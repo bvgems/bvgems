@@ -1,0 +1,117 @@
+.root {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    padding-top: calc(var(--mantine-spacing-sm) * 0); /* reduced */
+    padding-bottom: calc(var(--mantine-spacing-sm) * 0); /* reduced */
+    z-index: 0;
+  }
+  
+  .root::before {
+    content: "";
+    position: absolute;
+    inset: 0; /* top: 0; right: 0; bottom: 0; left: 0 */
+    background: rgba(0, 0, 0, 0.7); /* Dark overlay with 40% opacity */
+    z-index: -1;
+  }
+  
+  
+  .inner {
+    display: flex;
+    justify-content: space-between;
+  
+    /* @media (max-width: $mantine-breakpoint-md) {
+      flex-direction: column;
+    } */
+  }
+  
+  .image {
+    /* @media (max-width: $mantine-breakpoint-md) {
+      display: none;
+    } */
+  }
+  
+  .content {
+    padding-top: calc(var(--mantine-spacing-xl) * 2);
+    padding-bottom: calc(var(--mantine-spacing-xl) * 2);
+    margin-right: calc(var(--mantine-spacing-xl) * 3);
+  
+    /* @media (max-width: $mantine-breakpoint-md) {
+      margin-right: 0;
+    } */
+  }
+  
+  .title {
+    font-family: Outfit, var(--mantine-font-family);
+    font-weight: 500;
+    line-height: 1.05;
+    max-width: 500px;
+    font-size: 35px;
+    color: var(--mantine-color-white);
+
+  
+    /* @media (max-width: $mantine-breakpoint-md) {
+      max-width: 100%;
+      font-size: 34px;
+      line-height: 1.15;
+    } */
+  }
+  
+  .description {
+    color: var(--mantine-color-white);
+    font-family: Outfit, var(--mantine-font-family);
+    opacity: 0.75;
+    max-width: 500px;
+    font-size: 18px;
+  
+    /* @media (max-width: $mantine-breakpoint-md) {
+      max-width: 100%;
+    } */
+  }
+  
+  .control {
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: Outfit, var(--mantine-font-family);
+    font-size: 18px;
+    background-color: #bc4c2a;
+  
+    /* @media (max-width: $mantine-breakpoint-md) {
+      width: 100%;
+    } */
+  }
+
+  .control:hover{
+    background-color: white;
+    color:black
+  }
+
+  .slide1 {
+    background-image: url("/assets/bg-dim.avif");
+  }
+  
+  .slide2 {
+    background-image: url("/assets/bg2.avif");
+  }
+  
+  .slide3 {
+    background-image: url("/assets/bg3.avif");
+  }
+  
+  .slide {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    padding-top: calc(var(--mantine-spacing-xl) * 2);
+    padding-bottom: calc(var(--mantine-spacing-xl) * 2);
+    z-index: 0;
+  }
+  
+  .slide::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+    z-index: -1;
+  }
+  

@@ -9,16 +9,32 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.8",
+    "@mantine/carousel": "^8.0.1",
+    "@mantine/core": "^8.0.0",
+    "@mantine/hooks": "^8.0.0",
+    "@next/font": "^14.2.15",
+    "@tabler/icons-react": "^3.31.0",
+    "axios": "^1.9.0",
+    "embla-carousel": "^8.5.2",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.5.2",
+    "graphql": "^16.11.0",
+    "next": "15.3.2",
+    "pg": "^8.16.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.3.2"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.15.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "postcss": "^8.5.3",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

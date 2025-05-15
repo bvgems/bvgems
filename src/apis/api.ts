@@ -1,0 +1,38 @@
+import axios from "axios";
+
+export const getAllGemstones = async () => {
+  try {
+    const response = await axios.get("http://localhost:3000/api/getGemStones");
+
+    return response?.data?.collections;
+  } catch (error) {
+    console.log("Something went wrong while fetching gemstones");
+  }
+};
+
+export const getCategoryData = async (handle: string) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getCategoryData?handle=${handle}`
+    );
+
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching category data");
+  }
+};
+
+export const getShapesData = async (
+  shape: string | null,
+  collection: string
+) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getShapesData?shape=${shape}&collection=${collection}`
+    );
+    console.log("response of shape", response);
+    return response;
+  } catch (error) {
+    console.log("Something went wrong while fetching category data");
+  }
+};
