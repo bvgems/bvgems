@@ -37,7 +37,9 @@ export function GridView() {
           </Card.Section>
 
           <Group justify="space-between" mt="md" mb="xs">
-            <Text fw={700}>{item?.title}</Text>
+            <Text c={"violet"} fw={700}>
+              {item?.title}
+            </Text>
             {/* <Badge color="pink">On Sale</Badge> */}
           </Group>
 
@@ -48,7 +50,7 @@ export function GridView() {
           </Text>
           <Link href={`/${item.handle}`}>
             <Button
-              color="#bc4c2a"
+              color="violet"
               fullWidth
               mt="md"
               rightSection={<IconArrowRight size={14} />}
@@ -64,9 +66,7 @@ export function GridView() {
   return (
     <div className="mt-16">
       <div className="flex justify-center">
-        <h1 className="text-3xl font-semibold">
-          Calibrated Faceted Gemstones
-        </h1>
+        <h1 className="text-3xl font-semibold">Calibrated Faceted Gemstones</h1>
       </div>
       <Container size={"lg"} py="xl">
         <SimpleGrid cols={{ base: 1, sm: 3 }} spacing={{ base: 0, sm: "md" }}>

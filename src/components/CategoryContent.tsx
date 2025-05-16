@@ -13,6 +13,8 @@ import {
   TableThead,
 } from "@mantine/core";
 import { getShapesData } from "@/apis/api";
+import { useAuth } from "@/hooks/useAuth";
+import { IconShoppingCart, IconUser } from "@tabler/icons-react";
 
 export function CategoryContent({
   data,
@@ -26,6 +28,7 @@ export function CategoryContent({
   const [selectedShape, setSelectedShape] = useState<string | null>(shapes[0]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [fetchedResult, setFetchedResult] = useState([]);
+  const { user } = useAuth();
 
   const handleSizeToggle = (size: string) => {
     setSelectedSizes((prev) =>
@@ -43,7 +46,7 @@ export function CategoryContent({
 
   useEffect(() => {
     fetchShapesData(selectedShape, data.title);
-    setSelectedSizes([]); // Reset sizes when shape changes
+    setSelectedSizes([]);
   }, [selectedShape]);
 
   const filteredRows = fetchedResult
@@ -52,7 +55,7 @@ export function CategoryContent({
         selectedSizes.length === 0 || selectedSizes.includes(item.size)
     )
     .map((element: any) => (
-      <Table.Tr key={element.id}>
+      <Table.Tr key={element.id} className="hover:bg-violet-500 cursor-pointer">
         <Table.Td>{element.type}</Table.Td>
         <Table.Td>{element.collection_slug}</Table.Td>
         <Table.Td>{element.color}</Table.Td>
@@ -60,8 +63,28 @@ export function CategoryContent({
         <Table.Td>{element.ct_weight}</Table.Td>
         <Table.Td>{element.quality}</Table.Td>
         <Table.Td>{element.cut}</Table.Td>
+        <Table.Td></Table.Td>
+        <Table.Td>
+          {user ? (
+            <Button
+              leftSection={<IconShoppingCart />}
+              styles={{
+                root: {
+                  backgroundColor: "#15803d",
+                  padding: "0.75rem",
+                },
+              }}
+            >
+              Add To Cart
+            </Button>
+          ) : (
+            <Button className="p-3" leftSection={<IconUser />} color="violet">
+              Signin To Order
+            </Button>
+          )}
+        </Table.Td>
       </Table.Tr>
-    )); 
+    ));
 
   return (
     <>
@@ -69,7 +92,7 @@ export function CategoryContent({
         <Grid gutter={{ md: 50 }}>
           <GridCol span={{ base: 12, md: 5 }}>
             <Image
-              className="shadow-xl rounded-b-3xl"
+              className="shadow-sm rounded-b-3xl"
               src={data?.image?.src}
               fit="contain"
               h={"400"}
@@ -77,14 +100,14 @@ export function CategoryContent({
             />
           </GridCol>
           <GridCol span={{ base: 12, md: 7 }}>
-            <span className="text-3xl font-bold text-[#bc4c2a]">
+            <span className="text-3xl font-bold text-violet-800">
               {data?.title}
             </span>
             <div className="flex flex-wrap gap-3 mt-6">
               {shapes?.map((shape: string, index: number) => (
                 <Button
                   key={index}
-                  color="#bc4c2a"
+                  color="violet"
                   variant={selectedShape === shape ? "filled" : "light"}
                   size="compact-sm"
                   onClick={() => setSelectedShape(shape)}
@@ -96,7 +119,7 @@ export function CategoryContent({
 
             {selectedShape && (
               <div className="mt-6">
-                <p className="font-semibold mb-2 text-[#bc4c2a]">
+                <p className="font-semibold mb-2 text-violet-800">
                   Available Sizes for {selectedShape}:
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -104,7 +127,7 @@ export function CategoryContent({
                     <Button
                       key={i}
                       onClick={() => handleSizeToggle(size)}
-                      color="#bc4c2a"
+                      color="violet"
                       variant={
                         selectedSizes.includes(size) ? "filled" : "outline"
                       }
@@ -127,9 +150,9 @@ export function CategoryContent({
           Showing {filteredRows.length} result
           {filteredRows.length !== 1 ? "s" : ""}
         </p>
-        <Table striped highlightOnHover stickyHeaderOffset={60}>
+        <Table striped stickyHeaderOffset={60}>
           <TableThead>
-            <Table.Tr className="font-extrabold text-[18px]">
+            <Table.Tr className="font-extrabold text-[18px] text-violet-800">
               <TableTh>Type</TableTh>
               <TableTh>Gemstone</TableTh>
               <TableTh>Color</TableTh>
@@ -137,6 +160,7 @@ export function CategoryContent({
               <TableTh>CT Weight</TableTh>
               <TableTh>Quality</TableTh>
               <TableTh>Cut</TableTh>
+              <TableTh>Estimated Price</TableTh>
             </Table.Tr>
           </TableThead>
           <TableTbody>{filteredRows}</TableTbody>

@@ -36,3 +36,30 @@ export const getShapesData = async (
     console.log("Something went wrong while fetching category data");
   }
 };
+
+export const handleSignup = async (payload: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/handleSignup`,
+      payload
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while signing up");
+  }
+};
+
+export const handleSignin = async (payload: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/handleSignin`,
+      payload
+    );
+    console.log("res", response);
+
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while signing in", error);
+  }
+};

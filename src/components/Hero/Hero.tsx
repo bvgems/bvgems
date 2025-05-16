@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Button, Text, Title } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import { Carousel, CarouselSlide } from "@mantine/carousel";
@@ -9,18 +9,18 @@ export function Hero() {
   const autoplay = useRef(Autoplay({ delay: 2200 }));
   const slidesData = [
     {
+      image: "/assets/background-two.png",
+      title: "Your Gemstone Destination Awaits",
+      description:
+        "Discover premium gems from every corner, beautifully brought together",
+    },
+    {
       image: "/assets/background-three.png",
       title: "Shop Gemstones the Easy Way",
       description:
         "Browse our curated gemstone collection — all beautifully in one place",
     },
 
-    {
-      image: "/assets/background-two.png",
-      title: "Your Gemstone Destination Awaits",
-      description:
-        "Discover premium gems from every corner, beautifully brought together",
-    },
     {
       image: "/assets/background-one.png",
       title: "Find Your Perfect Gemstone Match",

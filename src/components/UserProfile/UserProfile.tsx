@@ -1,0 +1,79 @@
+import {
+  Avatar,
+  Group,
+  Menu,
+  MenuDivider,
+  MenuDropdown,
+  MenuItem,
+  MenuLabel,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import {
+  IconChevronDown,
+  IconLogout,
+  IconTrash,
+  IconUser,
+} from "@tabler/icons-react";
+import { useState } from "react";
+import cx from "clsx";
+import classes from "./HeaderTabs.module.css";
+import { useAuth } from "@/hooks/useAuth";
+
+export const UserProfile = ({ user }: any) => {
+  const [opened, { toggle }] = useDisclosure(false);
+  const [userMenuOpened, setUserMenuOpened] = useState(false);
+  const { handleLogout } = useAuth();
+
+  return (
+    <Menu
+      width={260}
+      position="bottom-end"
+      transitionProps={{ transition: "pop-top-right" }}
+      onClose={() => setUserMenuOpened(false)}
+      onOpen={() => setUserMenuOpened(true)}
+      withinPortal
+    >
+      <Menu.Target>
+        <UnstyledButton
+          className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
+        >
+          <Group gap={7}>
+            <Avatar
+              name={`${user?.firstName} ${user?.lastName}`}
+              color="violet"
+            />
+
+            <Text fw={500} size="sm" lh={1} mr={3}>
+              {/* {user.name} */}
+            </Text>
+            <IconChevronDown size={12} stroke={1.5} />
+          </Group>
+        </UnstyledButton>
+      </Menu.Target>
+      <MenuDropdown>
+        <MenuItem leftSection={<IconUser size={16} stroke={1.5} />}>
+          My Profile
+        </MenuItem>
+        <MenuItem
+          onClick={handleLogout}
+          leftSection={<IconLogout size={16} stroke={1.5} />}
+        >
+          Sign Out
+        </MenuItem>
+
+        <MenuDivider />
+
+        <MenuLabel>Danger zone</MenuLabel>
+
+        <Menu.Item
+          color="red"
+          leftSection={<IconTrash size={16} stroke={1.5} />}
+        >
+          Delete account
+        </Menu.Item>
+      </MenuDropdown>
+    </Menu>
+  );
+};

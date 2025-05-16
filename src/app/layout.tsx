@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Montserrat } from "next/font/google";
 import "@mantine/core/styles.css";
-import '@mantine/carousel/styles.css';
+import "@mantine/carousel/styles.css";
+import "@mantine/notifications/styles.css";
 import "./globals.css";
 import { MantineProvider } from "@mantine/core";
 import { Header } from "@/components/Header/Header";
+import { Notifications } from "@mantine/notifications";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,6 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={montserrat.className}>
         <MantineProvider>
+          <Notifications />
           <Header />
           {children}
         </MantineProvider>

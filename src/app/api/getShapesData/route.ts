@@ -1,15 +1,6 @@
 import { getGemstoneByHandle } from "@/app/Graphql/queries";
 import { NextResponse } from "next/server";
-
-import { Pool } from "pg";
-
-const pool = new Pool({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  password: process.env.PGPASSWORD,
-  port: Number(process.env.PGPORT) || 5432,
-});
+import { pool } from "@/lib/pool";
 
 export async function GET(req: Request) {
   try {
@@ -26,7 +17,7 @@ export async function GET(req: Request) {
       `SELECT * FROM gemstone_specs WHERE shape=$1 AND collection_slug=$2`,
       [shape, collection]
     );
-    console.log("dataaaa", result.rows,result.rowCount);
+    console.log("dataaaa", result.rows, result.rowCount);
 
     return new Response(JSON.stringify(result?.rows), {
       status: 200,
@@ -35,7 +26,7 @@ export async function GET(req: Request) {
       },
     });
   } catch (error) {
-    console.log('errrorrrrr',error)
+    console.log("errrorrrrr", error);
     return new Response(
       JSON.stringify({ error: "Failed to fetch Shopify data" }),
       { status: 500 }

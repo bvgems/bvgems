@@ -4,7 +4,7 @@ import {
   Burger,
   Button,
   Center,
-  Container,
+  Modal,
   Grid,
   GridCol,
   Group,
@@ -14,6 +14,10 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import classes from "./HeaderMenu.module.css";
 import { IconPhone, IconMail, IconSearch } from "@tabler/icons-react";
+import { AuthForm } from "../Auth/AuthForm";
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { UserProfile } from "../UserProfile/UserProfile";
 
 const links = [
   { link: "/", label: "Home" },
@@ -42,6 +46,8 @@ const links = [
 
 export function Header() {
   const [opened, { toggle }] = useDisclosure(false);
+  const [modalOpened, { open, close }] = useDisclosure(false);
+  const { user } = useAuth();
 
   const items = links.map((link) => {
     const menuItems = link.links?.map((item) => (
@@ -87,7 +93,21 @@ export function Header() {
 
   return (
     <>
-      <div className="mx-16 flex justify-evenly mb-3 mt-2">
+      <Modal
+        opened={modalOpened}
+        onClose={close}
+        overlayProps={{
+          style: {
+            backdropFilter: "blur(4px)",
+          },
+        }}
+        transitionProps={{ transition: "slide-right" }}
+        centered
+      >
+        <AuthForm onClose={close} />
+      </Modal>
+
+      <div className="mx-16 flex justify-evenly mb-3 mt-2 text-violet-800">
         <div>🇺🇸 66 W 47th St, Booth #9 and #10 , New York, NY 10036</div>
         <div className="flex justify-around gap-6">
           <span className="flex gap-2">
@@ -123,21 +143,26 @@ export function Header() {
               span={{ base: 12, md: 3 }}
               className="flex items-center justify-start gap-3"
             >
-              <Button
-                variant="transparent"
-                styles={{
-                  root: {
-                    color: "black",
-                  },
-                }}
-              >
-                Sign In
-              </Button>
+              {user ? (
+                <UserProfile user={user} />
+              ) : (
+                <Button
+                  variant="transparent"
+                  onClick={open}
+                  styles={{
+                    root: {
+                      color: "black",
+                    },
+                  }}
+                >
+                  Sign In
+                </Button>
+              )}
+
               <div className="w-px h-6 bg-gray-300" />
               <IconSearch size="18" />
             </GridCol>
 
-            {/* Burger Menu */}
             <Burger
               opened={opened}
               onClick={toggle}
