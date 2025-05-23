@@ -1,5 +1,5 @@
 import { getCategoryData } from "@/apis/api";
-import { CategoryContent } from "@/components/CategoryContent";
+import { CategoryContent } from "@/components/Category/CategoryContent";
 import { Button, Container, Grid, GridCol, Image, Text } from "@mantine/core";
 
 export default async function CategoryPage({
@@ -16,7 +16,6 @@ export default async function CategoryPage({
   return (
     <div>
       <CategoryContent data={data} shapes={shapes} allSizes={allSizes} />
-      
     </div>
   );
 }

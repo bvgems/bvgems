@@ -14,6 +14,7 @@ export const SignupForm = ({ onClose }: { onClose: () => void }) => {
       firstName: "",
       lastName: "",
       email: "",
+      companyName: "",
       password: "",
       confirmPassword: "",
     },
@@ -24,6 +25,8 @@ export const SignupForm = ({ onClose }: { onClose: () => void }) => {
       lastName: (value) =>
         value.trim().length > 0 ? null : "Last name is required",
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      companyName: (value) =>
+        value.trim().length > 0 ? null : "Company name is required",
       password: (value) =>
         value.trim().length >= 6
           ? null
@@ -40,6 +43,7 @@ export const SignupForm = ({ onClose }: { onClose: () => void }) => {
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
+      companyName: values.companyName,
       password: values.password,
     };
 
@@ -86,6 +90,11 @@ export const SignupForm = ({ onClose }: { onClose: () => void }) => {
             label="Enter Email Address"
             placeholder="your email address"
             {...form.getInputProps("email")}
+          />
+          <TextInput
+            label="Enter Your Company Name"
+            placeholder="your company name"
+            {...form.getInputProps("companyName")}
           />
           <PasswordInput
             label="Set Your Password"

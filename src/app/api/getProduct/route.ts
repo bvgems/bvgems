@@ -2,19 +2,17 @@ import { getGemstoneByHandle } from "@/app/Graphql/queries";
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/pool";
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
   try {
-    const url = new URL(req.url);
-    const shape = url.searchParams.get("shape");
-    const collection = url.searchParams.get("collection");
+    const id = await req.json();
 
-    if (!shape) {
-      return NextResponse.json({ error: "Missing shape" }, { status: 400 });
+    if (!id) {
+      return NextResponse.json({ error: "Missing Id" }, { status: 400 });
     }
 
     const result = await pool.query(
-      `SELECT * FROM gemstone_specs WHERE shape=$1 AND collection_slug=$2`,
-      [shape, collection]
+      `SELECT * FROM gemstone_specs WHERE id=$1`,
+      [id]
     );
 
     return new Response(JSON.stringify(result?.rows), {
@@ -24,7 +22,7 @@ export async function GET(req: Request) {
       },
     });
   } catch (error) {
-    console.log("errrorrrrr", error);
+    console.log("errror while getting the product data", error);
     return new Response(
       JSON.stringify({ error: "Failed to fetch Shopify data" }),
       { status: 500 }

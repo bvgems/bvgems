@@ -3,9 +3,17 @@ import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   const allCollections: any[] = [];
+  let filteredCollections: any[] = [];
   let hasNextPage = true;
   let cursor: string | null = null;
-
+  const EXCLUDED_HANDLES = [
+    "frontpage",
+    "round-princess-cushion",
+    "heart-trillion",
+    "oval-emerald",
+    "marquise-baguette",
+    "pear",
+  ];
   try {
     while (hasNextPage) {
       const shopifyRes = await fetch(
@@ -31,9 +39,14 @@ export async function GET(req: NextRequest) {
 
       hasNextPage = result?.data?.collections?.pageInfo?.hasNextPage;
       cursor = hasNextPage ? edges[edges.length - 1].cursor : null;
+      filteredCollections.push(
+        ...edges
+          .map((edge: any) => edge.node)
+          .filter((node: any) => !EXCLUDED_HANDLES.includes(node.handle))
+      );
     }
 
-    return new Response(JSON.stringify({ collections: allCollections }), {
+    return new Response(JSON.stringify({ collections: filteredCollections }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

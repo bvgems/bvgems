@@ -66,7 +66,9 @@ export function GridView() {
   return (
     <div className="mt-16">
       <div className="flex justify-center">
-        <h1 className="text-3xl font-semibold">Calibrated Faceted Gemstones</h1>
+        <h1 className="text-3xl font-semibold text-violet-800">
+          Calibrated Faceted Gemstones
+        </h1>
       </div>
       <Container size={"lg"} py="xl">
         <SimpleGrid cols={{ base: 1, sm: 3 }} spacing={{ base: 0, sm: "md" }}>

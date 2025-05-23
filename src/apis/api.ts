@@ -63,3 +63,40 @@ export const handleSignin = async (payload: any) => {
     console.log("Something went wrong while signing in", error);
   }
 };
+
+export const getParticularProductsData = async (id: string) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/getProduct`,
+      id
+    );
+
+    return response.data[0];
+  } catch (error) {
+    console.log("Something went wrong while signing in", error);
+  }
+};
+
+export const getTolerance = async (collection: string) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getTolerance?collection=${collection}`
+    );
+
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching tolerance", error);
+  }
+};
+
+export const getGemStoneKnowledge = async (stone: string) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getGemStoneKnowledge?stone=${stone}`
+    );
+
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while getting gemstone knowledge", error);
+  }
+};

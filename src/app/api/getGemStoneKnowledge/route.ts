@@ -1,9 +1,11 @@
-import { getGemstoneByHandle } from "@/app/Graphql/queries";
+import { getGemStoneKnowledge } from "@/app/Graphql/queries";
 
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-    const handle = url.searchParams.get("handle");
+    const stone = url.searchParams.get("stone");
+    console.log("stoneee", stone);
+
     const shopifyRes = await fetch(
       "https://e4wqcy-up.myshopify.com/api/2024-04/graphql.json",
       {
@@ -14,23 +16,36 @@ export async function GET(req: Request) {
             "c64a5e6dbfa340f0bff88be9fde4b7a8",
         },
         body: JSON.stringify({
-          query: getGemstoneByHandle,
+          query: getGemStoneKnowledge,
           variables: {
-            handle,
+            cursor: null,
           },
         }),
       }
     );
 
-    const data = await shopifyRes.json();
+    const json = await shopifyRes.json();
 
-    return new Response(JSON.stringify(data?.data?.collection), {
+    const allCollections = json?.data?.collections?.edges || [];
+
+    const matchedCollection = allCollections.find(
+      (edge: any) => edge.node.title.toLowerCase() === stone?.toLowerCase()
+    );
+
+    if (!matchedCollection) {
+      return new Response(JSON.stringify({ error: "Collection not found" }), {
+        status: 404,
+      });
+    }
+
+    return new Response(JSON.stringify(matchedCollection.node), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
       },
     });
   } catch (error) {
+    console.log("error", error);
     return new Response(
       JSON.stringify({ error: "Failed to fetch Shopify data" }),
       { status: 500 }

@@ -1,5 +1,5 @@
 "use client";
-import { IconChevronDown } from "@tabler/icons-react";
+import { IconChevronDown, IconShoppingBag } from "@tabler/icons-react";
 import {
   Burger,
   Button,
@@ -10,26 +10,31 @@ import {
   Group,
   Image,
   Menu,
+  Badge,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "./HeaderMenu.module.css";
 import { IconPhone, IconMail, IconSearch } from "@tabler/icons-react";
 import { AuthForm } from "../Auth/AuthForm";
-import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { UserProfile } from "../UserProfile/UserProfile";
+import { useRouter } from "next/navigation";
+import { getCartStore } from "@/store/useCartStore";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const links = [
   { link: "/", label: "Home" },
   {
-    link: "#1",
-    label: "Learn",
-    links: [
-      { link: "/docs", label: "Documentation" },
-      { link: "/resources", label: "Resources" },
-      { link: "/community", label: "Community" },
-      { link: "/blog", label: "Blog" },
-    ],
+    link: "/education",
+    label: "Gemstones Education",
+    // links: [
+    //   { link: "/docs", label: "Documentation" },
+    //   { link: "/resources", label: "Resources" },
+    //   { link: "/community", label: "Community" },
+    //   { link: "/blog", label: "Blog" },
+    // ],
   },
   { link: "/about", label: "About" },
   { link: "/pricing", label: "Pricing" },
@@ -45,14 +50,37 @@ const links = [
 ];
 
 export function Header() {
+  const pathname = usePathname();
+
   const [opened, { toggle }] = useDisclosure(false);
   const [modalOpened, { open, close }] = useDisclosure(false);
   const { user } = useAuth();
+  const cartStore = useMemo(
+    () => getCartStore(user?.id || "guest"),
+    [user?.id]
+  );
+
+  const cart = cartStore((state: any) => state.cart);
+  const cartCount = cart.reduce(
+    (sum: any, item: any) => sum + item.quantity,
+    0
+  );
+
+  const router = useRouter();
 
   const items = links.map((link) => {
-    const menuItems = link.links?.map((item) => (
-      <Menu.Item key={item.link}>{item.label}</Menu.Item>
-    ));
+    const menuItems = link.links?.map((item) => {
+      const isSubActive = pathname === item.link;
+      return (
+        <Menu.Item
+          key={item.link}
+          onClick={() => router.push(item.link)}
+          className={isSubActive ? "text-[#5d0ec0]" : ""}
+        >
+          {item.label}
+        </Menu.Item>
+      );
+    });
 
     if (menuItems) {
       return (
@@ -63,16 +91,20 @@ export function Header() {
           withinPortal
         >
           <Menu.Target>
-            <a
-              href={link.link}
-              className={classes.link}
-              onClick={(event) => event.preventDefault()}
-            >
+            <div className={classes.link}>
               <Center>
-                <span className={classes.linkLabel}>{link.label}</span>
+                <span
+                  className={`${classes.linkLabel} ${
+                    link.links?.some((item) => pathname === item.link)
+                      ? "text-[#5d0ec0]"
+                      : ""
+                  }`}
+                >
+                  {link.label}
+                </span>
                 <IconChevronDown size={14} stroke={1.5} />
               </Center>
-            </a>
+            </div>
           </Menu.Target>
           <Menu.Dropdown>{menuItems}</Menu.Dropdown>
         </Menu>
@@ -80,14 +112,15 @@ export function Header() {
     }
 
     return (
-      <a
-        key={link.label}
-        href={link.link}
-        className={classes.link}
-        onClick={(event) => event.preventDefault()}
-      >
-        {link.label}
-      </a>
+      <Link key={link.label} href={link.link} className={classes.link}>
+        <span
+          className={`${classes.linkLabel} ${
+            pathname === link.link ? "text-[#5d0ec0]" : ""
+          }`}
+        >
+          {link.label}
+        </span>
+      </Link>
     );
   });
 
@@ -146,21 +179,33 @@ export function Header() {
               {user ? (
                 <UserProfile user={user} />
               ) : (
-                <Button
-                  variant="transparent"
-                  onClick={open}
-                  styles={{
-                    root: {
-                      color: "black",
-                    },
-                  }}
-                >
+                <Button color="violet" onClick={open}>
                   Sign In
                 </Button>
               )}
 
               <div className="w-px h-6 bg-gray-300" />
-              <IconSearch size="18" />
+              <IconSearch className="hover:cursor-pointer" size="22" />
+              <div className="relative ml-3.5">
+                {user ? (
+                  <>
+                    <IconShoppingBag
+                      onClick={() => router?.push("/cart")}
+                      className="hover:cursor-pointer"
+                      size="22"
+                    />
+                    <Badge
+                      className="absolute -top-2 -right-2"
+                      size="xs"
+                      color="violet"
+                      variant="filled"
+                      radius="xl"
+                    >
+                      {cartCount}
+                    </Badge>
+                  </>
+                ) : null}
+              </div>
             </GridCol>
 
             <Burger

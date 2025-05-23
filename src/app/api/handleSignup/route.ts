@@ -6,18 +6,18 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    const { firstName, lastName, email, password } = body;
+    const { firstName, lastName, email, password, companyName } = body;
 
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const insertQuery = `
-      INSERT INTO app_users (first_name, last_name, email, password_hash)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO app_users (first_name, last_name, email, password_hash,company_name)
+      VALUES ($1, $2, $3, $4,$5)
       RETURNING id, email, created_at;
     `;
 
-    const values = [firstName, lastName, email, hashedPassword];
+    const values = [firstName, lastName, email, hashedPassword, companyName];
     const result = await pool.query(insertQuery, values);
 
     const user = result.rows[0];

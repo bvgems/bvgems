@@ -20,11 +20,14 @@
     font-size: 15px;
     font-weight: 500;
   
-    @mixin hover {
-      background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
-    }
+   
+  }
+
+  .link:hover{
+    color:#5d0ec0;
   }
   
   .linkLabel {
     margin-right: 5px;
+    font-weight: 550;
   }
