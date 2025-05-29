@@ -35,7 +35,7 @@ export const SigninForm = ({ onClose }: { onClose: () => void }) => {
     };
 
     const signinResponse = await handleSignin(payload);
-    console.log("response", signinResponse);
+
     if (signinResponse?.flag) {
       notifications.show({
         icon: <IconCheck />,

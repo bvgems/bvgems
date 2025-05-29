@@ -12,7 +12,7 @@ import {
 import { getShapesData } from "@/apis/api";
 import { CategoryTable } from "./CategoryTable";
 import { useDisclosure } from "@mantine/hooks";
-import { SizeToleranceGuide } from "../SizeToleranceGuide";
+import { SizeToleranceGuide } from "../Tolerance/SizeToleranceGuide";
 
 export function CategoryContent({
   data,
@@ -23,7 +23,10 @@ export function CategoryContent({
   shapes: string[];
   allSizes: { [key: string]: string[] };
 }) {
-  const [selectedShape, setSelectedShape] = useState<string | null>(shapes[0]);
+  const [selectedShape, setSelectedShape] = useState<string | null>(
+    shapes?.length ? shapes[0] : null
+  );
+
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [fetchedResult, setFetchedResult] = useState([]);
   const [opened, { open, close }] = useDisclosure(false);
@@ -43,7 +46,7 @@ export function CategoryContent({
   };
 
   useEffect(() => {
-    fetchShapesData(selectedShape, data.title);
+    fetchShapesData(selectedShape, data?.title);
     setSelectedSizes([]);
   }, [selectedShape]);
 

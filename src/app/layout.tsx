@@ -8,6 +8,8 @@ import "./globals.css";
 import { MantineProvider } from "@mantine/core";
 import { Header } from "@/components/Header/Header";
 import { Notifications } from "@mantine/notifications";
+import { InitGemstones } from "@/components/CommonComponents/InitGemstones";
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,6 +32,7 @@ export default function RootLayout({
         <MantineProvider>
           <Notifications />
           <Header />
+          <InitGemstones />
           {children}
         </MantineProvider>
       </body>

@@ -15,7 +15,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getParticularProductsData, getShapesData } from "@/apis/api";
-import { ProductSpecifications } from "@/components/ProductSpecifications";
+import { ProductSpecifications } from "@/components/ProductDetails/ProductSpecifications";
 import {
   IconCalendarCheck,
   IconCheck,
@@ -25,10 +25,10 @@ import {
   IconPlus,
   IconZoomIn,
 } from "@tabler/icons-react";
-import { ProductAccordion } from "@/components/ProductAccordion";
-import { ZoomImage } from "@/components/ZoomImage";
+import { ProductAccordion } from "@/components/ProductDetails/ProductAccordion";
+import { ZoomImage } from "@/components/ProductDetails/ZoomImage";
 import { useDisclosure } from "@mantine/hooks";
-import { SizeToleranceGuide } from "@/components/SizeToleranceGuide";
+import { SizeToleranceGuide } from "@/components/Tolerance/SizeToleranceGuide";
 import { getCartStore } from "@/store/useCartStore";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "@/hooks/useAuth";

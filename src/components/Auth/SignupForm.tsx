@@ -1,4 +1,11 @@
-import { Button, Image, PasswordInput, TextInput } from "@mantine/core";
+import {
+  Button,
+  Image,
+  Input,
+  NumberInput,
+  PasswordInput,
+  TextInput,
+} from "@mantine/core";
 import Link from "next/link";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
@@ -15,6 +22,7 @@ export const SignupForm = ({ onClose }: { onClose: () => void }) => {
       lastName: "",
       email: "",
       companyName: "",
+      phoneNumber: "",
       password: "",
       confirmPassword: "",
     },
@@ -27,6 +35,11 @@ export const SignupForm = ({ onClose }: { onClose: () => void }) => {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
       companyName: (value) =>
         value.trim().length > 0 ? null : "Company name is required",
+      phoneNumber: (value) =>
+        /^\(\d{3}\)\s\d{3}-\d{4}$/.test(value)
+          ? null
+          : "Phone number must be of 10 digits.",
+
       password: (value) =>
         value.trim().length >= 6
           ? null
@@ -44,6 +57,7 @@ export const SignupForm = ({ onClose }: { onClose: () => void }) => {
       lastName: values.lastName,
       email: values.email,
       companyName: values.companyName,
+      phoneNumber: values.phoneNumber,
       password: values.password,
     };
 
@@ -79,11 +93,13 @@ export const SignupForm = ({ onClose }: { onClose: () => void }) => {
               label="Enter First Name"
               placeholder="your first name"
               {...form.getInputProps("firstName")}
+              className="w-full"
             />
             <TextInput
               label="Enter Last Name"
               placeholder="your last name"
               {...form.getInputProps("lastName")}
+              className="w-full"
             />
           </div>
           <TextInput
@@ -96,16 +112,43 @@ export const SignupForm = ({ onClose }: { onClose: () => void }) => {
             placeholder="your company name"
             {...form.getInputProps("companyName")}
           />
-          <PasswordInput
-            label="Set Your Password"
-            placeholder="your password"
-            {...form.getInputProps("password")}
+          <TextInput
+            label="Enter Your Phone Number"
+            placeholder="(XXX) XXX-XXXX"
+            value={form.values.phoneNumber}
+            onChange={(event) => {
+              const raw = event.currentTarget.value
+                .replace(/\D/g, "")
+                .slice(0, 10);
+              const formatted =
+                raw.length <= 3
+                  ? raw
+                  : raw.length <= 6
+                  ? `(${raw.slice(0, 3)}) ${raw.slice(3)}`
+                  : `(${raw.slice(0, 3)}) ${raw.slice(3, 6)}-${raw.slice(6)}`;
+              form.setFieldValue("phoneNumber", formatted);
+            }}
+            error={form.errors.phoneNumber}
+            leftSection={
+              <span style={{ fontSize: "1.25rem", marginRight: "6px" }}>
+                🇺🇸
+              </span>
+            }
           />
-          <PasswordInput
-            label="Confirm Your Password"
-            placeholder="confirm password"
-            {...form.getInputProps("confirmPassword")}
-          />
+          <div className="flex justify-between gap-3">
+            <PasswordInput
+              label="Set Your Password"
+              placeholder="your password"
+              {...form.getInputProps("password")}
+              className="w-full"
+            />
+            <PasswordInput
+              label="Confirm Your Password"
+              placeholder="confirm password"
+              {...form.getInputProps("confirmPassword")}
+              className="w-full"
+            />
+          </div>
           <div className="flex flex-col gap-2">
             <Button type="submit" color="violet" loading={loading}>
               Sign Up

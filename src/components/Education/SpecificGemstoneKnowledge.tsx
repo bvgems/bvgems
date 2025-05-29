@@ -1,15 +1,7 @@
 "use client";
 
 import { getGemStoneKnowledge } from "@/apis/api";
-import {
-  Image,
-  Table,
-  TableTd,
-  TableTh,
-  TableThead,
-  TableTr,
-  Button,
-} from "@mantine/core";
+import { Image, Table, Button } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 
 import { IconDownload } from "@tabler/icons-react";
@@ -84,7 +76,7 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
     <div className="px-10 py-5">
       {knowledge ? (
         <>
-          <div className="flex flex-col items-center gap-3.5" ref={contentRef}>
+          <div className="flex flex-col items-center gap-3.5 px-28" ref={contentRef}>
             <div className="flex justify-center flex-col items-center gap-3">
               <Image
                 h="200"
@@ -100,7 +92,7 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
               <h3 className="font-semibold flex justify-center mb-3">
                 More Details about {activeStone}
               </h3>
-              <div className="w-full max-w-md">
+              <div className="w-full">
                 <Table variant="vertical" layout="fixed" withTableBorder>
                   <Table.Tbody>
                     <Table.Tr>

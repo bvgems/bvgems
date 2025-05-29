@@ -11,6 +11,7 @@ import {
   Image,
   Menu,
   Badge,
+  Divider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "./HeaderMenu.module.css";
@@ -21,8 +22,9 @@ import { UserProfile } from "../UserProfile/UserProfile";
 import { useRouter } from "next/navigation";
 import { getCartStore } from "@/store/useCartStore";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { usePathname } from "next/navigation";
+import { usestoneStore } from "@/store/useStoneStore";
 
 const links = [
   { link: "/", label: "Home" },
@@ -52,8 +54,11 @@ const links = [
 export function Header() {
   const pathname = usePathname();
 
+  const gemstones: any = usestoneStore((state) => state.gemstones) || [];
+
   const [opened, { toggle }] = useDisclosure(false);
   const [modalOpened, { open, close }] = useDisclosure(false);
+
   const { user } = useAuth();
   const cartStore = useMemo(
     () => getCartStore(user?.id || "guest"),
@@ -141,18 +146,31 @@ export function Header() {
       </Modal>
 
       <div className="mx-16 flex justify-evenly mb-3 mt-2 text-violet-800">
-        <div>🇺🇸 66 W 47th St, Booth #9 and #10 , New York, NY 10036</div>
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=66+W+47th+St,+Booth+%239+and+%2310,+New+York,+NY+10036"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline"
+        >
+          🇺🇸 66 W 47th St, Booth #9 and #10, New York, NY 10036
+        </a>
+
         <div className="flex justify-around gap-6">
-          <span className="flex gap-2">
+          <a href="tel:+12129444382" className="flex gap-2 hover:underline">
             <IconPhone />
             (212) 944-4382
-          </span>
-          <span className="flex gap-2">
+          </a>
+
+          <a
+            href="mailto:bvgemsinc@gmail.com"
+            className="flex gap-2 hover:underline"
+          >
             <IconMail />
             bvgemsinc@gmail.com
-          </span>
+          </a>
         </div>
       </div>
+
       <header className={classes.header}>
         <nav className="mt-4">
           <Grid className={classes.inner}>
@@ -217,6 +235,19 @@ export function Header() {
           </Grid>
         </nav>
       </header>
+
+      <div className="mx-56 flex flex-row flex-wrap justify-evenly mb-3 mt-2 text-violet-800">
+        {gemstones?.map((gemstone: any, index: number) => (
+          <Link
+            href={`/${gemstone?.handle}`}
+            key={index}
+            className="mx-2 hover:cursor-pointer hover:font-semibold"
+          >
+            {gemstone?.title}
+          </Link>
+        ))}
+      </div>
+      <Divider />
     </>
   );
 }

@@ -1,5 +1,96 @@
 import axios from "axios";
 
+export const getUserProfile = async (userId: any) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getUserProfile?id=${userId}`
+    );
+
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching user profile");
+  }
+};
+
+export const upsertShippingAddress = async (isEdit: boolean, payload: any) => {
+  try {
+    let response;
+    if (isEdit) {
+      response = await axios.put("/api/updateShippingAddress", payload);
+    } else {
+      response = await axios.post("/api/storeAddress", payload);
+    }
+    return response;
+  } catch (error) {
+    console.log(
+      "Something went wrong while performing operation for shipping address"
+    );
+  }
+};
+
+export const upsertBusinessReference = async (
+  isEdit: boolean,
+  payload: any
+) => {
+  try {
+    let response;
+    if (isEdit) {
+      response = await axios.put("/api/updateBusinessReference", payload);
+    } else {
+      response = await axios.post("/api/storeBusinessReference", payload);
+    }
+    return response;
+  } catch (error) {
+    console.log(
+      "Something went wrong while performing operation for business reference"
+    );
+  }
+};
+
+export const deleteAddress = async (toDeleteId: any) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:3000/api/deleteShippingAddress?toDeleteId=${toDeleteId}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while deleting user address");
+  }
+};
+
+export const deleteReference = async (toDeleteId: any) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:3000/api/deleteBusinessReference?toDeleteId=${toDeleteId}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while deleting the business reference");
+  }
+};
+
+export const getShippingAddresses = async (userId: any) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getShippingAddress?id=${userId}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching user profile");
+  }
+};
+
+export const getBusinessReferences = async (userId: any) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getBusinessReferences?id=${userId}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching user profile");
+  }
+};
+
 export const getAllGemstones = async () => {
   try {
     const response = await axios.get("http://localhost:3000/api/getGemStones");
@@ -98,5 +189,71 @@ export const getGemStoneKnowledge = async (stone: string) => {
     return response?.data;
   } catch (error) {
     console.log("Something went wrong while getting gemstone knowledge", error);
+  }
+};
+
+export const editProfile = async (payload: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/editProfile`,
+      payload
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while updating profile");
+  }
+};
+
+export const handleChangePassword = async (payload: {
+  oldPassword: string;
+  newPassword: string;
+}) => {
+  try {
+    const response = await fetch("/api/changePassword", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return await response.json();
+  } catch (err) {
+    return { flag: false, error: "Server error" };
+  }
+};
+
+export const storeShippingAddress = async (payload: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/storeAddress`,
+      payload
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while storing the address");
+  }
+};
+
+export const getAMLInfo = async (userId: string) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getAMLInfo?userId=${userId}`
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while getting AML info");
+  }
+};
+export const editAMLInfo = async (userId: string, data: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/upsertAMLInfo`,
+      { userId, data }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while storing the AML info");
   }
 };

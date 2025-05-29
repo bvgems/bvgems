@@ -3,21 +3,15 @@ import {
   AccordionControl,
   AccordionItem,
   AccordionPanel,
-  Image,
   List,
   ListItem,
   Text,
-  ThemeIcon,
 } from "@mantine/core";
 import {
-  IconCircleCheck,
   IconCreditCardPay,
   IconQuestionMark,
-  IconRewindBackward10,
-  IconSignature,
   IconTruckDelivery,
 } from "@tabler/icons-react";
-import React from "react";
 
 export const ProductAccordion = () => {
   return (

@@ -20,11 +20,13 @@ import { useState } from "react";
 import cx from "clsx";
 import classes from "./HeaderTabs.module.css";
 import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export const UserProfile = ({ user }: any) => {
   const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const { handleLogout } = useAuth();
+  const router = useRouter();
 
   return (
     <Menu
@@ -53,7 +55,12 @@ export const UserProfile = ({ user }: any) => {
         </UnstyledButton>
       </Menu.Target>
       <MenuDropdown>
-        <MenuItem leftSection={<IconUser size={16} stroke={1.5} />}>
+        <MenuItem
+          onClick={() => {
+            router?.push("/profile");
+          }}
+          leftSection={<IconUser size={16} stroke={1.5} />}
+        >
           My Profile
         </MenuItem>
         <MenuItem

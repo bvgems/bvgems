@@ -1,6 +1,5 @@
 import { getCategoryData } from "@/apis/api";
 import { CategoryContent } from "@/components/Category/CategoryContent";
-import { Button, Container, Grid, GridCol, Image, Text } from "@mantine/core";
 
 export default async function CategoryPage({
   params,
@@ -11,7 +10,9 @@ export default async function CategoryPage({
 
   const data: any = await getCategoryData(handle);
   const shapes = data?.shapes?.value?.split(",").map((s: any) => s.trim());
-  const allSizes = JSON.parse(data?.shapeSizes?.value);
+
+  const rawSizes = data?.shapeSizes?.value;
+  const allSizes = rawSizes ? JSON.parse(rawSizes) : {};
 
   return (
     <div>

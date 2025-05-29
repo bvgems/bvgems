@@ -17,9 +17,7 @@ import {
   Checkbox,
   Alert,
   Tooltip,
-  Modal,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import {
   IconArrowNarrowRight,
   IconCheck,
@@ -28,9 +26,10 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { AuthForm } from "../Auth/AuthForm";
 import { notifications } from "@mantine/notifications";
 import { useMemo } from "react";
+import { UnAuthorized } from "../CommonComponents/UnAuthorized";
+
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
   {
@@ -49,41 +48,9 @@ export function CartComponent() {
   const removeFromCart = cartStore((state: any) => state.removeFromCart);
   const updateQuantity = cartStore((state: any) => state.updateQuantity);
   const getTotalPrice = cartStore((state: any) => state.getTotalPrice);
-  const [modalOpened, { open, close }] = useDisclosure(false);
 
   if (!user) {
-    return (
-      <>
-        <Modal
-          opened={modalOpened}
-          onClose={close}
-          overlayProps={{
-            style: {
-              backdropFilter: "blur(4px)",
-            },
-          }}
-          transitionProps={{ transition: "slide-right" }}
-          centered
-        >
-          <AuthForm onClose={close} />
-        </Modal>
-
-        <div className="flex flex-col gap-3 items-center justify-center mt-24">
-          <Player
-            autoplay
-            loop
-            src="/assets/unauthorised.json"
-            style={{ height: "300px", width: "300px" }}
-          />
-          <p className="text-xl font-semibold mt-4 text-violet-800">
-            You are not authorized to access this page.
-          </p>
-          <Button onClick={open} color="violet">
-            Log In Now
-          </Button>
-        </div>
-      </>
-    );
+    return <UnAuthorized />;
   }
 
   if (cart.length === 0) {
