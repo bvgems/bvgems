@@ -5,23 +5,30 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { upsertBusinessReference } from "@/apis/api";
+import { PhoneInput } from "../CommonComponents/PhoneInput";
+import { useStpperStore } from "@/store/useStepperStore";
 
 export const BusinessReferenceForm = ({
   userId,
   referenceData,
   onSuccess,
+  isStepper,
+  nextStep,
 }: {
-  userId: string;
+  userId?: string;
   referenceData?: any;
-  onSuccess: () => void;
+  onSuccess?: () => void;
+  isStepper?: boolean;
+  nextStep?: any;
 }) => {
   const isEdit = Boolean(referenceData?.id);
+  const { setBusinessReference } = useStpperStore();
 
   const form = useForm({
     initialValues: {
       companyName: "",
       contactPerson: "",
-      contactNumber: "",
+      phoneNumber: "",
       companyAddress: "",
       additionalNotes: "",
     },
@@ -30,7 +37,7 @@ export const BusinessReferenceForm = ({
       companyName: (v) => (v.trim() ? null : "Company Name is Required"),
       companyAddress: (v) => (v.trim() ? null : "Company Address is Required"),
       contactPerson: (v) => (v.trim() ? null : "Contact Person is Required"),
-      contactNumber: (v) =>
+      phoneNumber: (v) =>
         /^\(\d{3}\)\s\d{3}-\d{4}$/.test(v) ? null : "Phone must be 10 digits",
     },
   });
@@ -41,20 +48,31 @@ export const BusinessReferenceForm = ({
         companyName: referenceData?.company_name,
         companyAddress: referenceData?.company_address,
         contactPerson: referenceData?.contact_person,
-        contactNumber: referenceData?.contact_number,
+        phoneNumber: referenceData?.contact_number,
         additionalNotes: referenceData?.additional_notes,
       });
     }
   }, [referenceData]);
 
   const handleSubmit = async (values: typeof form.values) => {
+    if (isStepper && form.isValid()) {
+      setBusinessReference({
+        companyName: values.companyName,
+        contactPerson: values.contactPerson,
+        phoneNumber: values.phoneNumber,
+        companyAddress: values.companyAddress,
+        addtionalNotes: values.additionalNotes,
+      });
+      nextStep();
+      return;
+    }
     const payload = {
-      ...(isEdit ? { id: referenceData.id } : { user_id: userId }),
-      contact_person: values.contactPerson,
-      contact_number: values.contactNumber,
-      company_address: values.companyAddress,
-      company_name: values.companyName,
-      additional_notes: values.additionalNotes,
+      ...(isEdit ? { id: referenceData.id } : { userId: userId }),
+      contactPerson: values.contactPerson,
+      phoneNumber: values.phoneNumber,
+      companyAddress: values.companyAddress,
+      companyName: values.companyName,
+      additionalNotes: values.additionalNotes,
     };
     const response: any = await upsertBusinessReference(isEdit, payload);
     const result = response.data;
@@ -65,7 +83,7 @@ export const BusinessReferenceForm = ({
         position: "top-right",
         color: "teal",
       });
-      onSuccess();
+      onSuccess?.();
     } else {
       notifications.show({
         icon: <IconX />,
@@ -78,7 +96,27 @@ export const BusinessReferenceForm = ({
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <div className="flex flex-col gap-4 px-2.5">
+      <div className={`flex flex-col gap-4 ${isStepper ? "px-28" : "px-2.5"}`}>
+        {isStepper ? (
+          <div className="flex justify-end mt-5">
+            <Button
+              type="button"
+              onClick={() => {
+                console.log("Skip clicked", isStepper);
+                try {
+                  nextStep();
+                } catch (e) {
+                  console.error("Skip failed:", e);
+                }
+              }}
+              size="compact-sm"
+              variant="transparent"
+              color="violet"
+            >
+              <span className="underline">Skip For Now</span>
+            </Button>
+          </div>
+        ) : null}
         <TextInput
           label="Company Name"
           placeholder="B. V. Gems"
@@ -89,25 +127,7 @@ export const BusinessReferenceForm = ({
           placeholder="John Doe"
           {...form.getInputProps("contactPerson")}
         />
-        <TextInput
-          label="Contact Number"
-          placeholder="(123) 456-7890"
-          value={form.values.contactNumber}
-          onChange={(e) => {
-            const raw = e.currentTarget.value.replace(/\D/g, "").slice(0, 10);
-            const formatted =
-              raw.length <= 3
-                ? raw
-                : raw.length <= 6
-                ? `(${raw.slice(0, 3)}) ${raw.slice(3)}`
-                : `(${raw.slice(0, 3)}) ${raw.slice(3, 6)}-${raw.slice(6)}`;
-            form.setFieldValue("contactNumber", formatted);
-          }}
-          error={form.errors.contactNumber}
-          leftSection={
-            <span style={{ fontSize: "1.25rem", marginRight: "6px" }}>🇺🇸</span>
-          }
-        />
+        <PhoneInput form={form} />
         <TextInput
           label="Company Address"
           placeholder="123 Main st, NY, NY, 10038"
@@ -121,7 +141,9 @@ export const BusinessReferenceForm = ({
 
         <Group mt="md">
           <Button type="submit" color="violet" fullWidth>
-            {isEdit ? "Update Reference" : "Save Reference"}
+            {isEdit
+              ? "Update Reference"
+              : `${isStepper ? "Save and Continue" : "Save Reference"}`}
           </Button>
         </Group>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import classes from "./NavbarSimple.module.css";
+import classes from "../../styles/NavbarSimple.module.css";
 
 interface Props {
   gemstones: any[];

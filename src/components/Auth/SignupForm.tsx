@@ -1,20 +1,24 @@
-import {
-  Button,
-  Image,
-  Input,
-  NumberInput,
-  PasswordInput,
-  TextInput,
-} from "@mantine/core";
+import { Button, PasswordInput, TextInput } from "@mantine/core";
 import Link from "next/link";
 import { useForm } from "@mantine/form";
-import { useState } from "react";
-import { handleSignup } from "@/apis/api";
-import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { IconArrowRight } from "@tabler/icons-react";
+import { PhoneInput } from "../CommonComponents/PhoneInput";
+import { useRouter } from "next/navigation";
+import { useStpperStore } from "@/store/useStepperStore";
 
-export const SignupForm = ({ onClose }: { onClose: () => void }) => {
+export const SignupForm = ({
+  onClose,
+  isStepper,
+  nextStep,
+}: {
+  onClose?: () => void;
+  isStepper?: boolean;
+  nextStep?: any;
+}) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { stepperUser, setStepperUser, hasHydrated } = useStpperStore();
 
   const form = useForm({
     initialValues: {
@@ -49,127 +53,162 @@ export const SignupForm = ({ onClose }: { onClose: () => void }) => {
     },
   });
 
+  useEffect(() => {
+    if (!hasHydrated) return;
+
+    if (isStepper && stepperUser) {
+      form.setValues({
+        firstName: stepperUser.firstName || "",
+        lastName: stepperUser.lastName || "",
+        email: stepperUser.email || "",
+        companyName: stepperUser.companyName || "",
+        phoneNumber: stepperUser.phoneNumber || "",
+        password: stepperUser.password || "",
+        confirmPassword: stepperUser.password || "",
+      });
+    }
+  }, [isStepper, stepperUser, hasHydrated]);
+
+  if (!hasHydrated) {
+    return <div>Loading...</div>;
+  }
+
   const handleSubmit = async (values: any) => {
+    if (isStepper) {
+      setStepperUser({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        companyName: values.companyName,
+        phoneNumber: values.phoneNumber,
+        password: values.password,
+      });
+      nextStep();
+      return;
+    }
     setLoading(true);
 
-    const payload = {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setStepperUser({
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
       companyName: values.companyName,
       phoneNumber: values.phoneNumber,
       password: values.password,
-    };
-
-    const signupResponse = await handleSignup(payload);
-    if (signupResponse?.flag) {
-      notifications.show({
-        icon: <IconCheck />,
-        color: "teal",
-        message: signupResponse?.message,
-        position: "top-right",
-        autoClose: 4000,
-      });
-      form.reset();
-      onClose();
-    } else {
-      notifications.show({
-        icon: <IconX />,
-        color: "red",
-        message: signupResponse?.error,
-        position: "top-right",
-        autoClose: 4000,
-      });
-    }
+    });
     setLoading(false);
+    onClose?.();
+    router.push("/apply-account");
   };
 
+  // const handleSubmit = async (values: any) => {
+  //   setLoading(true);
+
+  //   await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  //   setShowStepper(true);
+
+  //   // const payload = {
+  //   //   firstName: values.firstName,
+  //   //   lastName: values.lastName,
+  //   //   email: values.email,
+  //   //   companyName: values.companyName,
+  //   //   phoneNumber: values.phoneNumber,
+  //   //   password: values.password,
+  //   // };
+
+  //   // const signupResponse = await handleSignup(payload);
+  //   // if (signupResponse?.flag) {
+  //   //   notifications.show({
+  //   //     icon: <IconCheck />,
+  //   //     color: "teal",
+  //   //     message: signupResponse?.message,
+  //   //     position: "top-right",
+  //   //     autoClose: 4000,
+  //   //   });
+  //   //   form.reset();
+  //   //   onClose();
+  //   // } else {
+  //   //   notifications.show({
+  //   //     icon: <IconX />,
+  //   //     color: "red",
+  //   //     message: signupResponse?.error,
+  //   //     position: "top-right",
+  //   //     autoClose: 4000,
+  //   //   });
+  //   // }
+  //   // setLoading(false);
+  // };
+
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
-      <div>
-        <div className="mt-10 flex flex-col gap-4 px-3">
-          <div className="flex justify-between gap-3">
+    <>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <div>
+          <div
+            className={`mt-5 mb-4 flex flex-col gap-4 ${
+              isStepper ? "px-28" : "px-3"
+            }`}
+          >
+            <div className="flex justify-between gap-3">
+              <TextInput
+                label="Enter First Name"
+                placeholder="your first name"
+                {...form.getInputProps("firstName")}
+                className="w-full"
+              />
+              <TextInput
+                label="Enter Last Name"
+                placeholder="your last name"
+                {...form.getInputProps("lastName")}
+                className="w-full"
+              />
+            </div>
             <TextInput
-              label="Enter First Name"
-              placeholder="your first name"
-              {...form.getInputProps("firstName")}
-              className="w-full"
+              label="Enter Email Address"
+              placeholder="your email address"
+              {...form.getInputProps("email")}
             />
             <TextInput
-              label="Enter Last Name"
-              placeholder="your last name"
-              {...form.getInputProps("lastName")}
-              className="w-full"
+              label="Enter Your Company Name"
+              placeholder="your company name"
+              {...form.getInputProps("companyName")}
             />
-          </div>
-          <TextInput
-            label="Enter Email Address"
-            placeholder="your email address"
-            {...form.getInputProps("email")}
-          />
-          <TextInput
-            label="Enter Your Company Name"
-            placeholder="your company name"
-            {...form.getInputProps("companyName")}
-          />
-          <TextInput
-            label="Enter Your Phone Number"
-            placeholder="(XXX) XXX-XXXX"
-            value={form.values.phoneNumber}
-            onChange={(event) => {
-              const raw = event.currentTarget.value
-                .replace(/\D/g, "")
-                .slice(0, 10);
-              const formatted =
-                raw.length <= 3
-                  ? raw
-                  : raw.length <= 6
-                  ? `(${raw.slice(0, 3)}) ${raw.slice(3)}`
-                  : `(${raw.slice(0, 3)}) ${raw.slice(3, 6)}-${raw.slice(6)}`;
-              form.setFieldValue("phoneNumber", formatted);
-            }}
-            error={form.errors.phoneNumber}
-            leftSection={
-              <span style={{ fontSize: "1.25rem", marginRight: "6px" }}>
-                🇺🇸
-              </span>
-            }
-          />
-          <div className="flex justify-between gap-3">
-            <PasswordInput
-              label="Set Your Password"
-              placeholder="your password"
-              {...form.getInputProps("password")}
-              className="w-full"
-            />
-            <PasswordInput
-              label="Confirm Your Password"
-              placeholder="confirm password"
-              {...form.getInputProps("confirmPassword")}
-              className="w-full"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Button type="submit" color="violet" loading={loading}>
-              Sign Up
-            </Button>
-            <Link
-              className="text-violet-800 text-[0.90rem] flex justify-center font-medium mt-3"
-              href="/login"
-            >
-              Already have an account? SIGN IN
-            </Link>
-          </div>
-          <div className="flex justify-center text-gray-400">
-            Or Continue With
-          </div>
-          <div className="flex gap-4 justify-center">
-            <Image src="/assets/google.png" h="44" w="40" alt="Google" />
-            <Image src="/assets/facebook.png" h="40" w="40" alt="Facebook" />
-            <Image src="/assets/apple.png" h="40" w="40" alt="Apple" />
+            <PhoneInput form={form} />
+            <div className="flex justify-between gap-3">
+              <PasswordInput
+                label="Set Your Password"
+                placeholder="your password"
+                {...form.getInputProps("password")}
+                className="w-full"
+              />
+              <PasswordInput
+                label="Confirm Your Password"
+                placeholder="confirm password"
+                {...form.getInputProps("confirmPassword")}
+                className="w-full"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Button
+                rightSection={<IconArrowRight />}
+                type="submit"
+                color="violet"
+                loading={loading}
+              >
+                Save and Continue
+              </Button>
+              <Link
+                className="text-violet-800 text-[0.90rem] flex justify-center font-medium mt-3"
+                href="/login"
+              >
+                Already have an account? SIGN IN
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };

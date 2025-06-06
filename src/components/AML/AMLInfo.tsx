@@ -14,13 +14,25 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { useUserStore } from "@/store/useUserStore";
-import { editAMLInfo, getAMLInfo } from "@/apis/api";
+import { applyForAccount, editAMLInfo, getAMLInfo } from "@/apis/api";
 import { AML_OPTIONS, COUNTRY_OPTIONS } from "@/utils/constants";
+import { PhoneInput } from "../CommonComponents/PhoneInput";
+import { useStpperStore } from "@/store/useStepperStore";
+import { useRouter } from "next/navigation";
 
-export const AMLInfo = () => {
+export const AMLInfo = ({ isStepper }: any) => {
+  const router = useRouter();
   const { user }: any = useUserStore();
   const [isLoading, setIsLoading] = useState(false);
   const [initialData, setInitialData] = useState<any>({});
+  const {
+    stepperUser,
+    businessVerification,
+    shippingAddress,
+    businessReference,
+    amlInfo,
+    setAmlInfo,
+  } = useStpperStore();
 
   const form = useForm({
     initialValues: {
@@ -32,7 +44,7 @@ export const AMLInfo = () => {
       state: "",
       city: "",
       zipCode: "",
-      phone: "",
+      phoneNumber: "",
       amlStatus: "",
       amlOther: "",
       confirmed: false,
@@ -50,7 +62,7 @@ export const AMLInfo = () => {
       state: (v) => (v.trim() ? null : "State is required"),
       city: (v) => (v.trim() ? null : "City is required"),
       zipCode: (v) => (/^\d{5}(-\d{4})?$/.test(v) ? null : "Invalid ZIP code"),
-      phone: (v) =>
+      phoneNumber: (v) =>
         /^\d{10}$/.test(v.replace(/\D/g, ""))
           ? null
           : "Phone must be 10 digits",
@@ -72,7 +84,7 @@ export const AMLInfo = () => {
           state: res.amlInfo.state ?? "",
           city: res.amlInfo.city ?? "",
           zipCode: res.amlInfo.zip_code ?? "",
-          phone: res.amlInfo.phone ?? "",
+          phoneNumber: res.amlInfo.phone ?? "",
           amlStatus: res.amlInfo.aml_status ?? "",
           amlOther: res.amlInfo.aml_other ?? "",
           confirmed: res.amlInfo.confirmed ?? false,
@@ -91,21 +103,88 @@ export const AMLInfo = () => {
     });
   };
 
-  const handleSubmit = async (values: typeof form.values) => {
+  const applyAccount = async (values: any) => {
     try {
-      setIsLoading(true);
-      const response: any = await editAMLInfo(user.id, values);
+      const response = await applyForAccount(
+        stepperUser,
+        businessVerification,
+        shippingAddress,
+        businessReference,
+        values
+      );
+
       if (response?.flag) {
         notifications.show({
           icon: <IconCheck />,
           color: "teal",
-          message: response.message,
+          title: response.message,
+          message:
+            "Your application has been forwarded to B V Gems. Once it is approved, we will notify you.",
           position: "top-right",
         });
+
+        setAmlInfo(null);
+        useStpperStore.getState().clearStepperUser();
+        useStpperStore.getState().clearBusinessVerification();
+        useStpperStore.getState().clearShippingAddress();
+        useStpperStore.getState().clearBusinessReference();
+        useStpperStore.getState().clearAmlInfo();
+        useStpperStore.getState().clearDataFlags();
+
+        localStorage.clear();
+
         setInitialData(values);
       } else {
         throw new Error(response?.error || "Submission failed");
       }
+    } catch (error: any) {
+      notifications.show({
+        icon: <IconX />,
+        color: "red",
+        message: error.message || "An error occurred",
+        position: "top-right",
+      });
+    }
+  };
+
+  const handleSubmit = async (values: typeof form.values) => {
+    try {
+      setIsLoading(true);
+
+      if (isStepper && form.isValid()) {
+        setAmlInfo(values);
+        await applyAccount(values);
+      } else if (user?.id) {
+        const response = await editAMLInfo(user.id, values);
+        if (response?.flag) {
+          notifications.show({
+            icon: <IconCheck />,
+            color: "teal",
+            message: response.message,
+            position: "top-right",
+          });
+          setInitialData(values);
+        } else {
+          throw new Error(response?.error || "Submission failed");
+        }
+      }
+    } catch (error: any) {
+      notifications.show({
+        icon: <IconX />,
+        color: "red",
+        message: error.message || "An error occurred",
+        position: "top-right",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const redirectToHome = async () => {
+    try {
+      setIsLoading(true);
+      await applyAccount(amlInfo);
+      router.push("/");
     } catch (error: any) {
       notifications.show({
         icon: <IconX />,
@@ -122,11 +201,29 @@ export const AMLInfo = () => {
     JSON.stringify(form.values) !== JSON.stringify(initialData);
 
   return (
-    <Container size="xl">
-      <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Title order={3} mb="md">
-          AML Information
-        </Title>
+    <Container mt={"xl"} size="xl">
+      <form
+        className={`${isStepper ? "px-28" : ""}`}
+        onSubmit={form.onSubmit(handleSubmit)}
+      >
+        {!isStepper ? (
+          <Title order={3} mb="md">
+            AML Information
+          </Title>
+        ) : null}
+        {isStepper ? (
+          <div className="flex justify-end mt-5">
+            <Button
+              onClick={redirectToHome}
+              size="compact-sm"
+              variant="transparent"
+              color="violet"
+            >
+              <span className="underline">Skip For Now</span>
+            </Button>
+          </div>
+        ) : null}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <TextInput
             label="Bank Name"
@@ -178,23 +275,7 @@ export const AMLInfo = () => {
             disabled={isLoading}
             {...form.getInputProps("zipCode")}
           />
-          <TextInput
-            label="Phone"
-            placeholder="Enter phone number"
-            value={form.values.phone}
-            onChange={(e) => {
-              const raw = e.currentTarget.value.replace(/\D/g, "").slice(0, 10);
-              const formatted =
-                raw.length <= 3
-                  ? raw
-                  : raw.length <= 6
-                  ? `(${raw.slice(0, 3)}) ${raw.slice(3)}`
-                  : `(${raw.slice(0, 3)}) ${raw.slice(3, 6)}-${raw.slice(6)}`;
-              form.setFieldValue("phone", formatted);
-            }}
-            error={form.errors.phone}
-            disabled={isLoading}
-          />
+          <PhoneInput form={form} />
         </div>
 
         <Title order={4} mt="xl" mb="sm">

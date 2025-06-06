@@ -1,5 +1,42 @@
 import axios from "axios";
 
+export const changeApproveStatus = async (userId: any) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/approveAccount",
+      { userId }
+    );
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while approving account");
+  }
+};
+
+export const applyForAccount = async (
+  stepperUser: any,
+  businessVerification: any,
+  shippingAddress: any,
+  businessReference: any,
+  amlInfo: any
+) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/applyForAccount",
+      {
+        stepperUser,
+        businessVerification,
+        shippingAddress,
+        businessReference,
+        amlInfo,
+      }
+    );
+
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching user profile");
+  }
+};
+
 export const getUserProfile = async (userId: any) => {
   try {
     const response = await axios.get(
@@ -147,9 +184,8 @@ export const handleSignin = async (payload: any) => {
       `http://localhost:3000/api/handleSignin`,
       payload
     );
-    console.log("res", response);
 
-    return response.data;
+    return response;
   } catch (error) {
     console.log("Something went wrong while signing in", error);
   }

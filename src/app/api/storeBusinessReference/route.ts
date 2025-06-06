@@ -1,31 +1,12 @@
 import { NextRequest } from "next/server";
 import { pool } from "@/lib/pool";
+import { createBusinessReference } from "../helperFunctions/createBusinessReference";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      user_id,
-      contact_person,
-      contact_number,
-      company_address,
-      company_name,
-      additional_notes,
-    } = body;
-
-    await pool.query(
-      `INSERT INTO business_reference
-        (user_id, contact_person,contact_number, company_address,company_name,additional_notes)
-       VALUES ($1,$2,$3,$4,$5,$6)`,
-      [
-        user_id,
-        contact_person,
-        contact_number,
-        company_address,
-        company_name,
-        additional_notes,
-      ]
-    );
+    const userId = body?.userId;
+    await createBusinessReference(body, userId);
 
     return new Response(
       JSON.stringify({

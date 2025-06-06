@@ -6,16 +6,23 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import { US_STATES } from "@/utils/constants";
 import React, { useEffect, useState } from "react";
 import { upsertShippingAddress } from "@/apis/api";
+import { PhoneInput } from "../CommonComponents/PhoneInput";
+import { useStpperStore } from "@/store/useStepperStore";
 
 export const ShippingAddressForm = ({
   userId,
   addressData,
   onSuccess,
+  isStepper,
+  nextStep,
 }: {
-  userId: string;
+  userId?: string;
   addressData?: any;
-  onSuccess: () => void;
+  onSuccess?: () => void;
+  isStepper?: boolean;
+  nextStep?: any;
 }) => {
+  const { setShippingAddress } = useStpperStore();
   const isEdit = Boolean(addressData?.id);
 
   const form = useForm({
@@ -59,16 +66,31 @@ export const ShippingAddressForm = ({
   }, [addressData]);
 
   const handleSubmit = async (values: typeof form.values) => {
+    if (isStepper && form.isValid()) {
+      setShippingAddress({
+        fullName: values.fullName,
+        addressLine1: values.addressLine1,
+        addressLine2: values.addressLine2,
+        city: values.city,
+        state: values.state,
+        zipCode: values.zipCode,
+        country: values.country,
+        phoneNumber: values.phoneNumber,
+        email: values.email,
+      });
+      nextStep();
+      return;
+    }
     const payload = {
-      ...(isEdit ? { id: addressData.id } : { user_id: userId }),
-      full_name: values.fullName,
-      address_line1: values.addressLine1,
-      address_line2: values.addressLine2,
+      ...(isEdit ? { id: addressData.id } : { userId: userId }),
+      fullName: values.fullName,
+      addressLine1: values.addressLine1,
+      addressLine2: values.addressLine2,
       city: values.city,
       state: values.state,
-      zip_code: values.zipCode,
+      zipCode: values.zipCode,
       country: values.country,
-      phone_number: values.phoneNumber,
+      phoneNumber: values.phoneNumber,
       email: values.email,
     };
 
@@ -82,7 +104,7 @@ export const ShippingAddressForm = ({
         position: "top-right",
         color: "teal",
       });
-      onSuccess();
+      onSuccess?.();
     } else {
       notifications.show({
         icon: <IconX />,
@@ -95,7 +117,19 @@ export const ShippingAddressForm = ({
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <div className="flex flex-col gap-4 px-2.5">
+      <div className={`flex flex-col gap-4 ${isStepper ? "px-28" : "px-2.5"}`}>
+        {isStepper ? (
+          <div className="flex justify-end mt-5">
+            <Button
+              onClick={() => nextStep()}
+              size="compact-sm"
+              variant="transparent"
+              color="violet"
+            >
+              <span className="underline">Skip For Now</span>
+            </Button>
+          </div>
+        ) : null}
         <TextInput
           label="Full Name"
           placeholder="John Doe"
@@ -133,25 +167,7 @@ export const ShippingAddressForm = ({
           {...form.getInputProps("zipCode")}
         />
         <TextInput label="Country" value="United States" disabled />
-        <TextInput
-          label="Phone Number"
-          placeholder="(123) 456-7890"
-          value={form.values.phoneNumber}
-          onChange={(e) => {
-            const raw = e.currentTarget.value.replace(/\D/g, "").slice(0, 10);
-            const formatted =
-              raw.length <= 3
-                ? raw
-                : raw.length <= 6
-                ? `(${raw.slice(0, 3)}) ${raw.slice(3)}`
-                : `(${raw.slice(0, 3)}) ${raw.slice(3, 6)}-${raw.slice(6)}`;
-            form.setFieldValue("phoneNumber", formatted);
-          }}
-          error={form.errors.phoneNumber}
-          leftSection={
-            <span style={{ fontSize: "1.25rem", marginRight: "6px" }}>🇺🇸</span>
-          }
-        />
+        <PhoneInput form={form} />
         <TextInput
           label="Email"
           type="email"

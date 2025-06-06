@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, password } = body;
+    console.log("emailllll", email, password);
 
     const userQuery = `SELECT * FROM app_users WHERE email = $1 LIMIT 1;`;
     const result = await pool.query(userQuery, [email]);
@@ -27,10 +28,23 @@ export async function POST(request: NextRequest) {
       user.password_hash
     );
 
+    console.log("ispasss", isPasswordCorrect, user.is_approved);
+
     if (!isPasswordCorrect) {
       return new Response(
         JSON.stringify({ flag: false, error: "Invalid credentials!" }),
         { status: 201, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!user?.is_approved) {
+      return new Response(
+        JSON.stringify({
+          flag: false,
+          error:
+            "Your account is not yet approved. We'll notify you once approved.",
+        }),
+        { status: 202, headers: { "Content-Type": "application/json" } }
       );
     }
 

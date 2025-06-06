@@ -1,5 +1,7 @@
+// src/app/api/aml/post.ts
 import { NextRequest } from "next/server";
 import { pool } from "@/lib/pool";
+import { upsertAMLInfo } from "../helperFunctions/createAMLInfo";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,54 +14,7 @@ export async function POST(request: NextRequest) {
     );
     const isExisting = checkResult.rowCount > 0;
 
-    await pool.query(
-      `INSERT INTO aml_info (
-        user_id,
-        bank_name,
-        bank_account,
-        bank_address,
-        primary_contact,
-        country,
-        state,
-        city,
-        zip_code,
-        phone,
-        aml_status,
-        aml_other,
-        confirmed,
-        created_at,
-        updated_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW(), NOW())
-      ON CONFLICT (user_id) DO UPDATE SET
-        bank_name = EXCLUDED.bank_name,
-        bank_account = EXCLUDED.bank_account,
-        bank_address = EXCLUDED.bank_address,
-        primary_contact = EXCLUDED.primary_contact,
-        country = EXCLUDED.country,
-        state = EXCLUDED.state,
-        city = EXCLUDED.city,
-        zip_code = EXCLUDED.zip_code,
-        phone = EXCLUDED.phone,
-        aml_status = EXCLUDED.aml_status,
-        aml_other = EXCLUDED.aml_other,
-        confirmed = EXCLUDED.confirmed,
-        updated_at = NOW();`,
-      [
-        userId,
-        data.bankName,
-        data.bankAccount,
-        data.bankAddress,
-        data.primaryContact,
-        data.country,
-        data.state,
-        data.city,
-        data.zipCode,
-        data.phone,
-        data.amlStatus,
-        data.amlOther,
-        data.confirmed,
-      ]
-    );
+    await upsertAMLInfo(userId, data);
 
     const message = isExisting
       ? "AML info updated successfully!"

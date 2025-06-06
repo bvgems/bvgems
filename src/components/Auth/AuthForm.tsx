@@ -21,7 +21,7 @@ export const AuthForm = ({ onClose }: { onClose: () => void }) => {
             value="signUp"
             leftSection={<IconUsersPlus size={15} />}
           >
-            <span className="font-semibold">Sign Up</span>
+            <span className="font-semibold">Apply for an Account</span>
           </TabsTab>
         </TabsList>
 
@@ -30,7 +30,7 @@ export const AuthForm = ({ onClose }: { onClose: () => void }) => {
         </TabsPanel>
 
         <TabsPanel value="signUp">
-          <SignupForm onClose={onClose} />
+          <SignupForm onClose={onClose} isStepper={false} />
         </TabsPanel>
       </Tabs>
     </div>

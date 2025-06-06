@@ -4,7 +4,7 @@ import { useForm } from "@mantine/form";
 import { useState } from "react";
 import { handleSignin } from "@/apis/api";
 import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { IconCheck, IconExclamationCircle, IconX } from "@tabler/icons-react";
 import { useUserStore } from "@/store/useUserStore";
 
 export const SigninForm = ({ onClose }: { onClose: () => void }) => {
@@ -36,26 +36,36 @@ export const SigninForm = ({ onClose }: { onClose: () => void }) => {
 
     const signinResponse = await handleSignin(payload);
 
-    if (signinResponse?.flag) {
+    if (signinResponse?.data?.flag) {
       notifications.show({
         icon: <IconCheck />,
         color: "teal",
-        message: "Welcome Back " + signinResponse?.user?.firstName + " !",
+        message: "Welcome Back " + signinResponse?.data?.user?.firstName + " !",
         position: "top-right",
         autoClose: 4000,
       });
 
-      setUser(signinResponse.user);
+      setUser(signinResponse?.data?.user);
       form.reset();
       onClose();
     } else {
-      notifications.show({
-        icon: <IconX />,
-        color: "red",
-        message: signinResponse?.error,
-        position: "top-right",
-        autoClose: 4000,
-      });
+      if (signinResponse?.status === 201) {
+        notifications.show({
+          icon: <IconX />,
+          color: "red",
+          message: signinResponse?.data?.error,
+          position: "top-right",
+          autoClose: 4000,
+        });
+      } else if (signinResponse?.status === 202) {
+        notifications.show({
+          icon: <IconExclamationCircle />,
+          color: "yellow",
+          message: signinResponse?.data?.error,
+          position: "top-right",
+          autoClose: 4000,
+        });
+      }
     }
     setLoading(false);
   };
