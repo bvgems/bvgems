@@ -116,6 +116,18 @@ export const getShippingAddresses = async (userId: any) => {
     console.log("Something went wrong while fetching user profile");
   }
 };
+export const getBusinessVerification = async (userId: any) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getBusinessVerification?id=${userId}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.log(
+      "Something went wrong while fetching business verification data"
+    );
+  }
+};
 
 export const getBusinessReferences = async (userId: any) => {
   try {

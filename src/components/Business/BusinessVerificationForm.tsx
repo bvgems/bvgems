@@ -6,6 +6,8 @@ import { IconArrowRight } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useStpperStore } from "@/store/useStepperStore";
 import { COUNTRY_OPTIONS } from "@/utils/constants";
+import { useUserStore } from "@/store/useUserStore";
+import { getBusinessVerification } from "@/apis/api";
 
 export const BusinessVerificationForm = ({
   onClose,
@@ -18,6 +20,9 @@ export const BusinessVerificationForm = ({
 }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [verification, setVerification] = useState<any[]>([]);
+
+  const { user }: any = useUserStore();
   const {
     stepperUser,
     businessVerification,
@@ -46,24 +51,48 @@ export const BusinessVerificationForm = ({
   });
 
   useEffect(() => {
-    if (!hasHydrated) return;
+    fetchBusinessVerification();
+  }, [user?.id]);
 
-    if (stepperUser?.companyName) {
-      form.setFieldValue("companyName", stepperUser.companyName);
-    }
-
-    if (businessVerification) {
+  const fetchBusinessVerification = async () => {
+    if (!user?.id) return;
+    const res = await getBusinessVerification(user.id);
+    const fetched = res?.businessVerification[0];
+    if (fetched) {
+      setVerification(fetched);
       form.setValues({
-        companyName: stepperUser?.companyName || "",
-        ownerName: businessVerification.ownerName || "",
-        companyAddress: businessVerification.companyAddress || "",
-        country: businessVerification.country || "",
-        state: businessVerification.state || "",
-        city: businessVerification.city || "",
-        website: businessVerification.companyWebsite || "",
+        companyName: fetched.company_name || "",
+        ownerName: fetched.owner_name || "",
+        companyAddress: fetched.company_address || "",
+        country: fetched.country || "",
+        state: fetched.state || "",
+        city: fetched.city || "",
+        website: fetched.company_website || "",
       });
     }
-  }, [stepperUser, businessVerification, hasHydrated]);
+  };
+
+  useEffect(() => {
+    if (!hasHydrated) return;
+
+    if (!verification) {
+      if (stepperUser?.companyName) {
+        form.setFieldValue("companyName", stepperUser.companyName);
+      }
+
+      if (businessVerification) {
+        form.setValues({
+          companyName: stepperUser?.companyName || "",
+          ownerName: businessVerification.ownerName || "",
+          companyAddress: businessVerification.companyAddress || "",
+          country: businessVerification.country || "",
+          state: businessVerification.state || "",
+          city: businessVerification.city || "",
+          website: businessVerification.companyWebsite || "",
+        });
+      }
+    }
+  }, [stepperUser, businessVerification, hasHydrated, verification]);
 
   if (!hasHydrated) {
     return <div>Loading...</div>;
