@@ -12,6 +12,7 @@ import { getUserProfile } from "@/apis/api";
 import { useUserStore } from "@/store/useUserStore";
 import { AMLInfo } from "../AML/AMLInfo";
 import { BusinessReference } from "../Business/BusinessReference";
+import { BusinessVerificationForm } from "../Business/BusinessVerificationForm";
 
 interface Props {
   activeSection?: string;
@@ -80,7 +81,7 @@ export const SettingsComponent = ({
     "Business Details": [
       {
         title: "Business Verification",
-        content: "<BusinessVerification />",
+        content: <BusinessVerificationForm />,
       },
       {
         title: "Business References",

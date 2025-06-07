@@ -6,14 +6,14 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const {
       id,
-      full_name,
-      address_line1,
-      address_line2,
+      fullName,
+      addressLine1,
+      addressLine2,
       city,
       state,
-      zip_code,
+      zipCode,
       country,
-      phone_number,
+      phoneNumber,
       email,
     } = body;
 
@@ -31,14 +31,14 @@ export async function PUT(request: NextRequest) {
           updated_at = now()
         WHERE id = $10`,
       [
-        full_name,
-        address_line1,
-        address_line2,
+        fullName,
+        addressLine1,
+        addressLine2,
         city,
         state,
-        zip_code,
+        zipCode,
         country,
-        phone_number,
+        phoneNumber,
         email,
         id,
       ]

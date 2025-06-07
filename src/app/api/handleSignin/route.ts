@@ -9,15 +9,14 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, password } = body;
-    console.log("emailllll", email, password);
 
     const userQuery = `SELECT * FROM app_users WHERE email = $1 LIMIT 1;`;
     const result = await pool.query(userQuery, [email]);
 
     if (result.rows.length === 0) {
       return new Response(
-        JSON.stringify({ flag: false, error: "Email not found" }),
-        { status: 401, headers: { "Content-Type": "application/json" } }
+        JSON.stringify({ flag: false, error: "Invalid username or password" }),
+        { status: 201, headers: { "Content-Type": "application/json" } }
       );
     }
 
@@ -28,11 +27,9 @@ export async function POST(request: NextRequest) {
       user.password_hash
     );
 
-    console.log("ispasss", isPasswordCorrect, user.is_approved);
-
     if (!isPasswordCorrect) {
       return new Response(
-        JSON.stringify({ flag: false, error: "Invalid credentials!" }),
+        JSON.stringify({ flag: false, error: "Invalid username or password" }),
         { status: 201, headers: { "Content-Type": "application/json" } }
       );
     }

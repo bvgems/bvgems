@@ -3,9 +3,10 @@ import Link from "next/link";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { IconArrowRight } from "@tabler/icons-react";
-import { PhoneInput } from "../CommonComponents/PhoneInput";
+import { PhoneNumberInput } from "../CommonComponents/PhoneInput";
 import { useRouter } from "next/navigation";
 import { useStpperStore } from "@/store/useStepperStore";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 export const SignupForm = ({
   onClose,
@@ -39,11 +40,13 @@ export const SignupForm = ({
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
       companyName: (value) =>
         value.trim().length > 0 ? null : "Company name is required",
-      phoneNumber: (value) =>
-        /^\(\d{3}\)\s\d{3}-\d{4}$/.test(value)
-          ? null
-          : "Phone number must be of 10 digits.",
+      phoneNumber: (value) => {
+        if (!value) return "Phone number is required.";
+        if (!isValidPhoneNumber(value))
+          return "Please enter a valid phone number.";
 
+        return null;
+      },
       password: (value) =>
         value.trim().length >= 6
           ? null
@@ -88,7 +91,7 @@ export const SignupForm = ({
     }
     setLoading(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     setStepperUser({
       firstName: values.firstName,
@@ -102,45 +105,6 @@ export const SignupForm = ({
     onClose?.();
     router.push("/apply-account");
   };
-
-  // const handleSubmit = async (values: any) => {
-  //   setLoading(true);
-
-  //   await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  //   setShowStepper(true);
-
-  //   // const payload = {
-  //   //   firstName: values.firstName,
-  //   //   lastName: values.lastName,
-  //   //   email: values.email,
-  //   //   companyName: values.companyName,
-  //   //   phoneNumber: values.phoneNumber,
-  //   //   password: values.password,
-  //   // };
-
-  //   // const signupResponse = await handleSignup(payload);
-  //   // if (signupResponse?.flag) {
-  //   //   notifications.show({
-  //   //     icon: <IconCheck />,
-  //   //     color: "teal",
-  //   //     message: signupResponse?.message,
-  //   //     position: "top-right",
-  //   //     autoClose: 4000,
-  //   //   });
-  //   //   form.reset();
-  //   //   onClose();
-  //   // } else {
-  //   //   notifications.show({
-  //   //     icon: <IconX />,
-  //   //     color: "red",
-  //   //     message: signupResponse?.error,
-  //   //     position: "top-right",
-  //   //     autoClose: 4000,
-  //   //   });
-  //   // }
-  //   // setLoading(false);
-  // };
 
   return (
     <>
@@ -175,7 +139,7 @@ export const SignupForm = ({
               placeholder="your company name"
               {...form.getInputProps("companyName")}
             />
-            <PhoneInput form={form} />
+            <PhoneNumberInput form={form} />
             <div className="flex justify-between gap-3">
               <PasswordInput
                 label="Set Your Password"

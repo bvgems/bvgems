@@ -16,9 +16,10 @@ import { useForm } from "@mantine/form";
 import { useUserStore } from "@/store/useUserStore";
 import { applyForAccount, editAMLInfo, getAMLInfo } from "@/apis/api";
 import { AML_OPTIONS, COUNTRY_OPTIONS } from "@/utils/constants";
-import { PhoneInput } from "../CommonComponents/PhoneInput";
+import { PhoneNumberInput } from "../CommonComponents/PhoneInput";
 import { useStpperStore } from "@/store/useStepperStore";
 import { useRouter } from "next/navigation";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 export const AMLInfo = ({ isStepper }: any) => {
   const router = useRouter();
@@ -32,6 +33,7 @@ export const AMLInfo = ({ isStepper }: any) => {
     businessReference,
     amlInfo,
     setAmlInfo,
+    hasHydrated,
   } = useStpperStore();
 
   const form = useForm({
@@ -62,39 +64,73 @@ export const AMLInfo = ({ isStepper }: any) => {
       state: (v) => (v.trim() ? null : "State is required"),
       city: (v) => (v.trim() ? null : "City is required"),
       zipCode: (v) => (/^\d{5}(-\d{4})?$/.test(v) ? null : "Invalid ZIP code"),
-      phoneNumber: (v) =>
-        /^\d{10}$/.test(v.replace(/\D/g, ""))
-          ? null
-          : "Phone must be 10 digits",
+      phoneNumber: (value) => {
+        if (!value) return "Phone number is required.";
+        if (!isValidPhoneNumber(value))
+          return "Please enter a valid phone number.";
+        return null;
+      },
       confirmed: (v) => (v ? null : "Confirmation is required"),
     },
   });
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     const fetchAMLInfo = async () => {
-      if (!user?.id) return;
-      const res: any = await getAMLInfo(user.id);
-      if (res?.amlInfo) {
-        const normalized = {
-          bankName: res.amlInfo.bank_name ?? "",
-          bankAccount: res.amlInfo.bank_account ?? "",
-          bankAddress: res.amlInfo.bank_address ?? "",
-          primaryContact: res.amlInfo.primary_contact ?? "",
-          country: res.amlInfo.country ?? "",
-          state: res.amlInfo.state ?? "",
-          city: res.amlInfo.city ?? "",
-          zipCode: res.amlInfo.zip_code ?? "",
-          phoneNumber: res.amlInfo.phone ?? "",
-          amlStatus: res.amlInfo.aml_status ?? "",
-          amlOther: res.amlInfo.aml_other ?? "",
-          confirmed: res.amlInfo.confirmed ?? false,
-        };
-        form.setValues(normalized);
-        setInitialData(normalized);
+      if (amlInfo) {
+        form.setValues({
+          bankName: amlInfo.bankName || "",
+          bankAccount: amlInfo.bankAccount || "",
+          bankAddress: amlInfo.bankAddress || "",
+          primaryContact: amlInfo.primaryContact || "",
+          country: amlInfo.country || "",
+          state: amlInfo.state || "",
+          city: amlInfo.city || "",
+          zipCode: amlInfo.zipCode || "",
+          phoneNumber: amlInfo.phoneNumber || "",
+          amlStatus: amlInfo.amlStatus || "",
+          amlOther: amlInfo.amlOther || "",
+          confirmed: amlInfo.confirmed || false,
+        });
+        setInitialData({
+          bankName: amlInfo.bankName || "",
+          bankAccount: amlInfo.bankAccount || "",
+          bankAddress: amlInfo.bankAddress || "",
+          primaryContact: amlInfo.primaryContact || "",
+          country: amlInfo.country || "",
+          state: amlInfo.state || "",
+          city: amlInfo.city || "",
+          zipCode: amlInfo.zipCode || "",
+          phoneNumber: amlInfo.phoneNumber || "",
+          amlStatus: amlInfo.amlStatus || "",
+          amlOther: amlInfo.amlOther || "",
+          confirmed: amlInfo.confirmed || false,
+        });
+      } else if (user?.id) {
+        const res: any = await getAMLInfo(user.id);
+        if (res?.amlInfo) {
+          const normalized = {
+            bankName: res.amlInfo.bank_name ?? "",
+            bankAccount: res.amlInfo.bank_account ?? "",
+            bankAddress: res.amlInfo.bank_address ?? "",
+            primaryContact: res.amlInfo.primary_contact ?? "",
+            country: res.amlInfo.country ?? "",
+            state: res.amlInfo.state ?? "",
+            city: res.amlInfo.city ?? "",
+            zipCode: res.amlInfo.zip_code ?? "",
+            phoneNumber: res.amlInfo.phone ?? "",
+            amlStatus: res.amlInfo.aml_status ?? "",
+            amlOther: res.amlInfo.aml_other ?? "",
+            confirmed: res.amlInfo.confirmed ?? false,
+          };
+          form.setValues(normalized);
+          setInitialData(normalized);
+        }
       }
     };
     fetchAMLInfo();
-  }, [user]);
+  }, [amlInfo, user, hasHydrated]);
 
   const handleCheckboxChange = (status: string) => {
     form.setValues({
@@ -152,6 +188,8 @@ export const AMLInfo = ({ isStepper }: any) => {
       setIsLoading(true);
 
       if (isStepper && form.isValid()) {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
         setAmlInfo(values);
         await applyAccount(values);
       } else if (user?.id) {
@@ -199,6 +237,10 @@ export const AMLInfo = ({ isStepper }: any) => {
 
   const isFormChanged =
     JSON.stringify(form.values) !== JSON.stringify(initialData);
+
+  if (!hasHydrated) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container mt={"xl"} size="xl">
@@ -275,7 +317,7 @@ export const AMLInfo = ({ isStepper }: any) => {
             disabled={isLoading}
             {...form.getInputProps("zipCode")}
           />
-          <PhoneInput form={form} />
+          <PhoneNumberInput form={form} />
         </div>
 
         <Title order={4} mt="xl" mb="sm">

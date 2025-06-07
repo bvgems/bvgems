@@ -1,26 +1,32 @@
-import { TextInput } from "@mantine/core";
 import React from "react";
+import { Input } from "@mantine/core";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
-export const PhoneInput = ({ form }: any) => {
+export const PhoneNumberInput = ({ form }: any) => {
   return (
-    <TextInput
+    <Input.Wrapper
       label="Phone Number"
-      placeholder="(123) 456-7890"
-      value={form?.values?.phoneNumber}
-      onChange={(e) => {
-        const raw = e.currentTarget.value.replace(/\D/g, "").slice(0, 10);
-        const formatted =
-          raw.length <= 3
-            ? raw
-            : raw.length <= 6
-            ? `(${raw.slice(0, 3)}) ${raw.slice(3)}`
-            : `(${raw.slice(0, 3)}) ${raw.slice(3, 6)}-${raw.slice(6)}`;
-        form.setFieldValue("phoneNumber", formatted);
-      }}
       error={form?.errors?.phoneNumber}
-      leftSection={
-        <span style={{ fontSize: "1.25rem", marginRight: "6px" }}>🇺🇸</span>
-      }
-    />
+      required
+    >
+      <PhoneInput
+        international
+        countryCallingCodeEditable={false}
+        defaultCountry="US"
+        value={form?.values?.phoneNumber}
+        onChange={(value) => {
+          form.setFieldValue("phoneNumber", value ?? "");
+        }}
+        placeholder="(123) 456-7890"
+        style={{
+          width: "100%",
+          padding: "8px",
+          borderRadius: "8px",
+          border: "1px solid #ced4da",
+          fontSize: "16px",
+        }}
+      />
+    </Input.Wrapper>
   );
 };

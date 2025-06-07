@@ -1,4 +1,3 @@
-// src/utils/amlInfoHelper.ts
 import { pool } from "@/lib/pool";
 
 export async function upsertAMLInfo(userId: any, amlInfo: any) {

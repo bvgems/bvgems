@@ -14,12 +14,16 @@ export const BusinessVerificationForm = ({
 }: {
   onClose?: () => void;
   isStepper?: boolean;
-  nextStep: any;
+  nextStep?: any;
 }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { stepperUser, setStepperUser, setBusinessVerification } =
-    useStpperStore();
+  const {
+    stepperUser,
+    businessVerification,
+    setBusinessVerification,
+    hasHydrated,
+  } = useStpperStore();
 
   const form = useForm({
     initialValues: {
@@ -42,14 +46,32 @@ export const BusinessVerificationForm = ({
   });
 
   useEffect(() => {
-    if (isStepper && stepperUser) {
-      form.setFieldValue("companyName", stepperUser.companyName || "");
+    if (!hasHydrated) return;
+
+    if (stepperUser?.companyName) {
+      form.setFieldValue("companyName", stepperUser.companyName);
     }
-  }, [isStepper, stepperUser]);
+
+    if (businessVerification) {
+      form.setValues({
+        companyName: stepperUser?.companyName || "",
+        ownerName: businessVerification.ownerName || "",
+        companyAddress: businessVerification.companyAddress || "",
+        country: businessVerification.country || "",
+        state: businessVerification.state || "",
+        city: businessVerification.city || "",
+        website: businessVerification.companyWebsite || "",
+      });
+    }
+  }, [stepperUser, businessVerification, hasHydrated]);
+
+  if (!hasHydrated) {
+    return <div>Loading...</div>;
+  }
 
   const handleSubmit = async (values: typeof form.values) => {
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     if (form.isValid()) {
       setBusinessVerification({
@@ -66,12 +88,14 @@ export const BusinessVerificationForm = ({
     nextStep();
   };
 
+  const isDisabled = !isStepper || loading;
+
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <div
-          className={`mt-10 flex flex-col gap-4 ${
-            isStepper ? "px-28" : "px-3"
+          className={`flex flex-col gap-4 ${
+            isStepper ? "mt-10 px-28" : "px-3"
           }`}
         >
           <div className="flex gap-3">
@@ -86,6 +110,7 @@ export const BusinessVerificationForm = ({
               label="Enter Owner Name"
               placeholder="your owner name"
               className="w-full"
+              disabled={isDisabled}
               {...form.getInputProps("ownerName")}
             />
           </div>
@@ -93,6 +118,7 @@ export const BusinessVerificationForm = ({
           <TextInput
             label="Enter Company Address"
             placeholder="your company address"
+            disabled={isDisabled}
             {...form.getInputProps("companyAddress")}
           />
 
@@ -101,7 +127,7 @@ export const BusinessVerificationForm = ({
             data={COUNTRY_OPTIONS}
             searchable
             placeholder="Select your country"
-            disabled={loading}
+            disabled={isDisabled}
             {...form.getInputProps("country")}
           />
 
@@ -110,12 +136,14 @@ export const BusinessVerificationForm = ({
               label="Enter State"
               placeholder="your state"
               className="w-full"
+              disabled={isDisabled}
               {...form.getInputProps("state")}
             />
             <TextInput
               label="Enter City"
               placeholder="your city"
               className="w-full"
+              disabled={isDisabled}
               {...form.getInputProps("city")}
             />
           </div>
@@ -123,26 +151,31 @@ export const BusinessVerificationForm = ({
           <TextInput
             label="Enter Company Website"
             placeholder="your company website"
+            disabled={isDisabled}
             {...form.getInputProps("website")}
           />
 
-          <Button
-            rightSection={<IconArrowRight />}
-            type="submit"
-            color="violet"
-            loading={loading}
-          >
-            Save and Continue
-          </Button>
+          {isStepper ? (
+            <>
+              <Button
+                rightSection={<IconArrowRight />}
+                type="submit"
+                color="violet"
+                loading={loading}
+              >
+                Save and Continue
+              </Button>
 
-          <div className="flex flex-col gap-2">
-            <Link
-              className="text-violet-800 text-[0.90rem] flex justify-center font-medium mt-3"
-              href="/login"
-            >
-              Already have an account? SIGN IN
-            </Link>
-          </div>
+              <div className="flex flex-col gap-2">
+                <Link
+                  className="text-violet-800 text-[0.90rem] flex justify-center font-medium mt-3"
+                  href="/login"
+                >
+                  Already have an account? SIGN IN
+                </Link>
+              </div>
+            </>
+          ) : null}
         </div>
       </form>
     </>

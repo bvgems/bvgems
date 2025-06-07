@@ -1,13 +1,13 @@
 "use client";
-import { Button, Group, Select, TextInput } from "@mantine/core";
+import { Button, Group, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
-import { US_STATES } from "@/utils/constants";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { upsertShippingAddress } from "@/apis/api";
-import { PhoneInput } from "../CommonComponents/PhoneInput";
+import { PhoneNumberInput } from "../CommonComponents/PhoneInput";
 import { useStpperStore } from "@/store/useStepperStore";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 export const ShippingAddressForm = ({
   userId,
@@ -22,7 +22,7 @@ export const ShippingAddressForm = ({
   isStepper?: boolean;
   nextStep?: any;
 }) => {
-  const { setShippingAddress } = useStpperStore();
+  const { shippingAddress, setShippingAddress, hasHydrated } = useStpperStore();
   const isEdit = Boolean(addressData?.id);
 
   const form = useForm({
@@ -37,6 +37,7 @@ export const ShippingAddressForm = ({
       phoneNumber: "",
       email: "",
     },
+    validateInputOnChange: true,
     validate: {
       fullName: (v) => (v.trim() ? null : "Required"),
       addressLine1: (v) => (v.trim() ? null : "Required"),
@@ -44,29 +45,53 @@ export const ShippingAddressForm = ({
       state: (v) => (v.trim() ? null : "Required"),
       zipCode: (v) => (/^\d{5}(-\d{4})?$/.test(v) ? null : "Invalid ZIP"),
       email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : "Invalid email"),
-      phoneNumber: (v) =>
-        /^\(\d{3}\)\s\d{3}-\d{4}$/.test(v) ? null : "Phone must be 10 digits",
+      phoneNumber: (value) => {
+        if (!value) return "Phone number is required.";
+        if (!isValidPhoneNumber(value))
+          return "Please enter a valid phone number.";
+
+        return null;
+      },
     },
   });
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (addressData) {
       form.setValues({
-        fullName: addressData.full_name,
-        addressLine1: addressData.address_line1,
-        addressLine2: addressData.address_line2,
-        city: addressData.city,
-        state: addressData.state,
-        zipCode: addressData.zip_code,
-        country: addressData.country,
-        phoneNumber: addressData.phone_number,
-        email: addressData.email,
+        fullName: addressData.full_name || "",
+        addressLine1: addressData.address_line1 || "",
+        addressLine2: addressData.address_line2 || "",
+        city: addressData.city || "",
+        state: addressData.state || "",
+        zipCode: addressData.zip_code || "",
+        country: addressData.country || "United States",
+        phoneNumber: addressData.phone_number || "",
+        email: addressData.email || "",
+      });
+    } else if (shippingAddress) {
+      form.setValues({
+        fullName: shippingAddress.fullName || "",
+        addressLine1: shippingAddress.addressLine1 || "",
+        addressLine2: shippingAddress.addressLine2 || "",
+        city: shippingAddress.city || "",
+        state: shippingAddress.state || "",
+        zipCode: shippingAddress.zipCode || "",
+        country: shippingAddress.country || "United States",
+        phoneNumber: shippingAddress.phoneNumber || "",
+        email: shippingAddress.email || "",
       });
     }
-  }, [addressData]);
+  }, [addressData, shippingAddress, hasHydrated]);
+
+  if (!hasHydrated) {
+    return <div>Loading...</div>;
+  }
 
   const handleSubmit = async (values: typeof form.values) => {
     if (isStepper && form.isValid()) {
+      await new Promise((resolve) => setTimeout(resolve, 300));
       setShippingAddress({
         fullName: values.fullName,
         addressLine1: values.addressLine1,
@@ -81,6 +106,7 @@ export const ShippingAddressForm = ({
       nextStep();
       return;
     }
+
     const payload = {
       ...(isEdit ? { id: addressData.id } : { userId: userId }),
       fullName: values.fullName,
@@ -118,7 +144,7 @@ export const ShippingAddressForm = ({
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <div className={`flex flex-col gap-4 ${isStepper ? "px-28" : "px-2.5"}`}>
-        {isStepper ? (
+        {isStepper && (
           <div className="flex justify-end mt-5">
             <Button
               onClick={() => nextStep()}
@@ -129,7 +155,7 @@ export const ShippingAddressForm = ({
               <span className="underline">Skip For Now</span>
             </Button>
           </div>
-        ) : null}
+        )}
         <TextInput
           label="Full Name"
           placeholder="John Doe"
@@ -152,12 +178,10 @@ export const ShippingAddressForm = ({
             placeholder="New York"
             {...form.getInputProps("city")}
           />
-          <Select
-            searchable
+          <TextInput
+            label="Enter State"
+            placeholder="your state"
             className="w-1/2"
-            label="State"
-            placeholder="Select state"
-            data={US_STATES}
             {...form.getInputProps("state")}
           />
         </div>
@@ -167,7 +191,7 @@ export const ShippingAddressForm = ({
           {...form.getInputProps("zipCode")}
         />
         <TextInput label="Country" value="United States" disabled />
-        <PhoneInput form={form} />
+        <PhoneNumberInput form={form} />
         <TextInput
           label="Email"
           type="email"

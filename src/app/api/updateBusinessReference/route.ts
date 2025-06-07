@@ -6,12 +6,21 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const {
       id,
-      contact_person,
-      contact_number,
-      company_address,
-      company_name,
-      additional_notes,
+      contactPerson,
+      phoneNumber,
+      companyAddress,
+      companyName,
+      addtionalNotes,
     } = body;
+    console.log(
+      "hey,",
+      id,
+      contactPerson,
+      phoneNumber,
+      companyAddress,
+      companyName,
+      addtionalNotes
+    );
 
     await pool.query(
       `UPDATE business_reference SET
@@ -23,11 +32,11 @@ export async function PUT(request: NextRequest) {
           updated_at = now()
         WHERE id = $6`,
       [
-        contact_person,
-        contact_number,
-        company_address,
-        company_name,
-        additional_notes,
+        contactPerson,
+        phoneNumber,
+        companyAddress,
+        companyName,
+        addtionalNotes,
         id,
       ]
     );

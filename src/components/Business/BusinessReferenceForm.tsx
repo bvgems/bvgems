@@ -5,8 +5,9 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { upsertBusinessReference } from "@/apis/api";
-import { PhoneInput } from "../CommonComponents/PhoneInput";
+import { PhoneNumberInput } from "../CommonComponents/PhoneInput";
 import { useStpperStore } from "@/store/useStepperStore";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 export const BusinessReferenceForm = ({
   userId,
@@ -22,7 +23,8 @@ export const BusinessReferenceForm = ({
   nextStep?: any;
 }) => {
   const isEdit = Boolean(referenceData?.id);
-  const { setBusinessReference } = useStpperStore();
+  const { businessReference, setBusinessReference, hasHydrated } =
+    useStpperStore();
 
   const form = useForm({
     initialValues: {
@@ -37,25 +39,45 @@ export const BusinessReferenceForm = ({
       companyName: (v) => (v.trim() ? null : "Company Name is Required"),
       companyAddress: (v) => (v.trim() ? null : "Company Address is Required"),
       contactPerson: (v) => (v.trim() ? null : "Contact Person is Required"),
-      phoneNumber: (v) =>
-        /^\(\d{3}\)\s\d{3}-\d{4}$/.test(v) ? null : "Phone must be 10 digits",
+      phoneNumber: (value) => {
+        if (!value) return "Phone number is required.";
+        if (!isValidPhoneNumber(value))
+          return "Please enter a valid phone number.";
+
+        return null;
+      },
     },
   });
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (referenceData) {
       form.setValues({
-        companyName: referenceData?.company_name,
-        companyAddress: referenceData?.company_address,
-        contactPerson: referenceData?.contact_person,
-        phoneNumber: referenceData?.contact_number,
-        additionalNotes: referenceData?.additional_notes,
+        companyName: referenceData?.company_name || "",
+        companyAddress: referenceData?.company_address || "",
+        contactPerson: referenceData?.contact_person || "",
+        phoneNumber: referenceData?.contact_number || "",
+        additionalNotes: referenceData?.additional_notes || "",
+      });
+    } else if (businessReference) {
+      form.setValues({
+        companyName: businessReference.companyName || "",
+        companyAddress: businessReference.companyAddress || "",
+        contactPerson: businessReference.contactPerson || "",
+        phoneNumber: businessReference.phoneNumber || "",
+        additionalNotes: businessReference.addtionalNotes || "",
       });
     }
-  }, [referenceData]);
+  }, [referenceData, businessReference, hasHydrated]);
+
+  if (!hasHydrated) {
+    return <div>Loading...</div>;
+  }
 
   const handleSubmit = async (values: typeof form.values) => {
     if (isStepper && form.isValid()) {
+      await new Promise((resolve) => setTimeout(resolve, 300));
       setBusinessReference({
         companyName: values.companyName,
         contactPerson: values.contactPerson,
@@ -97,7 +119,7 @@ export const BusinessReferenceForm = ({
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <div className={`flex flex-col gap-4 ${isStepper ? "px-28" : "px-2.5"}`}>
-        {isStepper ? (
+        {isStepper && (
           <div className="flex justify-end mt-5">
             <Button
               type="button"
@@ -116,7 +138,7 @@ export const BusinessReferenceForm = ({
               <span className="underline">Skip For Now</span>
             </Button>
           </div>
-        ) : null}
+        )}
         <TextInput
           label="Company Name"
           placeholder="B. V. Gems"
@@ -127,7 +149,7 @@ export const BusinessReferenceForm = ({
           placeholder="John Doe"
           {...form.getInputProps("contactPerson")}
         />
-        <PhoneInput form={form} />
+        <PhoneNumberInput form={form} />
         <TextInput
           label="Company Address"
           placeholder="123 Main st, NY, NY, 10038"
@@ -135,7 +157,7 @@ export const BusinessReferenceForm = ({
         />
         <Textarea
           label="Additional Notes"
-          placeholder="provide additinal notes"
+          placeholder="Provide additional notes"
           {...form.getInputProps("additionalNotes")}
         />
 
