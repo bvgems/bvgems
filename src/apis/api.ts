@@ -1,5 +1,16 @@
 import axios from "axios";
 
+export const getStorePolicies = async () => {
+  try {
+    const response = await axios.get(
+      "http://localhost:3000/api/getStorePolicies"
+    );
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching the store policies");
+  }
+};
+
 export const changeApproveStatus = async (userId: any) => {
   try {
     const response = await axios.post(

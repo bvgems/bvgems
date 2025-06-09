@@ -19,8 +19,6 @@
     color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
     font-size: 15px;
     font-weight: 500;
-  
-   
   }
 
   .link:hover{

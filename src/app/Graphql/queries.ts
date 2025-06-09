@@ -150,3 +150,14 @@ export const getToleranceByHandle = `
     }
   }
 `;
+
+export const getStorePolicyPage = `
+  query GetStorePolicyPage {
+    page(handle: "store-policy") {
+      metafield(namespace: "custom", key: "store_policy") {
+        value
+        type
+      }
+    }
+  }
+`;

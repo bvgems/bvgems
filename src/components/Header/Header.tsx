@@ -31,22 +31,18 @@ const links = [
   {
     link: "/education",
     label: "Gemstones Education",
-    // links: [
-    //   { link: "/docs", label: "Documentation" },
-    //   { link: "/resources", label: "Resources" },
-    //   { link: "/community", label: "Community" },
-    //   { link: "/blog", label: "Blog" },
-    // ],
   },
-  { link: "/about", label: "About" },
+  { link: "/colorstone-layouts", label: "Colorstone Layouts" },
   { link: "/pricing", label: "Pricing" },
   {
     link: "#2",
-    label: "Support",
+    label: "More",
     links: [
+      { link: "/education", label: "Gemstones Education" },
+      { link: "/about-us", label: "About B. V. Gems." },
+      { link: "/store-policy", label: "Store Policy" },
       { link: "/faq", label: "FAQ" },
-      { link: "/demo", label: "Book a demo" },
-      { link: "/forums", label: "Forums" },
+      { link: "/contact-us", label: "Contact Us" },
     ],
   },
 ];
@@ -111,7 +107,9 @@ export function Header() {
               </Center>
             </div>
           </Menu.Target>
-          <Menu.Dropdown>{menuItems}</Menu.Dropdown>
+          <Menu.Dropdown className="flex flex-col gap-2 px-8">
+            {menuItems}
+          </Menu.Dropdown>
         </Menu>
       );
     }
