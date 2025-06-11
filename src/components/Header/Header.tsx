@@ -38,11 +38,11 @@ const links = [
     link: "#2",
     label: "More",
     links: [
-      { link: "/education", label: "Gemstones Education" },
-      { link: "/about-us", label: "About B. V. Gems." },
-      { link: "/store-policy", label: "Store Policy" },
-      { link: "/faq", label: "FAQ" },
-      { link: "/contact-us", label: "Contact Us" },
+      { link: "/customer-support/education", label: "Gemstones Education" },
+      { link: "/customer-support/about-us", label: "About B. V. Gems." },
+      { link: "/customer-support/store-policy", label: "Store Policy" },
+      { link: "/customer-support/faqs", label: "FAQ" },
+      { link: "/customer-support/contact-us", label: "Contact Us" },
     ],
   },
 ];

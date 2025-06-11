@@ -1,14 +1,5 @@
-import React from "react";
-import {
-  Text,
-  List,
-  Anchor,
-  Box,
-  Accordion,
-  ActionIcon,
-  Center,
-} from "@mantine/core";
-import { IconDots, IconPlus } from "@tabler/icons-react";
+import { Text, List, Anchor, Accordion, Center } from "@mantine/core";
+import { IconPlus } from "@tabler/icons-react";
 
 interface Node {
   type: string;
@@ -113,7 +104,7 @@ const RichTextRenderer = ({ content }: any) => {
 
   return (
     <Accordion
-      chevron={<IconPlus color="#7950f2" size={16} />}
+      chevron={<IconPlus color="#5d0ec0" size={16} />}
       chevronPosition="left"
       variant="default"
       defaultValue={accordionItems.map(
@@ -128,7 +119,7 @@ const RichTextRenderer = ({ content }: any) => {
           value={item.heading.value || `item-${index}`}
         >
           <AccordionControl>
-            <Text color="violet" fw={700}>
+            <Text style={{ color: "#5d0ec0" }} fw={700}>
               {item.heading.children?.map((child, idx) =>
                 renderNode(child, `heading-${index}-${idx}`)
               )}

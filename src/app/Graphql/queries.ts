@@ -161,3 +161,14 @@ export const getStorePolicyPage = `
     }
   }
 `;
+
+export const getFAQs = `
+  query GetFAQs {
+    page(handle: "faq") {
+      metafield(namespace: "custom", key: "faqs") {
+        value
+        type
+      }
+    }
+  }
+`;

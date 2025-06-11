@@ -11,6 +11,15 @@ export const getStorePolicies = async () => {
   }
 };
 
+export const getFAQs = async () => {
+  try {
+    const response = await axios.get("http://localhost:3000/api/getFAQs");
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching the FAQs");
+  }
+};
+
 export const changeApproveStatus = async (userId: any) => {
   try {
     const response = await axios.post(

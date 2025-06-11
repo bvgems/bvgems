@@ -7,10 +7,8 @@ import {
   Title,
   Card,
   Text,
-  Divider,
   Group,
   ThemeIcon,
-  Box,
   Loader,
 } from "@mantine/core";
 import { IconShieldCheck } from "@tabler/icons-react";
@@ -34,7 +32,7 @@ export default function StorePolicy() {
   }, []);
 
   return (
-    <Container size="lg" py="lg">
+    <Container size="xl">
       <div className="flex justify-center items-center gap-2">
         <ThemeIcon
           variant="gradient"
@@ -44,14 +42,14 @@ export default function StorePolicy() {
           <IconShieldCheck size="1.5rem" />
         </ThemeIcon>{" "}
         <Title order={1} className="text-center" mb="xs">
-          <span className="text-[1.7rem]">Store Policy</span>
+          <span className="text-[1.7rem] text-violet-800">Store Policy</span>
         </Title>
       </div>
       <Text className="text-center" size="md" color="dimmed" mb="lg">
         At B. V. Gems, we uphold the highest ethical standards as proud members
         of the AGTA. Read our comprehensive store policy below.
       </Text>
-      <Card radius="md" withBorder p="xl">
+      <Card className="mt-5" radius="md" withBorder p="xl">
         {policyContent ? (
           <RichTextRenderer content={policyContent} />
         ) : (
