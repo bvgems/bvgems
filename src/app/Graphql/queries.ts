@@ -172,3 +172,76 @@ export const getFAQs = `
     }
   }
 `;
+
+export const shopifyQuery = `
+      query getProductsByCategory($category: String!) {
+        products(first: 50, query: $category) {
+          edges {
+            node {
+              id
+              title
+              handle
+              description
+              productType
+              createdAt
+              tags
+              images(first: 2) {
+                edges {
+                  node {
+                    url
+                    altText
+                  }
+                }
+              }
+              variants(first: 1) {
+                edges {
+                  node {
+                    price {
+                      amount
+                      currencyCode
+                    }
+                    title
+                    sku
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+
+export const GetProductByHandle = `
+  query getProductByHandle($handle: String!) {
+    productByHandle(handle: $handle) {
+      id
+      title
+      handle
+      description
+      productType
+      createdAt
+      tags
+      images(first: 10) {
+        edges {
+          node {
+            url
+            altText
+          }
+        }
+      }
+      variants(first: 10) {
+        edges {
+          node {
+            price {
+              amount
+              currencyCode
+            }
+            title
+            sku
+            availableForSale
+          }
+        }
+      }
+    }
+  }
+`;

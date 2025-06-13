@@ -76,7 +76,7 @@ export function Header() {
         <Menu.Item
           key={item.link}
           onClick={() => router.push(item.link)}
-          className={isSubActive ? "text-[#5d0ec0]" : ""}
+          className={isSubActive ? "text-[#6B7280]" : ""}
         >
           {item.label}
         </Menu.Item>
@@ -97,7 +97,7 @@ export function Header() {
                 <span
                   className={`${classes.linkLabel} ${
                     link.links?.some((item) => pathname === item.link)
-                      ? "text-[#5d0ec0]"
+                      ? "text-[#6B7280]"
                       : ""
                   }`}
                 >
@@ -118,7 +118,7 @@ export function Header() {
       <Link key={link.label} href={link.link} className={classes.link}>
         <span
           className={`${classes.linkLabel} ${
-            pathname === link.link ? "text-[#5d0ec0]" : ""
+            pathname === link.link ? "text-gray-400" : ""
           }`}
         >
           {link.label}
@@ -143,7 +143,7 @@ export function Header() {
         <AuthForm onClose={close} />
       </Modal>
 
-      <div className="mx-16 flex justify-evenly mb-3 mt-2 text-violet-800">
+      <div className="flex justify-evenly py-1.5 mb-3 text-black bg-[#dbdddf]">
         <a
           href="https://www.google.com/maps/search/?api=1&query=66+W+47th+St,+Booth+%239+and+%2310,+New+York,+NY+10036"
           target="_blank"
@@ -175,7 +175,7 @@ export function Header() {
             <GridCol span={{ base: 12, md: 2 }}>
               <Image
                 className="ml-5"
-                src={"/assets/logo.png"}
+                src={"/assets/logo2.png"}
                 alt="logo"
                 h={60}
                 w={150}
@@ -195,8 +195,13 @@ export function Header() {
               {user ? (
                 <UserProfile user={user} />
               ) : (
-                <Button color="violet" onClick={open}>
-                  Sign In
+                <Button
+                  color="#6B7280"
+                  variant="outline"
+                  size="compact-md"
+                  onClick={open}
+                >
+                  <span className="text-black">Sign In</span>
                 </Button>
               )}
 
@@ -233,19 +238,6 @@ export function Header() {
           </Grid>
         </nav>
       </header>
-
-      <div className="mx-56 flex flex-row flex-wrap justify-evenly mb-3 mt-2 text-violet-800">
-        {gemstones?.map((gemstone: any, index: number) => (
-          <Link
-            href={`/${gemstone?.handle}`}
-            key={index}
-            className="mx-2 hover:cursor-pointer hover:font-semibold"
-          >
-            {gemstone?.title}
-          </Link>
-        ))}
-      </div>
-      <Divider />
     </>
   );
 }

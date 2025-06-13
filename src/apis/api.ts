@@ -1,9 +1,33 @@
 import axios from "axios";
 
+export const fetchProductByHandle = async (handle: any) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getJewerlyProduct?handle=${handle}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching the jewerly product data");
+  }
+};
+
+export const getJewerlyData = async (category: any) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getJewerlyData?category=${category}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(
+      "Something went wrong while fetching the jewerly category data"
+    );
+  }
+};
+
 export const getStorePolicies = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/getStorePolicies"
+      `http://localhost:3000/api/getStorePolicies`
     );
     return response.data;
   } catch (error) {

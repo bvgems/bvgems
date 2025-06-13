@@ -22,10 +22,11 @@
   }
 
   .link:hover{
-    color:#5d0ec0;
+    color:#6B7280    ;
   }
   
   .linkLabel {
     margin-right: 5px;
-    font-weight: 550;
+    font-weight: 570;
+    font-size: 1.1rem;
   }

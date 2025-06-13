@@ -1,59 +1,91 @@
 "use client";
 import { Button, Image, Text, Title } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
-import { Carousel, CarouselSlide } from "@mantine/carousel";
-import { useRef } from "react";
-import Autoplay from "embla-carousel-autoplay";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export function Hero() {
-  const autoplay = useRef(Autoplay({ delay: 2200 }));
-  const slidesData = [
-    {
-      image: "/assets/hero1.png",
-      title: "Your Gemstone Destination Awaits",
-      description:
-        "Discover premium gems from every corner, beautifully brought together",
-    },
-    {
-      image: "/assets/hero2.png",
-      title: "Shop Gemstones the Easy Way",
-      description:
-        "Browse our curated gemstone collection — all beautifully in one place",
-    },
-  ];
+  const slide = {
+    image: "/assets/hero.png",
+    title: "YOUR GEMSTONE DESTINATION AWAITS",
+    description:
+      "Discover premium gems from every corner, beautifully brought together",
+  };
 
-  const slides = slidesData.map((slide, index) => (
-    <CarouselSlide key={index}>
-      <div className="relative w-full h-[400px]">
+  const [revealImage, setRevealImage] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setRevealImage(true);
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="relative w-full h-[750px] bg-white overflow-hidden">
+      <AnimatePresence>
+        {!revealImage && (
+          <>
+            <motion.div
+              initial={{ x: 0 }}
+              animate={{ x: "-100%" }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.8 }}
+              className="absolute top-0 left-0 w-1/2 h-full bg-[#f7f7f7] z-20"
+            />
+            <motion.div
+              initial={{ x: 0 }}
+              animate={{ x: "100%" }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.8 }}
+              className="absolute top-0 right-0 w-1/2 h-full bg-[#f7f7f7] z-20"
+            />
+          </>
+        )}
+      </AnimatePresence>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 1.1 }}
+        animate={revealImage ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="w-full h-full absolute top-0 left-0 z-10"
+      >
         <Image
           src={slide.image}
           alt={slide.title}
-          className=" object-cover"
-          fit="inherit"
+          fit="fill"
+          className="w-full h-full object-cover object-[center_right]"
         />
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30 z-10" />
+      </motion.div>
 
-        <div className="absolute inset-0 text-black flex flex-col justify-center items-start px-32">
-          <Title className="text-violet-800" order={2}>
-            {slide.title}
-          </Title>
-          <Text size="md" mt="xl">
-            {slide.description}
-          </Text>
-          <Button
-            mt="lg"
-            color="violet"
-            rightSection={<IconArrowRight size={20} />}
-          >
-            Shop Now
-          </Button>
-        </div>
-      </div>
-    </CarouselSlide>
-  ));
+      <motion.div
+        initial={{ y: 50, opacity: 0 }}
+        animate={revealImage ? { y: 0, opacity: 1 } : {}}
+        transition={{ duration: 1, delay: 0.5 }}
+        className="absolute inset-0 text-white flex flex-col justify-center items-center text-center px-4 z-30 mt-36"
+      >
+        <h1
+          style={{ fontFamily: "'Alice', sans-serif", fontWeight: "520" }}
+          className="text-[2.5rem]"
+        >
+          {slide.title}
+        </h1>
 
-  return (
-    <Carousel withIndicators height={450}>
-      {slides}
-    </Carousel>
+        <p className="max-w-xl mt-2.5 text-lg">{slide.description}</p>
+        <Button
+          mt="xl"
+          px={"xl"}
+          size="lg"
+          color="white"
+          variant="outline"
+          fw={"normal"}
+          rightSection={<IconArrowRight size={20} />}
+        >
+          Shop Now
+        </Button>
+      </motion.div>
+    </div>
   );
 }

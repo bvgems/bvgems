@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Montserrat } from "next/font/google";
+import { Alice } from "next/font/google";
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
 import "@mantine/notifications/styles.css";
@@ -9,7 +10,6 @@ import { MantineProvider } from "@mantine/core";
 import { Header } from "@/components/Header/Header";
 import { Notifications } from "@mantine/notifications";
 import { InitGemstones } from "@/components/CommonComponents/InitGemstones";
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,6 +21,11 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700"],
 });
 
+const alice = Alice({
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,7 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={montserrat.className}>
+      <body
+        className={`${montserrat.className} ${alice.className}`}
+      >
         <MantineProvider>
           <Notifications />
           <Header />

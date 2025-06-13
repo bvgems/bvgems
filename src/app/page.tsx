@@ -1,13 +1,17 @@
-import { GemstonesEducationBanner } from "@/components/Education/GemstonesEducationBanner";
-import { GridView } from "@/components/GridView/GridView";
 import { Hero } from "@/components/Hero/Hero";
+import { JewelrySection } from "@/components/Jewerly/JewerlySection";
+import { LooseGemstones } from "@/components/LooseGemstones/LooseGemstones";
+import { OwnEngagementRing } from "@/components/OwnEngagementRing/OwnEngagementRing";
+import { OwnJewerly } from "@/components/OwnJewerly/OwnJewerly";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <GridView />
-      <GemstonesEducationBanner />
+      <JewelrySection />
+      <LooseGemstones />
+      <OwnJewerly />
+      <OwnEngagementRing />
     </>
   );
 }

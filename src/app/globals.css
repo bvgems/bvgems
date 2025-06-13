@@ -18,11 +18,15 @@
 }
 
 body {
-  background: var(--background);
-  /* background-color: #e3dad0; */
+  /* background: var(--background); */
+  background-color: #f7f7f7;
   /* color: var(--foreground); */
-  font-family: 'Montserrat', sans-serif;
+  /* font-family: 'Montserrat', sans-serif; */
 }
+h1, h2, h3 {
+  font-family: 'Alice', sans-serif;
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0%);

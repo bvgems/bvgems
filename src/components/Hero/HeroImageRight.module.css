@@ -42,7 +42,7 @@
   }
   
   .title {
-    font-family: Outfit, var(--mantine-font-family);
+    font-family:'Alice', sans-serif;
     font-weight: 500;
     line-height: 1.05;
     max-width: 500px;
@@ -59,7 +59,7 @@
   
   .description {
     color: var(--mantine-color-white);
-    font-family: Outfit, var(--mantine-font-family);
+    font-family: 'Alice', sans-serif;
     opacity: 0.75;
     max-width: 500px;
     font-size: 18px;
@@ -72,7 +72,7 @@
   .control {
     padding-left: 20px;
     padding-right: 20px;
-    font-family: Outfit, var(--mantine-font-family);
+    font-family: 'Alice', sans-serif;
     font-size: 18px;
     background-color: #bc4c2a;
   
