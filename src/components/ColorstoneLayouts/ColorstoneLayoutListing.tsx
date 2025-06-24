@@ -1,34 +1,27 @@
-"use client";
+import React, { useEffect, useState } from "react";
+import { ViewAllProductComponent } from "../CommonComponents/ViewAllProductComponent";
+import { Divider, Tabs, TabsList, TabsTab } from "@mantine/core";
 import { useParams } from "next/navigation";
-import { Grid, Tabs, TabsList, TabsTab, Divider } from "@mantine/core";
-import { useState, useEffect } from "react";
-import { getJewerlyData } from "@/apis/api";
-import { motion, AnimatePresence } from "framer-motion";
-import { FilterDialog } from "@/components/Jewerly/FilterDialog";
-import { JewelryCategoryCard } from "@/components/Jewerly/JewerlyCard";
-import { ViewAllProductComponent } from "@/components/CommonComponents/ViewAllProductComponent";
+import { FilterDialog } from "../Jewerly/FilterDialog";
+import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
+import { fetchColorstoneLayouts } from "@/apis/api";
 
-export default function JewelryCategoryPage() {
+export const ColorstoneLayoutListing = () => {
   const [rawProducts, setRawProducts] = useState<any>([]);
   const [allProducts, setAllProducts] = useState<any>([]);
   const [activeTab, setActiveTab] = useState("alphabetical");
 
-  const { category } = useParams();
-
+  const category = "layouts";
   useEffect(() => {
-    const fetchJewerlyData = async () => {
-      if (category) {
-        const response = await getJewerlyData(category);
-        const products: any = response?.products?.edges || [];
-        setRawProducts(products);
-        setAllProducts(
-          [...products].sort((a, b) => a.node.title.localeCompare(b.node.title))
-        );
-      }
-    };
+    getAllColorstoneLayouts();
+  }, []);
 
-    fetchJewerlyData();
-  }, [category]);
+  const getAllColorstoneLayouts = async () => {
+    const response = await fetchColorstoneLayouts();
+
+    setRawProducts(response);
+    setAllProducts(response);
+  };
 
   useEffect(() => {
     if (activeTab === "alphabetical") {
@@ -45,7 +38,6 @@ export default function JewelryCategoryPage() {
       setAllProducts(sorted);
     }
   }, [activeTab, rawProducts]);
-
   return (
     <div className="p-8">
       <div className="w-[100%]">
@@ -99,4 +91,4 @@ export default function JewelryCategoryPage() {
       />
     </div>
   );
-}
+};

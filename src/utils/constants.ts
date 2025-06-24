@@ -309,3 +309,217 @@ export const COUNTRY_OPTIONS = [
   "Åland Islands",
   "Other",
 ];
+
+export const categoryOptions = [
+  {
+    label: "Bracelets",
+    image: "/assets/bracelet-icon.png",
+  },
+  {
+    label: "Necklaces",
+    image: "/assets/necklace-icon.png",
+  },
+];
+
+export const shapeOptions = [
+  {
+    label: "Round",
+    image: "/assets/round-icon.png",
+  },
+];
+
+export const braceletLengthOptions = [
+  {
+    label: "6.5 Inch",
+  },
+  {
+    label: "7 Inch",
+  },
+  {
+    label: "7.5 Inch",
+  },
+];
+export const necklaceLengthOptions = [
+  {
+    label: "16 Inch",
+  },
+  {
+    label: "18 Inch",
+  },
+  {
+    label: "20 Inch",
+  },
+  {
+    label: "22 Inch",
+  },
+];
+
+export const stoneSizeOptions = [
+  {
+    value: "1.5 mm",
+    label: "1.5 mm",
+  },
+  { value: "1.75 mm", label: "1.75 mm" },
+  {
+    value: "2 mm",
+    label: "2 mm",
+  },
+  {
+    value: "2.25 mm",
+    label: "2.25 mm",
+  },
+  {
+    value: "2.5 mm",
+    label: "2.5 mm",
+  },
+  { value: "2.75 mm", label: "2.75 mm" },
+  {
+    value: "3 mm",
+    label: "3 mm",
+  },
+  {
+    value: "3.25 mm",
+    label: "3.25 mm",
+  },
+  {
+    value: "3.5 mm",
+    label: "3.5 mm",
+  },
+  {
+    value: "3.75 mm",
+    label: "3.75 mm",
+  },
+  {
+    value: "4 mm",
+    label: "4 mm",
+  },
+];
+export const gemstoneOptions = [
+  {
+    label: "Alexandrite",
+    value: "Alexandrite",
+    image: "/assets/sapphire.png",
+  },
+  { label: "Amethyst", value: "Amethyst", image: "/assets/amethyst.png" },
+  { label: "Aquamarine", value: "Aquamarine", image: "/assets/aquamarine.png" },
+  { label: "Citrine", value: "Citrine", image: "/assets/citrine.png" },
+  { label: "Emerald", value: "Emerald", image: "/assets/emerald.png" },
+  { label: "Morganite", value: "Morganite", image: "/assets/morganite.png" },
+  { label: "Peridot", value: "Peridot", image: "/assets/peridot.png" },
+  { label: "Ruby", value: "Ruby", image: "/assets/ruby.png" },
+  { label: "Sapphire", value: "Sapphire", image: "/assets/sapphire.png" },
+  { label: "Tanzanite", value: "Tanzanite", image: "/assets/tanzanite.png" },
+  { label: "Tsavorite", value: "Tsavorite", image: "/assets/tsavorite.png" },
+  {
+    label: "Lab Diamond",
+    value: "Lab Diamond",
+    image: "/assets/lab-diamond.png",
+  },
+  {
+    label: "Black Diamond",
+    value: "Black Diamond",
+    image: "/assets/black-diamond.png",
+  },
+];
+
+export const colorOptions: any = {
+  Sapphire: [
+    { label: "Blue", value: "blue", color: "#1E40AF" },
+    { label: "Yellow", value: "yellow", color: "#FACC15" },
+    { label: "Pink", value: "pink", color: "#EC4899" },
+    { label: "Green", value: "green", color: "#22C55E" },
+    { label: "Orange", value: "orange", color: "#F97316" },
+    { label: "Multi color", value: "multi-color", color: "#D946EF" },
+  ],
+  Ruby: [
+    { label: "Pinkish Red", value: "pinkish-red", color: "#E0115F" },
+    { label: "Piegion Blood", value: "piegion-blood", color: "#9B111E" },
+    { label: "Medium Red", value: "medium-red", color: "#AA4069" },
+    { label: "Deep Red", value: "deep-red", color: "#850101" },
+  ],
+  Tsavorite: [{ label: "Green", value: "green", color: "#059669" }],
+};
+
+export const patternOptions = [
+  {
+    value: "straight-pattern",
+    label: "Straight Pattern",
+    description: "A clean, consistent line of one gemstone color throughout.",
+    image: "/assets/straight-img.png",
+  },
+  {
+    value: "ombre-pattern",
+    label: "Ombre Pattern",
+    description: "A gradient-style blend from one gemstone color to another.",
+    image: "/assets/ombre-img.png",
+  },
+  {
+    value: "custom-details",
+    label: "Give Your Pattern",
+  },
+];
+
+export const quickNavigationData = [
+  {
+    value: "education",
+    label: "Education",
+    children: [
+      {
+        label: "Gemstone Education",
+        href: "/customer-support/gemstone-education",
+      },
+    ],
+  },
+  {
+    value: "get-to-know-us",
+    label: "Get to Know Us",
+    children: [
+      {
+        label: "About Us",
+        href: "/customer-support/about-us",
+      },
+    ],
+  },
+  {
+    value: "customer-center",
+    label: "Customer Center",
+    children: [
+      {
+        label: "Contact Us",
+        href: "/customer-support/contact-us",
+      },
+      {
+        label: "Frequently Asked Questions",
+        href: "/customer-support/faqs",
+      },
+    ],
+  },
+  {
+    value: "our-policies",
+    label: "Our Policies",
+    children: [
+      {
+        label: "Store Policy",
+        href: "/customer-support/store-policy",
+      },
+      {
+        label: "Return Policy",
+        href: "/customer-support/return-policy",
+      },
+      {
+        label: "Shipping Policy",
+        href: "/customer-support/shipping-policy",
+      },
+    ],
+  },
+  {
+    value: "site-map",
+    label: "Site Map",
+    children: [
+      {
+        label: "Site Map",
+        href: "/customer-support/sitemap",
+      },
+    ],
+  },
+];

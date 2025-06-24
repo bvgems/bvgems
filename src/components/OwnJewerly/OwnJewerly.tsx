@@ -4,16 +4,16 @@ import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { JewelryCard } from "./JewerlyCard";
 
 const jewelryItems = [
-  {
-    title: "Rings",
-    image: "/assets/ownring3.png",
-    subtitle: "Design a ring that reflects your story.",
-  },
-  {
-    title: "Ear Rings",
-    image: "/assets/ownearrings.png",
-    subtitle: "Delicate earrings crafted for every moment.",
-  },
+  // {
+  //   title: "Rings",
+  //   image: "/assets/ownring3.png",
+  //   subtitle: "Design a ring that reflects your story.",
+  // },
+  // {
+  //   title: "Ear Rings",
+  //   image: "/assets/ownearrings.png",
+  //   subtitle: "Delicate earrings crafted for every moment.",
+  // },
   {
     title: "Necklaces",
     image: "/assets/ownnecklace.png",

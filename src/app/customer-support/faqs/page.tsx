@@ -16,6 +16,7 @@ export default function FAQPage() {
   const [faqContent, setFaqContent] = useState();
   const fetchFAQs = async () => {
     const response = await getFAQs();
+    console.log("response", response);
     if (response) {
       const rawValue = response?.faqs?.data?.page?.metafield?.value;
       let faqData;

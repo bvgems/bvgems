@@ -1,5 +1,43 @@
 import axios from "axios";
 
+export const getSampleLayoutUrl = async (
+  gemstone: string,
+  shape: string,
+  pattern: string,
+  color: string
+) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/getSampleLayoutUrl`,
+      {
+        gemstone,
+        shape,
+        pattern,
+        color,
+      }
+    );
+
+    return response?.data?.data;
+  } catch (error) {
+    console.log(
+      "Something went wrong while fetching the color stone layout",
+      error
+    );
+    return null;
+  }
+};
+
+export const fetchColorstoneLayouts = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/getColorstoneLayouts`
+    );
+    return response.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching the color stone layouts");
+  }
+};
+
 export const fetchProductByHandle = async (handle: any) => {
   try {
     const response = await axios.get(

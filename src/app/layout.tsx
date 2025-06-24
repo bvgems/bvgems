@@ -6,10 +6,11 @@ import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
 import "@mantine/notifications/styles.css";
 import "./globals.css";
-import { MantineProvider } from "@mantine/core";
+import { Divider, MantineProvider } from "@mantine/core";
 import { Header } from "@/components/Header/Header";
 import { Notifications } from "@mantine/notifications";
 import { InitGemstones } from "@/components/CommonComponents/InitGemstones";
+import { Footer } from "@/components/CommonComponents/Footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -33,14 +34,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${montserrat.className} ${alice.className}`}
-      >
+      <body className={`${montserrat.className} ${alice.className}`}>
         <MantineProvider>
           <Notifications />
           <Header />
           <InitGemstones />
           {children}
+          <Divider className="mt-10"/>
+          <Footer />
         </MantineProvider>
       </body>
     </html>

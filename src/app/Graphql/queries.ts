@@ -173,6 +173,32 @@ export const getFAQs = `
   }
 `;
 
+export const getAllProducts = `
+  query GetAllProducts {
+    products(first: 100) {
+      edges {
+        node {
+          id
+          title
+          handle
+          images(first: 1) {
+            edges {
+              node {
+                src
+              }
+            }
+          }
+          metafield(namespace: "custom", key: "in_hand") {
+            value
+            type
+          }
+        }
+      }
+    }
+  }
+`;
+
+
 export const shopifyQuery = `
       query getProductsByCategory($category: String!) {
         products(first: 50, query: $category) {
@@ -211,6 +237,31 @@ export const shopifyQuery = `
       }
     `;
 
+export const getProductsByCategory = `
+    query GetProductsByCategory($first: Int = 100) {
+      products(first: $first) {
+        edges {
+          node {
+            id
+            title
+            handle
+              createdAt
+            metafield(namespace: "custom", key: "category") {
+              value
+            }
+              images(first: 2) {
+                edges {
+                  node {
+                    url
+                    altText
+                  }
+                }
+              }
+          }
+        }
+      }
+    }
+  `;
 export const GetProductByHandle = `
   query getProductByHandle($handle: String!) {
     productByHandle(handle: $handle) {
@@ -241,6 +292,21 @@ export const GetProductByHandle = `
             availableForSale
           }
         }
+      }
+    }
+  }
+`;
+
+export const GetLayoutsByHandle = `
+  query GetProductByHandle($handle: String!) {
+    productByHandle(handle: $handle) {
+      id
+      title
+      handle
+      description
+      layouts: metafield(namespace: "custom", key: "layout_map") {
+        value
+        type
       }
     }
   }

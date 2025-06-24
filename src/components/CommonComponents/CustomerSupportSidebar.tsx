@@ -3,71 +3,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Accordion, AccordionPanel, List, ListItem, rem } from "@mantine/core";
 import { IconChevronDown, IconChevronRight } from "@tabler/icons-react";
+import { quickNavigationData } from "@/utils/constants";
 
-const accordionData = [
-  {
-    value: "education",
-    label: "Education",
-    children: [
-      {
-        label: "Gemstone Education",
-        href: "/customer-support/gemstone-education",
-      },
-    ],
-  },
-  {
-    value: "get-to-know-us",
-    label: "Get to Know Us",
-    children: [
-      {
-        label: "About Us",
-        href: "/customer-support/about-us",
-      },
-    ],
-  },
-  {
-    value: "customer-center",
-    label: "Customer Center",
-    children: [
-      {
-        label: "Contact Us",
-        href: "/customer-support/contact-us",
-      },
-      {
-        label: "Frequently Asked Questions",
-        href: "/customer-support/faqs",
-      },
-    ],
-  },
-  {
-    value: "our-policies",
-    label: "Our Policies",
-    children: [
-      {
-        label: "Store Policy",
-        href: "/customer-support/store-policy",
-      },
-      {
-        label: "Return Policy",
-        href: "/customer-support/return-policy",
-      },
-      {
-        label: "Shipping Policy",
-        href: "/customer-support/shipping-policy",
-      },
-    ],
-  },
-  {
-    value: "site-map",
-    label: "Site Map",
-    children: [
-      {
-        label: "About Us",
-        href: "/customer-support/sitemap",
-      },
-    ],
-  },
-];
+
 
 export const CustomerSupportSidebar = () => {
   const pathname = usePathname();
@@ -80,7 +18,7 @@ export const CustomerSupportSidebar = () => {
       <Accordion
         chevron={<IconChevronDown size={rem(16)} />}
         chevronPosition="right"
-        defaultValue={accordionData.map((item) => item.value)}
+        defaultValue={quickNavigationData.map((item) => item.value)}
         transitionDuration={400}
         multiple
         styles={{
@@ -96,7 +34,7 @@ export const CustomerSupportSidebar = () => {
           },
         }}
       >
-        {accordionData.map((item: any) => (
+        {quickNavigationData.map((item: any) => (
           <Accordion.Item key={item.value} value={item.value}>
             <Accordion.Control
               className={`${

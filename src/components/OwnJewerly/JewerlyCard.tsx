@@ -1,7 +1,9 @@
+"use client";
 import { Image } from "@mantine/core";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export const JewelryCard = ({
   title,
@@ -14,6 +16,7 @@ export const JewelryCard = ({
 }) => {
   const controls = useAnimation();
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 });
+  const router = useRouter();
 
   useEffect(() => {
     if (inView) {
@@ -24,6 +27,9 @@ export const JewelryCard = ({
       });
     }
   }, [inView, controls]);
+  const handleRedirect = () => {
+    router.push(`/create-colorstone-layout`);
+  };
 
   return (
     <motion.div
@@ -45,20 +51,18 @@ export const JewelryCard = ({
         <h1 className="text-2xl uppercase font-semibold">{title}</h1>
         <p className="text-gray-600 text-sm">{subtitle}</p>
         <div className="mt-5 flex gap-4 justify-between">
-          {["Start with Setting", "Start with Gemstone"].map((label) => (
-            <motion.button
-              key={label}
-              className="relative text-gray-500 text-sm px-0 py-1 border-none bg-transparent focus:outline-none"
-              variants={{ rest: { opacity: 1 }, hover: { opacity: 1 } }}
-            >
-              {label}
-              <motion.span
-                variants={{ rest: { width: "0%" }, hover: { width: "100%" } }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="absolute left-0 bottom-0 h-[1.5px] bg-gray-500"
-              />
-            </motion.button>
-          ))}
+          <motion.button
+            className="relative text-gray-500 text-sm px-0 py-1 border-none bg-transparent focus:outline-none cursor-pointer"
+            variants={{ rest: { opacity: 1 }, hover: { opacity: 1 } }}
+            onClick={() => handleRedirect()}
+          >
+            Create Now
+            <motion.span
+              variants={{ rest: { width: "0%" }, hover: { width: "100%" } }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="absolute left-0 bottom-0 h-[1.5px] bg-gray-500"
+            />
+          </motion.button>
         </div>
       </motion.div>
     </motion.div>

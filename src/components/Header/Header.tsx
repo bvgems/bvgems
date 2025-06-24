@@ -143,9 +143,9 @@ export function Header() {
         <AuthForm onClose={close} />
       </Modal>
 
-      <div className="flex justify-evenly py-1.5 mb-3 text-black bg-[#dbdddf]">
+      <div className="flex justify-evenly py-1.5 mb-3 text-black">
         <a
-          href="https://www.google.com/maps/search/?api=1&query=66+W+47th+St,+Booth+%239+and+%2310,+New+York,+NY+10036"
+          href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:underline"
