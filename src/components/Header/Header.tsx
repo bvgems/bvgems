@@ -301,7 +301,10 @@ export function Header() {
         <AuthForm onClose={close} />
       </Modal>
 
-      <div className="flex justify-evenly py-1 text-white bg-[#0b182d] text-sm">
+      <div
+        style={{ fontFamily: "system-ui, sans-serif" }}
+        className="flex justify-evenly py-1 text-white bg-[#0b182d] text-sm"
+      >
         <a
           href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
           target="_blank"
@@ -365,7 +368,7 @@ export function Header() {
                   <Button
                     w={100}
                     variant="light"
-                    leftSection={<IconArrowLeft size={20}/>}
+                    leftSection={<IconArrowLeft size={20} />}
                     size="compact-md"
                     color="#0b182d"
                     onClick={() => {

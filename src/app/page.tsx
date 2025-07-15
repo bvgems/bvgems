@@ -1,4 +1,5 @@
 "use client";
+import { CustomerBenefits } from "@/components/CustomerBenefits/CustomerBenefits";
 import { Hero } from "@/components/Hero/Hero";
 import { JewelrySection } from "@/components/Jewerly/JewerlySection";
 import { LooseGemstones } from "@/components/LooseGemstones/LooseGemstones";
@@ -19,6 +20,7 @@ export default function Home() {
       <OwnJewerly />
       <OwnEngagementRing />
       <Testimonials />
+      <CustomerBenefits />
     </>
   );
 }
