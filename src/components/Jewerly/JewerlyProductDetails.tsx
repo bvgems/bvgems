@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { getCartStore } from "@/store/useCartStore";
 import {
   Button,
   Divider,
@@ -22,8 +21,10 @@ import {
   IconHeart,
   IconTruckDelivery,
 } from "@tabler/icons-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { AuthForm } from "../Auth/AuthForm";
+import { addProductToCart } from "@/utils/commonFunctions";
+import { getCartStore } from "@/store/useCartStore";
 
 export const JewerlyProductDetails = ({ productData }: any) => {
   const { user } = useAuth();
@@ -36,31 +37,9 @@ export const JewerlyProductDetails = ({ productData }: any) => {
     null
   );
   const [modalOpened, { open, close }] = useDisclosure(false);
-  const addProductToCart = () => {
-    if (!productData) return;
 
-    const variant = productData?.variants?.edges?.[0]?.node;
-    const price = parseFloat(variant?.price?.amount || "0");
-
-    const jewelryItem = {
-      product: {
-        productType: "jewerly",
-        productId: productData?.id,
-        collection_slug: productData?.title,
-        color: "",
-        ct_weight: 0,
-        cut: "",
-        image_url: productData?.images?.edges?.[0]?.node?.url,
-        price: productData?.variants?.edges?.[0]?.node?.price?.amount,
-        shape: "",
-        size: "",
-        type: "",
-      },
-      quantity,
-    };
-
-    addToCart(jewelryItem);
-
+  const addProduct = async () => {
+    await addProductToCart(productData, quantity, addToCart);
     notifications.show({
       icon: <IconCheck />,
       color: "teal",
@@ -179,7 +158,7 @@ export const JewerlyProductDetails = ({ productData }: any) => {
 
         <div className="mt-3 flex flex-col gap-2">
           {user ? (
-            <Button color="#0b182d" onClick={addProductToCart} fullWidth>
+            <Button color="#0b182d" onClick={addProduct} fullWidth>
               ADD TO CART
             </Button>
           ) : (

@@ -2,18 +2,36 @@ import { Card } from "@mantine/core";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { getCartStore } from "@/store/useCartStore";
+import { notifications } from "@mantine/notifications";
+import { IconCheck } from "@tabler/icons-react";
+import { addProductToCart } from "@/utils/commonFunctions";
 
 export const JewelryCategoryCard = ({ category, product, index }: any) => {
   const router = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
+  const { user } = useAuth();
+  const userKey = user?.id?.toString() || "guest";
+  const cartStore = getCartStore(userKey);
+  const addToCart = cartStore((state: any) => state.addToCart);
   const redirectToProduct = (product: any) => {
     const handle = product?.node?.handle;
 
     router?.push(`/jewerly/${category}/${handle}`);
   };
 
-  const addProductToCart = () => {
-    console.log("adding to cart...");
+  const addProduct = async () => {
+    console.log("product", product);
+    await addProductToCart(product?.node, 1, addToCart);
+
+    notifications.show({
+      icon: <IconCheck />,
+      color: "teal",
+      message: "Jewelry product added to the cart!",
+      position: "top-right",
+      autoClose: 4000,
+    });
   };
 
   return (
@@ -82,13 +100,13 @@ export const JewelryCategoryCard = ({ category, product, index }: any) => {
       </div>
       <div className="mt-2">
         <motion.button
-          className="relative text-gray-500 text-sm px-0 py-1 border-none bg-transparent focus:outline-none"
+          className="relative text-gray-500 text-sm px-0 py-1 border-none bg-transparent focus:outline-none cursor-pointer"
           initial="rest"
           whileHover="hover"
           animate="rest"
           onClick={(e) => {
             e.stopPropagation();
-            addProductToCart();
+            addProduct();
           }}
         >
           Add To Cart
