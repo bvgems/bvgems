@@ -65,7 +65,7 @@ export const ContactUsForm = () => {
         component="a"
         className="mt-10 flex flex-col gap-4 max-w-xl mx-auto px-12 py-3.5 rounded-3xl"
       >
-        <span className="text-center text-violet-800 text-xl font-semibold">
+        <span className="text-center text-[#0b182d] text-xl font-semibold">
           Submit The Inquiry
         </span>
         <TextInput
@@ -109,8 +109,8 @@ export const ContactUsForm = () => {
           {...form.getInputProps("message")}
         />
 
-        <Button type="submit" color="violet" loading={loading}>
-          Submit Inquiry
+        <Button type="submit" color="#0b182d" loading={loading}>
+          SUBMIT INQUIRY
         </Button>
       </Card>
     </form>

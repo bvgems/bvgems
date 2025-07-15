@@ -6,23 +6,28 @@ interface Props {
   gemstones: any[];
   selected: string | null;
   onSelect: (stone: string) => void;
+  activeStone: string | null;
 }
 
-export function EducationSidebar({ gemstones, selected, onSelect }: Props) {
+export function EducationSidebar({
+  gemstones,
+  selected,
+  onSelect,
+  activeStone,
+}: Props) {
   const links = gemstones.map((item: any) => {
-    const isActive = item.title === selected;
+    const isActive =
+      item.title.toLowerCase() === selected?.toLowerCase() ||
+      item.title.toLowerCase() === activeStone?.toLowerCase();
 
     return (
       <Link
         key={item.id}
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          onSelect(item.title);
-        }}
+        href={`?activeStone=${item.title.toLowerCase()}`} 
+        replace 
         className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
           isActive
-            ? "text-violet-800 font-semibold bg-violet-50"
+            ? "text-[#0b182d] font-semibold bg-gray-200"
             : "text-gray-700 hover:bg-gray-100 hover:text-black"
         }`}
       >

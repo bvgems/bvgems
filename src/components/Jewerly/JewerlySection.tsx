@@ -1,6 +1,6 @@
 "use client";
-import { Card, Grid, GridCol, Image } from "@mantine/core";
-import React, { useRef } from "react";
+import { Card, Container, Grid, GridCol, Image } from "@mantine/core";
+import React, { forwardRef, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRouter } from "next/navigation";
 
@@ -77,17 +77,17 @@ const AnimatedGridCol = ({
   );
 };
 
-export const JewelrySection = () => {
+export const JewelrySection = forwardRef<HTMLDivElement>((_, ref) => {
   const router = useRouter();
 
   const navigateToJewerly = (handle: any) => {
     router.push(`/jewerly/${handle}`);
   };
   return (
-    <div className="mt-20 px-4">
+    <Container size={1250} ref={ref} className="mt-20">
       <AnimatedText
         text="Our Jewelry Collection"
-        className="text-center text-4xl text-[#6B7280] mb-6"
+        className="text-center text-4xl text-[#0b182d] mb-6"
       />
       <div className="p-4">
         <Grid gutter="lg">
@@ -97,7 +97,7 @@ export const JewelrySection = () => {
                 className="overflow-hidden relative rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 group cursor-pointer"
                 padding={0}
                 radius="md"
-                style={{ height: "400px" }}
+                style={{ height: "350px" }}
                 onClick={() => navigateToJewerly(item?.handle)}
               >
                 <div className="relative w-full h-full overflow-hidden">
@@ -128,6 +128,7 @@ export const JewelrySection = () => {
           ))}
         </Grid>
       </div>
-    </div>
+    </Container>
   );
-};
+});
+JewelrySection.displayName = "JewelrySection";

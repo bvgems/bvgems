@@ -75,7 +75,7 @@ export function SettingsSidebar({
           }}
           className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
             isActive
-              ? "text-violet-800 font-semibold bg-violet-50"
+              ? "text-[#0b182d] font-semibold bg-gray-200"
               : "text-gray-700 hover:bg-gray-100 hover:text-black"
           }`}
         >

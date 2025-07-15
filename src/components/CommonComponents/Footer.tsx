@@ -78,7 +78,7 @@ export const Footer = () => {
     },
   ];
   const groups = data.map((group) => {
-    const links = group.links.map((link, index) => (
+    const links = group?.links?.map((link, index) => (
       <h3
         className="text-md cursor-pointer hover:text-gray-500"
         key={index}
@@ -92,21 +92,21 @@ export const Footer = () => {
 
     return (
       <div key={group.title}>
-        <h1 className="text-xl text-gray-500 mb-4">{group.title}</h1>
+        <h1 className="text-xl mb-4">{group.title}</h1>
         <div className="flex flex-col gap-2">{links}</div>
       </div>
     );
   });
 
   return (
-    <footer className="pt-12 pr-4 bg-white">
+    <footer className="pt-12 pr-4 bg-[#0b182d] text-white">
       <Grid gutter={"xl"} className="px-2">
         <GridCol
           className="flex flex-col items-center"
           span={{ base: 12, md: 3 }}
         >
           <Image h={100} w={200} src="/assets/logo2.png" alt="Logo" />
-          <p className="text-sm text-gray-500 mt-4 italic">
+          <p className="text-sm mt-4 italic">
             "Where Every Gem Tells a Story."
           </p>
         </GridCol>
@@ -115,7 +115,7 @@ export const Footer = () => {
         </GridCol>
         <GridCol span={{ base: 12, md: 2 }}>
           <div className="flex flex-col">
-            <h1 className="text-xl text-gray-500 mb-4">Visit Us</h1>
+            <h1 className="text-xl mb-4">Visit Us</h1>
 
             <a
               href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
@@ -137,7 +137,7 @@ export const Footer = () => {
         </GridCol>
         <GridCol span={{ base: 12, md: 3 }}>
           <div className="flex flex-col gap-6 text-center">
-            <h1 className="text-xl text-gray-500">Industry Affiliations</h1>
+            <h1 className="text-xl">Industry Affiliations</h1>
             <div className="flex items-center gap-4 px-8">
               <Image h={120} w={120} src={"/assets/jbt-logo.png"} />
               <Image fit="fill" h={100} w={120} src={"/assets/agta-logo.png"} />
@@ -168,7 +168,11 @@ export const Footer = () => {
                 />
               </ActionIcon>
               <ActionIcon size="lg" color="gray" variant="subtle">
-                <IconBrandFacebookFilled color="#1877F2" size={26} stroke={1.5} />
+                <IconBrandFacebookFilled
+                  color="#1877F2"
+                  size={26}
+                  stroke={1.5}
+                />
               </ActionIcon>
             </div>
           </div>

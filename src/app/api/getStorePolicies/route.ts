@@ -20,7 +20,7 @@ export async function GET(req: Request) {
 
     const result = await shopifyRes.json();
 
-    console.log("first", result);
+
 
     return NextResponse.json({ storePolicies: result }, { status: 200 });
   } catch (error) {

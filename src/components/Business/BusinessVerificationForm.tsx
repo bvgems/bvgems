@@ -189,15 +189,15 @@ export const BusinessVerificationForm = ({
               <Button
                 rightSection={<IconArrowRight />}
                 type="submit"
-                color="violet"
+                color="#0b182d"
                 loading={loading}
               >
-                Save and Continue
+                SAVE AND CONTINUE
               </Button>
 
               <div className="flex flex-col gap-2">
                 <Link
-                  className="text-violet-800 text-[0.90rem] flex justify-center font-medium mt-3"
+                  className="text-[0b182d] text-[0.90rem] flex justify-center font-medium mt-3"
                   href="/login"
                 >
                   Already have an account? SIGN IN

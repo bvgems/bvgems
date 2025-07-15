@@ -158,13 +158,13 @@ export const SignupForm = ({
               <Button
                 rightSection={<IconArrowRight />}
                 type="submit"
-                color="violet"
+                color="#0b182d"
                 loading={loading}
               >
                 Save and Continue
               </Button>
               <Link
-                className="text-violet-800 text-[0.90rem] flex justify-center font-medium mt-3"
+                className="text-[0b182d] text-[0.90rem] flex justify-center font-medium mt-3"
                 href="/login"
               >
                 Already have an account? SIGN IN

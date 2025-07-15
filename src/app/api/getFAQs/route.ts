@@ -35,7 +35,7 @@ export async function GET(req: Request) {
 
     const result = await shopifyRes.json();
     const result2 = await shopifyRes2.json();
-console.log('res',result2?.data?.products?.edges[0])
+
     return NextResponse.json(
       { faqs: result, inhand: result2 },
       { status: 200 }

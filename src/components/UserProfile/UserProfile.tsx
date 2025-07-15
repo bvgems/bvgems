@@ -44,7 +44,7 @@ export const UserProfile = ({ user }: any) => {
           <Group gap={7}>
             <Avatar
               name={`${user?.firstName} ${user?.lastName}`}
-              color="violet"
+              color="#0b182d"
             />
 
             <Text fw={500} size="sm" lh={1} mr={3}>

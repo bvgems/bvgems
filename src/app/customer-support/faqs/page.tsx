@@ -40,12 +40,12 @@ export default function FAQPage() {
         <ThemeIcon
           variant="gradient"
           size="md"
-          gradient={{ from: "grape", to: "violet" }}
+          gradient={{ from: "black", to: "#0b182d" }}
         >
           <IconQuestionMark size="1.5rem" />
         </ThemeIcon>{" "}
         <Title order={1} className="text-center" mb="xs">
-          <span className="text-[1.7rem] text-violet-800">FAQs</span>
+          <span className="text-[1.7rem] text-[#0b182d]">FAQs</span>
         </Title>
       </div>
 

@@ -76,7 +76,10 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
     <div className="px-10 py-5">
       {knowledge ? (
         <>
-          <div className="flex flex-col items-center gap-3.5 px-28" ref={contentRef}>
+          <div
+            className="flex flex-col items-center gap-3.5 px-28"
+            ref={contentRef}
+          >
             <div className="flex justify-center flex-col items-center gap-3">
               <Image
                 h="200"
@@ -154,7 +157,7 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
               <Button
                 leftSection={<IconDownload />}
                 variant="filled"
-                color="violet"
+                color="#0b182d"
                 className="mt-6"
                 onClick={handleDownloadPDF}
               >

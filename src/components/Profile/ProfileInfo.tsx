@@ -157,12 +157,12 @@ export const ProfileInfo = ({ userData }: any) => {
         <Group>
           <Button
             className="mt-5"
-            color="violet"
+            color="#0b182d"
             onClick={handleSubmit}
             disabled={!isFormChanged || isLoading}
             loading={isLoading}
           >
-            Save Changes
+            SAVE CHANGES
           </Button>
         </Group>
       </div>

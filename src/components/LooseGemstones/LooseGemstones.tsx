@@ -1,11 +1,11 @@
-import { Grid, GridCol, Image } from "@mantine/core";
+import { Container, Grid, GridCol, Image } from "@mantine/core";
 import React from "react";
 import { RightSideLooseGemstones } from "./RightSideLooseGemstones";
 import { LeftSideLooseGemstones } from "./LeftSideLooseGemstones";
 
 export const LooseGemstones = () => {
   return (
-    <div className="p-7 mt-12 h-[500px]">
+    <Container size={1250}className="mt-12 h-[400px]">
       <Grid>
         <GridCol span={{ base: 12, md: 4 }}>
           <LeftSideLooseGemstones />
@@ -14,6 +14,6 @@ export const LooseGemstones = () => {
           <RightSideLooseGemstones />
         </GridCol>
       </Grid>
-    </div>
+    </Container>
   );
 };

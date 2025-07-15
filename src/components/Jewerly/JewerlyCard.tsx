@@ -7,7 +7,6 @@ export const JewelryCategoryCard = ({ category, product, index }: any) => {
   const router = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
   const redirectToProduct = (product: any) => {
-    console.log("product",product);
     const handle = product?.node?.handle;
 
     router?.push(`/jewerly/${category}/${handle}`);

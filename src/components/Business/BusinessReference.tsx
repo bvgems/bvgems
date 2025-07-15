@@ -135,7 +135,7 @@ export const BusinessReference = () => {
           stickyHeaderOffset={60}
         >
           <TableThead>
-            <TableTr className="font-extrabold text-[15px] text-violet-800">
+            <TableTr className="font-extrabold text-[15px] text-[#0b182d]">
               <TableTh>Reference#</TableTh>
               <TableTh>Company Name</TableTh>
               <TableTh>Contact Person</TableTh>
@@ -150,13 +150,13 @@ export const BusinessReference = () => {
       {references?.length ? (
         <Button
           mt="md"
-          color="violet"
+          color="#0b182d"
           onClick={() => {
             setReferenceAddress(null);
             open();
           }}
         >
-          Add New Reference
+          ADD NEW REFERENCE
         </Button>
       ) : null}
       <Modal

@@ -1,6 +1,5 @@
 import { NumberInput, RangeSlider } from "@mantine/core";
 import { IconRulerMeasure } from "@tabler/icons-react";
-import React, { useState } from "react";
 
 export const WidthFilter = ({ range, setRange }: any) => {
   const handleMinChange = (val: string | number) => {

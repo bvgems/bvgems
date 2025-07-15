@@ -89,8 +89,8 @@ export const ChangePasswordForm = ({ onClose }: { onClose?: () => void }) => {
           placeholder="Re-enter new password"
           {...form.getInputProps("confirmPassword")}
         />
-        <Button type="submit" color="violet" loading={loading}>
-          Change Password
+        <Button type="submit" color="#0b182d" loading={loading}>
+          CHANGE PASSWORD
         </Button>
       </div>
     </form>

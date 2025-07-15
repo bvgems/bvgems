@@ -1,6 +1,9 @@
-export const getAllCollectionsQuery = `
-  query getAllCollections($cursor: String) {
-    collections(first: 100, after: $cursor) {
+export const getAllProductsQuery = `
+  query getAllProducts($cursor: String) {
+    products(first: 100, after: $cursor) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
         cursor
         node {
@@ -8,10 +11,17 @@ export const getAllCollectionsQuery = `
           title
           handle
           description
-          image {
-            src
-            altText
+          productType
+
+          images(first: 5) {
+            edges {
+              node {
+                url
+                altText
+              }
+            }
           }
+
           shapes: metafield(namespace: "custom", key: "shapes") {
             value
             type
@@ -20,22 +30,18 @@ export const getAllCollectionsQuery = `
             value
             type
           }
-         additionalImages: metafield(namespace: "custom", key: "additional_images") {
-  type
-  reference {
-    ... on MediaImage {
-      image {
-        url
-        altText
-      }
-    }
-  }
-}
-
+          additionalImages: metafield(namespace: "custom", key: "additional_images") {
+            type
+            reference {
+              ... on MediaImage {
+                image {
+                  url
+                  altText
+                }
+              }
+            }
+          }
         }
-      }
-      pageInfo {
-        hasNextPage
       }
     }
   }
@@ -110,21 +116,60 @@ export const getGemStoneKnowledge = `
 `;
 
 export const getGemstoneByHandle = `
-  query GetCollectionByHandle($handle: String!) {
-    collection(handle: $handle) {
+  query GetProductByHandle($handle: String!) {
+    productByHandle(handle: $handle) {
       id
       title
       handle
       description
-      image {
-        src
-        altText
+      images(first: 10) {
+        edges {
+          node {
+            url
+            altText
+          }
+        }
+      }
+          hardness: metafield(namespace: "custom", key: "hardness") {
+        value
+        type
+      }
+         toughness: metafield(namespace: "custom", key: "toughness") {
+        value
+        type
+      }
+         birthstone: metafield(namespace: "custom", key: "birthstone") {
+        value
+        type
+      }
+         zodiac: metafield(namespace: "custom", key: "zodiac") {
+        value
+        type
+      }
+         hardness: metafield(namespace: "custom", key: "hardness") {
+        value
+        type
       }
       shapes: metafield(namespace: "custom", key: "shapes") {
         value
         type
       }
       shapeSizes: metafield(namespace: "custom", key: "shape_sizes") {
+        value
+        type
+      }
+      additionalImages: metafield(namespace: "custom", key: "additional_images") {
+        type
+        reference {
+          ... on MediaImage {
+            image {
+              url
+              altText
+            }
+          }
+        }
+      }
+      category: metafield(namespace: "custom", key: "category") {
         value
         type
       }
@@ -197,7 +242,6 @@ export const getAllProducts = `
     }
   }
 `;
-
 
 export const shopifyQuery = `
       query getProductsByCategory($category: String!) {

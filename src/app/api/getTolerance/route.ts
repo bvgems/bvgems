@@ -42,7 +42,6 @@ export async function GET(req: Request) {
         { status: 404 }
       );
     }
-    console.log("first", collection);
 
     return NextResponse.json({ collection }, { status: 200 });
   } catch (error) {

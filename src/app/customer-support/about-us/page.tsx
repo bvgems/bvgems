@@ -16,12 +16,12 @@ export default function AboutUsPage() {
           <ThemeIcon
             variant="gradient"
             size="md"
-            gradient={{ from: "grape", to: "violet" }}
+            gradient={{ from: "black", to: "#0b182d" }}
           >
             <IconDiamond size="1.5rem" />
           </ThemeIcon>
           <Title order={1} className="text-center" mb="xs">
-            <span className="text-[1.7rem] text-violet-800">
+            <span className="text-[1.7rem] text-[#0b182d]">
               About B. V. Gems
             </span>
           </Title>

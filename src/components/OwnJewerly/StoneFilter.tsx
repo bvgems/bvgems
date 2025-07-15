@@ -1,10 +1,6 @@
 "use client";
 
-import { Grid, GridCol, Tooltip, Button, ActionIcon } from "@mantine/core";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import React, { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Grid, GridCol } from "@mantine/core";
 import "swiper/css";
 import "swiper/css/navigation";
 import { ShapeFilter } from "../CommonComponents/ShapeFilter";

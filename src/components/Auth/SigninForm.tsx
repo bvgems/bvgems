@@ -86,17 +86,17 @@ export const SigninForm = ({ onClose }: { onClose: () => void }) => {
           />
           <div className="flex flex-col gap-2">
             <Link
-              className="text-violet-800 text-[0.90rem] font-medium flex justify-end"
+              className="text-[#0b182d] text-[0.90rem] font-medium flex justify-end"
               href="#"
             >
               Forgot Password?
             </Link>
 
-            <Button type="submit" color="violet" loading={loading}>
+            <Button type="submit" color="#0b182d" loading={loading}>
               Sign In
             </Button>
             <Link
-              className="text-violet-800 text-[0.90rem] flex justify-center font-medium mt-3"
+              className="text-[#0b182d] text-[0.90rem] flex justify-center font-medium mt-3"
               href="#"
             >
               Don't have an account? SIGN UP

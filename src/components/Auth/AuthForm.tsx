@@ -7,7 +7,7 @@ export const AuthForm = ({ onClose }: { onClose: () => void }) => {
   return (
     <div>
       {" "}
-      <Tabs color="violet" defaultValue="signIn">
+      <Tabs color="#0b182d" defaultValue="signIn">
         <TabsList grow>
           <TabsTab
             className="flex justify-center"

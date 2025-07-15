@@ -1,5 +1,34 @@
 import axios from "axios";
 
+export const getFilteredData = async (options: any) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/getFilteredGemStones",
+      {
+        options,
+      }
+    );
+
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while checkout", error);
+    return null;
+  }
+};
+
+export const makeCheckout = async (cart: any) => {
+  try {
+    const response = await axios.post("/api/checkout", {
+      cartItems: cart,
+    });
+
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while checkout", error);
+    return null;
+  }
+};
+
 export const getSampleLayoutUrl = async (
   gemstone: string,
   shape: string,
@@ -226,7 +255,18 @@ export const getAllGemstones = async () => {
   try {
     const response = await axios.get("http://localhost:3000/api/getGemStones");
 
-    return response?.data?.collections;
+    return response?.data?.products;
+  } catch (error) {
+    console.log("Something went wrong while fetching gemstones");
+  }
+};
+
+export const getGemstonesList = async () => {
+  try {
+    const response = await axios.get(
+      "http://localhost:3000/api/getAllGemStones"
+    );
+    return response?.data;
   } catch (error) {
     console.log("Something went wrong while fetching gemstones");
   }
@@ -252,7 +292,7 @@ export const getShapesData = async (
     const response = await axios.get(
       `http://localhost:3000/api/getShapesData?shape=${shape}&collection=${collection}`
     );
-    console.log("response of shape", response);
+
     return response;
   } catch (error) {
     console.log("Something went wrong while fetching category data");

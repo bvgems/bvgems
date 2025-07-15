@@ -1,3 +1,5 @@
+import { link } from "fs";
+
 export const US_STATES = [
   { value: "AL", label: "AL" },
   { value: "AK", label: "AK" },
@@ -399,26 +401,79 @@ export const gemstoneOptions = [
     label: "Alexandrite",
     value: "Alexandrite",
     image: "/assets/sapphire.png",
+    link: "/alexandrite",
   },
-  { label: "Amethyst", value: "Amethyst", image: "/assets/amethyst.png" },
-  { label: "Aquamarine", value: "Aquamarine", image: "/assets/aquamarine.png" },
-  { label: "Citrine", value: "Citrine", image: "/assets/citrine.png" },
-  { label: "Emerald", value: "Emerald", image: "/assets/emerald.png" },
-  { label: "Morganite", value: "Morganite", image: "/assets/morganite.png" },
-  { label: "Peridot", value: "Peridot", image: "/assets/peridot.png" },
-  { label: "Ruby", value: "Ruby", image: "/assets/ruby.png" },
-  { label: "Sapphire", value: "Sapphire", image: "/assets/sapphire.png" },
-  { label: "Tanzanite", value: "Tanzanite", image: "/assets/tanzanite.png" },
-  { label: "Tsavorite", value: "Tsavorite", image: "/assets/tsavorite.png" },
+  {
+    label: "Amethyst",
+    value: "Amethyst",
+    image: "/assets/amethyst.png",
+    link: "/amethyst",
+  },
+  {
+    label: "Aquamarine",
+    value: "Aquamarine",
+    image: "/assets/aquamarine.png",
+    link: "/aquamarine",
+  },
+  {
+    label: "Citrine",
+    value: "Citrine",
+    image: "/assets/citrine.png",
+    link: "/citrine",
+  },
+  {
+    label: "Emerald",
+    value: "Emerald",
+    image: "/assets/emerald.png",
+    link: "/emerald",
+  },
+  {
+    label: "Morganite",
+    value: "Morganite",
+    image: "/assets/morganite.png",
+    link: "/morganite",
+  },
+  {
+    label: "Peridot",
+    value: "Peridot",
+    image: "/assets/peridot.png",
+    link: "/peridot",
+  },
+  {
+    label: "Ruby",
+    value: "Ruby",
+    image: "/assets/ruby.png",
+    link: "/ruby",
+  },
+  {
+    label: "Sapphire",
+    value: "Sapphire",
+    image: "/assets/sapphire.png",
+    link: "/sapphire",
+  },
+  {
+    label: "Tanzanite",
+    value: "Tanzanite",
+    image: "/assets/tanzanite.png",
+    link: "/tanzanite",
+  },
+  {
+    label: "Tsavorite",
+    value: "Tsavorite",
+    image: "/assets/tsavorite.png",
+    link: "/tsavorite",
+  },
   {
     label: "Lab Diamond",
     value: "Lab Diamond",
     image: "/assets/lab-diamond.png",
+    link: "/lab-diamond",
   },
   {
     label: "Black Diamond",
     value: "Black Diamond",
     image: "/assets/black-diamond.png",
+    link: "/black-diamond",
   },
 ];
 
@@ -523,3 +578,166 @@ export const quickNavigationData = [
     ],
   },
 ];
+
+export const shopByColorOptions = [
+  {
+    name: "Red",
+    image: "/assets/redcolor.jpeg",
+    href: "/shop-by-color/red",
+  },
+  {
+    name: "Pink",
+
+    image: "/assets/pinkcolor.jpeg",
+    href: "/shop-by-color/pink",
+  },
+  {
+    name: "Purple",
+
+    image: "/assets/purplecolor.jpeg",
+    href: "/shop-by-color/purple",
+  },
+  {
+    name: "Blue",
+
+    image: "/assets/bluecolor.jpeg",
+    href: "/shop-by-color/blue",
+  },
+  {
+    name: "Green",
+
+    image: "/assets/greencolor.jpeg",
+    href: "/shop-by-color/green",
+  },
+  {
+    name: "Yellow",
+
+    image: "/assets/yellowcolor.jpeg",
+    href: "/shop-by-color/yellow",
+  },
+];
+
+export const ShapeFilterList = [
+  {
+    label: "Round",
+    image: "/assets/round.svg",
+  },
+  {
+    label: "Oval",
+    image: "/assets/oval.svg",
+  },
+  {
+    label: "Emerald",
+    image: "/assets/emerald.svg",
+  },
+  {
+    label: "Pear",
+    image: "/assets/pear.svg",
+  },
+  {
+    label: "Marquise",
+    image: "/assets/marquise.svg",
+  },
+  {
+    label: "Cushion",
+    image: "/assets/cushion.svg",
+  },
+  {
+    label: "Trillion",
+    image: "/assets/trillion.svg",
+  },
+  {
+    label: "Heart",
+    image: "/assets/heart.svg",
+  },
+  {
+    label: "Straight Baguette",
+    image: "/assets/baguette.svg",
+  },
+];
+
+export const SizeFilterList = {
+  Round: [
+    "0.8 - 1",
+    "1.1 - 1.5",
+    "1.6 - 2",
+    "2.25 - 3",
+    "3.25 - 4.5",
+    "5 - 6",
+    "6.5 - 8",
+    "9 - 11",
+    "12 - 13",
+    "14 - 16",
+  ],
+  Others: [
+    "2x2",
+    "2.25x2.25",
+    "2.5x2.5",
+    "2.75x2.75",
+    "3x1.5",
+    "3x1.75",
+    "3x2",
+    "3x3",
+    "3.5x1.5",
+    "3.5x1.75",
+    "3.5x2",
+    "3.5x3.5",
+    "4x1.5",
+    "4x2",
+    "4x3",
+    "4x4",
+    "4.5x2",
+    "4.5x2.5",
+    "4.5x4.5",
+    "5x2",
+    "5x2.5",
+    "5x3",
+    "5x5",
+    "5.5x5.5",
+    "6x3",
+    "6x4",
+    "6x6",
+    "6.5x6.5",
+    "7x3.5",
+    "7x5",
+    "7x7",
+    "8x4",
+    "8x5",
+    "8x6",
+    "8x8",
+    "9x4.5",
+    "9x6",
+    "9x7",
+    "9x9",
+    "10x5",
+    "10x7",
+    "10x8",
+    "10x10",
+    "11x9",
+    "11x11",
+    "12x7",
+    "12x8",
+    "12x10",
+    "12x12",
+    "13x9",
+    "13x13",
+    "14x9",
+    "14x10",
+    "14x12",
+    "14x14",
+    "15x10",
+    "15x13",
+    "16x12",
+    "16x13",
+    "16x16",
+    "17x10",
+    "17x14",
+    "18x10",
+    "18x11",
+    "18x13",
+    "18x18",
+    "19x11",
+    "19x19",
+    "20x11",
+  ],
+};

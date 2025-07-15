@@ -133,7 +133,7 @@ export const BusinessReferenceForm = ({
               }}
               size="compact-sm"
               variant="transparent"
-              color="violet"
+              color="#0b182d"
             >
               <span className="underline">Skip For Now</span>
             </Button>
@@ -162,10 +162,10 @@ export const BusinessReferenceForm = ({
         />
 
         <Group mt="md">
-          <Button type="submit" color="violet" fullWidth>
+          <Button type="submit" color="#0b182d" fullWidth>
             {isEdit
               ? "Update Reference"
-              : `${isStepper ? "Save and Continue" : "Save Reference"}`}
+              : `${isStepper ? "SAVE AND CONTINUE" : "SAVE REFERENCE"}`}
           </Button>
         </Group>
       </div>

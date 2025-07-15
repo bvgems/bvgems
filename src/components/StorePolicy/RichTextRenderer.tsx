@@ -119,7 +119,7 @@ const RichTextRenderer = ({ content }: any) => {
           value={item.heading.value || `item-${index}`}
         >
           <AccordionControl>
-            <Text style={{ color: "#5d0ec0" }} fw={700}>
+            <Text style={{ color: "#0b182d" }} fw={700}>
               {item.heading.children?.map((child, idx) =>
                 renderNode(child, `heading-${index}-${idx}`)
               )}

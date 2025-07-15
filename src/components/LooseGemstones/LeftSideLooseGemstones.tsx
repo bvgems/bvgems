@@ -10,12 +10,12 @@ export const LeftSideLooseGemstones = () => {
   return (
     <motion.div
       ref={ref}
-      className="h-[500px] flex items-center"
+      className="h-[400px] flex items-center"
       initial={{ y: 100, opacity: 0 }}
       animate={inView ? { y: 0, opacity: 1 } : {}}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <Image h={500} src="/assets/left-loose-gemstone.png" alt="Gemstone" />
+      <Image h={400} src="/assets/loose-gemstone.png" alt="Gemstone" />
     </motion.div>
   );
 };

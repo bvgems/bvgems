@@ -12,7 +12,7 @@ export const CustomerSupportSidebar = () => {
 
   return (
     <div className="bg-white rounded-xl ml-9 mt-12 shadow-md border border-gray-200">
-      <div className="bg-violet-800 text-white text-lg font-semibold px-4 py-3 rounded-t-xl">
+      <div className="bg-[#0b182d] text-white text-lg font-semibold px-4 py-3 rounded-t-xl">
         QUICK NAVIGATIONS
       </div>
       <Accordion
@@ -41,7 +41,7 @@ export const CustomerSupportSidebar = () => {
                 (item.href && pathname === item.href) ||
                 (item.children &&
                   item.children.some((child: any) => pathname === child.href))
-                  ? "text-purple-700 font-semibold"
+                  ? "text-gray-500 font-semibold"
                   : "text-gray-700"
               }`}
             >
@@ -62,7 +62,7 @@ export const CustomerSupportSidebar = () => {
                       key={child.href}
                       className={`rounded-md px-2 py-1 ${
                         pathname === child.href
-                          ? "text-purple-700 font-semibold"
+                          ? "text-gray-400 font-semibold"
                           : "text-gray-700 hover:bg-gray-100"
                       }`}
                     >

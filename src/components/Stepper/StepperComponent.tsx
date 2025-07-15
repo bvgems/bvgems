@@ -32,7 +32,7 @@ export const StepperComponent = () => {
         title: "Welcome!",
         position: "top-right",
         message: "Please complete each step to apply for an account.",
-        color: "violet",
+        color: "#0b182d",
         autoClose: 3000,
       });
       hasShownNotification.current = true;
@@ -71,7 +71,7 @@ export const StepperComponent = () => {
     <Container size={"xl"} className="mt-6">
       <Stepper
         allowNextStepsSelect={false}
-        color="violet"
+        color="#0b182d"
         size="sm"
         active={active}
         onStepClick={setActive}
@@ -90,7 +90,7 @@ export const StepperComponent = () => {
         className="mt-9 mb-8 ml-5"
         size="xs"
         variant="light"
-        color="violet"
+        color="#0b182d"
         disabled={active === 0}
       >
         Previous

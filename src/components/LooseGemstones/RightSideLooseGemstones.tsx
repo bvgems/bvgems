@@ -21,7 +21,7 @@ export const RightSideLooseGemstones = () => {
   return (
     <motion.div
       ref={ref}
-      className="bg-[#0b182d] h-[500px] px-10 flex items-center"
+      className="bg-[#0b182d] h-[400px] px-10 flex items-center"
       initial={{ y: 100, x: 100, rotate: 15, opacity: 0 }}
       animate={inView ? { y: 0, x: 0, rotate: 0, opacity: 1 } : {}}
       transition={{ duration: 1, ease: "easeOut" }}
@@ -30,7 +30,7 @@ export const RightSideLooseGemstones = () => {
         <GridCol span={{ base: 12, md: 6 }}>
           <Carousel
             slideSize="100%"
-            height={450}
+            height={400}
             slideGap={0}
             controlsOffset="sm"
             controlSize={26}
@@ -41,16 +41,16 @@ export const RightSideLooseGemstones = () => {
             onMouseLeave={() => autoplay.current?.reset?.()}
           >
             <CarouselSlide>
-              <Image h={450} src="/assets/pink.png" />
+              <Image className="mt-6" h={350} src="/assets/pink.png" />
             </CarouselSlide>
             <CarouselSlide>
-              <Image h={450} src="/assets/blue.png" />
+              <Image className="mt-6" h={350} src="/assets/blue.png" />
             </CarouselSlide>
             <CarouselSlide>
-              <Image h={450} src="/assets/green.png" />
+              <Image className="mt-6" h={350} src="/assets/green.png" />
             </CarouselSlide>
             <CarouselSlide>
-              <Image h={450} src="/assets/purple.png" />
+              <Image className="mt-6" h={350} src="/assets/purple.png" />
             </CarouselSlide>
           </Carousel>
         </GridCol>

@@ -4,6 +4,7 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const handle = url.searchParams.get("handle");
+    console.log('handle',handle)
     const shopifyRes = await fetch(
       "https://e4wqcy-up.myshopify.com/api/2024-04/graphql.json",
       {
@@ -23,8 +24,9 @@ export async function GET(req: Request) {
     );
 
     const data = await shopifyRes.json();
+    console.log('data of tanx',data)
 
-    return new Response(JSON.stringify(data?.data?.collection), {
+    return new Response(JSON.stringify(data?.data?.productByHandle), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

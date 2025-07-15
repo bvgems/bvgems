@@ -17,18 +17,18 @@ import {
   Checkbox,
   Alert,
   Tooltip,
+  Container,
 } from "@mantine/core";
 import {
   IconArrowNarrowRight,
   IconCheck,
   IconInfoCircle,
-  IconMinus,
-  IconPlus,
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { notifications } from "@mantine/notifications";
 import { useMemo } from "react";
 import { UnAuthorized } from "../CommonComponents/UnAuthorized";
+import { useRouter } from "next/navigation";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
@@ -48,6 +48,11 @@ export function CartComponent() {
   const removeFromCart = cartStore((state: any) => state.removeFromCart);
   const updateQuantity = cartStore((state: any) => state.updateQuantity);
   const getTotalPrice = cartStore((state: any) => state.getTotalPrice);
+  const router = useRouter();
+
+  const handleCheckout = async () => {
+    router?.push("/checkout");
+  };
 
   if (!user) {
     return <UnAuthorized />;
@@ -55,17 +60,19 @@ export function CartComponent() {
 
   if (cart.length === 0) {
     return (
-      <div className="flex flex-col gap-3 items-center justify-center mt-24">
+      <div className="flex flex-col gap-3 items-center justify-center py-24">
         <Player
           autoplay
           loop
           src="/assets/empty-cart.json"
           style={{ height: "300px", width: "300px" }}
         />
-        <p className="text-xl font-semibold mt-4 text-violet-800">
+        <p className="text-xl font-semibold mt-4 text-gray-700">
           Your cart is empty
         </p>
-        <Button color="violet" rightSection={<IconArrowNarrowRight />}>
+        <Button onClick={()=>{
+          router?.push('/loose-gemstones')
+        }} color="gray" rightSection={<IconArrowNarrowRight />}>
           Shop Now
         </Button>
       </div>
@@ -76,38 +83,47 @@ export function CartComponent() {
     <TableTr key={index}>
       <TableTd className="text-[1rem]">
         <div className="flex flex-col gap-2 justify-start">
-          <Image src={value?.product?.image_url} h={100} w={100} />
+          <Image
+            src={value?.jewelryProduct?.image_url ?? value?.product?.image_url}
+            h={100}
+            w={100}
+            fit="fill"
+          />
           <div className="font-semibold">
-            {value?.product?.collection_slug + " " + value?.product?.shape}
+            {value?.product?.collection_slug
+              ? value?.product?.collection_slug + " " + value?.product?.shape
+              : value?.jewelryProduct?.productName}
           </div>
-          <div className="flex flex-col">
-            <span>Size: {value?.product?.size}</span>
-            <span>Weight: {value?.product?.ct_weight}</span>
-            <span>Quality: {value?.product?.quality}</span>
-          </div>
+          {value?.product?.productType === "stone" ? (
+            <div className="flex flex-col">
+              <span>Size: {value?.product?.size}</span>
+              <span>Weight: {value?.product?.ct_weight}</span>
+              <span>Quality: {value?.product?.quality}</span>
+            </div>
+          ) : null}
         </div>
       </TableTd>
-      <TableTd className="font-semibold">$ {value?.product?.price}</TableTd>
+      <TableTd className="font-semibold">
+        <div>
+          <span>$</span>
+          {value?.jewelryProduct?.price ?? value?.product?.price}
+        </div>
+      </TableTd>
+
       <TableTd>
         <div className="flex flex-row">
-          <Button
-            onClick={() =>
-              updateQuantity(value.product.productId, value.quantity + 1)
-            }
-            variant="default"
-          >
-            <IconPlus />
-          </Button>
-          <NumberInput placeholder="Quantity" min={1} value={value?.quantity} />
-          <Button
-            onClick={() =>
-              updateQuantity(value.product.productId, value.quantity - 1)
-            }
-            variant="default"
-            disabled={value.quantity <= 1}
-          >
-            <IconMinus />
-          </Button>
+          <NumberInput
+            className="flex-1"
+            min={1}
+            value={value.quantity}
+            onChange={(newQuantity) => {
+              const safeQuantity =
+                typeof newQuantity === "number" ? newQuantity : 1;
+              updateQuantity(value.product.productId, safeQuantity);
+            }}
+            allowNegative={false}
+            radius={0}
+          />
         </div>
       </TableTd>
       <TableTd className="font-semibold">
@@ -135,11 +151,11 @@ export function CartComponent() {
   ));
 
   return (
-    <div className="">
-      <Grid>
-        <GridCol span={{ base: 12, md: 8 }}>
+    <Container size={"xl"} className="py-10">
+      <Grid gutter={"xl"}>
+        <GridCol span={{ base: 12, md: 9 }}>
           <Table striped horizontalSpacing={"xl"} verticalSpacing={"sm"}>
-            <TableThead className="uppercase text-violet-800">
+            <TableThead className="uppercase text-[#0b182d]">
               <TableTr>
                 <TableTh>Product</TableTh>
                 <TableTh>Price</TableTh>
@@ -151,9 +167,9 @@ export function CartComponent() {
             <Table.Tbody>{rows}</Table.Tbody>
           </Table>
         </GridCol>
-        <GridCol span={{ base: 12, md: 4 }}>
-          <div className="p-6">
-            <span className="text-xl font-semibold text-violet-800">
+        <GridCol span={{ base: 12, md: 3 }}>
+          <div>
+            <span className="text-xl font-semibold text-[#0b182d]">
               Order Summary
             </span>
             <div className="mt-5">
@@ -174,7 +190,7 @@ export function CartComponent() {
                 <span className="font-semibold">- $0</span>
               </div>
               <Divider my="sm" />
-              <div className="flex flex-row justify-between text-lg text-violet-800 font-semibold">
+              <div className="flex flex-row justify-between text-lg text-[#0b182d] font-semibold">
                 <span className="">Grand Total:</span>
                 <span className="font-semibold">
                   {" "}
@@ -184,7 +200,7 @@ export function CartComponent() {
             </div>
             <div className="mt-9 flex flex-col gap-4">
               <div className="flex flex-row items-center gap-2">
-                <Checkbox color="violet" label="NYC Store Pickup" />{" "}
+                <Checkbox color="#0b182d" label="NYC Store Pickup" />{" "}
                 <Tooltip
                   multiline
                   w={220}
@@ -198,7 +214,7 @@ export function CartComponent() {
                 </Tooltip>
               </div>
               <Alert
-                color="violet"
+                color="#0b182d"
                 title="Hassle-Free Returns"
                 icon={<IconInfoCircle />}
               >
@@ -210,17 +226,18 @@ export function CartComponent() {
 
             <div className="mt-5">
               <Button
+                onClick={handleCheckout}
                 rightSection={<IconArrowNarrowRight />}
                 className="mt-3"
-                color="violet"
+                color="#0b182d"
                 fullWidth
               >
-                Checkout
+                CHECKOUT
               </Button>
             </div>
           </div>
         </GridCol>
       </Grid>
-    </div>
+    </Container>
   );
 }

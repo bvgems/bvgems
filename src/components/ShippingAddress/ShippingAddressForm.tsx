@@ -150,7 +150,7 @@ export const ShippingAddressForm = ({
               onClick={() => nextStep()}
               size="compact-sm"
               variant="transparent"
-              color="violet"
+              color="#0b182d"
             >
               <span className="underline">Skip For Now</span>
             </Button>
@@ -199,8 +199,8 @@ export const ShippingAddressForm = ({
           {...form.getInputProps("email")}
         />
         <Group mt="md">
-          <Button type="submit" color="violet" fullWidth>
-            {isEdit ? "Update Address" : "Save Address"}
+          <Button type="submit" color="#0b182d" fullWidth>
+            {isEdit ? "UPDATE ADDRESS" : "SAVE ADDRESS"}
           </Button>
         </Group>
       </div>

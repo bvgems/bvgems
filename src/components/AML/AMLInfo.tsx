@@ -259,7 +259,7 @@ export const AMLInfo = ({ isStepper }: any) => {
               onClick={redirectToHome}
               size="compact-sm"
               variant="transparent"
-              color="violet"
+              color="#0b182d"
             >
               <span className="underline">Skip For Now</span>
             </Button>
@@ -326,6 +326,7 @@ export const AMLInfo = ({ isStepper }: any) => {
         <div className="flex flex-col gap-2">
           {AML_OPTIONS.map((label, index) => (
             <Checkbox
+              color="#0b182d"
               key={index}
               label={label}
               checked={form.values.amlStatus === label}
@@ -352,6 +353,7 @@ export const AMLInfo = ({ isStepper }: any) => {
           Confirmation
         </Title>
         <Checkbox
+          color="#0b182d"
           label="I confirm that all the stated information is true and correct. If additional documentation is required for verification, I will provide as requested."
           {...form.getInputProps("confirmed", { type: "checkbox" })}
           disabled={isLoading}
@@ -360,11 +362,11 @@ export const AMLInfo = ({ isStepper }: any) => {
         <Group mt="xl">
           <Button
             type="submit"
-            color="violet"
+            color="#0b182d"
             loading={isLoading}
             disabled={!isFormChanged || isLoading}
           >
-            Save AML Info
+            SAVE AML INFO
           </Button>
         </Group>
       </form>

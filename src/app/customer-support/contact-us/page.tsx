@@ -31,12 +31,12 @@ export default function ContactUsPage() {
           <ThemeIcon
             variant="gradient"
             size="md"
-            gradient={{ from: "grape", to: "violet" }}
+            gradient={{ from: "black", to: "#0b182d" }}
           >
             <IconPhoneDone size="1.5rem" />
           </ThemeIcon>
           <Title order={1} className="text-center" mb="xs">
-            <span className="text-[1.7rem] text-violet-800">Contact Us</span>
+            <span className="text-[1.7rem] text-[#0b182d]">Contact Us</span>
           </Title>
         </div>
         <div className="flex justify-center items-center text-center">
@@ -61,7 +61,6 @@ export default function ContactUsPage() {
                   variant="gradient"
                   size="lg"
                   radius="xl"
-                  gradient={{ from: "grape", to: "violet" }}
                   className="transition-transform hover:rotate-6 hover:scale-110"
                 >
                   <IconPhoneRinging size="1.5rem" />
@@ -93,7 +92,6 @@ export default function ContactUsPage() {
                   variant="gradient"
                   size="lg"
                   radius="xl"
-                  gradient={{ from: "grape", to: "violet" }}
                   className="transition-transform hover:rotate-6 hover:scale-110"
                 >
                   <IconMail size="1.5rem" />
@@ -125,7 +123,6 @@ export default function ContactUsPage() {
                   variant="gradient"
                   size="lg"
                   radius="xl"
-                  gradient={{ from: "grape", to: "violet" }}
                   className="transition-transform hover:rotate-6 hover:scale-110"
                 >
                   <IconMapPin size="1.5rem" />
@@ -152,7 +149,7 @@ export default function ContactUsPage() {
         </div>
         <Grid gutter="xl" className="mt-12">
           <GridCol span={{ base: 12, md: 6 }}>
-            <span className="text-violet-800 font-semibold">
+            <span className="text-[#0b182d] font-semibold">
               Our Business Hours
             </span>
             <Table
@@ -160,7 +157,7 @@ export default function ContactUsPage() {
               variant="vertical"
               layout="fixed"
               striped
-              stripedColor="violet"
+              stripedColor=""
             >
               <TableTbody>
                 <TableTr>
@@ -168,9 +165,7 @@ export default function ContactUsPage() {
                     <span className="font-semibold">Mon - Fri</span>
                   </TableTh>
                   <TableTd>
-                    <span className="text-white font-medium">
-                      9:00 AM - 7:00 PM
-                    </span>
+                    <span className=" font-medium">9:00 AM - 7:00 PM</span>
                   </TableTd>
                 </TableTr>
 
@@ -187,7 +182,7 @@ export default function ContactUsPage() {
                     <span className="font-semibold">Sunday</span>
                   </TableTh>
                   <TableTd>
-                    <span className="text-white font-medium">Closed</span>
+                    <span className="font-medium">Closed</span>
                   </TableTd>
                 </TableTr>
               </TableTbody>
@@ -195,10 +190,10 @@ export default function ContactUsPage() {
           </GridCol>
 
           <GridCol className="flex flex-col" span={{ base: 12, md: 6 }}>
-            <span className="text-violet-800 font-bold">FAQ</span>
+            <span className="text-[#0b182d] font-bold">FAQ</span>
             <div className="mt-3">
               Need a quick answer? Check out our{" "}
-              <strong className="text-violet-800 underline">
+              <strong className="text-[#0b182d] underline">
                 {" "}
                 <Link href="/customer-support/faqs">
                   Frequently Asked Questions

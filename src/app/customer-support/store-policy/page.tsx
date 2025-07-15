@@ -37,12 +37,12 @@ export default function StorePolicy() {
         <ThemeIcon
           variant="gradient"
           size="lg"
-          gradient={{ from: "grape", to: "violet" }}
+          gradient={{ from: "black", to: "#0b182d" }}
         >
           <IconShieldCheck size="1.5rem" />
         </ThemeIcon>{" "}
         <Title order={1} className="text-center" mb="xs">
-          <span className="text-[1.7rem] text-violet-800">Store Policy</span>
+          <span className="text-[1.7rem] text-[#0b182d]">Store Policy</span>
         </Title>
       </div>
       <Text className="text-center" size="md" color="dimmed" mb="lg">

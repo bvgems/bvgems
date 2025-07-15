@@ -31,7 +31,7 @@ export const FAQComponent: React.FC<FAQComponentProps> = ({ faqContent }) => {
       {faqContent.map((item, index) => (
         <AccordionItem key={index} value={`item-${index}`}>
           <AccordionControl>
-            <span className="text-violet-800 font-bold">{item.question}</span>
+            <span className="text-[#0b182d] font-bold">{item.question}</span>
           </AccordionControl>
           <AccordionPanel>
             <List withPadding>

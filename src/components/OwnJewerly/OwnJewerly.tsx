@@ -1,5 +1,5 @@
 "use client";
-import { Grid, GridCol, Image } from "@mantine/core";
+import { Container, Grid, GridCol, Image } from "@mantine/core";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { JewelryCard } from "./JewerlyCard";
 
@@ -30,10 +30,10 @@ const jewelryItems = [
 
 export const OwnJewerly = () => {
   return (
-    <div className="mt-20 p-8">
+    <Container size={1250} className="mt-20">
       <AnimatedText
         text="Build Your Own Jewerly"
-        className="text-center text-4xl text-[#6B7280] mb-12"
+        className="text-center text-4xl text-[#0b182d] mb-12"
       />
       <Grid gutter="xl" mt="xl" align="center">
         {jewelryItems.map((item, index) => (
@@ -46,6 +46,6 @@ export const OwnJewerly = () => {
           </GridCol>
         ))}
       </Grid>
-    </div>
+    </Container>
   );
 };

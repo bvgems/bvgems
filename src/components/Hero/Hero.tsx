@@ -1,29 +1,61 @@
 "use client";
-import { Button, Image, Text, Title } from "@mantine/core";
+import { Button, Image } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { RefObject, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export function Hero() {
-  const slide = {
-    image: "/assets/hero.png",
-    title: "YOUR GEMSTONE DESTINATION AWAITS",
+const textSlides = [
+  {
+    title: "RARE BEAUTY, LOOSE GEMSTONES",
     description:
-      "Discover premium gems from every corner, beautifully brought together",
-  };
+      "Discover premium loose gemstones from around the world—curated for brilliance, ready for your designs.",
+    link: "/loose-gemstones",
+  },
+  {
+    title: "JEWELRY THAT TELLS YOUR STORY",
+    description:
+      "Explore handcrafted gemstone bracelets, necklaces, and rings—crafted to elevate every moment.",
+    link: "#jewelry-section",
+  },
+];
 
+type HeroProps = {
+  jewelryRef: RefObject<HTMLDivElement | null>;
+};
+
+export function Hero({ jewelryRef }: HeroProps) {
+  const heroImage = "/assets/hero-bg.png";
   const [revealImage, setRevealImage] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setRevealImage(true);
     }, 600);
-
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % textSlides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentText = textSlides[currentSlide];
+
+  const handleShopNow = () => {
+    if (currentSlide === 1 && jewelryRef.current) {
+      jewelryRef.current.scrollIntoView({ behavior: "smooth" });
+    } else {
+      router.push(currentText.link);
+    }
+  };
+
   return (
-    <div className="relative w-full h-[750px] bg-white overflow-hidden">
+    <div className="relative w-full h-[550px] bg-white overflow-hidden">
       <AnimatePresence>
         {!revealImage && (
           <>
@@ -52,39 +84,12 @@ export function Hero() {
         className="w-full h-full absolute top-0 left-0 z-10"
       >
         <Image
-          src={slide.image}
-          alt={slide.title}
-          fit="fill"
-          className="w-full h-full object-cover object-[center_right]"
+          src={heroImage}
+          alt="Hero Image"
+
+          className="w-full h-full"
         />
-        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30 z-10" />
-      </motion.div>
 
-      <motion.div
-        initial={{ y: 50, opacity: 0 }}
-        animate={revealImage ? { y: 0, opacity: 1 } : {}}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="absolute inset-0 text-white flex flex-col justify-center items-center text-center px-4 z-30 mt-36"
-      >
-        <h1
-          style={{ fontFamily: "'Alice', sans-serif", fontWeight: "520" }}
-          className="text-[2.5rem]"
-        >
-          {slide.title}
-        </h1>
-
-        <p className="max-w-xl mt-2.5 text-lg">{slide.description}</p>
-        <Button
-          mt="xl"
-          px={"xl"}
-          size="lg"
-          color="white"
-          variant="outline"
-          fw={"normal"}
-          rightSection={<IconArrowRight size={20} />}
-        >
-          Shop Now
-        </Button>
       </motion.div>
     </div>
   );

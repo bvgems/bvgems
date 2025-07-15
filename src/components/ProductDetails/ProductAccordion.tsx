@@ -12,6 +12,7 @@ import {
   IconQuestionMark,
   IconTruckDelivery,
 } from "@tabler/icons-react";
+import { PaymentOptions } from "../CommonComponents/PaymentOptions";
 
 export const ProductAccordion = () => {
   return (
@@ -51,37 +52,10 @@ export const ProductAccordion = () => {
           <Text fw={510}>Payment Accepted</Text>
         </AccordionControl>
         <AccordionPanel>
-          {" "}
-          <List
-            spacing="xs"
-            size="sm"
-            listStyleType="disc"
-            withPadding
-            styles={{ itemWrapper: { paddingLeft: "0.5rem" } }}
-          >
-            <ListItem>
-              <div>Credit / Debit Card</div>
-              <div className="text-xs text-gray-400">
-                (Visa, Mastercard, Discover, American Express)
-              </div>
-            </ListItem>
-
-            <ListItem>Paypal Checkout</ListItem>
-            <ListItem>Apple Pay</ListItem>
-            <ListItem>Wire Transfer</ListItem>
-          </List>
+          <div className="pl-6">
+            <PaymentOptions />
+          </div>
         </AccordionPanel>
-      </AccordionItem>
-
-      <AccordionItem value="camera">
-        <AccordionControl
-          icon={
-            <IconQuestionMark size={20} color="var(--mantine-color-teal-6)" />
-          }
-        >
-          <Text fw={510}>FAQs</Text>
-        </AccordionControl>
-        <AccordionPanel>Content</AccordionPanel>
       </AccordionItem>
     </Accordion>
   );

@@ -1,3 +1,4 @@
+"use client";
 import {
   Card,
   Text,
@@ -24,7 +25,13 @@ import { deleteAddress, getShippingAddresses } from "@/apis/api";
 import { ShippingAddressForm } from "./ShippingAddressForm";
 import { notifications } from "@mantine/notifications";
 
-export const ShippingAddress = () => {
+export const ShippingAddress = ({
+  selectable = false,
+  onSelect,
+}: {
+  selectable?: boolean;
+  onSelect?: (address: any) => void;
+}) => {
   const { user }: any = useUserStore();
 
   const [addresses, setAddresses] = useState<any[]>([]);
@@ -32,6 +39,7 @@ export const ShippingAddress = () => {
   const [modalOpened, { open, close }] = useDisclosure(false);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [toDeleteId, setToDeleteId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const fetchAddresses = async () => {
     if (!user?.id) return;
@@ -43,6 +51,16 @@ export const ShippingAddress = () => {
   useEffect(() => {
     fetchAddresses();
   }, [user?.id]);
+  useEffect(() => {
+    console.log("seelected");
+  }, [selectedId]);
+
+  useEffect(() => {
+    if (selectable && addresses.length > 0) {
+      setSelectedId(addresses[0].id);
+      onSelect?.(addresses[0]);
+    }
+  }, [addresses, selectable]);
 
   const handleDelete = async () => {
     if (toDeleteId) {
@@ -87,84 +105,108 @@ export const ShippingAddress = () => {
           </Button>
         </Paper>
       ) : (
-        addresses.map((address) => (
-          <Card key={address.id} withBorder radius="md" shadow="sm" p="lg">
-            <Group justify="space-between" align="flex-start" wrap="nowrap">
-              <Group wrap="nowrap">
-                <Stack gap={4}>
-                  <Group gap={4}>
-                    <IconMapPin size={16} />
-                    <Text fw={500}>{address.full_name}</Text>
-                  </Group>
-                  <Text size="sm" c="dimmed">
-                    {address.address_line1}
-                  </Text>
-                  {address.address_line2 && (
+        addresses.map((address) => {
+          console.log("heyyy", typeof address.id, typeof selectedId);
+          return (
+            <Card
+              key={address.id}
+              withBorder
+              radius="md"
+              shadow={selectedId == address.id ? "md" : "sm"}
+              p="lg"
+              style={{
+                cursor: "pointer",
+                marginBottom: "1rem",
+                transition: "all 0.2s ease-in-out",
+                border:
+                  selectable && selectedId === address.id
+                    ? "2px solid #0b182d"
+                    : undefined,
+              }}
+              onClick={() => {
+                if (selectable) {
+                  console.log("Selecting address:", address);
+                  setSelectedId(address.id);
+                  onSelect?.(address);
+                }
+              }}
+            >
+              <Group justify="space-between" align="flex-start" wrap="nowrap">
+                <Group wrap="nowrap">
+                  <Stack gap={4}>
+                    <Group gap={4}>
+                      <IconMapPin size={16} />
+                      <Text fw={500}>{address.full_name}</Text>
+                    </Group>
                     <Text size="sm" c="dimmed">
-                      {address.address_line2}
+                      {address.address_line1}
                     </Text>
-                  )}
-                  <Text size="sm" c="dimmed">
-                    {address.city}, {address.state} {address.zip_code}
-                  </Text>
-                  <Text size="sm" c="dimmed">
-                    {address.country}
-                  </Text>
-
-                  <Group gap={4}>
-                    <IconPhone size={14} />
-                    <Text size="sm">{address.phone_number}</Text>
-                  </Group>
-                  <Group gap={4}>
-                    <IconMail size={14} />
-                    <Text size="sm">{address.email}</Text>
-                  </Group>
-                </Stack>
+                    {address.address_line2 && (
+                      <Text size="sm" c="dimmed">
+                        {address.address_line2}
+                      </Text>
+                    )}
+                    <Text size="sm" c="dimmed">
+                      {address.city}, {address.state} {address.zip_code}
+                    </Text>
+                    <Text size="sm" c="dimmed">
+                      {address.country}
+                    </Text>
+                    <Group gap={4}>
+                      <IconPhone size={14} />
+                      <Text size="sm">{address.phone_number}</Text>
+                    </Group>
+                    <Group gap={4}>
+                      <IconMail size={14} />
+                      <Text size="sm">{address.email}</Text>
+                    </Group>
+                  </Stack>
+                </Group>
+                {!selectable && (
+                  <Stack gap="xs" align="flex-end">
+                    <Button
+                      variant="light"
+                      color="blue"
+                      size="xs"
+                      leftSection={<IconEdit size={14} />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingAddress(address);
+                        open();
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="light"
+                      color="red"
+                      size="xs"
+                      leftSection={<IconTrash size={14} />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setToDeleteId(address.id);
+                        setDeleteModalOpened(true);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </Stack>
+                )}
               </Group>
-
-              <Stack gap="xs" align="flex-end">
-                <Button
-                  variant="light"
-                  color="blue"
-                  size="xs"
-                  leftSection={<IconEdit size={14} />}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setEditingAddress(address);
-                    open();
-                  }}
-                >
-                  Edit
-                </Button>
-
-                <Button
-                  variant="light"
-                  color="red"
-                  size="xs"
-                  leftSection={<IconTrash size={14} />}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setToDeleteId(address.id);
-                    setDeleteModalOpened(true);
-                  }}
-                >
-                  Delete
-                </Button>
-              </Stack>
-            </Group>
-          </Card>
-        ))
+            </Card>
+          );
+        })
       )}
-      {addresses?.length ? (
+      {addresses?.length && !selectable ? (
         <Button
           mt="md"
-          color="violet"
+          color="#0b182d"
           onClick={() => {
             setEditingAddress(null);
             open();
           }}
         >
-          Add New Address
+          ADD NEW ADDRESS
         </Button>
       ) : null}
 

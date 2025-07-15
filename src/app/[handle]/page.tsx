@@ -9,6 +9,8 @@ export default async function CategoryPage({
   const handle = params.handle;
 
   const data: any = await getCategoryData(handle);
+
+
   const shapes = data?.shapes?.value?.split(",").map((s: any) => s.trim());
 
   const rawSizes = data?.shapeSizes?.value;
