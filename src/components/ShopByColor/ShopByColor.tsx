@@ -21,7 +21,6 @@ const itemVariants = {
 export default function ShopByColor() {
   const router = useRouter();
   const handleShopByColor = (item: any) => {
-    console.log(item);
     router?.push(`/loose-gemstones?color=${item?.name?.toLowerCase()}`);
   };
   return (
