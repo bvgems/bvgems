@@ -1,5 +1,6 @@
 import { pool } from "@/lib/pool";
 import { NextRequest, NextResponse } from "next/server";
+import { getAllLooseGemstones } from "../lib/commonFunctions";
 
 export async function GET(req: NextRequest) {
   try {
@@ -16,14 +17,6 @@ export async function GET(req: NextRequest) {
 
     const result = await pool.query(query);
 
-    const allGemStonesQuery = `SELECT * FROM gemstone_specs`;
-
-    const allGemstones = await pool.query(allGemStonesQuery);
-
-    if (result.rows.length === 0 || allGemstones?.rows?.length === 0) {
-      return NextResponse.json({ error: "No data found" }, { status: 404 });
-    }
-
     const formattedData = result.rows.map((item) => {
       const formattedValue = `${item?.ct_weight} cttw. ${item?.color} ${item?.shape} ${item?.collection_slug} ${item?.size}mm - ${item?.id}`;
 
@@ -32,18 +25,13 @@ export async function GET(req: NextRequest) {
         value: formattedValue,
       };
     });
-
-    const allGemstonesFormattedData = allGemstones?.rows.map((item) => {
-      const formattedValue = `${item?.ct_weight} cttw. ${item?.color} ${item?.shape} ${item?.collection_slug} ${item?.size}mm - ${item?.id}`;
-
-      return {
-        ...item,
-        value: formattedValue,
-      };
-    });
+    const allGemstones = await getAllLooseGemstones();
+    if (result.rows.length === 0 || allGemstones?.length === 0) {
+      return NextResponse.json({ error: "No data found" }, { status: 404 });
+    }
 
     return NextResponse.json(
-      { data: formattedData, allGemstones: allGemstonesFormattedData },
+      { data: formattedData, allGemstones },
       { status: 200 }
     );
   } catch (error) {

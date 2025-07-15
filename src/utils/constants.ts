@@ -741,3 +741,35 @@ export const SizeFilterList = {
     "20x11",
   ],
 };
+
+export const links = [
+  { link: "/", label: "Home" },
+  {
+    link: "/loose-gemstones",
+    label: "Loose Gemstones",
+    links: gemstoneOptions,
+  },
+  {
+    label: "Jewelery",
+    links: [
+      { link: "/jewerly/rings", label: "Rings" },
+      { link: "/jewerly/earrings", label: "Ear Rings" },
+      { link: "/jewerly/necklaces", label: "Necklaces" },
+      { link: "/jewerly/bracelets", label: "Bracelets" },
+    ],
+  },
+  { link: "/colorstone-layouts", label: "Colorstone Layouts" },
+  {
+    label: "More",
+    links: [
+      {
+        link: "/customer-support/education?activeStone=morganite",
+        label: "Gemstones Education",
+      },
+      { link: "/customer-support/about-us", label: "About B. V. Gems." },
+      { link: "/customer-support/store-policy", label: "Store Policy" },
+      { link: "/customer-support/faqs", label: "FAQ" },
+      { link: "/customer-support/contact-us", label: "Contact Us" },
+    ],
+  },
+];

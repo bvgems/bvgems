@@ -427,3 +427,12 @@ export const editAMLInfo = async (userId: string, data: any) => {
     console.log("Something went wrong while storing the AML info");
   }
 };
+
+export const fetchAllItems = async () => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/fetchAllItems`);
+    return response?.data?.data;
+  } catch (error) {
+    console.log("Something went wrong while storing the AML info");
+  }
+};

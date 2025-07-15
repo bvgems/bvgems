@@ -6,6 +6,8 @@ import {
   IconPhone,
   IconMail,
   IconSearch,
+  IconX,
+  IconArrowLeft,
 } from "@tabler/icons-react";
 import {
   Burger,
@@ -22,57 +24,29 @@ import {
   HoverCard,
   SimpleGrid,
   Menu,
+  Autocomplete,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { AuthForm } from "../Auth/AuthForm";
 import { useAuth } from "@/hooks/useAuth";
 import { UserProfile } from "../UserProfile/UserProfile";
 import { getCartStore } from "@/store/useCartStore";
-import { usestoneStore } from "@/store/useStoneStore";
-import { gemstoneOptions } from "@/utils/constants";
-
-const links = [
-  { link: "/", label: "Home" },
-  {
-    link: "/loose-gemstones",
-    label: "Loose Gemstones",
-    links: gemstoneOptions,
-  },
-  {
-    label: "Jewelery",
-    links: [
-      { link: "/jewerly/rings", label: "Rings" },
-      { link: "/jewerly/earrings", label: "Ear Rings" },
-      { link: "/jewerly/necklaces", label: "Necklaces" },
-      { link: "/jewerly/bracelets", label: "Bracelets" },
-    ],
-  },
-  { link: "/colorstone-layouts", label: "Colorstone Layouts" },
-  {
-    label: "More",
-    links: [
-      {
-        link: "/customer-support/education?activeStone=morganite",
-        label: "Gemstones Education",
-      },
-      { link: "/customer-support/about-us", label: "About B. V. Gems." },
-      { link: "/customer-support/store-policy", label: "Store Policy" },
-      { link: "/customer-support/faqs", label: "FAQ" },
-      { link: "/customer-support/contact-us", label: "Contact Us" },
-    ],
-  },
-];
+import { links } from "@/utils/constants";
+import { fetchAllItems } from "@/apis/api";
+import { useGemStore } from "@/store/useGlobalProductsStore";
+import { useRef, useEffect } from "react";
 
 export function Header() {
   const pathname = usePathname();
-  const gemstones = usestoneStore((state) => state.gemstones) || [];
   const [opened, { toggle }] = useDisclosure(false);
   const [modalOpened, { open, close }] = useDisclosure(false);
   const { user } = useAuth();
+  const router = useRouter();
+
   const cartStore = useMemo(
     () => getCartStore(user?.id || "guest"),
     [user?.id]
@@ -82,9 +56,94 @@ export function Header() {
     (sum: any, item: any) => sum + item.quantity,
     0
   );
-  const router = useRouter();
 
-  const items: any = links.map((link) => {
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [globalSearchItems, setGlobalSearchItems] = useState<any[]>([]);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchOpen]);
+
+  const handleSearchRedirect = (option: any) => {
+    if (option?.image_url) {
+      router?.push(
+        `/product-details?id=${option?.id}&name=${option?.collection_slug}`
+      );
+    } else {
+      router.push(
+        `/jewerly/${option?.productType?.toLowerCase()}/${option?.handle}`
+      );
+    }
+  };
+
+  const getFlattenJewleryData = (jewelryProducts: any) => {
+    return jewelryProducts.map((item: any) => ({
+      ...item.node,
+      label: item.node.title,
+      value: item.node.title,
+    }));
+  };
+
+  const handleSearchClick = async () => {
+    setSearchOpen(true);
+    const store = useGemStore.getState();
+    const { gemstones, products, setGemstones, setProducts } = store;
+
+    let updatedGemstones = gemstones;
+    let updatedProducts = products;
+
+    if (gemstones.length === 0 || products.length === 0) {
+      const allItems = await fetchAllItems();
+
+      if (allItems.allLooseGemstones && gemstones.length === 0) {
+        setGemstones(allItems.allLooseGemstones);
+        updatedGemstones = allItems.allLooseGemstones;
+      }
+
+      if (allItems.mergedJewleryData && products.length === 0) {
+        setProducts(allItems.mergedJewleryData);
+        updatedProducts = allItems.mergedJewleryData;
+      }
+    }
+
+    const allJeweleryProducts = getFlattenJewleryData(updatedProducts);
+    const mergedSearchItems = [...updatedGemstones, ...allJeweleryProducts];
+
+    setGlobalSearchItems(
+      mergedSearchItems.map((item: any) => ({
+        ...item,
+        label: item.title || item.label || item.value,
+        value: item.title || item.label || item.value,
+      }))
+    );
+  };
+
+  const renderGlobalItems = ({ option, ...props }: any) => {
+    return (
+      <div
+        onClick={() => handleSearchRedirect(option)}
+        key={option.value}
+        {...props}
+        className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+      >
+        <Image
+          h={70}
+          w={70}
+          fit="fill"
+          src={option.images?.edges[0]?.node?.url ?? option?.image_url}
+          className="w-10 h-10 rounded object-cover"
+        />
+        <div>
+          <p className="text-sm font-medium">{option.label}</p>
+        </div>
+      </div>
+    );
+  };
+
+  const items = links.map((link) => {
     const menuItems = link.links?.map((item: any) => (
       <UnstyledButton
         key={item.link}
@@ -138,7 +197,6 @@ export function Header() {
               </Center>
             </div>
           </HoverCard.Target>
-
           <HoverCard.Dropdown className="relative px-12 py-10 bg-white rounded-lg shadow-lg border border-gray-200 min-w-[900px] h-[400px] flex">
             <Grid gutter="xl" className="w-full">
               <GridCol className="flex items-center" span={4}>
@@ -151,7 +209,6 @@ export function Header() {
                   className="mt-8"
                 />
               </GridCol>
-
               <GridCol span={8} className="relative">
                 <SimpleGrid
                   cols={2}
@@ -161,7 +218,6 @@ export function Header() {
                 >
                   {menuItems}
                 </SimpleGrid>
-
                 <div className="flex justify-end pr-4">
                   <Button
                     variant="transparent"
@@ -245,10 +301,7 @@ export function Header() {
         <AuthForm onClose={close} />
       </Modal>
 
-      <div
-        style={{ fontFamily: "system-ui, sans-serif" }}
-        className="flex justify-evenly py-1 text-white bg-[#0b182d] text-sm"
-      >
+      <div className="flex justify-evenly py-1 text-white bg-[#0b182d] text-sm">
         <a
           href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
           target="_blank"
@@ -257,7 +310,6 @@ export function Header() {
         >
           🇺🇸 66 W 47th St, Booth #9 and #10, New York, NY 10036
         </a>
-
         <div className="flex justify-around gap-6">
           <a href="tel:+12129444382" className="flex gap-2 hover:underline">
             <IconPhone /> +1 (212) 944-4382
@@ -286,45 +338,88 @@ export function Header() {
             </GridCol>
 
             <GridCol span={{ base: 12, md: 7 }} className="flex justify-center">
-              <Group className="uppercase" gap={5} visibleFrom="sm">
-                {items}
-              </Group>
+              {!searchOpen ? (
+                <Group className="uppercase" gap={5} visibleFrom="sm">
+                  {items}
+                </Group>
+              ) : (
+                <div className="w-full flex items-center justify-center gap-1">
+                  <Autocomplete
+                    size="md"
+                    ref={searchInputRef}
+                    clearable
+                    leftSection={<IconSearch />}
+                    data={globalSearchItems}
+                    renderOption={renderGlobalItems}
+                    onOptionSubmit={(val) => {
+                      const selectedItem = globalSearchItems.find(
+                        (item) => item.label.toLowerCase() === val.toLowerCase()
+                      );
+                      if (selectedItem) {
+                        handleSearchRedirect(selectedItem);
+                      }
+                    }}
+                    placeholder="Search for gemstones, jewelry, etc..."
+                    className="w-full px-4 py-2 rounded-md text-black"
+                  />
+                  <Button
+                    w={100}
+                    variant="light"
+                    leftSection={<IconArrowLeft size={20}/>}
+                    size="compact-md"
+                    color="#0b182d"
+                    onClick={() => {
+                      setSearchOpen(false);
+                    }}
+                  >
+                    Back
+                  </Button>
+                </div>
+              )}
             </GridCol>
 
             <GridCol
               span={{ base: 12, md: 3 }}
               className="flex items-center justify-start gap-3"
             >
-              {user ? (
-                <UserProfile user={user} />
-              ) : (
-                <Button
-                  color="#6B7280"
-                  variant="outline"
-                  size="compact-md"
-                  onClick={open}
-                >
-                  <span className="text-black">Sign In</span>
-                </Button>
+              {!searchOpen && (
+                <>
+                  {user ? (
+                    <UserProfile user={user} />
+                  ) : (
+                    <Button
+                      color="#6B7280"
+                      variant="outline"
+                      size="compact-md"
+                      onClick={open}
+                    >
+                      <span className="text-black">Sign In</span>
+                    </Button>
+                  )}
+                  <div className="w-px h-6 bg-gray-300" />
+                  <IconSearch
+                    className="hover:cursor-pointer"
+                    size="22"
+                    onClick={handleSearchClick}
+                  />
+                  <div className="relative ml-3.5">
+                    {user && (
+                      <>
+                        <IconShoppingBag
+                          onClick={() => router.push("/cart")}
+                          className="hover:cursor-pointer"
+                          size="22"
+                        />
+                        <div className="absolute -top-2 -right-2">
+                          <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
+                            {cartCount}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </>
               )}
-              <div className="w-px h-6 bg-gray-300" />
-              <IconSearch className="hover:cursor-pointer" size="22" />
-              <div className="relative ml-3.5">
-                {user && (
-                  <>
-                    <IconShoppingBag
-                      onClick={() => router.push("/cart")}
-                      className="hover:cursor-pointer"
-                      size="22"
-                    />
-                    <div className="absolute -top-2 -right-2">
-                      <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
-                        {cartCount}
-                      </span>
-                    </div>
-                  </>
-                )}
-              </div>
             </GridCol>
 
             <Burger

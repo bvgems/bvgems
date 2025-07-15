@@ -1,35 +1,15 @@
 import { shopifyQuery } from "@/app/Graphql/queries";
 import { NextRequest, NextResponse } from "next/server";
+import { getAllJeweleryProducts } from "../lib/commonFunctions";
 
 export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const category = url.searchParams.get("category");
 
-    const variables = {
-      category: `product_type:${category}`,
-    };
-
-    const shopifyRes = await fetch(
-      "https://e4wqcy-up.myshopify.com/api/2024-04/graphql.json",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Shopify-Storefront-Access-Token":
-            "c64a5e6dbfa340f0bff88be9fde4b7a8",
-        },
-        body: JSON.stringify({
-          query: shopifyQuery,
-          variables,
-        }),
-      }
-    );
-
-    const result = await shopifyRes.json();
-
+    const result = await getAllJeweleryProducts(category);
     return NextResponse.json(
-      { products: result.data.products },
+      { products: result},
       { status: 200 }
     );
   } catch (error) {
