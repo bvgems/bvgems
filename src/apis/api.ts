@@ -1,5 +1,16 @@
 import axios from "axios";
 
+export const fetchBeads = async () => {
+  try {
+    const response = await axios.get("http://localhost:3000/api/getBeads");
+
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching the beads", error);
+    return null;
+  }
+};
+
 export const getFilteredData = async (options: any) => {
   try {
     const response = await axios.post(

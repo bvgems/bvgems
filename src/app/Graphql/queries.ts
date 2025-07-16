@@ -1,3 +1,42 @@
+export const GetAllBeads = `
+  query GetProducts($first: Int!) {
+    products(first: $first) {
+      edges {
+        node {
+          id
+          title
+          handle
+          description
+           images(first: 5) {
+            edges {
+              node {
+                url
+                altText
+              }
+            }
+          }
+          metafield(namespace: "custom", key: "productType") {
+            value
+          }
+          variants(first: 5) {
+            edges {
+              node {
+                id
+                title
+                price {
+                  amount
+                  currencyCode
+                }
+                availableForSale
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const getAllProductsQuery = `
   query getAllProducts($cursor: String) {
     products(first: 100, after: $cursor) {

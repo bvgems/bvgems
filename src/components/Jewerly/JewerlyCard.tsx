@@ -1,3 +1,4 @@
+"use client";
 import { Card } from "@mantine/core";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -8,7 +9,12 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck } from "@tabler/icons-react";
 import { addProductToCart } from "@/utils/commonFunctions";
 
-export const JewelryCategoryCard = ({ category, product, index }: any) => {
+export const JewelryCategoryCard = ({
+  isBead,
+  category,
+  product,
+  index,
+}: any) => {
   const router = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
   const { user } = useAuth();
@@ -18,11 +24,12 @@ export const JewelryCategoryCard = ({ category, product, index }: any) => {
   const redirectToProduct = (product: any) => {
     const handle = product?.node?.handle;
 
-    router?.push(`/jewerly/${category}/${handle}`);
+    isBead
+      ? router?.push(`/jewerly/beads/${handle}`)
+      : router?.push(`/jewerly/${category}/${handle}`);
   };
 
   const addProduct = async () => {
-    console.log("product", product);
     await addProductToCart(product?.node, 1, addToCart);
 
     notifications.show({
@@ -54,7 +61,7 @@ export const JewelryCategoryCard = ({ category, product, index }: any) => {
           key="main"
           src={product?.node?.images?.edges?.[0]?.node?.url}
           alt={product?.node?.title}
-          className="absolute object-contain"
+          className={`absolute ${isBead ? "object-fill" : "object-contain"}`}
           style={{ height: 300, width: "100%" }}
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{

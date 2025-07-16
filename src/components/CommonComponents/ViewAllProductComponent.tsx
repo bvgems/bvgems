@@ -25,11 +25,14 @@ export const ViewAllProductComponent: React.FC<AnimatedGridProps> = ({
         transition={{ duration: 0.4, ease: "easeInOut" }}
       >
         <Grid gutter="xl" className="mt-6">
-          {items.map((item, index) => (
-            <Grid.Col key={index} span={{ base: 12, sm: 6, md: 3 }}>
-              {renderItem(item, index)}
-            </Grid.Col>
-          ))}
+          {items.map((item, index) => {
+            console.log("index", index);
+            return (
+              <Grid.Col key={index} span={{ base: 12, sm: 6, md: 3 }}>
+                {renderItem(item, index)}
+              </Grid.Col>
+            );
+          })}
         </Grid>
       </motion.div>
     </AnimatePresence>

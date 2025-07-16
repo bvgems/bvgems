@@ -25,13 +25,13 @@ import { useState } from "react";
 import { AuthForm } from "../Auth/AuthForm";
 import { addProductToCart } from "@/utils/commonFunctions";
 import { getCartStore } from "@/store/useCartStore";
+import { GoldColor } from "@/utils/constants";
 
-export const JewerlyProductDetails = ({ productData }: any) => {
+export const JewerlyProductDetails = ({ isBead, productData }: any) => {
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
-
   const [quantity, setQuantity] = useState<any>(1);
   const [selectedGoldColor, setSelectedGoldColor] = useState<string | null>(
     null
@@ -49,6 +49,17 @@ export const JewerlyProductDetails = ({ productData }: any) => {
     });
   };
 
+  const getData = () => {
+    if (isBead) {
+      const sizeArray = productData?.variants?.edges?.map((item: any) => {
+        return item?.node?.title;
+      });
+      return sizeArray;
+    } else {
+      return GoldColor;
+    }
+  };
+
   return (
     <>
       <Modal
@@ -64,7 +75,7 @@ export const JewerlyProductDetails = ({ productData }: any) => {
       >
         <AuthForm onClose={close} />
       </Modal>
-      <div className="px-9 flex flex-col gap-4">
+      <div className={`px-9 flex flex-col ${isBead ? "gap-2" : "gap-4"}`}>
         <h1 className="uppercase text-[2rem] leading-relaxed tracking-wide">
           {productData?.title}
         </h1>
@@ -90,45 +101,47 @@ export const JewerlyProductDetails = ({ productData }: any) => {
         <Divider />
         <p className="text-lg mt-2 pb-1.5">{productData?.description}</p>
 
-        <div className="">
-          <Table
-            horizontalSpacing="lg"
-            withRowBorders={false}
-            variant="vertical"
-            layout="fixed"
-          >
-            <TableTbody>
-              <TableTr className="text-lg">
-                <TableTh w={160}>Stone Color</TableTh>
-                <TableTd>-</TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh>Stone Size</TableTh>
-                <TableTd>-</TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh>Stone Wg.</TableTh>
-                <TableTd>-</TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh>Diamond Size</TableTh>
-                <TableTd>-</TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh>Total Wg.</TableTh>
-                <TableTd>-</TableTd>
-              </TableTr>
-            </TableTbody>
-          </Table>
-        </div>
-
+        {!isBead ? (
+          <div className="">
+            <Table
+              horizontalSpacing="lg"
+              withRowBorders={false}
+              variant="vertical"
+              layout="fixed"
+            >
+              <TableTbody>
+                <TableTr className="text-lg">
+                  <TableTh w={160}>Stone Color</TableTh>
+                  <TableTd>-</TableTd>
+                </TableTr>
+                <TableTr className="text-lg">
+                  <TableTh>Stone Size</TableTh>
+                  <TableTd>-</TableTd>
+                </TableTr>
+                <TableTr className="text-lg">
+                  <TableTh>Stone Wg.</TableTh>
+                  <TableTd>-</TableTd>
+                </TableTr>
+                <TableTr className="text-lg">
+                  <TableTh>Diamond Size</TableTh>
+                  <TableTd>-</TableTd>
+                </TableTr>
+                <TableTr className="text-lg">
+                  <TableTh>Total Wg.</TableTh>
+                  <TableTd>-</TableTd>
+                </TableTr>
+              </TableTbody>
+            </Table>
+          </div>
+        ) : null}
+        {isBead ? <p>Straight Size</p> : null}
         <div className="flex gap-4 w-full">
           <Select
             className="flex-1"
             leftSection={<IconDiamond size={20} />}
-            label="Select Gold Color"
-            placeholder="Gold color"
-            data={["Rose Gold", "White Gold", "Yellow Gold"]}
+            label={`${isBead ? "Select Stone Size" : "Select Gold Color"}`}
+            placeholder={`${isBead ? "Stone Size" : "Gold Color"}`}
+            data={getData()}
             value={selectedGoldColor}
             onChange={setSelectedGoldColor}
             styles={{

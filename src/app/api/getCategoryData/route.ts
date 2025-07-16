@@ -4,7 +4,6 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const handle = url.searchParams.get("handle");
-    console.log('handle',handle)
     const shopifyRes = await fetch(
       "https://e4wqcy-up.myshopify.com/api/2024-04/graphql.json",
       {

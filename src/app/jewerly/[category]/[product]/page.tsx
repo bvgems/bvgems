@@ -2,21 +2,22 @@
 import { fetchProductByHandle } from "@/apis/api";
 import { JewerlyProductDetails } from "@/components/Jewerly/JewerlyProductDetails";
 import { Grid, GridCol } from "@mantine/core";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
 
-
-
 export default function JewerlyProductPage() {
   const { product } = useParams();
+  const path = usePathname();
+  const isBead = path?.includes("beads");
   const [productData, setProductData] = useState<any>(null);
 
   useEffect(() => {
     const getProductByHandle = async () => {
       if (product) {
         const response = await fetchProductByHandle(product);
+        console.log('response',response.product)
         setProductData(response?.product);
       }
     };
@@ -39,6 +40,7 @@ export default function JewerlyProductPage() {
                   "/placeholder.png"
                 }
                 alt={productData?.title}
+                isBead={isBead}
               />
             </motion.div>
           )}
@@ -50,7 +52,7 @@ export default function JewerlyProductPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
           >
-            <JewerlyProductDetails productData={productData} />
+            <JewerlyProductDetails isBead productData={productData} />
           </motion.div>
         </GridCol>
       </Grid>

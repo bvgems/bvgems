@@ -749,6 +749,7 @@ export const links = [
     label: "Loose Gemstones",
     links: gemstoneOptions,
   },
+  { link: "/precious-beads", label: "Precious Beads" },
   {
     label: "Jewelery",
     links: [
@@ -773,3 +774,5 @@ export const links = [
     ],
   },
 ];
+
+export const GoldColor = ["Rose Gold", "White Gold", "Yellow Gold"];

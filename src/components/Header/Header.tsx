@@ -6,7 +6,6 @@ import {
   IconPhone,
   IconMail,
   IconSearch,
-  IconX,
   IconArrowLeft,
 } from "@tabler/icons-react";
 import {
