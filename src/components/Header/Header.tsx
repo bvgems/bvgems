@@ -405,20 +405,16 @@ export function Header() {
                     onClick={handleSearchClick}
                   />
                   <div className="relative ml-3.5">
-                    {user && (
-                      <>
-                        <IconShoppingBag
-                          onClick={() => router.push("/cart")}
-                          className="hover:cursor-pointer"
-                          size="22"
-                        />
-                        <div className="absolute -top-2 -right-2">
-                          <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
-                            {cartCount}
-                          </span>
-                        </div>
-                      </>
-                    )}
+                    <IconShoppingBag
+                      onClick={() => router.push("/cart")}
+                      className="hover:cursor-pointer"
+                      size="22"
+                    />
+                    <div className="absolute -top-2 -right-2">
+                      <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
+                        {cartCount}
+                      </span>
+                    </div>
                   </div>
                 </>
               )}

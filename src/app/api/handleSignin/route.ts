@@ -34,16 +34,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!user?.is_approved) {
-      return new Response(
-        JSON.stringify({
-          flag: false,
-          error:
-            "Your account is not yet approved. We'll notify you once approved.",
-        }),
-        { status: 202, headers: { "Content-Type": "application/json" } }
-      );
-    }
+    // if (!user?.is_approved) {
+    //   return new Response(
+    //     JSON.stringify({
+    //       flag: false,
+    //       error:
+    //         "Your account is not yet approved. We'll notify you once approved.",
+    //     }),
+    //     { status: 202, headers: { "Content-Type": "application/json" } }
+
+    // }
 
     const payload = {
       id: user.id,

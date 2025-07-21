@@ -17,7 +17,7 @@ export default function JewerlyProductPage() {
     const getProductByHandle = async () => {
       if (product) {
         const response = await fetchProductByHandle(product);
-        console.log('response',response.product)
+        console.log("response", response.product);
         setProductData(response?.product);
       }
     };
@@ -52,7 +52,7 @@ export default function JewerlyProductPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
           >
-            <JewerlyProductDetails isBead productData={productData} />
+            <JewerlyProductDetails isBead={isBead} productData={productData} />
           </motion.div>
         </GridCol>
       </Grid>

@@ -25,6 +25,7 @@ export const PhoneNumberInput = ({ form }: any) => {
           borderRadius: "8px",
           border: "1px solid #ced4da",
           fontSize: "16px",
+          backgroundColor: "white",
         }}
       />
     </Input.Wrapper>

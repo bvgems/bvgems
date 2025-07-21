@@ -90,6 +90,21 @@ export const ShippingAddressForm = ({
   }
 
   const handleSubmit = async (values: typeof form.values) => {
+    if (!userId) {
+      setShippingAddress({
+        fullName: values.fullName,
+        addressLine1: values.addressLine1,
+        addressLine2: values.addressLine2,
+        city: values.city,
+        state: values.state,
+        zipCode: values.zipCode,
+        country: values.country,
+        phoneNumber: values.phoneNumber,
+        email: values.email,
+      });
+      onSuccess?.();
+      return;
+    }
     if (isStepper && form.isValid()) {
       await new Promise((resolve) => setTimeout(resolve, 300));
       setShippingAddress({

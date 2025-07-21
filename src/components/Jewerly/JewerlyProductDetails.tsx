@@ -100,7 +100,7 @@ export const JewerlyProductDetails = ({ isBead, productData }: any) => {
 
         <Divider />
         <p className="text-lg mt-2 pb-1.5">{productData?.description}</p>
-
+        {isBead}
         {!isBead ? (
           <div className="">
             <Table
@@ -170,7 +170,10 @@ export const JewerlyProductDetails = ({ isBead, productData }: any) => {
         </div>
 
         <div className="mt-3 flex flex-col gap-2">
-          {user ? (
+          <Button color="#0b182d" onClick={addProduct} fullWidth>
+            ADD TO CART
+          </Button>
+          {/* {user ? (
             <Button color="#0b182d" onClick={addProduct} fullWidth>
               ADD TO CART
             </Button>
@@ -185,7 +188,7 @@ export const JewerlyProductDetails = ({ isBead, productData }: any) => {
             >
               SIGN IN TO ORDER
             </Button>
-          )}
+          )} */}
 
           <Button
             leftSection={<IconHeart />}

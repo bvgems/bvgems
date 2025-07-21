@@ -1,74 +1,211 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Container, Grid, GridCol, Button, Stack } from "@mantine/core";
-import { ShippingAddress } from "@/components/ShippingAddress/ShipppingAddress";
-import { makeCheckout } from "@/apis/api";
+import {
+  Container,
+  Grid,
+  GridCol,
+  Button,
+  Table,
+  TableTr,
+  TableThead,
+  TableTh,
+  TableTd,
+  Image,
+  Divider,
+  Modal,
+} from "@mantine/core";
+import { createShopifyOrder, makeCheckout } from "@/apis/api";
 import { loadStripe } from "@stripe/stripe-js";
 import { getCartStore } from "@/store/useCartStore";
 import { useAuth } from "@/hooks/useAuth";
-import { PaymentOptions } from "@/components/CommonComponents/PaymentOptions";
+import { CheckoutStepper } from "@/components/Checkout/CheckoutStepper";
+import { BillingSummary } from "@/components/CommonComponents/BillingSummary";
+import { useStpperStore } from "@/store/useStepperStore";
+import { useGuestUserStore } from "@/store/useGuestUserStore";
+import { useDisclosure } from "@mantine/hooks";
+import OrderConfirmationModal from "@/components/CommonComponents/OrderConfirmationModal";
 
 export default function CheckoutSelectionPage() {
   const { user } = useAuth();
+  const { guestUser } = useGuestUserStore();
+
   const cartStore = useMemo(
     () => getCartStore(user?.id || "guest"),
     [user?.id]
   );
-  const [selectedAddress, setSelectedAddress] = useState<any>(null);
-  const [paymentOption, setPaymentOption] = useState<"online" | "cod" | null>(
-    null
-  );
+  const { shippingAddress } = useStpperStore();
+
+  const [deliveryMethod, setDeliveryMethod] = useState();
+  const [paymentMethod, setPaymentMethod] = useState();
+  const [opened, { open, close }] = useDisclosure(false);
 
   const cart = cartStore((state: any) => state.cart);
-
   const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
   );
 
-  const handlePayment = async () => {
+  const handlePayment = async (orderId: any) => {
     const stripe = await stripePromise;
-    const response = await makeCheckout(cart);
+
+    const response = await makeCheckout({
+      cartItems: cart,
+      shopifyOrderId: orderId.toString(),
+    });
     const sessionId = response.id;
     await stripe?.redirectToCheckout({ sessionId });
   };
 
+  const getOrderPayload = (paymentMethod: any) => {
+    const orderPayload = {
+      order: {
+        line_items: cart?.map((item: any) => ({
+          title: item?.product?.collection_slug,
+          quantity: item?.quantity,
+          price: item?.product?.price.toString(),
+          requires_shipping: deliveryMethod === "delivery",
+          taxable: true,
+          fulfillment_service: "manual",
+        })),
+        email: guestUser?.email,
+        phone: guestUser?.phoneNumber,
+        customer: {
+          email: guestUser?.email || "guest@example.com",
+          first_name: guestUser?.firstName || "Guest",
+          last_name: guestUser?.lastName || "User",
+          phone: guestUser?.phoneNumber || null,
+          accepts_marketing: false,
+          accepts_marketing_updated_at: new Date().toISOString(),
+          marketing_opt_in_level: "single_opt_in",
+          tags: "online-store",
+        },
+        financial_status: "pending",
+        send_receipt: paymentMethod === "cod",
+        fulfillment_status: "unfulfilled",
+        currency: "USD",
+        buyer_accepts_marketing: false,
+        billing_address: {
+          first_name: shippingAddress?.fullName || "Guest",
+          last_name: shippingAddress?.fullName || "User",
+          address1: shippingAddress?.addressLine1,
+          city: shippingAddress?.city,
+          province: shippingAddress?.state,
+          country: shippingAddress?.country,
+          zip: shippingAddress?.zipCode,
+          phone: shippingAddress?.phoneNumber || guestUser?.phoneNumber,
+        },
+        shipping_address: {
+          first_name: shippingAddress?.fullName || "Guest",
+          last_name: shippingAddress?.fullName || "User",
+          address1: shippingAddress?.addressLine1,
+          city: shippingAddress?.city,
+          province: shippingAddress?.state,
+          country: shippingAddress?.country,
+          zip: shippingAddress?.zipCode,
+          phone: shippingAddress?.phoneNumber || guestUser?.phoneNumber,
+        },
+      },
+    };
+    return orderPayload;
+  };
+  const handleOrderPlacing = async () => {
+    if (!deliveryMethod || !paymentMethod) return;
+
+    if (paymentMethod === "cod") {
+      const orderPayload = getOrderPayload(paymentMethod);
+      const orderResponse: any = await createShopifyOrder(orderPayload);
+      // router.push('/order-confirmation');
+      open();
+    } else {
+      const orderPayload = getOrderPayload(paymentMethod);
+      const orderResponse: any = await createShopifyOrder(orderPayload);
+      handlePayment(orderResponse?.order?.id);
+      open();
+    }
+  };
+
+  const rows = cart.map((value: any, index: number) => (
+    <TableTr key={index}>
+      <TableTd className="text-[1rem]">
+        <div className="flex flex-col gap-2 justify-start">
+          <Image
+            src={value?.jewelryProduct?.image_url ?? value?.product?.image_url}
+            h={100}
+            w={100}
+            fit="fill"
+          />
+          <div className="flex flex-col">
+            <span>
+              {value?.product?.collection_slug
+                ? value?.product?.collection_slug + " " + value?.product?.shape
+                : value?.jewelryProduct?.productName}
+            </span>
+            <span className="text-sm">Qty: {value?.quantity}</span>
+          </div>
+          {value?.product?.productType === "stone" ? (
+            <div className="flex flex-col">
+              <span>Size: {value?.product?.size}</span>
+              <span>Weight: {value?.product?.ct_weight}</span>
+              <span>Quality: {value?.product?.quality}</span>
+            </div>
+          ) : null}
+        </div>
+      </TableTd>
+      <TableTd className="font-semibold">
+        <div className="text-lg">
+          <span>$</span>
+          {value?.jewelryProduct?.price ?? value?.product?.price}
+        </div>
+      </TableTd>
+    </TableTr>
+  ));
   return (
-    <div className="py-12">
-      <Container size={"lg"} className="py-5">
-        <Grid gutter={"xl"}>
-          <GridCol span={{ base: 12, md: 8 }}>
-            <h1 className="text-xl py-6">Select Your Shipping Address</h1>
-            <ShippingAddress selectable={true} onSelect={setSelectedAddress} />
+    <div className="pb-20">
+      <OrderConfirmationModal opened={opened} close={close} />
+      <Container size={"xl"}>
+        <Grid gutter={"xl"} className="mt-10">
+          <GridCol
+            className="border border-gray-200 rounded-2xl bg-[#f1f1f1]"
+            span={{ base: 12, md: 8 }}
+          >
+            <CheckoutStepper
+              paymentMethod={paymentMethod}
+              setPaymentMethod={setPaymentMethod}
+              deliveryMethod={deliveryMethod}
+              setDeliveryMethod={setDeliveryMethod}
+            />
+            <div className="px-10">
+              <BillingSummary />
+
+              <Button
+                disabled={!deliveryMethod || !paymentMethod}
+                onClick={handleOrderPlacing}
+                color="#0b182d"
+                fullWidth
+              >
+                PLACE ORDER
+              </Button>
+            </div>
           </GridCol>
 
           <GridCol span={{ base: 12, md: 4 }}>
-            {selectedAddress && (
-              <div className="p-12">
-                <h2 className="text-lg font-semibold py-6">
-                  Choose Payment Method
-                </h2>
-                <Stack>
-                  <Button
-                    color="#0b182d"
-                    variant={paymentOption === "online" ? "filled" : "outline"}
-                    onClick={() => {
-                      setPaymentOption("online");
-                      handlePayment();
-                    }}
-                  >
-                    Pay Online Now
-                  </Button>
-                  <PaymentOptions />
-                  <Button
-                    color="#0b182d"
-                    variant={paymentOption === "cod" ? "filled" : "outline"}
-                    onClick={() => setPaymentOption("cod")}
-                  >
-                    Pay on Delivery
-                  </Button>
-                </Stack>
-              </div>
-            )}
+            <div className="px-10">
+              <h2 className="text-lg font-semibold">Review Your Order</h2>
+              <Divider mt={"lg"} />
+              <Table
+                verticalSpacing={"lg"}
+                className="mt-5"
+                striped
+                horizontalSpacing={"xl"}
+              >
+                <TableThead className="uppercase text-[#0b182d]">
+                  <TableTr>
+                    <TableTh>Product</TableTh>
+                    <TableTh>Price</TableTh>
+                  </TableTr>
+                </TableThead>
+                <Table.Tbody>{rows}</Table.Tbody>
+              </Table>
+            </div>
           </GridCol>
         </Grid>
       </Container>

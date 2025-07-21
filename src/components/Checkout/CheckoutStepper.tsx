@@ -1,0 +1,159 @@
+"use client";
+import * as React from "react";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import StepContent from "@mui/material/StepContent";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import { Button } from "@mantine/core";
+import { styled } from "@mui/material/styles";
+import { ShippingAddress } from "../ShippingAddress/ShipppingAddress";
+import { DeliveryMethod } from "./DeliveryMethod";
+import { PaymentMethod } from "./PaymentMethod";
+import { CustomerDetails } from "./CustomerDetails";
+import { useGuestUserStore } from "@/store/useGuestUserStore";
+
+const CustomStepLabel = styled(StepLabel)(() => ({
+  "& .MuiStepLabel-label": {
+    color: "#0b182d",
+    fontSize: "1.1rem",
+  },
+  "& .MuiStepIcon-root": {
+    color: "#6C7481",
+  },
+  "& .MuiStepIcon-root.Mui-active": {
+    color: "#0b182d",
+  },
+  "& .MuiStepIcon-root.Mui-completed": {
+    color: "#388e3c",
+  },
+}));
+
+export const CheckoutStepper = ({
+  paymentMethod,
+  setPaymentMethod,
+  deliveryMethod,
+  setDeliveryMethod,
+}: any) => {
+  const { setGuestUser } = useGuestUserStore();
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [isFormValid, setIsFormValid] = React.useState(false);
+  const [initialValues, setInititalValues] = React.useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+  });
+
+  const steps = React.useMemo(() => {
+    const result = [
+      {
+        label: "Delivery Method",
+        content: (
+          <DeliveryMethod
+            deliveryMethod={deliveryMethod}
+            setDeliveryMethod={setDeliveryMethod}
+          />
+        ),
+      },
+      {
+        label: "Customer Details",
+        content: (
+          <CustomerDetails
+            setIsFormValid={setIsFormValid}
+            initialValues={initialValues}
+            setInitialValues={setInititalValues}
+          />
+        ),
+      },
+    ];
+
+    if (deliveryMethod === "delivery") {
+      result.push({
+        label: "Select Shipping Address",
+        content: <ShippingAddress />,
+      });
+    }
+
+    result.push({
+      label: "Choose Payment Method",
+      content: (
+        <PaymentMethod
+          deliveryMethod={deliveryMethod}
+          paymentMethod={paymentMethod}
+          setPaymentMethod={setPaymentMethod}
+        />
+      ),
+    });
+
+    return result;
+  }, [deliveryMethod]);
+
+  const handleNext = (index: number) => {
+    if (index === 1) {
+      setGuestUser(initialValues);
+    }
+    setActiveStep((prev) => prev + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prev) => prev - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
+  return (
+    <div className="pt-10 px-10">
+      <Stepper
+        activeStep={activeStep}
+        orientation="vertical"
+        sx={{
+          "& .MuiStepConnector-line": {
+            borderColor: "#0b182d",
+          },
+        }}
+      >
+        {steps.map((step, index) => (
+          <Step key={step.label}>
+            <CustomStepLabel>{step.label}</CustomStepLabel>
+            <StepContent>
+              <div>{step.content}</div>
+              <div className="flex gap-5 mt-3">
+                {index === steps?.length - 1 ? null : (
+                  <Button
+                    disabled={
+                      (index === 0 && !deliveryMethod) ||
+                      (index === 1 && !isFormValid)
+                    }
+                    color="#0b182d"
+                    onClick={() => handleNext(index)}
+                  >
+                    {index === steps.length - 1 ? "FINISH" : "CONTINUE"}
+                  </Button>
+                )}
+                <Button
+                  variant="light"
+                  color="#0b182d"
+                  disabled={index === 0}
+                  onClick={handleBack}
+                >
+                  BACK
+                </Button>
+              </div>
+            </StepContent>
+          </Step>
+        ))}
+      </Stepper>
+
+      {activeStep === steps.length && (
+        <Paper square elevation={0} sx={{ p: 3 }}>
+          <Typography>All steps completed - you're finished</Typography>
+          <Button onClick={handleReset}>Reset</Button>
+        </Paper>
+      )}
+    </div>
+  );
+};

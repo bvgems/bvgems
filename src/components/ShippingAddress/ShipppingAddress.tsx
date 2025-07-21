@@ -24,6 +24,7 @@ import { useUserStore } from "@/store/useUserStore";
 import { deleteAddress, getShippingAddresses } from "@/apis/api";
 import { ShippingAddressForm } from "./ShippingAddressForm";
 import { notifications } from "@mantine/notifications";
+import { useStpperStore } from "@/store/useStepperStore";
 
 export const ShippingAddress = ({
   selectable = false,
@@ -33,6 +34,8 @@ export const ShippingAddress = ({
   onSelect?: (address: any) => void;
 }) => {
   const { user }: any = useUserStore();
+  const userId = user?.id;
+  const { shippingAddress } = useStpperStore();
 
   const [addresses, setAddresses] = useState<any[]>([]);
   const [editingAddress, setEditingAddress] = useState<any>(null);
@@ -51,9 +54,6 @@ export const ShippingAddress = ({
   useEffect(() => {
     fetchAddresses();
   }, [user?.id]);
-  useEffect(() => {
-    console.log("seelected");
-  }, [selectedId]);
 
   useEffect(() => {
     if (selectable && addresses.length > 0) {
@@ -86,27 +86,81 @@ export const ShippingAddress = ({
     }
   };
 
+  const NoAddress = () => {
+    return (
+      <Paper p="xl" radius="md" className="text-center">
+        <div className="flex justify-center mb-3">
+          <IconMapPin size={48} color="red" />
+        </div>
+        <Title order={3} mb="sm">
+          Shipping Address Needed
+        </Title>
+        <Text c="dimmed" mb="md">
+          We need your shipping address to proceed with your order. This helps
+          us to ensure timely delivery.
+        </Text>
+        <Button color="#0b182d" onClick={open}>
+          ADD SHIPPING ADDRESS
+        </Button>
+      </Paper>
+    );
+  };
+
   return (
     <div>
-      {addresses?.length === 0 ? (
-        <Paper p="xl" radius="md" className="text-center">
-          <div className="flex justify-center mb-3">
-            <IconMapPin size={48} color="red" />
-          </div>
-          <Title order={3} mb="sm">
-            Shipping Address Needed
-          </Title>
-          <Text c="dimmed" mb="md">
-            We need your shipping address to proceed with your order. This helps
-            us to ensure timely delivery.
-          </Text>
-          <Button color="violet" onClick={open}>
-            Add Shipping Address
-          </Button>
-        </Paper>
+      {!userId ? (
+        !shippingAddress ? (
+          <NoAddress />
+        ) : (
+          <Card
+            withBorder
+            radius="md"
+            p="lg"
+            style={{
+              cursor: "pointer",
+              marginBottom: "1rem",
+              transition: "all 0.2s ease-in-out",
+            }}
+          >
+            <Group justify="space-between" align="flex-start" wrap="nowrap">
+              <Group wrap="nowrap">
+                <Stack gap={4}>
+                  <Group gap={4}>
+                    <IconMapPin size={16} />
+                    <Text fw={500}>{shippingAddress.fullName}</Text>
+                  </Group>
+                  <Text size="sm" c="dimmed">
+                    {shippingAddress.addressLine1}
+                  </Text>
+                  {shippingAddress.addressLine2 && (
+                    <Text size="sm" c="dimmed">
+                      {shippingAddress.addressLine2}
+                    </Text>
+                  )}
+                  <Text size="sm" c="dimmed">
+                    {shippingAddress.city}, {shippingAddress.state}{" "}
+                    {shippingAddress.zipCode}
+                  </Text>
+                  <Text size="sm" c="dimmed">
+                    {shippingAddress.country}
+                  </Text>
+                  <Group gap={4}>
+                    <IconPhone size={14} />
+                    <Text size="sm">{shippingAddress.phoneNumber}</Text>
+                  </Group>
+                  <Group gap={4}>
+                    <IconMail size={14} />
+                    <Text size="sm">{shippingAddress.email}</Text>
+                  </Group>
+                </Stack>
+              </Group>
+            </Group>
+          </Card>
+        )
+      ) : addresses?.length === 0 ? (
+        <NoAddress />
       ) : (
         addresses.map((address) => {
-          console.log("heyyy", typeof address.id, typeof selectedId);
           return (
             <Card
               key={address.id}

@@ -155,7 +155,7 @@ export const AMLInfo = ({ isStepper }: any) => {
           color: "teal",
           title: response.message,
           message:
-            "Your application has been forwarded to B V Gems. Once it is approved, we will notify you.",
+            "Your account has been registered successfully! You can now Log in.",
           position: "top-right",
         });
 

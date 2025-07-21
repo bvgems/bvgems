@@ -1,5 +1,45 @@
 import axios from "axios";
 
+export const createShopifyOrder = async (payload: any) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/createShopifyOrder",
+      payload
+    );
+    console.log("res", response);
+    return response?.data;
+  } catch (error) {
+    console.log(
+      "Something went wrong while sending the order to shopify",
+      error
+    );
+    return null;
+  }
+};
+export const redirectToStripeCheckout = async (
+  cart: any,
+  shippingAddress: any,
+  guestUser: any
+) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/createShopifyCheckout",
+      {
+        cart,
+        shippingAddress,
+        guestUser,
+      }
+    );
+    console.log("res", response);
+    return response?.data;
+  } catch (error) {
+    console.log(
+      "Something went wrong while sending the order to shopify",
+      error
+    );
+    return null;
+  }
+};
 export const fetchBeads = async () => {
   try {
     const response = await axios.get("http://localhost:3000/api/getBeads");
@@ -27,10 +67,11 @@ export const getFilteredData = async (options: any) => {
   }
 };
 
-export const makeCheckout = async (cart: any) => {
+export const makeCheckout = async (data: any) => {
   try {
     const response = await axios.post("/api/checkout", {
-      cartItems: cart,
+      cartItems: data?.cartItems,
+      shopifyOrderId: data?.shopifyOrderId,
     });
 
     return response?.data;

@@ -29,6 +29,7 @@ import { notifications } from "@mantine/notifications";
 import { useMemo } from "react";
 import { UnAuthorized } from "../CommonComponents/UnAuthorized";
 import { useRouter } from "next/navigation";
+import { BillingSummary } from "../CommonComponents/BillingSummary";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
@@ -54,10 +55,6 @@ export function CartComponent() {
     router?.push("/checkout");
   };
 
-  if (!user) {
-    return <UnAuthorized />;
-  }
-
   if (cart.length === 0) {
     return (
       <div className="flex flex-col gap-3 items-center justify-center py-24">
@@ -70,9 +67,13 @@ export function CartComponent() {
         <p className="text-xl font-semibold mt-4 text-gray-700">
           Your cart is empty
         </p>
-        <Button onClick={()=>{
-          router?.push('/loose-gemstones')
-        }} color="gray" rightSection={<IconArrowNarrowRight />}>
+        <Button
+          onClick={() => {
+            router?.push("/loose-gemstones");
+          }}
+          color="gray"
+          rightSection={<IconArrowNarrowRight />}
+        >
           Shop Now
         </Button>
       </div>
@@ -172,47 +173,8 @@ export function CartComponent() {
             <span className="text-xl font-semibold text-[#0b182d]">
               Order Summary
             </span>
-            <div className="mt-5">
-              <div className="flex flex-row justify-between">
-                <span>Subtotal:</span>
-                <span className="font-semibold">
-                  ${getTotalPrice().toFixed(2)}
-                </span>
-              </div>
-              <Divider my="sm" />
-              <div className="flex flex-row justify-between">
-                <span>Sales Tax:</span>
-                <span className="font-semibold">+ $0</span>
-              </div>
-              <Divider my="sm" />
-              <div className="flex flex-row justify-between">
-                <span>Discount:</span>
-                <span className="font-semibold">- $0</span>
-              </div>
-              <Divider my="sm" />
-              <div className="flex flex-row justify-between text-lg text-[#0b182d] font-semibold">
-                <span className="">Grand Total:</span>
-                <span className="font-semibold">
-                  {" "}
-                  ${getTotalPrice().toFixed(2)}
-                </span>
-              </div>
-            </div>
+            <BillingSummary />
             <div className="mt-9 flex flex-col gap-4">
-              <div className="flex flex-row items-center gap-2">
-                <Checkbox color="#0b182d" label="NYC Store Pickup" />{" "}
-                <Tooltip
-                  multiline
-                  w={220}
-                  withArrow
-                  transitionProps={{ duration: 200 }}
-                  label="Pick up from our Address: 66 W 47th St, Booth #9 and #10 , New York, NY 10036v"
-                >
-                  <span className="cursor-pointer">
-                    <IconInfoCircle size={19} />
-                  </span>
-                </Tooltip>
-              </div>
               <Alert
                 color="#0b182d"
                 title="Hassle-Free Returns"
@@ -226,6 +188,7 @@ export function CartComponent() {
 
             <div className="mt-5">
               <Button
+                disabled={!cart?.length}
                 onClick={handleCheckout}
                 rightSection={<IconArrowNarrowRight />}
                 className="mt-3"

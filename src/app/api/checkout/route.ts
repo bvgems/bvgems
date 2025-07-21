@@ -7,15 +7,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: Request) {
   try {
-    const { cartItems } = await req.json();
-    console.log("cartttt", cartItems);
-
+    const { cartItems, shopifyOrderId, email } = await req.json();
     const line_items = cartItems.map((item: any) => {
       const productData: any = {
         name: `${item.product.collection_slug} - ${item.product.shape}`,
       };
 
-      if (item.product.image_url && item.product.image_url.trim() !== "") {
+      if (item.product.image_url?.trim()) {
         productData.images = [item.product.image_url];
       }
 
@@ -30,13 +28,18 @@ export async function POST(req: Request) {
     });
 
     const origin = req.headers.get("origin") || "http://localhost:3000";
+    console.log('origin',origin)
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items,
       mode: "payment",
-      success_url: `${origin}/success`,
-      cancel_url: `${origin}/cart`,
+      customer_email: "fenil2926@gmail.com",
+      success_url: `${origin}/payment-success?orderId=${shopifyOrderId}`,
+      cancel_url: `${origin}/payment-cancelled?orderId=${shopifyOrderId}`,
+      metadata: {
+        shopifyOrderId,
+      },
     });
 
     return NextResponse.json({ id: session.id }, { status: 200 });
