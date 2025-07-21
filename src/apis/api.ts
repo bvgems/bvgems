@@ -214,6 +214,7 @@ export const getUserProfile = async (userId: any) => {
 
 export const upsertShippingAddress = async (isEdit: boolean, payload: any) => {
   try {
+    console.log('isedit',isEdit)
     let response;
     if (isEdit) {
       response = await axios.put("/api/updateShippingAddress", payload);

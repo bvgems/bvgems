@@ -6,6 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const userId = body.userId;
+    console.log("bodyy",body)
     await createShippingAddress(body, userId);
 
     return new Response(

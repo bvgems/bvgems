@@ -161,25 +161,23 @@ export const ShippingAddress = ({
         <NoAddress />
       ) : (
         addresses.map((address) => {
+          const isSelected = selectedId === address.id;
+
           return (
             <Card
               key={address.id}
               withBorder
               radius="md"
-              shadow={selectedId == address.id ? "md" : "sm"}
+              shadow={isSelected ? "md" : "sm"}
               p="lg"
               style={{
-                cursor: "pointer",
+                cursor: selectable ? "pointer" : "default",
                 marginBottom: "1rem",
                 transition: "all 0.2s ease-in-out",
-                border:
-                  selectable && selectedId === address.id
-                    ? "2px solid #0b182d"
-                    : undefined,
+                border: selectable && isSelected ? "2px solid #0b182d" : undefined,
               }}
               onClick={() => {
                 if (selectable) {
-                  console.log("Selecting address:", address);
                   setSelectedId(address.id);
                   onSelect?.(address);
                 }
@@ -216,6 +214,7 @@ export const ShippingAddress = ({
                     </Group>
                   </Stack>
                 </Group>
+
                 {!selectable && (
                   <Stack gap="xs" align="flex-end">
                     <Button
@@ -251,19 +250,17 @@ export const ShippingAddress = ({
           );
         })
       )}
-      {addresses?.length && !selectable ? (
-        <Button
-          mt="md"
-          color="#0b182d"
-          onClick={() => {
-            setEditingAddress(null);
-            open();
-          }}
-        >
+
+      {addresses?.length > 0 && !selectable && (
+        <Button mt="md" color="#0b182d" onClick={() => {
+          setEditingAddress(null);
+          open();
+        }}>
           ADD NEW ADDRESS
         </Button>
-      ) : null}
+      )}
 
+      {/* Add/Edit Modal */}
       <Modal
         opened={modalOpened}
         onClose={close}
@@ -280,6 +277,7 @@ export const ShippingAddress = ({
         />
       </Modal>
 
+      {/* Delete Confirmation Modal */}
       <Modal
         opened={deleteModalOpened}
         onClose={() => setDeleteModalOpened(false)}

@@ -31,6 +31,7 @@ const CustomStepLabel = styled(StepLabel)(() => ({
 }));
 
 export const CheckoutStepper = ({
+  setSelectedShippingAddress,
   paymentMethod,
   setPaymentMethod,
   deliveryMethod,
@@ -72,7 +73,24 @@ export const CheckoutStepper = ({
     if (deliveryMethod === "delivery") {
       result.push({
         label: "Select Shipping Address",
-        content: <ShippingAddress />,
+        content: (
+          <ShippingAddress
+            selectable={true}
+            onSelect={(address) => {
+              setSelectedShippingAddress({
+                fullName: address.full_name,
+                addressLine1: address.address_line1,
+                addressLine2: address.address_line2,
+                city: address.city,
+                state: address.state,
+                country: address.country,
+                zipCode: address.zip_code,
+                phoneNumber: address.phone_number,
+                email: address.email,
+              });
+            }}
+          />
+        ),
       });
     }
 

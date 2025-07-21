@@ -90,6 +90,7 @@ export const ShippingAddressForm = ({
   }
 
   const handleSubmit = async (values: typeof form.values) => {
+    console.log("useid", userId, isStepper);
     if (!userId) {
       setShippingAddress({
         fullName: values.fullName,
@@ -135,7 +136,10 @@ export const ShippingAddressForm = ({
       email: values.email,
     };
 
+    console.log("pay", payload);
+
     const response: any = await upsertShippingAddress(isEdit, payload);
+    console.log("res", response);
     const result = response.data;
 
     if (result.flag) {

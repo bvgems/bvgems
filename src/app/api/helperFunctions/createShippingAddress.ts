@@ -31,6 +31,7 @@ export async function createShippingAddress(shippingAddress: any, userId: any) {
         email,
       ]
     );
+    console.log('first',result)
 
     return result;
   } catch (error: any) {

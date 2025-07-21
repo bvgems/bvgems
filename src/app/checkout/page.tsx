@@ -28,6 +28,7 @@ import OrderConfirmationModal from "@/components/CommonComponents/OrderConfirmat
 export default function CheckoutSelectionPage() {
   const { user } = useAuth();
   const { guestUser } = useGuestUserStore();
+  const [selectedShippingAddress, setSelectedShippingAddress] = useState<any>();
 
   const cartStore = useMemo(
     () => getCartStore(user?.id || "guest"),
@@ -84,24 +85,65 @@ export default function CheckoutSelectionPage() {
         currency: "USD",
         buyer_accepts_marketing: false,
         billing_address: {
-          first_name: shippingAddress?.fullName || "Guest",
-          last_name: shippingAddress?.fullName || "User",
-          address1: shippingAddress?.addressLine1,
-          city: shippingAddress?.city,
-          province: shippingAddress?.state,
-          country: shippingAddress?.country,
-          zip: shippingAddress?.zipCode,
-          phone: shippingAddress?.phoneNumber || guestUser?.phoneNumber,
+          first_name:
+            selectedShippingAddress?.fullName ??
+            shippingAddress?.fullName ??
+            "Guest",
+          last_name:
+            selectedShippingAddress?.fullName ??
+            shippingAddress?.fullName ??
+            "User",
+          address1:
+            selectedShippingAddress?.addressLine1 ??
+            shippingAddress?.addressLine1 ??
+            "",
+          address2:
+            selectedShippingAddress?.addressLine2 ??
+            shippingAddress?.addressLine2 ??
+            "",
+          city: selectedShippingAddress?.city ?? shippingAddress?.city ?? "",
+          province:
+            selectedShippingAddress?.state ?? shippingAddress?.state ?? "",
+          country:
+            selectedShippingAddress?.country ?? shippingAddress?.country ?? "",
+          zip:
+            selectedShippingAddress?.zipCode ?? shippingAddress?.zipCode ?? "",
+          phone:
+            selectedShippingAddress?.phoneNumber ??
+            shippingAddress?.phoneNumber ??
+            guestUser?.phoneNumber ??
+            "",
         },
+
         shipping_address: {
-          first_name: shippingAddress?.fullName || "Guest",
-          last_name: shippingAddress?.fullName || "User",
-          address1: shippingAddress?.addressLine1,
-          city: shippingAddress?.city,
-          province: shippingAddress?.state,
-          country: shippingAddress?.country,
-          zip: shippingAddress?.zipCode,
-          phone: shippingAddress?.phoneNumber || guestUser?.phoneNumber,
+          first_name:
+            selectedShippingAddress?.fullName ??
+            shippingAddress?.fullName ??
+            "Guest",
+          last_name:
+            selectedShippingAddress?.fullName ??
+            shippingAddress?.fullName ??
+            "User",
+          address1:
+            selectedShippingAddress?.addressLine1 ??
+            shippingAddress?.addressLine1 ??
+            "",
+          address2:
+            selectedShippingAddress?.addressLine2 ??
+            shippingAddress?.addressLine2 ??
+            "",
+          city: selectedShippingAddress?.city ?? shippingAddress?.city ?? "",
+          province:
+            selectedShippingAddress?.state ?? shippingAddress?.state ?? "",
+          country:
+            selectedShippingAddress?.country ?? shippingAddress?.country ?? "",
+          zip:
+            selectedShippingAddress?.zipCode ?? shippingAddress?.zipCode ?? "",
+          phone:
+            selectedShippingAddress?.phoneNumber ??
+            shippingAddress?.phoneNumber ??
+            guestUser?.phoneNumber ??
+            "",
         },
       },
     };
@@ -113,12 +155,11 @@ export default function CheckoutSelectionPage() {
     if (paymentMethod === "cod") {
       const orderPayload = getOrderPayload(paymentMethod);
       const orderResponse: any = await createShopifyOrder(orderPayload);
-      // router.push('/order-confirmation');
       open();
     } else {
       const orderPayload = getOrderPayload(paymentMethod);
       const orderResponse: any = await createShopifyOrder(orderPayload);
-      handlePayment(orderResponse?.order?.id);
+      await handlePayment(orderResponse?.order?.id);
       open();
     }
   };
@@ -168,6 +209,7 @@ export default function CheckoutSelectionPage() {
             span={{ base: 12, md: 8 }}
           >
             <CheckoutStepper
+              setSelectedShippingAddress={setSelectedShippingAddress}
               paymentMethod={paymentMethod}
               setPaymentMethod={setPaymentMethod}
               deliveryMethod={deliveryMethod}
