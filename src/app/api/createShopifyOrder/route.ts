@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
         headers: {
           "X-Shopify-Access-Token":
             process.env.SHOPIFY_ACCESS_TOKEN ||
-            "REMOVED_SECRET",
+            process.env.SHOPIFY_ACCESS_TOKEN,
           "Content-Type": "application/json",
         },
       }

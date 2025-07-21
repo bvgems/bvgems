@@ -12,7 +12,7 @@ async function sendOrderReceipt(shopifyOrderId: string) {
       `https://e4wqcy-up.myshopify.com/admin/api/2024-04/orders/${shopifyOrderId}.json`,
       {
         headers: {
-          "X-Shopify-Access-Token": "REMOVED_SECRET",
+          "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN,
           "Content-Type": "application/json",
         },
       }
@@ -41,7 +41,7 @@ async function sendOrderReceipt(shopifyOrderId: string) {
       },
       {
         headers: {
-          "X-Shopify-Access-Token": "REMOVED_SECRET",
+          "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN,
           "Content-Type": "application/json",
         },
       }
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
           {
             headers: {
               "X-Shopify-Access-Token":
-                "REMOVED_SECRET",
+                process.env.SHOPIFY_ACCESS_TOKEN,
               "Content-Type": "application/json",
             },
           }
