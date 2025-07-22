@@ -56,58 +56,54 @@ export const ShippingAddress = ({
   }, [user?.id]);
 
   useEffect(() => {
-    if (selectable && addresses.length > 0) {
-      setSelectedId(addresses[0].id);
-      onSelect?.(addresses[0]);
+    if (selectable) {
+      if (!userId && shippingAddress) {
+        setSelectedId("guest-address");
+        onSelect?.(shippingAddress);
+      } else if (userId && addresses.length > 0) {
+        setSelectedId(addresses[0].id);
+        onSelect?.(addresses[0]);
+      }
     }
-  }, [addresses, selectable]);
+  }, [addresses, shippingAddress, userId, selectable]);
 
   const handleDelete = async () => {
     if (toDeleteId) {
       const response = await deleteAddress(toDeleteId);
-      if (response.flag) {
-        notifications.show({
-          icon: <IconCheck />,
-          message: response.message,
-          position: "top-right",
-          color: "teal",
-        });
-      } else {
-        notifications.show({
-          icon: <IconX />,
-          message: "Delete failed",
-          position: "top-right",
-          color: "red",
-        });
-      }
+      notifications.show({
+        icon: response.flag ? <IconCheck /> : <IconX />,
+        message: response.flag ? response.message : "Delete failed",
+        position: "top-right",
+        color: response.flag ? "teal" : "red",
+      });
+
       setToDeleteId(null);
       setDeleteModalOpened(false);
       fetchAddresses();
     }
   };
 
-  const NoAddress = () => {
-    return (
-      <Paper p="xl" radius="md" className="text-center">
-        <div className="flex justify-center mb-3">
-          <IconMapPin size={48} color="red" />
-        </div>
-        <Title order={3} mb="sm">
-          Shipping Address Needed
-        </Title>
-        <Text c="dimmed" mb="md">
-          We need your shipping address to proceed with your order. This helps
-          us to ensure timely delivery.
-        </Text>
-        <Button color="#0b182d" onClick={open}>
-          ADD SHIPPING ADDRESS
-        </Button>
-      </Paper>
-    );
-  };
+  const NoAddress = () => (
+    <Paper p="xl" radius="md" className="text-center">
+      <div className="flex justify-center mb-3">
+        <IconMapPin size={48} color="red" />
+      </div>
+      <Title order={3} mb="sm">
+        Shipping Address Needed
+      </Title>
+      <Text c="dimmed" mb="md">
+        We need your shipping address to proceed with your order. This helps us
+        ensure timely delivery.
+      </Text>
+      <Button color="#0b182d" onClick={open}>
+        ADD SHIPPING ADDRESS
+      </Button>
+    </Paper>
+  );
 
   return (
     <div>
+      {/* GUEST USER & ONE ADDRESS */}
       {!userId ? (
         !shippingAddress ? (
           <NoAddress />
@@ -117,9 +113,19 @@ export const ShippingAddress = ({
             radius="md"
             p="lg"
             style={{
-              cursor: "pointer",
+              cursor: selectable ? "pointer" : "default",
               marginBottom: "1rem",
               transition: "all 0.2s ease-in-out",
+              border:
+                selectable && selectedId === "guest-address"
+                  ? "2px solid #0b182d"
+                  : undefined,
+            }}
+            onClick={() => {
+              if (selectable) {
+                setSelectedId("guest-address");
+                onSelect?.(shippingAddress);
+              }
             }}
           >
             <Group justify="space-between" align="flex-start" wrap="nowrap">
@@ -174,7 +180,8 @@ export const ShippingAddress = ({
                 cursor: selectable ? "pointer" : "default",
                 marginBottom: "1rem",
                 transition: "all 0.2s ease-in-out",
-                border: selectable && isSelected ? "2px solid #0b182d" : undefined,
+                border:
+                  selectable && isSelected ? "2px solid #0b182d" : undefined,
               }}
               onClick={() => {
                 if (selectable) {
@@ -252,10 +259,14 @@ export const ShippingAddress = ({
       )}
 
       {addresses?.length > 0 && !selectable && (
-        <Button mt="md" color="#0b182d" onClick={() => {
-          setEditingAddress(null);
-          open();
-        }}>
+        <Button
+          mt="md"
+          color="#0b182d"
+          onClick={() => {
+            setEditingAddress(null);
+            open();
+          }}
+        >
           ADD NEW ADDRESS
         </Button>
       )}

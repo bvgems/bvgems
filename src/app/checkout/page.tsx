@@ -55,11 +55,11 @@ export default function CheckoutSelectionPage() {
     const sessionId = response.id;
     await stripe?.redirectToCheckout({ sessionId });
   };
-
   const getOrderPayload = (paymentMethod: any) => {
     const orderPayload = {
       order: {
         line_items: cart?.map((item: any) => ({
+          image: item?.product?.image_url,
           title: item?.product?.collection_slug,
           quantity: item?.quantity,
           price: item?.product?.price.toString(),
@@ -67,13 +67,13 @@ export default function CheckoutSelectionPage() {
           taxable: true,
           fulfillment_service: "manual",
         })),
-        email: guestUser?.email,
-        phone: guestUser?.phoneNumber,
+        email: user ? user?.email : guestUser?.email,
+        phone: user ? user?.phoneNumber : guestUser?.phoneNumber,
         customer: {
-          email: guestUser?.email || "guest@example.com",
-          first_name: guestUser?.firstName || "Guest",
-          last_name: guestUser?.lastName || "User",
-          phone: guestUser?.phoneNumber || null,
+          email: user ? user?.email : guestUser?.email || "guest@example.com",
+          first_name: user ? user?.firstName : guestUser?.firstName || "Guest",
+          last_name: user ? user?.lastName : guestUser?.lastName || "User",
+          phone: user ? user?.phoneNumber : guestUser?.phoneNumber || null,
           accepts_marketing: false,
           accepts_marketing_updated_at: new Date().toISOString(),
           marketing_opt_in_level: "single_opt_in",
@@ -152,14 +152,16 @@ export default function CheckoutSelectionPage() {
   const handleOrderPlacing = async () => {
     if (!deliveryMethod || !paymentMethod) return;
 
+    const orderPayload = getOrderPayload(paymentMethod);
+
     if (paymentMethod === "cod") {
-      const orderPayload = getOrderPayload(paymentMethod);
-      const orderResponse: any = await createShopifyOrder(orderPayload);
+      await createShopifyOrder(orderPayload);
+      cartStore.getState().clearCart();
       open();
     } else {
-      const orderPayload = getOrderPayload(paymentMethod);
       const orderResponse: any = await createShopifyOrder(orderPayload);
       await handlePayment(orderResponse?.order?.id);
+      cartStore.getState().clearCart();
       open();
     }
   };
@@ -209,6 +211,7 @@ export default function CheckoutSelectionPage() {
             span={{ base: 12, md: 8 }}
           >
             <CheckoutStepper
+              selectedShippingAddress={selectedShippingAddress}
               setSelectedShippingAddress={setSelectedShippingAddress}
               paymentMethod={paymentMethod}
               setPaymentMethod={setPaymentMethod}

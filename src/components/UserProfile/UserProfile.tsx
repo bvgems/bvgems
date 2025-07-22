@@ -12,6 +12,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconChevronDown,
+  IconDiamond,
   IconLogout,
   IconTrash,
   IconUser,
@@ -63,23 +64,21 @@ export const UserProfile = ({ user }: any) => {
         >
           My Profile
         </MenuItem>
+
+        <Menu.Item
+          onClick={() => {
+            router?.push("/my-orders");
+          }}
+          leftSection={<IconDiamond size={16} stroke={1.5} />}
+        >
+          My Orders
+        </Menu.Item>
         <MenuItem
           onClick={handleLogout}
           leftSection={<IconLogout size={16} stroke={1.5} />}
         >
           Sign Out
         </MenuItem>
-
-        <MenuDivider />
-
-        <MenuLabel>Danger zone</MenuLabel>
-
-        <Menu.Item
-          color="red"
-          leftSection={<IconTrash size={16} stroke={1.5} />}
-        >
-          Delete account
-        </Menu.Item>
       </MenuDropdown>
     </Menu>
   );

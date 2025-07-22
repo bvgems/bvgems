@@ -3,6 +3,7 @@ import { PhoneNumberInput } from "../CommonComponents/PhoneInput";
 import { useForm } from "@mantine/form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export const CustomerDetails = ({
   setIsFormValid,

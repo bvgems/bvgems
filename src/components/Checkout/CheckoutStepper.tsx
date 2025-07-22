@@ -13,6 +13,7 @@ import { DeliveryMethod } from "./DeliveryMethod";
 import { PaymentMethod } from "./PaymentMethod";
 import { CustomerDetails } from "./CustomerDetails";
 import { useGuestUserStore } from "@/store/useGuestUserStore";
+import { useAuth } from "@/hooks/useAuth";
 
 const CustomStepLabel = styled(StepLabel)(() => ({
   "& .MuiStepLabel-label": {
@@ -31,12 +32,14 @@ const CustomStepLabel = styled(StepLabel)(() => ({
 }));
 
 export const CheckoutStepper = ({
+  selectedShippingAddress,
   setSelectedShippingAddress,
   paymentMethod,
   setPaymentMethod,
   deliveryMethod,
   setDeliveryMethod,
 }: any) => {
+  const { user } = useAuth();
   const { setGuestUser } = useGuestUserStore();
   const [activeStep, setActiveStep] = React.useState(0);
   const [isFormValid, setIsFormValid] = React.useState(false);
@@ -58,7 +61,9 @@ export const CheckoutStepper = ({
           />
         ),
       },
-      {
+    ];
+    if (!user) {
+      result?.push({
         label: "Customer Details",
         content: (
           <CustomerDetails
@@ -67,8 +72,8 @@ export const CheckoutStepper = ({
             setInitialValues={setInititalValues}
           />
         ),
-      },
-    ];
+      });
+    }
 
     if (deliveryMethod === "delivery") {
       result.push({
@@ -106,9 +111,10 @@ export const CheckoutStepper = ({
     });
 
     return result;
-  }, [deliveryMethod]);
+  }, [deliveryMethod, user]);
 
   const handleNext = (index: number) => {
+    console.log("in", index);
     if (index === 1) {
       setGuestUser(initialValues);
     }
@@ -121,6 +127,20 @@ export const CheckoutStepper = ({
 
   const handleReset = () => {
     setActiveStep(0);
+  };
+
+  const isDisabled = (index: any) => {
+    if (index === 0 && !deliveryMethod) {
+      return true;
+    } else if (index === 1) {
+      if (!isFormValid && !user) {
+        return true;
+      }
+    } else if (index === 2 && !user) {
+      if (!selectedShippingAddress) {
+        return true;
+      }
+    }
   };
 
   return (
@@ -142,10 +162,7 @@ export const CheckoutStepper = ({
               <div className="flex gap-5 mt-3">
                 {index === steps?.length - 1 ? null : (
                   <Button
-                    disabled={
-                      (index === 0 && !deliveryMethod) ||
-                      (index === 1 && !isFormValid)
-                    }
+                    disabled={isDisabled(index)}
                     color="#0b182d"
                     onClick={() => handleNext(index)}
                   >

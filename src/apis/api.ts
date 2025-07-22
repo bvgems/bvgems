@@ -1,5 +1,19 @@
 import axios from "axios";
-
+export const fetchAllOrders = async (email: any) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/fetchOrders?email=${email}`
+    );
+    console.log("res", response);
+    return response?.data;
+  } catch (error) {
+    console.log(
+      "Something went wrong while fetching the orders from shopify",
+      error
+    );
+    return null;
+  }
+};
 export const createShopifyOrder = async (payload: any) => {
   try {
     const response = await axios.post(
@@ -214,7 +228,7 @@ export const getUserProfile = async (userId: any) => {
 
 export const upsertShippingAddress = async (isEdit: boolean, payload: any) => {
   try {
-    console.log('isedit',isEdit)
+    console.log("isedit", isEdit);
     let response;
     if (isEdit) {
       response = await axios.put("/api/updateShippingAddress", payload);
