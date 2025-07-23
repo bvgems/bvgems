@@ -9,6 +9,7 @@ type User = {
   companyName: string;
   phoneNumber: string;
   isAddressStored?: boolean;
+  isMemoPurchaseApproved: boolean;
 };
 
 type UserStore = {

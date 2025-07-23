@@ -10,7 +10,7 @@ export async function createBusinessReference(
       contactPerson,
       phoneNumber,
       companyAddress,
-      addtionalNotes,
+      additionalNotes,
     } = businessReference;
 
     const result = await pool.query(
@@ -23,7 +23,7 @@ export async function createBusinessReference(
         phoneNumber,
         companyAddress,
         companyName,
-        addtionalNotes,
+        additionalNotes,
       ]
     );
 

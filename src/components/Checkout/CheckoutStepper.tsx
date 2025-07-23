@@ -114,7 +114,6 @@ export const CheckoutStepper = ({
   }, [deliveryMethod, user]);
 
   const handleNext = (index: number) => {
-    console.log("in", index);
     if (index === 1) {
       setGuestUser(initialValues);
     }

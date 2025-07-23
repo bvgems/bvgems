@@ -44,7 +44,6 @@ export const SigninForm = ({ onClose }: { onClose: () => void }) => {
         position: "top-right",
         autoClose: 4000,
       });
-
       setUser(signinResponse?.data?.user);
       form.reset();
       onClose();

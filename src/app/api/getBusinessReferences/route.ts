@@ -1,17 +1,14 @@
 import { NextRequest } from "next/server";
-import { pool } from "@/lib/pool";
+import { getBusinessReferences } from "../lib/commonFunctions";
 
 export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const id = url.searchParams.get("id");
 
-    const result = await pool.query(
-      `SELECT * FROM business_reference WHERE user_id = $1 ORDER BY created_at DESC`,
-      [id]
-    );
+    const result = await getBusinessReferences(id);
 
-    return new Response(JSON.stringify({ businessReferences: result.rows }), {
+    return new Response(JSON.stringify({ businessReferences: result }), {
       status: 200,
     });
   } catch (error) {

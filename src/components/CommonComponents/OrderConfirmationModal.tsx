@@ -8,6 +8,7 @@ import {
   Group,
 } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 export default function OrderConfirmationModal({
   opened,
@@ -16,6 +17,7 @@ export default function OrderConfirmationModal({
   opened: boolean;
   close: () => void;
 }) {
+  const router = useRouter();
   return (
     <Modal
       opened={opened}
@@ -45,8 +47,14 @@ export default function OrderConfirmationModal({
         </Text>
 
         <Group justify="center" mt="sm">
-          <Button variant="light" color="green" onClick={close}>
-            Close
+          <Button
+            variant="light"
+            color="green"
+            onClick={() => {
+              router?.push("/my-orders");
+            }}
+          >
+            View Order
           </Button>
         </Group>
       </Stack>

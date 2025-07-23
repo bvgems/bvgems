@@ -51,3 +51,16 @@ export const getAllJeweleryProducts = async (category: any) => {
     );
   }
 };
+
+export const getBusinessReferences = async (userId: any) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM business_reference WHERE user_id = $1 ORDER BY created_at DESC`,
+      [userId]
+    );
+
+    return result?.rows;
+  } catch (error) {
+    console.error("GET error:", error);
+  }
+};

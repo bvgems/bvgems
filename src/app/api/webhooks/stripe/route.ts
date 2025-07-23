@@ -27,9 +27,6 @@ async function sendOrderReceipt(shopifyOrderId: string) {
           id: shopifyOrderId,
           financial_status: "paid",
           send_receipt: true,
-          tags: order.tags
-            ? `${order.tags}, payment-received`
-            : "payment-received",
           note_attributes: [
             ...(order.note_attributes || []),
             {
@@ -98,8 +95,7 @@ export async function POST(req: NextRequest) {
           },
           {
             headers: {
-              "X-Shopify-Access-Token":
-                process.env.SHOPIFY_ACCESS_TOKEN,
+              "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN,
               "Content-Type": "application/json",
             },
           }

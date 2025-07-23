@@ -1,10 +1,29 @@
 import axios from "axios";
+export const sendMemoRequestEmail = async (user: any, cartItems: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/sendMemoRequestEmail`,
+      {
+        user,
+        cartItems,
+      }
+    );
+
+    return response?.data;
+  } catch (error) {
+    console.log(
+      "Something went wrong while fetching the orders from shopify",
+      error
+    );
+    return null;
+  }
+};
 export const fetchAllOrders = async (email: any) => {
   try {
     const response = await axios.get(
       `http://localhost:3000/api/fetchOrders?email=${email}`
     );
-    console.log("res", response);
+
     return response?.data;
   } catch (error) {
     console.log(

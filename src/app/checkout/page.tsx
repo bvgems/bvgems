@@ -12,7 +12,6 @@ import {
   TableTd,
   Image,
   Divider,
-  Modal,
 } from "@mantine/core";
 import { createShopifyOrder, makeCheckout } from "@/apis/api";
 import { loadStripe } from "@stripe/stripe-js";
@@ -67,6 +66,14 @@ export default function CheckoutSelectionPage() {
           taxable: true,
           fulfillment_service: "manual",
         })),
+        tags:
+          paymentMethod === "cod"
+            ? "Pickup Payment"
+            : paymentMethod === "memo"
+            ? "Memo Purchase"
+            : paymentMethod === "online"
+            ? "Already Paid"
+            : "",
         email: user ? user?.email : guestUser?.email,
         phone: user ? user?.phoneNumber : guestUser?.phoneNumber,
         customer: {
@@ -154,7 +161,7 @@ export default function CheckoutSelectionPage() {
 
     const orderPayload = getOrderPayload(paymentMethod);
 
-    if (paymentMethod === "cod") {
+    if (paymentMethod === "cod" || paymentMethod === "memo") {
       await createShopifyOrder(orderPayload);
       cartStore.getState().clearCart();
       open();
@@ -222,7 +229,9 @@ export default function CheckoutSelectionPage() {
               <BillingSummary />
 
               <Button
-                disabled={!deliveryMethod || !paymentMethod}
+                disabled={
+                  !deliveryMethod || !paymentMethod || cart?.length === 0
+                }
                 onClick={handleOrderPlacing}
                 color="#0b182d"
                 fullWidth
