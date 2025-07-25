@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getAllJeweleryProducts,
   getAllLooseGemstones,
+  getBeads,
 } from "../lib/commonFunctions";
 
 export async function GET(req: NextRequest) {
@@ -30,6 +31,12 @@ export async function GET(req: NextRequest) {
     const formattedNecklacesData = allNecklaces?.edges?.map((item: any) => ({
       ...item,
       value: item?.node?.title,
+    }));  
+
+    const allBeads: any = await getBeads();
+    const formattedBeadsData = allBeads?.map((item: any) => ({
+      ...item,
+      value: item?.node?.title + item?.node?.id,
     }));
 
     const mergedJewleryData = [
@@ -37,6 +44,7 @@ export async function GET(req: NextRequest) {
       ...formattedRingsData,
       ...formattedEarringsData,
       ...formattedNecklacesData,
+      ...formattedBeadsData,
     ];
 
     const mergedData = {

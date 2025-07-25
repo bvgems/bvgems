@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Button,
-  Container,
   Grid,
   GridCol,
   Image,
@@ -21,12 +20,17 @@ import { CategoryTable } from "./CategoryTable";
 import { useDisclosure } from "@mantine/hooks";
 import { SizeToleranceGuide } from "../Tolerance/SizeToleranceGuide";
 import { useRouter } from "next/navigation";
+import { ImageZoom } from "../CommonComponents/ImageZoom";
+import { IconDiamond, IconDiamondFilled } from "@tabler/icons-react";
+import { colorOptions } from "@/utils/constants";
 
 export function CategoryContent({
+  isSapphire,
   data,
   shapes,
   allSizes,
 }: {
+  isSapphire: boolean;
   data: any;
   shapes: string[];
   allSizes: { [key: string]: string[] };
@@ -35,18 +39,34 @@ export function CategoryContent({
     shapes?.length ? shapes[0] : null
   );
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-  const [fetchedResult, setFetchedResult] = useState([]);
+  const [fetchedResult, setFetchedResult] = useState<any>([]);
   const [opened, { open, close }] = useDisclosure(false);
 
   const router = useRouter();
-  const images = data?.images?.edges?.map((item: any) => item.node.url) || [];
-  const [mainImage, setMainImage] = useState(images[1] || "");
+
+  const imagesArray = useMemo(() => {
+    const array: string[] = [];
+    if (fetchedResult?.[0]?.image_url) {
+      array.push(fetchedResult[0].image_url);
+    }
+    data?.images?.edges?.forEach((item: any) => {
+      if (item?.node?.url) array.push(item.node.url);
+    });
+    return array;
+  }, [fetchedResult, data]);
+
+  const [mainImage, setMainImage] = useState("");
 
   const fetchShapesData = async (
     selectedShape: string | null,
     title: string
   ) => {
     const result: any = await getShapesData(selectedShape, title);
+    setMainImage(result?.data[0]?.image_url);
+    imagesArray?.push(mainImage);
+    data?.images?.edges?.map((item: any) =>
+      imagesArray?.push(item?.node_url)
+    ) || [];
     setFetchedResult(result?.data);
   };
 
@@ -72,32 +92,12 @@ export function CategoryContent({
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
               className="flex gap-4 items-start px-12"
             >
-              <div className="flex flex-col gap-2">
-                {images.slice(1, 4).map((img: string, index: number) => (
-                  <Image
-                    key={index}
-                    src={img}
-                    h={80}
-                    w={80}
-                    radius="md"
-                    fit="cover"
-                    className={`cursor-pointer border transition hover:scale-105 ${
-                      mainImage === img ? "border-black" : "border-gray-300"
-                    }`}
-                    onClick={() => setMainImage(img)}
-                  />
-                ))}
-              </div>
-
               <div>
-                <Image
-                  src={mainImage}
-                  h={450}
-                  w={450}
-                  radius="md"
-                  fit="contain"
-                  className="border border-gray-300"
-                />
+                {mainImage ? (
+                  <ImageZoom src={mainImage} />
+                ) : (
+                  <div className="h-[300px] w-[300px] bg-gray-100 rounded" />
+                )}
               </div>
             </motion.div>
           </GridCol>
@@ -152,9 +152,29 @@ export function CategoryContent({
                     );
                   })}
                 </div>
+                {isSapphire ? (
+                  <div className="mt-3 py-4">
+                    <div className="flex flex-row flex-wrap gap-10 mt-3 items-center">
+                      <span className="text-lg">Color:</span>
+                      {colorOptions["Sapphire"]?.map(
+                        (item: any, index: number) => (
+                          <Tooltip
+                            label={item?.value}
+                            className="cursor-pointer"
+                            key={index}
+                          >
+                            <span className="border border-gray-300 p-2 cursor-pointer">
+                              <IconDiamond color={item?.color} size={30} />
+                            </span>
+                          </Tooltip>
+                        )
+                      )}
+                    </div>
+                  </div>
+                ) : null}
 
                 {selectedShape && (
-                  <div className="mt-6">
+                  <div className="mt-3">
                     <p className="font-medium mb-2 text-gray-700">
                       Select Size for {selectedShape}:
                     </p>

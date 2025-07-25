@@ -1,5 +1,3 @@
-import { link } from "fs";
-
 export const US_STATES = [
   { value: "AL", label: "AL" },
   { value: "AK", label: "AK" },
@@ -462,12 +460,6 @@ export const gemstoneOptions = [
     value: "Tsavorite",
     image: "/assets/tsavorite.png",
     link: "/tsavorite",
-  },
-  {
-    label: "Lab Diamond",
-    value: "Lab Diamond",
-    image: "/assets/lab-diamond.png",
-    link: "/lab-diamond",
   },
   {
     label: "Black Diamond",

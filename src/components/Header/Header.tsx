@@ -87,9 +87,11 @@ export function Header() {
   };
 
   const handleSearchClick = async () => {
+    console.log('hetttt')
     setSearchOpen(true);
     const store = useGemStore.getState();
     const { gemstones, products, setGemstones, setProducts } = store;
+    console.log('alll',products)
 
     let updatedGemstones = gemstones;
     let updatedProducts = products;

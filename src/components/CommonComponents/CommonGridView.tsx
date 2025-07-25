@@ -9,7 +9,6 @@ import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
 export const CommonGridView = ({ isBead }: any) => {
   const { category, activeTab, setActiveTab, allProducts, beads } =
     useGridView();
-    console.log('ussss',isBead)
   return (
     <div className="p-8">
       <div className="w-[100%]">

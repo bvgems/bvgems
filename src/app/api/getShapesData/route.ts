@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     }
 
     const result = await pool.query(
-      `SELECT * FROM gemstone_specs WHERE shape=$1 AND collection_slug=$2`,
+      `SELECT * FROM gemstone_specs WHERE shape = $1 AND LOWER(collection_slug) = LOWER($2)`,
       [shape, collection]
     );
 

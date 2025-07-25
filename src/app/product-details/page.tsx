@@ -140,7 +140,7 @@ export default function ProductDetailsPage() {
           <div className="p-4">
             <div className="flex flex-col md:flex-row gap-1">
               <div className="w-full md:w-7/12 flex flex-col items-center">
-                <ImageZoom src={shopifyProduct?.images?.edges[1]?.node?.url} />
+                <ImageZoom src={product?.image_url} />
                 <div className="text-xs text-gray-400 flex items-center">
                   <IconZoomIn size="15" />
                   Hover on the image to zoom
