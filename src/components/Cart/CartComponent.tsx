@@ -13,10 +13,7 @@ import {
   TableTh,
   TableTd,
   NumberInput,
-  Divider,
-  Checkbox,
   Alert,
-  Tooltip,
   Container,
 } from "@mantine/core";
 import {
@@ -27,7 +24,6 @@ import {
 import dynamic from "next/dynamic";
 import { notifications } from "@mantine/notifications";
 import { useMemo } from "react";
-import { UnAuthorized } from "../CommonComponents/UnAuthorized";
 import { useRouter } from "next/navigation";
 import { BillingSummary } from "../CommonComponents/BillingSummary";
 
@@ -46,10 +42,24 @@ export function CartComponent() {
   );
 
   const cart = cartStore((state: any) => state.cart);
-  const removeFromCart = cartStore((state: any) => state.removeFromCart);
+
+  const removeProduct = cartStore((state: any) => state.removeFromCart);
+
   const updateQuantity = cartStore((state: any) => state.updateQuantity);
-  const getTotalPrice = cartStore((state: any) => state.getTotalPrice);
+
   const router = useRouter();
+
+  const handleRemoveProduct = (id: any, product: any) => {
+    removeProduct(product?.productId);
+
+    notifications.show({
+      icon: <IconCheck />,
+      color: "teal",
+      message: "Product has been removed from the cart!",
+      position: "top-right",
+      autoClose: 4000,
+    });
+  };
 
   const handleCheckout = async () => {
     router?.push("/checkout");
@@ -93,13 +103,25 @@ export function CartComponent() {
           <div className="font-semibold">
             {value?.product?.collection_slug
               ? value?.product?.collection_slug + " " + value?.product?.shape
-              : value?.jewelryProduct?.productName}
+              : value?.product?.title}
           </div>
           {value?.product?.productType === "stone" ? (
             <div className="flex flex-col">
               <span>Size: {value?.product?.size}</span>
               <span>Weight: {value?.product?.ct_weight}</span>
               <span>Quality: {value?.product?.quality}</span>
+            </div>
+          ) : null}
+          {value?.product?.productType === "ringJewelry" ||
+          value?.product?.productType === "necklaceJewelry" ? (
+            <div className="flex flex-col">
+              <span>Gold Color: {value?.product?.goldColor}</span>
+              <span>Size: {value?.product?.size}</span>
+              {value?.product?.productType === "ringJewelry" ? (
+                <span>Shape: {value?.product?.shape}</span>
+              ) : (
+                <span>Length: {value?.product?.length}</span>
+              )}
             </div>
           ) : null}
         </div>
@@ -132,16 +154,7 @@ export function CartComponent() {
       </TableTd>
       <TableTd className="font-semibold">
         <Button
-          onClick={() => {
-            removeFromCart(value.product.productId);
-            notifications.show({
-              icon: <IconCheck />,
-              color: "teal",
-              message: "Product Is Removed From The Cart!",
-              position: "top-right",
-              autoClose: 4000,
-            });
-          }}
+          onClick={() => handleRemoveProduct(value.cartItemId, value.product)}
           color="red"
           variant="outline"
         >
@@ -154,19 +167,24 @@ export function CartComponent() {
   return (
     <Container size={"xl"} className="py-10">
       <Grid gutter={"xl"}>
-        <GridCol span={{ base: 12, md: 9 }}>
-          <Table striped horizontalSpacing={"xl"} verticalSpacing={"sm"}>
-            <TableThead className="uppercase text-[#0b182d]">
-              <TableTr>
-                <TableTh>Product</TableTh>
-                <TableTh>Price</TableTh>
-                <TableTh>Quantity</TableTh>
-                <TableTh>Total</TableTh>
-                <TableTh>Action</TableTh>
-              </TableTr>
-            </TableThead>
-            <Table.Tbody>{rows}</Table.Tbody>
-          </Table>
+        <GridCol
+          span={{ base: 12, md: 9 }}
+          className="!px-4 flex justify-center md:justify-start"
+        >
+          <div className="w-full max-w-[500px] md:max-w-full">
+            <Table striped horizontalSpacing={"xl"} verticalSpacing={"sm"}>
+              <TableThead className="uppercase text-[#0b182d]">
+                <TableTr>
+                  <TableTh>Product</TableTh>
+                  <TableTh>Price</TableTh>
+                  <TableTh>Quantity</TableTh>
+                  <TableTh>Total</TableTh>
+                  <TableTh>Action</TableTh>
+                </TableTr>
+              </TableThead>
+              <Table.Tbody>{rows}</Table.Tbody>
+            </Table>
+          </div>
         </GridCol>
         <GridCol span={{ base: 12, md: 3 }}>
           <div>

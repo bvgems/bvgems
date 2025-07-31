@@ -187,7 +187,7 @@ export const ProductSpecifications = ({
                   <ComboboxOption value={item.value} key={item.value}>
                     <Group gap="xs">
                       {item.value === value && <CheckIcon size={12} />}
-                      <span>{item.label}</span>
+                      <span>{parseFloat(item.label).toFixed(2)}</span>
                     </Group>
                   </ComboboxOption>
                 ))}

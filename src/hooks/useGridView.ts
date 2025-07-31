@@ -1,4 +1,4 @@
-import { fetchBeads, getJewerlyData } from "@/apis/api";
+import { fetchBeads, getJewelryData } from "@/apis/api";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -18,9 +18,10 @@ export const useGridView = () => {
   }, [path]);
 
   useEffect(() => {
-    const fetchJewerlyData = async () => {
+    const fetchJewelryData = async () => {
       if (category) {
-        const response = await getJewerlyData(category);
+        const response = await getJewelryData(category);
+        console.log("resss", response);
         const products: any = response?.products?.edges || [];
         setRawProducts(products);
         setAllProducts(
@@ -29,7 +30,7 @@ export const useGridView = () => {
       }
     };
 
-    fetchJewerlyData();
+    fetchJewelryData();
   }, [category]);
 
   useEffect(() => {

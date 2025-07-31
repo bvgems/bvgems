@@ -1,6 +1,4 @@
-"use client";
-
-import { Container, Image } from "@mantine/core";
+import { Container, Image, Grid } from "@mantine/core";
 import { motion } from "framer-motion";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { shopByColorOptions } from "@/utils/constants";
@@ -18,11 +16,13 @@ const itemVariants = {
     },
   }),
 };
+
 export default function ShopByColor() {
   const router = useRouter();
   const handleShopByColor = (item: any) => {
     router?.push(`/loose-gemstones?color=${item?.name?.toLowerCase()}`);
   };
+
   return (
     <Container size={1250} className="mt-20">
       <AnimatedText
@@ -30,33 +30,38 @@ export default function ShopByColor() {
         className="text-center text-4xl text-[#0b182d] mb-8"
       />
 
-      <div className="flex items-center justify-center gap-10 flex-nowrap overflow-x-auto">
+      <Grid gutter="xl" justify="center">
         {shopByColorOptions?.map((item: any, index: number) => (
-          <motion.div
+          <Grid.Col
             key={index}
-            className="flex flex-col justify-center items-center cursor-pointer group"
-            custom={index}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={itemVariants}
+            span={{ base: 6, sm: 4, md: 3, lg: 2 }}
+            className="flex justify-center"
           >
             <motion.div
-              onClick={() => handleShopByColor(item)}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
+              className="flex flex-col justify-center items-center cursor-pointer group"
+              custom={index}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={itemVariants}
             >
-              <Image
-                h={150}
-                w={150}
-                src={item?.image}
-                alt={item?.name}
-                className="transition-transform"
-              />
+              <motion.div
+                onClick={() => handleShopByColor(item)}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+              >
+                <Image
+                  h={150}
+                  w={150}
+                  src={item?.image}
+                  alt={item?.name}
+                  className="transition-transform"
+                />
+              </motion.div>
+              <span className="italic text-[#0b182d] mt-2">{item?.name}</span>
             </motion.div>
-            <span className="italic text-[#0b182d] mt-2">{item?.name}</span>
-          </motion.div>
+          </Grid.Col>
         ))}
-      </div>
+      </Grid>
     </Container>
   );
 }

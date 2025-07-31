@@ -52,7 +52,6 @@ export function GridView({ gemstones, loadingTrigger }: GridViewProps) {
 
   const handleSelect = (value: string) => {
     const selected = searchItems.find((item: any) => item.value === value);
-    console.log("value", value, selected);
 
     if (selected && selected.id) {
       router.push(
@@ -98,7 +97,7 @@ export function GridView({ gemstones, loadingTrigger }: GridViewProps) {
 
   return (
     <div>
-      <div className="mt-4 flex items-center px-8 justify-between">
+      <div className="mt-4 flex flex-col md:flex-row items-center px-4 md:px-8 justify-between gap-4">
         <span>Showing {displayItems?.length} results</span>
         <Autocomplete
           size="md"

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { ViewAllProductComponent } from "../CommonComponents/ViewAllProductComponent";
 import { Divider, Tabs, TabsList, TabsTab } from "@mantine/core";
 import { useParams } from "next/navigation";
-import { FilterDialog } from "../Jewerly/FilterDialog";
-import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
+
 import { fetchColorstoneLayouts } from "@/apis/api";
+import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
 
 export const ColorstoneLayoutListing = () => {
   const [rawProducts, setRawProducts] = useState<any>([]);
@@ -72,7 +72,7 @@ export const ColorstoneLayoutListing = () => {
               </TabsTab>
             </TabsList>
 
-            <FilterDialog />
+            {/* <FilterDialog /> */}
           </div>
           <Divider />
         </Tabs>

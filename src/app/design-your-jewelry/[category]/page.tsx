@@ -1,6 +1,6 @@
 "use client";
 import { useParams, useSearchParams } from "next/navigation";
-import { OwnJewerleryStepper } from "@/components/OwnJewerly/OwnJewerleryStepper";
+import { OwnJewerleryStepper } from "@/components/OwnJewelry/OwnJewerleryStepper";
 import React from "react";
 
 export default function DesignYourJewelryCategoryPage() {

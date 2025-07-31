@@ -4,7 +4,7 @@ import {
   IconBasketDollar,
   IconHeartHandshake,
   IconTruckDelivery,
-  IconTruckReturn,
+  IconTruckReturn,  
 } from "@tabler/icons-react";
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
@@ -55,9 +55,9 @@ export const CustomerBenefits = () => {
       icon: <IconTruckReturn size={50} color="#926f34" />,
     },
     {
-      title: "Cash on Delivery Available",
+      title: "",
       description:
-        "Shop with ease and pay only when your order arrives—no upfront payment needed.",
+        "",
       icon: <IconBasketDollar size={50} color="#926f34" />,
     },
   ];

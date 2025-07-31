@@ -1,4 +1,32 @@
 import axios from "axios";
+
+export const submitInquiry = async (values: any) => {
+  try {
+    const response = await axios.post(`http://localhost:3000/api/sendInquiry`, {
+      values,
+    });
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while submitting inquiry", error);
+    return null;
+  }
+};
+
+export const handleEmailExists = async (email: any) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/checkEmailExists?email=${email}`
+    );
+
+    return response?.data;
+  } catch (error) {
+    console.log(
+      "Something went wrong while checking the email existance",
+      error
+    );
+    return null;
+  }
+};
 export const sendMemoRequestEmail = async (user: any, cartItems: any) => {
   try {
     const response = await axios.post(
@@ -155,23 +183,23 @@ export const fetchColorstoneLayouts = async () => {
 export const fetchProductByHandle = async (handle: any) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getJewerlyProduct?handle=${handle}`
+      `http://localhost:3000/api/getJewelryProduct?handle=${handle}`
     );
     return response.data;
   } catch (error) {
-    console.log("Something went wrong while fetching the jewerly product data");
+    console.log("Something went wrong while fetching the jewelry product data");
   }
 };
 
-export const getJewerlyData = async (category: any) => {
+export const getJewelryData = async (category: any) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getJewerlyData?category=${category}`
+      `http://localhost:3000/api/getJewelryData?category=${category}`
     );
     return response.data;
   } catch (error) {
     console.log(
-      "Something went wrong while fetching the jewerly category data"
+      "Something went wrong while fetching the jewelry category data"
     );
   }
 };
@@ -372,13 +400,21 @@ export const getCategoryData = async (handle: string) => {
 
 export const getShapesData = async (
   shape: string | null,
-  collection: string
+  collection: string,
+  isSapphire?: boolean,
+  sapphireColor?: string
 ) => {
   try {
-    const response = await axios.get(
-      `http://localhost:3000/api/getShapesData?shape=${shape}&collection=${collection}`
+    const response = await axios.post(
+      `http://localhost:3000/api/getShapesData`,
+      {
+        shape,
+        collection,
+        isSapphire,
+        sapphireColor,
+      }
     );
-
+    console.log("resss", response);
     return response;
   } catch (error) {
     console.log("Something went wrong while fetching category data");

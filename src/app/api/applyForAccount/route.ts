@@ -6,6 +6,7 @@ import { createShippingAddress } from "../helperFunctions/createShippingAddress"
 import { createBusinessReference } from "../helperFunctions/createBusinessReference";
 import { upsertAMLInfo } from "../helperFunctions/createAMLInfo";
 import { buildApplicationEmail } from "../helperFunctions/buildApplicationEmail";
+import jwt from "jsonwebtoken";
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,8 +34,11 @@ export async function POST(request: NextRequest) {
     if (amlInfo) {
       await upsertAMLInfo(amlInfo, userId);
     }
+    const token = jwt.sign({ userId: userId }, process.env.APPROVAL_SECRET!, {
+      expiresIn: "3d",
+    });
 
-    const approvalLink = `http://localhost:3000/account-aprooval?userId=${userId}`;
+    const approvalLink = `http://localhost:3000/api/approveAccount?token=${token}`;
     const emailHtml = buildApplicationEmail(
       stepperUser,
       businessVerification,

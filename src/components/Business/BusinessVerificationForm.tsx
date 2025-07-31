@@ -18,9 +18,8 @@ export const BusinessVerificationForm = ({
   isStepper?: boolean;
   nextStep?: any;
 }) => {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [verification, setVerification] = useState<any[]>([]);
+  const [verification, setVerification] = useState<any>(null);
 
   const { user }: any = useUserStore();
   const {
@@ -73,6 +72,7 @@ export const BusinessVerificationForm = ({
   };
 
   useEffect(() => {
+    console.log("stepperUser", stepperUser, verification);
     if (!hasHydrated) return;
 
     if (!verification) {

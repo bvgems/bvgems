@@ -24,7 +24,7 @@ export const PaymentMethod = ({
 
     if (user.isMemoPurchaseApproved) {
       const hasJewelry = cart?.some(
-        (item: any) => item?.product?.productType === "jewerly"
+        (item: any) => item?.product?.productType === "jewelry"
       );
 
       return hasJewelry;

@@ -1,12 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export interface CartItem {
+export interface JewelryCartItem {
+  cartItemId: string;
   product: {
     productType: string;
     productId: string;
-    collection_slug: string;
-    color: string;
+    title: string;
+    goldColor: string;
     ct_weight: number;
     cut: string;
     image_url: string;
@@ -15,53 +16,37 @@ export interface CartItem {
     shape: string;
     size: string;
     type: string;
-    goldColor: string;
-    gemstone:string
-    length:string;
   };
   quantity: number;
 }
 
-interface CartStore {
-  cart: CartItem[];
-  addToCart: (item: CartItem) => void;
+interface JewelryCartStore {
+  cart: JewelryCartItem[];
+  addToCart: (item: JewelryCartItem) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
   getTotalPrice: () => number;
 }
 
-const storeRegistry: any = {};
+const jewelryStoreRegistry: any = {};
 
-export const getCartStore = (userKey: string) => {
-  if (!storeRegistry[userKey]) {
-    storeRegistry[userKey] = create<CartStore>()(
+export const getJewelryCartStore = (userKey: string) => {
+  if (!jewelryStoreRegistry[userKey]) {
+    jewelryStoreRegistry[userKey] = create<JewelryCartStore>()(
       persist(
         (set, get) => ({
           cart: [],
           addToCart: (newItem) =>
-            set((state) => {
-              const existingItem = state.cart.find(
-                (item) => item.product.productId === newItem.product.productId
-              );
-              if (existingItem) {
-                return {
-                  cart: state.cart.map((item) =>
-                    item.product.productId === newItem.product.productId
-                      ? { ...item, quantity: item.quantity + newItem.quantity }
-                      : item
-                  ),
-                };
-              } else {
-                return { cart: [...state.cart, newItem] };
-              }
-            }),
-          removeFromCart: (productId) =>
             set((state) => ({
-              cart: state.cart.filter(
-                (item) => item.product.productId !== productId
-              ),
+              cart: [...state.cart, newItem],
             })),
+
+          removeFromCart: (cartItemId: string) =>
+            set((state) => ({
+              cart: state.cart.filter((item) => item.cartItemId !== cartItemId),
+            })),
+
           updateQuantity: (productId, quantity) =>
             set((state) => ({
               cart: state.cart.map((item) =>
@@ -80,10 +65,10 @@ export const getCartStore = (userKey: string) => {
           },
         }),
         {
-          name: `cart-storage-${userKey}`,
+          name: `jewelry-cart-storage-${userKey}`,
         }
       )
     );
   }
-  return storeRegistry[userKey];
+  return jewelryStoreRegistry[userKey];
 };

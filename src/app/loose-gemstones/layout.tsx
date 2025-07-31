@@ -3,9 +3,19 @@
 import { getFilteredData } from "@/apis/api";
 import { GridView } from "@/components/GridView/GridView";
 import { FilterSideBar } from "@/components/LooseGemstones/FilterSideBar";
-import { Divider, Grid, GridCol } from "@mantine/core";
+import {
+  Divider,
+  Grid,
+  GridCol,
+  Drawer,
+  Button,
+  ActionIcon,
+  Group,
+} from "@mantine/core";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useDisclosure } from "@mantine/hooks";
+import { IconFilter } from "@tabler/icons-react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
@@ -24,6 +34,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [filteredGemstones, setFilteredGemstones] = useState<any>(undefined);
   const [filterTrigger, setFilterTrigger] = useState(0);
   const [filtersChanged, setFiltersChanged] = useState(false);
+
+  const [drawerOpened, { open, close }] = useDisclosure(false);
 
   const fetchFilteredData = async () => {
     const filterOptions = {
@@ -62,8 +74,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           Calibrated Faceted Gemstones
         </h1>
       </div>
-      <Grid>
-        <GridCol className="flex" span={{ base: 12, md: 3 }}>
+
+      <div className="lg:hidden flex justify-end px-4 mb-2 mt-5">
+        <ActionIcon onClick={open} variant="outline" color="gray" size="lg">
+          <IconFilter size={20} />
+        </ActionIcon>
+      </div>
+
+      <Grid gutter="lg">
+        <GridCol span={{ base: 12, md: 3 }} className="hidden lg:flex">
           <FilterSideBar
             selectedStones={selectedStones}
             setSelectedStones={(value: any) => {
@@ -112,6 +131,56 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           />
         </GridCol>
       </Grid>
+
+      <Drawer
+        opened={drawerOpened}
+        onClose={close}
+        title="Filter Gemstones"
+        padding="md"
+        size={320}
+        overlayProps={{ opacity: 0.3, blur: 3 }}
+        hiddenFrom="lg"
+        withinPortal={false}
+      >
+        <FilterSideBar
+          selectedStones={selectedStones}
+          setSelectedStones={(value: any) => {
+            setSelectedStones(value);
+            setFiltersChanged(true);
+          }}
+          selectedColors={selectedColors}
+          setSelectedColors={(value: any) => {
+            setSelectedColors(value);
+            setFiltersChanged(true);
+          }}
+          selectedShapes={selectedShapes}
+          setSelectedShapes={(value: any) => {
+            setSelectedShapes(value);
+            setFiltersChanged(true);
+          }}
+          length={length}
+          setLength={(value: any) => {
+            setLength(value);
+            setFiltersChanged(true);
+          }}
+          width={width}
+          setWidth={(value: any) => {
+            setWidth(value);
+            setFiltersChanged(true);
+          }}
+          priceRange={priceRange}
+          setPriceRange={(value: any) => {
+            setPriceRange(value);
+            setFiltersChanged(true);
+          }}
+          selectedRoundSizes={selectedRoundSizes}
+          setSelectedRoundSizes={(value: any) => {
+            setSelectedRoundSizes(value);
+            setFiltersChanged(true);
+          }}
+          color={color}
+        />
+      </Drawer>
     </div>
   );
 }

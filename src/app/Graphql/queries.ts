@@ -314,6 +314,7 @@ export const shopifyQuery = `
                   }
                 }
               }
+
             }
           }
         }
@@ -355,6 +356,52 @@ export const GetProductByHandle = `
       productType
       createdAt
       tags
+      gemstone:metafield(namespace: "custom", key: "gemstone") {
+            value
+            type
+          }
+      stoneType: metafield(namespace: "custom", key: "stone_type") {
+            value
+            type
+          }
+      shape: metafield(namespace: "custom", key: "shape") {
+            value
+            type
+          }
+
+      color: metafield(namespace: "custom", key: "Color") {
+            value
+            type
+          }
+
+      ct_weight: metafield(namespace: "custom", key: "ct_weight") {
+            value
+            type
+          }
+
+      customization: metafield(namespace: "custom", key: "customization") {
+            value
+            type
+          }
+      showshapeoptions: metafield(namespace: "custom", key: "showshapeoptions") {
+            value
+            type
+          }
+      isTwoStoneRing:metafield(namespace: "custom", key: "istwostonering") {
+            value
+            type
+          }
+
+      firstShape:metafield(namespace: "custom", key: "first_stone") {
+            value
+            type
+          }
+           secondShape:metafield(namespace: "custom", key: "second_stone") {
+            value
+            type
+          }
+           
+
       images(first: 10) {
         edges {
           node {
@@ -363,7 +410,7 @@ export const GetProductByHandle = `
           }
         }
       }
-      variants(first: 10) {
+      variants(first: 20) {
         edges {
           node {
             price {
@@ -371,6 +418,10 @@ export const GetProductByHandle = `
               currencyCode
             }
             title
+             image {
+        url
+        altText
+      }
             sku
             availableForSale
           }

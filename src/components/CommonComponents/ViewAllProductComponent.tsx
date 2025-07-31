@@ -26,7 +26,6 @@ export const ViewAllProductComponent: React.FC<AnimatedGridProps> = ({
       >
         <Grid gutter="xl" className="mt-6">
           {items.map((item, index) => {
-            console.log("index", index);
             return (
               <Grid.Col key={index} span={{ base: 12, sm: 6, md: 3 }}>
                 {renderItem(item, index)}

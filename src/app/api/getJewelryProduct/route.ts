@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
     );
 
     const result = await shopifyRes.json();
+    console.log('resss',result)
 
     return NextResponse.json(
       { product: result.data.productByHandle },

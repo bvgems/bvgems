@@ -2,7 +2,7 @@ import { getCategoryData } from "@/apis/api";
 import { CategoryContent } from "@/components/Category/CategoryContent";
 
 export default async function CategoryPage({ params }: any) {
-  const handle = params.handle;
+  const handle = await params.handle;
   const isSapphire = handle === "sapphire";
   const data: any = await getCategoryData(handle);
 

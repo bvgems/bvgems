@@ -1,26 +1,7 @@
 "use client";
 
-import {
-  IconBrandFacebook,
-  IconBrandFacebookFilled,
-  IconBrandInstagram,
-  IconBrandInstagramFilled,
-  IconBrandTwitter,
-  IconBrandTwitterFilled,
-  IconBrandYoutube,
-  IconBrandYoutubeFilled,
-  IconMapPin,
-} from "@tabler/icons-react";
-import {
-  ActionIcon,
-  Divider,
-  Grid,
-  GridCol,
-  Group,
-  Image,
-  Text,
-  ThemeIcon,
-} from "@mantine/core";
+import { IconBrandInstagramFilled } from "@tabler/icons-react";
+import { ActionIcon, Grid, GridCol, Image, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { getAllGemstones } from "@/apis/api";
 import { useRouter } from "next/navigation";
@@ -99,7 +80,7 @@ export const Footer = () => {
   });
 
   return (
-    <footer className="pt-12 pr-4 bg-[#0b182d] text-white">
+    <footer className="pt-12 pr-4 bg-[#F9F5F0] text-black">
       <Grid gutter={"xl"} className="px-2">
         <GridCol
           className="flex flex-col items-center"
@@ -143,39 +124,6 @@ export const Footer = () => {
               <Image fit="fill" h={100} w={120} src={"/assets/agta-logo.png"} />
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center mt-7">
-            <h1 className="mb-2">Follow Us On:</h1>
-            <div className="flex flex-wrap gap-4">
-              <ActionIcon size="lg" color="gray" variant="subtle">
-                <IconBrandTwitterFilled
-                  color="#1DA1F2"
-                  size={26}
-                  stroke={1.5}
-                />
-              </ActionIcon>
-              <ActionIcon size="lg" color="gray" variant="subtle">
-                <IconBrandYoutubeFilled
-                  color="#FF0000"
-                  size={26}
-                  stroke={1.5}
-                />
-              </ActionIcon>
-              <ActionIcon size="lg" color="gray" variant="subtle">
-                <IconBrandInstagramFilled
-                  color="#E1306C"
-                  size={26}
-                  stroke={1.5}
-                />
-              </ActionIcon>
-              <ActionIcon size="lg" color="gray" variant="subtle">
-                <IconBrandFacebookFilled
-                  color="#1877F2"
-                  size={26}
-                  stroke={1.5}
-                />
-              </ActionIcon>
-            </div>
-          </div>
         </GridCol>
       </Grid>
 
@@ -185,6 +133,18 @@ export const Footer = () => {
             &copy; {year} bvgems.com All rights reserved.
           </Text>
         )}
+        <div className="flex justify-center items-center gap-2">
+          <h1>Follow Us On:</h1>
+          <a
+            href="https://www.instagram.com/bvgemsinc/?igsh=aG93ank2anBkaG9p"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ActionIcon size="lg" color="gray" variant="subtle">
+              <IconBrandInstagramFilled color="#E1306C" stroke={1.5} />
+            </ActionIcon>
+          </a>
+        </div>
       </div>
     </footer>
   );

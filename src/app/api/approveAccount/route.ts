@@ -2,31 +2,25 @@ import { NextRequest } from "next/server";
 import { pool } from "@/lib/pool";
 import { buildWelcomeEmail } from "../helperFunctions/buildWelcomeEmail";
 import { sendEmail } from "@/utils/sendEmail";
+import jwt from "jsonwebtoken";
 
-export async function POST(request: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const body = await request.json();
-    const userId = body.userId;
+    const url = new URL(req.url);
+    const token = url.searchParams.get("token");
 
-    if (!userId) {
-      return new Response(
-        JSON.stringify({
-          flag: false,
-          error: "Missing userId",
-        }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+    if (!token) {
+      return new Response("Missing token", { status: 400 });
     }
-
+    const secret = process.env.APPROVAL_SECRET!;
+    const payload = jwt.verify(token, secret) as { userId: string };
+    console.log("payy", payload);
     const response: any = await pool.query(
       `UPDATE app_users 
        SET is_approved = true 
        WHERE id = $1 
        RETURNING first_name,email`,
-      [userId]
+      [payload.userId]
     );
 
     const email = response?.rows[0]?.email;

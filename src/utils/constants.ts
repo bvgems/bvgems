@@ -455,18 +455,6 @@ export const gemstoneOptions = [
     image: "/assets/tanzanite.png",
     link: "/tanzanite",
   },
-  {
-    label: "Tsavorite",
-    value: "Tsavorite",
-    image: "/assets/tsavorite.png",
-    link: "/tsavorite",
-  },
-  {
-    label: "Black Diamond",
-    value: "Black Diamond",
-    image: "/assets/black-diamond.png",
-    link: "/black-diamond",
-  },
 ];
 
 export const colorOptions: any = {
@@ -513,7 +501,7 @@ export const quickNavigationData = [
     children: [
       {
         label: "Gemstone Education",
-        href: "/customer-support/gemstone-education",
+        href: "/customer-support/education?activeStone=morganite",
       },
     ],
   },
@@ -738,20 +726,22 @@ export const links = [
   { link: "/", label: "Home" },
   {
     link: "/loose-gemstones",
-    label: "Loose Gemstones",
+    label: "Calibrated Gemstones",
     links: gemstoneOptions,
   },
+  { link: "/free-size-gemstones", label: "Free Size Gemstones" },
   { link: "/precious-beads", label: "Precious Beads" },
+
   {
     label: "Jewelery",
     links: [
-      { link: "/jewerly/rings", label: "Rings" },
-      { link: "/jewerly/earrings", label: "Ear Rings" },
-      { link: "/jewerly/necklaces", label: "Necklaces" },
-      { link: "/jewerly/bracelets", label: "Bracelets" },
+      { link: "/jewelry/rings", label: "Rings" },
+      { link: "/jewelry/earrings", label: "Ear Rings" },
+      { link: "/jewelry/necklaces", label: "Necklaces" },
+      { link: "/jewelry/bracelets", label: "Bracelets" },
+      { link: "/colorstone-layouts", label: "Colorstone Layouts" },
     ],
   },
-  { link: "/colorstone-layouts", label: "Colorstone Layouts" },
   {
     label: "More",
     links: [
@@ -759,7 +749,7 @@ export const links = [
         link: "/customer-support/education?activeStone=morganite",
         label: "Gemstones Education",
       },
-      { link: "/customer-support/about-us", label: "About B. V. Gems." },
+      { link: "/customer-support/about-us", label: "About B. V. Gems" },
       { link: "/customer-support/store-policy", label: "Store Policy" },
       { link: "/customer-support/faqs", label: "FAQ" },
       { link: "/customer-support/contact-us", label: "Contact Us" },
@@ -767,4 +757,20 @@ export const links = [
   },
 ];
 
-export const GoldColor = ["Rose Gold", "White Gold", "Yellow Gold"];
+export const GoldColorData = [
+  { value: "Rose Gold", color: "#b76e79" },
+  { value: "White Gold", color: "#e5e4e2" },
+  { value: "Yellow Gold", color: "#ffd700" },
+];
+
+export const SapphireLooseGemstoneColorOptions = [
+  { value: "Blue", color: "#1E40AF" },
+  { value: "Yellow", color: "#FACC15" },
+  { value: "Pink", color: "#EC4899" },
+  { value: "Green", color: "#22C55E" },
+  { value: "Orange", color: "#F97316" },
+  { value: "Black", color: "#000000" },
+  { value: "White", color: "#808080" },
+  { value: "Red", color: "#FF0000" },
+  { value: "Purple", color: "#800080" },
+];

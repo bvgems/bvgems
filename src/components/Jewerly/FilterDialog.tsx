@@ -1,20 +1,28 @@
+"use client";
+
 import {
   Popover,
   Checkbox,
   PopoverDropdown,
   PopoverTarget,
-  createTheme,
-  MantineProvider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFilter, IconX } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export const FilterDialog = () => {
   const [opened, { toggle, close }] = useDisclosure(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const theme = createTheme({
-    cursorType: "pointer",
-  });
+  const handleCheckboxChange = (category: string) => {
+    const newPath = `/jewelry/${category.toLowerCase().replace(/\s/g, "")}`;
+    if (pathname !== newPath) {
+      router.push(newPath);
+    }
+    close(); // Optional: close the popover after selecting
+  };
 
   return (
     <div className="cursor-pointer flex items-center gap-1.5 text-gray-500">
@@ -48,23 +56,30 @@ export const FilterDialog = () => {
             <div>
               <span className="font-semibold text-black">Categories</span>
               <div className="flex flex-col mt-3 gap-5 cursor-pointer">
-                <MantineProvider theme={theme}>
-                  <Checkbox variant="outline" size="md" label="Rings" />
-                  <Checkbox variant="outline" size="md" label="Ear Rings" />
-                  <Checkbox variant="outline" size="md" label="Necklace" />
-                  <Checkbox variant="outline" size="md" label="Bracelets" />
-                </MantineProvider>
-              </div>
-            </div>
-
-            <div className="mt-7">
-              <span className="font-semibold mt-2 text-black">Colors</span>
-              <div className="flex mt-3 gap-3.5 cursor-pointer">
-                <div className="w-5 h-5 bg-yellow-400 rounded-full" />
-                <div className="w-5 h-5 bg-gray-400 rounded-full" />
-                <div className="w-5 h-5 bg-red-400 rounded-full" />
-                <div className="w-5 h-5 bg-cyan-400 rounded-full" />
-                <div className="w-5 h-5 bg-purple-600 rounded-full" />
+                <Checkbox
+                  variant="outline"
+                  size="md"
+                  label="Rings"
+                  onChange={() => handleCheckboxChange("rings")}
+                />
+                <Checkbox
+                  variant="outline"
+                  size="md"
+                  label="Ear Rings"
+                  onChange={() => handleCheckboxChange("earrings")}
+                />
+                <Checkbox
+                  variant="outline"
+                  size="md"
+                  label="Necklace"
+                  onChange={() => handleCheckboxChange("necklaces")}
+                />
+                <Checkbox
+                  variant="outline"
+                  size="md"
+                  label="Bracelets"
+                  onChange={() => handleCheckboxChange("bracelets")}
+                />
               </div>
             </div>
           </div>

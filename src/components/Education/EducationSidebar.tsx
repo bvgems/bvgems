@@ -1,6 +1,6 @@
 "use client";
+
 import Link from "next/link";
-import classes from "../../styles/NavbarSimple.module.css";
 
 interface Props {
   gemstones: any[];
@@ -23,8 +23,9 @@ export function EducationSidebar({
     return (
       <Link
         key={item.id}
-        href={`?activeStone=${item.title.toLowerCase()}`} 
-        replace 
+        href={`?activeStone=${item.title.toLowerCase()}`}
+        replace
+        onClick={() => onSelect(item.title.toLowerCase())}
         className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
           isActive
             ? "text-[#0b182d] font-semibold bg-gray-200"
@@ -36,9 +37,5 @@ export function EducationSidebar({
     );
   });
 
-  return (
-    <nav className={classes.navbar}>
-      <div className={classes.navbarMain}>{links}</div>
-    </nav>
-  );
+  return <nav className="space-y-1">{links}</nav>;
 }

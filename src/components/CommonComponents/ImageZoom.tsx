@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-export const ImageZoom = ({ src, alt, className = "", isBead }: any) => {
+export const ImageZoom = ({ src, alt, className = "" }: any) => {
   const sourceRef: any = useRef(null);
   const targetRef: any = useRef(null);
   const containerRef: any = useRef(null);
@@ -46,9 +46,7 @@ export const ImageZoom = ({ src, alt, className = "", isBead }: any) => {
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden cursor-zoom-in ${
-        isBead ? "h-[900]" : "h-[600]"
-      }  ${className}`}
+      className={`relative overflow-hidden cursor-zoom-in px-20 h-[500]  ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
@@ -58,8 +56,7 @@ export const ImageZoom = ({ src, alt, className = "", isBead }: any) => {
         ref={sourceRef}
         src={src}
         alt={alt}
-        className="w-full h-full block"
-        style={{ height: "70%", objectFit: "fill" }}
+        className={`w-full h-[450px] block object-contain`}
       />
       <img
         ref={targetRef}

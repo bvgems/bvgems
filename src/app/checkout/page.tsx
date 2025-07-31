@@ -23,6 +23,7 @@ import { useStpperStore } from "@/store/useStepperStore";
 import { useGuestUserStore } from "@/store/useGuestUserStore";
 import { useDisclosure } from "@mantine/hooks";
 import OrderConfirmationModal from "@/components/CommonComponents/OrderConfirmationModal";
+import { getJewelryCartStore } from "@/store/useJewelryCartStore";
 
 export default function CheckoutSelectionPage() {
   const { user } = useAuth();
@@ -33,13 +34,19 @@ export default function CheckoutSelectionPage() {
     () => getCartStore(user?.id || "guest"),
     [user?.id]
   );
+  const jewelryCartStore = useMemo(
+    () => getJewelryCartStore(user?.id || "guest"),
+    [user?.id]
+  );
+  const cart = cartStore((state: any) => state.cart);
+  const jewelryCart = jewelryCartStore((state: any) => state.cart);
+  const mergedCart = [...cart, ...jewelryCart];
   const { shippingAddress } = useStpperStore();
 
   const [deliveryMethod, setDeliveryMethod] = useState();
   const [paymentMethod, setPaymentMethod] = useState();
   const [opened, { open, close }] = useDisclosure(false);
 
-  const cart = cartStore((state: any) => state.cart);
   const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
   );
@@ -173,41 +180,49 @@ export default function CheckoutSelectionPage() {
     }
   };
 
-  const rows = cart.map((value: any, index: number) => (
-    <TableTr key={index}>
-      <TableTd className="text-[1rem]">
-        <div className="flex flex-col gap-2 justify-start">
-          <Image
-            src={value?.jewelryProduct?.image_url ?? value?.product?.image_url}
-            h={100}
-            w={100}
-            fit="fill"
-          />
-          <div className="flex flex-col">
-            <span>
-              {value?.product?.collection_slug
-                ? value?.product?.collection_slug + " " + value?.product?.shape
-                : value?.jewelryProduct?.productName}
-            </span>
-            <span className="text-sm">Qty: {value?.quantity}</span>
-          </div>
-          {value?.product?.productType === "stone" ? (
+  const rows = mergedCart.map((value: any, index: number) => {
+    console.log("valueee", value);
+    return (
+      <TableTr key={index}>
+        <TableTd className="text-[1rem]">
+          <div className="flex flex-col gap-2 justify-start">
+            <Image
+              src={
+                value?.jewelryProduct?.image_url ?? value?.product?.image_url
+              }
+              h={100}
+              w={100}
+              fit="fill"
+            />
             <div className="flex flex-col">
-              <span>Size: {value?.product?.size}</span>
-              <span>Weight: {value?.product?.ct_weight}</span>
-              <span>Quality: {value?.product?.quality}</span>
+              <span>
+                {value?.product?.collection_slug
+                  ? value?.product?.collection_slug +
+                    " " +
+                    value?.product?.shape
+                  : value?.jewelryProduct?.productName}
+              </span>
+              <span className="text-sm">Qty: {value?.quantity}</span>
             </div>
-          ) : null}
-        </div>
-      </TableTd>
-      <TableTd className="font-semibold">
-        <div className="text-lg">
-          <span>$</span>
-          {value?.jewelryProduct?.price ?? value?.product?.price}
-        </div>
-      </TableTd>
-    </TableTr>
-  ));
+            {value?.product?.productType === "stone" ? (
+              <div className="flex flex-col">
+                <span>Size: {value?.product?.size}</span>
+                <span>Weight: {value?.product?.ct_weight}</span>
+                <span>Quality: {value?.product?.quality}</span>
+              </div>
+            ) : null}
+          </div>
+        </TableTd>
+        <TableTd className="font-semibold">
+          <div className="text-lg">
+            <span>$</span>
+            {value?.jewelryProduct?.price ?? value?.product?.price}
+          </div>
+        </TableTd>
+      </TableTr>
+    );
+  });
+
   return (
     <div className="pb-20">
       <OrderConfirmationModal opened={opened} close={close} />

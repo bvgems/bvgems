@@ -23,7 +23,7 @@ import classes from "./HeaderTabs.module.css";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
-export const UserProfile = ({ user }: any) => {
+export const UserProfile = ({ isSmaller, user }: any) => {
   const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const { handleLogout } = useAuth();
@@ -42,15 +42,12 @@ export const UserProfile = ({ user }: any) => {
         <UnstyledButton
           className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
         >
-          <Group gap={7}>
+          <Group gap={isSmaller ? 2 : 5}>
             <Avatar
               name={`${user?.firstName} ${user?.lastName}`}
               color="#0b182d"
             />
 
-            <Text fw={500} size="sm" lh={1} mr={3}>
-              {/* {user.name} */}
-            </Text>
             <IconChevronDown size={12} stroke={1.5} />
           </Group>
         </UnstyledButton>

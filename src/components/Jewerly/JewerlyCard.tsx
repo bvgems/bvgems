@@ -5,9 +5,6 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { getCartStore } from "@/store/useCartStore";
-import { notifications } from "@mantine/notifications";
-import { IconCheck } from "@tabler/icons-react";
-import { addProductToCart } from "@/utils/commonFunctions";
 
 export const JewelryCategoryCard = ({
   isBead,
@@ -20,25 +17,12 @@ export const JewelryCategoryCard = ({
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
   const cartStore = getCartStore(userKey);
-  const addToCart = cartStore((state: any) => state.addToCart);
   const redirectToProduct = (product: any) => {
     const handle = product?.node?.handle;
 
     isBead
-      ? router?.push(`/jewerly/beads/${handle}`)
-      : router?.push(`/jewerly/${category}/${handle}`);
-  };
-
-  const addProduct = async () => {
-    await addProductToCart(product?.node, 1, addToCart);
-
-    notifications.show({
-      icon: <IconCheck />,
-      color: "teal",
-      message: "Jewelry product added to the cart!",
-      position: "top-right",
-      autoClose: 4000,
-    });
+      ? router?.push(`/jewelry/beads/${handle}`)
+      : router?.push(`/jewelry/${category}/${handle}`);
   };
 
   return (
@@ -62,7 +46,7 @@ export const JewelryCategoryCard = ({
           src={product?.node?.images?.edges?.[0]?.node?.url}
           alt={product?.node?.title}
           className={`absolute ${isBead ? "object-fill" : "object-contain"}`}
-          style={{ height: 300, width: "100%" }}
+          style={{ height: 500, width: "100%" }}
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{
             opacity: hovered === index ? 0 : 1,
@@ -88,7 +72,9 @@ export const JewelryCategoryCard = ({
         )}
       </div>
 
-      <div className="mt-4 h-[48px]">
+      <div
+        className={`mt-4 ${category === "necklaces" ? "h-[78px]" : "h-[48px]"}`}
+      >
         <span className="text-gray-700 text-[1.2rem] block line-clamp-1 leading-snug">
           {product?.node?.title}
         </span>
@@ -96,27 +82,23 @@ export const JewelryCategoryCard = ({
 
       <div className="mt-2.5 text-[1.2rem] flex items-center gap-3">
         <span className="font-semibold">
-          $ {product?.node?.variants?.edges[0]?.node?.price?.amount} USD
-        </span>
-        <span className="text-[1.2rem] line-through text-gray-500">
           $
-          {Number(product?.node?.variants?.edges[0]?.node?.price?.amount) +
-            2000}{" "}
+          {Number(
+            product?.node?.variants?.edges?.[0]?.node?.price?.amount || 0
+          ).toFixed(2)}{" "}
           USD
         </span>
       </div>
+
       <div className="mt-2">
         <motion.button
           className="relative text-gray-500 text-sm px-0 py-1 border-none bg-transparent focus:outline-none cursor-pointer"
           initial="rest"
           whileHover="hover"
           animate="rest"
-          onClick={(e) => {
-            e.stopPropagation();
-            addProduct();
-          }}
+          onClick={() => redirectToProduct(product)}
         >
-          Add To Cart
+          VIEW MORE
           <motion.span
             variants={{
               rest: { width: "0%" },

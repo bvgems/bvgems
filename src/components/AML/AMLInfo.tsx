@@ -155,7 +155,7 @@ export const AMLInfo = ({ isStepper }: any) => {
           color: "teal",
           title: response.message,
           message:
-            "Your account has been registered successfully! You can now Log in.",
+            "We're currently reviewing your information and will notify you once your account has been approved. You’ll be able to log in and access your account at that time.",
           position: "top-right",
         });
 

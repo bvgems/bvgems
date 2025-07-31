@@ -3,7 +3,6 @@
 import { getGemStoneKnowledge } from "@/apis/api";
 import { Image, Table, Button } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
-
 import { IconDownload } from "@tabler/icons-react";
 
 interface Props {
@@ -49,7 +48,7 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
     };
 
     if (totalImages === 0) {
-      generatePDF(); // No images
+      generatePDF();
       return;
     }
 
@@ -73,75 +72,71 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
   if (!activeStone) return null;
 
   return (
-    <div className="px-10 py-5">
+    <div className="px-2 py-5">
       {knowledge ? (
         <>
           <div
-            className="flex flex-col items-center gap-3.5 px-28"
+            className="flex flex-col items-center"
             ref={contentRef}
           >
             <div className="flex justify-center flex-col items-center gap-3">
               <Image
-                h="200"
-                w="200"
+                h={160}
+                w={160}
+                className="object-cover"
                 src={knowledge?.additionalImages?.reference?.image?.url}
               />
-              <span className="font-semibold">{activeStone}</span>
+              <span className="text-xl md:text-2xl font-semibold capitalize">
+                {activeStone}
+              </span>
             </div>
-            <div className="text-justify">
+            <div className="text-justify text-sm md:text-base leading-relaxed mt-3 mb-4">
               {knowledge?.descriptionMetafield?.value}
             </div>
-            <div>
-              <h3 className="font-semibold flex justify-center mb-3">
+            <div className="w-full max-w-full md:max-w-3xl">
+              <h3 className="font-semibold text-center text-lg md:text-xl mb-3">
                 More Details about {activeStone}
               </h3>
-              <div className="w-full">
-                <Table variant="vertical" layout="fixed" withTableBorder>
-                  <Table.Tbody>
-                    <Table.Tr>
-                      <Table.Th>Hardness</Table.Th>
-                      <Table.Td>{knowledge?.hardness?.value || "—"}</Table.Td>
-                    </Table.Tr>
-                    <Table.Tr>
-                      <Table.Th>Toughness</Table.Th>
-                      <Table.Td>{knowledge?.toughness?.value || "—"}</Table.Td>
-                    </Table.Tr>
-                    <Table.Tr>
-                      <Table.Th>Metal Pairing</Table.Th>
-                      <Table.Td>
-                        {knowledge?.metalPairing?.value || "—"}
+              <Table
+                variant="vertical"
+                layout="fixed"
+                withTableBorder
+                striped
+                highlightOnHover
+              >
+                <Table.Tbody>
+                  {[
+                    ["Hardness", knowledge?.hardness?.value],
+                    ["Toughness", knowledge?.toughness?.value],
+                    ["Metal Pairing", knowledge?.metalPairing?.value],
+                    ["Birthstone", knowledge?.birthstone?.value],
+                    ["Anniversary", knowledge?.anniversary?.value],
+                    [
+                      "Enhancements",
+                      knowledge?.enhancements?.value
+                        ? JSON.parse(knowledge.enhancements.value).join(", ")
+                        : null,
+                    ],
+                    ["Zodiac", knowledge?.zodiac?.value],
+                  ].map(([label, value]) => (
+                    <Table.Tr key={label}>
+                      <Table.Th className="w-1/3 text-sm md:text-base">
+                        {label}
+                      </Table.Th>
+                      <Table.Td className="text-sm md:text-base">
+                        {value || "—"}
                       </Table.Td>
                     </Table.Tr>
-                    <Table.Tr>
-                      <Table.Th>Birthstone</Table.Th>
-                      <Table.Td>{knowledge?.birthstone?.value || "—"}</Table.Td>
-                    </Table.Tr>
-                    <Table.Tr>
-                      <Table.Th>Anniversary</Table.Th>
-                      <Table.Td>
-                        {knowledge?.anniversary?.value || "—"}
-                      </Table.Td>
-                    </Table.Tr>
-                    <Table.Tr>
-                      <Table.Th>Enhancements</Table.Th>
-                      <Table.Td>
-                        {knowledge?.enhancements?.value
-                          ? JSON.parse(knowledge.enhancements.value).join(", ")
-                          : "—"}
-                      </Table.Td>
-                    </Table.Tr>
-                    <Table.Tr>
-                      <Table.Th>Zodiac</Table.Th>
-                      <Table.Td>{knowledge?.zodiac?.value || "—"}</Table.Td>
-                    </Table.Tr>
-                  </Table.Tbody>
-                </Table>
-              </div>
+                  ))}
+                </Table.Tbody>
+              </Table>
 
               {knowledge?.careNotes?.value && (
-                <div className="mt-6 w-full max-w-md">
-                  <h3 className="font-semibold mb-2">Care Instructions</h3>
-                  <ul className="list-disc list-inside space-y-1">
+                <div className="mt-6 w-full">
+                  <h3 className="font-semibold text-base md:text-lg mb-2">
+                    Care Instructions
+                  </h3>
+                  <ul className="list-disc list-inside space-y-1 text-sm md:text-base">
                     {JSON.parse(knowledge.careNotes.value).map(
                       (note: string, index: number) => (
                         <li key={index}>{note}</li>
@@ -152,22 +147,22 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
               )}
             </div>
           </div>
-          {knowledge && (
-            <div className="flex justify-end px-10">
-              <Button
-                leftSection={<IconDownload />}
-                variant="filled"
-                color="#0b182d"
-                className="mt-6"
-                onClick={handleDownloadPDF}
-              >
-                Save as PDF
-              </Button>
-            </div>
-          )}
+
+          <div className="flex justify-end px-4 md:px-10 mt-6">
+            <Button
+              leftSection={<IconDownload />}
+              variant="filled"
+              color="#0b182d"
+              onClick={handleDownloadPDF}
+            >
+              Save as PDF
+            </Button>
+          </div>
         </>
       ) : (
-        <p>Loading gemstone details...</p>
+        <p className="text-center text-sm text-gray-500">
+          Loading gemstone details...
+        </p>
       )}
     </div>
   );

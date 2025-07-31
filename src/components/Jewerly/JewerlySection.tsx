@@ -80,8 +80,8 @@ const AnimatedGridCol = ({
 export const JewelrySection = forwardRef<HTMLDivElement>((_, ref) => {
   const router = useRouter();
 
-  const navigateToJewerly = (handle: any) => {
-    router.push(`/jewerly/${handle}`);
+  const navigateToJewelry = (handle: any) => {
+    router.push(`/jewelry/${handle}`);
   };
   return (
     <Container size={1250} ref={ref} className="mt-20">
@@ -98,7 +98,7 @@ export const JewelrySection = forwardRef<HTMLDivElement>((_, ref) => {
                 padding={0}
                 radius="md"
                 style={{ height: "350px" }}
-                onClick={() => navigateToJewerly(item?.handle)}
+                onClick={() => navigateToJewelry(item?.handle)}
               >
                 <div className="relative w-full h-full overflow-hidden">
                   <Image

@@ -4,16 +4,6 @@ import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { JewelryCard } from "./JewerlyCard";
 
 const jewelryItems = [
-  // {
-  //   title: "Rings",
-  //   image: "/assets/ownring3.png",
-  //   subtitle: "Design a ring that reflects your story.",
-  // },
-  // {
-  //   title: "Ear Rings",
-  //   image: "/assets/ownearrings.png",
-  //   subtitle: "Delicate earrings crafted for every moment.",
-  // },
   {
     title: "Necklaces",
     image: "/assets/ownnecklace.png",
@@ -26,13 +16,11 @@ const jewelryItems = [
   },
 ];
 
-
-
-export const OwnJewerly = () => {
+export const OwnJewelry = () => {
   return (
     <Container size={1250} className="mt-20">
       <AnimatedText
-        text="Build Your Own Jewerly"
+        text="Build Your Own Jewelry"
         className="text-center text-4xl text-[#0b182d] mb-12"
       />
       <Grid gutter="xl" mt="xl" align="center">

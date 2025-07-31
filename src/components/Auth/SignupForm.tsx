@@ -1,4 +1,4 @@
-import { Button, PasswordInput, TextInput } from "@mantine/core";
+import { Button, Loader, PasswordInput, TextInput } from "@mantine/core";
 import Link from "next/link";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
@@ -7,6 +7,8 @@ import { PhoneNumberInput } from "../CommonComponents/PhoneInput";
 import { useRouter } from "next/navigation";
 import { useStpperStore } from "@/store/useStepperStore";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { useDebouncedValue } from "@mantine/hooks";
+import { handleEmailExists } from "@/apis/api";
 
 export const SignupForm = ({
   onClose,
@@ -37,7 +39,12 @@ export const SignupForm = ({
         value.trim().length > 0 ? null : "First name is required",
       lastName: (value) =>
         value.trim().length > 0 ? null : "Last name is required",
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      email: (value) => {
+        if (!value) return "Email is required";
+        if (!/^\S+@\S+\.\S+$/.test(value)) return "Invalid email address";
+        if (emailChecked && emailExists) return "Email already registered";
+        return null;
+      },
       companyName: (value) =>
         value.trim().length > 0 ? null : "Company name is required",
       phoneNumber: (value) => {
@@ -55,6 +62,29 @@ export const SignupForm = ({
         value === values.password ? null : "Passwords do not match",
     },
   });
+
+  const [emailChecked, setEmailChecked] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
+  const [debouncedEmail] = useDebouncedValue(form.values.email, 400);
+  useEffect(() => {
+    const checkEmail = async () => {
+      if (!debouncedEmail || !/^\S+@\S+\.\S+$/.test(debouncedEmail)) {
+        setEmailChecked(false);
+        return;
+      }
+
+      const data = await handleEmailExists(debouncedEmail);
+      setEmailExists(data.exists);
+      setEmailChecked(true);
+    };
+
+    checkEmail();
+  }, [debouncedEmail]);
+  useEffect(() => {
+    if (emailChecked) {
+      form.validateField("email");
+    }
+  }, [emailChecked, emailExists]);
 
   useEffect(() => {
     if (!hasHydrated) return;
@@ -130,10 +160,23 @@ export const SignupForm = ({
               />
             </div>
             <TextInput
-              label="Enter Email Address"
+              label={
+                <div className="flex items-center gap-2">
+                  <span>Enter Email Address</span>
+                  {!emailChecked && debouncedEmail && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs text-gray-500">Checking...</span>
+                      <div className="scale-[0.6]">
+                        <Loader size="xs" color="gray" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              }
               placeholder="your email address"
               {...form.getInputProps("email")}
             />
+
             <TextInput
               label="Enter Your Company Name"
               placeholder="your company name"
@@ -156,6 +199,7 @@ export const SignupForm = ({
             </div>
             <div className="flex flex-col gap-2">
               <Button
+                disabled={emailChecked && emailExists}
                 rightSection={<IconArrowRight />}
                 type="submit"
                 color="#0b182d"

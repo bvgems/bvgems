@@ -122,19 +122,6 @@ export default function ProductDetailsPage() {
 
   return (
     <>
-      <Modal
-        opened={modalOpened}
-        onClose={close}
-        overlayProps={{
-          style: {
-            backdropFilter: "blur(4px)",
-          },
-        }}
-        transitionProps={{ transition: "slide-right" }}
-        centered
-      >
-        <AuthForm onClose={close} />
-      </Modal>
       <div className="flex flex-col md:flex-row gap-4 px-5 mt-6">
         <div className="w-full md:w-2/3 pr-2">
           <div className="p-4">
@@ -147,7 +134,7 @@ export default function ProductDetailsPage() {
                 </div>
                 <div className="text-xs text-gray-400 mt-4 flex items-center">
                   <Button
-                    onClick={open}
+                    onClick={openTable}
                     variant="outline"
                     size="compact-xs"
                     color="violet"
@@ -164,19 +151,6 @@ export default function ProductDetailsPage() {
                 />
               </div>
             </div>
-          </div>
-
-          <div className="mt-9 flex flex-wrap gap-9 justify-around">
-            {shopifyProduct?.images?.edges?.slice(1)?.map((item: any) => (
-              <Image
-                key={item?.node?.url}
-                src={item?.node?.url}
-                h={300}
-                w={300}
-                radius="md"
-                fit="fill"
-              />
-            ))}
           </div>
         </div>
 
@@ -207,7 +181,9 @@ export default function ProductDetailsPage() {
                     Available
                   </Badge>
                 </div>
-                <div className="text-2xl font-semibold">$ {price}</div>
+                <div className="text-2xl font-semibold">
+                  $ {(Number(price) || 0).toFixed(2)}
+                </div>
               </div>
 
               <div className="flex items-center justify-between gap-2">

@@ -128,24 +128,71 @@ export const BusinessReference = () => {
           </Button>
         </Paper>
       ) : (
-        <Table
-          horizontalSpacing={"md"}
-          highlightOnHover
-          striped
-          stickyHeaderOffset={60}
-        >
-          <TableThead>
-            <TableTr className="font-extrabold text-[15px] text-[#0b182d]">
-              <TableTh>Reference#</TableTh>
-              <TableTh>Company Name</TableTh>
-              <TableTh>Contact Person</TableTh>
-              <TableTh>Contact Number</TableTh>
-              <TableTh>Company Person</TableTh>
-              <TableTh>Action</TableTh>
-            </TableTr>
-          </TableThead>
-          <TableTbody>{referencesRows}</TableTbody>
-        </Table>
+        <>
+          <div className="hidden lg:block">
+            <Table
+              horizontalSpacing={"md"}
+              highlightOnHover
+              striped
+              stickyHeaderOffset={60}
+            >
+              <TableThead>
+                <TableTr className="font-extrabold text-[15px] text-[#0b182d]">
+                  <TableTh>Reference#</TableTh>
+                  <TableTh>Company Name</TableTh>
+                  <TableTh>Contact Person</TableTh>
+                  <TableTh>Contact Number</TableTh>
+                  <TableTh>Company Person</TableTh>
+                  <TableTh>Action</TableTh>
+                </TableTr>
+              </TableThead>
+              <TableTbody>{referencesRows}</TableTbody>
+            </Table>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="block lg:hidden space-y-4">
+            {references.map((reference: any, index: number) => (
+              <div key={reference.id} className="border p-4 rounded shadow-sm">
+                <div className="text-sm mb-2">
+                  <strong>Reference#:</strong> {index + 1}
+                </div>
+                <div className="text-sm mb-1">
+                  <strong>Company Name:</strong> {reference?.company_name}
+                </div>
+                <div className="text-sm mb-1">
+                  <strong>Contact Person:</strong> {reference?.contact_person}
+                </div>
+                <div className="text-sm mb-1">
+                  <strong>Contact Number:</strong> {reference?.contact_number}
+                </div>
+                <div className="text-sm mb-2">
+                  <strong>Company Address:</strong> {reference?.company_address}
+                </div>
+                <div className="flex gap-3">
+                  <IconEdit
+                    onClick={() => {
+                      setReferenceAddress(reference);
+                      open();
+                    }}
+                    size={20}
+                    className="cursor-pointer"
+                    color="green"
+                  />
+                  <IconTrash
+                    onClick={() => {
+                      setToDeleteId(reference.id);
+                      setDeleteModalOpened(true);
+                    }}
+                    size={20}
+                    className="cursor-pointer"
+                    color="red"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
       {references?.length ? (
         <Button
@@ -159,6 +206,7 @@ export const BusinessReference = () => {
           ADD NEW REFERENCE
         </Button>
       ) : null}
+
       <Modal
         opened={modalOpened}
         onClose={close}

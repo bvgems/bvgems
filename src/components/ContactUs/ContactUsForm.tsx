@@ -4,6 +4,7 @@ import { Button, TextInput, Textarea, Select, Text, Card } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
+import { submitInquiry } from "@/apis/api";
 
 export const ContactUsForm = () => {
   const [loading, setLoading] = useState(false);
@@ -24,8 +25,6 @@ export const ContactUsForm = () => {
       subject: (value) =>
         value.trim().length > 0 ? null : "Subject is required",
       inquiryType: (value) => (value ? null : "Please select an inquiry type"),
-      message: (value) =>
-        value.trim().length > 0 ? null : "Message is required",
     },
   });
 
@@ -33,16 +32,25 @@ export const ContactUsForm = () => {
     setLoading(true);
 
     try {
-      console.log("Submitted values:", values);
+      const response = await submitInquiry(values);
 
-      notifications.show({
-        icon: <IconCheck />,
-        color: "teal",
-        message: "Your inquiry has been sent successfully!",
-        position: "top-right",
-        autoClose: 4000,
-      });
-
+      if (response?.flag) {
+        notifications.show({
+          icon: <IconCheck />,
+          color: "teal",
+          message: response?.message,
+          position: "top-right",
+          autoClose: 4000,
+        });
+      } else {
+        notifications.show({
+          icon: <IconX />,
+          color: "red",
+          message: response?.error,
+          position: "top-right",
+          autoClose: 4000,
+        });
+      }
       form.reset();
     } catch (error) {
       notifications.show({
@@ -102,7 +110,11 @@ export const ContactUsForm = () => {
         />
 
         <Textarea
-          label="Message"
+          label={
+            <span className="flex gap-1 items-center">
+              Message <p className="text-gray-400">(optional)</p>
+            </span>
+          }
           placeholder="Your message"
           minRows={4}
           autosize

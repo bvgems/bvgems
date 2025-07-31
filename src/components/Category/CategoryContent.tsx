@@ -21,8 +21,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { SizeToleranceGuide } from "../Tolerance/SizeToleranceGuide";
 import { useRouter } from "next/navigation";
 import { ImageZoom } from "../CommonComponents/ImageZoom";
-import { IconDiamond, IconDiamondFilled } from "@tabler/icons-react";
-import { colorOptions } from "@/utils/constants";
+import { IconDiamond } from "@tabler/icons-react";
+import { SapphireLooseGemstoneColorOptions } from "@/utils/constants";
 
 export function CategoryContent({
   isSapphire,
@@ -39,6 +39,10 @@ export function CategoryContent({
     shapes?.length ? shapes[0] : null
   );
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [typeFilter, setTypeFilter] = useState<string | null>(null);
+  const [selectedSapphireColor, setSelectedSapphireColor] = useState(
+    SapphireLooseGemstoneColorOptions[0]?.value
+  );
   const [fetchedResult, setFetchedResult] = useState<any>([]);
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -59,21 +63,29 @@ export function CategoryContent({
 
   const fetchShapesData = async (
     selectedShape: string | null,
-    title: string
+    title: string,
+    isSapphire: boolean,
+    sapphireColor: string
   ) => {
-    const result: any = await getShapesData(selectedShape, title);
+    const result: any = await getShapesData(
+      selectedShape,
+      title,
+      isSapphire,
+      sapphireColor
+    );
     setMainImage(result?.data[0]?.image_url);
-    imagesArray?.push(mainImage);
-    data?.images?.edges?.map((item: any) =>
-      imagesArray?.push(item?.node_url)
-    ) || [];
     setFetchedResult(result?.data);
   };
 
   useEffect(() => {
-    fetchShapesData(selectedShape, data?.title);
+    fetchShapesData(
+      selectedShape,
+      data?.title,
+      isSapphire,
+      selectedSapphireColor
+    );
     setSelectedSizes([]);
-  }, [selectedShape]);
+  }, [selectedShape, selectedSapphireColor]);
 
   const redirectToEducation = () => {
     router.push(
@@ -113,6 +125,7 @@ export function CategoryContent({
                   {data?.title}
                 </h1>
 
+
                 <div className="flex flex-wrap gap-3 mt-4">
                   {shapes?.map((shape: string, index: number) => {
                     const isSelected = shape === selectedShape;
@@ -137,7 +150,7 @@ export function CategoryContent({
                         className="flex flex-col items-center cursor-pointer"
                         onClick={() => setSelectedShape(shape)}
                       >
-                        <Tooltip label={shape} offset={0}>
+                        <Tooltip label={shape}>
                           <Image
                             src={imageSrc}
                             h={50}
@@ -152,18 +165,25 @@ export function CategoryContent({
                     );
                   })}
                 </div>
-                {isSapphire ? (
+
+                {/* Color filter (if Sapphire) */}
+                {isSapphire && (
                   <div className="mt-3 py-4">
-                    <div className="flex flex-row flex-wrap gap-10 mt-3 items-center">
+                    <div className="flex flex-row flex-wrap gap-8 mt-3 items-center">
                       <span className="text-lg">Color:</span>
-                      {colorOptions["Sapphire"]?.map(
+                      {SapphireLooseGemstoneColorOptions?.map(
                         (item: any, index: number) => (
-                          <Tooltip
-                            label={item?.value}
-                            className="cursor-pointer"
-                            key={index}
-                          >
-                            <span className="border border-gray-300 p-2 cursor-pointer">
+                          <Tooltip label={item?.value} key={index}>
+                            <span
+                              onClick={() =>
+                                setSelectedSapphireColor(item?.value)
+                              }
+                              className={`p-2 border rounded cursor-pointer ${
+                                selectedSapphireColor === item?.value
+                                  ? "border-black"
+                                  : "border-gray-300"
+                              }`}
+                            >
                               <IconDiamond color={item?.color} size={30} />
                             </span>
                           </Tooltip>
@@ -171,7 +191,7 @@ export function CategoryContent({
                       )}
                     </div>
                   </div>
-                ) : null}
+                )}
 
                 {selectedShape && (
                   <div className="mt-3">
@@ -183,10 +203,15 @@ export function CategoryContent({
                       searchable
                       clearable
                       placeholder="Choose size"
-                      data={allSizes[selectedShape]?.map((size) => ({
-                        label: size,
-                        value: size,
-                      }))}
+                      data={allSizes[selectedShape]?.map((size) => {
+                        const label = size.includes("x")
+                          ? size.replace(/x/g, " x ")
+                          : size;
+                        return {
+                          label,
+                          value: size,
+                        };
+                      })}
                       value={selectedSizes[0] || null}
                       onChange={(value) =>
                         setSelectedSizes(value ? [value] : [])
@@ -194,6 +219,25 @@ export function CategoryContent({
                     />
                   </div>
                 )}
+
+
+                <div className="mt-4">
+                  <p className="font-medium mb-2 text-gray-700">Natural / Lab:</p>
+                  <Select
+                    placeholder="Select Type"
+                    data={[
+                      { label: "All", value: "" },
+                      { label: "Natural", value: "Natural" },
+                      { label: "Lab Grown", value: "Lab Grown" },
+                    ]}
+                    value={typeFilter || ""}
+                    onChange={(val) => setTypeFilter(val)}
+                    className="w-[50%]"
+                    clearable
+                  />
+                </div>
+
+                {/* Static Table */}
                 <div className="mt-3 max-w-[350px]">
                   <h1>Additional Information</h1>
                   <Table
@@ -204,48 +248,25 @@ export function CategoryContent({
                   >
                     <TableTbody>
                       <TableTr>
-                        <TableTh>
-                          <span className="font-semibold">Hardness</span>
-                        </TableTh>
-                        <TableTd>
-                          <span className=" font-medium">
-                            {data?.hardness?.value}
-                          </span>
-                        </TableTd>
+                        <TableTh>Hardness</TableTh>
+                        <TableTd>{data?.hardness?.value}</TableTd>
                       </TableTr>
-
                       <TableTr>
-                        <TableTh>
-                          {" "}
-                          <span className="font-semibold">Toughness</span>
-                        </TableTh>
+                        <TableTh>Toughness</TableTh>
                         <TableTd>{data?.toughness?.value}</TableTd>
                       </TableTr>
                       <TableTr>
-                        <TableTh>
-                          {" "}
-                          <span className="font-semibold">Birthstone</span>
-                        </TableTh>
-                        <TableTd>
-                          <span className="font-medium">
-                            {data?.birthstone?.value}
-                          </span>
-                        </TableTd>
+                        <TableTh>Birthstone</TableTh>
+                        <TableTd>{data?.birthstone?.value}</TableTd>
                       </TableTr>
                       <TableTr>
-                        <TableTh>
-                          {" "}
-                          <span className="font-semibold">Zodiac</span>
-                        </TableTh>
-                        <TableTd>
-                          <span className="font-medium">
-                            {data?.zodiac?.value ?? "-"}
-                          </span>
-                        </TableTd>
+                        <TableTh>Zodiac</TableTh>
+                        <TableTd>{data?.zodiac?.value ?? "-"}</TableTd>
                       </TableTr>
                     </TableTbody>
                   </Table>
                 </div>
+
                 <div>
                   <Button
                     onClick={open}
@@ -278,6 +299,7 @@ export function CategoryContent({
         fetchedResult={fetchedResult}
         selectedSizes={selectedSizes}
         data={data}
+        typeFilter={typeFilter}
       />
       <SizeToleranceGuide opened={opened} close={close} />
     </>

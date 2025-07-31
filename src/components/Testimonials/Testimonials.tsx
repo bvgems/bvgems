@@ -70,7 +70,7 @@ export const Testimonials = () => {
     <Container size={1250} className="mt-20 pb-20">
       <AnimatedText
         text="See What Our Customers Say About Us"
-        className="text-center text-4xl text-[#0b182d]"
+        className="text-center text-3xl sm:text-4xl text-[#0b182d]"
       />
 
       <Carousel
@@ -93,7 +93,7 @@ export const Testimonials = () => {
       >
         {reviews.map((review, index) => (
           <Carousel.Slide key={index}>
-            <div className="relative h-[450px] w-[700px] mx-auto rounded-4xl bg-[#f1f1f1] flex flex-col items-center justify-center px-6 text-center">
+            <div className="relative w-full max-w-[700px] mx-auto rounded-4xl bg-[#f1f1f1] flex flex-col items-center justify-center px-4 sm:px-6 py-10 sm:py-14 text-center">
               <Image src={review.platform} h={50} w={50} />
 
               <Rating
@@ -104,10 +104,10 @@ export const Testimonials = () => {
                 className="mb-4"
               />
 
-              <p className="text-base leading-7 text-gray-800 italic">
+              <p className="text-sm sm:text-base leading-6 sm:leading-7 text-gray-800 italic">
                 "{review.review}"
               </p>
-              <span className="flex justify-end mt-3 text-lg font-semibold">
+              <span className="mt-4 text-base sm:text-lg font-semibold">
                 - {review.name}
               </span>
             </div>

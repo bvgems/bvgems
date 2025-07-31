@@ -2,16 +2,17 @@
 import { useGridView } from "@/hooks/useGridView";
 import { Divider, Tabs, TabsList, TabsTab } from "@mantine/core";
 import React from "react";
-import { FilterDialog } from "../Jewerly/FilterDialog";
 import { ViewAllProductComponent } from "./ViewAllProductComponent";
+import { FilterDialog } from "../Jewerly/FilterDialog";
 import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
 
 export const CommonGridView = ({ isBead }: any) => {
   const { category, activeTab, setActiveTab, allProducts, beads } =
     useGridView();
+
   return (
-    <div className="p-8">
-      <div className="w-[100%]">
+    <div className="px-4 sm:px-8 pt-6">
+      <div className="w-full">
         <Tabs
           color="gray"
           value={activeTab}
@@ -19,11 +20,11 @@ export const CommonGridView = ({ isBead }: any) => {
             if (val) setActiveTab(val);
           }}
         >
-          <div className="flex justify-between items-center w-full">
-            <TabsList className="flex space-x-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 mb-2">
+            <TabsList className="flex gap-4 sm:gap-6">
               <TabsTab value="alphabetical">
                 <span
-                  className={`text-xl ${
+                  className={`text-base sm:text-xl font-medium ${
                     activeTab === "alphabetical"
                       ? "text-gray-500"
                       : "text-black"
@@ -34,7 +35,7 @@ export const CommonGridView = ({ isBead }: any) => {
               </TabsTab>
               <TabsTab value="newest">
                 <span
-                  className={`text-xl ${
+                  className={`text-base sm:text-xl font-medium ${
                     activeTab === "newest" ? "text-gray-500" : "text-black"
                   }`}
                 >
@@ -43,7 +44,9 @@ export const CommonGridView = ({ isBead }: any) => {
               </TabsTab>
             </TabsList>
 
-            <FilterDialog />
+            <div className="self-start sm:self-center">
+              <FilterDialog />
+            </div>
           </div>
           <Divider />
         </Tabs>
