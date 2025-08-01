@@ -34,13 +34,9 @@ export default function CheckoutSelectionPage() {
     () => getCartStore(user?.id || "guest"),
     [user?.id]
   );
-  const jewelryCartStore = useMemo(
-    () => getJewelryCartStore(user?.id || "guest"),
-    [user?.id]
-  );
+
   const cart = cartStore((state: any) => state.cart);
-  const jewelryCart = jewelryCartStore((state: any) => state.cart);
-  const mergedCart = [...cart, ...jewelryCart];
+
   const { shippingAddress } = useStpperStore();
 
   const [deliveryMethod, setDeliveryMethod] = useState();
@@ -64,15 +60,75 @@ export default function CheckoutSelectionPage() {
   const getOrderPayload = (paymentMethod: any) => {
     const orderPayload = {
       order: {
-        line_items: cart?.map((item: any) => ({
-          image: item?.product?.image_url,
-          title: item?.product?.collection_slug,
-          quantity: item?.quantity,
-          price: item?.product?.price.toString(),
-          requires_shipping: deliveryMethod === "delivery",
-          taxable: true,
-          fulfillment_service: "manual",
-        })),
+        line_items: cart?.map((item: any) => {
+          const productType = item?.product?.productType;
+          const isStone = productType === "stone";
+          const isRing = productType === "ringJewelry";
+          const isNecklace = productType === "necklaceJewelry";
+          const isBracelet = productType === "braceletJewelry";
+          const isEarring = productType === "earringJewelry";
+          const isJewelry = isRing || isNecklace || isBracelet || isEarring;
+  
+          const title = item?.product?.collection_slug;
+  
+          const baseProperties = isStone
+            ? [
+                { name: "Size", value: item?.product?.size },
+                { name: "Weight", value: item?.product?.ct_weight?.toString() },
+                { name: "Quality", value: item?.product?.quality }
+              ]
+            : isRing
+            ? [
+                { name: "Gemstone", value: item?.product?.gemstone },
+                { name: "Gold Color", value: item?.product?.goldColor },
+                { name: "Stone Size", value: item?.product?.size },
+                { name: "Shape", value: item?.product?.shape }
+              ]
+            : isNecklace
+            ? [
+                { name: "Gold Color", value: item?.product?.goldColor },
+                { name: "Stone Size", value: item?.product?.size },
+                { name: "Length", value: item?.product?.length }
+              ]
+            : isBracelet
+            ? [
+                { name: "Gold Color", value: item?.product?.goldColor },
+                { name: "Size", value: item?.product?.size }
+              ]
+            : isEarring
+            ? [
+                { name: "Gold Color", value: item?.product?.goldColor }
+              ]
+            : [];
+  
+          const imageUrl =
+            item?.jewelryProduct?.image_url ?? item?.product?.image_url ?? "";
+  
+          // Conditional payload based on presence of variantId
+          const isStored = !!item?.product?.variantId;
+  
+          return isStored
+            ? {
+                variant_id: item?.product?.variantId,
+                quantity: item?.quantity,
+                properties: baseProperties,
+                requires_shipping: deliveryMethod === "delivery",
+                fulfillment_service: "manual"
+              }
+            : {
+                title: title || "Custom Product",
+                quantity: item?.quantity,
+                price: (item?.product?.price ?? item?.jewelryProduct?.price)?.toString(),
+                requires_shipping: deliveryMethod === "delivery",
+                taxable: true,
+                fulfillment_service: "manual",
+                properties: [
+                  ...baseProperties,
+                  { name: "_image_url", value: imageUrl }
+                ]
+              };
+        }),
+  
         tags:
           paymentMethod === "cod"
             ? "Pickup Payment"
@@ -81,6 +137,7 @@ export default function CheckoutSelectionPage() {
             : paymentMethod === "online"
             ? "Already Paid"
             : "",
+  
         email: user ? user?.email : guestUser?.email,
         phone: user ? user?.phoneNumber : guestUser?.phoneNumber,
         customer: {
@@ -91,13 +148,14 @@ export default function CheckoutSelectionPage() {
           accepts_marketing: false,
           accepts_marketing_updated_at: new Date().toISOString(),
           marketing_opt_in_level: "single_opt_in",
-          tags: "online-store",
+          tags: "online-store"
         },
         financial_status: "pending",
         send_receipt: paymentMethod === "cod",
         fulfillment_status: "unfulfilled",
         currency: "USD",
         buyer_accepts_marketing: false,
+  
         billing_address: {
           first_name:
             selectedShippingAddress?.fullName ??
@@ -126,9 +184,9 @@ export default function CheckoutSelectionPage() {
             selectedShippingAddress?.phoneNumber ??
             shippingAddress?.phoneNumber ??
             guestUser?.phoneNumber ??
-            "",
+            ""
         },
-
+  
         shipping_address: {
           first_name:
             selectedShippingAddress?.fullName ??
@@ -157,12 +215,13 @@ export default function CheckoutSelectionPage() {
             selectedShippingAddress?.phoneNumber ??
             shippingAddress?.phoneNumber ??
             guestUser?.phoneNumber ??
-            "",
-        },
-      },
+            ""
+        }
+      }
     };
     return orderPayload;
   };
+  
   const handleOrderPlacing = async () => {
     if (!deliveryMethod || !paymentMethod) return;
 
@@ -180,7 +239,7 @@ export default function CheckoutSelectionPage() {
     }
   };
 
-  const rows = mergedCart.map((value: any, index: number) => {
+  const rows = cart.map((value: any, index: number) => {
     console.log("valueee", value);
     return (
       <TableTr key={index}>

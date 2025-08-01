@@ -36,13 +36,16 @@ export const JewelryProductDetails = ({
   selectedImage,
   twoStoneRings,
 }: any) => {
+  console.log("proddd", productData);
   const { user } = useAuth();
   const segments = path?.split("/").filter(Boolean);
   const category = segments?.[1];
-
+  const showShapeOptions = productData?.showshapeoptions?.value === "true";
+  const isTwoStoneRing = productData?.isTwoStoneRing?.value === "true";
   const isRingCategory = category === "rings";
   const isEarringCategory = category === "earrings";
   const isNecklaces = category === "necklaces";
+  const isBracelets = category === "bracelets";
   const isBead = category === "beads";
 
   const ringSizes = Array.from({ length: 15 }, (_, i) =>
@@ -54,6 +57,8 @@ export const JewelryProductDetails = ({
   );
   const [selectedNecklaceStoneSize, setSelectedNecklacesStoneSize] =
     useState<any>("2.00 MM");
+  const [selectedBeadStoneSize, setSelectedBeadStoneSize] =
+    useState<any>("2.00");
 
   const [selectedNecklaceLength, setSelectedNecklaceLength] =
     useState<any>("16 INCH");
@@ -74,14 +79,37 @@ export const JewelryProductDetails = ({
       variables = {
         goldColor: selectedGoldColor,
         size: selectedRingSize,
-        stone: selectedShape,
+        stone: isTwoStoneRing
+          ? `${firstStone} - ${productData?.firstShape?.value} , ${secondStone} - ${productData?.secondShape?.value}`
+          : selectedShape
+          ? selectedShape
+          : productData?.gemstone?.value,
         image: selectedImage,
       };
     } else if (isNecklaces) {
       variables = {
         goldColor: selectedGoldColor,
-        size: selectedNecklaceStoneSize,
-        length: selectedNecklaceLength,
+        size:
+          productData?.showGoldColor?.value === "true"
+            ? selectedNecklaceStoneSize
+            : null,
+        length:
+          productData?.showGoldColor?.value === "true"
+            ? selectedNecklaceLength
+            : null,
+      };
+    } else if (isEarringCategory) {
+      variables = {
+        goldColor:
+          productData?.showGoldColor?.value === "true" ? selectedGoldColor : "",
+      };
+    } else if (isBracelets) {
+      variables = {
+        goldColor: selectedGoldColor,
+      };
+    } else if (isBead) {
+      variables = {
+        size: selectedBeadStoneSize,
       };
     }
     addProductToCart(
@@ -91,7 +119,11 @@ export const JewelryProductDetails = ({
       variables,
       isBead,
       isRingCategory,
-      isNecklaces
+      isNecklaces,
+      isBracelets,
+      isEarringCategory,
+      firstStone,
+      secondStone
     );
     notifications.show({
       icon: <IconCheck />,
@@ -108,6 +140,19 @@ export const JewelryProductDetails = ({
   };
 
   const isDisabled = () => {
+    if (isBead) {
+      if (!selectedBeadStoneSize) {
+        return true;
+      }
+      return false;
+    }
+    if (isEarringCategory) {
+      if (productData?.showGoldColor?.value === "true" && !selectedGoldColor) {
+        return true;
+      } else {
+        return false;
+      }
+    }
     if (isRingCategory && !selectedRingSize) return true;
     if (!selectedGoldColor) return true;
 
@@ -188,21 +233,50 @@ export const JewelryProductDetails = ({
         ) : null}
         {isBead ? <p>Straight Size</p> : null}
         {isEarringCategory ? (
-          <NumberInput
-            className="flex-1"
-            label="Quantity"
-            min={1}
-            value={quantity}
-            onChange={(value) => setQuantity(value || 1)}
-            allowNegative={false}
-            radius={0}
-            styles={{
-              input: {
-                padding: "22px 15px",
-                backgroundColor: "#dbdddf",
-              },
-            }}
-          />
+          <>
+            <NumberInput
+              className="flex-1"
+              label="Quantity"
+              min={1}
+              value={quantity}
+              onChange={(value) => setQuantity(value || 1)}
+              allowNegative={false}
+              radius={0}
+              styles={{
+                input: {
+                  padding: "22px 15px",
+                  backgroundColor: "#dbdddf",
+                },
+              }}
+            />
+            {productData?.showGoldColor ? (
+              productData?.showGoldColor?.value === "true" ? (
+                <Autocomplete
+                  clearable
+                  data={GoldColorData.map((item) => item.value)}
+                  value={selectedGoldColor}
+                  onChange={setSelectedGoldColor}
+                  renderOption={({ option }) => {
+                    const matched = GoldColorData.find(
+                      (color) => color.value === option.value
+                    );
+                    return (
+                      <Group gap="sm">
+                        <span
+                          className="w-4 h-4 rounded-full border"
+                          style={{ backgroundColor: matched?.color }}
+                        ></span>
+                        <Text size="sm">{option.value}</Text>
+                      </Group>
+                    );
+                  }}
+                  maxDropdownHeight={300}
+                  label="Select Gold Color"
+                  placeholder="Gold Color"
+                />
+              ) : null
+            ) : null}
+          </>
         ) : isNecklaces ? (
           <>
             <Autocomplete
@@ -229,36 +303,40 @@ export const JewelryProductDetails = ({
               placeholder="Gold Color"
             />
 
-            <Select
-              className="flex-1"
-              leftSection={<IconDiamond size={20} />}
-              label={`Select Stone Size`}
-              placeholder={`${"Stone Size"}`}
-              data={["2.00 MM", "3.00 MM", "4.00 MM"]}
-              value={selectedNecklaceStoneSize}
-              onChange={setSelectedNecklacesStoneSize}
-              styles={{
-                input: {
-                  padding: "22px 35px",
-                  backgroundColor: "#dbdddf",
-                },
-              }}
-            />
-            <Select
-              className="flex-1"
-              leftSection={<IconDiamond size={20} />}
-              label={`Select Length`}
-              placeholder={`${"Length of Necklace"}`}
-              data={["16 INCH", "18 INCH", "20 INCH", "22 INCH"]}
-              value={selectedNecklaceLength}
-              onChange={setSelectedNecklaceLength}
-              styles={{
-                input: {
-                  padding: "22px 35px",
-                  backgroundColor: "#dbdddf",
-                },
-              }}
-            />
+            {productData?.showGoldColor ? (
+              <>
+                <Select
+                  className="flex-1"
+                  leftSection={<IconDiamond size={20} />}
+                  label={`Select Stone Size`}
+                  placeholder={`${"Stone Size"}`}
+                  data={["2.00 MM", "3.00 MM", "4.00 MM"]}
+                  value={selectedNecklaceStoneSize}
+                  onChange={setSelectedNecklacesStoneSize}
+                  styles={{
+                    input: {
+                      padding: "22px 35px",
+                      backgroundColor: "#dbdddf",
+                    },
+                  }}
+                />
+                <Select
+                  className="flex-1"
+                  leftSection={<IconDiamond size={20} />}
+                  label={`Select Length`}
+                  placeholder={`${"Length of Necklace"}`}
+                  data={["16 INCH", "18 INCH", "20 INCH", "22 INCH"]}
+                  value={selectedNecklaceLength}
+                  onChange={setSelectedNecklaceLength}
+                  styles={{
+                    input: {
+                      padding: "22px 35px",
+                      backgroundColor: "#dbdddf",
+                    },
+                  }}
+                />
+              </>
+            ) : null}
           </>
         ) : (
           <div className="flex gap-4 w-full">
@@ -269,8 +347,8 @@ export const JewelryProductDetails = ({
                 label="Select Stone Size"
                 placeholder="Stone Size"
                 data={getData()} // string[]
-                value={selectedGoldColor}
-                onChange={setSelectedGoldColor}
+                value={selectedBeadStoneSize}
+                onChange={setSelectedBeadStoneSize}
                 styles={{
                   input: {
                     padding: "22px 35px",

@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 async function sendOrderReceipt(shopifyOrderId: string) {
   try {
     const orderResponse = await axios.get(
-      `https://e4wqcy-up.myshopify.com/admin/api/2024-04/orders/${shopifyOrderId}.json`,
+      `${process.env.SHOPIFY_ADMIN_API_URL}/orders/${shopifyOrderId}.json`,
       {
         headers: {
           "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN,
@@ -21,7 +21,7 @@ async function sendOrderReceipt(shopifyOrderId: string) {
     const order = orderResponse.data.order;
 
     await axios.put(
-      `https://e4wqcy-up.myshopify.com/admin/api/2024-04/orders/${shopifyOrderId}.json`,
+      `${process.env.SHOPIFY_ADMIN_API_URL}/orders/${shopifyOrderId}.json`,
       {
         order: {
           id: shopifyOrderId,
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
     if (shopifyOrderId) {
       try {
         const transactionResponse = await axios.post(
-          `https://e4wqcy-up.myshopify.com/admin/api/2024-04/orders/${shopifyOrderId}/transactions.json`,
+          `${process.env.SHOPIFY_ADMIN_API_URL}/orders/${shopifyOrderId}/transactions.json`,
           {
             transaction: {
               kind: "sale",

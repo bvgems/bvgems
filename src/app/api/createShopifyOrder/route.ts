@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
     const orderData = await request.json();
 
     const response = await axios.post(
-      `https://e4wqcy-up.myshopify.com/admin/api/2024-04/orders.json`,
+      `${process.env.SHOPIFY_ADMIN_API_URL}/orders.json`,
       orderData,
       {
         headers: {

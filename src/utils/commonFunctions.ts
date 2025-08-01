@@ -18,9 +18,16 @@ export const addProductToCart = (
   variables: any,
   isBead: boolean,
   isRingCategory: boolean,
-  isNecklaces: boolean
+  isNecklaces: boolean,
+  isBracelets: boolean,
+  isEarringCategory: boolean,
+  firstStone: string | any,
+  secondStone: any
 ) => {
   if (!productData) return;
+  console.log('prodd',productData)
+
+  const showshapeoptions = productData?.showshapeoptions?.value === "true";
 
   const jewelryItem = {
     product: {
@@ -30,7 +37,11 @@ export const addProductToCart = (
         ? "ringJewelry"
         : isNecklaces
         ? "necklaceJewelry"
-        : "jewelry",
+        : isBracelets
+        ? "braceletJewelry"
+        : isEarringCategory
+        ? "earringJewelry"
+        : "Product",
       productId: isBead
         ? productData?.productId
         : getCompositeKey(
@@ -45,15 +56,21 @@ export const addProductToCart = (
       cut: "",
       image_url: variables?.image || productData?.images?.edges?.[0]?.node?.url,
       price: productData?.variants?.edges?.[0]?.node?.price?.amount,
-      gemstone:
-        productData?.showshapeoptions?.value === "true"
-          ? variables?.stone
-          : productData?.gemstone?.value || "",
+      // gemstone:
+      //   productData?.showshapeoptions?.value === "true"
+      //     ? variables?.stone
+      //     : productData?.gemstone?.value || "",
+      gemstone: variables?.stone,
       size: variables?.size || "",
       shape: productData?.shape?.value || "",
       type: "",
       goldColor: variables?.goldColor || "",
       length: variables?.length || "",
+      firstStone: isRingCategory ? firstStone : "",
+      secondStone: isRingCategory ? secondStone : "",
+      // firstStone: showshapeoptions
+      //   ? `${firstStone} - ${productData?.firstShape?.value} , ${secondStone} - ${productData?.secondShape?.value}`
+      //   : "",
     },
     quantity,
   };

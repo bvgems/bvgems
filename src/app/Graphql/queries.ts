@@ -392,6 +392,11 @@ export const GetProductByHandle = `
             type
           }
 
+      showGoldColor:metafield(namespace: "custom", key: "showGoldColor") {
+            value
+            type
+          }
+
       firstShape:metafield(namespace: "custom", key: "first_stone") {
             value
             type

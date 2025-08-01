@@ -1,13 +1,10 @@
-// app/api/shopify/create-checkout/route.ts
 import { NextRequest } from "next/server";
 import axios from "axios";
 
 export async function POST(request: NextRequest) {
   try {
     const { cart, guestUser, shippingAddress } = await request.json();
-    console.log("cart, guestUser", cart, guestUser);
 
-    // First, get variant IDs for each product
     const lineItems = [];
 
     for (const item of cart) {
@@ -18,7 +15,6 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Query to get the first variant of the product
       const productQuery = `
         query getProduct($id: ID!) {
           product(id: $id) {
@@ -39,7 +35,7 @@ export async function POST(request: NextRequest) {
       `;
 
       const productResponse = await axios.post(
-        `https://e4wqcy-up.myshopify.com/api/2024-04/graphql.json`,
+        process.env.SHOPIFY_STOREFRONT_URL as string,
         {
           query: productQuery,
           variables: { id: productId },
@@ -76,9 +72,6 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    console.log("Line items with variant IDs:", lineItems);
-
-    // Step 1: Create a cart
     const cartCreateMutation = `
       mutation cartCreate($input: CartInput!) {
         cartCreate(input: $input) {
@@ -155,7 +148,7 @@ export async function POST(request: NextRequest) {
     };
 
     const response = await axios.post(
-      `https://e4wqcy-up.myshopify.com/api/2024-04/graphql.json`,
+      process.env.SHOPIFY_STOREFRONT_UR as string,
       {
         query: cartCreateMutation,
         variables: cartVariables,

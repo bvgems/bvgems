@@ -42,6 +42,7 @@ export function CartComponent() {
   );
 
   const cart = cartStore((state: any) => state.cart);
+  console.log("cartyyy", cart);
 
   const removeProduct = cartStore((state: any) => state.removeFromCart);
 
@@ -116,13 +117,29 @@ export function CartComponent() {
           value?.product?.productType === "necklaceJewelry" ? (
             <div className="flex flex-col">
               <span>Gold Color: {value?.product?.goldColor}</span>
-              <span>Size: {value?.product?.size}</span>
+              {value?.product?.size ? (
+                <span>Size: {value?.product?.size}</span>
+              ) : null}
               {value?.product?.productType === "ringJewelry" ? (
-                <span>Shape: {value?.product?.shape}</span>
-              ) : (
+                <>
+                  <span>Shape: {value?.product?.shape}</span>
+                  <span>Selected Stones: {value?.product?.gemstone}</span>
+                </>
+              ) : value?.product?.length ? (
                 <span>Length: {value?.product?.length}</span>
-              )}
+              ) : null}
             </div>
+          ) : null}
+          {value?.product?.productType === "earringJewelry" ? (
+            value?.product?.goldColor ? (
+              <span>Gold Color: {value?.product?.goldColor}</span>
+            ) : null
+          ) : null}
+          {value?.product?.productType === "braceletJewelry" ? (
+            <span>Gold Color: {value?.product?.goldColor}</span>
+          ) : null}
+          {value?.product?.productType === "bead" ? (
+            <span>Stone size: {value?.product?.size}</span>
           ) : null}
         </div>
       </TableTd>

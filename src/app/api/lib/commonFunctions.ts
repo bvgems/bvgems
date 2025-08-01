@@ -28,7 +28,7 @@ export const getAllJeweleryProducts = async (category: any) => {
     };
 
     const shopifyRes = await fetch(
-      "https://e4wqcy-up.myshopify.com/api/2024-04/graphql.json",
+      process.env.SHOPIFY_STOREFRONT_URL as string,
       {
         method: "POST",
         headers: {
@@ -68,7 +68,7 @@ export const getBusinessReferences = async (userId: any) => {
 export const getBeads = async () => {
   try {
     const shopifyRes = await fetch(
-      "https://e4wqcy-up.myshopify.com/api/2024-04/graphql.json",
+      process.env.SHOPIFY_STOREFRONT_URL as string,
       {
         method: "POST",
         headers: {

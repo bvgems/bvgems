@@ -80,7 +80,7 @@ export const CategoryTable = ({
     });
   };
 
-  const formattedSelectedSize = selectedSizes[0]?.replace(/x/g, " x ");
+  const formattedSelectedSize = selectedSizes[0];
 
   const totalFilteredRows = useMemo(() => {
     return (
@@ -211,7 +211,12 @@ export const CategoryTable = ({
                         </Button>
                       </TableTd>
                       <TableTd className="hidden md:table-cell">
-                        {parseFloat(element.size).toFixed(2)}
+                        {element.size.includes("x")
+                          ? element.size
+                              .replace(/x/g, " x ")
+                              .replace(/\s+/g, " ")
+                              .trim()
+                          : parseFloat(element.size).toFixed(2)}
                       </TableTd>
 
                       <TableTd className="hidden md:table-cell">

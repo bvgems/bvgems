@@ -33,12 +33,12 @@ export default function AboutUsPage() {
       <div>
         <Grid gutter="xl" className="mt-12">
           <GridCol span={{ base: 12, md: 6 }}>
-            <Image
+            {/* <Image
               src={"/assets/family-photo.png"}
               alt={"Family Photo"}
               h={"330"}
               className="object-cover w-full"
-            />
+            /> */}
           </GridCol>
           <GridCol className="flex flex-col gap-3" span={{ base: 12, md: 6 }}>
             <span className="font-medium text-[21px]">Our Story</span>

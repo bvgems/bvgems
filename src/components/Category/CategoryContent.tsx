@@ -28,12 +28,10 @@ export function CategoryContent({
   isSapphire,
   data,
   shapes,
-  allSizes,
 }: {
   isSapphire: boolean;
   data: any;
   shapes: string[];
-  allSizes: { [key: string]: string[] };
 }) {
   const [selectedShape, setSelectedShape] = useState<string | null>(
     shapes?.length ? shapes[0] : null
@@ -43,22 +41,10 @@ export function CategoryContent({
   const [selectedSapphireColor, setSelectedSapphireColor] = useState(
     SapphireLooseGemstoneColorOptions[0]?.value
   );
-  const [fetchedResult, setFetchedResult] = useState<any>([]);
+  const [fetchedResult, setFetchedResult] = useState<any[]>([]);
+  const [allSizes, setAllSizes] = useState<{ [shape: string]: string[] }>({});
   const [opened, { open, close }] = useDisclosure(false);
-
   const router = useRouter();
-
-  const imagesArray = useMemo(() => {
-    const array: string[] = [];
-    if (fetchedResult?.[0]?.image_url) {
-      array.push(fetchedResult[0].image_url);
-    }
-    data?.images?.edges?.forEach((item: any) => {
-      if (item?.node?.url) array.push(item.node.url);
-    });
-    return array;
-  }, [fetchedResult, data]);
-
   const [mainImage, setMainImage] = useState("");
 
   const fetchShapesData = async (
@@ -73,19 +59,43 @@ export function CategoryContent({
       isSapphire,
       sapphireColor
     );
-    setMainImage(result?.data[0]?.image_url);
+
+    const shape = selectedShape || "default";
+    const uniqueSizes = Array.from(
+      new Set(result?.data?.map((item: any) => item.size))
+    ).sort((a: any, b: any) => parseFloat(a) - parseFloat(b));
+
+    setAllSizes((prev: any) => ({
+      ...prev,
+      [shape]: uniqueSizes,
+    }));
+
+    setMainImage(result?.data?.[0]?.image_url);
     setFetchedResult(result?.data);
   };
 
   useEffect(() => {
-    fetchShapesData(
-      selectedShape,
-      data?.title,
-      isSapphire,
-      selectedSapphireColor
-    );
-    setSelectedSizes([]);
+    if (selectedShape) {
+      fetchShapesData(
+        selectedShape,
+        data?.title,
+        isSapphire,
+        selectedSapphireColor
+      );
+      setSelectedSizes([]);
+    }
   }, [selectedShape, selectedSapphireColor]);
+
+  const imagesArray = useMemo(() => {
+    const array: string[] = [];
+    if (fetchedResult?.[0]?.image_url) {
+      array.push(fetchedResult[0].image_url);
+    }
+    data?.images?.edges?.forEach((item: any) => {
+      if (item?.node?.url) array.push(item.node.url);
+    });
+    return array;
+  }, [fetchedResult, data]);
 
   const redirectToEducation = () => {
     router.push(
@@ -125,7 +135,7 @@ export function CategoryContent({
                   {data?.title}
                 </h1>
 
-
+                {/* Shape options */}
                 <div className="flex flex-wrap gap-3 mt-4">
                   {shapes?.map((shape: string, index: number) => {
                     const isSelected = shape === selectedShape;
@@ -166,7 +176,7 @@ export function CategoryContent({
                   })}
                 </div>
 
-                {/* Color filter (if Sapphire) */}
+                {/* Sapphire color filter */}
                 {isSapphire && (
                   <div className="mt-3 py-4">
                     <div className="flex flex-row flex-wrap gap-8 mt-3 items-center">
@@ -203,10 +213,13 @@ export function CategoryContent({
                       searchable
                       clearable
                       placeholder="Choose size"
-                      data={allSizes[selectedShape]?.map((size) => {
+                      data={allSizes[selectedShape]?.map((size: string) => {
                         const label = size.includes("x")
-                          ? size.replace(/x/g, " x ")
-                          : size;
+                          ? size
+                              .replace(/x/g, " x ")
+                              .replace(/\s+/g, " ")
+                              .trim()
+                          : parseFloat(size).toFixed(2); // format single number to 2 decimals
                         return {
                           label,
                           value: size,
@@ -220,9 +233,11 @@ export function CategoryContent({
                   </div>
                 )}
 
-
+                {/* Type filter */}
                 <div className="mt-4">
-                  <p className="font-medium mb-2 text-gray-700">Natural / Lab:</p>
+                  <p className="font-medium mb-2 text-gray-700">
+                    Natural / Lab:
+                  </p>
                   <Select
                     placeholder="Select Type"
                     data={[
@@ -237,7 +252,7 @@ export function CategoryContent({
                   />
                 </div>
 
-                {/* Static Table */}
+                {/* Static Info Table */}
                 <div className="mt-3 max-w-[350px]">
                   <h1>Additional Information</h1>
                   <Table

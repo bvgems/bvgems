@@ -494,6 +494,28 @@ export const patternOptions = [
   },
 ];
 
+export const FreeSizeGemstonesList = [
+  {
+    label: "Sapphire",
+    value: "Sapphire",
+    image: "/assets/freesizesapphire.png",
+    link: "/sapphire",
+  },
+  {
+    label: "Ruby",
+    value: "Ruby",
+    image: "/assets/freesizeruby.png",
+    link: "/ruby",
+  },
+
+  {
+    label: "Emerald",
+    value: "Emerald",
+    image: "/assets/freesizeemerald.png",
+    link: "/emerald",
+  },
+];
+
 export const quickNavigationData = [
   {
     value: "education",
@@ -774,3 +796,9 @@ export const SapphireLooseGemstoneColorOptions = [
   { value: "Red", color: "#FF0000" },
   { value: "Purple", color: "#800080" },
 ];
+
+export const FreeSizeOrigins:any = {
+  Emerald: ["Columbia", "Zambia"],
+  Ruby: ["Mozambique", "Burma"],
+  Sapphire: ["Australia", "Madagascar", "Ceylon", "Thai"],
+};

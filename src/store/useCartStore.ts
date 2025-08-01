@@ -16,8 +16,10 @@ export interface CartItem {
     size: string;
     type: string;
     goldColor: string;
-    gemstone:string
-    length:string;
+    gemstone: string;
+    length: string;
+    firstStone: string;
+    secondStone: string;
   };
   quantity: number;
 }

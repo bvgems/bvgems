@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   try {
     while (hasNextPage) {
       const shopifyRes = await fetch(
-        "https://e4wqcy-up.myshopify.com/api/2024-04/graphql.json",
+        process.env.SHOPIFY_STOREFRONT_URL as string,
         {
           method: "POST",
           headers: {

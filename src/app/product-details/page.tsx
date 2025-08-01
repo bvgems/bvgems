@@ -5,8 +5,6 @@ import {
   Badge,
   Button,
   Checkbox,
-  Image,
-  Modal,
   NumberInput,
   NumberInputHandlers,
   Text,
@@ -22,7 +20,6 @@ import {
 } from "@/apis/api";
 import { ProductSpecifications } from "@/components/ProductDetails/ProductSpecifications";
 import {
-  IconCalendarCheck,
   IconCheck,
   IconHeart,
   IconInfoCircle,
@@ -37,7 +34,7 @@ import { getCartStore } from "@/store/useCartStore";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "@/hooks/useAuth";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
-import { AuthForm } from "@/components/Auth/AuthForm";
+import { useRouter } from "next/navigation";
 
 export default function ProductDetailsPage() {
   const searchParams = useSearchParams();
@@ -54,6 +51,7 @@ export default function ProductDetailsPage() {
   const [modalOpened, { open, close }] = useDisclosure(false);
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
+  const router = useRouter();
 
   const [tableOpened, { open: openTable, close: closeTable }] =
     useDisclosure(false);
@@ -214,19 +212,26 @@ export default function ProductDetailsPage() {
               <Alert
                 variant="light"
                 color="#0b182d"
-                title="Request a Visit"
-                icon={<IconCalendarCheck />}
+                title="HAVING A QUESTION?"
+                icon={<IconInfoCircle />}
               >
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-col text-sm">
-                    <Text size="md">View Gemstone In Person</Text>
+                    <Text size="md">Contact us now</Text>
                     <Text size="sm" c="dimmed">
-                      Your satisfaction is our priority — let us help you find
-                      the perfect stone in person.
+                      We're here to help with any questions or concerns about
+                      your order — feel free to reach out for assistance.
                     </Text>
                   </div>
-                  <Button color="#99a1af" size="xs" className="self-start">
-                    Request
+                  <Button
+                    onClick={() => {
+                      router?.push("/customer-support/contact-us");
+                    }}
+                    color="#99a1af"
+                    size="xs"
+                    className="self-start"
+                  >
+                    CONTACT US NOW
                   </Button>
                 </div>
               </Alert>
