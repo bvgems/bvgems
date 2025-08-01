@@ -13,12 +13,7 @@ export default async function CategoryPage({ params }: any) {
 
   return (
     <div>
-      <CategoryContent
-        isSapphire={isSapphire}
-        data={data}
-        shapes={shapes}
-        allSizes={allSizes}
-      />
+      <CategoryContent isSapphire={isSapphire} data={data} shapes={shapes} />
     </div>
   );
 }
