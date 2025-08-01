@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const submitInquiry = async (values: any) => {
   try {
-    const response = await axios.post(`http://localhost:3000/api/sendInquiry`, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/sendInquiry`, {
       values,
     });
     return response?.data;
@@ -15,7 +15,7 @@ export const submitInquiry = async (values: any) => {
 export const handleEmailExists = async (email: any) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/checkEmailExists?email=${email}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkEmailExists?email=${email}`
     );
 
     return response?.data;
@@ -30,7 +30,7 @@ export const handleEmailExists = async (email: any) => {
 export const sendMemoRequestEmail = async (user: any, cartItems: any) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/sendMemoRequestEmail`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/sendMemoRequestEmail`,
       {
         user,
         cartItems,
@@ -49,7 +49,7 @@ export const sendMemoRequestEmail = async (user: any, cartItems: any) => {
 export const fetchAllOrders = async (email: any) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/fetchOrders?email=${email}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/fetchOrders?email=${email}`
     );
 
     return response?.data;
@@ -64,7 +64,7 @@ export const fetchAllOrders = async (email: any) => {
 export const createShopifyOrder = async (payload: any) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/createShopifyOrder",
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/createShopifyOrder`,
       payload
     );
     console.log("res", response);
@@ -84,14 +84,13 @@ export const redirectToStripeCheckout = async (
 ) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/createShopifyCheckout",
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/createShopifyCheckout`,
       {
         cart,
         shippingAddress,
         guestUser,
       }
     );
-    console.log("res", response);
     return response?.data;
   } catch (error) {
     console.log(
@@ -103,7 +102,7 @@ export const redirectToStripeCheckout = async (
 };
 export const fetchBeads = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/getBeads");
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getBeads`);
 
     return response?.data;
   } catch (error) {
@@ -115,7 +114,7 @@ export const fetchBeads = async () => {
 export const getFilteredData = async (options: any) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/getFilteredGemStones",
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getFilteredGemStones`,
       {
         options,
       }
@@ -150,7 +149,7 @@ export const getSampleLayoutUrl = async (
 ) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/getSampleLayoutUrl`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getSampleLayoutUrl`,
       {
         gemstone,
         shape,
@@ -172,7 +171,7 @@ export const getSampleLayoutUrl = async (
 export const fetchColorstoneLayouts = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getColorstoneLayouts`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getColorstoneLayouts`
     );
     return response.data;
   } catch (error) {
@@ -183,7 +182,7 @@ export const fetchColorstoneLayouts = async () => {
 export const fetchProductByHandle = async (handle: any) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getJewelryProduct?handle=${handle}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getJewelryProduct?handle=${handle}`
     );
     return response.data;
   } catch (error) {
@@ -194,7 +193,7 @@ export const fetchProductByHandle = async (handle: any) => {
 export const getJewelryData = async (category: any) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getJewelryData?category=${category}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getJewelryData?category=${category}`
     );
     return response.data;
   } catch (error) {
@@ -207,7 +206,7 @@ export const getJewelryData = async (category: any) => {
 export const getStorePolicies = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getStorePolicies`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getStorePolicies`
     );
     return response.data;
   } catch (error) {
@@ -217,7 +216,7 @@ export const getStorePolicies = async () => {
 
 export const getFAQs = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/getFAQs");
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getFAQs`);
     return response.data;
   } catch (error) {
     console.log("Something went wrong while fetching the FAQs");
@@ -227,7 +226,7 @@ export const getFAQs = async () => {
 export const changeApproveStatus = async (userId: any) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/approveAccount",
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/approveAccount`,
       { userId }
     );
     return response.data;
@@ -245,7 +244,7 @@ export const applyForAccount = async (
 ) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/applyForAccount",
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/applyForAccount`,
       {
         stepperUser,
         businessVerification,
@@ -264,7 +263,7 @@ export const applyForAccount = async (
 export const getUserProfile = async (userId: any) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getUserProfile?id=${userId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getUserProfile?id=${userId}`
     );
 
     return response?.data;
@@ -275,7 +274,6 @@ export const getUserProfile = async (userId: any) => {
 
 export const upsertShippingAddress = async (isEdit: boolean, payload: any) => {
   try {
-    console.log("isedit", isEdit);
     let response;
     if (isEdit) {
       response = await axios.put("/api/updateShippingAddress", payload);
@@ -312,7 +310,7 @@ export const upsertBusinessReference = async (
 export const deleteAddress = async (toDeleteId: any) => {
   try {
     const response = await axios.delete(
-      `http://localhost:3000/api/deleteShippingAddress?toDeleteId=${toDeleteId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/deleteShippingAddress?toDeleteId=${toDeleteId}`
     );
     return response?.data;
   } catch (error) {
@@ -323,7 +321,7 @@ export const deleteAddress = async (toDeleteId: any) => {
 export const deleteReference = async (toDeleteId: any) => {
   try {
     const response = await axios.delete(
-      `http://localhost:3000/api/deleteBusinessReference?toDeleteId=${toDeleteId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/deleteBusinessReference?toDeleteId=${toDeleteId}`
     );
     return response?.data;
   } catch (error) {
@@ -334,7 +332,7 @@ export const deleteReference = async (toDeleteId: any) => {
 export const getShippingAddresses = async (userId: any) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getShippingAddress?id=${userId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getShippingAddress?id=${userId}`
     );
     return response?.data;
   } catch (error) {
@@ -344,7 +342,7 @@ export const getShippingAddresses = async (userId: any) => {
 export const getBusinessVerification = async (userId: any) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getBusinessVerification?id=${userId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getBusinessVerification?id=${userId}`
     );
     return response?.data;
   } catch (error) {
@@ -357,7 +355,7 @@ export const getBusinessVerification = async (userId: any) => {
 export const getBusinessReferences = async (userId: any) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getBusinessReferences?id=${userId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getBusinessReferences?id=${userId}`
     );
     return response?.data;
   } catch (error) {
@@ -367,7 +365,7 @@ export const getBusinessReferences = async (userId: any) => {
 
 export const getAllGemstones = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/getGemStones");
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getGemStones`);
 
     return response?.data?.products;
   } catch (error) {
@@ -378,7 +376,7 @@ export const getAllGemstones = async () => {
 export const getGemstonesList = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/getAllGemStones"
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getAllGemStones`
     );
     return response?.data;
   } catch (error) {
@@ -389,7 +387,7 @@ export const getGemstonesList = async () => {
 export const getCategoryData = async (handle: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getCategoryData?handle=${handle}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getCategoryData?handle=${handle}`
     );
 
     return response?.data;
@@ -406,7 +404,7 @@ export const getShapesData = async (
 ) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/getShapesData`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getShapesData`,
       {
         shape,
         collection,
@@ -414,7 +412,6 @@ export const getShapesData = async (
         sapphireColor,
       }
     );
-    console.log("resss", response);
     return response;
   } catch (error) {
     console.log("Something went wrong while fetching category data");
@@ -424,7 +421,7 @@ export const getShapesData = async (
 export const handleSignup = async (payload: any) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/handleSignup`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/handleSignup`,
       payload
     );
 
@@ -437,7 +434,7 @@ export const handleSignup = async (payload: any) => {
 export const handleSignin = async (payload: any) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/handleSignin`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/handleSignin`,
       payload
     );
 
@@ -450,7 +447,7 @@ export const handleSignin = async (payload: any) => {
 export const getParticularProductsData = async (id: string) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/getProduct`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getProduct`,
       id
     );
 
@@ -463,7 +460,7 @@ export const getParticularProductsData = async (id: string) => {
 export const getTolerance = async (collection: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getTolerance?collection=${collection}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getTolerance?collection=${collection}`
     );
 
     return response?.data;
@@ -475,7 +472,7 @@ export const getTolerance = async (collection: string) => {
 export const getGemStoneKnowledge = async (stone: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getGemStoneKnowledge?stone=${stone}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getGemStoneKnowledge?stone=${stone}`
     );
 
     return response?.data;
@@ -487,7 +484,7 @@ export const getGemStoneKnowledge = async (stone: string) => {
 export const editProfile = async (payload: any) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/editProfile`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/editProfile`,
       payload
     );
 
@@ -516,7 +513,7 @@ export const handleChangePassword = async (payload: {
 export const storeShippingAddress = async (payload: any) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/storeAddress`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/storeAddress`,
       payload
     );
 
@@ -529,7 +526,7 @@ export const storeShippingAddress = async (payload: any) => {
 export const getAMLInfo = async (userId: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getAMLInfo?userId=${userId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getAMLInfo?userId=${userId}`
     );
 
     return response.data;
@@ -540,7 +537,7 @@ export const getAMLInfo = async (userId: string) => {
 export const editAMLInfo = async (userId: string, data: any) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/upsertAMLInfo`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/upsertAMLInfo`,
       { userId, data }
     );
 
@@ -552,7 +549,7 @@ export const editAMLInfo = async (userId: string, data: any) => {
 
 export const fetchAllItems = async () => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/fetchAllItems`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/fetchAllItems`);
     return response?.data?.data;
   } catch (error) {
     console.log("Something went wrong while storing the AML info");
