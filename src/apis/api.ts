@@ -1,8 +1,12 @@
 import axios from "axios";
+const baseUrl =
+  typeof window === "undefined"
+    ? process.env.NEXT_PUBLIC_BASE_URL || "https://bvgems.com"
+    : "";
 
 export const submitInquiry = async (values: any) => {
   try {
-    const response = await axios.post(`/api/sendInquiry`, {
+    const response = await axios.post(`${baseUrl}/api/sendInquiry`, {
       values,
     });
     return response?.data;
@@ -14,9 +18,7 @@ export const submitInquiry = async (values: any) => {
 
 export const handleEmailExists = async (email: any) => {
   try {
-    const response = await axios.get(
-      `/api/checkEmailExists?email=${email}`
-    );
+    const response = await axios.get(`${baseUrl}/api/checkEmailExists?email=${email}`);
 
     return response?.data;
   } catch (error) {
@@ -29,13 +31,10 @@ export const handleEmailExists = async (email: any) => {
 };
 export const sendMemoRequestEmail = async (user: any, cartItems: any) => {
   try {
-    const response = await axios.post(
-      `/api/sendMemoRequestEmail`,
-      {
-        user,
-        cartItems,
-      }
-    );
+    const response = await axios.post(`${baseUrl}/api/sendMemoRequestEmail`, {
+      user,
+      cartItems,
+    });
 
     return response?.data;
   } catch (error) {
@@ -48,9 +47,7 @@ export const sendMemoRequestEmail = async (user: any, cartItems: any) => {
 };
 export const fetchAllOrders = async (email: any) => {
   try {
-    const response = await axios.get(
-      `/api/fetchOrders?email=${email}`
-    );
+    const response = await axios.get(`${baseUrl}/api/fetchOrders?email=${email}`);
 
     return response?.data;
   } catch (error) {
@@ -63,10 +60,7 @@ export const fetchAllOrders = async (email: any) => {
 };
 export const createShopifyOrder = async (payload: any) => {
   try {
-    const response = await axios.post(
-      `/api/createShopifyOrder`,
-      payload
-    );
+    const response = await axios.post(`${baseUrl}/api/createShopifyOrder`, payload);
     console.log("res", response);
     return response?.data;
   } catch (error) {
@@ -83,14 +77,11 @@ export const redirectToStripeCheckout = async (
   guestUser: any
 ) => {
   try {
-    const response = await axios.post(
-      `/api/createShopifyCheckout`,
-      {
-        cart,
-        shippingAddress,
-        guestUser,
-      }
-    );
+    const response = await axios.post(`${baseUrl}/api/createShopifyCheckout`, {
+      cart,
+      shippingAddress,
+      guestUser,
+    });
     return response?.data;
   } catch (error) {
     console.log(
@@ -102,7 +93,7 @@ export const redirectToStripeCheckout = async (
 };
 export const fetchBeads = async () => {
   try {
-    const response = await axios.get(`/api/getBeads`);
+    const response = await axios.get(`${baseUrl}/api/getBeads`);
 
     return response?.data;
   } catch (error) {
@@ -113,12 +104,9 @@ export const fetchBeads = async () => {
 
 export const getFilteredData = async (options: any) => {
   try {
-    const response = await axios.post(
-      `/api/getFilteredGemStones`,
-      {
-        options,
-      }
-    );
+    const response = await axios.post(`${baseUrl}/api/getFilteredGemStones`, {
+      options,
+    });
 
     return response?.data;
   } catch (error) {
@@ -129,7 +117,7 @@ export const getFilteredData = async (options: any) => {
 
 export const makeCheckout = async (data: any) => {
   try {
-    const response = await axios.post("/api/checkout", {
+    const response = await axios.post("${baseUrl}/api/checkout", {
       cartItems: data?.cartItems,
       shopifyOrderId: data?.shopifyOrderId,
     });
@@ -148,15 +136,12 @@ export const getSampleLayoutUrl = async (
   color: string
 ) => {
   try {
-    const response = await axios.post(
-      `/api/getSampleLayoutUrl`,
-      {
-        gemstone,
-        shape,
-        pattern,
-        color,
-      }
-    );
+    const response = await axios.post(`${baseUrl}/api/getSampleLayoutUrl`, {
+      gemstone,
+      shape,
+      pattern,
+      color,
+    });
 
     return response?.data?.data;
   } catch (error) {
@@ -170,9 +155,7 @@ export const getSampleLayoutUrl = async (
 
 export const fetchColorstoneLayouts = async () => {
   try {
-    const response = await axios.get(
-      `/api/getColorstoneLayouts`
-    );
+    const response = await axios.get(`${baseUrl}/api/getColorstoneLayouts`);
     return response.data;
   } catch (error) {
     console.log("Something went wrong while fetching the color stone layouts");
@@ -181,9 +164,7 @@ export const fetchColorstoneLayouts = async () => {
 
 export const fetchProductByHandle = async (handle: any) => {
   try {
-    const response = await axios.get(
-      `/api/getJewelryProduct?handle=${handle}`
-    );
+    const response = await axios.get(`${baseUrl}/api/getJewelryProduct?handle=${handle}`);
     return response.data;
   } catch (error) {
     console.log("Something went wrong while fetching the jewelry product data");
@@ -193,7 +174,7 @@ export const fetchProductByHandle = async (handle: any) => {
 export const getJewelryData = async (category: any) => {
   try {
     const response = await axios.get(
-      `/api/getJewelryData?category=${category}`
+      `${baseUrl}/api/getJewelryData?category=${category}`
     );
     return response.data;
   } catch (error) {
@@ -205,9 +186,7 @@ export const getJewelryData = async (category: any) => {
 
 export const getStorePolicies = async () => {
   try {
-    const response = await axios.get(
-      `/api/getStorePolicies`
-    );
+    const response = await axios.get(`${baseUrl}/api/getStorePolicies`);
     return response.data;
   } catch (error) {
     console.log("Something went wrong while fetching the store policies");
@@ -216,7 +195,7 @@ export const getStorePolicies = async () => {
 
 export const getFAQs = async () => {
   try {
-    const response = await axios.get(`/api/getFAQs`);
+    const response = await axios.get(`${baseUrl}/api/getFAQs`);
     return response.data;
   } catch (error) {
     console.log("Something went wrong while fetching the FAQs");
@@ -225,10 +204,7 @@ export const getFAQs = async () => {
 
 export const changeApproveStatus = async (userId: any) => {
   try {
-    const response = await axios.post(
-      `/api/approveAccount`,
-      { userId }
-    );
+    const response = await axios.post(`${baseUrl}/api/approveAccount`, { userId });
     return response.data;
   } catch (error) {
     console.log("Something went wrong while approving account");
@@ -243,16 +219,13 @@ export const applyForAccount = async (
   amlInfo: any
 ) => {
   try {
-    const response = await axios.post(
-      `/api/applyForAccount`,
-      {
-        stepperUser,
-        businessVerification,
-        shippingAddress,
-        businessReference,
-        amlInfo,
-      }
-    );
+    const response = await axios.post(`${baseUrl}/api/applyForAccount`, {
+      stepperUser,
+      businessVerification,
+      shippingAddress,
+      businessReference,
+      amlInfo,
+    });
 
     return response?.data;
   } catch (error) {
@@ -262,9 +235,7 @@ export const applyForAccount = async (
 
 export const getUserProfile = async (userId: any) => {
   try {
-    const response = await axios.get(
-      `/api/getUserProfile?id=${userId}`
-    );
+    const response = await axios.get(`${baseUrl}/api/getUserProfile?id=${userId}`);
 
     return response?.data;
   } catch (error) {
@@ -276,9 +247,9 @@ export const upsertShippingAddress = async (isEdit: boolean, payload: any) => {
   try {
     let response;
     if (isEdit) {
-      response = await axios.put("/api/updateShippingAddress", payload);
+      response = await axios.put("${baseUrl}/api/updateShippingAddress", payload);
     } else {
-      response = await axios.post("/api/storeAddress", payload);
+      response = await axios.post("${baseUrl}/api/storeAddress", payload);
     }
     return response;
   } catch (error) {
@@ -295,9 +266,9 @@ export const upsertBusinessReference = async (
   try {
     let response;
     if (isEdit) {
-      response = await axios.put("/api/updateBusinessReference", payload);
+      response = await axios.put("${baseUrl}/api/updateBusinessReference", payload);
     } else {
-      response = await axios.post("/api/storeBusinessReference", payload);
+      response = await axios.post("${baseUrl}/api/storeBusinessReference", payload);
     }
     return response;
   } catch (error) {
@@ -310,7 +281,7 @@ export const upsertBusinessReference = async (
 export const deleteAddress = async (toDeleteId: any) => {
   try {
     const response = await axios.delete(
-      `/api/deleteShippingAddress?toDeleteId=${toDeleteId}`
+      `${baseUrl}/api/deleteShippingAddress?toDeleteId=${toDeleteId}`
     );
     return response?.data;
   } catch (error) {
@@ -321,7 +292,7 @@ export const deleteAddress = async (toDeleteId: any) => {
 export const deleteReference = async (toDeleteId: any) => {
   try {
     const response = await axios.delete(
-      `/api/deleteBusinessReference?toDeleteId=${toDeleteId}`
+      `${baseUrl}/api/deleteBusinessReference?toDeleteId=${toDeleteId}`
     );
     return response?.data;
   } catch (error) {
@@ -331,9 +302,7 @@ export const deleteReference = async (toDeleteId: any) => {
 
 export const getShippingAddresses = async (userId: any) => {
   try {
-    const response = await axios.get(
-      `/api/getShippingAddress?id=${userId}`
-    );
+    const response = await axios.get(`${baseUrl}/api/getShippingAddress?id=${userId}`);
     return response?.data;
   } catch (error) {
     console.log("Something went wrong while fetching user profile");
@@ -342,7 +311,7 @@ export const getShippingAddresses = async (userId: any) => {
 export const getBusinessVerification = async (userId: any) => {
   try {
     const response = await axios.get(
-      `/api/getBusinessVerification?id=${userId}`
+      `${baseUrl}/api/getBusinessVerification?id=${userId}`
     );
     return response?.data;
   } catch (error) {
@@ -354,9 +323,7 @@ export const getBusinessVerification = async (userId: any) => {
 
 export const getBusinessReferences = async (userId: any) => {
   try {
-    const response = await axios.get(
-      `/api/getBusinessReferences?id=${userId}`
-    );
+    const response = await axios.get(`${baseUrl}/api/getBusinessReferences?id=${userId}`);
     return response?.data;
   } catch (error) {
     console.log("Something went wrong while fetching user profile");
@@ -365,7 +332,7 @@ export const getBusinessReferences = async (userId: any) => {
 
 export const getAllGemstones = async () => {
   try {
-    const response = await axios.get(`/api/getGemStones`);
+    const response = await axios.get(`${baseUrl}/api/getGemStones`);
 
     return response?.data?.products;
   } catch (error) {
@@ -375,9 +342,7 @@ export const getAllGemstones = async () => {
 
 export const getGemstonesList = async () => {
   try {
-    const response = await axios.get(
-      `/api/getAllGemStones`
-    );
+    const response = await axios.get(`${baseUrl}/api/getAllGemStones`);
     return response?.data;
   } catch (error) {
     console.log("Something went wrong while fetching gemstones");
@@ -387,12 +352,12 @@ export const getGemstonesList = async () => {
 export const getCategoryData = async (handle: string) => {
   try {
     const response = await axios.get(
-      `/api/getCategoryData?handle=${handle}`
+      `${baseUrl}/api/getCategoryData?handle=${handle}`
     );
 
     return response?.data;
   } catch (error) {
-    console.log("Something went wrong while fetching category data");
+    console.log("Something went wrong while fetching category data", error);
   }
 };
 
@@ -403,15 +368,12 @@ export const getShapesData = async (
   sapphireColor?: string
 ) => {
   try {
-    const response = await axios.post(
-      `/api/getShapesData`,
-      {
-        shape,
-        collection,
-        isSapphire,
-        sapphireColor,
-      }
-    );
+    const response = await axios.post(`${baseUrl}/api/getShapesData`, {
+      shape,
+      collection,
+      isSapphire,
+      sapphireColor,
+    });
     return response;
   } catch (error) {
     console.log("Something went wrong while fetching category data");
@@ -420,10 +382,7 @@ export const getShapesData = async (
 
 export const handleSignup = async (payload: any) => {
   try {
-    const response = await axios.post(
-      `/api/handleSignup`,
-      payload
-    );
+    const response = await axios.post(`${baseUrl}/api/handleSignup`, payload);
 
     return response.data;
   } catch (error) {
@@ -433,10 +392,7 @@ export const handleSignup = async (payload: any) => {
 
 export const handleSignin = async (payload: any) => {
   try {
-    const response = await axios.post(
-      `/api/handleSignin`,
-      payload
-    );
+    const response = await axios.post(`${baseUrl}/api/handleSignin`, payload);
 
     return response;
   } catch (error) {
@@ -446,10 +402,7 @@ export const handleSignin = async (payload: any) => {
 
 export const getParticularProductsData = async (id: string) => {
   try {
-    const response = await axios.post(
-      `/api/getProduct`,
-      id
-    );
+    const response = await axios.post(`${baseUrl}/api/getProduct`, id);
 
     return response.data[0];
   } catch (error) {
@@ -460,7 +413,7 @@ export const getParticularProductsData = async (id: string) => {
 export const getTolerance = async (collection: string) => {
   try {
     const response = await axios.get(
-      `/api/getTolerance?collection=${collection}`
+      `${baseUrl}/api/getTolerance?collection=${collection}`
     );
 
     return response?.data;
@@ -472,7 +425,7 @@ export const getTolerance = async (collection: string) => {
 export const getGemStoneKnowledge = async (stone: string) => {
   try {
     const response = await axios.get(
-      `/api/getGemStoneKnowledge?stone=${stone}`
+      `${baseUrl}/api/getGemStoneKnowledge?stone=${stone}`
     );
 
     return response?.data;
@@ -483,10 +436,7 @@ export const getGemStoneKnowledge = async (stone: string) => {
 
 export const editProfile = async (payload: any) => {
   try {
-    const response = await axios.post(
-      `/api/editProfile`,
-      payload
-    );
+    const response = await axios.post(`${baseUrl}/api/editProfile`, payload);
 
     return response.data;
   } catch (error) {
@@ -499,7 +449,7 @@ export const handleChangePassword = async (payload: {
   newPassword: string;
 }) => {
   try {
-    const response = await fetch("/api/changePassword", {
+    const response = await fetch("${baseUrl}/api/changePassword", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -512,10 +462,7 @@ export const handleChangePassword = async (payload: {
 
 export const storeShippingAddress = async (payload: any) => {
   try {
-    const response = await axios.post(
-      `/api/storeAddress`,
-      payload
-    );
+    const response = await axios.post(`${baseUrl}/api/storeAddress`, payload);
 
     return response.data;
   } catch (error) {
@@ -525,9 +472,7 @@ export const storeShippingAddress = async (payload: any) => {
 
 export const getAMLInfo = async (userId: string) => {
   try {
-    const response = await axios.get(
-      `/api/getAMLInfo?userId=${userId}`
-    );
+    const response = await axios.get(`${baseUrl}/api/getAMLInfo?userId=${userId}`);
 
     return response.data;
   } catch (error) {
@@ -536,10 +481,7 @@ export const getAMLInfo = async (userId: string) => {
 };
 export const editAMLInfo = async (userId: string, data: any) => {
   try {
-    const response = await axios.post(
-      `/api/upsertAMLInfo`,
-      { userId, data }
-    );
+    const response = await axios.post(`${baseUrl}/api/upsertAMLInfo`, { userId, data });
 
     return response.data;
   } catch (error) {
@@ -549,7 +491,7 @@ export const editAMLInfo = async (userId: string, data: any) => {
 
 export const fetchAllItems = async () => {
   try {
-    const response = await axios.get(`/api/fetchAllItems`);
+    const response = await axios.get(`${baseUrl}/api/fetchAllItems`);
     return response?.data?.data;
   } catch (error) {
     console.log("Something went wrong while storing the AML info");
