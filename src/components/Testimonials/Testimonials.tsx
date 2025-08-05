@@ -21,7 +21,7 @@ const reviews = [
     platform: "/assets/google.png",
     name: "Samantha Jones",
     initials: "SJ",
-    rating: 4,
+    rating: 5,
     review: `I was looking to create a unique sapphire pendant for my anniversary and chose B.V Gems because of their reputation in colored gemstones.
   
   Shrey worked closely with me to find the perfect sapphire, and then introduced me to a designer who helped craft a beautiful and elegant piece. I explained what I had in mind, and they handled everything with precision and care.
@@ -32,7 +32,7 @@ const reviews = [
     platform: "/assets/google.png",
     name: "Michael Lee",
     initials: "ML",
-    rating: 4.5,
+    rating: 5,
     review: `I had a custom ruby ring in mind for my wife and decided to trust B.V Gems after reading their excellent reviews on gemstone craftsmanship.
   
   Shrey was a fantastic guide—he sourced a high-quality ruby and worked with the design team to build a ring that matched my vision. I only gave a few notes and they turned them into something brilliant and unique.

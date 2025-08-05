@@ -39,23 +39,31 @@ export const EmailSubscribeModal = () => {
   const handleSubmit = async () => {
     try {
       const res = await subscribeEmail(email);
-
-      if (res?.flag) {
         localStorage.setItem("hideSubscribePopup", "true");
-        notifications.show({
+
+         notifications.show({
           icon: <IconCheck />,
           color: "teal",
           message: res?.message,
           position: "top-right",
         });
-      } else {
-        notifications.show({
-          icon: <IconX />,
-          color: "red",
-          message: res.error || "An error occurred",
-          position: "top-right",
-        });
-      }
+
+      // if (res?.flag) {
+      //   localStorage.setItem("hideSubscribePopup", "true");
+      //   notifications.show({
+      //     icon: <IconCheck />,
+      //     color: "teal",
+      //     message: res?.message,
+      //     position: "top-right",
+      //   });
+      // } else {
+      //   notifications.show({
+      //     icon: <IconX />,
+      //     color: "red",
+      //     message: res.error || "An error occurred",
+      //     position: "top-right",
+      //   });
+      // }
       close();
     } catch (err) {
       console.error(err);
