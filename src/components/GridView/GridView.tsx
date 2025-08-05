@@ -10,9 +10,10 @@ import { useRouter } from "next/navigation";
 interface GridViewProps {
   gemstones?: any;
   loadingTrigger?: any;
+  color?: any;
 }
 
-export function GridView({ gemstones, loadingTrigger }: GridViewProps) {
+export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
   const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [searchItems, setSearchItems] = useState<any>([]);
@@ -21,7 +22,8 @@ export function GridView({ gemstones, loadingTrigger }: GridViewProps) {
   const router = useRouter();
 
   useEffect(() => {
-    if (gemstones === undefined) {
+    console.log("gem", gemstones,color);
+    if (gemstones === undefined && !color) {
       setLoading(true);
       fetchGemstones();
     } else {
@@ -112,9 +114,9 @@ export function GridView({ gemstones, loadingTrigger }: GridViewProps) {
           clearable
         />
       </div>
-      <Grid gutter="xl" className="px-8 mt-5">
+      <Grid className="px-5 mt-5">
         {displayItems.map((item: any, index: number) => (
-          <Grid.Col key={item?.id || index} span={{ base: 12, sm: 6, md: 4 }}>
+          <Grid.Col key={item?.id || index} span={{ base: 6, sm: 6, md: 4 }}>
             <AnimatedCard item={item} index={index} baseDelay={0.6} />
           </Grid.Col>
         ))}

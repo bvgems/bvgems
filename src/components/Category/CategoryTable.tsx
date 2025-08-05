@@ -2,7 +2,6 @@
 
 import {
   Button,
-  Image,
   Modal,
   Select,
   Table,
@@ -176,6 +175,7 @@ export const CategoryTable = ({
                       onClick={() => goToCartPage(element)}
                       className="cursor-pointer"
                     >
+                      {/* Image cell */}
                       <TableTd>
                         <div className="w-14 h-14 flex items-center justify-center rounded overflow-hidden shadow-sm border border-gray-200">
                           <img
@@ -185,11 +185,59 @@ export const CategoryTable = ({
                           />
                         </div>
                       </TableTd>
-                      <TableTd>{element.type}</TableTd>
-                      <TableTd className="capitalize">
+
+                      {/* Desktop only */}
+                      <TableTd className="hidden md:table-cell">
+                        {element.type}
+                      </TableTd>
+                      <TableTd className="hidden md:table-cell capitalize">
                         {element.collection_slug}
                       </TableTd>
-                      <TableTd>{element.color}</TableTd>
+                      <TableTd className="hidden md:table-cell">
+                        {element.color}
+                      </TableTd>
+                      <TableTd className="hidden md:table-cell">
+                        {element.size.includes("x")
+                          ? element.size
+                              .replace(/x/g, " x ")
+                              .replace(/\s+/g, " ")
+                              .trim()
+                          : parseFloat(element.size).toFixed(2)}
+                      </TableTd>
+                      <TableTd className="hidden md:table-cell">
+                        {element.ct_weight}
+                      </TableTd>
+                      <TableTd className="hidden md:table-cell">
+                        {element.quality}
+                      </TableTd>
+                      <TableTd className="hidden md:table-cell">
+                        {element.cut}
+                      </TableTd>
+                      <TableTd className="hidden md:table-cell">
+                        <Button
+                          leftSection={<IconShoppingCart />}
+                          variant="outline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addProductToCart(element);
+                          }}
+                          color="#0b182d"
+                        >
+                          ADD TO CART
+                        </Button>
+                      </TableTd>
+
+                      {/* Mobile-only inline info */}
+                      <TableTd className="md:hidden">{element.type}</TableTd>
+                      <TableTd className="md:hidden">
+                        {element.size.includes("x")
+                          ? element.size
+                              .replace(/x/g, " x ")
+                              .replace(/\s+/g, " ")
+                              .trim()
+                          : parseFloat(element.size).toFixed(2)}
+                      </TableTd>
+                      <TableTd className="md:hidden">{element.quality}</TableTd>
                       <TableTd className="md:hidden">
                         <Button
                           variant="subtle"
@@ -210,96 +258,38 @@ export const CategoryTable = ({
                           {isExpanded ? "Hide" : "Details"}
                         </Button>
                       </TableTd>
-                      <TableTd className="hidden md:table-cell">
-                        {element.size.includes("x")
-                          ? element.size
-                              .replace(/x/g, " x ")
-                              .replace(/\s+/g, " ")
-                              .trim()
-                          : parseFloat(element.size).toFixed(2)}
-                      </TableTd>
-
-                      <TableTd className="hidden md:table-cell">
-                        {element.ct_weight}
-                      </TableTd>
-                      <TableTd className="hidden md:table-cell">
-                        {element.quality}
-                      </TableTd>
-                      <TableTd className="hidden md:table-cell">
-                        {element.cut}
-                      </TableTd>
-                      <TableTd className="hidden md:table-cell">
-                        {user ? (
-                          <Button
-                            leftSection={<IconShoppingCart />}
-                            variant="outline"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              addProductToCart(element);
-                            }}
-                            color="#0b182d"
-                          >
-                            ADD TO CART
-                          </Button>
-                        ) : (
-                          <Button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              open();
-                            }}
-                            leftSection={<IconUser />}
-                            color="gray"
-                          >
-                            SIGN IN TO ORDER
-                          </Button>
-                        )}
-                      </TableTd>
                     </TableTr>
 
+                    {/* Mobile expanded row */}
                     {isExpanded && (
                       <TableTr className="md:hidden bg-gray-50">
                         <TableTd colSpan={5}>
                           <div className="flex flex-col gap-2 text-sm px-2 py-3">
                             <div>
-                              <strong>Size:</strong>{" "}
-                              {parseFloat(element.size).toFixed(2)}
+                              <strong>Stone:</strong> {element.collection_slug}
+                            </div>
+                            <div>
+                              <strong>Color:</strong> {element.color}
                             </div>
                             <div>
                               <strong>CT Weight:</strong> {element.ct_weight}
                             </div>
                             <div>
-                              <strong>Quality:</strong> {element.quality}
-                            </div>
-                            <div>
                               <strong>Cut:</strong> {element.cut}
                             </div>
                             <div className="mt-2">
-                              {user ? (
-                                <Button
-                                  leftSection={<IconShoppingCart />}
-                                  variant="outline"
-                                  fullWidth
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    addProductToCart(element);
-                                  }}
-                                  color="#0b182d"
-                                >
-                                  ADD TO CART
-                                </Button>
-                              ) : (
-                                <Button
-                                  fullWidth
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    open();
-                                  }}
-                                  leftSection={<IconUser />}
-                                  color="gray"
-                                >
-                                  SIGN IN TO ORDER
-                                </Button>
-                              )}
+                              <Button
+                                leftSection={<IconShoppingCart />}
+                                variant="outline"
+                                fullWidth
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  addProductToCart(element);
+                                }}
+                                color="#0b182d"
+                              >
+                                ADD TO CART
+                              </Button>
                             </div>
                           </div>
                         </TableTd>

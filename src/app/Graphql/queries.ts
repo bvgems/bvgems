@@ -415,7 +415,7 @@ export const GetProductByHandle = `
           }
         }
       }
-      variants(first: 20) {
+      variants(first: 50) {
         edges {
           node {
             price {

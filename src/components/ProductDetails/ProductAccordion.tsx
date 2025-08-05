@@ -49,7 +49,7 @@ export const ProductAccordion = () => {
             <IconCreditCardPay size={20} color="var(--mantine-color-blue-6)" />
           }
         >
-          <Text fw={510}>Payment Accepted</Text>
+          <Text fw={510}>Payments Accepted</Text>
         </AccordionControl>
         <AccordionPanel>
           <div className="pl-6">

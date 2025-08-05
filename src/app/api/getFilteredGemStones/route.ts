@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const options = body.options;
     const cleanedOptions = getCleanedOptions(options);
-
+    console.log("cleannn", cleanedOptions);
     const whereClauses: string[] = [];
     const values: any[] = [];
     let paramIndex = 1;

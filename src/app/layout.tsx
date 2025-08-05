@@ -7,6 +7,7 @@ import "./globals.css";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { ClientOnlyLayout } from "@/components/Layout/ClientOnlyLayout";
+import { EmailSubscribeModal } from "@/components/CommonComponents/EmailSubscribeModal";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -36,7 +37,10 @@ export default function RootLayout({
       <body className={`${montserrat.className} ${alice.className}`}>
         <MantineProvider>
           <Notifications />
-          <ClientOnlyLayout>{children}</ClientOnlyLayout>
+          <ClientOnlyLayout>
+            <EmailSubscribeModal />
+            {children}
+          </ClientOnlyLayout>
         </MantineProvider>
       </body>
     </html>

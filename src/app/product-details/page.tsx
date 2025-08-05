@@ -21,7 +21,6 @@ import {
 import { ProductSpecifications } from "@/components/ProductDetails/ProductSpecifications";
 import {
   IconCheck,
-  IconHeart,
   IconInfoCircle,
   IconMinus,
   IconPlus,
@@ -48,7 +47,7 @@ export default function ProductDetailsPage() {
   const handlersRef = useRef<NumberInputHandlers>(null);
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
-  const [modalOpened, { open, close }] = useDisclosure(false);
+
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
   const router = useRouter();
@@ -58,6 +57,7 @@ export default function ProductDetailsPage() {
 
   const getProduct = async (id: string) => {
     const productDetails = await getParticularProductsData(id);
+    console.log("pro", productDetails);
 
     setProduct(productDetails);
     setPrice(productDetails?.price);
@@ -135,9 +135,9 @@ export default function ProductDetailsPage() {
                     onClick={openTable}
                     variant="outline"
                     size="compact-xs"
-                    color="violet"
+                    color="#0b182d"
                   >
-                    <span>Size Tolerance Guide</span>
+                    <span>SIZE TOLERANCE GUIDE</span>
                   </Button>
                 </div>
               </div>
@@ -162,7 +162,6 @@ export default function ProductDetailsPage() {
                     product?.shape +
                     " " +
                     product?.size +
-                    "mm" +
                     " " +
                     product?.ct_weight +
                     "cts. " +
@@ -179,9 +178,34 @@ export default function ProductDetailsPage() {
                     Available
                   </Badge>
                 </div>
-                <div className="text-2xl font-semibold">
-                  $ {(Number(price) || 0).toFixed(2)}
-                </div>
+
+                {product?.type === "Lab Grown" ||
+                product?.quality === "Lab Grown" ? (
+                  <div className="text-2xl font-semibold">
+                    $ {(Number(price) || 0).toFixed(2)}
+                  </div>
+                ) : (
+                  <div className="mt-8 mb-5">
+                    <a
+                      href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
+                        `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${product?.ct_weight}cts., ${product?.quality} Quality`
+                      )}&body=${encodeURIComponent(
+                        `Hello,\n\nI would like to request the price for the following gemstone:\n\nCollection: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${product?.ct_weight} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button
+                        color="#0b182d"
+                        fullWidth
+                        variant="outline"
+                        size="compact-sm"
+                      >
+                        REQUEST FOR PRICING
+                      </Button>
+                    </a>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center justify-between gap-2">
@@ -212,7 +236,7 @@ export default function ProductDetailsPage() {
               <Alert
                 variant="light"
                 color="#0b182d"
-                title="HAVING A QUESTION?"
+                title="HAVE A QUESTION?"
                 icon={<IconInfoCircle />}
               >
                 <div className="flex flex-col gap-3">
@@ -236,55 +260,15 @@ export default function ProductDetailsPage() {
                 </div>
               </Alert>
 
-              <Textarea
-                placeholder="Write your instructions here"
-                label={
-                  <div className="flex items-center gap-1 mb-1">
-                    <div>Special Instructions</div>
-                    <Tooltip
-                      multiline
-                      w={220}
-                      withArrow
-                      transitionProps={{ duration: 200 }}
-                      label="Use this box to share any special instructions for your order, like stone sizes or if you want the stones to match with others in your order."
-                    >
-                      <span className="cursor-pointer">
-                        <IconInfoCircle size={16} />
-                      </span>
-                    </Tooltip>
-                  </div>
-                }
-                autosize
-                minRows={2}
-              />
-
               <ProductAccordion />
 
-              {user ? (
-                <Button color="#0b182d" onClick={addProductToCart} fullWidth>
-                  ADD TO CART
-                </Button>
-              ) : (
-                <Button
-                  color="#0b182d"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    open();
-                  }}
-                  fullWidth
-                >
-                  SIGN IN TO ORDER
-                </Button>
-              )}
-
               <Button
-                leftSection={<IconHeart />}
-                className="mt-3"
-                color="#99a1af"
-                variant="outline"
+                mb={"xl"}
+                color="#0b182d"
+                onClick={addProductToCart}
                 fullWidth
               >
-                Add To Favorites
+                ADD TO CART
               </Button>
             </div>
           </div>

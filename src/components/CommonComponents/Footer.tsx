@@ -1,11 +1,16 @@
 "use client";
 
-import { IconBrandInstagramFilled } from "@tabler/icons-react";
-import { ActionIcon, Grid, GridCol, Image, Text } from "@mantine/core";
+import {
+  IconAt,
+  IconBrandInstagramFilled,
+  IconMail,
+} from "@tabler/icons-react";
+import { ActionIcon, Grid, GridCol, Image, Input, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { getAllGemstones } from "@/apis/api";
 import { useRouter } from "next/navigation";
 import { quickNavigationData } from "@/utils/constants";
+import Link from "next/link";
 
 export const Footer = () => {
   const router = useRouter();
@@ -120,8 +125,17 @@ export const Footer = () => {
           <div className="flex flex-col gap-6 text-center">
             <h1 className="text-xl">Industry Affiliations</h1>
             <div className="flex items-center gap-4 px-8">
-              <Image h={120} w={120} src={"/assets/jbt-logo.png"} />
-              <Image fit="fill" h={100} w={120} src={"/assets/agta-logo.png"} />
+              <Link target="_blank" href="https://www.jewelersboard.com/">
+                <Image h={120} w={120} src={"/assets/jbt-logo.png"} />
+              </Link>
+              <Link target="_blank" href="https://agta.org/">
+                <Image
+                  fit="fill"
+                  h={100}
+                  w={120}
+                  src={"/assets/agta-logo.png"}
+                />
+              </Link>
             </div>
           </div>
         </GridCol>

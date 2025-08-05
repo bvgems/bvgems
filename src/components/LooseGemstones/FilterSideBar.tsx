@@ -41,7 +41,6 @@ export const FilterSideBar = ({
   setPriceRange,
   selectedRoundSizes,
   setSelectedRoundSizes,
-
   color,
 }: any) => {
   const handleStoneChange = (stoneLabel: string, checked: boolean) => {

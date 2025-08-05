@@ -21,7 +21,7 @@ export const AnimatedCard = ({
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const router = useRouter();
   const getProductName = (item: any) => {
-    return `${item?.ct_weight} cttw. ${item?.color} ${item?.shape} ${item?.collection_slug}, ${item?.quality} Quality - ${item?.size}mm`;
+    return `${item?.ct_weight} cttw. ${item?.color} ${item?.shape} ${item?.collection_slug}, ${item?.quality} Quality - ${item?.size}`;
   };
 
   useEffect(() => {
@@ -46,25 +46,23 @@ export const AnimatedCard = ({
       transition={{ duration: 0.4, ease: "easeInOut" }}
     >
       <Card
-        className="flex flex-col justify-start bg-white cursor-pointer h-[350px]"
+        className="flex flex-col justify-start bg-white cursor-pointer h-[400px] lg:h-[350px]"
         padding="lg"
         withBorder
         shadow="md"
         onClick={redirectToStonePage}
       >
-        <CardSection
-          h={250}
-          component="a"
-          className="overflow-hidden border border-black"
-        >
-          <motion.img
-            src={item?.image_url}
-            alt={item?.title}
-            className="w-full h-full"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          />
+        <CardSection h={250} withBorder component="a">
+          <div className="mt-5 flex items-center justify-center">
+            <motion.img
+              src={item?.image_url}
+              alt={item?.title}
+              className="object-contain h-[200px] flex justify-center items-center"
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+          </div>
         </CardSection>
 
         <h1 className="text-gray-700 text-[1rem] mt-3">

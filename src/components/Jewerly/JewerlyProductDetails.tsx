@@ -20,7 +20,7 @@ import {
   IconHeart,
   IconTruckDelivery,
 } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthForm } from "../Auth/AuthForm";
 import { addProductToCart } from "@/utils/commonFunctions";
 
@@ -48,17 +48,34 @@ export const JewelryProductDetails = ({
   const isBracelets = category === "bracelets";
   const isBead = category === "beads";
 
-  const ringSizes = Array.from({ length: 15 }, (_, i) =>
-    (4 + i * 0.5).toFixed(2)
-  );
+  const ringSizes = () => {
+    if (!twoStoneRings && !showShapeOptions) {
+      if (!productData?.variants?.edges?.length || !selectedGoldColor)
+        return [];
 
-  const [selectedRingSize, setSelectedRingSize] = useState<string | null>(
-    ringSizes[0]
-  );
+      const sizeSet = new Set<string>();
+
+      productData.variants.edges.forEach(({ node }: any) => {
+        const [gold, size] = node.title.split(" / ");
+        if (gold.trim() === selectedGoldColor.trim()) {
+          sizeSet.add(`${size.trim()}`);
+        }
+      });
+
+      return Array.from(sizeSet);
+    } else {
+      const ringSizes = Array.from({ length: 15 }, (_, i) =>
+        (4 + i * 0.5).toFixed(2)
+      );
+      return ringSizes;
+    }
+  };
+
+  const [selectedRingSize, setSelectedRingSize] = useState<any>();
   const [selectedNecklaceStoneSize, setSelectedNecklacesStoneSize] =
-    useState<any>("2.00 MM");
+    useState<any>("2.0 MM");
   const [selectedBeadStoneSize, setSelectedBeadStoneSize] =
-    useState<any>("2.00");
+    useState<any>("2.0 MM");
 
   const [selectedNecklaceLength, setSelectedNecklaceLength] =
     useState<any>("16 INCH");
@@ -134,9 +151,61 @@ export const JewelryProductDetails = ({
     });
   };
 
+  useEffect(() => {
+    if (!isNecklaces || !productData?.variants?.edges?.length) return;
+    const firstVariant = productData.variants.edges[0]?.node;
+    const parts = firstVariant?.title?.split(" / ");
+
+    if (parts?.length === 3) {
+      const [gold, stoneSize, length] = parts;
+      if (!selectedGoldColor) setSelectedGoldColor(gold?.trim());
+      if (!selectedNecklaceStoneSize)
+        setSelectedNecklacesStoneSize(stoneSize?.trim());
+      if (!selectedNecklaceLength) setSelectedNecklaceLength(length?.trim());
+    }
+  }, [productData, isNecklaces]);
+
+  useEffect(() => {
+    if (
+      !isRingCategory ||
+      isTwoStoneRing ||
+      !productData?.variants?.edges?.length
+    )
+      return;
+
+    const firstVariant = productData.variants.edges[0]?.node;
+    const parts = firstVariant?.title?.split(" / ");
+    if (parts?.length === 2) {
+      const [gold, size] = parts;
+      if (!selectedGoldColor) setSelectedGoldColor(gold?.trim());
+      if (!selectedRingSize) setSelectedRingSize(size?.trim());
+    }
+  }, [productData, isRingCategory, isTwoStoneRing]);
+
   const getData = () => {
-    const sizeArray = ["2.00", "2.50", "3.00", "3.50", "4.00", "4.50", "5.00"];
-    return sizeArray;
+    if (isBead) {
+      return (
+        productData?.variants?.edges?.map((item: any) => item?.node?.title) ||
+        []
+      );
+    } else if (isNecklaces) {
+      const sizeSet = new Set<string>();
+      productData?.variants?.edges?.forEach(({ node }: any) => {
+        const parts = node?.title?.split(" / ");
+        if (parts?.length === 3) sizeSet.add(parts[1].trim());
+      });
+      return Array.from(sizeSet);
+    }
+    return [];
+  };
+
+  const getLengthData = () => {
+    const lengthSet = new Set<string>();
+    productData?.variants?.edges?.forEach(({ node }: any) => {
+      const parts = node?.title?.split(" / ");
+      if (parts?.length === 3) lengthSet.add(parts[2].trim());
+    });
+    return Array.from(lengthSet);
   };
 
   const isDisabled = () => {
@@ -173,6 +242,12 @@ export const JewelryProductDetails = ({
     return false;
   };
 
+  const setStones = (val: any) => {
+    const splitedStones = val?.split("/");
+    setFirstStone(splitedStones[0]);
+    setSecondStone(splitedStones[1]);
+  };
+
   return (
     <>
       <Modal
@@ -200,12 +275,84 @@ export const JewelryProductDetails = ({
         <div className="text-[1.3rem] sm:text-[1.9rem] text-gray-700 font-bold">
           <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
             <span className="font-sans">
-              $
-              {Number(
-                productData?.variants?.edges?.[0]?.node?.price?.amount || 0
-              ).toFixed(2)}{" "}
-              {productData?.variants?.edges?.[0]?.node?.price?.currencyCode ||
-                "USD"}
+              {(() => {
+                const getPrice = (title: string) => {
+                  const variant = productData?.variants?.edges?.find(
+                    (v: any) => v?.node?.title === title
+                  );
+                  return variant?.node?.price?.amount;
+                };
+
+                if (isBead) {
+                  const price = getPrice(selectedBeadStoneSize);
+                  return price
+                    ? `$${Number(price).toFixed(2)} USD`
+                    : "Select Size";
+                }
+
+                if (isNecklaces) {
+                  const title = `${selectedGoldColor} / ${selectedNecklaceStoneSize} / ${selectedNecklaceLength}`;
+                  const price = getPrice(title);
+                  if (price) return `$${Number(price).toFixed(2)} USD`;
+
+                  const fallback =
+                    productData?.variants?.edges?.[0]?.node?.price?.amount;
+                  return fallback
+                    ? `$${Number(fallback).toFixed(2)} USD`
+                    : "Unavailable";
+                }
+
+                if (isRingCategory) {
+                  if (!isTwoStoneRing && !showShapeOptions) {
+                    if (!selectedGoldColor || !selectedRingSize)
+                      return "Select options";
+                    const title = `${selectedGoldColor} / ${selectedRingSize.replace(
+                      " mm",
+                      ""
+                    )}`;
+                    const price = getPrice(title);
+                    return price
+                      ? `$${Number(price).toFixed(2)} USD`
+                      : "Unavailable";
+                  } else if (!isTwoStoneRing && showShapeOptions) {
+                    return productData?.variants?.edges?.map((item: any) => {
+                      if (item?.node?.title === selectedShape) {
+                        return `$${Number(item?.node?.price?.amount).toFixed(
+                          2
+                        )} USD`;
+                      }
+                    });
+                  } else if (isTwoStoneRing) {
+                    const price = productData?.variants?.edges?.map(
+                      (item: any) => {
+                        if (
+                          item?.node?.title === `${firstStone}/${secondStone}`
+                        ) {
+                          return `$${Number(item?.node?.price?.amount).toFixed(
+                            2
+                          )} USD`;
+                        }
+                      }
+                    );
+                    console.log("priiii", price);
+                    if (price === undefined) {
+                      return "Select Options";
+                    } else {
+                      return price;
+                    }
+                  }
+
+                  const title = `${selectedGoldColor} / ${selectedRingSize}`;
+                  const price = getPrice(title);
+                  return price
+                    ? `$${Number(price).toFixed(2)} USD`
+                    : "Unavailable";
+                }
+
+                const price =
+                  productData?.variants?.edges?.[0]?.node?.price?.amount;
+                return `$${Number(price || 0).toFixed(2)} USD`;
+              })()}
             </span>
           </div>
         </div>
@@ -227,7 +374,7 @@ export const JewelryProductDetails = ({
         )}
 
         <p className="text-lg mt-2 pb-1.5">{productData?.description}</p>
-        {isBead}
+
         {isRingCategory ? (
           <JeweleryDetailsAccordion productData={productData} />
         ) : null}
@@ -310,7 +457,7 @@ export const JewelryProductDetails = ({
                   leftSection={<IconDiamond size={20} />}
                   label={`Select Stone Size`}
                   placeholder={`${"Stone Size"}`}
-                  data={["2.00 MM", "3.00 MM", "4.00 MM"]}
+                  data={getData()}
                   value={selectedNecklaceStoneSize}
                   onChange={setSelectedNecklacesStoneSize}
                   styles={{
@@ -325,7 +472,7 @@ export const JewelryProductDetails = ({
                   leftSection={<IconDiamond size={20} />}
                   label={`Select Length`}
                   placeholder={`${"Length of Necklace"}`}
-                  data={["16 INCH", "18 INCH", "20 INCH", "22 INCH"]}
+                  data={getLengthData()}
                   value={selectedNecklaceLength}
                   onChange={setSelectedNecklaceLength}
                   styles={{
@@ -346,7 +493,7 @@ export const JewelryProductDetails = ({
                 leftSection={<IconDiamond size={20} />}
                 label="Select Stone Size"
                 placeholder="Stone Size"
-                data={getData()} // string[]
+                data={getData()}
                 value={selectedBeadStoneSize}
                 onChange={setSelectedBeadStoneSize}
                 styles={{
@@ -362,6 +509,7 @@ export const JewelryProductDetails = ({
                 leftSection={<IconDiamond size={20} />}
                 label="Select Gold Color"
                 placeholder="Gold Color"
+                clearable
                 data={GoldColorData.map((item) => item.value)}
                 value={selectedGoldColor}
                 onChange={setSelectedGoldColor}
@@ -408,12 +556,13 @@ export const JewelryProductDetails = ({
 
         {isRingCategory ? (
           <div>
-            <Select
+            <Autocomplete
               className="flex-1"
+              clearable
               leftSection={<IconDiamond size={20} />}
               label="Select Ring Size (mm)"
               placeholder="Ring size"
-              data={ringSizes}
+              data={ringSizes()}
               value={selectedRingSize}
               onChange={setSelectedRingSize}
               styles={{
@@ -429,33 +578,16 @@ export const JewelryProductDetails = ({
         {productData?.showshapeoptions?.value === "true" ? (
           twoStoneRings ? (
             <div className="flex flex-col gap-3">
-              <Select
+              <Autocomplete
+                clearable
                 className="flex-1"
                 leftSection={<IconDiamond size={20} />}
-                label={`Select Stone For ${productData?.firstShape?.value} shape`}
-                placeholder="Select stone"
+                label={`Select Stones For ${productData?.firstShape?.value} / ${productData?.secondShape?.value} shape`}
+                placeholder={`${productData?.firstShape?.value} / ${productData?.secondShape?.value}`}
                 data={productData?.variants?.edges?.map(
                   (v: any) => v?.node?.title
                 )}
-                value={firstStone}
-                onChange={(val: any) => setFirstStone(val)}
-                styles={{
-                  input: {
-                    padding: "22px 35px",
-                    backgroundColor: "#dbdddf",
-                  },
-                }}
-              />
-              <Select
-                className="flex-1"
-                leftSection={<IconDiamond size={20} />}
-                label={`Select Stone For ${productData?.secondShape?.value} shape`}
-                placeholder="Select stone"
-                data={productData?.variants?.edges?.map(
-                  (v: any) => v?.node?.title
-                )}
-                value={secondStone}
-                onChange={(val: any) => setSecondStone(val)}
+                onChange={(val: any) => setStones(val)}
                 styles={{
                   input: {
                     padding: "22px 35px",
@@ -511,16 +643,6 @@ export const JewelryProductDetails = ({
               SIGN IN TO ORDER
             </Button>
           )} */}
-
-          <Button
-            leftSection={<IconHeart />}
-            className="mt-3"
-            color="#0b182d"
-            variant="outline"
-            fullWidth
-          >
-            ADD TO FAVORITES
-          </Button>
         </div>
 
         <div className="flex items-center justify-end text-gray-500">

@@ -4,7 +4,7 @@ import {
   IconBasketDollar,
   IconHeartHandshake,
   IconTruckDelivery,
-  IconTruckReturn,  
+  IconTruckReturn,
 } from "@tabler/icons-react";
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
@@ -55,9 +55,9 @@ export const CustomerBenefits = () => {
       icon: <IconTruckReturn size={50} color="#926f34" />,
     },
     {
-      title: "",
+      title: "24/7 Support & Secure Checkout",
       description:
-        "",
+        "Get instant help over WhatsApp, iMessage, or email. All transactions are 100% secure via PayPal, credit, or debit card.",
       icon: <IconBasketDollar size={50} color="#926f34" />,
     },
   ];

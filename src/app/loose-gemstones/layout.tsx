@@ -19,11 +19,14 @@ import { IconFilter } from "@tabler/icons-react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
-  const color = searchParams.get("color");
+  const colorParam = searchParams.get("color");
+  const color = colorParam
+    ? colorParam.charAt(0).toUpperCase() + colorParam.slice(1).toLowerCase()
+    : null;
 
   const [selectedStones, setSelectedStones] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>(
-    color ? [color.toLowerCase()] : []
+    color ? [color] : []
   );
   const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
   const [selectedRoundSizes, setSelectedRoundSizes] = useState<string[]>([]);
@@ -54,7 +57,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    if (!filtersChanged) return;
+    console.log("selected color change", color, filtersChanged);
+    if (!filtersChanged) {
+      if (color) {
+        fetchFilteredData();
+        return;
+      } else {
+        return;
+      }
+    }
     fetchFilteredData();
   }, [
     selectedStones,
@@ -128,7 +139,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <GridView
             gemstones={filteredGemstones}
             loadingTrigger={filterTrigger}
+            color={color}
           />
+          {/* {filteredGemstones !== undefined ? (
+            <GridView
+              gemstones={filteredGemstones}
+              loadingTrigger={filterTrigger}
+            />
+          ) : (
+            <div className="px-5 py-10 text-center text-gray-500">
+              Loading gemstones...
+            </div>
+          )} */}
         </GridCol>
       </Grid>
 

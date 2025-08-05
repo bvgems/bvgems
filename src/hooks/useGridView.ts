@@ -21,7 +21,6 @@ export const useGridView = () => {
     const fetchJewelryData = async () => {
       if (category) {
         const response = await getJewelryData(category);
-        console.log("resss", response);
         const products: any = response?.products?.edges || [];
         setRawProducts(products);
         setAllProducts(
