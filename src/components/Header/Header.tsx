@@ -384,7 +384,7 @@ export function Header() {
                 </div>
 
                 <div
-                  className={`flex items-center ${user ? "gap-1" : "gap-4"}`}
+                  className={`flex items-center gap-4`}
                 >
                   <IconSearch
                     className="hover:cursor-pointer"

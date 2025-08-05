@@ -21,7 +21,8 @@ export const AnimatedCard = ({
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const router = useRouter();
   const getProductName = (item: any) => {
-    return `${item?.ct_weight} cttw. ${item?.color} ${item?.shape} ${item?.collection_slug}, ${item?.quality} Quality - ${item?.size}`;
+    const ctWeightPart = item?.ct_weight ? `${item.ct_weight} cttw. ` : "";
+    return `${ctWeightPart}${item?.color} ${item?.shape} ${item?.collection_slug}, ${item?.quality} Quality - ${item?.size}`;
   };
 
   useEffect(() => {
