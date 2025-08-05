@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     const emailHtml = buildContactUsEmail(values);
 
     await sendEmail(
-      "fenilkadhiwala42@gmail.com",
+      "bvgemsinc@gmail.com",
       "New Inquiry Received",
       emailHtml
     );

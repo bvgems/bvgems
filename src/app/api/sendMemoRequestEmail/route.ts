@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     );
 
     await sendEmail(
-      "fenilkadhiwala42@gmail.com",
+      "bvgemsinc@gmail.com",
       "New Memo Purchase Request Received",
       emailHtml
     );

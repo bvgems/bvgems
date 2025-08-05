@@ -118,7 +118,11 @@ export const BusinessReferenceForm = ({
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <div className={`flex flex-col gap-4 ${isStepper ? "px-28" : "px-2.5"}`}>
+      <div
+        className={`flex flex-col gap-4 ${
+          isStepper ? "px-5 sm:px-8 lg:px-28" : "px-2.5"
+        }`}
+      >
         {isStepper && (
           <div className="flex justify-end mt-5">
             <Button

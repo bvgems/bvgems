@@ -140,7 +140,7 @@ export const DrawerComponent = ({
           </div>
         )}
 
-        {isSmaller && (
+        {isMobile || isSmaller ? (
           <div className="mt-5">
             {!user ? (
               <Button
@@ -157,7 +157,7 @@ export const DrawerComponent = ({
               </Button>
             ) : null}
           </div>
-        )}
+        ) : null}
       </Drawer>
     </>
   );

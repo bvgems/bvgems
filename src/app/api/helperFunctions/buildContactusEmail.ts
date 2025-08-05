@@ -8,7 +8,7 @@ export function buildContactUsEmail(formData: {
   return `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://yourwebsite.com/logo.png" alt="BV Gems Logo" style="max-height: 60px;" />
+          <img src="https://res.cloudinary.com/dabdvgxd4/image/upload/v1754420615/logo2_qhix5o.png" alt="BV Gems Logo" style="max-height: 60px;" />
           <h2 style="color: #6a0dad; margin-top: 10px;">New Inquiry Submitted</h2>
         </div>
   

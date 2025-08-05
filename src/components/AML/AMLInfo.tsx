@@ -245,7 +245,7 @@ export const AMLInfo = ({ isStepper }: any) => {
   return (
     <Container mt={"xl"} size="xl">
       <form
-        className={`${isStepper ? "px-28" : ""}`}
+        className={`${isStepper ? "px-5 sm:px-8 lg:px-28" : ""}`}
         onSubmit={form.onSubmit(handleSubmit)}
       >
         {!isStepper ? (

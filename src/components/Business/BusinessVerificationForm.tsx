@@ -124,13 +124,13 @@ export const BusinessVerificationForm = ({
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <div
           className={`flex flex-col gap-4 ${
-            isStepper ? "mt-10 px-28" : "px-3"
+            isStepper ? "mt-10 px-5 sm:px-8 lg:px-28" : "px-3"
           }`}
         >
           <div className="flex gap-3">
             <TextInput
               disabled
-              label="Enter Your Company Name"
+              label="Company Name"
               placeholder="your company name"
               className="w-full"
               {...form.getInputProps("companyName")}
