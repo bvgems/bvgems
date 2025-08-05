@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       expiresIn: "3d",
     });
 
-    const approvalLink = `http://localhost:3000/api/approveAccount?token=${token}`;
+    const approvalLink = `https://bvgems.com/api/approveAccount?token=${token}`;
     const emailHtml = buildApplicationEmail(
       stepperUser,
       businessVerification,

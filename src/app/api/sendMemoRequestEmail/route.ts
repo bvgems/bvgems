@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       expiresIn: "3d",
     });
 
-    const approvalLink = `http://localhost:3000/api/memoApproval?token=${token}`;
+    const approvalLink = `https://bvgems.com/api/memoApproval?token=${token}`;
     const emailHtml = buildMemoApprovalEmail(
       user,
       references,

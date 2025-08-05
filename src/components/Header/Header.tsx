@@ -336,7 +336,8 @@ export function Header() {
 
       <header className="sticky top-0 z-50 h-[85px] border-b border-gray-300 bg-white">
         <nav className="mt-4">
-          {isMobile ? (
+          {isMobile ? 
+          (
             searchOpen ? (
               <div className="flex items-center gap-2">
                 <Autocomplete
@@ -390,7 +391,7 @@ export function Header() {
                     size="22"
                     onClick={handleSearchClick}
                   />
-                  {!user ? (
+                  {/* {!user ? (
                     <IconUserFilled
                       className="hover:cursor-pointer"
                       size="22"
@@ -398,9 +399,21 @@ export function Header() {
                     />
                   ) : !isSmaller ? (
                     <UserProfile isSmaller={isSmaller} user={user} />
-                  ) : null}
+                  ) : null} */}
+                  <div className="relative">
+                    <IconShoppingBag
+                      onClick={() => router.push("/cart")}
+                      className="hover:cursor-pointer"
+                      size="22"
+                    />
+                    <div className="absolute -top-2 -right-2">
+                      <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
+                        {cartCount}
+                      </span>
+                    </div>
+                  </div>
 
-                  {!isSmaller ? (
+                  {/* {!isSmaller ? (
                     <div className="relative">
                       <IconShoppingBag
                         onClick={() => router.push("/cart")}
@@ -413,7 +426,7 @@ export function Header() {
                         </span>
                       </div>
                     </div>
-                  ) : null}
+                  ) : null} */}
                 </div>
               </div>
             )
