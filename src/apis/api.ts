@@ -392,7 +392,7 @@ export const getGemstonesList = async () => {
 export const getCategoryData = async (handle: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/getCategoryData?handle=${handle}`
+      `${baseUrl}/api/getCategoryData?handle=${handle}`
     );
 
     return response?.data;
