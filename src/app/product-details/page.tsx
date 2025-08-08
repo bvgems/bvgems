@@ -173,7 +173,7 @@ export default function ProductDetailsPage() {
               {product?.type === "Lab Grown" ||
               product?.quality === "Lab Grown" ? (
                 <div className="text-2xl font-semibold">
-                  ${(price || 0).toFixed(2)}
+                  ${(parseFloat(price?.toString() || "0") || 0).toFixed(2)}
                 </div>
               ) : (
                 <div className="text-md font-medium flex flex-col gap-2">

@@ -96,6 +96,9 @@ export const CategoryTable = ({
 
   const getPerCaratPrice = (element: any) => {
     if (!element?.ct_weight || !element?.price) return 0;
+    if (element?.type === "Lab Grown" || element?.quality === "Lab Grown") {
+      return 50;
+    }
     return (element?.price / element?.ct_weight).toFixed(2);
   };
 
@@ -223,7 +226,10 @@ export const CategoryTable = ({
                         {element.cut}
                       </TableTd>
                       <TableTd className="hidden md:table-cell">
-                        {element?.price ? (
+                        {element?.quality === "Lab Grown" ||
+                        element?.type === "Lab Grown" ? (
+                          <span className="font-bold text-lg">-</span>
+                        ) : element?.price ? (
                           <span className="font-bold text-lg">
                             $ {element.price}
                           </span>
@@ -231,6 +237,7 @@ export const CategoryTable = ({
                           <span className="underline">Request Pricing</span>
                         )}
                       </TableTd>
+
                       <TableTd className="hidden md:table-cell">
                         {getPerCaratPrice(element) !== 0 ? (
                           <span className="font-bold text-lg">
@@ -307,7 +314,11 @@ export const CategoryTable = ({
                             <div>
                               <strong>Per Stone Price: </strong>{" "}
                               <span className="font-bold text-lg">
-                                $ {element.price}
+                                ${" "}
+                                {element?.quality === "Lab Grown" ||
+                                element?.type === "Lab Grown"
+                                  ? "-"
+                                  : element.price}
                               </span>
                             </div>
                             <div>
