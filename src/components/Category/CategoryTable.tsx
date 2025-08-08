@@ -234,7 +234,18 @@ export const CategoryTable = ({
                             $ {element.price}
                           </span>
                         ) : (
-                          <span className="underline">Request Pricing</span>
+                          <a
+                            href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
+                              `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
+                            )}&body=${encodeURIComponent(
+                              `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                            )}`}
+                            className="underline text-blue-600"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Request Pricing
+                          </a>
                         )}
                       </TableTd>
 
@@ -244,7 +255,18 @@ export const CategoryTable = ({
                             $ {getPerCaratPrice(element)}
                           </span>
                         ) : (
-                          <span className="underline">Request Pricing</span>
+                          <a
+                            href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
+                              `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
+                            )}&body=${encodeURIComponent(
+                              `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                            )}`}
+                            className="underline text-blue-600"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Request Pricing
+                          </a>
                         )}
                       </TableTd>
                       <TableTd className="hidden md:table-cell">
@@ -314,11 +336,27 @@ export const CategoryTable = ({
                             <div>
                               <strong>Per Stone Price: </strong>{" "}
                               <span className="font-bold text-lg">
-                                ${" "}
                                 {element?.quality === "Lab Grown" ||
-                                element?.type === "Lab Grown"
-                                  ? "-"
-                                  : element.price}
+                                element?.type === "Lab Grown" ? (
+                                  <span className="font-bold text-lg">-</span>
+                                ) : element?.price ? (
+                                  <span className="font-bold text-lg">
+                                    $ {element.price}
+                                  </span>
+                                ) : (
+                                  <a
+                                    href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
+                                      `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
+                                    )}&body=${encodeURIComponent(
+                                      `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                                    )}`}
+                                    className="underline text-blue-600"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    Request Pricing
+                                  </a>
+                                )}
                               </span>
                             </div>
                             <div>
