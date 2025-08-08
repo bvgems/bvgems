@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     const result = await pool.query(query);
 
     const formattedData = result.rows.map((item) => {
-      const formattedValue = `${item?.ct_weight} cttw. ${item?.color} ${item?.shape} ${item?.collection_slug} ${item?.size}mm - ${item?.id}`;
+      const formattedValue = `${item?.shape} ${item?.collection_slug} ${item?.size} - ${item?.id}`;
 
       return {
         ...item,

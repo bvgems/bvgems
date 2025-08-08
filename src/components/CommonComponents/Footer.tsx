@@ -1,31 +1,82 @@
 "use client";
 
-import { IconBrandInstagramFilled } from "@tabler/icons-react";
-import { ActionIcon, Grid, GridCol, Image, Text } from "@mantine/core";
+import {
+  IconArrowRight,
+  IconBrandInstagramFilled,
+  IconCheck,
+  IconMail,
+} from "@tabler/icons-react";
+import {
+  ActionIcon,
+  Button,
+  Grid,
+  GridCol,
+  Image,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
-import { getAllGemstones } from "@/apis/api";
+import { getAllGemstones, subscribeEmail } from "@/apis/api";
 import { useRouter } from "next/navigation";
 import { quickNavigationData } from "@/utils/constants";
 import Link from "next/link";
+import { notifications } from "@mantine/notifications";
 
 export const Footer = () => {
   const router = useRouter();
   const [allGemstones, setAllGemstoenes] = useState([]);
   const [year, setYear] = useState<number | null>(null);
-
+  const [email, setEmail] = useState("");
   useEffect(() => {
     setYear(new Date().getFullYear());
   }, []);
+  const handleSubmit = async () => {
+    try {
+      const res = await subscribeEmail(email);
+      console.log('resss',res)
+      localStorage.setItem("hideSubscribePopup", "true");
 
+      notifications.show({
+        icon: <IconCheck />,
+        color: "teal",
+        message: res?.message,
+        position: "top-right",
+      });
+
+      // if (res?.flag) {
+      //   localStorage.setItem("hideSubscribePopup", "true");
+      //   notifications.show({
+      //     icon: <IconCheck />,
+      //     color: "teal",
+      //     message: res?.message,
+      //     position: "top-right",
+      //   });
+      // } else {
+      //   notifications.show({
+      //     icon: <IconX />,
+      //     color: "red",
+      //     message: res.error || "An error occurred",
+      //     position: "top-right",
+      //   });
+      // }
+      close();
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred. Please try again later.");
+    }
+  };
   useEffect(() => {
     const fetchAllGemstones = async () => {
       const response = await getAllGemstones();
-      const formattedGemstones = response?.map((item: any) => ({
-        label: item?.title,
-        link: item?.handle,
-      }));
+      const formattedGemstones = response
+        ?.map((item: any) => ({
+          label: item?.title,
+          link: item?.handle,
+        }))
+        .sort((a: any, b: any) => a.label.localeCompare(b.label));
       setAllGemstoenes(formattedGemstones);
     };
+
     fetchAllGemstones();
   }, []);
 
@@ -81,32 +132,47 @@ export const Footer = () => {
 
   return (
     <footer className="pt-12 px-4 pb-6 bg-[#F9F5F0] text-black">
-      <Grid gutter="xl" className="max-w-screen-xl mx-auto">
-        {/* Logo + Tagline */}
+      <Grid gutter="xl" className="mx-5">
         <GridCol
           span={{ base: 12, md: 3 }}
           className="text-center sm:text-left"
         >
-          <Image
-            h={100}
-            w={200}
-            src="/assets/logo2.png"
-            alt="Logo"
-            className="mx-auto md:mx-0"
-          />
-          <p className="text-sm mt-4 italic">
-            "Where Every Gem Tells a Story."
-          </p>
+          <div className="flex flex-col gap-10">
+            <div className=" flex flex-col justify-center items-center">
+              <Image
+                h={100}
+                w={200}
+                onClick={() => router.push("/")}
+                src="/assets/logo2.png"
+                alt="Logo"
+                className="mx-auto md:mx-0 cursor-pointer"
+              />
+              <p className="text-sm mt-4 italic">
+                "Where Every Gem Tells a Story."
+              </p>
+            </div>
+            <div className="flex justify-center items-center gap-4">
+              <Link target="_blank" href="https://www.jewelersboard.com/">
+                <Image h={100} w={100} src={"/assets/jbt-logo.png"} />
+              </Link>
+              <Link target="_blank" href="https://agta.org/">
+                <Image
+                  h={90}
+                  w={100}
+                  fit="contain"
+                  src={"/assets/agta-logo.png"}
+                />
+              </Link>
+            </div>
+          </div>
         </GridCol>
 
-        {/* Links */}
         <GridCol span={{ base: 12, md: 4 }}>
           <div className="flex flex-col sm:flex-row flex-wrap gap-6">
             {groups}
           </div>
         </GridCol>
 
-        {/* Visit Us */}
         <GridCol
           span={{ base: 12, md: 2 }}
           className="text-center sm:text-left"
@@ -130,30 +196,35 @@ export const Footer = () => {
           </div>
         </GridCol>
 
-        {/* Industry Affiliations */}
         <GridCol
           span={{ base: 12, md: 3 }}
           className="text-center sm:text-left"
         >
-          <h1 className="text-lg sm:text-xl mb-3 font-semibold">
-            Industry Affiliations
-          </h1>
-          <div className="flex justify-center sm:justify-start items-center gap-4 px-2">
-            <Link target="_blank" href="https://www.jewelersboard.com/">
-              <Image h={100} w={100} src={"/assets/jbt-logo.png"} />
-            </Link>
-            <Link target="_blank" href="https://agta.org/">
-              <Image
-                h={90}
-                w={100}
-                fit="contain"
-                src={"/assets/agta-logo.png"}
+          <div className="flex flex-col gap-5">
+            <Text size="md">
+              Subscribe to our newsletter and get the latest trending products
+              and offers updates.
+            </Text>
+            <div className="flex items-center">
+              <TextInput
+                leftSection={<IconMail size={16} />}
+                placeholder="Your email address"
+                value={email}
+                onChange={(event) => setEmail(event.currentTarget.value)}
+                w="100%"
+                radius={0}
+                size="sm"
+                rightSection={
+                  <IconArrowRight
+                    className="cursor-pointer"
+                    onClick={handleSubmit}
+                  />
+                }
               />
-            </Link>
+            </div>
           </div>
         </GridCol>
       </Grid>
-
 
       <div className=" border-gray-300 mt-10 pt-6">
         <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">

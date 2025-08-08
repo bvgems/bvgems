@@ -22,6 +22,7 @@ export const ProductSpecifications = ({
   allProducts,
 }: any) => {
   const router = useRouter();
+  console.log("prodc", allProducts);
 
   const [allSizes, setAllSizes] = useState<any[]>([]);
   const [value, setValue] = useState<string | null>(product?.size ?? null);
@@ -96,10 +97,20 @@ export const ProductSpecifications = ({
       .filter((size: any) => size != null);
 
     const uniqueSizes = Array.from(new Set(sizes));
-    const allSize = uniqueSizes.map((size: any) => ({
-      label: size.toString(),
-      value: size.toString(),
-    }));
+    const allSize = uniqueSizes.map((size: any) => {
+      const match = size.match(/(\d+(\.\d+)?)\s*x\s*(\d+(\.\d+)?)/i);
+      const formatted =
+        match && match.length >= 4
+          ? `${parseFloat(match[1]).toFixed(2)} x ${parseFloat(
+              match[3]
+            ).toFixed(2)}`
+          : size;
+
+      return {
+        label: formatted,
+        value: size.toString(),
+      };
+    });
 
     setAllSizes(allSize);
 
@@ -187,7 +198,7 @@ export const ProductSpecifications = ({
                   <ComboboxOption value={item.value} key={item.value}>
                     <Group gap="xs">
                       {item.value === value && <CheckIcon size={12} />}
-                      <span>{parseFloat(item.label).toFixed(2)}</span>
+                      <span>{item.label}</span>
                     </Group>
                   </ComboboxOption>
                 ))}

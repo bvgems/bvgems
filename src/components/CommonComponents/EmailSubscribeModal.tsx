@@ -39,14 +39,14 @@ export const EmailSubscribeModal = () => {
   const handleSubmit = async () => {
     try {
       const res = await subscribeEmail(email);
-        localStorage.setItem("hideSubscribePopup", "true");
+      localStorage.setItem("hideSubscribePopup", "true");
 
-         notifications.show({
-          icon: <IconCheck />,
-          color: "teal",
-          message: res?.message,
-          position: "top-right",
-        });
+      notifications.show({
+        icon: <IconCheck />,
+        color: "teal",
+        message: res?.message,
+        position: "top-right",
+      });
 
       // if (res?.flag) {
       //   localStorage.setItem("hideSubscribePopup", "true");
@@ -91,8 +91,8 @@ export const EmailSubscribeModal = () => {
         />
 
         <Text size="md">
-          Subscribe to our newsletter and get the latest trending products and
-          offers updates.
+          Enter your email to get the latest trending products and offers
+          updates.
         </Text>
 
         <TextInput

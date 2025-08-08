@@ -75,7 +75,7 @@ export default function CreateCustomLayout() {
 
   const filterConfigs = [
     {
-      title: "Jewelery",
+      title: "Jewelry",
       options: categoryOptions,
       selected: selectedJewelery,
       setter: setSelectedJewelery,

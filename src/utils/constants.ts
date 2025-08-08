@@ -584,37 +584,37 @@ export const quickNavigationData = [
 export const shopByColorOptions = [
   {
     name: "Red",
-    image: "/assets/redcolor.jpeg",
+    image: "/assets/redcolor.png",
     href: "/shop-by-color/red",
   },
   {
     name: "Pink",
 
-    image: "/assets/pinkcolor.jpeg",
+    image: "/assets/pinkcolor.png",
     href: "/shop-by-color/pink",
   },
   {
     name: "Purple",
 
-    image: "/assets/purplecolor.jpeg",
+    image: "/assets/purplecolor.png",
     href: "/shop-by-color/purple",
   },
   {
     name: "Blue",
 
-    image: "/assets/bluecolor.jpeg",
+    image: "/assets/bluecolor.png",
     href: "/shop-by-color/blue",
   },
   {
     name: "Green",
 
-    image: "/assets/greencolor.jpeg",
+    image: "/assets/greencolor.png",
     href: "/shop-by-color/green",
   },
   {
     name: "Yellow",
 
-    image: "/assets/yellowcolor.jpeg",
+    image: "/assets/yellowcolor.png",
     href: "/shop-by-color/yellow",
   },
 ];
@@ -755,13 +755,13 @@ export const links = [
   { link: "/precious-beads", label: "Precious Beads" },
 
   {
-    label: "Jewelery",
+    label: "Jewelry",
     links: [
       { link: "/jewelry/rings", label: "Rings" },
       { link: "/jewelry/earrings", label: "Ear Rings" },
       { link: "/jewelry/necklaces", label: "Necklaces" },
       { link: "/jewelry/bracelets", label: "Bracelets" },
-      { link: "/colorstone-layouts", label: "Colorstone Layouts" },
+      { link: "/create-colorstone-layout", label: "Colorstone Layouts" },
     ],
   },
   {
@@ -797,7 +797,7 @@ export const SapphireLooseGemstoneColorOptions = [
   { value: "Purple", color: "#800080" },
 ];
 
-export const FreeSizeOrigins:any = {
+export const FreeSizeOrigins: any = {
   Emerald: ["Columbia", "Zambia"],
   Ruby: ["Mozambique", "Burma"],
   Sapphire: ["Australia", "Madagascar", "Ceylon", "Thai"],

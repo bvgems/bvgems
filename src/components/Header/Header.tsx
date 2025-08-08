@@ -318,7 +318,7 @@ export function Header() {
             rel="noopener noreferrer"
             className="hover:underline"
           >
-            🇺🇸 66 W 47th St, Booth #9 and #10, New York, NY 10036
+            66 W 47th St, Booth #9 and #10, New York, NY 10036
           </a>
           <div className="flex justify-around gap-6">
             <a href="tel:+12129444382" className="flex gap-2 hover:underline">
@@ -336,8 +336,7 @@ export function Header() {
 
       <header className="sticky top-0 z-50 h-[85px] border-b border-gray-300 bg-white">
         <nav className="mt-4">
-          {isMobile ? 
-          (
+          {isMobile ? (
             searchOpen ? (
               <div className="flex items-center gap-2">
                 <Autocomplete
@@ -383,9 +382,7 @@ export function Header() {
                   />
                 </div>
 
-                <div
-                  className={`flex items-center gap-4`}
-                >
+                <div className={`flex items-center gap-4`}>
                   <IconSearch
                     className="hover:cursor-pointer"
                     size="22"

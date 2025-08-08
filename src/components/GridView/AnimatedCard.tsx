@@ -47,7 +47,7 @@ export const AnimatedCard = ({
       transition={{ duration: 0.4, ease: "easeInOut" }}
     >
       <Card
-        className="flex flex-col justify-start bg-white cursor-pointer h-[400px] lg:h-[350px]"
+        className="flex flex-col justify-start bg-white cursor-pointer h-[250px] lg:h-[350px]"
         padding="lg"
         withBorder
         shadow="md"
@@ -58,7 +58,7 @@ export const AnimatedCard = ({
             <motion.img
               src={item?.image_url}
               alt={item?.title}
-              className="object-contain h-[200px] flex justify-center items-center"
+              className="object-contain h-[80px] md:h-[150px] lg:h-[200px] flex justify-center items-center"
               initial={{ opacity: 0, scale: 1.1 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
@@ -69,25 +69,6 @@ export const AnimatedCard = ({
         <h1 className="text-gray-700 text-[1rem] mt-3">
           {getProductName(item)}
         </h1>
-
-        <Link href={`/${item.handle}`}>
-          <motion.button
-            className="relative text-gray-500 text-sm px-0 py-1 border-none bg-transparent focus:outline-none"
-            initial="rest"
-            whileHover="hover"
-            animate="rest"
-          >
-            View More
-            <motion.span
-              variants={{
-                rest: { width: "0%" },
-                hover: { width: "100%" },
-              }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="absolute left-0 bottom-0 h-[1.5px] bg-gray-500"
-            />
-          </motion.button>
-        </Link>
       </Card>
     </motion.div>
   );

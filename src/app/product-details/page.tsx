@@ -8,11 +8,10 @@ import {
   NumberInput,
   NumberInputHandlers,
   Text,
-  Textarea,
   Tooltip,
 } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   getCategoryData,
   getParticularProductsData,
@@ -33,12 +32,12 @@ import { getCartStore } from "@/store/useCartStore";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "@/hooks/useAuth";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
-import { useRouter } from "next/navigation";
 
 export default function ProductDetailsPage() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const name = searchParams.get("name");
+
   const [product, setProduct] = useState<any>();
   const [shopifyProduct, setShopifyProduct] = useState<any>();
   const [allProducts, setAllProducts] = useState<any>();
@@ -57,10 +56,8 @@ export default function ProductDetailsPage() {
 
   const getProduct = async (id: string) => {
     const productDetails = await getParticularProductsData(id);
-    console.log("pro", productDetails);
-
     setProduct(productDetails);
-    setPrice(productDetails?.price);
+    setPrice(productDetails?.price || 0);
 
     const allDetails = await getShapesData(
       productDetails?.shape,
@@ -72,6 +69,16 @@ export default function ProductDetailsPage() {
   const getData = async (handle: any) => {
     const response = await getCategoryData(handle);
     setShopifyProduct(response);
+  };
+
+  const handleQuantityChanges = (value: number) => {
+    setQuantity(value);
+    setPrice((value || 1) * (product?.price || 0));
+  };
+
+  const getPerCaratPrice = (element: any) => {
+    if (!element?.ct_weight || !element?.price) return 0;
+    return (element?.price / element?.ct_weight).toFixed(2);
   };
 
   const addProductToCart = () => {
@@ -92,7 +99,7 @@ export default function ProductDetailsPage() {
         size: product.size,
         type: product.type,
       },
-      quantity: quantity,
+      quantity,
     });
 
     notifications.show({
@@ -104,177 +111,175 @@ export default function ProductDetailsPage() {
     });
   };
 
-  const handleQuantityChanges = (value: number) => {
-    setQuantity(value);
-    setPrice(value * product?.price);
-  };
-
   useEffect(() => {
-    if (id) {
-      getProduct(id);
-    }
-    if (name) {
-      getData(name);
-    }
+    if (id) getProduct(id);
+    if (name) getData(name);
   }, [id]);
 
   return (
-    <>
-      <div className="flex flex-col md:flex-row gap-4 px-5 mt-6">
-        <div className="w-full md:w-2/3 pr-2">
-          <div className="p-4">
-            <div className="flex flex-col md:flex-row gap-1">
-              <div className="w-full md:w-7/12 flex flex-col items-center">
-                <ImageZoom src={product?.image_url} />
-                <div className="text-xs text-gray-400 flex items-center">
-                  <IconZoomIn size="15" />
-                  Hover on the image to zoom
-                </div>
-                <div className="text-xs text-gray-400 mt-4 flex items-center">
-                  <Button
-                    onClick={openTable}
-                    variant="outline"
-                    size="compact-xs"
-                    color="#0b182d"
-                  >
-                    <span>SIZE TOLERANCE GUIDE</span>
-                  </Button>
-                </div>
+    <div className="flex flex-col md:flex-row gap-6 px-5 mt-6">
+      {/* Left: Image and specs */}
+      <div className="w-full md:w-2/3 pr-2">
+        <div className="p-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="w-full md:w-7/12 flex flex-col items-center">
+              <ImageZoom src={product?.image_url} />
+              <div className="text-xs text-gray-500 flex items-center mt-2">
+                <IconZoomIn size={15} className="mr-1" />
+                Hover on the image to zoom
               </div>
-              <div className="w-full md:w-5/12">
-                <ProductSpecifications
-                  getProduct={getProduct}
-                  product={product}
-                  allProducts={allProducts}
-                />
-              </div>
+              <Button
+                onClick={openTable}
+                variant="outline"
+                size="compact-xs"
+                className="mt-4"
+                color="#0b182d"
+              >
+                SIZE TOLERANCE GUIDE
+              </Button>
+            </div>
+            <div className="w-full md:w-5/12">
+              <ProductSpecifications
+                getProduct={getProduct}
+                product={product}
+                allProducts={allProducts}
+              />
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="w-full md:w-1/3">
-          <div className="sticky top-5">
-            <div className="flex flex-col gap-4">
-              <div>
-                <h1 className="text-xl">
-                  {product?.collection_slug +
-                    " " +
-                    product?.shape +
-                    " " +
-                    product?.size +
-                    " " +
-                    product?.ct_weight +
-                    "cts. " +
-                    "," +
-                    " " +
-                    product?.quality +
-                    " Quality"}
-                </h1>
-                <div className="flex justify-between items-center mt-4">
-                  <span className="text-sm text-gray-500">
-                    {"Item: #" + product?.id}
-                  </span>
-                  <Badge color="#37B24D" radius="xs">
-                    Available
-                  </Badge>
+      {/* Right: Pricing and actions */}
+      <div className="w-full md:w-1/3">
+        <div className="sticky top-5">
+          <div className="flex flex-col gap-4">
+            <div>
+              <h1 className="text-xl font-semibold">
+                {product?.collection_slug} {product?.shape} {product?.size}{" "}
+                {product?.ct_weight}cts., {product?.quality} Quality
+              </h1>
+              <div className="flex justify-between items-center mt-2">
+                <span className="text-sm text-gray-500">
+                  Item: #{product?.id}
+                </span>
+                <Badge color="#37B24D" radius="xs">
+                  Available
+                </Badge>
+              </div>
+            </div>
+
+            {/* Price */}
+            <div className="mt-2">
+              {product?.type === "Lab Grown" ||
+              product?.quality === "Lab Grown" ? (
+                <div className="text-2xl font-semibold">
+                  ${(price || 0).toFixed(2)}
                 </div>
-
-                {product?.type === "Lab Grown" ||
-                product?.quality === "Lab Grown" ? (
-                  <div className="text-2xl font-semibold">
-                    $ {(Number(price) || 0).toFixed(2)}
-                  </div>
-                ) : (
-                  <div className="mt-8 mb-5">
+              ) : (
+                <div className="text-md font-medium flex flex-col gap-2">
+                  {product?.price ? (
+                    <>
+                      <span>
+                        Per Stone Price: <strong>${product?.price}</strong>
+                      </span>
+                      <span>
+                        Per Carat weight Price:{" "}
+                        {getPerCaratPrice(product) !== 0 ? (
+                          `$${getPerCaratPrice(product)}`
+                        ) : (
+                          <a
+                            href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
+                              `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${product?.ct_weight}cts., ${product?.quality} Quality`
+                            )}&body=${encodeURIComponent(
+                              `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${product?.ct_weight} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                            )}`}
+                            className="underline text-blue-600"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Request Pricing
+                          </a>
+                        )}
+                      </span>
+                    </>
+                  ) : (
                     <a
                       href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
                         `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${product?.ct_weight}cts., ${product?.quality} Quality`
                       )}&body=${encodeURIComponent(
-                        `Hello,\n\nI would like to request the price for the following gemstone:\n\nCollection: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${product?.ct_weight} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                        `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${product?.ct_weight} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
                       )}`}
+                      className="underline text-blue-600"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button
-                        color="#0b182d"
-                        fullWidth
-                        variant="outline"
-                        size="compact-sm"
-                      >
-                        REQUEST FOR PRICING
-                      </Button>
+                      Request Pricing
                     </a>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between gap-2">
-                <div>Quantity:</div>
-                <Button
-                  onClick={() => handlersRef.current?.increment()}
-                  variant="default"
-                >
-                  <IconPlus />
-                </Button>
-                <NumberInput
-                  placeholder="Click the buttons"
-                  handlersRef={handlersRef}
-                  min={1}
-                  value={quantity}
-                  onChange={(value: any) => handleQuantityChanges(value)}
-                />
-                <Button
-                  onClick={() => handlersRef.current?.decrement()}
-                  variant="default"
-                >
-                  <IconMinus />
-                </Button>
-              </div>
-
-              <Checkbox label="Match For Size and Color" color="#0b182d" />
-
-              <Alert
-                variant="light"
-                color="#0b182d"
-                title="HAVE A QUESTION?"
-                icon={<IconInfoCircle />}
-              >
-                <div className="flex flex-col gap-3">
-                  <div className="flex flex-col text-sm">
-                    <Text size="md">Contact us now</Text>
-                    <Text size="sm" c="dimmed">
-                      We're here to help with any questions or concerns about
-                      your order — feel free to reach out for assistance.
-                    </Text>
-                  </div>
-                  <Button
-                    onClick={() => {
-                      router?.push("/customer-support/contact-us");
-                    }}
-                    color="#99a1af"
-                    size="xs"
-                    className="self-start"
-                  >
-                    CONTACT US NOW
-                  </Button>
+                  )}
                 </div>
-              </Alert>
+              )}
+            </div>
 
-              <ProductAccordion />
-
+            {/* Quantity */}
+            <div className="flex items-center justify-between gap-2">
+              <div>Quantity:</div>
               <Button
-                mb={"xl"}
-                color="#0b182d"
-                onClick={addProductToCart}
-                fullWidth
+                onClick={() => handlersRef.current?.decrement()}
+                variant="default"
               >
-                ADD TO CART
+                <IconMinus />
+              </Button>
+              <NumberInput
+                value={quantity}
+                onChange={(value: any) => handleQuantityChanges(value)}
+                handlersRef={handlersRef}
+                min={1}
+                hideControls
+              />
+              <Button
+                onClick={() => handlersRef.current?.increment()}
+                variant="default"
+              >
+                <IconPlus />
               </Button>
             </div>
+
+            {/* Match checkbox */}
+            <Checkbox label="Match For Size and Color" color="#0b182d" />
+
+            {/* Alert */}
+            <Alert
+              variant="light"
+              color="#0b182d"
+              title="HAVE A QUESTION?"
+              icon={<IconInfoCircle />}
+            >
+              <div className="flex flex-col gap-3">
+                <Text size="md">Contact us now</Text>
+                <Text size="sm" c="dimmed">
+                  We're here to help with any questions or concerns about your
+                  order — feel free to reach out for assistance.
+                </Text>
+                <Button
+                  onClick={() => router.push("/customer-support/contact-us")}
+                  color="#99a1af"
+                  size="xs"
+                  className="self-start"
+                >
+                  CONTACT US NOW
+                </Button>
+              </div>
+            </Alert>
+
+            {/* Accordion + CTA */}
+            <ProductAccordion />
+            <Button color="#0b182d" onClick={addProductToCart} fullWidth>
+              ADD TO CART
+            </Button>
           </div>
         </div>
-        <SizeToleranceGuide opened={tableOpened} close={closeTable} />
       </div>
-    </>
+      <SizeToleranceGuide opened={tableOpened} close={closeTable} />
+    </div>
   );
 }

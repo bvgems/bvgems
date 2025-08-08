@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
 
       if (queryResults?.rows?.length > 0) {
         const formattedData = queryResults.rows.map((item) => {
-          const formattedValue = `${item?.ct_weight} cttw. ${item?.color} ${item?.shape} ${item?.collection_slug} ${item?.size}mm - ${item?.id}`;
+          const formattedValue = `${item?.shape} ${item?.collection_slug} ${item?.size} - ${item?.id}`;
 
           return {
             ...item,
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
 
       if (fallbackResults?.rows?.length > 0) {
         const formattedFallbackData = fallbackResults.rows.map((item) => {
-          const formattedValue = `${item?.ct_weight} cttw. ${item?.color} ${item?.shape} ${item?.collection_slug} ${item?.size}mm - ${item?.id}`;
+          const formattedValue = `${item?.shape} ${item?.collection_slug} ${item?.size} - ${item?.id}`;
 
           return {
             ...item,

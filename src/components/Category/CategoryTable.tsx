@@ -94,6 +94,11 @@ export const CategoryTable = ({
 
   const totalPages = Math.ceil(totalFilteredRows.length / rowsPerPage);
 
+  const getPerCaratPrice = (element: any) => {
+    if (!element?.ct_weight || !element?.price) return 0;
+    return (element?.price / element?.ct_weight).toFixed(2);
+  };
+
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedSizes, sortOrder, typeFilter]);
@@ -161,7 +166,11 @@ export const CategoryTable = ({
               <TableTh>CT Weight</TableTh>
               <TableTh>Quality</TableTh>
               <TableTh>Cut</TableTh>
-              <TableTh>Estimated Price</TableTh>
+              <TableTh className="">
+                <div>Estimated Price</div>
+                <p className="text-xs text-gray-400">(per stone)</p>
+              </TableTh>
+              <TableTh className="">Per Carat Price</TableTh>
             </TableTr>
           </TableThead>
 
@@ -212,6 +221,24 @@ export const CategoryTable = ({
                       </TableTd>
                       <TableTd className="hidden md:table-cell">
                         {element.cut}
+                      </TableTd>
+                      <TableTd className="hidden md:table-cell">
+                        {element?.price ? (
+                          <span className="font-bold text-lg">
+                            $ {element.price}
+                          </span>
+                        ) : (
+                          <span className="underline">Request Pricing</span>
+                        )}
+                      </TableTd>
+                      <TableTd className="hidden md:table-cell">
+                        {getPerCaratPrice(element) !== 0 ? (
+                          <span className="font-bold text-lg">
+                            $ {getPerCaratPrice(element)}
+                          </span>
+                        ) : (
+                          <span className="underline">Request Pricing</span>
+                        )}
                       </TableTd>
                       <TableTd className="hidden md:table-cell">
                         <Button
@@ -276,6 +303,18 @@ export const CategoryTable = ({
                             </div>
                             <div>
                               <strong>Cut:</strong> {element.cut}
+                            </div>
+                            <div>
+                              <strong>Per Stone Price: </strong>{" "}
+                              <span className="font-bold text-lg">
+                                $ {element.price}
+                              </span>
+                            </div>
+                            <div>
+                              <strong>Per Carat Price: </strong>{" "}
+                              <span className="font-bold text-lg">
+                                $ {getPerCaratPrice(element)}
+                              </span>
                             </div>
                             <div className="mt-2">
                               <Button
