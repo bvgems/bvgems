@@ -33,6 +33,34 @@ import { notifications } from "@mantine/notifications";
 import { useAuth } from "@/hooks/useAuth";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
 
+/** ---------- Helpers ---------- */
+const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
+
+const isLabGrown = (item: any) =>
+  LAB_LABELS.has(item?.type) || LAB_LABELS.has(item?.quality);
+
+/** Per-carat price:
+ *  - Lab grown: fixed 50
+ *  - Natural: price / ct_weight (if both exist)
+ */
+const getPerCaratPrice = (item: any): number => {
+  if (!item) return 0;
+  if (isLabGrown(item)) return 50;
+  if (!item?.ct_weight || !item?.price) return 0;
+  return Number((item.price / item.ct_weight).toFixed(2));
+};
+
+/** Per-stone price:
+ *  - Lab grown: 50 * ct_weight
+ *  - Natural: item.price (if exists)
+ */
+const getPerStonePrice = (item: any): number => {
+  if (!item) return 0;
+  if (!item?.ct_weight) return 0;
+  if (isLabGrown(item)) return Number((50 * item.ct_weight).toFixed(2));
+  return item?.price ? Number(item.price) : 0;
+};
+
 export default function ProductDetailsPage() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -42,7 +70,7 @@ export default function ProductDetailsPage() {
   const [shopifyProduct, setShopifyProduct] = useState<any>();
   const [allProducts, setAllProducts] = useState<any>();
   const [quantity, setQuantity] = useState<number>(1);
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState<number>(0); // total price = per-stone * quantity
   const handlersRef = useRef<NumberInputHandlers>(null);
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
@@ -54,16 +82,24 @@ export default function ProductDetailsPage() {
   const [tableOpened, { open: openTable, close: closeTable }] =
     useDisclosure(false);
 
-  const getProduct = async (id: string) => {
-    const productDetails = await getParticularProductsData(id);
-    setProduct(productDetails);
-    setPrice(productDetails?.price || 0);
+  const recalcTotal = (item: any, qty: number) => {
+    const perStone = getPerStonePrice(item);
+    setPrice(Number((perStone * (qty || 1)).toFixed(2)));
+  };
 
+  const getProduct = async (pid: string) => {
+    const productDetails = await getParticularProductsData(pid);
+    setProduct(productDetails);
+
+    // Load sibling/shape variants
     const allDetails = await getShapesData(
       productDetails?.shape,
       productDetails?.collection_slug
     );
     setAllProducts(allDetails?.data);
+
+    // Initial price with current quantity
+    recalcTotal(productDetails, quantity);
   };
 
   const getData = async (handle: any) => {
@@ -72,17 +108,15 @@ export default function ProductDetailsPage() {
   };
 
   const handleQuantityChanges = (value: number) => {
-    setQuantity(value);
-    setPrice((value || 1) * (product?.price || 0));
-  };
-
-  const getPerCaratPrice = (element: any) => {
-    if (!element?.ct_weight || !element?.price) return 0;
-    return (element?.price / element?.ct_weight).toFixed(2);
+    const qty = Math.max(1, Number(value) || 1);
+    setQuantity(qty);
+    recalcTotal(product, qty);
   };
 
   const addProductToCart = () => {
     if (!product) return;
+
+    const perStone = getPerStonePrice(product);
 
     addToCart({
       product: {
@@ -93,7 +127,7 @@ export default function ProductDetailsPage() {
         ct_weight: product.ct_weight,
         cut: product.cut,
         image_url: product.image_url,
-        price: product.price,
+        price: perStone, // store per-stone price in cart
         quality: product.quality,
         shape: product.shape,
         size: product.size,
@@ -114,7 +148,14 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     if (id) getProduct(id);
     if (name) getData(name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  // When product loads or changes, keep total in sync with quantity
+  useEffect(() => {
+    if (product) recalcTotal(product, quantity);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
 
   return (
     <div className="flex flex-col md:flex-row gap-6 px-5 mt-6">
@@ -170,25 +211,39 @@ export default function ProductDetailsPage() {
 
             {/* Price */}
             <div className="mt-2">
-              {product?.type === "Lab Grown" ||
-              product?.quality === "Lab Grown" ? (
-                <div className="text-2xl font-semibold">
-                  ${(parseFloat(price?.toString() || "0") || 0).toFixed(2)}
+              {isLabGrown(product) ? (
+                // Lab-grown: per-stone = 50 * ct_weight; per-carat = 50
+                <div className="text-md font-medium flex flex-col gap-2">
+                  <span>
+                    Per Stone Price:{" "}
+                    <strong>${getPerStonePrice(product).toFixed(2)}</strong>
+                  </span>
+                  <span>
+                    Per Carat Price:{" "}
+                    <strong>${getPerCaratPrice(product)}</strong>
+                  </span>
+                  <span className="text-lg font-semibold">
+                    Total ({quantity}): ${price.toFixed(2)}
+                  </span>
                 </div>
               ) : (
+                // Natural: show db price (if present) and derived per-carat
                 <div className="text-md font-medium flex flex-col gap-2">
                   {product?.price ? (
                     <>
                       <span>
-                        Per Stone Price: <strong>${product?.price}</strong>
+                        Per Stone Price:{" "}
+                        <strong>${Number(product?.price).toFixed(2)}</strong>
                       </span>
                       <span>
-                        Per Carat weight Price:{" "}
+                        Per Carat Price:{" "}
                         {getPerCaratPrice(product) !== 0 ? (
-                          `$${getPerCaratPrice(product)}`
+                          <strong>
+                            ${getPerCaratPrice(product).toFixed(2)}
+                          </strong>
                         ) : (
                           <a
-                            href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
+                            href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
                               `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${product?.ct_weight}cts., ${product?.quality} Quality`
                             )}&body=${encodeURIComponent(
                               `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${product?.ct_weight} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
@@ -201,10 +256,14 @@ export default function ProductDetailsPage() {
                           </a>
                         )}
                       </span>
+                      <span className="text-lg font-semibold">
+                        Total ({quantity}): $
+                        {(Number(product?.price) * quantity).toFixed(2)}
+                      </span>
                     </>
                   ) : (
                     <a
-                      href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
+                      href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
                         `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${product?.ct_weight}cts., ${product?.quality} Quality`
                       )}&body=${encodeURIComponent(
                         `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${product?.ct_weight} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`

@@ -3,7 +3,7 @@ export function buildMemoApprovalSuccessEmail(user: any) {
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; border: 1px solid #ddd;">
         <div style="text-align: center; margin-bottom: 20px;">
           <img src="https://res.cloudinary.com/dabdvgxd4/image/upload/v1754420615/logo2_qhix5o.png" alt="BV Gems Logo" style="max-height: 60px;" />
-          <h2 style="color: #6a0dad; margin-top: 10px;">Memo Purchase Approved</h2>
+          <h2 style="color: #0b182d; margin-top: 10px; text-transform: uppercase;">Memo Purchase Approved</h2>
         </div>
   
         <p>Dear ${user?.first_name || "Customer"},</p>
@@ -17,8 +17,8 @@ export function buildMemoApprovalSuccessEmail(user: any) {
   
         <div style="margin: 20px 0; text-align: center;">
           <a href="https://bvgems.com" 
-            style="display: inline-block; background-color: #6a0dad; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-            Start Shopping on Memo
+            style="display: inline-block; background-color: #0b182d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+           START SHOPPING ON MEMO
           </a>
         </div>
   

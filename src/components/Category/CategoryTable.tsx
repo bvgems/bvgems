@@ -102,6 +102,10 @@ export const CategoryTable = ({
     return (element?.price / element?.ct_weight).toFixed(2);
   };
 
+  const getLabPrices = (element: any) => {
+    if (!element?.ct_weight || !element?.price) return 0;
+    return (50 * element?.ct_weight).toFixed(2);
+  };
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedSizes, sortOrder, typeFilter]);
@@ -228,14 +232,16 @@ export const CategoryTable = ({
                       <TableTd className="hidden md:table-cell">
                         {element?.quality === "Lab Grown" ||
                         element?.type === "Lab Grown" ? (
-                          <span className="font-bold text-lg">-</span>
+                          <span className="font-bold text-lg">
+                            {getLabPrices(element)}
+                          </span>
                         ) : element?.price ? (
                           <span className="font-bold text-lg">
                             $ {element.price}
                           </span>
                         ) : (
                           <a
-                            href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
+                            href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
                               `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
                             )}&body=${encodeURIComponent(
                               `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
@@ -256,7 +262,7 @@ export const CategoryTable = ({
                           </span>
                         ) : (
                           <a
-                            href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
+                            href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
                               `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
                             )}&body=${encodeURIComponent(
                               `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
@@ -338,14 +344,16 @@ export const CategoryTable = ({
                               <span className="font-bold text-lg">
                                 {element?.quality === "Lab Grown" ||
                                 element?.type === "Lab Grown" ? (
-                                  <span className="font-bold text-lg">-</span>
+                                  <span className="font-bold text-lg">
+                                    {getLabPrices(element)}
+                                  </span>
                                 ) : element?.price ? (
                                   <span className="font-bold text-lg">
                                     $ {element.price}
                                   </span>
                                 ) : (
                                   <a
-                                    href={`mailto:bvgems@gmail.com?subject=${encodeURIComponent(
+                                    href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
                                       `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
                                     )}&body=${encodeURIComponent(
                                       `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`

@@ -1,11 +1,11 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.office365.com", 
+  host: "smtp.office365.com",
   port: 587,
-  secure: false, 
+  secure: false,
   auth: {
-    user: "sales@bvgems.com",
+    user: "support@bvgems.com",
     pass: process.env.EMAIL_PASSWORD,
   },
   tls: {

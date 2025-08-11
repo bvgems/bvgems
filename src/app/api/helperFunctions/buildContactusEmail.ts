@@ -9,7 +9,7 @@ export function buildContactUsEmail(formData: {
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
           <img src="https://res.cloudinary.com/dabdvgxd4/image/upload/v1754420615/logo2_qhix5o.png" alt="BV Gems Logo" style="max-height: 60px;" />
-          <h2 style="color: #6a0dad; margin-top: 10px;">New Inquiry Submitted</h2>
+          <h2 style="color: #0b182d; margin-top: 10px; text-transform: uppercase;">New Inquiry Submitted</h2>
         </div>
   
         <p>Dear Shrey,</p>
@@ -54,8 +54,8 @@ export function buildContactUsEmail(formData: {
   
         <div style="text-align: center; margin-top: 30px;">
           <a href="mailto:${formData.email}"
-            style="display: inline-block; background-color: #6a0dad; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-            Reply to Customer
+            style="display: inline-block; background-color: #0b182d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            REPLY TO CUSTOMER
           </a>
         </div>
       </div>
