@@ -8,7 +8,7 @@ export function buildWelcomeEmail(customerName: string) {
         <p>Dear ${customerName || "Valued Customer"},</p>
         <p>We are thrilled to inform you that your account has been approved and is now active. You can now enjoy exclusive access to our products, services, and special offers.</p>
         <p>Thank you for choosing B.V. Gems. We look forward to building a strong and lasting relationship with you.</p>
-        <p>If you have any questions or need assistance, please feel free to reach out to us at <a href="mailto:${"bvgemsinc@gmail.com"}">bvgemsinc@gmail.com</a>. Our team is always here to help!</p>
+        <p>If you have any questions or need assistance, please feel free to reach out to us at <a href="mailto:${"sales@bvgems.com"}">sales@bvgems.com</a>. Our team is always here to help!</p>
         <div style="text-align: center; margin-top: 20px;">
           <a href="https://bvgems.com"
             style="display: inline-block; background-color: #6a0dad; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">

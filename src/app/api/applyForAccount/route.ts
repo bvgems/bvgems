@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     );
 
     await sendEmail(
-      "bvgemsinc@gmail.com",
+      "sales@bvgems.com",
       "New Account Application Received",
       emailHtml
     );

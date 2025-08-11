@@ -22,7 +22,7 @@ export function buildMemoApprovalSuccessEmail(user: any) {
           </a>
         </div>
   
-        <p>If you have any questions or need assistance, feel free to contact our team at <a href="mailto:bvgemsinc@gmail.com">bvgemsinc@gmail.com</a>.</p>
+        <p>If you have any questions or need assistance, feel free to contact our team at <a href="mailto:sales@bvgems.com">sales@bvgems.com</a>.</p>
   
         <p>Thank you for choosing BV Gems.</p>
   

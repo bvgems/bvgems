@@ -142,7 +142,7 @@ export const SignupForm = ({
         <div>
           <div
             className={`mt-5 mb-4 flex flex-col gap-4 ${
-              isStepper ? "px-28" : "px-3"
+              isStepper ? "px-5 sm:px-8 lg:px-28" : "px-3"
             }`}
           >
             <div className="flex justify-between gap-3">

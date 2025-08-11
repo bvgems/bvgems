@@ -325,10 +325,10 @@ export function Header() {
               <IconPhone /> +1 (212) 944-4382
             </a>
             <a
-              href="mailto:bvgemsinc@gmail.com"
+              href="mailto:sales@bvgems.com"
               className="flex gap-2 hover:underline"
             >
-              <IconMail /> bvgemsinc@gmail.com
+              <IconMail /> sales@bvgems.com
             </a>
           </div>
         </div>

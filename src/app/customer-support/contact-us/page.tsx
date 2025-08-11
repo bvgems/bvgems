@@ -84,7 +84,7 @@ export default function ContactUsPage() {
               shadow="sm"
               padding="xl"
               component="a"
-              href="mailto:bvgemsinc@gmail.com"
+              href="mailto:sales@bvgems.com"
               className="cursor-pointer h-full flex flex-col justify-between transition-transform transform hover:scale-105 hover:shadow-lg"
             >
               <div className="flex flex-col justify-center items-center text-center flex-grow">
@@ -103,7 +103,7 @@ export default function ContactUsPage() {
                   Send us an email with any questions or inquiries you may have.
                 </Text>
                 <Text mt="xs" c="dimmed" size="sm">
-                  <span className="font-black">bvgemsinc@gmail.com</span>
+                  <span className="font-black">sales@bvgems.com</span>
                 </Text>
               </div>
             </Card>
