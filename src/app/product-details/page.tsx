@@ -166,6 +166,12 @@ export default function ProductDetailsPage() {
     if (product) recalcTotal(product, quantity, caratWeight);
   }, [product, purchaseByCarat]);
 
+  const hasPricing = !(
+    getPerStonePrice(product) === 0 &&
+    getPerCaratPrice(product) === 0 &&
+    price === 0
+  );
+
   return (
     <div className="flex flex-col md:flex-row gap-6 px-5 mt-6">
       <Modal
@@ -177,6 +183,7 @@ export default function ProductDetailsPage() {
       >
         <AuthForm onClose={close} />
       </Modal>
+
       {/* Left: Image and specs */}
       <div className="w-full md:w-2/3 pr-2">
         <div className="p-4">
@@ -234,16 +241,38 @@ export default function ProductDetailsPage() {
                 <div className="text-md font-medium flex flex-col gap-2">
                   <span>
                     Per Stone Price:{" "}
-                    <strong>${getPerStonePrice(product).toFixed(2)}</strong>
+                    <strong>
+                      {getPerStonePrice(product) === 0
+                        ? "-"
+                        : `$${getPerStonePrice(product).toFixed(2)}`}
+                    </strong>
                   </span>
                   <span>
                     Per Carat Price:{" "}
-                    <strong>${getPerCaratPrice(product).toFixed(2)}</strong>
+                    <strong>
+                      {getPerCaratPrice(product) === 0
+                        ? "-"
+                        : `$${getPerCaratPrice(product).toFixed(2)}`}
+                    </strong>
                   </span>
                   <span className="text-lg font-semibold">
-                    Total: ${price.toFixed(2)}
+                    Total: {price === 0 ? "-" : `$${price.toFixed(2)}`}
                   </span>
                 </div>
+
+                {/* Show Request Pricing only once */}
+                {!hasPricing && (
+                  <a
+                    href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
+                      `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${product?.ct_weight}cts., ${product?.quality} Quality`
+                    )}&body=${encodeURIComponent(
+                      `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${product?.ct_weight} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                    )}`}
+                    className="underline text-blue-600"
+                  >
+                    Request Pricing
+                  </a>
+                )}
               </div>
             ) : (
               <Alert className="uppercase" color="gray" variant="light">
@@ -252,7 +281,7 @@ export default function ProductDetailsPage() {
                   onClick={open}
                   className="underline text-blue-600 hover:text-blue-800 cursor-pointer"
                 >
-                 SIGN IN
+                  SIGN IN
                 </button>{" "}
                 to view gemstone prices.
               </Alert>
@@ -271,7 +300,7 @@ export default function ProductDetailsPage() {
               />
             )}
 
-            {/* Input section changes based on mode */}
+            {/* Input section */}
             {user &&
               (purchaseByCarat ? (
                 <div className="flex items-center justify-between gap-2">
@@ -308,7 +337,6 @@ export default function ProductDetailsPage() {
                 </div>
               ))}
 
-            {/* Match checkbox */}
             {user && (
               <Checkbox label="Match For Size and Color" color="#0b182d" />
             )}

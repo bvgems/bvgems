@@ -143,15 +143,15 @@ export const CategoryTable = ({
       </Modal>
 
       <hr className="mt-11 text-gray-300" />
-      <div className="mt-10 px-4 md:px-35 mb-20 uppercase">
+      <div className="mt-10 px-4 md:px-35 mb-20">
         {!user && (
           <p className="text-center text-gray-700 mb-6 text-lg font-medium">
             Please{" "}
             <button
               onClick={open}
-              className="underline text-blue-600 hover:text-blue-800 cursor-pointer"
+              className="underline text-blue-600 hover:text-blue-800"
             >
-              SIGN IN
+              sign in
             </button>{" "}
             to view gemstone prices.
           </p>
@@ -208,7 +208,7 @@ export const CategoryTable = ({
                       onClick={() => goToCartPage(element)}
                       className="cursor-pointer"
                     >
-                      {/* Image cell */}
+                      {/* Image */}
                       <TableTd>
                         <div className="w-14 h-14 flex items-center justify-center rounded overflow-hidden shadow-sm border border-gray-200">
                           <img
@@ -229,12 +229,7 @@ export const CategoryTable = ({
                         {element.color}
                       </TableTd>
                       <TableTd className="hidden md:table-cell">
-                        {element.size.includes("x")
-                          ? element.size
-                              .replace(/x/g, " x ")
-                              .replace(/\s+/g, " ")
-                              .trim()
-                          : parseFloat(element.size).toFixed(2)}
+                        {element.size}
                       </TableTd>
                       <TableTd className="hidden md:table-cell">
                         {element.ct_weight}
@@ -249,23 +244,36 @@ export const CategoryTable = ({
                       {user && (
                         <>
                           <TableTd className="hidden md:table-cell">
-                            {element?.quality === "Lab Grown" ||
-                            element?.type === "Lab Grown" ? (
-                              <span className="font-bold text-lg">
-                                {getLabPrices(element)}
-                              </span>
-                            ) : element?.price ? (
-                              <span className="font-bold text-lg">
-                                $ {element.price}
-                              </span>
-                            ) : null}
+                            {element?.price ? (
+                              `$ ${element.price}`
+                            ) : (
+                              <a
+                                href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
+                                  `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
+                                )}&body=${encodeURIComponent(
+                                  `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                                )}`}
+                                className="underline text-blue-600"
+                              >
+                                Request Pricing
+                              </a>
+                            )}
                           </TableTd>
 
                           <TableTd className="hidden md:table-cell">
-                            {getPerCaratPrice(element) !== 0 && (
-                              <span className="font-bold text-lg">
-                                $ {getPerCaratPrice(element)}
-                              </span>
+                            {getPerCaratPrice(element) !== 0 ? (
+                              `$ ${getPerCaratPrice(element)}`
+                            ) : (
+                              <a
+                                href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
+                                  `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
+                                )}&body=${encodeURIComponent(
+                                  `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                                )}`}
+                                className="underline text-blue-600"
+                              >
+                                Request Pricing
+                              </a>
                             )}
                           </TableTd>
                         </>
@@ -282,33 +290,6 @@ export const CategoryTable = ({
                           color="#0b182d"
                         >
                           ADD TO CART
-                        </Button>
-                      </TableTd>
-
-                      {/* Mobile view */}
-                      <TableTd className="md:hidden">{element.type}</TableTd>
-                      <TableTd className="md:hidden">
-                        {element.size}
-                      </TableTd>
-                      <TableTd className="md:hidden">{element.quality}</TableTd>
-                      <TableTd className="md:hidden">
-                        <Button
-                          variant="subtle"
-                          size="compact-sm"
-                          color="#0b182d"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleRow(element.id);
-                          }}
-                          leftSection={
-                            isExpanded ? (
-                              <IconMinus size={16} />
-                            ) : (
-                              <IconPlus size={16} />
-                            )
-                          }
-                        >
-                          {isExpanded ? "Hide" : "Details"}
                         </Button>
                       </TableTd>
                     </TableTr>
@@ -333,29 +314,41 @@ export const CategoryTable = ({
                             {user && (
                               <>
                                 <div>
-                                  <strong>Per Stone Price: </strong> $
-                                  {element.price}
+                                  <strong>Per Stone Price:</strong>{" "}
+                                  {element?.price ? (
+                                    `$ ${element.price}`
+                                  ) : (
+                                    <a
+                                      href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
+                                        `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
+                                      )}&body=${encodeURIComponent(
+                                        `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                                      )}`}
+                                      className="underline text-blue-600"
+                                    >
+                                      Request Pricing
+                                    </a>
+                                  )}
                                 </div>
                                 <div>
-                                  <strong>Per Carat Price: </strong> $
-                                  {getPerCaratPrice(element)}
+                                  <strong>Per Carat Price:</strong>{" "}
+                                  {getPerCaratPrice(element) !== 0 ? (
+                                    `$ ${getPerCaratPrice(element)}`
+                                  ) : (
+                                    <a
+                                      href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
+                                        `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
+                                      )}&body=${encodeURIComponent(
+                                        `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                                      )}`}
+                                      className="underline text-blue-600"
+                                    >
+                                      Request Pricing
+                                    </a>
+                                  )}
                                 </div>
                               </>
                             )}
-                            <div className="mt-2">
-                              <Button
-                                leftSection={<IconShoppingCart />}
-                                variant="outline"
-                                fullWidth
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  addProductToCart(element);
-                                }}
-                                color="#0b182d"
-                              >
-                                ADD TO CART
-                              </Button>
-                            </div>
                           </div>
                         </TableTd>
                       </TableTr>
@@ -366,7 +359,7 @@ export const CategoryTable = ({
             ) : (
               <TableTr>
                 <TableTd colSpan={9}>
-                  <div className="text-center py-10 text-gray-600 text-md italic">
+                  <div className="text-center py-10 text-gray-600 italic">
                     No matching stones found for the selected filters.
                   </div>
                 </TableTd>
