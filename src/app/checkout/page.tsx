@@ -53,6 +53,7 @@ export default function CheckoutSelectionPage() {
     const response = await makeCheckout({
       cartItems: cart,
       shopifyOrderId: orderId.toString(),
+      email: user ? user?.email : guestUser?.email || "guest@example.com",
     });
     const sessionId = response.id;
     await stripe?.redirectToCheckout({ sessionId });
@@ -68,67 +69,67 @@ export default function CheckoutSelectionPage() {
           const isBracelet = productType === "braceletJewelry";
           const isEarring = productType === "earringJewelry";
           const isJewelry = isRing || isNecklace || isBracelet || isEarring;
-  
+
           const title = item?.product?.collection_slug;
-  
+
           const baseProperties = isStone
             ? [
                 { name: "Size", value: item?.product?.size },
                 { name: "Weight", value: item?.product?.ct_weight?.toString() },
-                { name: "Quality", value: item?.product?.quality }
+                { name: "Quality", value: item?.product?.quality },
               ]
             : isRing
             ? [
                 { name: "Gemstone", value: item?.product?.gemstone },
                 { name: "Gold Color", value: item?.product?.goldColor },
                 { name: "Stone Size", value: item?.product?.size },
-                { name: "Shape", value: item?.product?.shape }
+                { name: "Shape", value: item?.product?.shape },
               ]
             : isNecklace
             ? [
                 { name: "Gold Color", value: item?.product?.goldColor },
                 { name: "Stone Size", value: item?.product?.size },
-                { name: "Length", value: item?.product?.length }
+                { name: "Length", value: item?.product?.length },
               ]
             : isBracelet
             ? [
                 { name: "Gold Color", value: item?.product?.goldColor },
-                { name: "Size", value: item?.product?.size }
+                { name: "Size", value: item?.product?.size },
               ]
             : isEarring
-            ? [
-                { name: "Gold Color", value: item?.product?.goldColor }
-              ]
+            ? [{ name: "Gold Color", value: item?.product?.goldColor }]
             : [];
-  
+
           const imageUrl =
             item?.jewelryProduct?.image_url ?? item?.product?.image_url ?? "";
-  
+
           // Conditional payload based on presence of variantId
           const isStored = !!item?.product?.variantId;
-  
+
           return isStored
             ? {
                 variant_id: item?.product?.variantId,
                 quantity: item?.quantity,
                 properties: baseProperties,
                 requires_shipping: deliveryMethod === "delivery",
-                fulfillment_service: "manual"
+                fulfillment_service: "manual",
               }
             : {
                 title: title || "Custom Product",
                 quantity: item?.quantity,
-                price: (item?.product?.price ?? item?.jewelryProduct?.price)?.toString(),
+                price: (
+                  item?.product?.price ?? item?.jewelryProduct?.price
+                )?.toString(),
                 requires_shipping: deliveryMethod === "delivery",
                 taxable: true,
                 fulfillment_service: "manual",
                 properties: [
                   ...baseProperties,
-                  { name: "_image_url", value: imageUrl }
-                ]
+                  { name: "_image_url", value: imageUrl },
+                ],
               };
         }),
-  
+
         tags:
           paymentMethod === "cod"
             ? "Pickup Payment"
@@ -137,7 +138,7 @@ export default function CheckoutSelectionPage() {
             : paymentMethod === "online"
             ? "Already Paid"
             : "",
-  
+
         email: user ? user?.email : guestUser?.email,
         phone: user ? user?.phoneNumber : guestUser?.phoneNumber,
         customer: {
@@ -148,14 +149,14 @@ export default function CheckoutSelectionPage() {
           accepts_marketing: false,
           accepts_marketing_updated_at: new Date().toISOString(),
           marketing_opt_in_level: "single_opt_in",
-          tags: "online-store"
+          tags: "online-store",
         },
         financial_status: "pending",
         send_receipt: paymentMethod === "cod",
         fulfillment_status: "unfulfilled",
         currency: "USD",
         buyer_accepts_marketing: false,
-  
+
         billing_address: {
           first_name:
             selectedShippingAddress?.fullName ??
@@ -184,9 +185,9 @@ export default function CheckoutSelectionPage() {
             selectedShippingAddress?.phoneNumber ??
             shippingAddress?.phoneNumber ??
             guestUser?.phoneNumber ??
-            ""
+            "",
         },
-  
+
         shipping_address: {
           first_name:
             selectedShippingAddress?.fullName ??
@@ -215,13 +216,13 @@ export default function CheckoutSelectionPage() {
             selectedShippingAddress?.phoneNumber ??
             shippingAddress?.phoneNumber ??
             guestUser?.phoneNumber ??
-            ""
-        }
-      }
+            "",
+        },
+      },
     };
     return orderPayload;
   };
-  
+
   const handleOrderPlacing = async () => {
     if (!deliveryMethod || !paymentMethod) return;
 

@@ -127,7 +127,6 @@ export const getFilteredData = async (options: any) => {
     const response = await axios.post(`${baseUrl}/api/getFilteredGemStones`, {
       options,
     });
-    console.log("resss", response);
 
     return response?.data;
   } catch (error) {
@@ -138,9 +137,10 @@ export const getFilteredData = async (options: any) => {
 
 export const makeCheckout = async (data: any) => {
   try {
-    const response = await axios.post("${baseUrl}/api/checkout", {
+    const response = await axios.post(`${baseUrl}/api/checkout`, {
       cartItems: data?.cartItems,
       shopifyOrderId: data?.shopifyOrderId,
+      email: data?.email,
     });
 
     return response?.data;

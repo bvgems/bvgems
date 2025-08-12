@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       payment_method_types: ["card"],
       line_items,
       mode: "payment",
-      customer_email: "fenil2926@gmail.com",
+      customer_email: email,
       success_url: `${origin}/payment-success?orderId=${shopifyOrderId}`,
       cancel_url: `${origin}/payment-cancelled?orderId=${shopifyOrderId}`,
       metadata: {
