@@ -42,6 +42,42 @@ export async function POST(req: NextRequest) {
         values.push(cleanedOptions.color);
       }
 
+      if (cleanedOptions.size) {
+        if (cleanedOptions?.shape?.includes("Round")) {
+          const rangeClauses: string[] = [];
+          cleanedOptions.size.forEach((range: any) => {
+            const [min, max] = range.split(" - ").map(Number);
+            rangeClauses.push(
+              `(CAST(REPLACE(size, ' mm', '') AS NUMERIC) >= ${min} AND CAST(REPLACE(size, ' mm', '') AS NUMERIC) <= ${max})`
+            );
+          });
+
+          if (rangeClauses.length > 0) {
+            whereClauses.push(`(${rangeClauses.join(" OR ")})`);
+          }
+        }
+      }
+
+      if (
+        cleanedOptions.length &&
+        cleanedOptions.width &&
+        !cleanedOptions?.shape?.includes("Round")
+      ) {
+        const lenMin = cleanedOptions.length.min ?? 0;
+        const lenMax = cleanedOptions.length.max ?? 9999;
+        const widMin = cleanedOptions.width.min ?? 0;
+        const widMax = cleanedOptions.width.max ?? 9999;
+
+        whereClauses.push(`
+          (
+            CAST(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 1) AS NUMERIC) >= ${lenMin} 
+            AND CAST(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 1) AS NUMERIC) <= ${lenMax}
+            AND CAST(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 2) AS NUMERIC) >= ${widMin}
+            AND CAST(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 2) AS NUMERIC) <= ${widMax}
+          )
+        `);
+      }
+
       const whereQuery =
         whereClauses.length > 0 ? `WHERE ${whereClauses.join(" AND ")}` : "";
       const query = `SELECT * FROM gemstone_specs ${whereQuery}`;

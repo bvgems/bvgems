@@ -201,79 +201,55 @@ export const FilterSideBar = ({
           <AccordionItem value="other-sizes">
             <AccordionControl>Size (For All Other Shapes)</AccordionControl>
             <AccordionPanel>
-              <div className="flex flex-col md:flex-row gap-4 mt-2 ml-5">
-                <NumberInput
-                  value={length}
-                  onChange={setLength}
-                  min={0}
-                  step={0.25}
-                  label="Length (mm)"
-                  placeholder="e.g., 8"
-                  className="w-full"
-                />
-                <NumberInput
-                  value={width}
-                  onChange={setWidth}
-                  min={0}
-                  step={0.25}
-                  label="Width (mm)"
-                  placeholder="e.g., 6"
-                  className="w-full"
-                />
-              </div>
-            </AccordionPanel>
-          </AccordionItem>
-
-          <AccordionItem value="price">
-            <AccordionControl>Price Range ($)</AccordionControl>
-            <AccordionPanel>
-              <div className="flex flex-col gap-3 mt-2 ml-5">
+              <div className="flex flex-col gap-4 mt-2">
                 <div className="flex flex-col md:flex-row gap-4">
                   <NumberInput
-                    value={priceRange[0]}
+                    value={length?.min || ""}
                     onChange={(val) =>
-                      setPriceRange((prev: any) => [
-                        typeof val === "number" ? val : prev[0],
-                        prev[1],
-                      ])
+                      setLength((prev: any) => ({ ...prev, min: val }))
                     }
                     min={0}
-                    max={priceRange[1]}
-                    step={100}
-                    label="From"
+                    step={0.25}
+                    label="Min Length (mm)"
+                    placeholder="e.g., 4"
                     className="w-full"
-                    prefix="$"
                   />
                   <NumberInput
-                    value={priceRange[1]}
+                    value={length?.max || ""}
                     onChange={(val) =>
-                      setPriceRange((prev: any) => [
-                        prev[0],
-                        typeof val === "number" ? val : prev[1],
-                      ])
+                      setLength((prev: any) => ({ ...prev, max: val }))
                     }
-                    min={priceRange[0]}
-                    step={100}
-                    label="To"
+                    min={0}
+                    step={0.25}
+                    label="Max Length (mm)"
+                    placeholder="e.g., 10"
                     className="w-full"
-                    prefix="$"
                   />
                 </div>
-
-                <RangeSlider
-                  value={priceRange}
-                  onChange={setPriceRange}
-                  min={0}
-                  max={10000}
-                  step={100}
-                  color="#0b182d"
-                  label={(val) => `$${val}`}
-                  labelTransitionProps={{
-                    transition: "skew-down",
-                    duration: 150,
-                    timingFunction: "linear",
-                  }}
-                />
+                <div className="flex flex-col md:flex-row gap-4">
+                  <NumberInput
+                    value={width?.min || ""}
+                    onChange={(val) =>
+                      setWidth((prev: any) => ({ ...prev, min: val }))
+                    }
+                    min={0}
+                    step={0.25}
+                    label="Min Width (mm)"
+                    placeholder="e.g., 3"
+                    className="w-full"
+                  />
+                  <NumberInput
+                    value={width?.max || ""}
+                    onChange={(val) =>
+                      setWidth((prev: any) => ({ ...prev, max: val }))
+                    }
+                    min={0}
+                    step={0.25}
+                    label="Max Width (mm)"
+                    placeholder="e.g., 8"
+                    className="w-full"
+                  />
+                </div>
               </div>
             </AccordionPanel>
           </AccordionItem>

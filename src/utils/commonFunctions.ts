@@ -25,7 +25,7 @@ export const addProductToCart = (
   secondStone: any
 ) => {
   if (!productData) return;
-  console.log('prodd',productData)
+  console.log("prodd", productData);
 
   const showshapeoptions = productData?.showshapeoptions?.value === "true";
 
@@ -50,6 +50,7 @@ export const addProductToCart = (
             isRingCategory,
             isNecklaces
           ),
+      handle: productData?.handle,
       collection_slug: productData?.title,
       color: "",
       ct_weight: productData?.ct_weight,

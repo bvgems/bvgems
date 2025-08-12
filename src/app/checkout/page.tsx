@@ -23,7 +23,6 @@ import { useStpperStore } from "@/store/useStepperStore";
 import { useGuestUserStore } from "@/store/useGuestUserStore";
 import { useDisclosure } from "@mantine/hooks";
 import OrderConfirmationModal from "@/components/CommonComponents/OrderConfirmationModal";
-import { getJewelryCartStore } from "@/store/useJewelryCartStore";
 
 export default function CheckoutSelectionPage() {
   const { user } = useAuth();
@@ -34,7 +33,6 @@ export default function CheckoutSelectionPage() {
     () => getCartStore(user?.id || "guest"),
     [user?.id]
   );
-
   const cart = cartStore((state: any) => state.cart);
 
   const { shippingAddress } = useStpperStore();
@@ -49,7 +47,6 @@ export default function CheckoutSelectionPage() {
 
   const handlePayment = async (orderId: any) => {
     const stripe = await stripePromise;
-
     const response = await makeCheckout({
       cartItems: cart,
       shopifyOrderId: orderId.toString(),
@@ -58,6 +55,7 @@ export default function CheckoutSelectionPage() {
     const sessionId = response.id;
     await stripe?.redirectToCheckout({ sessionId });
   };
+
   const getOrderPayload = (paymentMethod: any) => {
     const orderPayload = {
       order: {
@@ -68,9 +66,6 @@ export default function CheckoutSelectionPage() {
           const isNecklace = productType === "necklaceJewelry";
           const isBracelet = productType === "braceletJewelry";
           const isEarring = productType === "earringJewelry";
-          const isJewelry = isRing || isNecklace || isBracelet || isEarring;
-
-          const title = item?.product?.collection_slug;
 
           const baseProperties = isStone
             ? [
@@ -103,7 +98,6 @@ export default function CheckoutSelectionPage() {
           const imageUrl =
             item?.jewelryProduct?.image_url ?? item?.product?.image_url ?? "";
 
-          // Conditional payload based on presence of variantId
           const isStored = !!item?.product?.variantId;
 
           return isStored
@@ -115,7 +109,10 @@ export default function CheckoutSelectionPage() {
                 fulfillment_service: "manual",
               }
             : {
-                title: title || "Custom Product",
+                title:
+                  item?.product?.collection_slug ||
+                  item?.product?.title ||
+                  "Custom Product",
                 quantity: item?.quantity,
                 price: (
                   item?.product?.price ?? item?.jewelryProduct?.price
@@ -129,7 +126,6 @@ export default function CheckoutSelectionPage() {
                 ],
               };
         }),
-
         tags:
           paymentMethod === "cod"
             ? "Pickup Payment"
@@ -138,7 +134,6 @@ export default function CheckoutSelectionPage() {
             : paymentMethod === "online"
             ? "Already Paid"
             : "",
-
         email: user ? user?.email : guestUser?.email,
         phone: user ? user?.phoneNumber : guestUser?.phoneNumber,
         customer: {
@@ -156,7 +151,6 @@ export default function CheckoutSelectionPage() {
         fulfillment_status: "unfulfilled",
         currency: "USD",
         buyer_accepts_marketing: false,
-
         billing_address: {
           first_name:
             selectedShippingAddress?.fullName ??
@@ -187,7 +181,6 @@ export default function CheckoutSelectionPage() {
             guestUser?.phoneNumber ??
             "",
         },
-
         shipping_address: {
           first_name:
             selectedShippingAddress?.fullName ??
@@ -225,7 +218,6 @@ export default function CheckoutSelectionPage() {
 
   const handleOrderPlacing = async () => {
     if (!deliveryMethod || !paymentMethod) return;
-
     const orderPayload = getOrderPayload(paymentMethod);
 
     if (paymentMethod === "cod" || paymentMethod === "memo") {
@@ -240,9 +232,16 @@ export default function CheckoutSelectionPage() {
     }
   };
 
-  const rows = cart.map((value: any, index: number) => {
-    console.log("valueee", value);
-    return (
+  // Separate items
+  const stoneItems = cart.filter(
+    (value: any) => value?.product?.productType === "stone"
+  );
+  const otherItems = cart.filter(
+    (value: any) => value?.product?.productType !== "stone"
+  );
+
+  const renderRows = (items: any[]) =>
+    items.map((value: any, index: number) => (
       <TableTr key={index}>
         <TableTd className="text-[1rem]">
           <div className="flex flex-col gap-2 justify-start">
@@ -262,15 +261,21 @@ export default function CheckoutSelectionPage() {
                     value?.product?.shape
                   : value?.jewelryProduct?.productName}
               </span>
-              <span className="text-sm">Qty: {value?.quantity}</span>
+              {value?.product?.purchaseByCarat ? (
+                <span className="text-sm">
+                  Carat Weight: {value?.caratWeight}
+                </span>
+              ) : (
+                <span className="text-sm">Qty: {value?.quantity}</span>
+              )}
             </div>
-            {value?.product?.productType === "stone" ? (
+            {value?.product?.productType === "stone" && (
               <div className="flex flex-col">
                 <span>Size: {value?.product?.size}</span>
                 <span>Weight: {value?.product?.ct_weight}</span>
                 <span>Quality: {value?.product?.quality}</span>
               </div>
-            ) : null}
+            )}
           </div>
         </TableTd>
         <TableTd className="font-semibold">
@@ -280,8 +285,7 @@ export default function CheckoutSelectionPage() {
           </div>
         </TableTd>
       </TableTr>
-    );
-  });
+    ));
 
   return (
     <div className="pb-20">
@@ -302,7 +306,6 @@ export default function CheckoutSelectionPage() {
             />
             <div className="px-10">
               <BillingSummary />
-
               <Button
                 disabled={
                   !deliveryMethod || !paymentMethod || cart?.length === 0
@@ -320,20 +323,42 @@ export default function CheckoutSelectionPage() {
             <div className="px-10">
               <h2 className="text-lg font-semibold">Review Your Order</h2>
               <Divider mt={"lg"} />
-              <Table
-                verticalSpacing={"lg"}
-                className="mt-5"
-                striped
-                horizontalSpacing={"xl"}
-              >
-                <TableThead className="uppercase text-[#0b182d]">
-                  <TableTr>
-                    <TableTh>Product</TableTh>
-                    <TableTh>Price</TableTh>
-                  </TableTr>
-                </TableThead>
-                <Table.Tbody>{rows}</Table.Tbody>
-              </Table>
+              {stoneItems.length > 0 && (
+                <>
+                  <h3 className="mt-4 mb-2 font-semibold">Gemstones</h3>
+                  <Table
+                    verticalSpacing={"lg"}
+                    striped
+                    horizontalSpacing={"xl"}
+                  >
+                    <TableThead className="uppercase text-[#0b182d]">
+                      <TableTr>
+                        <TableTh>Product</TableTh>
+                        <TableTh>Price</TableTh>
+                      </TableTr>
+                    </TableThead>
+                    <Table.Tbody>{renderRows(stoneItems)}</Table.Tbody>
+                  </Table>
+                </>
+              )}
+              {otherItems.length > 0 && (
+                <>
+                  <h3 className="mt-6 mb-2 font-semibold">Other Items</h3>
+                  <Table
+                    verticalSpacing={"lg"}
+                    striped
+                    horizontalSpacing={"xl"}
+                  >
+                    <TableThead className="uppercase text-[#0b182d]">
+                      <TableTr>
+                        <TableTh>Product</TableTh>
+                        <TableTh>Price</TableTh>
+                      </TableTr>
+                    </TableThead>
+                    <Table.Tbody>{renderRows(otherItems)}</Table.Tbody>
+                  </Table>
+                </>
+              )}
             </div>
           </GridCol>
         </Grid>

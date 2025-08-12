@@ -22,7 +22,6 @@ export const ProductSpecifications = ({
   allProducts,
 }: any) => {
   const router = useRouter();
-  console.log("prodc", allProducts);
 
   const [allSizes, setAllSizes] = useState<any[]>([]);
   const [value, setValue] = useState<string | null>(product?.size ?? null);

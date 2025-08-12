@@ -629,6 +629,10 @@ export const ShapeFilterList = [
     image: "/assets/oval.svg",
   },
   {
+    label: "Princess Cut",
+    image: "/assets/princesscut.svg",
+  },
+  {
     label: "Emerald",
     image: "/assets/emerald.svg",
   },

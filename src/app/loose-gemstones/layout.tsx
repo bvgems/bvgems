@@ -57,7 +57,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    console.log("selected color change", color, filtersChanged);
+
     if (!filtersChanged) {
       if (color) {
         fetchFilteredData();
@@ -80,7 +80,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div>
-      <div className="flex justify-center gap-6 py-10 bg-[#E5E7EB]">
+      <div className="flex justify-center gap-6 py-10 bg-[#F9F5F0]">
         <h1 className="text-3xl text-[#6B7280]">
           Calibrated Faceted Gemstones
         </h1>

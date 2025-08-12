@@ -16,7 +16,6 @@ import { useDisclosure } from "@mantine/hooks";
 import {
   IconCheck,
   IconShoppingCart,
-  IconUser,
   IconPlus,
   IconMinus,
 } from "@tabler/icons-react";
@@ -106,6 +105,7 @@ export const CategoryTable = ({
     if (!element?.ct_weight || !element?.price) return 0;
     return (50 * element?.ct_weight).toFixed(2);
   };
+
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedSizes, sortOrder, typeFilter]);
@@ -143,7 +143,20 @@ export const CategoryTable = ({
       </Modal>
 
       <hr className="mt-11 text-gray-300" />
-      <div className="mt-10 px-4 md:px-44 mb-20">
+      <div className="mt-10 px-4 md:px-35 mb-20 uppercase">
+        {!user && (
+          <p className="text-center text-gray-700 mb-6 text-lg font-medium">
+            Please{" "}
+            <button
+              onClick={open}
+              className="underline text-blue-600 hover:text-blue-800 cursor-pointer"
+            >
+              SIGN IN
+            </button>{" "}
+            to view gemstone prices.
+          </p>
+        )}
+
         <div className="flex justify-between items-center mb-4">
           <p className="text-sm text-gray-600">
             Showing {totalFilteredRows.length} result
@@ -164,7 +177,7 @@ export const CategoryTable = ({
 
         <Table highlightOnHover highlightOnHoverColor="#DCDCDC" striped>
           <TableThead className="hidden md:table-header-group">
-            <TableTr className="font-extrabold text-[18px] text-gray-700">
+            <TableTr className="font-extrabold text-[15px] text-gray-700 uppercase">
               <TableTh>Image</TableTh>
               <TableTh>Type</TableTh>
               <TableTh>Gemstone</TableTh>
@@ -173,11 +186,15 @@ export const CategoryTable = ({
               <TableTh>CT Weight</TableTh>
               <TableTh>Quality</TableTh>
               <TableTh>Cut</TableTh>
-              <TableTh className="">
-                <div>Estimated Price</div>
-                <p className="text-xs text-gray-400">(per stone)</p>
-              </TableTh>
-              <TableTh className="">Per Carat Price</TableTh>
+              {user && (
+                <>
+                  <TableTh>
+                    <div>Estimated Price</div>
+                    <p className="text-xs text-gray-400">(per stone)</p>
+                  </TableTh>
+                  <TableTh>Per Carat Price</TableTh>
+                </>
+              )}
             </TableTr>
           </TableThead>
 
@@ -202,7 +219,6 @@ export const CategoryTable = ({
                         </div>
                       </TableTd>
 
-                      {/* Desktop only */}
                       <TableTd className="hidden md:table-cell">
                         {element.type}
                       </TableTd>
@@ -229,52 +245,32 @@ export const CategoryTable = ({
                       <TableTd className="hidden md:table-cell">
                         {element.cut}
                       </TableTd>
-                      <TableTd className="hidden md:table-cell">
-                        {element?.quality === "Lab Grown" ||
-                        element?.type === "Lab Grown" ? (
-                          <span className="font-bold text-lg">
-                            {getLabPrices(element)}
-                          </span>
-                        ) : element?.price ? (
-                          <span className="font-bold text-lg">
-                            $ {element.price}
-                          </span>
-                        ) : (
-                          <a
-                            href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                              `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
-                            )}&body=${encodeURIComponent(
-                              `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
-                            )}`}
-                            className="underline text-blue-600"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Request Pricing
-                          </a>
-                        )}
-                      </TableTd>
 
-                      <TableTd className="hidden md:table-cell">
-                        {getPerCaratPrice(element) !== 0 ? (
-                          <span className="font-bold text-lg">
-                            $ {getPerCaratPrice(element)}
-                          </span>
-                        ) : (
-                          <a
-                            href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                              `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
-                            )}&body=${encodeURIComponent(
-                              `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
-                            )}`}
-                            className="underline text-blue-600"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Request Pricing
-                          </a>
-                        )}
-                      </TableTd>
+                      {user && (
+                        <>
+                          <TableTd className="hidden md:table-cell">
+                            {element?.quality === "Lab Grown" ||
+                            element?.type === "Lab Grown" ? (
+                              <span className="font-bold text-lg">
+                                {getLabPrices(element)}
+                              </span>
+                            ) : element?.price ? (
+                              <span className="font-bold text-lg">
+                                $ {element.price}
+                              </span>
+                            ) : null}
+                          </TableTd>
+
+                          <TableTd className="hidden md:table-cell">
+                            {getPerCaratPrice(element) !== 0 && (
+                              <span className="font-bold text-lg">
+                                $ {getPerCaratPrice(element)}
+                              </span>
+                            )}
+                          </TableTd>
+                        </>
+                      )}
+
                       <TableTd className="hidden md:table-cell">
                         <Button
                           leftSection={<IconShoppingCart />}
@@ -289,15 +285,10 @@ export const CategoryTable = ({
                         </Button>
                       </TableTd>
 
-                      {/* Mobile-only inline info */}
+                      {/* Mobile view */}
                       <TableTd className="md:hidden">{element.type}</TableTd>
                       <TableTd className="md:hidden">
-                        {element.size.includes("x")
-                          ? element.size
-                              .replace(/x/g, " x ")
-                              .replace(/\s+/g, " ")
-                              .trim()
-                          : parseFloat(element.size).toFixed(2)}
+                        {element.size}
                       </TableTd>
                       <TableTd className="md:hidden">{element.quality}</TableTd>
                       <TableTd className="md:hidden">
@@ -339,40 +330,18 @@ export const CategoryTable = ({
                             <div>
                               <strong>Cut:</strong> {element.cut}
                             </div>
-                            <div>
-                              <strong>Per Stone Price: </strong>{" "}
-                              <span className="font-bold text-lg">
-                                {element?.quality === "Lab Grown" ||
-                                element?.type === "Lab Grown" ? (
-                                  <span className="font-bold text-lg">
-                                    {getLabPrices(element)}
-                                  </span>
-                                ) : element?.price ? (
-                                  <span className="font-bold text-lg">
-                                    $ {element.price}
-                                  </span>
-                                ) : (
-                                  <a
-                                    href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                                      `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`
-                                    )}&body=${encodeURIComponent(
-                                      `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
-                                    )}`}
-                                    className="underline text-blue-600"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    Request Pricing
-                                  </a>
-                                )}
-                              </span>
-                            </div>
-                            <div>
-                              <strong>Per Carat Price: </strong>{" "}
-                              <span className="font-bold text-lg">
-                                $ {getPerCaratPrice(element)}
-                              </span>
-                            </div>
+                            {user && (
+                              <>
+                                <div>
+                                  <strong>Per Stone Price: </strong> $
+                                  {element.price}
+                                </div>
+                                <div>
+                                  <strong>Per Carat Price: </strong> $
+                                  {getPerCaratPrice(element)}
+                                </div>
+                              </>
+                            )}
                             <div className="mt-2">
                               <Button
                                 leftSection={<IconShoppingCart />}

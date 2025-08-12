@@ -3,7 +3,10 @@ import { persist } from "zustand/middleware";
 
 export interface CartItem {
   product: {
+    id: any;
+    handle:string;
     productType: string;
+    purchaseByCarat: boolean;
     productId: string;
     collection_slug: string;
     color: string;
@@ -22,6 +25,7 @@ export interface CartItem {
     secondStone: string;
   };
   quantity: number;
+  caratWeight: string;
 }
 
 interface CartStore {
@@ -31,6 +35,8 @@ interface CartStore {
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
   getTotalPrice: () => number;
+  cartTotal: number; // NEW
+  setCartTotal: (total: number) => void; // NEW
 }
 
 const storeRegistry: any = {};
@@ -41,6 +47,8 @@ export const getCartStore = (userKey: string) => {
       persist(
         (set, get) => ({
           cart: [],
+          cartTotal: 0, // NEW
+          setCartTotal: (total) => set({ cartTotal: total }), // NEW
           addToCart: (newItem) =>
             set((state) => {
               const existingItem = state.cart.find(
