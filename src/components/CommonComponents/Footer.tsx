@@ -33,7 +33,6 @@ export const Footer = () => {
   const handleSubmit = async () => {
     try {
       const res = await subscribeEmail(email);
-      console.log('resss',res)
       localStorage.setItem("hideSubscribePopup", "true");
 
       notifications.show({
@@ -43,22 +42,6 @@ export const Footer = () => {
         position: "top-right",
       });
 
-      // if (res?.flag) {
-      //   localStorage.setItem("hideSubscribePopup", "true");
-      //   notifications.show({
-      //     icon: <IconCheck />,
-      //     color: "teal",
-      //     message: res?.message,
-      //     position: "top-right",
-      //   });
-      // } else {
-      //   notifications.show({
-      //     icon: <IconX />,
-      //     color: "red",
-      //     message: res.error || "An error occurred",
-      //     position: "top-right",
-      //   });
-      // }
       close();
     } catch (err) {
       console.error(err);
@@ -150,19 +133,6 @@ export const Footer = () => {
               <p className="text-sm mt-4 italic">
                 "Where Every Gem Tells a Story."
               </p>
-            </div>
-            <div className="flex justify-center items-center gap-4">
-              <Link target="_blank" href="https://www.jewelersboard.com/">
-                <Image h={100} w={100} src={"/assets/jbt-logo.png"} />
-              </Link>
-              <Link target="_blank" href="https://agta.org/">
-                <Image
-                  h={90}
-                  w={100}
-                  fit="contain"
-                  src={"/assets/agta-logo.png"}
-                />
-              </Link>
             </div>
           </div>
         </GridCol>

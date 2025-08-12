@@ -806,3 +806,22 @@ export const FreeSizeOrigins: any = {
   Ruby: ["Mozambique", "Burma"],
   Sapphire: ["Australia", "Madagascar", "Ceylon", "Thai"],
 };
+
+export const IndustryAffiliationOptions = [
+  {
+    logo: "/assets/agta-logo.png",
+    link: "https://agta.org/",
+  },
+  {
+    logo: "/assets/jbt-logo.png",
+    link: "https://www.jewelersboard.com/",
+  },
+  {
+    logo: "/assets/polygon-logo.png",
+    link: "https://www.polygon.net/jwl/public/colored-stones/buy-colored-stones-en.jsp",
+  },
+  {
+    logo: "/assets/idca-logo.png",
+    link: "https://idcany.org/",
+  },
+];

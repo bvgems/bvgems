@@ -1,6 +1,7 @@
 "use client";
 import { CustomerBenefits } from "@/components/CustomerBenefits/CustomerBenefits";
 import { Hero } from "@/components/Hero/Hero";
+import { IndustryAffiliation } from "@/components/IndustryAffiliation/IndustryAffiliation";
 import { JewelrySection } from "@/components/Jewerly/JewerlySection";
 import { OwnJewelry } from "@/components/OwnJewerly/OwnJewerly";
 import ShopByColor from "@/components/ShopByColor/ShopByColor";
@@ -18,6 +19,7 @@ export default function Home() {
       <OwnJewelry />
       <Testimonials />
       <CustomerBenefits />
+      <IndustryAffiliation />
     </>
   );
 }
