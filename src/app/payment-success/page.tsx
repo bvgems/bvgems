@@ -26,11 +26,6 @@ const PaymentSuccessPage = () => {
           Thank you for your order. We’ve received your payment and are now
           processing your order. A confirmation email has been sent.
         </Text>
-        <Stack mt="xl" align="center">
-          <Button component="a" href="/my-orders" color="green">
-            View Your Order
-          </Button>
-        </Stack>
       </Paper>
     </Center>
   );

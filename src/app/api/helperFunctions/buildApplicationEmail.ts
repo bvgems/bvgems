@@ -36,6 +36,7 @@ export function buildApplicationEmail(
               ${
                 businessVerification
                   ? `
+                Company Name ${businessVerification?.companyName || "N/A"}<br/>
                 Owner Name: ${businessVerification.ownerName || "N/A"}<br/>
                 Company Address: ${
                   businessVerification.companyAddress || "N/A"

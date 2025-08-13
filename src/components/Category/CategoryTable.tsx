@@ -13,12 +13,7 @@ import {
   Pagination,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import {
-  IconCheck,
-  IconShoppingCart,
-  IconPlus,
-  IconMinus,
-} from "@tabler/icons-react";
+import { IconCheck, IconShoppingCart } from "@tabler/icons-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { AuthForm } from "../Auth/AuthForm";
@@ -101,11 +96,6 @@ export const CategoryTable = ({
     return (element?.price / element?.ct_weight).toFixed(2);
   };
 
-  const getLabPrices = (element: any) => {
-    if (!element?.ct_weight || !element?.price) return 0;
-    return (50 * element?.ct_weight).toFixed(2);
-  };
-
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedSizes, sortOrder, typeFilter]);
@@ -176,6 +166,7 @@ export const CategoryTable = ({
         </div>
 
         <Table highlightOnHover highlightOnHoverColor="#DCDCDC" striped>
+          {/* Desktop Header */}
           <TableThead className="hidden md:table-header-group">
             <TableTr className="font-extrabold text-[15px] text-gray-700 uppercase">
               <TableTh>Image</TableTh>
@@ -188,13 +179,11 @@ export const CategoryTable = ({
               <TableTh>Cut</TableTh>
               {user && (
                 <>
-                  <TableTh>
-                    <div>Estimated Price</div>
-                    <p className="text-xs text-gray-400">(per stone)</p>
-                  </TableTh>
+                  <TableTh>Estimated Price</TableTh>
                   <TableTh>Per Carat Price</TableTh>
                 </>
               )}
+              <TableTh></TableTh>
             </TableTr>
           </TableThead>
 
@@ -204,11 +193,11 @@ export const CategoryTable = ({
                 const isExpanded = expandedRows[element.id];
                 return (
                   <React.Fragment key={element.id}>
+                    {/* Desktop Row */}
                     <TableTr
+                      className="cursor-pointer hidden md:table-row"
                       onClick={() => goToCartPage(element)}
-                      className="cursor-pointer"
                     >
-                      {/* Image */}
                       <TableTd>
                         <div className="w-14 h-14 flex items-center justify-center rounded overflow-hidden shadow-sm border border-gray-200">
                           <img
@@ -218,32 +207,18 @@ export const CategoryTable = ({
                           />
                         </div>
                       </TableTd>
-
-                      <TableTd className="hidden md:table-cell">
-                        {element.type}
-                      </TableTd>
-                      <TableTd className="hidden md:table-cell capitalize">
+                      <TableTd>{element.type}</TableTd>
+                      <TableTd className="capitalize">
                         {element.collection_slug}
                       </TableTd>
-                      <TableTd className="hidden md:table-cell">
-                        {element.color}
-                      </TableTd>
-                      <TableTd className="hidden md:table-cell">
-                        {element.size}
-                      </TableTd>
-                      <TableTd className="hidden md:table-cell">
-                        {element.ct_weight}
-                      </TableTd>
-                      <TableTd className="hidden md:table-cell">
-                        {element.quality}
-                      </TableTd>
-                      <TableTd className="hidden md:table-cell">
-                        {element.cut}
-                      </TableTd>
-
+                      <TableTd>{element.color}</TableTd>
+                      <TableTd>{element.size}</TableTd>
+                      <TableTd>{element.ct_weight}</TableTd>
+                      <TableTd>{element.quality}</TableTd>
+                      <TableTd>{element.cut}</TableTd>
                       {user && (
                         <>
-                          <TableTd className="hidden md:table-cell">
+                          <TableTd>
                             {element?.price ? (
                               `$ ${element.price}`
                             ) : (
@@ -259,8 +234,7 @@ export const CategoryTable = ({
                               </a>
                             )}
                           </TableTd>
-
-                          <TableTd className="hidden md:table-cell">
+                          <TableTd>
                             {getPerCaratPrice(element) !== 0 ? (
                               `$ ${getPerCaratPrice(element)}`
                             ) : (
@@ -278,8 +252,7 @@ export const CategoryTable = ({
                           </TableTd>
                         </>
                       )}
-
-                      <TableTd className="hidden md:table-cell">
+                      <TableTd>
                         <Button
                           leftSection={<IconShoppingCart />}
                           variant="outline"
@@ -294,22 +267,55 @@ export const CategoryTable = ({
                       </TableTd>
                     </TableTr>
 
-                    {/* Mobile expanded row */}
+                    {/* Mobile Row */}
+                    <TableTr
+                      onClick={() => goToCartPage(element)}
+                      className="md:hidden"
+                    >
+                      <TableTd colSpan={3} className="w-full">
+                        <div className="flex items-center justify-between w-full">
+                          {/* Left: Image + details */}
+                          <div className="flex items-center gap-3">
+                            <div className="w-14 h-14 flex-shrink-0 rounded overflow-hidden shadow-sm border border-gray-200">
+                              <img
+                                src={element.image_url}
+                                alt="gem"
+                                className="object-cover w-full h-full"
+                              />
+                            </div>
+                            <div className="flex flex-col text-sm">
+                              <span>Size: {element.size}</span>
+                              <span>Quality: {element.quality}</span>
+                            </div>
+                          </div>
+
+                          {/* Right: Button */}
+                          <Button
+                            variant="light"
+                            size="xs"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleRow(element.id);
+                            }}
+                          >
+                            {isExpanded ? "Hide" : "View Details"}
+                          </Button>
+                        </div>
+                      </TableTd>
+                    </TableTr>
+
+                    {/* Mobile Expanded Row */}
                     {isExpanded && (
                       <TableTr className="md:hidden bg-gray-50">
-                        <TableTd colSpan={5}>
+                        <TableTd colSpan={3}>
                           <div className="flex flex-col gap-2 text-sm px-2 py-3">
                             <div>
-                              <strong>Stone:</strong> {element.collection_slug}
-                            </div>
-                            <div>
-                              <strong>Color:</strong> {element.color}
+                              <span>
+                                {`${element?.color} ${element?.collection_slug} ${element?.cut}`}
+                              </span>
                             </div>
                             <div>
                               <strong>CT Weight:</strong> {element.ct_weight}
-                            </div>
-                            <div>
-                              <strong>Cut:</strong> {element.cut}
                             </div>
                             {user && (
                               <>
@@ -368,6 +374,7 @@ export const CategoryTable = ({
           </TableTbody>
         </Table>
 
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-6 flex justify-center">
             <Pagination
