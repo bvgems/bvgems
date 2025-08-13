@@ -302,7 +302,16 @@ export const shopifyQuery = `
                   }
                 }
               }
-              variants(first: 1) {
+        showshapeoptions: metafield(namespace: "custom", key: "showshapeoptions") {
+            value
+            type
+          }
+             isTwoStoneRing:metafield(namespace: "custom", key: "istwostonering") {
+            value
+            type
+          }
+
+              variants(first: 10) {
                 edges {
                   node {
                     price {
@@ -310,6 +319,10 @@ export const shopifyQuery = `
                       currencyCode
                     }
                     title
+                    image {
+                    url
+                    altText
+                    }
                     sku
                   }
                 }

@@ -1,10 +1,18 @@
 "use client";
-import { Card } from "@mantine/core";
-import { useState } from "react";
-import { motion } from "framer-motion";
+
+import { Card, Tooltip } from "@mantine/core";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { getCartStore } from "@/store/useCartStore";
+import { IconHeart, IconScale } from "@tabler/icons-react";
+
+const GEM_COLORS: Record<string, string> = {
+  emerald: "#50C878",
+  ruby: "#E0115F",
+  "pink sapphire": "#887084",
+  "blue sapphire": "#0F52BA",
+};
 
 export const JewelryCategoryCard = ({
   isBead,
@@ -13,101 +21,147 @@ export const JewelryCategoryCard = ({
   index,
 }: any) => {
   const router = useRouter();
-  const [hovered, setHovered] = useState<number | null>(null);
   const { user } = useAuth();
-  const userKey = user?.id?.toString() || "guest";
-  const cartStore = getCartStore(userKey);
-  const redirectToProduct = (product: any) => {
-    const handle = product?.node?.handle;
 
+  const mainImage = product?.node?.images?.edges?.[0]?.node?.url || "";
+  const altImage = product?.node?.images?.edges?.[1]?.node?.url || "";
+  const [selectedImage, setSelectedImage] = useState<string>(mainImage);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [hoverPreviewImage, setHoverPreviewImage] = useState<string | null>(
+    null
+  );
+
+  const priceText = useMemo(() => {
+    const amounts =
+      product?.node?.variants?.edges
+        ?.map((e: any) => Number(e?.node?.price?.amount ?? 0))
+        ?.filter((n: number) => Number.isFinite(n)) || [];
+
+    if (!amounts.length) return "$0.00 USD";
+    const min = Math.min(...amounts);
+    const max = Math.max(...amounts);
+    return min === max
+      ? `$${min.toFixed(2)} USD`
+      : `$${min.toFixed(2)} – $${max.toFixed(2)} USD`;
+  }, [product]);
+
+  const variantImages: { title?: string; image: string }[] =
+    product?.node?.variants?.edges
+      ?.map((v: any) => ({
+        title: v?.node?.title,
+        image: v?.node?.image?.url || mainImage,
+      }))
+      ?.filter((v: any) => !!v.image) || [];
+
+  const isTwoStone: boolean = Boolean(
+    product?.node?.isTwoStoneRing?.value ?? product?.node?.isTwoStoneRing
+  );
+
+  const redirectToProduct = () => {
+    const handle = product?.node?.handle;
+    if (!handle) return;
     isBead
-      ? router?.push(`/jewelry/beads/${handle}`)
-      : router?.push(`/jewelry/${category}/${handle}`);
+      ? router.push(`/jewelry/beads/${handle}`)
+      : router.push(`/jewelry/${category}/${handle}`);
   };
+
+  const displayImage = hoverPreviewImage || selectedImage || mainImage;
 
   return (
     <Card
-      withBorder
-      padding="lg"
-      className="flex flex-col justify-start h-[450px] bg-white cursor-pointer"
-      onClick={() => redirectToProduct(product)}
+      withBorder={false}
+      radius="md"
+      shadow="none"
+      padding="md"
+      className="bg-transparent cursor-pointer select-none"
+      onClick={redirectToProduct}
     >
+      {/* IMAGE AREA */}
       <div
-        className="w-full h-[300px] flex items-center justify-center overflow-hidden relative"
+        className="relative w-full h-[260px] flex items-center justify-center overflow-hidden"
         onMouseEnter={() => setHovered(index)}
-        onMouseLeave={() => setHovered(null)}
+        onMouseLeave={() => {
+          setHovered(null);
+          setHoverPreviewImage(null);
+        }}
       >
-        <div className="absolute top-3 left-3 bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-1 rounded-sm z-10">
-          On Sale
-        </div>
-
-        <motion.img
-          key="main"
-          src={product?.node?.images?.edges?.[0]?.node?.url}
-          alt={product?.node?.title}
-          className={`absolute ${isBead ? "object-fill" : "object-contain"}`}
-          style={{ height: 500, width: "100%" }}
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{
-            opacity: hovered === index ? 0 : 1,
-            scale: 1,
-          }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        />
-
-        {product?.node?.images?.edges?.[1]?.node?.url && (
+        <AnimatePresence mode="wait">
           <motion.img
-            key="hover"
-            src={product?.node?.images?.edges?.[1]?.node?.url}
+            key={displayImage} // Key change triggers animation
+            src={displayImage}
             alt={product?.node?.title}
-            className="absolute"
-            style={{ height: 300, width: "100%" }}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{
-              opacity: hovered === index ? 1 : 0,
-              scale: hovered === index ? 1 : 1.1,
-            }}
-            transition={{ duration: 0.7, ease: "easeInOut" }}
-          />
-        )}
-      </div>
-
-      <div
-        className={`mt-4 ${category === "necklaces" ? "h-[78px]" : "h-[48px]"}`}
-      >
-        <span className="text-gray-700 text-[1.2rem] block line-clamp-1 leading-snug">
-          {product?.node?.title}
-        </span>
-      </div>
-
-      <div className="mt-2.5 text-[1.2rem] flex items-center gap-3">
-        <span className="font-semibold">
-          $
-          {Number(
-            product?.node?.variants?.edges?.[0]?.node?.price?.amount || 0
-          ).toFixed(2)}{" "}
-          USD
-        </span>
-      </div>
-
-      <div className="mt-2">
-        <motion.button
-          className="relative text-gray-500 text-sm px-0 py-1 border-none bg-transparent focus:outline-none cursor-pointer"
-          initial="rest"
-          whileHover="hover"
-          animate="rest"
-          onClick={() => redirectToProduct(product)}
-        >
-          VIEW MORE
-          <motion.span
-            variants={{
-              rest: { width: "0%" },
-              hover: { width: "100%" },
-            }}
+            className="absolute object-contain"
+            style={{ width: "100%", height: "100%" }}
+            initial={{ opacity: 0, scale: 1.02 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="absolute left-0 bottom-0 h-[1.5px] bg-gray-500"
           />
-        </motion.button>
+        </AnimatePresence>
+      </div>
+
+      {/* ACTION ICONS */}
+      <div
+        className="mt-3 flex items-center gap-3 h-9"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          className="p-2 rounded-full hover:bg-gray-100 transition"
+          aria-label="Add to wishlist"
+        >
+          <IconHeart size={18} className="text-gray-600" />
+        </button>
+        <button
+          className="p-2 rounded-full hover:bg-gray-100 transition"
+          aria-label="Compare"
+        >
+          <IconScale size={18} className="text-gray-600" />
+        </button>
+      </div>
+
+      {/* VARIANT SWATCHES */}
+      {!isTwoStone && variantImages.length > 1 && (
+        <div
+          className="mt-3 flex items-center gap-2"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {variantImages.slice(0, 6).map((variant: any, i: number) => (
+            <Tooltip
+              key={`${variant?.image}-${i}`}
+              label={variant.title || `Variant ${i + 1}`}
+            >
+              <button
+                onClick={() => setSelectedImage(variant.image)}
+                onMouseEnter={() => setHoverPreviewImage(variant.image)}
+                onMouseLeave={() => setHoverPreviewImage(null)}
+                className={`w-7 h-7 rounded-full overflow-hidden ring-0 outline-none transition transform hover:scale-[1.06] ${
+                  selectedImage === variant.image
+                    ? "shadow-[0_0_0_2px_rgba(0,0,0,0.5)]"
+                    : ""
+                }`}
+                aria-label={`Variant ${variant.title || i + 1}`}
+              >
+                <img
+                  src={variant.image}
+                  alt={variant.title}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            </Tooltip>
+          ))}
+        </div>
+      )}
+
+      {/* TITLE */}
+      <div className="mt-2">
+        <h3 className="text-[0.98rem] leading-snug text-gray-800 line-clamp-2 min-h-[40px]">
+          {product?.node?.title}
+        </h3>
+      </div>
+
+      {/* PRICE */}
+      <div className="mt-1 text-[1rem] font-semibold text-gray-900">
+        {priceText}
       </div>
     </Card>
   );

@@ -8,7 +8,7 @@ export const CommonGridView = ({ isBead }: any) => {
     useGridView();
 
   return (
-    <div className="px-4 sm:px-8 pt-6">
+    <div className="px-4 sm:px-8 pt-6 pb-14">
       <ViewAllProductComponent
         keyProp={activeTab}
         items={allProducts?.length ? allProducts : beads}
