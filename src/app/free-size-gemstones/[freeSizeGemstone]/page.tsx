@@ -1,10 +1,12 @@
 "use client";
+import { fetchFreeSizeGemstones } from "@/apis/api";
 import { FreeSizeFilterSideBar } from "@/components/FreeSizeGemtones/FreeSizeFilterSideBar";
+import { FreeSizeGridView } from "@/components/FreeSizeGemtones/FreeSizeGridView";
 import { GridView } from "@/components/GridView/GridView";
 import { Divider, Drawer, Grid, GridCol } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function FreeSizeGemstoneSelection() {
   const path = usePathname();
@@ -13,10 +15,16 @@ export default function FreeSizeGemstoneSelection() {
 
   const segments = path.split("/").filter(Boolean);
   const gemstoneType = segments[1];
-    const [selectedStones, setSelectedStones] = useState<string[]>([]);
-  
+  const [selectedStones, setSelectedStones] = useState<string[]>([]);
+  const [filteredGemstones, setFilteredGemstones] = useState<any>([]);
+  const getFreeSizeGemstones = async () => {
+    const response = await fetchFreeSizeGemstones(gemstoneType);
+    setFilteredGemstones(response);
+  };
 
-  console.log("Gemstone Type:", gemstoneType);
+  useEffect(() => {
+    getFreeSizeGemstones();
+  }, [gemstoneType]);
 
   return (
     <div>
@@ -26,7 +34,7 @@ export default function FreeSizeGemstoneSelection() {
             selectedStones={selectedStones}
             setSelectedStones={(value: any) => {
               setSelectedStones(value);
-            //   setFiltersChanged(true);
+              //   setFiltersChanged(true);
             }}
             // selectedColors={selectedColors}
             // setSelectedColors={(value: any) => {
@@ -64,10 +72,10 @@ export default function FreeSizeGemstoneSelection() {
         </GridCol>
 
         <GridCol span={{ base: 12, md: 9 }}>
-          {/* <GridView
+          <FreeSizeGridView
             gemstones={filteredGemstones}
-            loadingTrigger={filterTrigger}
-          /> */}
+            // loadingTrigger={filterTrigger}
+          />
         </GridCol>
       </Grid>
 

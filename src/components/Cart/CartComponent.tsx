@@ -59,7 +59,7 @@ export function CartComponent() {
   };
 
   const getTotalCaratPrice = (value: any) => {
-    return value?.product?.price * Number(value?.caratWeight);
+    return Number(value?.product?.price) * Number(value?.caratWeight);
   };
 
   const getCategory = (values: any) => {
@@ -86,6 +86,8 @@ export function CartComponent() {
       router.push(
         `/product-details?id=${value?.product?.id}&name=${value?.product?.handle}`
       );
+    } else if (value?.product?.productType === "freeSizeStone") {
+      router.push(`/free-size-gemstone-details?id=${value?.product?.id}`);
     } else {
       const category = getCategory(value?.product);
       router?.push(`/jewelry/${category}/${value?.product?.handle}`);
@@ -93,7 +95,11 @@ export function CartComponent() {
   };
   useEffect(() => {
     const total = cart.reduce((sum: number, value: any) => {
-      if (value.product.productType === "stone") {
+      if (
+        value.product.productType === "stone" ||
+        value.product.productType === "freeSizeStone"
+      ) {
+        console.log("valueee", value);
         return (
           sum +
           (value.product.purchaseByCarat
@@ -137,7 +143,8 @@ export function CartComponent() {
   const renderRows = (items: any[]) =>
     items.map((value: any, index: number) => {
       const total =
-        value.product.productType === "stone"
+        value.product.productType === "stone" ||
+        value.product.productType === "freeSizeStone"
           ? value.product.purchaseByCarat
             ? getTotalCaratPrice(value)
             : value.product.price * value.quantity
@@ -172,11 +179,14 @@ export function CartComponent() {
               </div>
 
               {/* Stones */}
-              {value?.product?.productType === "stone" ? (
+              {value?.product?.productType === "stone" ||
+              value.product?.productType === "freeSizeStone" ? (
                 <div className="flex flex-col">
                   <span>Size: {value?.product?.size}</span>
                   <span>Weight: {value?.product?.ct_weight}</span>
-                  <span>Quality: {value?.product?.quality}</span>
+                  {value?.product?.productType === "stone" ? (
+                    <span>Quality: {value?.product?.quality}</span>
+                  ) : null}
                 </div>
               ) : null}
 

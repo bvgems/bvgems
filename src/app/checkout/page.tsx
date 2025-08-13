@@ -278,12 +278,6 @@ export default function CheckoutSelectionPage() {
             )}
           </div>
         </TableTd>
-        <TableTd className="font-semibold">
-          <div className="text-lg">
-            <span>$</span>
-            {value?.jewelryProduct?.price ?? value?.product?.price}
-          </div>
-        </TableTd>
       </TableTr>
     ));
 
@@ -294,7 +288,7 @@ export default function CheckoutSelectionPage() {
         <Grid gutter={"xl"} className="mt-10">
           <GridCol
             className="border border-gray-200 rounded-2xl bg-[#f1f1f1]"
-            span={{ base: 12, md: 8 }}
+            span={{ base: 12 }}
           >
             <CheckoutStepper
               selectedShippingAddress={selectedShippingAddress}
@@ -319,7 +313,7 @@ export default function CheckoutSelectionPage() {
             </div>
           </GridCol>
 
-          <GridCol span={{ base: 12, md: 4 }}>
+          {/* <GridCol span={{ base: 12, md: 0 }}>
             <div className="px-10">
               <h2 className="text-lg font-semibold">Review Your Order</h2>
               <Divider mt={"lg"} />
@@ -334,7 +328,6 @@ export default function CheckoutSelectionPage() {
                     <TableThead className="uppercase text-[#0b182d]">
                       <TableTr>
                         <TableTh>Product</TableTh>
-                        <TableTh>Price</TableTh>
                       </TableTr>
                     </TableThead>
                     <Table.Tbody>{renderRows(stoneItems)}</Table.Tbody>
@@ -352,7 +345,6 @@ export default function CheckoutSelectionPage() {
                     <TableThead className="uppercase text-[#0b182d]">
                       <TableTr>
                         <TableTh>Product</TableTh>
-                        <TableTh>Price</TableTh>
                       </TableTr>
                     </TableThead>
                     <Table.Tbody>{renderRows(otherItems)}</Table.Tbody>
@@ -360,7 +352,7 @@ export default function CheckoutSelectionPage() {
                 </>
               )}
             </div>
-          </GridCol>
+          </GridCol> */}
         </Grid>
       </Container>
     </div>

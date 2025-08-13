@@ -10,6 +10,7 @@ import {
   Group,
   InputBase,
   InputPlaceholder,
+  Table,
   Text,
   useCombobox,
 } from "@mantine/core";
@@ -20,7 +21,9 @@ export const ProductSpecifications = ({
   getProduct,
   product,
   allProducts,
+  isFreeSize = false,
 }: any) => {
+  console.log("prod", product);
   const router = useRouter();
 
   const [allSizes, setAllSizes] = useState<any[]>([]);
@@ -68,13 +71,12 @@ export const ProductSpecifications = ({
 
   useEffect(() => {
     const isTriggeredByUser = isSizeChangedByUser || isQualityChangedByUser;
-
     if (!isTriggeredByUser || !allProducts || !value || !selectedQuality)
       return;
 
-    const newProduct = allProducts.find((item: any) => {
-      return item?.size === value && item?.quality === selectedQuality;
-    });
+    const newProduct = allProducts.find(
+      (item: any) => item?.size === value && item?.quality === selectedQuality
+    );
 
     if (newProduct?.id) {
       getProduct(newProduct.id);
@@ -156,120 +158,186 @@ export const ProductSpecifications = ({
 
   return (
     <Container className="p-4">
-      <div className="text-md flex flex-col gap-12">
-        <div className="flex flex-row justify-between items-center">
-          <div className="font-semibold">Stone</div>
-          <Text>{product?.collection_slug}</Text>
-        </div>
+      {!isFreeSize ? (
+        /** ---------------- Non Free Size Layout ---------------- */
+        <div className="text-md flex flex-col gap-12">
+          <div className="flex flex-row justify-between items-center">
+            <div className="font-semibold">Stone</div>
+            <Text>{product?.collection_slug}</Text>
+          </div>
 
-        <div className="flex flex-row justify-between items-center">
-          <div className="font-semibold">Shape</div>
-          <Text>{product?.shape}</Text>
-        </div>
+          <div className="flex flex-row justify-between items-center">
+            <div className="font-semibold">Shape</div>
+            <Text>{product?.shape}</Text>
+          </div>
 
-        <div className="flex flex-row justify-between items-center">
-          <div className="font-semibold">Size</div>
-          <Combobox
-            store={combobox}
-            resetSelectionOnOptionHover
-            onOptionSubmit={handleSizeChange}
-          >
-            <ComboboxTarget targetType="button">
-              <InputBase
-                onChange={handleSizeChange}
-                component="button"
-                type="button"
-                pointer
-                rightSection={<ComboboxChevron />}
-                rightSectionPointerEvents="none"
-                onClick={() => combobox.toggleDropdown()}
-                className="w-40"
-              >
-                {allSizes.find((item) => item.value === value)?.label || (
-                  <InputPlaceholder>Select size</InputPlaceholder>
-                )}
-              </InputBase>
-            </ComboboxTarget>
+          <div className="flex flex-row justify-between items-center">
+            <div className="font-semibold">Size</div>
+            <Combobox
+              store={combobox}
+              resetSelectionOnOptionHover
+              onOptionSubmit={handleSizeChange}
+            >
+              <ComboboxTarget targetType="button">
+                <InputBase
+                  onChange={handleSizeChange}
+                  component="button"
+                  type="button"
+                  pointer
+                  rightSection={<ComboboxChevron />}
+                  rightSectionPointerEvents="none"
+                  onClick={() => combobox.toggleDropdown()}
+                  className="w-40"
+                >
+                  {allSizes.find((item) => item.value === value)?.label || (
+                    <InputPlaceholder>Select size</InputPlaceholder>
+                  )}
+                </InputBase>
+              </ComboboxTarget>
+              <ComboboxDropdown>
+                <ComboboxOptions>
+                  {allSizes.map((item) => (
+                    <ComboboxOption value={item.value} key={item.value}>
+                      <Group gap="xs">
+                        {item.value === value && <CheckIcon size={12} />}
+                        <span>{item.label}</span>
+                      </Group>
+                    </ComboboxOption>
+                  ))}
+                </ComboboxOptions>
+              </ComboboxDropdown>
+            </Combobox>
+          </div>
 
-            <ComboboxDropdown>
-              <ComboboxOptions>
-                {allSizes.map((item) => (
-                  <ComboboxOption value={item.value} key={item.value}>
-                    <Group gap="xs">
-                      {item.value === value && <CheckIcon size={12} />}
-                      <span>{item.label}</span>
-                    </Group>
-                  </ComboboxOption>
-                ))}
-              </ComboboxOptions>
-            </ComboboxDropdown>
-          </Combobox>
-        </div>
+          <div className="flex flex-row justify-between items-center">
+            <div className="font-semibold">Color</div>
+            <Text className="font-bold">{product?.color}</Text>
+          </div>
 
-        <div className="flex flex-row justify-between items-center">
-          <div className="font-semibold">Color</div>
-          <div
-            className={`text-${
-              product?.color?.toLowerCase() === "purple"
-                ? "violet-800"
-                : product?.color?.toLowerCase()
-            } font-bold`}
-          >
-            {product?.color}
+          <div className="flex flex-row justify-between items-center">
+            <div className="font-semibold">Quality</div>
+            <Combobox
+              store={qualityCombobox}
+              resetSelectionOnOptionHover
+              onOptionSubmit={handleQualityChange}
+            >
+              <ComboboxTarget targetType="button">
+                <InputBase
+                  component="button"
+                  className="w-40"
+                  type="button"
+                  pointer
+                  rightSection={<ComboboxChevron />}
+                  rightSectionPointerEvents="none"
+                  onClick={() => qualityCombobox.toggleDropdown()}
+                >
+                  {qualityOptions.find((item) => item.value === selectedQuality)
+                    ?.label || (
+                    <InputPlaceholder>Select quality</InputPlaceholder>
+                  )}
+                </InputBase>
+              </ComboboxTarget>
+              <ComboboxDropdown>
+                <ComboboxOptions>
+                  {qualityOptions.map((item) => (
+                    <ComboboxOption value={item.value} key={item.value}>
+                      <Group gap="xs">
+                        {item.value === selectedQuality && (
+                          <CheckIcon size={12} />
+                        )}
+                        <span>{item.label}</span>
+                      </Group>
+                    </ComboboxOption>
+                  ))}
+                </ComboboxOptions>
+              </ComboboxDropdown>
+            </Combobox>
+          </div>
+
+          <div className="flex flex-row justify-between items-center">
+            <div className="font-semibold">CT. Weight</div>
+            <Text>{product?.ct_weight}</Text>
+          </div>
+
+          <div className="flex flex-row justify-between items-center">
+            <div className="font-semibold">Cut</div>
+            <Text>{product?.cut}</Text>
           </div>
         </div>
-
-        <div className="flex flex-row justify-between items-center">
-          <div className="font-semibold">Quality</div>
-          <Combobox
-            store={qualityCombobox}
-            resetSelectionOnOptionHover
-            onOptionSubmit={handleQualityChange}
-          >
-            <ComboboxTarget targetType="button">
-              <InputBase
-                component="button"
-                className="w-40"
-                type="button"
-                pointer
-                rightSection={<ComboboxChevron />}
-                rightSectionPointerEvents="none"
-                onClick={() => qualityCombobox.toggleDropdown()}
-              >
-                {qualityOptions.find((item) => item.value === selectedQuality)
-                  ?.label || (
-                  <InputPlaceholder>Select quality</InputPlaceholder>
-                )}
-              </InputBase>
-            </ComboboxTarget>
-
-            <ComboboxDropdown>
-              <ComboboxOptions>
-                {qualityOptions.map((item) => (
-                  <ComboboxOption value={item.value} key={item.value}>
-                    <Group gap="xs">
-                      {item.value === selectedQuality && (
-                        <CheckIcon size={12} />
-                      )}
-                      <span>{item.label}</span>
-                    </Group>
-                  </ComboboxOption>
-                ))}
-              </ComboboxOptions>
-            </ComboboxDropdown>
-          </Combobox>
-        </div>
-
-        <div className="flex flex-row justify-between items-center">
-          <div className="font-semibold">Cut</div>
-          <Text>{product?.cut}</Text>
-        </div>
-
-        <div className="flex flex-row justify-between items-center">
-          <div className="font-semibold">CT. Weight</div>
-          <Text>{product?.ct_weight}</Text>
-        </div>
-      </div>
+      ) : (
+        /** ---------------- Free Size Vertical Table ---------------- */
+        /** ---------------- Free Size Vertical Table ---------------- */
+        <Table
+          horizontalSpacing="lg"
+          verticalSpacing="md"
+          variant="vertical"
+          layout="fixed"
+          withTableBorder
+        >
+          <Table.Tbody>
+            <Table.Tr>
+              <Table.Th>
+                <span className="font-semibold">Stone</span>
+              </Table.Th>
+              <Table.Td>{product?.gemstone_type}</Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Th>
+                <span className="font-semibold">Shape</span>
+              </Table.Th>
+              <Table.Td>{product?.shape}</Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Th>
+                <span className="font-semibold">Size</span>
+              </Table.Th>
+              <Table.Td>{product?.dimension}</Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Th>
+                <span className="font-semibold">Color</span>
+              </Table.Th>
+              <Table.Td>{product?.color}</Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Th>
+                <span className="font-semibold">CT. Weight</span>
+              </Table.Th>
+              <Table.Td>{product?.ct_weight}</Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Th>
+                <span className="font-semibold">Lot Number</span>
+              </Table.Th>
+              <Table.Td>{product?.lot_number}</Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Th>
+                <span className="font-semibold">Single / Matched</span>
+              </Table.Th>
+              <Table.Td>{product?.single_or_matched}</Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Th>
+                <span className="font-semibold">Enhancement</span>
+              </Table.Th>
+              <Table.Td>{product?.enhancement}</Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Th>
+                <span className="font-semibold">Origin</span>
+              </Table.Th>
+              <Table.Td>{product?.origin}</Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Th>
+                <span className="font-semibold">Is Certified</span>
+              </Table.Th>
+              <Table.Td>{product?.is_certified ? "True" : "False"}</Table.Td>
+            </Table.Tr>
+          </Table.Tbody>
+        </Table>
+      )}
     </Container>
   );
 };
