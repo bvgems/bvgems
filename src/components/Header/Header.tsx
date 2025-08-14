@@ -6,7 +6,6 @@ import {
   IconMail,
   IconSearch,
   IconArrowLeft,
-  IconUserFilled,
 } from "@tabler/icons-react";
 import {
   Burger,
@@ -20,8 +19,6 @@ import {
   UnstyledButton,
   Text,
   ThemeIcon,
-  HoverCard,
-  SimpleGrid,
   Menu,
   Autocomplete,
   em,
@@ -30,7 +27,6 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useMemo, useState, useEffect, useRef } from "react";
-
 import { AuthForm } from "../Auth/AuthForm";
 import { useAuth } from "@/hooks/useAuth";
 import { UserProfile } from "../UserProfile/UserProfile";
@@ -39,6 +35,8 @@ import { links } from "@/utils/constants";
 import { fetchAllItems } from "@/apis/api";
 import { useGemStore } from "@/store/useGlobalProductsStore";
 import { DrawerComponent } from "./Drawer";
+import { HeaderHoverCardForGemstones } from "./HeaderHoverCardForGemstones";
+import { AddressBar } from "./AddressBar";
 
 export function Header() {
   const isMobile = useMediaQuery(`(max-width: ${em(991)})`);
@@ -144,7 +142,7 @@ export function Header() {
     </div>
   );
 
-  const items = links.map((link) => {
+  const items = links.map((link, index) => {
     const menuItems = link.links?.map((item: any) => (
       <UnstyledButton
         key={item.link}
@@ -153,11 +151,11 @@ export function Header() {
       >
         <Group wrap="nowrap" align="flex-start">
           {item.image && (
-            <ThemeIcon size={34} variant="default" radius="md">
+            <ThemeIcon size={34} variant="transparent">
               <Image src={item.image} alt={item.label} w={20} h={20} />
             </ThemeIcon>
           )}
-          <div>
+          <div className="hover:text-gray-500">
             <Text
               size="md"
               className={`text-[17px] ${
@@ -172,73 +170,15 @@ export function Header() {
       </UnstyledButton>
     ));
 
-    if (link.label === "Calibrated Gemstones") {
+    if (link.label === "Gemstones") {
       return (
-        <HoverCard
-          key={link.label}
-          width={850}
-          position="bottom"
-          radius="md"
-          shadow="md"
-          withinPortal
-        >
-          <HoverCard.Target>
-            <div className="px-3 py-2 rounded-sm hover:text-gray-500 text-[12px]">
-              <Center>
-                <span
-                  className={`mr-1 ${
-                    smallerTextFlag ? "text-[12px]" : "text-[15px]"
-                  } ${
-                    link.links?.some((item) => pathname === item.link)
-                      ? "text-gray-400"
-                      : ""
-                  }`}
-                >
-                  {link.label}
-                </span>
-                <IconChevronDown size={14} stroke={1.5} />
-              </Center>
-            </div>
-          </HoverCard.Target>
-          <HoverCard.Dropdown className="relative px-12 bg-white rounded-lg shadow-lg border border-gray-200 h-[320px] flex">
-            <Grid gutter="xl" className="w-full">
-              <GridCol className="flex items-center" span={4}>
-                <Image
-                  src="/assets/header-img.png"
-                  alt="Gemstone"
-                  radius="md"
-                  fit="cover"
-                  h={220}
-                />
-              </GridCol>
-              <GridCol span={8} className="relative">
-                <SimpleGrid
-                  cols={2}
-                  spacing="md"
-                  verticalSpacing="xs"
-                  pt={"xl"}
-                >
-                  {menuItems}
-                </SimpleGrid>
-                <div className="flex justify-end pr-4">
-                  <Button
-                    variant="transparent"
-                    color="#0b182d"
-                    onClick={() => router.push("/loose-gemstones")}
-                    className="text-blue-600 underline flex items-center gap-1 hover:text-blue-800"
-                  >
-                    <span className="underline">View All</span>
-                    <IconChevronDown
-                      style={{ transform: "rotate(-90deg)" }}
-                      size={16}
-                      stroke={2}
-                    />
-                  </Button>
-                </div>
-              </GridCol>
-            </Grid>
-          </HoverCard.Dropdown>
-        </HoverCard>
+        <HeaderHoverCardForGemstones
+          key={index}
+          link={link}
+          smallerTextFlag={smallerTextFlag}
+          pathname={pathname}
+          menuItems={menuItems}
+        />
       );
     }
 
@@ -307,32 +247,7 @@ export function Header() {
         <AuthForm onClose={close} />
       </Modal>
 
-      {!isMobile && (
-        <div
-          style={{ fontFamily: "system-ui, sans-serif" }}
-          className="flex justify-evenly py-1 bg-[#F9F5F0] text-black text-sm"
-        >
-          <a
-            href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
-            66 W 47th St, Booth #9 and #10, New York, NY 10036
-          </a>
-          <div className="flex justify-around gap-6">
-            <a href="tel:+12129444382" className="flex gap-2 hover:underline">
-              <IconPhone /> +1 (212) 944-4382
-            </a>
-            <a
-              href="mailto:sales@bvgems.com"
-              className="flex gap-2 hover:underline"
-            >
-              <IconMail /> sales@bvgems.com
-            </a>
-          </div>
-        </div>
-      )}
+      {!isMobile && <AddressBar />}
 
       <header className="sticky top-0 z-50 h-[85px] border-b border-gray-300 bg-white">
         <nav className="mt-4">
@@ -388,15 +303,7 @@ export function Header() {
                     size="22"
                     onClick={handleSearchClick}
                   />
-                  {/* {!user ? (
-                    <IconUserFilled
-                      className="hover:cursor-pointer"
-                      size="22"
-                      onClick={open}
-                    />
-                  ) : !isSmaller ? (
-                    <UserProfile isSmaller={isSmaller} user={user} />
-                  ) : null} */}
+
                   <div className="relative">
                     <IconShoppingBag
                       onClick={() => router.push("/cart")}
@@ -409,21 +316,6 @@ export function Header() {
                       </span>
                     </div>
                   </div>
-
-                  {/* {!isSmaller ? (
-                    <div className="relative">
-                      <IconShoppingBag
-                        onClick={() => router.push("/cart")}
-                        className="hover:cursor-pointer"
-                        size="22"
-                      />
-                      <div className="absolute -top-2 -right-2">
-                        <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
-                          {cartCount}
-                        </span>
-                      </div>
-                    </div>
-                  ) : null} */}
                 </div>
               </div>
             )

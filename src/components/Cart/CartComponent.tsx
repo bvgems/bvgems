@@ -15,8 +15,6 @@ import {
   NumberInput,
   Alert,
   Container,
-  Divider,
-  Tooltip,
 } from "@mantine/core";
 import {
   IconArrowNarrowRight,
@@ -99,7 +97,6 @@ export function CartComponent() {
         value.product.productType === "stone" ||
         value.product.productType === "freeSizeStone"
       ) {
-        console.log("valueee", value);
         return (
           sum +
           (value.product.purchaseByCarat
@@ -142,7 +139,6 @@ export function CartComponent() {
 
   const renderRows = (items: any[]) =>
     items.map((value: any, index: number) => {
-
       const total =
         value.product.productType === "stone" ||
         value.product.productType === "freeSizeStone"

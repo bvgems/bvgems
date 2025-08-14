@@ -46,7 +46,7 @@ export const ImageZoom = ({ src, alt, className = "" }: any) => {
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden cursor-zoom-in px-20 h-[500]  ${className}`}
+      className={`relative overflow-hidden cursor-zoom-in h-[300px] md:h-[450px] ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
@@ -56,7 +56,7 @@ export const ImageZoom = ({ src, alt, className = "" }: any) => {
         ref={sourceRef}
         src={src}
         alt={alt}
-        className={`w-full h-[450px] block object-contain`}
+        className={`w-full h-[300px] md:h-[450px] block object-contain`}
       />
       <img
         ref={targetRef}

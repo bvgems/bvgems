@@ -2,6 +2,7 @@
 
 import {
   gemstoneOptions,
+  GemstoneType,
   ShapeFilterList,
   shopByColorOptions,
   SizeFilterList,
@@ -18,15 +19,15 @@ import {
   Image,
   MantineProvider,
   NumberInput,
-  RangeSlider,
 } from "@mantine/core";
-import React, { useState } from "react";
 
 const theme = createTheme({
   cursorType: "pointer",
 });
 
 export const FilterSideBar = ({
+  selectedTypes,
+  setSelectedTypes,
   selectedStones,
   setSelectedStones,
   selectedColors,
@@ -87,7 +88,27 @@ export const FilterSideBar = ({
           ]}
         >
           <AccordionItem className="mt-2" value="gemstone">
-            <AccordionControl>Gemstone Type</AccordionControl>
+            <AccordionControl>Type</AccordionControl>
+            <AccordionPanel>
+              <CheckboxGroup value={selectedTypes} onChange={setSelectedTypes}>
+                {GemstoneType?.map((item: { label: string }, index: number) => (
+                  <div className="mt-2 ml-5" key={index}>
+                    <Checkbox
+                      value={item.label}
+                      color="#0b182d"
+                      size="16"
+                      className="mt-4"
+                      label={item.label}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                ))}
+              </CheckboxGroup>
+            </AccordionPanel>
+          </AccordionItem>
+
+          <AccordionItem className="mt-2" value="gemstone">
+            <AccordionControl>Gemstone</AccordionControl>
             <AccordionPanel>
               {gemstoneOptions?.map(
                 (item: { label: string }, index: number) => (
@@ -126,6 +147,7 @@ export const FilterSideBar = ({
                     <div className="mt-2 ml-5" key={index}>
                       <Checkbox
                         value={item.label}
+                        checked={selectedShapes.includes(item.label)}
                         color="#0b182d"
                         size="16"
                         className="mt-4"

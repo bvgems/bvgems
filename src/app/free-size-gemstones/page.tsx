@@ -5,7 +5,6 @@ import React from "react";
 
 export default function FreeSizeGemstonePage() {
   const path = useParams();
-  console.log('path',path)
   return (
     <>
       <div className="flex justify-center gap-6 py-10 bg-[#E5E7EB]">

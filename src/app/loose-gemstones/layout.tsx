@@ -3,45 +3,52 @@
 import { getFilteredData } from "@/apis/api";
 import { GridView } from "@/components/GridView/GridView";
 import { FilterSideBar } from "@/components/LooseGemstones/FilterSideBar";
-import {
-  Divider,
-  Grid,
-  GridCol,
-  Drawer,
-  Button,
-  ActionIcon,
-  Group,
-} from "@mantine/core";
+import { Divider, Grid, GridCol, Drawer, ActionIcon } from "@mantine/core";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFilter } from "@tabler/icons-react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const colorParam = searchParams.get("color");
-  const color = colorParam
-    ? colorParam.charAt(0).toUpperCase() + colorParam.slice(1).toLowerCase()
-    : null;
+  const shapeParam = searchParams.get("shape");
+  const type = searchParams?.get("type");
+
+  const capitalizeWords = (str: string) =>
+    str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+
+  const color = colorParam ? capitalizeWords(colorParam) : null;
+  const shape = shapeParam ? capitalizeWords(shapeParam) : null;
 
   const [selectedStones, setSelectedStones] = useState<string[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<any>(type ? [type] : []);
   const [selectedColors, setSelectedColors] = useState<string[]>(
     color ? [color] : []
   );
-  const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
+  const [selectedShapes, setSelectedShapes] = useState<string[]>(
+    shape ? [shape] : []
+  );
   const [selectedRoundSizes, setSelectedRoundSizes] = useState<string[]>([]);
   const [length, setLength] = useState<number | string>("");
   const [width, setWidth] = useState<number | string>("");
   const [priceRange, setPriceRange] = useState<[number, number]>([100, 5000]);
 
-  const [filteredGemstones, setFilteredGemstones] = useState<any>(undefined);
+  const [filteredGemstones, setFilteredGemstones] = useState<any[]>([]);
   const [filterTrigger, setFilterTrigger] = useState(0);
-  const [filtersChanged, setFiltersChanged] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [drawerOpened, { open, close }] = useDisclosure(false);
 
+  const didMount = useRef(false);
+
   const fetchFilteredData = async () => {
+    setLoading(true);
     const filterOptions = {
+      types: selectedTypes,
       collection_slug: selectedStones,
       color: selectedColors,
       shape: selectedShapes,
@@ -50,24 +57,43 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       width,
       price: priceRange,
     };
-
     const response = await getFilteredData(filterOptions);
     setFilteredGemstones(response?.data || []);
+    setLoading(false);
     setFilterTrigger((prev) => prev + 1);
   };
 
+  // Update filters when URL params change
   useEffect(() => {
-
-    if (!filtersChanged) {
-      if (color) {
-        fetchFilteredData();
-        return;
-      } else {
-        return;
-      }
+    if (color) {
+      setSelectedColors([color]);
+    } else {
+      setSelectedColors([]);
     }
+
+    if (shape) {
+      setSelectedShapes([shape]);
+    } else {
+      setSelectedShapes([]);
+    }
+  }, [color, shape]);
+
+  // Always fetch once on mount
+  useEffect(() => {
+    fetchFilteredData().finally(() => {
+      didMount.current = true;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Refetch when any filter changes
+  useEffect(() => {
+    console.log("vchangesss");
+    if (!didMount.current) return;
     fetchFilteredData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    selectedTypes,
     selectedStones,
     selectedColors,
     selectedShapes,
@@ -75,7 +101,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     length,
     width,
     priceRange,
-    filtersChanged,
   ]);
 
   return (
@@ -86,6 +111,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </h1>
       </div>
 
+      {/* Mobile Filter Button */}
       <div className="lg:hidden flex justify-end px-4 mb-2 mt-5">
         <ActionIcon onClick={open} variant="outline" color="gray" size="lg">
           <IconFilter size={20} />
@@ -93,67 +119,47 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       <Grid gutter="lg">
+        {/* Desktop Sidebar */}
         <GridCol span={{ base: 12, md: 3 }} className="hidden lg:flex">
           <FilterSideBar
+            selectedTypes={selectedTypes}
+            setSelectedTypes={setSelectedTypes}
             selectedStones={selectedStones}
-            setSelectedStones={(value: any) => {
-              setSelectedStones(value);
-              setFiltersChanged(true);
-            }}
+            setSelectedStones={setSelectedStones}
             selectedColors={selectedColors}
-            setSelectedColors={(value: any) => {
-              setSelectedColors(value);
-              setFiltersChanged(true);
-            }}
+            setSelectedColors={setSelectedColors}
             selectedShapes={selectedShapes}
-            setSelectedShapes={(value: any) => {
-              setSelectedShapes(value);
-              setFiltersChanged(true);
-            }}
+            setSelectedShapes={setSelectedShapes}
             length={length}
-            setLength={(value: any) => {
-              setLength(value);
-              setFiltersChanged(true);
-            }}
+            setLength={setLength}
             width={width}
-            setWidth={(value: any) => {
-              setWidth(value);
-              setFiltersChanged(true);
-            }}
+            setWidth={setWidth}
             priceRange={priceRange}
-            setPriceRange={(value: any) => {
-              setPriceRange(value);
-              setFiltersChanged(true);
-            }}
+            setPriceRange={setPriceRange}
             selectedRoundSizes={selectedRoundSizes}
-            setSelectedRoundSizes={(value: any) => {
-              setSelectedRoundSizes(value);
-              setFiltersChanged(true);
-            }}
+            setSelectedRoundSizes={setSelectedRoundSizes}
             color={color}
           />
           <Divider orientation="vertical" />
         </GridCol>
 
+        {/* Results */}
         <GridCol span={{ base: 12, md: 9 }}>
-          <GridView
-            gemstones={filteredGemstones}
-            loadingTrigger={filterTrigger}
-            color={color}
-          />
-          {/* {filteredGemstones !== undefined ? (
-            <GridView
-              gemstones={filteredGemstones}
-              loadingTrigger={filterTrigger}
-            />
-          ) : (
+          {loading ? (
             <div className="px-5 py-10 text-center text-gray-500">
               Loading gemstones...
             </div>
-          )} */}
+          ) : (
+            <GridView
+              gemstones={filteredGemstones}
+              loadingTrigger={filterTrigger}
+              color={color}
+            />
+          )}
         </GridCol>
       </Grid>
 
+      {/* Mobile Drawer */}
       <Drawer
         opened={drawerOpened}
         onClose={close}
@@ -165,41 +171,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         withinPortal={false}
       >
         <FilterSideBar
+          selectedTypes={selectedTypes}
+          setSelectedTypes={setSelectedTypes}
           selectedStones={selectedStones}
-          setSelectedStones={(value: any) => {
-            setSelectedStones(value);
-            setFiltersChanged(true);
-          }}
+          setSelectedStones={setSelectedStones}
           selectedColors={selectedColors}
-          setSelectedColors={(value: any) => {
-            setSelectedColors(value);
-            setFiltersChanged(true);
-          }}
+          setSelectedColors={setSelectedColors}
           selectedShapes={selectedShapes}
-          setSelectedShapes={(value: any) => {
-            setSelectedShapes(value);
-            setFiltersChanged(true);
-          }}
+          setSelectedShapes={setSelectedShapes}
           length={length}
-          setLength={(value: any) => {
-            setLength(value);
-            setFiltersChanged(true);
-          }}
+          setLength={setLength}
           width={width}
-          setWidth={(value: any) => {
-            setWidth(value);
-            setFiltersChanged(true);
-          }}
+          setWidth={setWidth}
           priceRange={priceRange}
-          setPriceRange={(value: any) => {
-            setPriceRange(value);
-            setFiltersChanged(true);
-          }}
+          setPriceRange={setPriceRange}
           selectedRoundSizes={selectedRoundSizes}
-          setSelectedRoundSizes={(value: any) => {
-            setSelectedRoundSizes(value);
-            setFiltersChanged(true);
-          }}
+          setSelectedRoundSizes={setSelectedRoundSizes}
           color={color}
         />
       </Drawer>

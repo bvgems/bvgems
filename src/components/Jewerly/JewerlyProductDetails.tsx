@@ -264,15 +264,15 @@ export const JewelryProductDetails = ({
         <AuthForm onClose={close} />
       </Modal>
       <div
-        className={`mt-10 lg:mt-0 px-9 flex flex-col ${
+        className={`mt-10 lg:mt-0 px-0 md:px-9 flex flex-col ${
           isBead ? "gap-2" : "gap-4"
         }`}
       >
-        <h1 className="uppercase text-[1.5rem] sm:text-[2rem] leading-snug sm:leading-relaxed tracking-wide">
+        <h1 className="uppercase text-[1.3rem] sm:text-[2rem] leading-snug sm:leading-relaxed tracking-wide">
           {productData?.title}
         </h1>
 
-        <div className="text-[1.3rem] sm:text-[1.9rem] text-gray-700 font-bold">
+        <div className="text-[1.2rem] sm:text-[1.9rem] text-gray-700 font-bold">
           <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
             <span className="font-sans">
               {(() => {
@@ -334,7 +334,6 @@ export const JewelryProductDetails = ({
                         }
                       }
                     );
-                    console.log("priiii", price);
                     if (price === undefined) {
                       return "Select Options";
                     } else {

@@ -5,10 +5,7 @@ import {
   Grid,
   GridCol,
   Button,
-  Table,
   TableTr,
-  TableThead,
-  TableTh,
   TableTd,
   Image,
   Divider,
@@ -232,7 +229,6 @@ export default function CheckoutSelectionPage() {
     }
   };
 
-  // Separate items
   const stoneItems = cart.filter(
     (value: any) => value?.product?.productType === "stone"
   );
@@ -244,7 +240,7 @@ export default function CheckoutSelectionPage() {
     items.map((value: any, index: number) => (
       <TableTr key={index}>
         <TableTd className="text-[1rem]">
-          <div className="flex flex-col gap-2 justify-start">
+          <div className="flex gap-4">
             <Image
               src={
                 value?.jewelryProduct?.image_url ?? value?.product?.image_url
@@ -253,29 +249,62 @@ export default function CheckoutSelectionPage() {
               w={100}
               fit="fill"
             />
-            <div className="flex flex-col">
-              <span>
+            <div className="flex flex-col gap-1">
+              <div className="font-semibold">
                 {value?.product?.collection_slug
                   ? value?.product?.collection_slug +
                     " " +
                     value?.product?.shape
-                  : value?.jewelryProduct?.productName}
-              </span>
-              {value?.product?.purchaseByCarat ? (
-                <span className="text-sm">
-                  Carat Weight: {value?.caratWeight}
-                </span>
-              ) : (
-                <span className="text-sm">Qty: {value?.quantity}</span>
+                  : value?.product?.title}
+              </div>
+
+              {/* Stones */}
+              {(value?.product?.productType === "stone" ||
+                value.product?.productType === "freeSizeStone") && (
+                <div className="flex flex-col">
+                  <span>Size: {value?.product?.size}</span>
+                  <span>Weight: {value?.product?.ct_weight}</span>
+                  {value?.product?.productType === "stone" && (
+                    <span>Quality: {value?.product?.quality}</span>
+                  )}
+                </div>
+              )}
+
+              {/* Rings / Necklaces */}
+              {(value?.product?.productType === "ringJewelry" ||
+                value?.product?.productType === "necklaceJewelry") && (
+                <div className="flex flex-col">
+                  <span>Gold Color: {value?.product?.goldColor}</span>
+                  {value?.product?.size && (
+                    <span>Size: {value?.product?.size}</span>
+                  )}
+                  {value?.product?.productType === "ringJewelry" ? (
+                    <>
+                      <span>Shape: {value?.product?.shape}</span>
+                      <span>Selected Stones: {value?.product?.gemstone}</span>
+                    </>
+                  ) : value?.product?.length ? (
+                    <span>Length: {value?.product?.length}</span>
+                  ) : null}
+                </div>
+              )}
+
+              {/* Earrings */}
+              {value?.product?.productType === "earringJewelry" &&
+                value?.product?.goldColor && (
+                  <span>Gold Color: {value?.product?.goldColor}</span>
+                )}
+
+              {/* Bracelets */}
+              {value?.product?.productType === "braceletJewelry" && (
+                <span>Gold Color: {value?.product?.goldColor}</span>
+              )}
+
+              {/* Beads */}
+              {value?.product?.productType === "bead" && (
+                <span>Stone size: {value?.product?.size}</span>
               )}
             </div>
-            {value?.product?.productType === "stone" && (
-              <div className="flex flex-col">
-                <span>Size: {value?.product?.size}</span>
-                <span>Weight: {value?.product?.ct_weight}</span>
-                <span>Quality: {value?.product?.quality}</span>
-              </div>
-            )}
           </div>
         </TableTd>
       </TableTr>
@@ -288,7 +317,7 @@ export default function CheckoutSelectionPage() {
         <Grid gutter={"xl"} className="mt-10">
           <GridCol
             className="border border-gray-200 rounded-2xl bg-[#f1f1f1]"
-            span={{ base: 12 }}
+            span={{ base: 12, md: 8 }}
           >
             <CheckoutStepper
               selectedShippingAddress={selectedShippingAddress}
@@ -313,46 +342,146 @@ export default function CheckoutSelectionPage() {
             </div>
           </GridCol>
 
-          {/* <GridCol span={{ base: 12, md: 0 }}>
+          <GridCol span={{ base: 12, md: 4 }}>
             <div className="px-10">
-              <h2 className="text-lg font-semibold">Review Your Order</h2>
-              <Divider mt={"lg"} />
+              <h2 className="text-lg font-semibold mb-4">Review Your Order</h2>
+              <Divider />
+
               {stoneItems.length > 0 && (
                 <>
-                  <h3 className="mt-4 mb-2 font-semibold">Gemstones</h3>
-                  <Table
-                    verticalSpacing={"lg"}
-                    striped
-                    horizontalSpacing={"xl"}
-                  >
-                    <TableThead className="uppercase text-[#0b182d]">
-                      <TableTr>
-                        <TableTh>Product</TableTh>
-                      </TableTr>
-                    </TableThead>
-                    <Table.Tbody>{renderRows(stoneItems)}</Table.Tbody>
-                  </Table>
+                  <h3 className="mt-4 mb-3 font-semibold text-gray-700">
+                    Gemstones
+                  </h3>
+                  <div className="flex flex-col gap-4">
+                    {stoneItems.map((item: any, idx: number) => (
+                      <div
+                        key={idx}
+                        className="flex gap-4 border border-gray-200 rounded-lg p-3 bg-white shadow-sm hover:shadow-md transition"
+                      >
+                        <Image
+                          src={
+                            item?.jewelryProduct?.image_url ??
+                            item?.product?.image_url
+                          }
+                          alt={item?.product?.title}
+                          h={80}
+                          w={80}
+                          fit="cover"
+                          className="rounded-md"
+                        />
+                        <div className="flex flex-col justify-between text-sm">
+                          <div>
+                            <div className="font-semibold text-gray-900 mb-1">
+                              {item?.product?.collection_slug
+                                ? `${item?.product?.collection_slug} ${item?.product?.shape}`
+                                : item?.product?.title}
+                            </div>
+                            <div className="text-gray-600">
+                              Size:{" "}
+                              <span className="font-medium">
+                                {item?.product?.size}
+                              </span>
+                            </div>
+                            <div className="text-gray-600">
+                              Weight:{" "}
+                              <span className="font-medium">
+                                {item?.product?.ct_weight}
+                              </span>
+                            </div>
+                            {item?.product?.quality && (
+                              <div className="text-gray-600">
+                                Quality:{" "}
+                                <span className="font-medium">
+                                  {item?.product?.quality}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </>
               )}
+
               {otherItems.length > 0 && (
                 <>
-                  <h3 className="mt-6 mb-2 font-semibold">Other Items</h3>
-                  <Table
-                    verticalSpacing={"lg"}
-                    striped
-                    horizontalSpacing={"xl"}
-                  >
-                    <TableThead className="uppercase text-[#0b182d]">
-                      <TableTr>
-                        <TableTh>Product</TableTh>
-                      </TableTr>
-                    </TableThead>
-                    <Table.Tbody>{renderRows(otherItems)}</Table.Tbody>
-                  </Table>
+                  <h3 className="mt-6 mb-3 font-semibold text-gray-700">
+                    Other Items
+                  </h3>
+                  <div className="flex flex-col gap-4">
+                    {otherItems.map((item: any, idx: number) => (
+                      <div
+                        key={idx}
+                        className="flex gap-4 border border-gray-200 rounded-lg p-3 bg-white shadow-sm hover:shadow-md transition"
+                      >
+                        <Image
+                          src={
+                            item?.jewelryProduct?.image_url ??
+                            item?.product?.image_url
+                          }
+                          alt={item?.product?.title}
+                          h={80}
+                          w={80}
+                          fit="cover"
+                          className="rounded-md"
+                        />
+                        <div className="flex flex-col justify-between text-sm">
+                          <div>
+                            <div className="font-semibold text-gray-900 mb-1">
+                              {item?.product?.collection_slug
+                                ? `${item?.product?.collection_slug} ${item?.product?.shape}`
+                                : item?.product?.title}
+                            </div>
+                            {item?.product?.goldColor && (
+                              <div className="text-gray-600">
+                                Gold Color:{" "}
+                                <span className="font-medium">
+                                  {item?.product?.goldColor}
+                                </span>
+                              </div>
+                            )}
+                            {item?.product?.size && (
+                              <div className="text-gray-600">
+                                Size:{" "}
+                                <span className="font-medium">
+                                  {item?.product?.size}
+                                </span>
+                              </div>
+                            )}
+                            {item?.product?.shape && (
+                              <div className="text-gray-600">
+                                Shape:{" "}
+                                <span className="font-medium">
+                                  {item?.product?.shape}
+                                </span>
+                              </div>
+                            )}
+                            {item?.product?.gemstone && (
+                              <div className="text-gray-600">
+                                Selected Stones:{" "}
+                                <span className="font-medium">
+                                  {item?.product?.gemstone}
+                                </span>
+                              </div>
+                            )}
+                            {item?.product?.length && (
+                              <div className="text-gray-600">
+                                Length:{" "}
+                                <span className="font-medium">
+                                  {item?.product?.length}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </>
               )}
             </div>
-          </GridCol> */}
+          </GridCol>
         </Grid>
       </Container>
     </div>

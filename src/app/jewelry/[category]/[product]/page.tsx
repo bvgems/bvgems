@@ -89,7 +89,7 @@ export default function JewelryProductPage() {
                 alt={productData?.title}
               />
 
-              <div className="flex gap-3 mt-2 flex-wrap justify-center">
+              <div className="flex gap-3 flex-wrap justify-center">
                 {!showShapeOptions
                   ? thumbnails.map((thumb: any, idx: number) => (
                       <div

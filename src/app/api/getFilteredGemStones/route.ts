@@ -29,6 +29,14 @@ export async function POST(req: NextRequest) {
     let paramIndex = 1;
 
     if (Object.keys(cleanedOptions).length > 0) {
+      if (cleanedOptions.types) {
+        whereClauses.push(
+          `(type = ANY($${paramIndex}::text[]) OR quality = ANY($${paramIndex}::text[]))`
+        );
+        values.push(cleanedOptions.types);
+        paramIndex++;
+      }
+
       if (cleanedOptions.collection_slug) {
         whereClauses.push(`collection_slug = ANY($${paramIndex++}::text[])`);
         values.push(cleanedOptions.collection_slug);

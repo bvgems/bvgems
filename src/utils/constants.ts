@@ -752,6 +752,40 @@ export const links = [
   { link: "/", label: "Home" },
   {
     link: "/loose-gemstones",
+    label: "Gemstones",
+    links: gemstoneOptions,
+  },
+  // { link: "/free-size-gemstones", label: "Free Size Gemstones" },
+  { link: "/precious-beads", label: "Precious Beads" },
+
+  {
+    label: "Jewelry",
+    links: [
+      { link: "/jewelry/rings", label: "Rings" },
+      { link: "/jewelry/earrings", label: "Earrings" },
+      { link: "/jewelry/necklaces", label: "Necklaces" },
+      { link: "/jewelry/bracelets", label: "Bracelets" },
+    ],
+  },
+  { link: "/create-colorstone-layout", label: "Colorstone Layouts" },
+  {
+    label: "More",
+    links: [
+      {
+        link: "/customer-support/education?activeStone=morganite",
+        label: "Gemstones Education",
+      },
+      { link: "/customer-support/about-us", label: "About B. V. Gems" },
+      { link: "/customer-support/store-policy", label: "Store Policy" },
+      { link: "/customer-support/faqs", label: "FAQ" },
+      { link: "/customer-support/contact-us", label: "Contact Us" },
+    ],
+  },
+];
+export const mobileLinks = [
+  { link: "/", label: "Home" },
+  {
+    link: "/loose-gemstones",
     label: "Calibrated Gemstones",
     links: gemstoneOptions,
   },
@@ -765,9 +799,9 @@ export const links = [
       { link: "/jewelry/earrings", label: "Ear Rings" },
       { link: "/jewelry/necklaces", label: "Necklaces" },
       { link: "/jewelry/bracelets", label: "Bracelets" },
-      { link: "/create-colorstone-layout", label: "Colorstone Layouts" },
     ],
   },
+  { link: "/create-colorstone-layout", label: "Colorstone Layouts" },
   {
     label: "More",
     links: [
@@ -823,5 +857,14 @@ export const IndustryAffiliationOptions = [
   {
     logo: "/assets/idca-logo.png",
     link: "https://idcany.org/",
+  },
+];
+
+export const GemstoneType = [
+  {
+    label: "Natural",
+  },
+  {
+    label: "Lab Grown",
   },
 ];

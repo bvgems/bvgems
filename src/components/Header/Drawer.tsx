@@ -1,8 +1,15 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { links } from "@/utils/constants";
-import { Accordion, Button, Drawer, Image, Modal } from "@mantine/core";
+import { links, mobileLinks } from "@/utils/constants";
+import {
+  Accordion,
+  Button,
+  Divider,
+  Drawer,
+  Image,
+  Modal,
+} from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -53,7 +60,7 @@ export const DrawerComponent = ({
             control: { paddingLeft: 12, fontWeight: 500, fontSize: 16 },
           }}
         >
-          {links.map((link: any) => {
+          {mobileLinks.map((link: any) => {
             const hasSublinks =
               Array.isArray(link.links) && link.links.length > 0;
 
@@ -116,7 +123,9 @@ export const DrawerComponent = ({
           })}
         </Accordion>
         {user && (
-          <div>
+          <div className="mt-4">
+            <Divider />
+
             <div
               onClick={() => {
                 toggle();

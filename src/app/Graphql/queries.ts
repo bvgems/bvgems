@@ -284,7 +284,7 @@ export const getAllProducts = `
 
 export const shopifyQuery = `
       query getProductsByCategory($category: String!) {
-        products(first: 50, query: $category) {
+        products(first: 150, query: $category) {
           edges {
             node {
               id

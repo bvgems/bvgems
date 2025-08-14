@@ -1,18 +1,10 @@
 "use client";
 
-import { Card, Tooltip } from "@mantine/core";
+import { Card, Tooltip, Skeleton } from "@mantine/core";
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { IconHeart, IconScale } from "@tabler/icons-react";
-
-const GEM_COLORS: Record<string, string> = {
-  emerald: "#50C878",
-  ruby: "#E0115F",
-  "pink sapphire": "#887084",
-  "blue sapphire": "#0F52BA",
-};
 
 export const JewelryCategoryCard = ({
   isBead,
@@ -22,6 +14,18 @@ export const JewelryCategoryCard = ({
 }: any) => {
   const router = useRouter();
   const { user } = useAuth();
+
+  const isLoading = !product?.node;
+
+  if (isLoading) {
+    return (
+      <Card radius="md" shadow="none" padding="md">
+        <Skeleton height={260} radius="md" mb="sm" />
+        <Skeleton height={20} width="80%" mb="xs" />
+        <Skeleton height={16} width="40%" />
+      </Card>
+    );
+  }
 
   const mainImage = product?.node?.images?.edges?.[0]?.node?.url || "";
   const altImage = product?.node?.images?.edges?.[1]?.node?.url || "";
@@ -87,7 +91,7 @@ export const JewelryCategoryCard = ({
       >
         <AnimatePresence mode="wait">
           <motion.img
-            key={displayImage} // Key change triggers animation
+            key={displayImage}
             src={displayImage}
             alt={product?.node?.title}
             className="absolute object-contain"
@@ -100,27 +104,8 @@ export const JewelryCategoryCard = ({
         </AnimatePresence>
       </div>
 
-      {/* ACTION ICONS */}
-      <div
-        className="mt-3 flex items-center gap-3 h-9"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          className="p-2 rounded-full hover:bg-gray-100 transition"
-          aria-label="Add to wishlist"
-        >
-          <IconHeart size={18} className="text-gray-600" />
-        </button>
-        <button
-          className="p-2 rounded-full hover:bg-gray-100 transition"
-          aria-label="Compare"
-        >
-          <IconScale size={18} className="text-gray-600" />
-        </button>
-      </div>
-
       {/* VARIANT SWATCHES */}
-      {!isTwoStone && variantImages.length > 1 && (
+      {!isTwoStone && !isBead && variantImages.length > 1 && (
         <div
           className="mt-3 flex items-center gap-2"
           onClick={(e) => e.stopPropagation()}
