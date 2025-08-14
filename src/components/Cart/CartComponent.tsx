@@ -142,6 +142,7 @@ export function CartComponent() {
 
   const renderRows = (items: any[]) =>
     items.map((value: any, index: number) => {
+
       const total =
         value.product.productType === "stone" ||
         value.product.productType === "freeSizeStone"
@@ -235,7 +236,11 @@ export function CartComponent() {
           {/* Quantity / Carat Weight */}
           <TableTd>
             {value?.product?.purchaseByCarat ? (
-              <span>Carat Weight: {value?.caratWeight}</span>
+              value?.product?.productType === "stone" ? (
+                <span>Carat Weight: {value?.caratWeight}</span>
+              ) : (
+                <span>Carat Weight: {value?.product?.ct_weight}</span>
+              )
             ) : (
               <NumberInput
                 className="flex-1"

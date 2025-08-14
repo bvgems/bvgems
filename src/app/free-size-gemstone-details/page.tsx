@@ -39,14 +39,13 @@ export default function FreeSizeGemstonePage() {
 
   const router = useRouter();
   const addProductToCart = () => {
+
     if (!product) return;
 
     const getPerCaratPrice = (item: any): number => {
       if (!item) return 0;
       return Number((item.price * caratWeight).toFixed(2));
     };
-    const perCarat = getPerCaratPrice(product);
-    console.log("per carat", perCarat, product, caratWeight);
 
     addToCart({
       product: {
@@ -67,7 +66,7 @@ export default function FreeSizeGemstonePage() {
         type: "",
       },
       quantity: 1,
-      caratWeight: `${caratWeight}`,
+      caratWeight: ``,
     });
 
     notifications.show({
@@ -82,10 +81,6 @@ export default function FreeSizeGemstonePage() {
   const getFreeSizeGemstonesById = async () => {
     const result = await fetchFreeSizeGemstonesById(id);
     setProduct(result);
-  };
-  const handleCaratWeightChanges = (value: number) => {
-    const ctw = Math.max(0.01, Number(value) || 0.01);
-    setCaratWeight(ctw);
   };
 
   useEffect(() => {
@@ -134,12 +129,12 @@ export default function FreeSizeGemstonePage() {
             {/* Title */}
             <div>
               <h1 className="text-xl font-semibold">
-                {product?.collection_slug} {product?.shape} {product?.size}{" "}
-                {product?.ct_weight}cts., {product?.quality} Quality
+                {product?.gemstone_type} {product?.shape} {product?.size}{" "}
+                {product?.ct_weight}cts.
               </h1>
               <div className="flex justify-between items-center mt-2">
                 <span className="text-sm text-gray-500">
-                  Item: #{product?.id}
+                  Item: #{product?.lot_number}
                 </span>
                 <Badge color="#37B24D" radius="xs">
                   Available
@@ -153,6 +148,12 @@ export default function FreeSizeGemstonePage() {
                 <div className="text-md font-medium flex flex-col gap-2">
                   <span>
                     Per Carat Price: <strong>{product?.price}</strong>
+                  </span>
+                  <span>
+                    Total Price:{" "}
+                    <strong>
+                      {product?.price ? product?.price * product?.ct_weight : 0}
+                    </strong>
                   </span>
                 </div>
 
@@ -172,19 +173,6 @@ export default function FreeSizeGemstonePage() {
             )}
 
             {/* Switch for mode selection */}
-
-            {/* Input section */}
-            {user && (
-              <div className="flex items-center justify-between gap-2">
-                <div>Carat Weight:</div>
-                <NumberInput
-                  value={caratWeight}
-                  onChange={(value: any) => handleCaratWeightChanges(value)}
-                  min={0.01}
-                  step={0.01}
-                />
-              </div>
-            )}
 
             {/* Alert */}
             <Alert
