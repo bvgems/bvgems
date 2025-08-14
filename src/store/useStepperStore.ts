@@ -46,18 +46,7 @@ type BusinessReference = {
 };
 
 type amlInfo = {
-  bankName: string;
-  bankAccount: string;
-  primaryContact: string;
-  bankAddress: string;
-  country: string;
-  state: string;
-  city: string;
-  zipCode: string;
-  phoneNumber: string;
   amlStatus: string;
-  amlOther: string;
-  confirmed: boolean;
 };
 
 type UserStore = {

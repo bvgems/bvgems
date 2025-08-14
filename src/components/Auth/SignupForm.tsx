@@ -138,6 +138,7 @@ export const SignupForm = ({
 
   return (
     <>
+      {isStepper ? <h1 className="text-center mt-5 text-2xl">Personal Information</h1> : null}
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <div>
           <div

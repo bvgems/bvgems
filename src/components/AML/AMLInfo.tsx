@@ -38,40 +38,9 @@ export const AMLInfo = ({ isStepper }: any) => {
 
   const form = useForm({
     initialValues: {
-      bankName: "",
-      bankAccount: "",
-      bankAddress: "",
-      primaryContact: "",
-      country: "",
-      state: "",
-      city: "",
-      zipCode: "",
-      phoneNumber: "",
       amlStatus: "",
-      amlOther: "",
-      confirmed: false,
     },
     validateInputOnChange: true,
-    validate: {
-      bankName: (v) => (v.trim() ? null : "Bank name is required"),
-      bankAccount: (v) =>
-        /^\d{8,17}$/.test(v)
-          ? null
-          : "Bank account must be 8-17 digits (U.S. standard)",
-      bankAddress: (v) => (v.trim() ? null : "Bank address is required"),
-      primaryContact: (v) => (v.trim() ? null : "Primary contact is required"),
-      country: (v) => (v.trim() ? null : "Country is required"),
-      state: (v) => (v.trim() ? null : "State is required"),
-      city: (v) => (v.trim() ? null : "City is required"),
-      zipCode: (v) => (/^\d{5}(-\d{4})?$/.test(v) ? null : "Invalid ZIP code"),
-      phoneNumber: (value) => {
-        if (!value) return "Phone number is required.";
-        if (!isValidPhoneNumber(value))
-          return "Please enter a valid phone number.";
-        return null;
-      },
-      confirmed: (v) => (v ? null : "Confirmation is required"),
-    },
   });
 
   useEffect(() => {
@@ -80,49 +49,17 @@ export const AMLInfo = ({ isStepper }: any) => {
     const fetchAMLInfo = async () => {
       if (amlInfo) {
         form.setValues({
-          bankName: amlInfo.bankName || "",
-          bankAccount: amlInfo.bankAccount || "",
-          bankAddress: amlInfo.bankAddress || "",
-          primaryContact: amlInfo.primaryContact || "",
-          country: amlInfo.country || "",
-          state: amlInfo.state || "",
-          city: amlInfo.city || "",
-          zipCode: amlInfo.zipCode || "",
-          phoneNumber: amlInfo.phoneNumber || "",
           amlStatus: amlInfo.amlStatus || "",
-          amlOther: amlInfo.amlOther || "",
-          confirmed: amlInfo.confirmed || false,
         });
         setInitialData({
-          bankName: amlInfo.bankName || "",
-          bankAccount: amlInfo.bankAccount || "",
-          bankAddress: amlInfo.bankAddress || "",
-          primaryContact: amlInfo.primaryContact || "",
-          country: amlInfo.country || "",
-          state: amlInfo.state || "",
-          city: amlInfo.city || "",
-          zipCode: amlInfo.zipCode || "",
-          phoneNumber: amlInfo.phoneNumber || "",
           amlStatus: amlInfo.amlStatus || "",
-          amlOther: amlInfo.amlOther || "",
-          confirmed: amlInfo.confirmed || false,
         });
       } else if (user?.id) {
         const res: any = await getAMLInfo(user.id);
         if (res?.amlInfo) {
           const normalized = {
-            bankName: res.amlInfo.bank_name ?? "",
-            bankAccount: res.amlInfo.bank_account ?? "",
-            bankAddress: res.amlInfo.bank_address ?? "",
-            primaryContact: res.amlInfo.primary_contact ?? "",
-            country: res.amlInfo.country ?? "",
-            state: res.amlInfo.state ?? "",
-            city: res.amlInfo.city ?? "",
-            zipCode: res.amlInfo.zip_code ?? "",
-            phoneNumber: res.amlInfo.phone ?? "",
             amlStatus: res.amlInfo.aml_status ?? "",
             amlOther: res.amlInfo.aml_other ?? "",
-            confirmed: res.amlInfo.confirmed ?? false,
           };
           form.setValues(normalized);
           setInitialData(normalized);
@@ -135,7 +72,6 @@ export const AMLInfo = ({ isStepper }: any) => {
   const handleCheckboxChange = (status: string) => {
     form.setValues({
       amlStatus: status === form.values.amlStatus ? "" : status,
-      amlOther: "",
     });
   };
 
@@ -166,7 +102,6 @@ export const AMLInfo = ({ isStepper }: any) => {
         useStpperStore.getState().clearBusinessReference();
         useStpperStore.getState().clearAmlInfo();
         useStpperStore.getState().clearDataFlags();
-
         localStorage.clear();
 
         setInitialData(values);
@@ -189,9 +124,9 @@ export const AMLInfo = ({ isStepper }: any) => {
 
       if (isStepper && form.isValid()) {
         await new Promise((resolve) => setTimeout(resolve, 300));
-
         setAmlInfo(values);
         await applyAccount(values);
+        router?.push("/");
       } else if (user?.id) {
         const response = await editAMLInfo(user.id, values);
         if (response?.flag) {
@@ -243,17 +178,18 @@ export const AMLInfo = ({ isStepper }: any) => {
   }
 
   return (
-    <Container mt={"xl"} size="xl">
+    <Container mt="xl" size="xl">
       <form
-        className={`${isStepper ? "px-5 sm:px-8 lg:px-28" : ""}`}
+        className={isStepper ? "px-5 sm:px-8 lg:px-28" : ""}
         onSubmit={form.onSubmit(handleSubmit)}
       >
-        {!isStepper ? (
+        {!isStepper && (
           <Title order={3} mb="md">
             AML Information
           </Title>
-        ) : null}
-        {isStepper ? (
+        )}
+
+        {isStepper && (
           <div className="flex justify-end mt-5">
             <Button
               onClick={redirectToHome}
@@ -264,68 +200,12 @@ export const AMLInfo = ({ isStepper }: any) => {
               <span className="underline">Skip For Now</span>
             </Button>
           </div>
-        ) : null}
+        )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <TextInput
-            label="Bank Name"
-            placeholder="Enter your bank's name"
-            disabled={isLoading}
-            {...form.getInputProps("bankName")}
-          />
-          <TextInput
-            label="Bank Account"
-            placeholder="Enter your bank account number"
-            disabled={isLoading}
-            {...form.getInputProps("bankAccount")}
-          />
-          <TextInput
-            label="Primary Contact"
-            placeholder="Full name of primary contact"
-            disabled={isLoading}
-            {...form.getInputProps("primaryContact")}
-          />
-          <TextInput
-            label="Bank Address"
-            placeholder="Address of the bank"
-            disabled={isLoading}
-            {...form.getInputProps("bankAddress")}
-          />
-          <Select
-            label="Country"
-            data={COUNTRY_OPTIONS}
-            searchable
-            placeholder="Select your country"
-            disabled={isLoading}
-            {...form.getInputProps("country")}
-          />
-          <TextInput
-            label="State"
-            placeholder="Enter your state"
-            disabled={isLoading}
-            {...form.getInputProps("state")}
-          />
-          <TextInput
-            label="City"
-            placeholder="Enter your city"
-            disabled={isLoading}
-            {...form.getInputProps("city")}
-          />
-          <TextInput
-            label="ZIP Code"
-            placeholder="Enter ZIP code"
-            disabled={isLoading}
-            {...form.getInputProps("zipCode")}
-          />
-          <PhoneNumberInput form={form} />
-        </div>
-
-        <Title order={4} mt="xl" mb="sm">
-          AML Status
-        </Title>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-5">
           {AML_OPTIONS.map((label, index) => (
             <Checkbox
+              size="md"
               color="#0b182d"
               key={index}
               label={label}
@@ -336,28 +216,12 @@ export const AMLInfo = ({ isStepper }: any) => {
           ))}
           <Checkbox
             label="Other"
+            color="#0b182d"
             checked={form.values.amlStatus === "Other"}
             onChange={() => handleCheckboxChange("Other")}
             disabled={isLoading}
           />
-          {form.values.amlStatus === "Other" && (
-            <Textarea
-              placeholder="Describe your AML status"
-              {...form.getInputProps("amlOther")}
-              disabled={isLoading}
-            />
-          )}
         </div>
-
-        <Title order={4} mt="xl" mb="sm">
-          Confirmation
-        </Title>
-        <Checkbox
-          color="#0b182d"
-          label="I confirm that all the stated information is true and correct. If additional documentation is required for verification, I will provide as requested."
-          {...form.getInputProps("confirmed", { type: "checkbox" })}
-          disabled={isLoading}
-        />
 
         <Group mt="xl">
           <Button

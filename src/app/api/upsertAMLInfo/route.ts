@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { data, userId } = body;
-
+    console.log("dataaa", data);
     const checkResult: any = await pool.query(
       `SELECT id FROM aml_info WHERE user_id = $1 LIMIT 1`,
       [userId]

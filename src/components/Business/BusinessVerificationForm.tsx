@@ -72,7 +72,6 @@ export const BusinessVerificationForm = ({
   };
 
   useEffect(() => {
-    console.log("stepperUser", stepperUser, verification);
     if (!hasHydrated) return;
 
     if (!verification) {
@@ -121,6 +120,10 @@ export const BusinessVerificationForm = ({
 
   return (
     <>
+      {isStepper ? (
+        <h1 className="text-center mt-5 text-2xl">Business Verification</h1>
+      ) : null}
+
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <div
           className={`flex flex-col gap-4 ${
@@ -130,13 +133,13 @@ export const BusinessVerificationForm = ({
           <div className="flex gap-3">
             <TextInput
               disabled
-              label="Company Name"
+              label="Your Company Name"
               placeholder="your company name"
               className="w-full"
               {...form.getInputProps("companyName")}
             />
             <TextInput
-              label="Enter Owner Name"
+              label="Company's Owner Name"
               placeholder="your owner name"
               className="w-full"
               disabled={isDisabled}
@@ -145,7 +148,7 @@ export const BusinessVerificationForm = ({
           </div>
 
           <TextInput
-            label="Enter Company Address"
+            label="Enter Your Company's Address"
             placeholder="your company address"
             disabled={isDisabled}
             {...form.getInputProps("companyAddress")}

@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
       amlInfo,
     } = body;
     const userCreationResponse = await createUser(stepperUser);
+    console.log('use creatonn',userCreationResponse)
     const userId = userCreationResponse?.id;
 
     businessVerification.companyName = stepperUser?.companyName;

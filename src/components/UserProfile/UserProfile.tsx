@@ -62,14 +62,6 @@ export const UserProfile = ({ isSmaller, user }: any) => {
           My Profile
         </MenuItem>
 
-        <Menu.Item
-          onClick={() => {
-            router?.push("/my-orders");
-          }}
-          leftSection={<IconDiamond size={16} stroke={1.5} />}
-        >
-          My Orders
-        </Menu.Item>
         <MenuItem
           onClick={handleLogout}
           leftSection={<IconLogout size={16} stroke={1.5} />}

@@ -300,11 +300,11 @@ export const upsertShippingAddress = async (isEdit: boolean, payload: any) => {
     let response;
     if (isEdit) {
       response = await axios.put(
-        "${baseUrl}/api/updateShippingAddress",
+        `${baseUrl}/api/updateShippingAddress`,
         payload
       );
     } else {
-      response = await axios.post("${baseUrl}/api/storeAddress", payload);
+      response = await axios.post(`${baseUrl}/api/storeAddress`, payload);
     }
     return response;
   } catch (error) {
@@ -322,12 +322,12 @@ export const upsertBusinessReference = async (
     let response;
     if (isEdit) {
       response = await axios.put(
-        "${baseUrl}/api/updateBusinessReference",
+        `${baseUrl}/api/updateBusinessReference`,
         payload
       );
     } else {
       response = await axios.post(
-        "${baseUrl}/api/storeBusinessReference",
+        `${baseUrl}/api/storeBusinessReference`,
         payload
       );
     }
@@ -514,7 +514,7 @@ export const handleChangePassword = async (payload: {
   newPassword: string;
 }) => {
   try {
-    const response = await fetch("${baseUrl}/api/changePassword", {
+    const response = await fetch(`${baseUrl}/api/changePassword`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

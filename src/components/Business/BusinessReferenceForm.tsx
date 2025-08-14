@@ -117,62 +117,67 @@ export const BusinessReferenceForm = ({
   };
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
-      <div
-        className={`flex flex-col gap-4 ${
-          isStepper ? "px-5 sm:px-8 lg:px-28" : "px-2.5"
-        }`}
-      >
-        {isStepper && (
-          <div className="flex justify-end mt-5">
-            <Button
-              type="button"
-              onClick={() => {
-                console.log("Skip clicked", isStepper);
-                try {
-                  nextStep();
-                } catch (e) {
-                  console.error("Skip failed:", e);
-                }
-              }}
-              size="compact-sm"
-              variant="transparent"
-              color="#0b182d"
-            >
-              <span className="underline">Skip For Now</span>
-            </Button>
-          </div>
-        )}
-        <TextInput
-          label="Company Name"
-          placeholder="B. V. Gems"
-          {...form.getInputProps("companyName")}
-        />
-        <TextInput
-          label="Contact Person"
-          placeholder="John Doe"
-          {...form.getInputProps("contactPerson")}
-        />
-        <PhoneNumberInput form={form} />
-        <TextInput
-          label="Company Address"
-          placeholder="123 Main st, NY, NY, 10038"
-          {...form.getInputProps("companyAddress")}
-        />
-        <Textarea
-          label="Additional Notes"
-          placeholder="Provide additional notes"
-          {...form.getInputProps("additionalNotes")}
-        />
+    <>
+      {isStepper ? (
+        <h1 className="text-center mt-5 text-2xl">Business Reference</h1>
+      ) : null}
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <div
+          className={`flex flex-col gap-4 ${
+            isStepper ? "px-5 sm:px-8 lg:px-28" : "px-2.5"
+          }`}
+        >
+          {isStepper && (
+            <div className="flex justify-end mt-5">
+              <Button
+                type="button"
+                onClick={() => {
+                  console.log("Skip clicked", isStepper);
+                  try {
+                    nextStep();
+                  } catch (e) {
+                    console.error("Skip failed:", e);
+                  }
+                }}
+                size="compact-sm"
+                variant="transparent"
+                color="#0b182d"
+              >
+                <span className="underline">Skip For Now</span>
+              </Button>
+            </div>
+          )}
+          <TextInput
+            label="Reference Company Name"
+            placeholder="B. V. Gems"
+            {...form.getInputProps("companyName")}
+          />
+          <TextInput
+            label="Reference Contact Person"
+            placeholder="John Doe"
+            {...form.getInputProps("contactPerson")}
+          />
+          <PhoneNumberInput form={form} />
+          <TextInput
+            label="Reference Company Address"
+            placeholder="123 Main st, NY, NY, 10038"
+            {...form.getInputProps("companyAddress")}
+          />
+          <Textarea
+            label="Additional Notes"
+            placeholder="Provide additional notes"
+            {...form.getInputProps("additionalNotes")}
+          />
 
-        <Group mt="md">
-          <Button type="submit" color="#0b182d" fullWidth>
-            {isEdit
-              ? "Update Reference"
-              : `${isStepper ? "SAVE AND CONTINUE" : "SAVE REFERENCE"}`}
-          </Button>
-        </Group>
-      </div>
-    </form>
+          <Group mt="md">
+            <Button type="submit" color="#0b182d" fullWidth>
+              {isEdit
+                ? "Update Reference"
+                : `${isStepper ? "SAVE AND CONTINUE" : "SAVE REFERENCE"}`}
+            </Button>
+          </Group>
+        </div>
+      </form>
+    </>
   );
 };

@@ -96,15 +96,6 @@ export function buildApplicationEmail(
               ${
                 amlInfo
                   ? `
-                Bank Name: ${amlInfo.bankName || "N/A"}<br/>
-                Bank Account: ${amlInfo.bankAccount || "N/A"}<br/>
-                Bank Address: ${amlInfo.bankAddress || "N/A"}<br/>
-                Primary Contact: ${amlInfo.primaryContact || "N/A"}<br/>
-                Country: ${amlInfo.country || "N/A"}<br/>
-                State: ${amlInfo.state || "N/A"}<br/>
-                City: ${amlInfo.city || "N/A"}<br/>
-                ZIP Code: ${amlInfo.zipCode || "N/A"}<br/>
-                Phone Number: ${amlInfo.phoneNumber || "N/A"}<br/>
                 AML Status: ${amlInfo.amlStatus || "N/A"}`
                   : "N/A"
               }

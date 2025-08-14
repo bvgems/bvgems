@@ -22,20 +22,26 @@ export const ShippingAddressForm = ({
   isStepper?: boolean;
   nextStep?: any;
 }) => {
-  const { shippingAddress, setShippingAddress, hasHydrated } = useStpperStore();
+  const {
+    shippingAddress,
+    setShippingAddress,
+    hasHydrated,
+    businessVerification,
+    stepperUser,
+  } = useStpperStore();
   const isEdit = Boolean(addressData?.id);
 
   const form = useForm({
     initialValues: {
-      fullName: "",
-      addressLine1: "",
+      fullName: stepperUser?.firstName + " " + stepperUser?.lastName || "",
+      addressLine1: businessVerification?.companyAddress || "",
       addressLine2: "",
-      city: "",
-      state: "",
+      city: businessVerification?.city || "",
+      state: businessVerification?.state || "",
       zipCode: "",
-      country: "United States",
-      phoneNumber: "",
-      email: "",
+      country: businessVerification?.country || "",
+      phoneNumber: stepperUser?.phoneNumber || "",
+      email: stepperUser?.email || "",
     },
     validateInputOnChange: true,
     validate: {
@@ -90,22 +96,6 @@ export const ShippingAddressForm = ({
   }
 
   const handleSubmit = async (values: typeof form.values) => {
-    console.log("useid", userId, isStepper);
-    if (!userId) {
-      setShippingAddress({
-        fullName: values.fullName,
-        addressLine1: values.addressLine1,
-        addressLine2: values.addressLine2,
-        city: values.city,
-        state: values.state,
-        zipCode: values.zipCode,
-        country: values.country,
-        phoneNumber: values.phoneNumber,
-        email: values.email,
-      });
-      onSuccess?.();
-      return;
-    }
     if (isStepper && form.isValid()) {
       await new Promise((resolve) => setTimeout(resolve, 300));
       setShippingAddress({
@@ -161,72 +151,77 @@ export const ShippingAddressForm = ({
   };
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
-      <div
-        className={`flex flex-col gap-4 ${
-          isStepper ? "px-5 sm:px-8 lg:px-28" : "px-2.5"
-        }`}
-      >
-        {isStepper && (
-          <div className="flex justify-end mt-5">
-            <Button
-              onClick={() => nextStep()}
-              size="compact-sm"
-              variant="transparent"
-              color="#0b182d"
-            >
-              <span className="underline">Skip For Now</span>
-            </Button>
+    <>
+      {isStepper ? (
+        <h1 className="text-center mt-5 text-2xl">Shipping Address Details</h1>
+      ) : null}
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <div
+          className={`flex flex-col gap-4 ${
+            isStepper ? "px-5 sm:px-8 lg:px-28" : "px-2.5"
+          }`}
+        >
+          {isStepper && (
+            <div className="flex justify-end mt-5">
+              <Button
+                onClick={() => nextStep()}
+                size="compact-sm"
+                variant="transparent"
+                color="#0b182d"
+              >
+                <span className="underline">Skip For Now</span>
+              </Button>
+            </div>
+          )}
+          <TextInput
+            label="Full Name"
+            placeholder="John Doe"
+            {...form.getInputProps("fullName")}
+          />
+          <TextInput
+            label="Street Address"
+            placeholder="123 Main St"
+            {...form.getInputProps("addressLine1")}
+          />
+          <TextInput
+            label="Apt, Suite, etc."
+            placeholder="Apt 4B"
+            {...form.getInputProps("addressLine2")}
+          />
+          <div className="flex gap-4">
+            <TextInput
+              className="w-1/2"
+              label="City"
+              placeholder="New York"
+              {...form.getInputProps("city")}
+            />
+            <TextInput
+              label="Enter State"
+              placeholder="your state"
+              className="w-1/2"
+              {...form.getInputProps("state")}
+            />
           </div>
-        )}
-        <TextInput
-          label="Full Name"
-          placeholder="John Doe"
-          {...form.getInputProps("fullName")}
-        />
-        <TextInput
-          label="Street Address"
-          placeholder="123 Main St"
-          {...form.getInputProps("addressLine1")}
-        />
-        <TextInput
-          label="Apt, Suite, etc."
-          placeholder="Apt 4B"
-          {...form.getInputProps("addressLine2")}
-        />
-        <div className="flex gap-4">
           <TextInput
-            className="w-1/2"
-            label="City"
-            placeholder="New York"
-            {...form.getInputProps("city")}
+            label="ZIP Code"
+            placeholder="10001"
+            {...form.getInputProps("zipCode")}
           />
+          <TextInput label="Country" {...form.getInputProps("country")} />
+          <PhoneNumberInput form={form} />
           <TextInput
-            label="Enter State"
-            placeholder="your state"
-            className="w-1/2"
-            {...form.getInputProps("state")}
+            label="Email"
+            type="email"
+            placeholder="john.doe@example.com"
+            {...form.getInputProps("email")}
           />
+          <Group mt="md">
+            <Button type="submit" color="#0b182d" fullWidth>
+              {isEdit ? "UPDATE ADDRESS" : "SAVE ADDRESS"}
+            </Button>
+          </Group>
         </div>
-        <TextInput
-          label="ZIP Code"
-          placeholder="10001"
-          {...form.getInputProps("zipCode")}
-        />
-        <TextInput label="Country" value="United States" disabled />
-        <PhoneNumberInput form={form} />
-        <TextInput
-          label="Email"
-          type="email"
-          placeholder="john.doe@example.com"
-          {...form.getInputProps("email")}
-        />
-        <Group mt="md">
-          <Button type="submit" color="#0b182d" fullWidth>
-            {isEdit ? "UPDATE ADDRESS" : "SAVE ADDRESS"}
-          </Button>
-        </Group>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
