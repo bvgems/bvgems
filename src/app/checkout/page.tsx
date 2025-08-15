@@ -51,7 +51,7 @@ export default function CheckoutSelectionPage() {
       email: user ? user?.email : guestUser?.email || "guest@example.com",
     });
     const sessionId = response.id;
-    // await stripe?.redirectToCheckout({ sessionId });
+    await stripe?.redirectToCheckout({ sessionId });
   };
 
   const handleOrderPlacing = async () => {
@@ -65,7 +65,6 @@ export default function CheckoutSelectionPage() {
       guestUser,
       cart
     );
-    console.log("order", orderPayload);
 
     if (paymentMethod === "cod" || paymentMethod === "memo") {
       await createShopifyOrder(orderPayload);
