@@ -1,19 +1,25 @@
 "use client";
-import { CustomerBenefits } from "@/components/CustomerBenefits/CustomerBenefits";
+import { useEffect, useState, useRef } from "react";
+import { getHeroData } from "@/apis/api";
 import { Hero } from "@/components/Hero/Hero";
-import { IndustryAffiliation } from "@/components/IndustryAffiliation/IndustryAffiliation";
+import ShopByColor from "@/components/ShopByColor/ShopByColor";
 import { JewelrySection } from "@/components/Jewerly/JewerlySection";
 import { OwnJewelry } from "@/components/OwnJewerly/OwnJewerly";
-import ShopByColor from "@/components/ShopByColor/ShopByColor";
 import { Testimonials } from "@/components/Testimonials/Testimonials";
-import { useRef } from "react";
+import { CustomerBenefits } from "@/components/CustomerBenefits/CustomerBenefits";
+import { IndustryAffiliation } from "@/components/IndustryAffiliation/IndustryAffiliation";
 
 export default function Home() {
   const jewelrySectionRef = useRef<HTMLDivElement>(null);
+  const [heroData, setHeroData] = useState<any>(null);
+
+  useEffect(() => {
+    getHeroData().then(setHeroData);
+  }, []);
 
   return (
     <>
-      <Hero jewelryRef={jewelrySectionRef} />
+      {heroData && <Hero jewelryRef={{ current: null }} heroData={heroData} />}
       <ShopByColor />
       <JewelrySection ref={jewelrySectionRef} />
       <OwnJewelry />

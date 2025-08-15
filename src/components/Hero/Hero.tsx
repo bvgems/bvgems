@@ -1,18 +1,15 @@
 "use client";
+
 import { Button, Image } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RefObject, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-type HeroProps = {
-  jewelryRef: RefObject<HTMLDivElement | null>;
-};
-
-export function Hero({ jewelryRef }: HeroProps) {
-  const heroImage = "/assets/hero-bg2.png";
+export function Hero({ jewelryRef, heroData }: any) {
   const [revealImage, setRevealImage] = useState(false);
   const router = useRouter();
+  console.log("heroData", heroData);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -44,6 +41,7 @@ export function Hero({ jewelryRef }: HeroProps) {
         )}
       </AnimatePresence>
 
+      {/* Hero Image */}
       <motion.div
         initial={{ opacity: 0, scale: 1.1 }}
         animate={revealImage ? { opacity: 1, scale: 1 } : {}}
@@ -51,15 +49,18 @@ export function Hero({ jewelryRef }: HeroProps) {
         className="w-full h-full absolute top-0 left-0 z-10"
       >
         <Image
-          src={heroImage}
+          src={
+            heroData?.heroData?.page?.metafields[0]?.references?.edges[0]?.node
+              ?.image?.url || "/assets/hero-bg2.png"
+          }
           alt="Hero Image"
-          className="w-full h-full object-cover"
+          className="w-full h-full"
         />
       </motion.div>
 
-      {revealImage && (
-        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-40 z-20 pointer-events-none" />
-      )}
+      {/* {revealImage && (
+        // <div className="absolute top-0 left-0 w-full h-full bg-black opacity-35 z-20 pointer-events-none" />
+      )} */}
 
       {revealImage && (
         <motion.div
@@ -68,12 +69,13 @@ export function Hero({ jewelryRef }: HeroProps) {
           transition={{ duration: 0.8, delay: 0.9 }}
           className="absolute top-1/2 left-[8%] z-30 transform -translate-y-1/2 text-left text-white max-w-[750px] px-4"
         >
-          <h1 className="text-3xl md:text-5xl font-semibold mb-4 drop-shadow-lg">
-            Discover Timeless Beauty in Every Stone
+          <h1 className="text-3xl md:text-5xl mb-4 drop-shadow-lg">
+            {heroData?.heroData?.page?.metafields[1]?.value ||
+              "Discover Timeless Beauty in Every Stone"}
           </h1>
           <p className="text-lg md:text-xl mb-6 drop-shadow-md">
-            Shop our curated selection of calibrated and free size gemstones,
-            ethically sourced and precision cut for brilliance.
+            {heroData?.heroData?.page?.metafields[2]?.value ||
+              "Shop our curated selection of calibrated and free size gemstones, ethically sourced and precision cut for brilliance."}
           </p>
           <div className="flex gap-4 flex-wrap">
             <Button

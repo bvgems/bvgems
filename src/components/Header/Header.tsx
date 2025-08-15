@@ -6,6 +6,7 @@ import {
   IconMail,
   IconSearch,
   IconArrowLeft,
+  IconUser,
 } from "@tabler/icons-react";
 import {
   Burger,
@@ -137,7 +138,7 @@ export function Header() {
         className="w-10 h-10 rounded object-cover"
       />
       <div>
-        <p className="text-sm font-medium">{option.label}</p>
+        <p className="text-sm ">{option.label}</p>
       </div>
     </div>
   );
@@ -191,7 +192,7 @@ export function Header() {
           withinPortal
         >
           <Menu.Target>
-            <div className="px-3 py-2 rounded-sm hover:text-gray-500 text-[15px] font-medium">
+            <div className="px-3 py-2 rounded-sm hover:text-gray-500 text-[15px] ">
               <Center>
                 <span
                   className={`mr-1 ${
@@ -226,7 +227,7 @@ export function Header() {
         href={link.link}
         className={`px-3 py-2 rounded-sm ${
           smallerTextFlag ? "text-[12px]" : "text-[15px]"
-        } font-medium hover:text-gray-500 ${
+        }  hover:text-gray-500 ${
           pathname === link.link ? "text-gray-400" : "text-black"
         }`}
       >
@@ -310,11 +311,13 @@ export function Header() {
                       className="hover:cursor-pointer"
                       size="22"
                     />
-                    <div className="absolute -top-2 -right-2">
-                      <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
-                        {cartCount}
-                      </span>
-                    </div>
+                    {cartCount > 0 ? (
+                      <div className="absolute -top-2 -right-2">
+                        <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
+                          {cartCount}
+                        </span>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -389,14 +392,7 @@ export function Header() {
                 {user ? (
                   <UserProfile isSmaller={isSmaller} user={user} />
                 ) : (
-                  <Button
-                    color="#6B7280"
-                    variant="outline"
-                    size="compact-md"
-                    onClick={open}
-                  >
-                    <span className="text-black">Sign In</span>
-                  </Button>
+                  <IconUser className="cursor-pointer" onClick={open} />
                 )}
                 <div className="w-px h-6 bg-gray-300" />
 
@@ -411,11 +407,13 @@ export function Header() {
                     className="hover:cursor-pointer"
                     size="22"
                   />
-                  <div className="absolute -top-2 -right-2">
-                    <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
-                      {cartCount}
-                    </span>
-                  </div>
+                  {cartCount > 0 ? (
+                    <div className="absolute -top-2 -right-2">
+                      <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
+                        {cartCount}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
               </GridCol>
             </Grid>

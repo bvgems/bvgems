@@ -4,12 +4,22 @@ const baseUrl =
     ? process.env.NEXT_PUBLIC_BASE_URL || "https://bvgems.com"
     : "";
 
+export const getHeroData = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/fetchHeroData`);
+    // console.log("resss of hero", response);
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching hero data", error);
+    return null;
+  }
+};
+
 export const fetchFreeSizeGemstonesById = async (id: any) => {
   try {
     const response = await axios.get(
       `${baseUrl}/api/getFreeSizeGemstonesById?id=${id}`
     );
-    console.log("resss of free", response);
     return response?.data[0];
   } catch (error) {
     console.log("Something went wrong while fetching gemstone data", error);

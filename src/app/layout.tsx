@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Alice } from "next/font/google";
+
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
 import "@mantine/notifications/styles.css";
@@ -65,15 +65,6 @@ export const metadata: Metadata = {
   themeColor: "#ffffff",
 };
 
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const alice = Alice({
-  subsets: ["latin"],
-  weight: "400",
-});
 
 export default function RootLayout({
   children,
@@ -121,7 +112,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${montserrat.className} ${alice.className}`}>
+      <body>
         <MantineProvider>
           <Notifications />
           <ClientOnlyLayout>

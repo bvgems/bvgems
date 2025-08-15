@@ -54,15 +54,6 @@ export const PaymentMethod = ({
                 <PaymentOptions size={25} />
               </div>
 
-              {deliveryMethod === "store" && (
-                <Radio
-                  value="cod"
-                  label="PICKUP PAYMENT"
-                  size="md"
-                  color="#0b182d"
-                />
-              )}
-
               <Radio
                 disabled={isDisabled()}
                 value="memo"

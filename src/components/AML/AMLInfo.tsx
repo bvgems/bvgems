@@ -1,25 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
-import {
-  TextInput,
-  Button,
-  Select,
-  Group,
-  Container,
-  Title,
-  Checkbox,
-  Textarea,
-} from "@mantine/core";
+import { Button, Group, Container, Title, Checkbox } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { useUserStore } from "@/store/useUserStore";
 import { applyForAccount, editAMLInfo, getAMLInfo } from "@/apis/api";
-import { AML_OPTIONS, COUNTRY_OPTIONS } from "@/utils/constants";
-import { PhoneNumberInput } from "../CommonComponents/PhoneInput";
+import { AML_OPTIONS } from "@/utils/constants";
 import { useStpperStore } from "@/store/useStepperStore";
 import { useRouter } from "next/navigation";
-import { isValidPhoneNumber } from "react-phone-number-input";
 
 export const AMLInfo = ({ isStepper }: any) => {
   const router = useRouter();

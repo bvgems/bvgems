@@ -3,10 +3,7 @@ import React from "react";
 
 export const AddressBar = () => {
   return (
-    <div
-      style={{ fontFamily: "system-ui, sans-serif" }}
-      className="flex justify-evenly py-1 bg-[#F9F5F0] text-black text-sm"
-    >
+    <div className="flex justify-evenly py-1 bg-[#F9F5F0] text-black text-sm">
       <a
         href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
         target="_blank"
