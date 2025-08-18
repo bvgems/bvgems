@@ -45,7 +45,7 @@ export const AnimatedCard = ({
             item?.id
           }&name=${item?.collection_slug?.toLowerCase()}`
         )
-      : router.push(`/free-size-gemstone-details?id=${item?.id}`);
+      : router.push(`/free-size-gemstone-details/${item?.id}`);
   };
 
   return (

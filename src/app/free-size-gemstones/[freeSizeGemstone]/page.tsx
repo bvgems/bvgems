@@ -1,133 +1,25 @@
-"use client";
-import { fetchFreeSizeGemstones } from "@/apis/api";
-import { FreeSizeFilterSideBar } from "@/components/FreeSizeGemtones/FreeSizeFilterSideBar";
-import { FreeSizeGridView } from "@/components/FreeSizeGemtones/FreeSizeGridView";
-import { GridView } from "@/components/GridView/GridView";
-import { Divider, Drawer, Grid, GridCol } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import FreeSizeGemstoneSelection from "@/components/FreeSizeGemstones/FreeSizeGemstoneSelection";
+import { Metadata } from "next";
 
-export default function FreeSizeGemstoneSelection() {
-  const path = usePathname();
+export async function generateMetadata({ params }: any): Promise<Metadata> {
+  const gemstoneType = params.slug || "Gemstone";
+  const formattedType =
+    gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1);
+  console.log("foprmatyyedd", params.slug);
 
-  const [drawerOpened, { open, close }] = useDisclosure(false);
-
-  const segments = path.split("/").filter(Boolean);
-  const gemstoneType = segments[1];
-  const [selectedStones, setSelectedStones] = useState<string[]>([]);
-  const [filteredGemstones, setFilteredGemstones] = useState<any>([]);
-  const getFreeSizeGemstones = async () => {
-    const response = await fetchFreeSizeGemstones(gemstoneType);
-    setFilteredGemstones(response);
+  return {
+    title: `Free Size ${formattedType} – Natural Loose ${formattedType} | B.V. Gems`,
+    description: `Discover free size ${formattedType.toLowerCase()} gemstones at B.V. Gems. Shop natural loose ${formattedType.toLowerCase()} stones, perfect for rings, necklaces & custom jewelry. Ethically sourced.`,
+    openGraph: {
+      title: `Free Size ${formattedType} – Natural Loose ${formattedType} | B.V. Gems`,
+      description: `Browse our exclusive free size ${formattedType.toLowerCase()} gemstones collection. Find natural loose ${formattedType.toLowerCase()}s, perfect for fine jewelry & custom designs.`,
+      url: `https://bvgems.com/free-size-gemstones/${gemstoneType}`,
+      siteName: "B.V. Gems",
+      type: "website",
+    },
   };
+}
 
-  useEffect(() => {
-    getFreeSizeGemstones();
-  }, [gemstoneType]);
-
-  return (
-    <div>
-      <Grid gutter="lg">
-        <GridCol span={{ base: 12, md: 3 }} className="hidden lg:flex">
-          <FreeSizeFilterSideBar
-            selectedStones={selectedStones}
-            setSelectedStones={(value: any) => {
-              setSelectedStones(value);
-              //   setFiltersChanged(true);
-            }}
-            // selectedColors={selectedColors}
-            // setSelectedColors={(value: any) => {
-            //   setSelectedColors(value);
-            //   setFiltersChanged(true);
-            // }}
-            // selectedShapes={selectedShapes}
-            // setSelectedShapes={(value: any) => {
-            //   setSelectedShapes(value);
-            //   setFiltersChanged(true);
-            // }}
-            // length={length}
-            // setLength={(value: any) => {
-            //   setLength(value);
-            //   setFiltersChanged(true);
-            // }}
-            // width={width}
-            // setWidth={(value: any) => {
-            //   setWidth(value);
-            //   setFiltersChanged(true);
-            // }}
-            // priceRange={priceRange}
-            // setPriceRange={(value: any) => {
-            //   setPriceRange(value);
-            //   setFiltersChanged(true);
-            // }}
-            // selectedRoundSizes={selectedRoundSizes}
-            // setSelectedRoundSizes={(value: any) => {
-            //   setSelectedRoundSizes(value);
-            //   setFiltersChanged(true);
-            // }}
-            // color={color}
-          />
-          <Divider orientation="vertical" />
-        </GridCol>
-
-        <GridCol span={{ base: 12, md: 9 }}>
-          <FreeSizeGridView
-            gemstones={filteredGemstones}
-            // loadingTrigger={filterTrigger}
-          />
-        </GridCol>
-      </Grid>
-
-      <Drawer
-        opened={drawerOpened}
-        onClose={close}
-        title="Filter Gemstones"
-        padding="md"
-        size={320}
-        overlayProps={{ opacity: 0.3, blur: 3 }}
-        hiddenFrom="lg"
-        withinPortal={false}
-      >
-        <FreeSizeFilterSideBar
-        //   selectedStones={selectedStones}
-        //   setSelectedStones={(value: any) => {
-        //     setSelectedStones(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   selectedColors={selectedColors}
-        //   setSelectedColors={(value: any) => {
-        //     setSelectedColors(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   selectedShapes={selectedShapes}
-        //   setSelectedShapes={(value: any) => {
-        //     setSelectedShapes(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   length={length}
-        //   setLength={(value: any) => {
-        //     setLength(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   width={width}
-        //   setWidth={(value: any) => {
-        //     setWidth(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   priceRange={priceRange}
-        //   setPriceRange={(value: any) => {
-        //     setPriceRange(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   selectedRoundSizes={selectedRoundSizes}
-        //   setSelectedRoundSizes={(value: any) => {
-        //     setSelectedRoundSizes(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   color={color}
-        />
-      </Drawer>
-    </div>
-  );
+export default function Page(props: any) {
+  return <FreeSizeGemstoneSelection {...props} />;
 }

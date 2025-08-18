@@ -24,9 +24,15 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-export default function FreeSizeGemstonePage() {
+type FreeSizeGemstoneDetailsProps = {
+  id: string;
+};
+
+export default function FreeSizeGemstoneDetails({
+  id,
+}: FreeSizeGemstoneDetailsProps) {
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+
   const [product, setProduct] = useState<any>();
   const [caratWeight, setCaratWeight] = useState<number>(0);
   const { user } = useAuth();
@@ -39,7 +45,6 @@ export default function FreeSizeGemstonePage() {
 
   const router = useRouter();
   const addProductToCart = () => {
-
     if (!product) return;
 
     const getPerCaratPrice = (item: any): number => {
