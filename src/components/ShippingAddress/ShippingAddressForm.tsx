@@ -33,7 +33,10 @@ export const ShippingAddressForm = ({
 
   const form = useForm({
     initialValues: {
-      fullName: stepperUser?.firstName + " " + stepperUser?.lastName || "",
+      fullName:
+        (stepperUser?.firstName || "") +
+        (stepperUser?.lastName ? " " + stepperUser.lastName : ""),
+
       addressLine1: businessVerification?.companyAddress || "",
       addressLine2: "",
       city: businessVerification?.city || "",
@@ -96,25 +99,7 @@ export const ShippingAddressForm = ({
   }
 
   const handleSubmit = async (values: typeof form.values) => {
-    if (isStepper && form.isValid()) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      setShippingAddress({
-        fullName: values.fullName,
-        addressLine1: values.addressLine1,
-        addressLine2: values.addressLine2,
-        city: values.city,
-        state: values.state,
-        zipCode: values.zipCode,
-        country: values.country,
-        phoneNumber: values.phoneNumber,
-        email: values.email,
-      });
-      nextStep();
-      return;
-    }
-
-    const payload = {
-      ...(isEdit ? { id: addressData.id } : { userId: userId }),
+    const newAddress = {
       fullName: values.fullName,
       addressLine1: values.addressLine1,
       addressLine2: values.addressLine2,
@@ -126,10 +111,20 @@ export const ShippingAddressForm = ({
       email: values.email,
     };
 
-    console.log("pay", payload);
+    // ✅ Always set in store for guest users
+    if (!userId) {
+      setShippingAddress(newAddress);
+      onSuccess?.(); // close modal, refresh UI
+      return;
+    }
+
+    // Existing API call for logged-in users
+    const payload = {
+      ...(isEdit ? { id: addressData.id } : { userId }),
+      ...newAddress,
+    };
 
     const response: any = await upsertShippingAddress(isEdit, payload);
-    console.log("res", response);
     const result = response.data;
 
     if (result.flag) {

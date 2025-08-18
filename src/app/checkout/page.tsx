@@ -5,8 +5,6 @@ import {
   Grid,
   GridCol,
   Button,
-  TableTr,
-  TableTd,
   Image,
   Divider,
 } from "@mantine/core";
@@ -43,13 +41,19 @@ export default function CheckoutSelectionPage() {
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
   );
 
-  const handlePayment = async (orderId: any) => {
+  const handlePayment = async () => {
     const stripe = await stripePromise;
     const response = await makeCheckout({
       cartItems: cart,
-      shopifyOrderId: orderId.toString(),
-      email: user ? user?.email : guestUser?.email || "guest@example.com",
+      email: user ? user.email : guestUser?.email || "guest@example.com",
+      deliveryMethod,
+      shippingAddress,
+      selectedShippingAddress,
+      user,
+      guestUser,
+      paymentMethod,
     });
+
     const sessionId = response.id;
     await stripe?.redirectToCheckout({ sessionId });
   };
@@ -66,15 +70,13 @@ export default function CheckoutSelectionPage() {
       cart
     );
 
-    if (paymentMethod === "cod" || paymentMethod === "memo") {
+    if (paymentMethod === "memo") {
       await createShopifyOrder(orderPayload);
       cartStore.getState().clearCart();
       open();
     } else {
-      const orderResponse: any = await createShopifyOrder(orderPayload);
-      await handlePayment(orderResponse?.order?.id);
+      await handlePayment();
       cartStore.getState().clearCart();
-      open();
     }
   };
 

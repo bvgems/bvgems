@@ -1,3 +1,4 @@
+import { pool } from "@/lib/pool";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -7,17 +8,35 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: Request) {
   try {
-    const { cartItems, shopifyOrderId, email } = await req.json();
+    const {
+      cartItems,
+      email,
+      deliveryMethod,
+      shippingAddress,
+      selectedShippingAddress,
+      user,
+      guestUser,
+      paymentMethod,
+    } = await req.json();
 
+    const userId = user?.id || null;
+    const guestEmail = !user?.id ? guestUser?.email || email : null;
+
+    const result = await pool.query(
+      `INSERT INTO checkout_carts (cart, user_id, guest_email)
+       VALUES ($1, $2, $3)
+       RETURNING id`,
+      [JSON.stringify(cartItems), userId, guestEmail]
+    );
+    const cartId = result.rows[0].id;
     const formatCurrency = (value: number) =>
       `$${Number(value).toLocaleString("en-US", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`;
 
-
     const line_items = cartItems.map((item: any) => {
-      let amount: any;
+      let amount: number = 0;
       const product = item?.product ?? {};
       const isCalibrated = product?.productType === "stone";
       const isFreeGemstone = product?.productType === "freeSizeStone";
@@ -27,15 +46,13 @@ export async function POST(req: Request) {
       } else if (isCalibrated) {
         if (product?.purchaseByCarat) {
           if (product?.ct_weight) {
-            amount =
-              Number(item?.caratWeight) *
-              (Number(product?.price) / Number(product?.ct_weight));
+            amount = Number(product?.price) * Number(item?.caratWeight);
           }
         } else {
-          amount = Number(product?.price) * item?.quantity;
+          amount = Number(product?.price) * (item?.quantity || 1);
         }
       } else {
-        amount = Number(product?.price) * item?.quantity;
+        amount = Number(product?.price) * (item?.quantity || 1);
       }
 
       const unit_amount = Math.max(
@@ -55,20 +72,13 @@ export async function POST(req: Request) {
            Price per Carat: ${formatCurrency(product?.price)},\n
            Carat Weight Of Stone: ${product?.ct_weight}
         `;
-      } else if (isCalibrated) {
-        if (product?.purchaseByCarat) {
-          const perCaratPrice =
-            Number(product?.price) / Number(product?.ct_weight);
-
-          productData.description = `
-            Price per Carat: ${formatCurrency(perCaratPrice)},\n
-            Purchased Carat: ${item?.caratWeight}\n
-         `;
-        }
-      } else {
+      } else if (isCalibrated && product?.purchaseByCarat) {
         productData.description = `
-        Quantity: ${item?.quantity}\n
-     `;
+            Per Carat Price : ${formatCurrency(Number(product?.price))},\n
+            Purchased Carat: ${item?.caratWeight}\n
+        `;
+      } else {
+        productData.description = `Quantity: ${item?.quantity}\n`;
       }
 
       if (product?.image_url && String(product.image_url).trim()) {
@@ -85,16 +95,24 @@ export async function POST(req: Request) {
       };
     });
 
-    const origin = req.headers.get("origin") || "https://bvgems.com";
+    const origin = req.headers.get("origin") || process.env.BASE_URL;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items,
       mode: "payment",
       customer_email: email,
-      success_url: `${origin}/payment-success?orderId=${shopifyOrderId}`,
-      cancel_url: `${origin}/payment-cancelled?orderId=${shopifyOrderId}`,
-      metadata: { shopifyOrderId },
+      success_url: `${origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/payment-cancelled`,
+      metadata: {
+        deliveryMethod: deliveryMethod || "",
+        shippingAddress: JSON.stringify(shippingAddress || {}),
+        selectedShippingAddress: JSON.stringify(selectedShippingAddress || {}),
+        user: JSON.stringify(user || {}),
+        guestUser: JSON.stringify(guestUser || {}),
+        cart: cartId,
+        paymentMethod: paymentMethod || "online",
+      },
     });
 
     return NextResponse.json({ id: session.id }, { status: 200 });

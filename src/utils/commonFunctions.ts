@@ -24,10 +24,10 @@ export const getOrderPayload = (
   guestUser: any,
   cart: any
 ) => {
+  console.log("here in payload", user, guestUser);
   const orderPayload = {
     order: {
       line_items: cart?.map((item: any) => {
-        console.log("item", item);
         const productType = item?.product?.productType;
         const isStone = productType === "stone";
         const isFreeGemstone = productType === "freeSizeStone";
@@ -131,15 +131,13 @@ export const getOrderPayload = (
             };
       }),
       tags:
-        paymentMethod === "cod"
-          ? "Pickup Payment"
-          : paymentMethod === "memo"
+        paymentMethod === "memo"
           ? "Memo Purchase"
           : paymentMethod === "online"
           ? "Already Paid"
           : "",
-      email: user ? user?.email : guestUser?.email,
-      phone: user ? user?.phoneNumber : guestUser?.phoneNumber,
+      email: guestUser?.email || user?.email,
+      phone: guestUser?.phoneNumber || user?.phoneNumber,
       customer: {
         email: user ? user?.email : guestUser?.email || "guest@example.com",
         first_name: user ? user?.firstName : guestUser?.firstName || "Guest",
@@ -150,7 +148,7 @@ export const getOrderPayload = (
         marketing_opt_in_level: "single_opt_in",
         tags: "online-store",
       },
-      financial_status: "pending",
+      financial_status: "paid",
       send_receipt: paymentMethod === "cod",
       fulfillment_status: "unfulfilled",
       currency: "USD",

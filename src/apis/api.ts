@@ -112,6 +112,7 @@ export const fetchAllOrders = async (email: any) => {
 };
 export const createShopifyOrder = async (payload: any) => {
   try {
+    console.log("payloadddd", payload);
     const response = await axios.post(
       `${baseUrl}/api/createShopifyOrder`,
       payload
@@ -170,17 +171,23 @@ export const getFilteredData = async (options: any) => {
   }
 };
 
+
 export const makeCheckout = async (data: any) => {
   try {
     const response = await axios.post(`${baseUrl}/api/checkout`, {
       cartItems: data?.cartItems,
-      shopifyOrderId: data?.shopifyOrderId,
       email: data?.email,
+      deliveryMethod: data?.deliveryMethod,
+      shippingAddress: data?.shippingAddress,
+      selectedShippingAddress: data?.selectedShippingAddress,
+      user: data?.user,
+      guestUser: data?.guestUser,
+      paymentMethod: data?.paymentMethod,
     });
 
     return response?.data;
   } catch (error) {
-    console.log("Something went wrong while checkout", error);
+    console.log("❌ Something went wrong while checkout", error);
     return null;
   }
 };
