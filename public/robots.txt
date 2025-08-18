@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://bvgems.com
+
+# Sitemaps
+Sitemap: https://bvgems.com/sitemap.xml
