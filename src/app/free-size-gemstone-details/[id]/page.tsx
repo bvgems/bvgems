@@ -3,13 +3,14 @@ import { Metadata } from "next";
 import FreeSizeGemstoneDetails from "@/components/FreeSizeGemstones/FreeSizeGemstonesDetails";
 
 type PageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>; // ✅ Changed to Promise
 };
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const product = await fetchFreeSizeGemstonesById(params.id);
+  const { id } = await params; // ✅ Await params
+  const product = await fetchFreeSizeGemstonesById(id);
 
   if (!product) {
     return {
@@ -32,7 +33,7 @@ export async function generateMetadata({
       }, size ${product.dimension}, color ${
         product.color
       }. Shop now at B.V. Gems.`,
-      url: `https://bvgems.com/free-size-gemstone-details/${params.id}`,
+      url: `https://bvgems.com/free-size-gemstone-details/${id}`,
       siteName: "B.V. Gems",
       type: "website",
       images: [
@@ -47,6 +48,7 @@ export async function generateMetadata({
   };
 }
 
-export default function Page({ params }: PageProps) {
-  return <FreeSizeGemstoneDetails id={params.id} />;
+export default async function Page({ params }: PageProps) {
+  const { id } = await params; // ✅ Await params
+  return <FreeSizeGemstoneDetails id={id} />;
 }

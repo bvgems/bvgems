@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { getParticularProductsData } from "@/apis/api";
 
 type Props = {
-  searchParams: { id: string };
+  searchParams: Promise<{ id: string }>; // ✅ Already a Promise, but need to await it
 };
 
 export async function generateMetadata({
   searchParams,
 }: Props): Promise<Metadata> {
-  const product = await getParticularProductsData(searchParams.id);
+  const { id } = await searchParams; // ✅ Await searchParams
+  const product = await getParticularProductsData(id);
 
   if (!product) {
     return {

@@ -1,16 +1,15 @@
 import { getCategoryData } from "@/apis/api";
 import { CategoryContent } from "@/components/Category/CategoryContent";
-
 import { Metadata } from "next";
 
 type PageProps = {
-  params: { handle: string };
+  params: Promise<{ handle: string }>;
 };
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const handle = params.handle;
+  const { handle } = await params; // ✅ await params
   const data: any = await getCategoryData(handle);
 
   if (!data) {
@@ -54,15 +53,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function CategoryPage({ params }: any) {
-  const handle = params.handle;
+export default async function CategoryPage({ params }: PageProps) {
+  const { handle } = await params; // ✅ await params
   const isSapphire = handle === "sapphire";
   const data: any = await getCategoryData(handle);
-
   const shapes = data?.shapes?.value?.split(",").map((s: any) => s.trim());
-
   const rawSizes = data?.shapeSizes?.value;
-  const allSizes = rawSizes ? JSON.parse(rawSizes) : {};
 
   return (
     <div>

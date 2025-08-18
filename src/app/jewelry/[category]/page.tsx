@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { CommonGridView } from "@/components/CommonComponents/CommonGridView";
 
 type Props = {
-  params: { category: string };
+  params: Promise<{ category: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const category = params.category;
+  const { category } = await params;
 
   const formattedCategory =
     category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();

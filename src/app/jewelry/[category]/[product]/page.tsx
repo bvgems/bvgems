@@ -3,11 +3,11 @@ import { fetchProductByHandle } from "@/apis/api";
 import JewelryProductPage from "@/components/Jewerly/JewerlyProductPage";
 
 type Props = {
-  params: { product: string; category: string };
+  params: Promise<{ product: string; category: string }>; // ✅ Changed to Promise
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const productHandle = params.product;
+  const { product: productHandle, category } = await params; // ✅ Await params
   const response = await fetchProductByHandle(productHandle);
   const product = response?.product;
 
@@ -31,13 +31,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${title} | B.V. Gems`,
       description: `Explore ${title} at B.V. Gems. Ethically sourced gemstones, precision craftsmanship, insured delivery.`,
       images: product?.images?.edges?.map((img: any) => img?.node?.url) || [],
-      url: `https://bvgems.com/jewelry/${params.category}/${params.product}`,
+      url: `https://bvgems.com/jewelry/${category}/${productHandle}`,
       siteName: "B.V. Gems",
-      type: "website", // ✅ must be one of Next.js allowed values
+      type: "website",
     },
   };
 }
 
-export default function Page(props: any) {
-  return <JewelryProductPage {...props} />;
+export default function Page() {
+  // ✅ No props needed - JewelryProductPage uses useParams() internally
+  return <JewelryProductPage />;
 }
+
