@@ -13,7 +13,6 @@ export async function generateMetadata({
   const handle = params.handle;
   const data: any = await getCategoryData(handle);
 
-  // Fallback title/description if API fails
   if (!data) {
     return {
       title: "Gemstone Collection | B.V. Gems",
@@ -56,7 +55,7 @@ export async function generateMetadata({
 }
 
 export default async function CategoryPage({ params }: any) {
-  const handle = await params.handle;
+  const handle = params.handle;
   const isSapphire = handle === "sapphire";
   const data: any = await getCategoryData(handle);
 
