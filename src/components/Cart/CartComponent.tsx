@@ -16,6 +16,7 @@ import {
   Divider,
   Stack,
   Badge,
+  Checkbox,
 } from "@mantine/core";
 import {
   IconArrowNarrowRight,
@@ -45,6 +46,9 @@ export function CartComponent() {
   const removeProduct = cartStore((state: any) => state.removeFromCart);
   const updateQuantity = cartStore((state: any) => state.updateQuantity);
   const setCartTotal = cartStore((state: any) => state.setCartTotal);
+  const toggleCertification = cartStore(
+    (state: any) => state.toggleCertification
+  );
   const router = useRouter();
 
   const handleRemoveProduct = (id: any, product: any) => {
@@ -98,20 +102,26 @@ export function CartComponent() {
 
   useEffect(() => {
     const total = cart.reduce((sum: number, value: any) => {
+      let productTotal = 0;
+
       if (
         value.product.productType === "stone" ||
         value.product.productType === "freeSizeStone"
       ) {
-        return (
-          sum +
-          (value.product.purchaseByCarat
-            ? getTotalCaratPrice(value)
-            : value.product.price * value.quantity)
-        );
+        productTotal = value.product.purchaseByCarat
+          ? getTotalCaratPrice(value)
+          : value.product.price * value.quantity;
       } else {
-        return sum + value.product.price * value.quantity;
+        productTotal = value.product.price * value.quantity;
       }
+
+      if (value.product.needCertification) {
+        productTotal += 75 * value?.quantity;
+      }
+
+      return sum + productTotal;
     }, 0);
+
     setCartTotal(total);
   }, [cart, setCartTotal]);
 
@@ -146,18 +156,34 @@ export function CartComponent() {
     <Container size="xl" className="py-10">
       <Grid gutter="xl">
         <GridCol span={{ base: 12, md: 8 }}>
-          <Text size="xl" fw={600} mb="md">
-            Shopping Cart
-          </Text>
+          <div className="flex items-center justify-between">
+            <Text size="xl" fw={600} mb="md">
+              Shopping Cart
+            </Text>
+            <Button
+              color="#0b182d"
+              size="compact-sm"
+              leftSection={<IconTrash size={14}/>}
+              onClick={() => {
+                cartStore.getState().clearCart();
+              }}
+            >
+              CLEAR CART
+            </Button>
+          </div>
           <Stack gap="md">
             {cart.map((value: any, index: number) => {
-              const total =
+              let total =
                 value.product.productType === "stone" ||
                 value.product.productType === "freeSizeStone"
                   ? value.product.purchaseByCarat
                     ? getTotalCaratPrice(value)
                     : value.product.price * value.quantity
                   : value.product.price * value.quantity;
+
+              if (value.product.needCertification) {
+                total += 75 * value.quantity;
+              }
 
               return (
                 <Paper
@@ -204,8 +230,13 @@ export function CartComponent() {
                               Size: {value?.product?.size} | Weight:{" "}
                               {value?.product?.ct_weight} | Quality:{" "}
                               {value?.product?.quality}
+                              {value?.product?.collection_slug === "Emerald" &&
+                                value?.product?.shade && (
+                                  <> | Shade: {value?.product?.shade}</>
+                                )}
                             </>
                           )}
+
                           {value?.product?.productType === "ringJewelry" && (
                             <>
                               Gold Color: {value?.product?.goldColor} | Size:{" "}
@@ -231,7 +262,6 @@ export function CartComponent() {
                         Remove
                       </Button>
                     </Group>
-
                     <Group mt="sm" align="center" justify="space-between">
                       <Text fw={500} size="lg">
                         ${value?.jewelryProduct?.price ?? value?.product?.price}
@@ -264,6 +294,24 @@ export function CartComponent() {
                         ${total.toFixed(2)}
                       </Text>
                     </Group>
+
+                    <Checkbox
+                      color="#0b182d"
+                      size="sm"
+                      mt="sm"
+                      label={
+                        <span className="text-gray-500">
+                          Add certification for this item (+$75)
+                        </span>
+                      }
+                      checked={!!value.product.needCertification}
+                      onChange={(e) =>
+                        toggleCertification(
+                          value.product.productId,
+                          e.currentTarget.checked
+                        )
+                      }
+                    />
                   </div>
                 </Paper>
               );

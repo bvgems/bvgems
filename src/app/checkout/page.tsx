@@ -177,6 +177,16 @@ export default function CheckoutSelectionPage() {
                                 </span>
                               </div>
                             )}
+                            {item?.product?.collection_slug === "Emerald" &&
+                            (item?.product?.type === "Lab Grown" ||
+                              item?.product?.quality === "Lab Grown") ? (
+                              <div className="text-gray-600">
+                                Shade:{" "}
+                                <span className="font-medium">
+                                  {item?.product?.shade}
+                                </span>
+                              </div>
+                            ) : null}
                           </div>
                         </div>
                       </div>

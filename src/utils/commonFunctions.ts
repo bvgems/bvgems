@@ -40,6 +40,7 @@ export const getOrderPayload = (
           if (item?.product?.purchaseByCarat) {
             price = Number(item?.product?.price) * Number(item?.caratWeight);
             quantity = 1;
+
             properties.push(
               { name: "Shape", value: item?.product?.shape },
               { name: "Size", value: item?.product?.size },
@@ -58,6 +59,11 @@ export const getOrderPayload = (
               { name: "Size", value: item?.product?.size },
               { name: "Quality", value: item?.product?.quality }
             );
+          }
+          if (item?.product?.collection_slug === "Emerald") {
+            if (item?.product?.shade) {
+              properties?.push({ name: "Shade", value: item?.product?.shade });
+            }
           }
         } else if (isFreeGemstone) {
           price = item?.product?.price * Number(item?.product?.ct_weight);
@@ -103,6 +109,13 @@ export const getOrderPayload = (
           if (item?.product?.length) {
             properties.push({ name: "Length", value: item?.product?.length });
           }
+        }
+
+        if (item?.product?.needCertification) {
+          properties.push({
+            name: "Need Certification",
+            value: item?.product?.needCertification === true ? "YES" : "NO",
+          });
         }
 
         const imageUrl =

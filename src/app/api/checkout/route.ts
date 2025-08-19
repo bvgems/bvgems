@@ -18,6 +18,7 @@ export async function POST(req: Request) {
       guestUser,
       paymentMethod,
     } = await req.json();
+    console.log("cartItemns", cartItems);
 
     const userId = user?.id || null;
     const guestEmail = !user?.id ? guestUser?.email || email : null;
@@ -53,6 +54,10 @@ export async function POST(req: Request) {
         }
       } else {
         amount = Number(product?.price) * (item?.quantity || 1);
+      }
+
+      if (product?.needCertification) {
+        amount = amount + 75 * item?.quantity;
       }
 
       const unit_amount = Math.max(

@@ -523,7 +523,7 @@ export const quickNavigationData = [
     children: [
       {
         label: "Gemstone Education",
-        href: "/customer-support/education?activeStone=morganite",
+        href: "/customer-support/education?activeStone=alexandrite",
       },
     ],
   },
@@ -755,8 +755,6 @@ export const links = [
     label: "Gemstones",
     links: gemstoneOptions,
   },
-  // { link: "/free-size-gemstones", label: "Free Size Gemstones" },
-  { link: "/precious-beads", label: "Precious Beads" },
 
   {
     label: "Jewelry",
@@ -767,12 +765,14 @@ export const links = [
       { link: "/jewelry/bracelets", label: "Bracelets" },
     ],
   },
+  { link: "/precious-beads", label: "Precious Beads" },
+
   { link: "/create-colorstone-layout", label: "Colorstone Layouts" },
   {
     label: "More",
     links: [
       {
-        link: "/customer-support/education?activeStone=morganite",
+        link: "/customer-support/education?activeStone=alexandrite",
         label: "Gemstones Education",
       },
       { link: "/customer-support/about-us", label: "About B. V. Gems" },
@@ -790,7 +790,6 @@ export const mobileLinks = [
     links: gemstoneOptions,
   },
   { link: "/free-size-gemstones", label: "Free Size Gemstones" },
-  { link: "/precious-beads", label: "Precious Beads" },
 
   {
     label: "Jewelry",
@@ -801,12 +800,14 @@ export const mobileLinks = [
       { link: "/jewelry/bracelets", label: "Bracelets" },
     ],
   },
+  { link: "/precious-beads", label: "Precious Beads" },
+
   { link: "/create-colorstone-layout", label: "Colorstone Layouts" },
   {
     label: "More",
     links: [
       {
-        link: "/customer-support/education?activeStone=morganite",
+        link: "/customer-support/education?activeStone=alexandrite",
         label: "Gemstones Education",
       },
       { link: "/customer-support/about-us", label: "About B. V. Gems" },

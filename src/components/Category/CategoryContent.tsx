@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Grid,
@@ -23,13 +23,27 @@ import { useRouter } from "next/navigation";
 import { ImageZoom } from "../CommonComponents/ImageZoom";
 import { IconDiamond } from "@tabler/icons-react";
 import { SapphireLooseGemstoneColorOptions } from "@/utils/constants";
+import { Carousel } from "@mantine/carousel";
+
+// Utility: pick one representative image per quality
+const getRepresentativeImages = (items: any[]) => {
+  const qualityMap: Record<string, any> = {};
+  items.forEach((item) => {
+    if (!qualityMap[item.quality]) {
+      qualityMap[item.quality] = item; // take the first one found
+    }
+  });
+  return Object.values(qualityMap);
+};
 
 export function CategoryContent({
   isSapphire,
+  isEmerald,
   data,
   shapes,
 }: {
   isSapphire: boolean;
+  isEmerald: boolean;
   data: any;
   shapes: string[];
 }) {
@@ -41,11 +55,14 @@ export function CategoryContent({
   const [selectedSapphireColor, setSelectedSapphireColor] = useState(
     SapphireLooseGemstoneColorOptions[0]?.value
   );
+  const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
   const [fetchedResult, setFetchedResult] = useState<any[]>([]);
   const [allSizes, setAllSizes] = useState<{ [shape: string]: string[] }>({});
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
-  const [mainImage, setMainImage] = useState("");
+
+  const [qualityImages, setQualityImages] = useState<any[]>([]);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const fetchShapesData = async (
     selectedShape: string | null,
@@ -70,8 +87,12 @@ export function CategoryContent({
       [shape]: uniqueSizes,
     }));
 
-    setMainImage(result?.data?.[0]?.image_url);
-    setFetchedResult(result?.data);
+    setFetchedResult(result?.data || []);
+
+    // Get one image per quality
+    const reps = getRepresentativeImages(result?.data || []);
+    setQualityImages(reps);
+    setActiveSlide(0); // reset when new data loads
   };
 
   useEffect(() => {
@@ -84,18 +105,8 @@ export function CategoryContent({
       );
       setSelectedSizes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedShape, selectedSapphireColor]);
-
-  const imagesArray = useMemo(() => {
-    const array: string[] = [];
-    if (fetchedResult?.[0]?.image_url) {
-      array.push(fetchedResult[0].image_url);
-    }
-    data?.images?.edges?.forEach((item: any) => {
-      if (item?.node?.url) array.push(item.node.url);
-    });
-    return array;
-  }, [fetchedResult, data]);
 
   const redirectToEducation = () => {
     router.push(
@@ -103,10 +114,15 @@ export function CategoryContent({
     );
   };
 
+  const currentQuality =
+    qualityImages?.[activeSlide]?.quality ??
+    (qualityImages?.[0]?.quality || "-");
+
   return (
     <>
       <div className="mt-9 px-6">
         <Grid>
+          {/* Left: Image + Carousel */}
           <GridCol span={{ base: 12, md: 5 }}>
             <motion.div
               initial={{ opacity: 0, y: 80 }}
@@ -114,9 +130,36 @@ export function CategoryContent({
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
               className="flex gap-4 items-start px-12"
             >
-              <div>
-                {mainImage ? (
-                  <ImageZoom src={mainImage} />
+              <div className="w-full">
+                {qualityImages.length > 0 ? (
+                  <div className="flex flex-col items-center">
+                    <Carousel
+                      withIndicators
+                      height={500}
+                      onSlideChange={(index) => setActiveSlide(index)}
+                      className="w-full max-w-[420px]"
+                    >
+                      {qualityImages.map((item: any, index: number) => (
+                        <Carousel.Slide key={index}>
+                          <div className="flex flex-col items-center">
+                            <div className="h-[500px] w-[300px]">
+                              <ImageZoom src={item.image_url} />
+                            </div>
+                          </div>
+                        </Carousel.Slide>
+                      ))}
+                    </Carousel>
+
+                    {/* Constant caption BELOW the image */}
+                    <div className="mt-4 flex flex-col items-center">
+                      <span className="text-[12px] uppercase tracking-[0.18em] text-gray-500">
+                        Quality
+                      </span>
+                      <span className="mt-1 inline-flex items-center rounded-full border border-gray-200 px-3 py-1 text-sm font-semibold shadow-sm bg-white">
+                        {currentQuality}
+                      </span>
+                    </div>
+                  </div>
                 ) : (
                   <div className="h-[300px] w-[300px] bg-gray-100 rounded" />
                 )}
@@ -124,6 +167,7 @@ export function CategoryContent({
             </motion.div>
           </GridCol>
 
+          {/* Right: Filters + Info */}
           <GridCol span={{ base: 12, md: 7 }}>
             <motion.div
               initial={{ opacity: 0, y: 80 }}
@@ -219,7 +263,7 @@ export function CategoryContent({
                               .replace(/x/g, " x ")
                               .replace(/\s+/g, " ")
                               .trim()
-                          : parseFloat(size).toFixed(2); // format single number to 2 decimals
+                          : parseFloat(size).toFixed(2);
                         return {
                           label,
                           value: size,
@@ -233,7 +277,6 @@ export function CategoryContent({
                   </div>
                 )}
 
-                {/* Type filter */}
                 <div className="mt-4">
                   <p className="font-medium mb-2 text-gray-700">
                     Natural / Lab:
@@ -246,11 +289,38 @@ export function CategoryContent({
                       { label: "Lab Grown", value: "Lab Grown" },
                     ]}
                     value={typeFilter || ""}
-                    onChange={(val) => setTypeFilter(val)}
+                    onChange={(val) => {
+                      setTypeFilter(val);
+                      if (val !== "Lab Grown") {
+                        setEmeraldShade(null);
+                      }
+                    }}
                     className="w-[50%]"
                     clearable
                   />
                 </div>
+
+                {/* Emerald Shade filter */}
+                {isEmerald && typeFilter === "Lab Grown" && (
+                  <div className="mt-4">
+                    <p className="font-medium mb-2 text-gray-700">Shade:</p>
+                    <div className="flex gap-4">
+                      {["Zambian", "Colombian"].map((shade) => (
+                        <button
+                          key={shade}
+                          onClick={() => setEmeraldShade(shade)}
+                          className={`px-5 py-2 rounded-full border text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                            emeraldShade === shade
+                              ? "bg-green-600 text-white shadow-md scale-105"
+                              : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                          }`}
+                        >
+                          {shade}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Static Info Table */}
                 <div className="mt-3 max-w-[350px]">
@@ -315,6 +385,7 @@ export function CategoryContent({
         selectedSizes={selectedSizes}
         data={data}
         typeFilter={typeFilter}
+        emeraldShade={emeraldShade}
       />
       <SizeToleranceGuide opened={opened} close={close} />
     </>

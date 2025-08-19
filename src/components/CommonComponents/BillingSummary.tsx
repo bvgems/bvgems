@@ -11,7 +11,8 @@ export const BillingSummary = () => {
     () => getCartStore(user?.id || "guest"),
     [user?.id]
   );
-  const totalPrices = cartStore((state: any) => state.cartTotal); // NEW: read stored total
+  const totalPrices = cartStore((state: any) => state.cartTotal);
+
 
   const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => setHasMounted(true), []);

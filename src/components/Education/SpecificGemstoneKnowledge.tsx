@@ -75,10 +75,7 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
     <div className="px-2 py-5">
       {knowledge ? (
         <>
-          <div
-            className="flex flex-col items-center"
-            ref={contentRef}
-          >
+          <div className="flex flex-col items-center" ref={contentRef}>
             <div className="flex justify-center flex-col items-center gap-3">
               <Image
                 h={160}
@@ -95,8 +92,12 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
             </div>
             <div className="w-full max-w-full md:max-w-3xl">
               <h3 className="font-semibold text-center text-lg md:text-xl mb-3">
-                More Details about {activeStone}
+                More Details about{" "}
+                {activeStone &&
+                  activeStone.charAt(0).toUpperCase() +
+                    activeStone.slice(1).toLowerCase()}
               </h3>
+
               <Table
                 variant="vertical"
                 layout="fixed"

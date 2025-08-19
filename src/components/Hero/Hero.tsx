@@ -3,13 +3,20 @@
 import { Button, Image } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RefObject, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export function Hero({ jewelryRef, heroData }: any) {
   const [revealImage, setRevealImage] = useState(false);
   const router = useRouter();
-  console.log("heroData", heroData);
+
+  const alignment =
+    heroData?.heroData?.page?.metafields[4]?.value?.toLowerCase() || "left";
+
+  const textAlignmentClass =
+    alignment === "Right"
+      ? "right-[8%] text-right items-end"
+      : "left-[8%] text-left items-start";
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -54,26 +61,25 @@ export function Hero({ jewelryRef, heroData }: any) {
               ?.image?.url || "/assets/hero-bg2.png"
           }
           alt="Hero Image"
-          className="w-full h-full"
+          className="w-full h-full object-cover"
         />
       </motion.div>
-
-      {/* {revealImage && (
-        // <div className="absolute top-0 left-0 w-full h-full bg-black opacity-35 z-20 pointer-events-none" />
-      )} */}
+      {revealImage && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-10 md:opacity-0 z-20 pointer-events-none" />
+      )}
 
       {revealImage && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className="absolute top-1/2 left-[8%] z-30 transform -translate-y-1/2 text-left text-white max-w-[750px] px-4"
+          className={`absolute top-1/2 transform -translate-y-1/2 z-30 max-w-[650px] px-4 flex flex-col text-[${heroData?.heroData?.page?.metafields[3]?.value}] md:text-black gap-4 ${textAlignmentClass}`}
         >
-          <h1 className="text-3xl md:text-5xl mb-4 drop-shadow-lg">
+          <h1 className="text-3xl md:text-5xl mb-2 drop-shadow-lg">
             {heroData?.heroData?.page?.metafields[1]?.value ||
               "Discover Timeless Beauty in Every Stone"}
           </h1>
-          <p className="text-lg md:text-xl mb-6 drop-shadow-md">
+          <p className="text-lg md:text-xl mb-4 drop-shadow-md">
             {heroData?.heroData?.page?.metafields[2]?.value ||
               "Shop our curated selection of calibrated and free size gemstones, ethically sourced and precision cut for brilliance."}
           </p>

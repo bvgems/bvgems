@@ -92,6 +92,16 @@ export default function ProductDetailsPage() {
 
   const getProduct = async (pid: string) => {
     const productDetails = await getParticularProductsData(pid);
+
+    // If it's Emerald + Lab Grown and no shade chosen yet, default to Zambian
+    if (
+      productDetails?.collection_slug === "Emerald" &&
+      isLabGrown(productDetails) &&
+      !productDetails?.shade
+    ) {
+      productDetails.shade = "Zambian";
+    }
+
     setProduct(productDetails);
 
     const allDetails = await getShapesData(
@@ -137,6 +147,7 @@ export default function ProductDetailsPage() {
         color: product.color,
         ct_weight: product.ct_weight,
         cut: product.cut,
+        shade: product?.shade || "", 
         image_url: product.image_url,
         price: purchaseByCarat ? perCarat : perStone,
         quality: product.quality,
@@ -229,8 +240,11 @@ export default function ProductDetailsPage() {
                 <span className="text-sm text-gray-500">
                   Item: #{product?.id}
                 </span>
-                <Badge color="#37B24D" radius="xs">
-                  Available
+                <Badge
+                  color={product?.type === "Natural" ? "#37B24D" : "blue"}
+                  radius="xs"
+                >
+                  {product?.type}
                 </Badge>
               </div>
             </div>
@@ -260,7 +274,6 @@ export default function ProductDetailsPage() {
                   </span>
                 </div>
 
-                {/* Show Request Pricing only once */}
                 {!hasPricing && (
                   <a
                     href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
@@ -297,13 +310,14 @@ export default function ProductDetailsPage() {
                 label="Purchase by Carat Weight"
                 color="teal"
                 size="md"
+                mt={"lg"}
               />
             )}
 
             {/* Input section */}
             {user &&
               (purchaseByCarat ? (
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center justify-between gap-2 mt-3">
                   <div>Carat Weight:</div>
                   <NumberInput
                     value={caratWeight}
@@ -313,7 +327,7 @@ export default function ProductDetailsPage() {
                   />
                 </div>
               ) : (
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center justify-between gap-2 mt-3">
                   <div>Quantity:</div>
                   <Button
                     onClick={() => handlersRef.current?.decrement()}
@@ -336,6 +350,32 @@ export default function ProductDetailsPage() {
                   </Button>
                 </div>
               ))}
+
+            {/* ✅ Emerald Lab shade buttons */}
+            {user &&
+              product?.collection_slug === "Emerald" &&
+              isLabGrown(product) && (
+                <div className="mt-5 flex items-center gap-5 mb-5">
+                  <p className="font-medium text-gray-700">Shade:</p>
+                  <div className="flex gap-4">
+                    {["Zambian", "Colombian"].map((shade) => (
+                      <button
+                        key={shade}
+                        onClick={() =>
+                          setProduct((prev: any) => ({ ...prev, shade }))
+                        }
+                        className={`px-5 py-2 rounded-full border text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                          product?.shade === shade
+                            ? "bg-green-600 text-white shadow-md scale-105"
+                            : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        {shade}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
             {user && (
               <Checkbox label="Match For Size and Color" color="#0b182d" />

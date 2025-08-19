@@ -159,7 +159,7 @@ export const Footer = () => {
           <div className="mt-4">
             <h2 className="text-md font-medium">Customer Service Hours</h2>
             <div className="flex flex-col justify-start mt-1.5 gap-1 text-sm">
-              <span>Mon: 9:00 AM - 7:00 PM</span>
+              <span>Mon - Fri: 9:00 AM - 7:00 PM</span>
               <span>Sat: By Appointment Only</span>
               <span>Sun: Closed</span>
             </div>

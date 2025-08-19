@@ -10,6 +10,9 @@ export async function GET(req: Request) {
       { namespace: "custom", key: "hero_image" },
       { namespace: "custom", key: "hero_heading" },
       { namespace: "custom", key: "hero_subtext" }
+      { namespace: "custom", key: "color" }
+      { namespace: "custom", key: "alignment" }
+
     ]) {
       key
       value

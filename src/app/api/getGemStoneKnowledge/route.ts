@@ -4,7 +4,6 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const stone = url.searchParams.get("stone");
-    console.log("stoneee", stone);
 
     const shopifyRes = await fetch(
       process.env.SHOPIFY_STOREFRONT_URL as string,

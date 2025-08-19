@@ -10,7 +10,10 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconLayoutSidebar } from "@tabler/icons-react";
 
 export default function EducationPage() {
-  const gemstones: any = usestoneStore((state) => state.gemstones) || [];
+  const gemstones: any[] = (usestoneStore((state) => state.gemstones) || [])
+    .slice()
+    .sort((a: any, b: any) => a.title.localeCompare(b.title));
+
   const [selectedStone, setSelectedStone] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const queryStone = searchParams.get("activeStone");
@@ -32,7 +35,6 @@ export default function EducationPage() {
           activeStone={queryStone}
         />
       </div>
-
 
       <div className="flex-1 overflow-y-auto p-4 md:p-8 relative">
         <div className="lg:hidden mb-4 flex justify-start">

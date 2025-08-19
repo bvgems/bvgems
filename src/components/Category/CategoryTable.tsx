@@ -26,6 +26,7 @@ export const CategoryTable = ({
   selectedSizes,
   data,
   typeFilter,
+  emeraldShade,
 }: any) => {
   const name = data?.handle;
   const { user } = useAuth();
@@ -46,8 +47,16 @@ export const CategoryTable = ({
   };
 
   const addProductToCart = (element: any, quantity: number = 1) => {
+    const isEmeraldLab =
+      element?.collection_slug === "Emerald" &&
+      (element?.type === "Lab Grown" || element?.quality === "Lab Grown");
+
+    const finalShade = isEmeraldLab ? emeraldShade || "Zambian" : "";
+
     addToCart({
       product: {
+        id: element?.id,
+        handle: element?.collection_slug?.toLowerCase(),
         productType: "stone",
         productId: element.id,
         collection_slug: element.collection_slug,
@@ -60,6 +69,7 @@ export const CategoryTable = ({
         shape: element.shape,
         size: element.size,
         type: element.type,
+        shade: finalShade,
       },
       quantity,
     });
@@ -250,21 +260,21 @@ export const CategoryTable = ({
                               </a>
                             )}
                           </TableTd>
+                          <TableTd>
+                            <Button
+                              leftSection={<IconShoppingCart />}
+                              variant="outline"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                addProductToCart(element);
+                              }}
+                              color="#0b182d"
+                            >
+                              ADD TO CART
+                            </Button>
+                          </TableTd>
                         </>
                       )}
-                      <TableTd>
-                        <Button
-                          leftSection={<IconShoppingCart />}
-                          variant="outline"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            addProductToCart(element);
-                          }}
-                          color="#0b182d"
-                        >
-                          ADD TO CART
-                        </Button>
-                      </TableTd>
                     </TableTr>
 
                     {/* Mobile Row */}
