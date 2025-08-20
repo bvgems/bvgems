@@ -48,7 +48,6 @@ export async function GET(req: Request) {
     });
 
     const { data } = await res.json();
-    console.log("fenil data", data);
 
     return NextResponse.json({ heroData: data }, { status: 200 });
   } catch (error) {

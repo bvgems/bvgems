@@ -4,6 +4,7 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const handle = url.searchParams.get("handle");
+
     const shopifyRes = await fetch(
       process.env.SHOPIFY_STOREFRONT_URL as string,
       {
@@ -23,6 +24,7 @@ export async function GET(req: Request) {
     );
 
     const data = await shopifyRes.json();
+    console.log('dataaaaaaa',data)
 
     return new Response(JSON.stringify(data?.data?.productByHandle), {
       status: 200,

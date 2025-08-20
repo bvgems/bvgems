@@ -3,13 +3,33 @@ import { useGridView } from "@/hooks/useGridView";
 import { ViewAllProductComponent } from "./ViewAllProductComponent";
 import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
 import { Skeleton, Grid, GridCol } from "@mantine/core";
+import { useEffect, useState } from "react";
 
-export const CommonGridView = ({ isBead }: any) => {
+export const CommonGridView = ({
+  filteredJewelry,
+  isBead = false,
+  selectedStones,
+}: any) => {
   const { category, activeTab, allProducts, beads } = useGridView();
+  console.log("selected stonesss", selectedStones);
 
   const isLoading = !allProducts?.length && !beads?.length;
+  const [totalDisplayedProducts, setTotalDispalyedProducts] = useState<any>();
+  const [finalProducts, setFinalProducts] = useState<any>();
 
-  // Skeleton placeholders
+  useEffect(() => {
+    if (filteredJewelry === undefined) {
+      setTotalDispalyedProducts(allProducts?.length);
+      setFinalProducts(allProducts);
+    } else {
+      const timer = setTimeout(() => {
+        setTotalDispalyedProducts(filteredJewelry?.length);
+        setFinalProducts(filteredJewelry);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [filteredJewelry]);
+
   if (isLoading) {
     return (
       <div className="px-4 sm:px-8 pt-6 pb-14">
@@ -28,15 +48,17 @@ export const CommonGridView = ({ isBead }: any) => {
 
   return (
     <div className="px-4 sm:px-8 pt-6 pb-14">
+      <p>Showing {totalDisplayedProducts} results</p>
       <ViewAllProductComponent
         keyProp={activeTab}
-        items={allProducts?.length ? allProducts : beads}
+        items={finalProducts?.length ? finalProducts : beads}
         renderItem={(product, index) => (
           <JewelryCategoryCard
             isBead={isBead}
             category={category}
             product={product}
             index={index}
+            selectedStones={selectedStones}
           />
         )}
       />

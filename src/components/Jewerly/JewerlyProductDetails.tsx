@@ -36,7 +36,6 @@ export const JewelryProductDetails = ({
   selectedImage,
   twoStoneRings,
 }: any) => {
-  console.log("proddd", productData);
   const { user } = useAuth();
   const segments = path?.split("/").filter(Boolean);
   const category = segments?.[1];
@@ -268,11 +267,11 @@ export const JewelryProductDetails = ({
           isBead ? "gap-2" : "gap-4"
         }`}
       >
-        <h1 className="uppercase text-[1.3rem] sm:text-[2rem] leading-snug sm:leading-relaxed tracking-wide">
+        <h1 className="capitalize text-[1.3rem] sm:text-[1.5rem] leading-snug sm:leading-relaxed tracking-wide">
           {productData?.title}
         </h1>
 
-        <div className="text-[1.2rem] sm:text-[1.9rem] text-gray-700 font-bold">
+        <div className="text-[1.2rem] sm:text-[1.5rem] text-gray-700 font-bold">
           <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
             <span className="font-sans">
               {(() => {
@@ -372,11 +371,10 @@ export const JewelryProductDetails = ({
           </>
         )}
 
-        <p className="text-lg mt-2 pb-1.5">{productData?.description}</p>
+        <p className="text-md mt-2 pb-1.5 text-gray-500 italic">
+          {productData?.description}
+        </p>
 
-        {isRingCategory ? (
-          <JeweleryDetailsAccordion productData={productData} />
-        ) : null}
         {isBead ? <p>Straight Size</p> : null}
         {isEarringCategory ? (
           <>
@@ -391,7 +389,7 @@ export const JewelryProductDetails = ({
               styles={{
                 input: {
                   padding: "22px 15px",
-                  backgroundColor: "#dbdddf",
+                  // backgroundColor: "#dbdddf",
                 },
               }}
             />
@@ -462,7 +460,7 @@ export const JewelryProductDetails = ({
                   styles={{
                     input: {
                       padding: "22px 35px",
-                      backgroundColor: "#dbdddf",
+                      // backgroundColor: "#dbdddf",
                     },
                   }}
                 />
@@ -477,7 +475,7 @@ export const JewelryProductDetails = ({
                   styles={{
                     input: {
                       padding: "22px 35px",
-                      backgroundColor: "#dbdddf",
+                      // backgroundColor: "#dbdddf",
                     },
                   }}
                 />
@@ -498,7 +496,7 @@ export const JewelryProductDetails = ({
                 styles={{
                   input: {
                     padding: "22px 35px",
-                    backgroundColor: "#dbdddf",
+                    // backgroundColor: "#dbdddf",
                   },
                 }}
               />
@@ -529,7 +527,7 @@ export const JewelryProductDetails = ({
                 styles={{
                   input: {
                     padding: "22px 35px",
-                    backgroundColor: "#dbdddf",
+                    // backgroundColor: "#dbdddf",
                   },
                 }}
               />
@@ -546,7 +544,7 @@ export const JewelryProductDetails = ({
               styles={{
                 input: {
                   padding: "22px 15px",
-                  backgroundColor: "#dbdddf",
+                  // backgroundColor: "#dbdddf",
                 },
               }}
             />
@@ -559,7 +557,7 @@ export const JewelryProductDetails = ({
               className="flex-1"
               clearable
               leftSection={<IconDiamond size={20} />}
-              label="Select Ring Size (mm)"
+              label="Select Ring Size"
               placeholder="Ring size"
               data={ringSizes()}
               value={selectedRingSize}
@@ -567,7 +565,7 @@ export const JewelryProductDetails = ({
               styles={{
                 input: {
                   padding: "22px 35px",
-                  backgroundColor: "#dbdddf",
+                  // backgroundColor: "#dbdddf",
                 },
               }}
             />
@@ -590,7 +588,7 @@ export const JewelryProductDetails = ({
                 styles={{
                   input: {
                     padding: "22px 35px",
-                    backgroundColor: "#dbdddf",
+                    // backgroundColor: "#dbdddf",
                   },
                 }}
               />
@@ -600,8 +598,8 @@ export const JewelryProductDetails = ({
               <Select
                 className="flex-1"
                 leftSection={<IconDiamond size={20} />}
-                label="Select Shape"
-                placeholder="Shape"
+                label="Select Stone"
+                placeholder="Stone"
                 data={productData?.variants?.edges?.map(
                   (v: any) => v?.node?.title
                 )}
@@ -610,7 +608,7 @@ export const JewelryProductDetails = ({
                 styles={{
                   input: {
                     padding: "22px 35px",
-                    backgroundColor: "#dbdddf",
+                    // backgroundColor: "#dbdddf",
                   },
                 }}
               />
@@ -626,28 +624,13 @@ export const JewelryProductDetails = ({
           >
             ADD TO CART
           </Button>
-          {/* {user ? (
-            <Button color="#0b182d" onClick={addProduct} fullWidth>
-              ADD TO CART
-            </Button>
-          ) : (
-            <Button
-              color="#0b182d"
-              onClick={(e) => {
-                e.stopPropagation();
-                open();
-              }}
-              fullWidth
-            >
-              SIGN IN TO ORDER
-            </Button>
-          )} */}
         </div>
-
-        <div className="flex items-center justify-end text-gray-500">
-          <IconTruckDelivery size={20} />
-          <span className="ml-1.5">Estimated delivery: 4 Days</span>
-        </div>
+        {isRingCategory ? (
+          <JeweleryDetailsAccordion
+            productData={productData}
+            gemstone={selectedShape}
+          />
+        ) : null}
       </div>
     </>
   );

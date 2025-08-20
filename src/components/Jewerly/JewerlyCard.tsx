@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Tooltip, Skeleton } from "@mantine/core";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,12 +11,12 @@ export const JewelryCategoryCard = ({
   category,
   product,
   index,
+  selectedStones, // ⬅️ new prop
 }: any) => {
   const router = useRouter();
   const { user } = useAuth();
 
   const isLoading = !product?.node;
-
   if (isLoading) {
     return (
       <Card radius="md" shadow="none" padding="md">
@@ -27,17 +27,40 @@ export const JewelryCategoryCard = ({
     );
   }
 
-  const mainImage = product?.node?.images?.edges?.[0]?.node?.url || "";
-  const altImage = product?.node?.images?.edges?.[1]?.node?.url || "";
+  const variants = product?.node?.variants?.edges || [];
+  const defaultMain = product?.node?.images?.edges?.[0]?.node?.url || "";
+
+  // 🔑 Decide main image
+  const [mainImage, setMainImage] = useState<string>(defaultMain);
+
   const [selectedImage, setSelectedImage] = useState<string>(mainImage);
-  const [hovered, setHovered] = useState<number | null>(null);
   const [hoverPreviewImage, setHoverPreviewImage] = useState<string | null>(
     null
   );
 
+  useEffect(() => {
+    if (selectedStones?.length) {
+      const matchStone = selectedStones[0].toLowerCase();
+      console.log("matchedd", matchStone);
+      const matchedVariant = variants.find(
+        (v: any) => v?.node?.title?.toLowerCase() === matchStone
+      );
+      console.log("heyyy", matchedVariant);
+      if (matchedVariant?.node?.image?.url) {
+        setMainImage(matchedVariant.node.image.url);
+        return;
+      }
+    }
+    setMainImage(defaultMain);
+  }, [selectedStones, product]);
+
+  useEffect(() => {
+    setSelectedImage(mainImage);
+  }, [mainImage]);
+
   const priceText = useMemo(() => {
     const amounts =
-      product?.node?.variants?.edges
+      variants
         ?.map((e: any) => Number(e?.node?.price?.amount ?? 0))
         ?.filter((n: number) => Number.isFinite(n)) || [];
 
@@ -50,10 +73,10 @@ export const JewelryCategoryCard = ({
   }, [product]);
 
   const variantImages: { title?: string; image: string }[] =
-    product?.node?.variants?.edges
+    variants
       ?.map((v: any) => ({
         title: v?.node?.title,
-        image: v?.node?.image?.url || mainImage,
+        image: v?.node?.image?.url || defaultMain,
       }))
       ?.filter((v: any) => !!v.image) || [];
 
@@ -65,8 +88,8 @@ export const JewelryCategoryCard = ({
     const handle = product?.node?.handle;
     if (!handle) return;
     isBead
-      ? router.push(`/jewelry/beads/${handle}`)
-      : router.push(`/jewelry/${category}/${handle}`);
+      ? router.push(`/jewelry-details/beads/${handle}`)
+      : router.push(`/jewelry-details/${category}/${handle}`);
   };
 
   const displayImage = hoverPreviewImage || selectedImage || mainImage;
@@ -81,14 +104,7 @@ export const JewelryCategoryCard = ({
       onClick={redirectToProduct}
     >
       {/* IMAGE AREA */}
-      <div
-        className="relative w-full h-[260px] flex items-center justify-center overflow-hidden"
-        onMouseEnter={() => setHovered(index)}
-        onMouseLeave={() => {
-          setHovered(null);
-          setHoverPreviewImage(null);
-        }}
-      >
+      <div className="relative w-full h-[260px] flex items-center justify-center overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.img
             key={displayImage}

@@ -171,6 +171,19 @@ export const getFilteredData = async (options: any) => {
   }
 };
 
+export const getFilteredJewelry = async (options: any, category:any) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/fetchFilteredJewelry`, {
+      options,
+      category,
+    });
+
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while checkout", error);
+    return null;
+  }
+};
 
 export const makeCheckout = async (data: any) => {
   try {

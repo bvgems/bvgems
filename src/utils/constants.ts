@@ -1,3 +1,10 @@
+export const STONE_COLORS: any = {
+  Ruby: "Red",
+  Emerald: "Green",
+  "Pink Sapphire": "Pink",
+  "Blue Sapphire": "Blue",
+};
+
 export const US_STATES = [
   { value: "AL", label: "AL" },
   { value: "AK", label: "AK" },
@@ -394,6 +401,44 @@ export const stoneSizeOptions = [
     label: "4 mm",
   },
 ];
+
+export const RingTypes = [
+  {
+    label: "Solitaire",
+    value: "Solitaire",
+  },
+  {
+    label: "Bezel",
+    value: "Bezel",
+  },
+  {
+    label: "Three Stone",
+    value: "Three Stone",
+  },
+  {
+    label: "Band",
+    value: "Band",
+  },
+];
+
+export const JewelryGemstones = [
+  {
+    label: "Ruby",
+    value: "Ruby",
+  },
+  {
+    label: "Emerald",
+    value: "Emerald",
+  },
+  {
+    label: "Pink Sapphire",
+    value: "Pink Sapphire",
+  },
+  {
+    label: "Blue Sapphire",
+    value: "Blue Sapphire",
+  },
+];
 export const gemstoneOptions = [
   {
     label: "Alexandrite",
@@ -430,6 +475,12 @@ export const gemstoneOptions = [
     value: "Morganite",
     image: "/assets/morganite.png",
     link: "/morganite",
+  },
+  {
+    label: "Pariba Tourmaline",
+    value: "Pariba Tourmaline",
+    image: "/assets/pariba.png",
+    link: "/pariba-tourmaline",
   },
   {
     label: "Peridot",

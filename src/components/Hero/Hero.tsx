@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 export function Hero({ jewelryRef, heroData }: any) {
   const [revealImage, setRevealImage] = useState(false);
   const router = useRouter();
+  console.log("color", heroData?.heroData?.page?.metafields[3]?.value);
 
   const alignment =
     heroData?.heroData?.page?.metafields[4]?.value?.toLowerCase() || "left";
@@ -73,7 +74,7 @@ export function Hero({ jewelryRef, heroData }: any) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className={`absolute top-1/2 transform -translate-y-1/2 z-30 max-w-[650px] px-4 flex flex-col text-[${heroData?.heroData?.page?.metafields[3]?.value}] md:text-black gap-4 ${textAlignmentClass}`}
+          className={`absolute top-1/2 transform -translate-y-1/2 z-30 max-w-[650px] px-4 flex flex-col text-[#333333] gap-4 ${textAlignmentClass}`}
         >
           <h1 className="text-3xl md:text-5xl mb-2 drop-shadow-lg">
             {heroData?.heroData?.page?.metafields[1]?.value ||

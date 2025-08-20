@@ -1,3 +1,4 @@
+import { STONE_COLORS } from "@/utils/constants";
 import {
   Accordion,
   Badge,
@@ -9,9 +10,9 @@ import {
 } from "@mantine/core";
 import React from "react";
 
-export const JeweleryDetailsAccordion = ({ productData }: any) => {
+export const JeweleryDetailsAccordion = ({ productData, gemstone }: any) => {
   return (
-    <Accordion variant="separated" radius="md">
+    <Accordion variant="separated" radius="md" defaultValue={"jewelry-details"}>
       <Accordion.Item value="jewelry-details">
         <Accordion.Control>Jewelry Details</Accordion.Control>
         <Accordion.Panel>
@@ -24,7 +25,7 @@ export const JeweleryDetailsAccordion = ({ productData }: any) => {
             <TableTbody>
               <TableTr className="text-lg">
                 <TableTh w={160}>Gemstone</TableTh>
-                <TableTd>{productData?.gemstone?.value || "-"}</TableTd>
+                <TableTd>{gemstone || "-"}</TableTd>
               </TableTr>
               <TableTr className="text-lg">
                 <TableTh w={160}>Type</TableTh>
@@ -36,33 +37,33 @@ export const JeweleryDetailsAccordion = ({ productData }: any) => {
               </TableTr>
               <TableTr className="text-lg">
                 <TableTh w={160}>Stone Color</TableTh>
-                <TableTd>{productData?.color?.value || "-"}</TableTd>
+                <TableTd>{STONE_COLORS[gemstone] || "-"}</TableTd>
+              </TableTr>
+
+              <TableTr className="text-lg">
+                <TableTh>Stone Weight</TableTh>
+                <TableTd>{productData?.ct_weight?.value || "-"} ct.</TableTd>
               </TableTr>
               <TableTr className="text-lg">
-                <TableTh>Stone Size</TableTh>
-                <TableTd>All Sizes Available</TableTd>
+                <TableTh>Diamond Weight</TableTh>
+                <TableTd>
+                  {productData?.DiamondWeight?.value || "-"} ct.
+                </TableTd>
               </TableTr>
               <TableTr className="text-lg">
-                <TableTh>Stone Wg.</TableTh>
-                <TableTd>{productData?.ct_weight?.value || "-"}</TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh>Diamond Size</TableTh>
-                <TableTd>-</TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh>Total Wg.</TableTh>
-                <TableTd>-</TableTd>
+                <TableTh>Total Weight</TableTh>
+                <TableTd>
+                  {" "}
+                  {Number(productData?.ct_weight?.value) +
+                    Number(productData?.DiamondWeight?.value) || "-"}{" "}
+                  ct.
+                </TableTd>
               </TableTr>
               <TableTr className="text-lg">
                 <TableTh w={160}>Customization</TableTh>
                 <TableTd>
-                  <Badge
-                    radius={0}
-                    size="lg"
-                    color={productData?.customization?.value ? "green" : "red"}
-                  >
-                    {productData?.customization?.value ? "YES" : "NO"}
+                  <Badge radius={0} size="lg" color={"green"}>
+                    YES
                   </Badge>
                 </TableTd>
               </TableTr>

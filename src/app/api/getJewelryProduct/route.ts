@@ -5,6 +5,7 @@ export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const handle = url.searchParams.get("handle");
+    console.log('handle*******************',handle)
 
     if (!handle) {
       return NextResponse.json({ error: "Missing handle" }, { status: 400 });

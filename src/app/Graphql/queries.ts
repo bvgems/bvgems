@@ -283,56 +283,102 @@ export const getAllProducts = `
 `;
 
 export const shopifyQuery = `
-      query getProductsByCategory($category: String!) {
-        products(first: 150, query: $category) {
-          edges {
-            node {
-              id
-              title
-              handle
-              description
-              productType
-              createdAt
-              tags
-              images(first: 2) {
-                edges {
-                  node {
-                    url
-                    altText
-                  }
-                }
+  query getProductsByCategory($category: String!) {
+    products(first: 150, query: $category, sortKey: CREATED_AT, reverse: true) {
+      edges {
+        node {
+          id
+          title
+          handle
+          description
+          productType
+          createdAt
+          tags
+          images(first: 2) {
+            edges {
+              node {
+                url
+                altText
               }
-        showshapeoptions: metafield(namespace: "custom", key: "showshapeoptions") {
+            }
+          }
+          showshapeoptions: metafield(namespace: "custom", key: "showshapeoptions") {
             value
             type
           }
-             isTwoStoneRing:metafield(namespace: "custom", key: "istwostonering") {
+          isTwoStoneRing: metafield(namespace: "custom", key: "istwostonering") {
             value
             type
           }
-
-              variants(first: 10) {
-                edges {
-                  node {
-                    price {
-                      amount
-                      currencyCode
-                    }
-                    title
-                    image {
-                    url
-                    altText
-                    }
-                    sku
-                  }
+          gemstone: metafield(namespace: "custom", key: "gemstone") {
+            value
+            type
+          }
+          stoneType: metafield(namespace: "custom", key: "stone_type") {
+            value
+            type
+          }
+          shape: metafield(namespace: "custom", key: "shape") {
+            value
+            type
+          }
+          color: metafield(namespace: "custom", key: "Color") {
+            value
+            type
+          }
+          ct_weight: metafield(namespace: "custom", key: "ct_weight") {
+            value
+            type
+          }
+          customization: metafield(namespace: "custom", key: "customization") {
+            value
+            type
+          }
+          showGoldColor: metafield(namespace: "custom", key: "showGoldColor") {
+            value
+            type
+          }
+          DiamondWeight: metafield(namespace: "custom", key: "diamonds") {
+            value
+            type
+          }
+          TotalWeight: metafield(namespace: "custom", key: "total_gemstone_ct_weight") {
+            value
+            type
+          }
+          TargetGender: metafield(namespace: "custom", key: "target_gender") {
+            value
+            type
+          }
+          firstShape: metafield(namespace: "custom", key: "first_stone") {
+            value
+            type
+          }
+          secondShape: metafield(namespace: "custom", key: "second_stone") {
+            value
+            type
+          }
+          variants(first: 10) {
+            edges {
+              node {
+                price {
+                  amount
+                  currencyCode
                 }
+                title
+                image {
+                  url
+                  altText
+                }
+                sku
               }
-
             }
           }
         }
       }
-    `;
+    }
+  }
+`;
 
 export const getProductsByCategory = `
     query GetProductsByCategory($first: Int = 100) {
@@ -406,6 +452,21 @@ export const GetProductByHandle = `
           }
 
       showGoldColor:metafield(namespace: "custom", key: "showGoldColor") {
+            value
+            type
+          }
+      DiamondWeight:metafield(namespace: "custom", key: "diamonds") {
+            value
+            type
+          }
+
+    TotalWeight:metafield(namespace: "custom", key: "total_gemstone_ct_weight") {
+            value
+            type
+          }
+
+
+           TargetGender:metafield(namespace: "custom", key: "target_gender") {
             value
             type
           }
