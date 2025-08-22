@@ -7,12 +7,7 @@ const nextConfig: NextConfig = {
         source: "/bracelets",
         destination: "/jewelry/bracelets", 
         permanent: true,
-      },
-      {
-        source: "/sapphire",
-        destination: "/sapphire", 
-        permanent: true,
-      },
+      }
     ];
   },
 };
