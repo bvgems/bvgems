@@ -23,7 +23,6 @@ export const ProductSpecifications = ({
   allProducts,
   isFreeSize = false,
 }: any) => {
-  console.log("prod", product);
   const router = useRouter();
 
   const [allSizes, setAllSizes] = useState<any[]>([]);
@@ -73,10 +72,21 @@ export const ProductSpecifications = ({
     const isTriggeredByUser = isSizeChangedByUser || isQualityChangedByUser;
     if (!isTriggeredByUser || !allProducts || !value || !selectedQuality)
       return;
+    const isSapphire = product?.collection_slug === "Sapphire";
 
-    const newProduct = allProducts.find(
-      (item: any) => item?.size === value && item?.quality === selectedQuality
-    );
+    let newProduct;
+    if (isSapphire) {
+      newProduct = allProducts.find(
+        (item: any) =>
+          item?.size === value &&
+          item?.quality === selectedQuality &&
+          item?.color === product?.color
+      );
+    } else {
+      newProduct = allProducts.find(
+        (item: any) => item?.size === value && item?.quality === selectedQuality
+      );
+    }
 
     if (newProduct?.id) {
       getProduct(newProduct.id);
