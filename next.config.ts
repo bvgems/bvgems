@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/sapphire",
-        destination: "sapphires", 
+        destination: "/sapphire", 
         permanent: true,
       },
     ];
