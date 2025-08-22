@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
+  getAllFreeSizeGemstones,
   getAllJeweleryProducts,
   getAllLooseGemstones,
   getBeads,
@@ -8,6 +9,7 @@ import {
 export async function GET(req: NextRequest) {
   try {
     const allLooseGemstones: any = await getAllLooseGemstones();
+    const allFreeSizeGemstones: any = await getAllFreeSizeGemstones();
 
     const allBracelets: any = await getAllJeweleryProducts("bracelets");
     const formattedBraceletsData = allBracelets?.edges?.map((item: any) => ({
@@ -31,7 +33,7 @@ export async function GET(req: NextRequest) {
     const formattedNecklacesData = allNecklaces?.edges?.map((item: any) => ({
       ...item,
       value: item?.node?.title,
-    }));  
+    }));
 
     const allBeads: any = await getBeads();
     const formattedBeadsData = allBeads?.map((item: any) => ({
@@ -49,6 +51,7 @@ export async function GET(req: NextRequest) {
 
     const mergedData = {
       allLooseGemstones,
+      allFreeSizeGemstones,
       mergedJewleryData,
     };
 

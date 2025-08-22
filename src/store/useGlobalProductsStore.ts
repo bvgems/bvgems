@@ -16,6 +16,23 @@ export type LooseGemstone = {
   value: string;
 };
 
+export type FreeSizeGemstone = {
+  id: number;
+  gemstone_type: string;
+  shape: string;
+  dimension: string;
+  ct_weight: string;
+  lot_number: string;
+  single_or_matched: string;
+  price: string;
+  enhancement: string;
+  is_certified: boolean;
+  image_url: string;
+  origin: string;
+  total_price: string;
+  value: string;
+};
+
 export type JeweleryProduct = {
   id: string;
   title: string;
@@ -48,9 +65,12 @@ export type JeweleryProduct = {
 
 type GemStore = {
   gemstones: LooseGemstone[];
+  freeSizeGemstones: FreeSizeGemstone[];
   products: JeweleryProduct[];
   setGemstones: (items: LooseGemstone[]) => void;
   addGemstone: (item: LooseGemstone) => void;
+  setFreeSizeGemstone: (items: FreeSizeGemstone[]) => void;
+  addFreeSizeGemstone: (item: FreeSizeGemstone) => void;
   setProducts: (items: JeweleryProduct[]) => void;
   addProduct: (item: JeweleryProduct) => void;
   clearAll: () => void;
@@ -60,10 +80,16 @@ export const useGemStore = create<GemStore>()(
   persist(
     (set) => ({
       gemstones: [],
+      freeSizeGemstones: [],
       products: [],
       setGemstones: (items) => set({ gemstones: items }),
       addGemstone: (item) =>
         set((state) => ({ gemstones: [...state.gemstones, item] })),
+      setFreeSizeGemstone: (items) => set({ freeSizeGemstones: items }),
+      addFreeSizeGemstone: (item) =>
+        set((state) => ({
+          freeSizeGemstones: [...state.freeSizeGemstones, item],
+        })),
       setProducts: (items) => set({ products: items }),
       addProduct: (item) =>
         set((state) => ({ products: [...state.products, item] })),

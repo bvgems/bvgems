@@ -171,7 +171,7 @@ export const getFilteredData = async (options: any) => {
   }
 };
 
-export const getFilteredJewelry = async (options: any, category:any) => {
+export const getFilteredJewelry = async (options: any, category: any) => {
   try {
     const response = await axios.post(`${baseUrl}/api/fetchFilteredJewelry`, {
       options,
@@ -592,6 +592,20 @@ export const editAMLInfo = async (userId: string, data: any) => {
 export const fetchAllItems = async () => {
   try {
     const response = await axios.get(`${baseUrl}/api/fetchAllItems`);
+    return response?.data?.data;
+  } catch (error) {
+    console.log("Something went wrong while storing the AML info");
+  }
+};
+
+export const getSearchResult = async (searchQuery: any, activeFilter: any) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/api/search?q=${encodeURIComponent(
+        searchQuery
+      )}&category=${activeFilter}`
+    );
+    console.log("response of search", response);
     return response?.data?.data;
   } catch (error) {
     console.log("Something went wrong while storing the AML info");

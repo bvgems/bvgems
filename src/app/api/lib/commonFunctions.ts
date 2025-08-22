@@ -21,6 +21,26 @@ export const getAllLooseGemstones = async () => {
   }
 };
 
+export const getAllFreeSizeGemstones = async () => {
+  try {
+    const allGemStonesQuery = `SELECT * FROM free_size_gemstones`;
+
+    const allGemstones = await pool.query(allGemStonesQuery);
+    const allGemstonesFormattedData = allGemstones?.rows.map((item) => {
+      const formattedValue = `${item?.shape} ${item?.gemstone_type} ${item?.dimension} - ${item?.id}`;
+
+      return {
+        ...item,
+        value: formattedValue,
+      };
+    });
+
+    return allGemstonesFormattedData;
+  } catch (error) {
+    console.error("Something went wrong while fetching all the gemstones!");
+  }
+};
+
 export const getAllJeweleryProducts = async (category: any) => {
   try {
     const variables = {

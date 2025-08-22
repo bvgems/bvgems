@@ -2,11 +2,10 @@
 import {
   IconChevronDown,
   IconShoppingBag,
-  IconPhone,
-  IconMail,
   IconSearch,
   IconArrowLeft,
   IconUser,
+  IconX,
 } from "@tabler/icons-react";
 import {
   Burger,
@@ -23,6 +22,7 @@ import {
   Menu,
   Autocomplete,
   em,
+  Loader,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { useRouter, usePathname } from "next/navigation";
@@ -33,11 +33,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { UserProfile } from "../UserProfile/UserProfile";
 import { getCartStore } from "@/store/useCartStore";
 import { links } from "@/utils/constants";
-import { fetchAllItems } from "@/apis/api";
-import { useGemStore } from "@/store/useGlobalProductsStore";
 import { DrawerComponent } from "./Drawer";
 import { HeaderHoverCardForGemstones } from "./HeaderHoverCardForGemstones";
 import { AddressBar } from "./AddressBar";
+import { getSearchResult } from "@/apis/api";
 
 export function Header() {
   const isMobile = useMediaQuery(`(max-width: ${em(991)})`);
@@ -63,7 +62,12 @@ export function Header() {
   );
 
   const [searchOpen, setSearchOpen] = useState(false);
-  const [globalSearchItems, setGlobalSearchItems] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<
+    "all" | "calibrated" | "freeSize" | "jewelry"
+  >("all");
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -72,77 +76,142 @@ export function Header() {
     }
   }, [searchOpen]);
 
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (!searchQuery) {
+        setSearchResults([]);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      const data: any = await getSearchResult(searchQuery, activeFilter);
+      setSearchResults(
+        data?.map((item: any) => {
+          const display = `${
+            item.collection_slug ?? item.gemstone_type ?? ""
+          } ${item.shape ?? ""}  ${item.size ?? item.dimension ?? ""} - ${
+            item.id
+          }`.trim();
+
+          return {
+            ...item,
+            value: display,
+            label: display,
+          };
+        })
+      );
+      setLoading(false);
+    };
+
+    const debounceTimer = setTimeout(fetchResults, 400);
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery, activeFilter]);
+
   const handleSearchRedirect = (option: any) => {
-    if (option?.image_url) {
+    setSearchOpen(false);
+    setSearchQuery("");
+
+    if (option?.gemstone_type) {
+      router?.push(`/free-size-gemstone-details/${option?.id}`);
+    } else if (option?.collection_slug) {
       router.push(
         `/product-details?id=${option?.id}&name=${option?.collection_slug}`
       );
     } else {
       router.push(
-        `/jewelry/${option?.productType?.toLowerCase()}/${option?.handle}`
+        `/jewelry-details/${option?.productType?.toLowerCase()}/${
+          option?.handle
+        }`
       );
     }
   };
 
-  const getFlattenJewleryData = (jewelryProducts: any) =>
-    jewelryProducts.map((item: any) => ({
-      ...item.node,
-      label: item.node.title,
-      value: item.node.title,
-    }));
-
-  const handleSearchClick = async () => {
-    setSearchOpen(true);
-    const store = useGemStore.getState();
-    const { gemstones, products, setGemstones, setProducts } = store;
-
-    let updatedGemstones = gemstones;
-    let updatedProducts = products;
-
-    if (gemstones.length === 0 || products.length === 0) {
-      const allItems = await fetchAllItems();
-      if (allItems.allLooseGemstones && gemstones.length === 0) {
-        setGemstones(allItems.allLooseGemstones);
-        updatedGemstones = allItems.allLooseGemstones;
-      }
-      if (allItems.mergedJewleryData && products.length === 0) {
-        setProducts(allItems.mergedJewleryData);
-        updatedProducts = allItems.mergedJewleryData;
-      }
-    }
-
-    const allJeweleryProducts = getFlattenJewleryData(updatedProducts);
-    const mergedSearchItems = [...updatedGemstones, ...allJeweleryProducts];
-
-    setGlobalSearchItems(
-      mergedSearchItems.map((item: any) => ({
-        ...item,
-        label: item.title || item.label || item.value,
-        value: item.title || item.label || item.value,
-      }))
-    );
+  const handleCloseSearch = () => {
+    setSearchOpen(false);
+    setSearchQuery("");
+    setSearchResults([]);
   };
 
-  const renderGlobalItems = ({ option, ...props }: any) => (
+  const renderSearchOption = ({ option, ...props }: any) => (
     <div
       onClick={() => handleSearchRedirect(option)}
       key={option.value}
       {...props}
-      className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+      className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
     >
-      <Image
-        h={70}
-        w={70}
-        fit="fill"
-        src={option.images?.edges[0]?.node?.url ?? option?.image_url}
-        className="w-10 h-10 rounded object-cover"
-      />
-      <div>
-        <p className="text-sm ">{option.label}</p>
+      <div className="flex-shrink-0">
+        <Image
+          h={50}
+          w={50}
+          fit="cover"
+          src={option.images?.edges?.[0]?.node?.url ?? option?.image_url}
+          className="object-cover"
+          alt={option.label}
+        />
+      </div>
+      <div className="flex-grow">
+        <p className="text-sm font-medium text-gray-900 line-clamp-1">
+          {String(option?.id ?? "").startsWith("gid")
+            ? `${option?.title}`
+            : option?.collection_slug === "Sapphire"
+            ? `${option?.color} ${
+                option.collection_slug || option.gemstone_type
+              } ${option.shape} ${option.size || option.dimension}${
+                option.category === "Calibrated" && option.quality
+                  ? ` - ${option.quality} Quality`
+                  : ""
+              }`
+            : `${option.collection_slug || option.gemstone_type} ${
+                option.shape
+              } ${option.size || option.dimension}${
+                option.category === "Calibrated" && option.quality
+                  ? ` - ${option.quality} Quality`
+                  : ""
+              }`}
+        </p>
+        <span className="text-xs text-gray-500 capitalize mt-1 block">
+          {option.category}
+        </span>
       </div>
     </div>
   );
 
+  const FilterButtons = ({ className = "" }: { className?: string }) => (
+    <div className={`flex gap-2 ${className}`}>
+      {[
+        { key: "all", label: "All" },
+        { key: "calibrated", label: "Calibrated" },
+        { key: "freeSize", label: "Free Size" },
+        { key: "jewelry", label: "Jewelry" },
+      ].map((filter) => (
+        <button
+          key={filter.key}
+          onClick={() =>
+            setActiveFilter(
+              filter.key as "all" | "calibrated" | "freeSize" | "jewelry"
+            )
+          }
+          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            activeFilter === filter.key
+              ? "bg-[#0b182d] text-white"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          }`}
+        >
+          {filter.label}
+        </button>
+      ))}
+    </div>
+  );
+
+  const getPlaceholder = () => {
+    if (activeFilter === "freeSize") {
+      return "Search by gemstone name, lot number, size, weight etc.";
+    }
+    return "Search for gemstones, jewelry, and more...";
+  };
+
+  // Navbar items
   const items = links.map((link, index) => {
     const menuItems = link.links?.map((item: any) => (
       <UnstyledButton
@@ -250,41 +319,111 @@ export function Header() {
 
       {!isMobile && <AddressBar />}
 
-      <header className="sticky top-0 z-50 h-[85px] border-b border-gray-300 bg-white">
-        <nav className="mt-4">
-          {isMobile ? (
-            searchOpen ? (
-              <div className="flex items-center gap-2">
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-300">
+        {/* Search Overlay for Desktop */}
+        {searchOpen && !isMobile && (
+          <div className="absolute top-0 left-0 right-0 bg-white shadow-lg border-b border-gray-200 z-50">
+            <div className="container mx-auto px-6 py-4">
+              <div className="flex items-center gap-4 mb-4">
+                <FilterButtons />
+                <div className="ml-auto">
+                  <Button
+                    variant="subtle"
+                    size="sm"
+                    leftSection={<IconX size={16} />}
+                    onClick={handleCloseSearch}
+                    color="gray"
+                  >
+                    Close
+                  </Button>
+                </div>
+              </div>
+              <div className="relative">
                 <Autocomplete
-                  size="md"
+                  size="lg"
                   ref={searchInputRef}
                   clearable
-                  leftSection={<IconSearch />}
-                  data={globalSearchItems}
-                  renderOption={renderGlobalItems}
+                  leftSection={<IconSearch size={20} />}
+                  data={searchResults}
+                  value={searchQuery}
+                  onChange={setSearchQuery}
+                  renderOption={renderSearchOption}
                   onOptionSubmit={(val) => {
-                    const selectedItem = globalSearchItems.find(
+                    const selectedItem = searchResults.find(
                       (item) => item.label.toLowerCase() === val.toLowerCase()
                     );
                     if (selectedItem) handleSearchRedirect(selectedItem);
                   }}
-                  placeholder="Search..."
-                  className="flex-grow text-black"
+                  placeholder={getPlaceholder()}
+                  className="w-full"
+                  dropdownOpened={searchResults.length > 0 || loading}
+                  styles={{
+                    input: {
+                      fontSize: "16px",
+                      padding: "12px 16px 12px 48px",
+                      borderRadius: "8px",
+                      border: "2px solid #e5e7eb",
+                    },
+                    dropdown: {
+                      maxHeight: "400px",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "8px",
+                      marginTop: "4px",
+                    },
+                  }}
                 />
-                <Button
-                  variant="light"
-                  size="compact-md"
-                  onClick={() => setSearchOpen(false)}
-                >
-                  Cancel
-                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <nav className="h-[85px] flex items-center">
+          {isMobile ? (
+            searchOpen ? (
+              <div className="w-full px-4 py-3">
+                <div className="flex items-center gap-2 mb-3">
+                  <IconArrowLeft
+                    size={20}
+                    className="cursor-pointer"
+                    onClick={handleCloseSearch}
+                  />
+                  <FilterButtons className="flex-grow" />
+                </div>
+                <Autocomplete
+                  size="md"
+                  ref={searchInputRef}
+                  clearable
+                  leftSection={<IconSearch size={18} />}
+                  data={searchResults}
+                  value={searchQuery}
+                  onChange={setSearchQuery}
+                  renderOption={renderSearchOption}
+                  // loading={loading}
+                  // nothingFound={loading ? <Loader size="sm" /> : "No results"}
+                  onOptionSubmit={(val) => {
+                    const selectedItem = searchResults.find(
+                      (item) => item.value.toLowerCase() === val.toLowerCase()
+                    );
+                    if (selectedItem) handleSearchRedirect(selectedItem);
+                  }}
+                  placeholder={getPlaceholder()}
+                  className="w-full"
+                  dropdownOpened={searchResults.length > 0 || loading}
+                  styles={{
+                    input: {
+                      borderRadius: "8px",
+                      border: "1px solid #d1d5db",
+                    },
+                    dropdown: {
+                      maxHeight: "300px",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "8px",
+                    },
+                  }}
+                />
               </div>
             ) : (
-              <div
-                className={`flex items-center justify-between h-[75px] ${
-                  smallerTextFlag ? "px-12" : "px-6"
-                }`}
-              >
+              <div className="flex items-center justify-between h-full w-full px-6">
                 <Burger opened={opened} onClick={toggle} size="sm" />
 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -298,42 +437,38 @@ export function Header() {
                   />
                 </div>
 
-                <div className={`flex items-center gap-4`}>
+                <div className="flex items-center gap-4">
                   <IconSearch
-                    className="hover:cursor-pointer"
+                    className="hover:cursor-pointer text-gray-700 hover:text-gray-900"
                     size="22"
-                    onClick={handleSearchClick}
+                    onClick={() => setSearchOpen(true)}
                   />
 
                   <div className="relative">
                     <IconShoppingBag
                       onClick={() => router.push("/cart")}
-                      className="hover:cursor-pointer"
+                      className="hover:cursor-pointer text-gray-700 hover:text-gray-900"
                       size="22"
                     />
-                    {cartCount > 0 ? (
+                    {cartCount > 0 && (
                       <div className="absolute -top-2 -right-2">
-                        <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
+                        <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5 min-w-[20px] h-5 flex items-center justify-center">
                           {cartCount}
                         </span>
                       </div>
-                    ) : null}
+                    )}
                   </div>
                 </div>
               </div>
             )
           ) : (
-            <Grid
-              className={`h-[75px] items-center justify-between ${
-                !smallerTextFlag ? "px-6" : ""
-              }`}
-            >
+            <Grid className="h-full items-center w-full px-6 mt-5">
               <GridCol
                 span={{ base: 12, md: 2 }}
-                className="flex justify-start w-full"
+                className="flex justify-start"
               >
                 <Image
-                  className="cursor-pointer ml-4"
+                  className="cursor-pointer"
                   onClick={() => router.push("/")}
                   src="/assets/logo2.png"
                   alt="logo"
@@ -341,92 +476,69 @@ export function Header() {
                   w={100}
                 />
               </GridCol>
+
               <GridCol
                 span={{ base: 12, md: 8 }}
-                className="flex justify-center px-3"
+                className="flex justify-center"
               >
-                {!searchOpen ? (
-                  <div
-                    className={`${
-                      smallerTextFlag ? "" : "uppercase"
-                    }   w-[100%] flex justify-center items-center`}
-                  >
-                    {items}
-                  </div>
-                ) : (
-                  <div className="w-full flex items-center justify-center gap-1">
-                    <Autocomplete
-                      size="md"
-                      ref={searchInputRef}
-                      clearable
-                      leftSection={<IconSearch />}
-                      data={globalSearchItems}
-                      renderOption={renderGlobalItems}
-                      onOptionSubmit={(val) => {
-                        const selectedItem = globalSearchItems.find(
-                          (item) =>
-                            item.label.toLowerCase() === val.toLowerCase()
-                        );
-                        if (selectedItem) handleSearchRedirect(selectedItem);
-                      }}
-                      placeholder="Search for gemstones, jewelry, etc..."
-                      className="w-full px-4 py-2 rounded-md text-black"
-                    />
-                    <Button
-                      w={100}
-                      variant="light"
-                      leftSection={<IconArrowLeft size={20} />}
-                      size="compact-md"
-                      color="#0b182d"
-                      onClick={() => setSearchOpen(false)}
-                    >
-                      Back
-                    </Button>
-                  </div>
-                )}
+                <div
+                  className={`${
+                    smallerTextFlag ? "" : "uppercase"
+                  } flex justify-center items-center gap-2`}
+                >
+                  {items}
+                </div>
               </GridCol>
+
               <GridCol
                 span={{ base: 12, md: 2 }}
-                className="flex items-center justify-end gap-3"
+                className="flex items-center justify-end gap-4"
               >
                 {user ? (
                   <UserProfile isSmaller={isSmaller} user={user} />
                 ) : (
-                  <IconUser className="cursor-pointer" onClick={open} />
+                  <IconUser
+                    className="cursor-pointer text-gray-700 hover:text-gray-900"
+                    onClick={open}
+                    size="20"
+                  />
                 )}
+
                 <div className="w-px h-6 bg-gray-300" />
 
                 <IconSearch
-                  className="hover:cursor-pointer"
-                  size="22"
-                  onClick={handleSearchClick}
+                  className="hover:cursor-pointer text-gray-700 hover:text-gray-900"
+                  size="20"
+                  onClick={() => setSearchOpen(true)}
                 />
-                <div className="relative ml-3.5 mr-4">
+
+                <div className="relative">
                   <IconShoppingBag
                     onClick={() => router.push("/cart")}
-                    className="hover:cursor-pointer"
-                    size="22"
+                    className="hover:cursor-pointer text-gray-700 hover:text-gray-900"
+                    size="20"
                   />
-                  {cartCount > 0 ? (
+                  {cartCount > 0 && (
                     <div className="absolute -top-2 -right-2">
-                      <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5">
+                      <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5 min-w-[20px] h-5 flex items-center justify-center">
                         {cartCount}
                       </span>
                     </div>
-                  ) : null}
+                  )}
                 </div>
               </GridCol>
             </Grid>
           )}
-          <DrawerComponent
-            cartCount={cartCount}
-            isMobile={isMobile}
-            isSmaller={isSmaller}
-            opened={opened}
-            toggle={toggle}
-            user={user}
-          />
         </nav>
+
+        <DrawerComponent
+          cartCount={cartCount}
+          isMobile={isMobile}
+          isSmaller={isSmaller}
+          opened={opened}
+          toggle={toggle}
+          user={user}
+        />
       </header>
     </>
   );
