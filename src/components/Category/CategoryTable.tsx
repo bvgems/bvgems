@@ -20,6 +20,7 @@ import { AuthForm } from "../Auth/AuthForm";
 import { getCartStore } from "@/store/useCartStore";
 import { notifications } from "@mantine/notifications";
 import React, { useMemo, useState, useEffect } from "react";
+import { AddToCartModal } from "../CommonComponents/AddToCartModal";
 
 export const CategoryTable = ({
   fetchedResult,
@@ -34,6 +35,10 @@ export const CategoryTable = ({
 
   const router = useRouter();
   const [modalOpened, { open, close }] = useDisclosure(false);
+  const [productModal, { open: openProductModal, close: closeProductModal }] =
+    useDisclosure(false);
+  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+
   const [sortOrder, setSortOrder] = useState<string | null>(null);
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,43 +51,6 @@ export const CategoryTable = ({
     router.push(`/product-details?id=${item?.id}&name=${name}`);
   };
 
-  const addProductToCart = (element: any, quantity: number = 1) => {
-    const isEmeraldLab =
-      element?.collection_slug === "Emerald" &&
-      (element?.type === "Lab Grown" || element?.quality === "Lab Grown");
-
-    const finalShade = isEmeraldLab ? emeraldShade || "Zambian" : "";
-
-    addToCart({
-      product: {
-        id: element?.id,
-        handle: element?.collection_slug?.toLowerCase(),
-        productType: "stone",
-        productId: element.id,
-        collection_slug: element.collection_slug,
-        color: element.color,
-        ct_weight: element.ct_weight,
-        cut: element.cut,
-        image_url: element.image_url,
-        price: element.price,
-        quality: element.quality,
-        shape: element.shape,
-        size: element.size,
-        type: element.type,
-        shade: finalShade,
-      },
-      quantity,
-    });
-
-    notifications.show({
-      icon: <IconCheck />,
-      color: "teal",
-      message: "Product Added To The Cart!",
-      position: "top-right",
-      autoClose: 4000,
-    });
-  };
-
   const formattedSelectedSize = selectedSizes[0];
 
   const totalFilteredRows = useMemo(() => {
@@ -91,7 +59,8 @@ export const CategoryTable = ({
         const sizeMatch =
           selectedSizes.length === 0 || item.size === formattedSelectedSize;
         const typeMatch = !typeFilter || item.type === typeFilter;
-        return sizeMatch && typeMatch;
+        const availableMatch = item.is_available === true;
+        return sizeMatch && typeMatch && availableMatch;
       }) ?? []
     );
   }, [fetchedResult, selectedSizes, typeFilter]);
@@ -141,9 +110,33 @@ export const CategoryTable = ({
       >
         <AuthForm onClose={close} />
       </Modal>
+      <Modal
+        p={0}
+        size={"xl"}
+        opened={productModal}
+        onClose={closeProductModal}
+        overlayProps={{ style: { backdropFilter: "blur(4px)" } }}
+        transitionProps={{ transition: "slide-right" }}
+        centered
+      >
+        {selectedProduct && (
+          <AddToCartModal
+            opened={productModal}
+            onClose={closeProductModal}
+            price={selectedProduct.price}
+            image_url={selectedProduct.image_url}
+            name={`${selectedProduct.collection_slug} ${selectedProduct.shape}`}
+            size={selectedProduct.size}
+            quality={selectedProduct.quality}
+            ct_weight={selectedProduct.ct_weight}
+            color={selectedProduct.color}
+            product={selectedProduct}
+          />
+        )}
+      </Modal>
 
       <hr className="mt-11 text-gray-300" />
-      <div className="mt-10 px-4 md:px-35 mb-20">
+      <div className="mt-10 px-4 md:px-26 mb-20">
         {!user && (
           <p className="text-center text-gray-700 mb-6 text-lg font-medium">
             Please{" "}
@@ -189,7 +182,7 @@ export const CategoryTable = ({
               <TableTh>Cut</TableTh>
               {user && (
                 <>
-                  <TableTh>Estimated Price</TableTh>
+                  <TableTh>est. price per stone</TableTh>
                   <TableTh>Per Carat Price</TableTh>
                 </>
               )}
@@ -230,7 +223,7 @@ export const CategoryTable = ({
                         <>
                           <TableTd>
                             {element?.price ? (
-                              `$ ${element.price}`
+                              `$ ${Number(element.price).toFixed(2)}`
                             ) : (
                               <a
                                 href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
@@ -264,9 +257,16 @@ export const CategoryTable = ({
                             <Button
                               leftSection={<IconShoppingCart />}
                               variant="outline"
+                              // onClick={(e) => {
+                              //   e.stopPropagation();
+                              //   openProductModal();
+                              //   // addProductToCart(element);
+                              // }}
+
                               onClick={(e) => {
                                 e.stopPropagation();
-                                addProductToCart(element);
+                                setSelectedProduct(element); // ✅ store the clicked product
+                                openProductModal();
                               }}
                               color="#0b182d"
                             >
@@ -330,7 +330,7 @@ export const CategoryTable = ({
                             {user && (
                               <>
                                 <div>
-                                  <strong>Per Stone Price:</strong>{" "}
+                                  <strong>Est. Price Per Stone:</strong>{" "}
                                   {element?.price ? (
                                     `$ ${element.price}`
                                   ) : (

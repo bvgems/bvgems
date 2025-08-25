@@ -55,11 +55,11 @@ export async function generateMetadata({
 
 export default async function CategoryPage({ params }: PageProps) {
   const { handle } = await params;
-  console.log('handle ********',handle)
+
   const isSapphire = handle === "sapphire";
   const isEmerald = handle === "emerald";
   const data: any = await getCategoryData(handle);
-  console.log('dataaaa',data)
+
   const shapes = data?.shapes?.value?.split(",").map((s: any) => s.trim());
 
   return (

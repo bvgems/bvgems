@@ -881,9 +881,9 @@ export const SapphireLooseGemstoneColorOptions = [
   { value: "Pink", color: "#EC4899" },
   { value: "Green", color: "#22C55E" },
   { value: "Orange", color: "#F97316" },
-  { value: "Black", color: "#000000" },
-  { value: "White", color: "#808080" },
-  { value: "Red", color: "#FF0000" },
+  // { value: "Black", color: "#000000" },
+  // { value: "White", color: "#808080" },
+  // { value: "Red", color: "#FF0000" },
   { value: "Purple", color: "#800080" },
 ];
 

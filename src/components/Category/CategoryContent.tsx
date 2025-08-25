@@ -33,7 +33,10 @@ const getRepresentativeImages = (items: any[]) => {
       qualityMap[item.quality] = item; // take the first one found
     }
   });
-  return Object.values(qualityMap);
+
+  // Enforce order B -> A -> AA -> Lab Grown
+  const order = ["B", "A", "AA", "Lab Grown"];
+  return order.map((q) => qualityMap[q]).filter((item) => item !== undefined);
 };
 
 export function CategoryContent({
@@ -47,6 +50,21 @@ export function CategoryContent({
   data: any;
   shapes: string[];
 }) {
+  const shapeOrder = [
+    "Round",
+    "Oval",
+    "Emerald Cut",
+    "Pear",
+    "Princess Cut",
+    "Marquise",
+    "Heart",
+    "Straight Baguette",
+    "Cushion",
+    "Trillion",
+  ];
+  const sortedShapes = [...(shapes || [])].sort(
+    (a, b) => shapeOrder.indexOf(a) - shapeOrder.indexOf(b)
+  );
   const [selectedShape, setSelectedShape] = useState<string | null>(
     shapes?.length ? shapes[0] : null
   );
@@ -89,7 +107,7 @@ export function CategoryContent({
 
     setFetchedResult(result?.data || []);
 
-    // Get one image per quality
+    // Get one image per quality in fixed order
     const reps = getRepresentativeImages(result?.data || []);
     setQualityImages(reps);
     setActiveSlide(0); // reset when new data loads
@@ -133,11 +151,16 @@ export function CategoryContent({
               <div className="w-full">
                 {qualityImages.length > 0 ? (
                   <div className="flex flex-col items-center">
+                    {/* Main Carousel */}
                     <Carousel
                       withIndicators
-                      height={500}
+                      height={400}
                       onSlideChange={(index) => setActiveSlide(index)}
                       className="w-full max-w-[420px]"
+                      slideGap="md"
+                      // align="center"
+                      slideSize="100%"
+                      initialSlide={activeSlide}
                     >
                       {qualityImages.map((item: any, index: number) => (
                         <Carousel.Slide key={index}>
@@ -150,14 +173,30 @@ export function CategoryContent({
                       ))}
                     </Carousel>
 
-                    {/* Constant caption BELOW the image */}
-                    <div className="mt-4 flex flex-col items-center">
-                      <span className="text-[12px] uppercase tracking-[0.18em] text-gray-500">
-                        Quality
-                      </span>
-                      <span className="mt-1 inline-flex items-center rounded-full border border-gray-200 px-3 py-1 text-sm font-semibold shadow-sm bg-white">
-                        {currentQuality}
-                      </span>
+                    {/* Thumbnails */}
+                    <div className="mt-4 flex gap-4 flex-wrap justify-center">
+                      {qualityImages.map((item: any, index: number) => (
+                        <div
+                          key={index}
+                          className={`flex flex-col items-center cursor-pointer border rounded-lg p-2 transition-all ${
+                            activeSlide === index
+                              ? "border-black shadow-md"
+                              : "border-gray-300"
+                          }`}
+                          onClick={() => setActiveSlide(index)}
+                        >
+                          <Image
+                            src={item.image_url}
+                            h={70}
+                            w={70}
+                            fit="contain"
+                            className="rounded"
+                          />
+                          <span className="text-xs font-medium mt-1">
+                            {item.quality}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ) : (
@@ -167,7 +206,6 @@ export function CategoryContent({
             </motion.div>
           </GridCol>
 
-          {/* Right: Filters + Info */}
           <GridCol span={{ base: 12, md: 7 }}>
             <motion.div
               initial={{ opacity: 0, y: 80 }}
@@ -179,21 +217,20 @@ export function CategoryContent({
                   {data?.title}
                 </h1>
 
-                {/* Shape options */}
                 <div className="flex flex-wrap gap-3 mt-4">
-                  {shapes?.map((shape: string, index: number) => {
+                  {sortedShapes?.map((shape: string, index: number) => {
                     const isSelected = shape === selectedShape;
                     const shapeImageMap: Record<string, string> = {
                       Round: "/assets/round.svg",
                       Oval: "/assets/oval.svg",
-                      "Princess Cut": "/assets/princesscut.svg",
-                      Emerald: "/assets/emerald.svg",
+                      "Emerald Cut": "/assets/emerald.svg",
                       Pear: "/assets/pear.svg",
+                      "Princess Cut": "/assets/princesscut.svg",
                       Marquise: "/assets/marquise.svg",
-                      Cushion: "/assets/cushion.svg",
-                      Trillion: "/assets/trillion.svg",
                       Heart: "/assets/heart.svg",
                       "Straight Baguette": "/assets/baguette.svg",
+                      Cushion: "/assets/cushion.svg",
+                      Trillion: "/assets/trillion.svg",
                     };
 
                     const imageSrc = shapeImageMap[shape];
@@ -323,33 +360,71 @@ export function CategoryContent({
                 )}
 
                 {/* Static Info Table */}
-                <div className="mt-3 max-w-[350px]">
-                  <h1>Additional Information</h1>
+                <div className="mt-3 max-w-[500px]">
+                  <h1 className="text-lg font-semibold mb-3">
+                    Additional Information
+                  </h1>
                   <Table
-                    className="mt-2.5"
-                    variant="vertical"
-                    layout="fixed"
+                    className="mt-2.5 border rounded-lg shadow-sm"
+                    verticalSpacing="sm"
                     striped
+                    highlightOnHover
                   >
                     <TableTbody>
                       <TableTr>
-                        <TableTh>Hardness</TableTh>
-                        <TableTd>{data?.hardness?.value}</TableTd>
-                      </TableTr>
-                      <TableTr>
-                        <TableTh>Toughness</TableTh>
+                        <TableTh className="w-[120px]">Treatment</TableTh>
                         <TableTd>{data?.toughness?.value}</TableTd>
                       </TableTr>
                       <TableTr>
-                        <TableTh>Birthstone</TableTh>
-                        <TableTd>{data?.birthstone?.value}</TableTd>
-                      </TableTr>
-                      <TableTr>
-                        <TableTh>Zodiac</TableTh>
-                        <TableTd>{data?.zodiac?.value ?? "-"}</TableTd>
+                        <TableTh className="w-[120px]">Hardness</TableTh>
+                        <TableTd>{data?.hardness?.value}</TableTd>
                       </TableTr>
                     </TableTbody>
                   </Table>
+
+                  <div className="mt-6">
+                    <h2 className="text-base font-semibold text-gray-800 mb-3">
+                      Quality Grades
+                    </h2>
+                    <Table
+                      className="border rounded-lg shadow-sm"
+                      verticalSpacing="sm"
+                      striped
+                    >
+                      <TableTbody>
+                        <TableTr>
+                          <TableTh className="w-[100px]">B</TableTh>
+                          <TableTd>
+                            Minimal to moderate color zoning, moderate
+                            inclusions, decent cutting, typically opaque;
+                            commercial quality
+                          </TableTd>
+                        </TableTr>
+                        <TableTr>
+                          <TableTh>A</TableTh>
+                          <TableTd>
+                            Good color, good cut, minimal zoning, good
+                            brilliance, minimal inclusion, more transparent
+                          </TableTd>
+                        </TableTr>
+                        <TableTr>
+                          <TableTh>AA</TableTh>
+                          <TableTd>
+                            Eye clean, open color, great cutting, zero to
+                            minimal zoning, good polish, transparent
+                          </TableTd>
+                        </TableTr>
+                        {/* <TableTr>
+                          <TableTh>Lab Grown</TableTh>
+                          <TableTd>
+                            Zero inclusions, excellent color, excellent cutting,
+                            excellent polish, Chemically (Beryl, Chrysoberyl,
+                            Corundum) optically perfect
+                          </TableTd>
+                        </TableTr> */}
+                      </TableTbody>
+                    </Table>
+                  </div>
                 </div>
 
                 <div>

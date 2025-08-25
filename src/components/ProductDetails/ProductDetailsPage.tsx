@@ -34,6 +34,7 @@ import { notifications } from "@mantine/notifications";
 import { useAuth } from "@/hooks/useAuth";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
 import { AuthForm } from "@/components/Auth/AuthForm";
+import { GemstonesInputSection } from "../CommonComponents/GemstonesInputSection";
 
 /** ---------- Helpers ---------- */
 const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
@@ -65,10 +66,18 @@ export default function ProductDetailsPage() {
   const [shopifyProduct, setShopifyProduct] = useState<any>();
   const [allProducts, setAllProducts] = useState<any>();
   const [quantity, setQuantity] = useState<number>(1);
+  const [caratError, setCaratError] = useState<string | null>(null);
+
   const [caratWeight, setCaratWeight] = useState<number>(0);
+
+  useEffect(() => {
+    if (product?.ct_weight) {
+      setCaratWeight(product.ct_weight);
+    }
+  }, [product]);
+
   const [price, setPrice] = useState<number>(0);
   const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(false);
-  const handlersRef = useRef<NumberInputHandlers>(null);
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
 
@@ -118,18 +127,6 @@ export default function ProductDetailsPage() {
     setShopifyProduct(response);
   };
 
-  const handleQuantityChanges = (value: number) => {
-    const qty = Math.max(1, Number(value) || 1);
-    setQuantity(qty);
-    recalcTotal(product, qty, caratWeight);
-  };
-
-  const handleCaratWeightChanges = (value: number) => {
-    const ctw = Math.max(0.01, Number(value) || 0.01);
-    setCaratWeight(ctw);
-    recalcTotal(product, quantity, ctw);
-  };
-
   const addProductToCart = () => {
     if (!product) return;
 
@@ -147,7 +144,7 @@ export default function ProductDetailsPage() {
         color: product.color,
         ct_weight: product.ct_weight,
         cut: product.cut,
-        shade: product?.shade || "", 
+        shade: product?.shade || "",
         image_url: product.image_url,
         price: purchaseByCarat ? perCarat : perStone,
         quality: product.quality,
@@ -269,9 +266,9 @@ export default function ProductDetailsPage() {
                         : `$${getPerCaratPrice(product).toFixed(2)}`}
                     </strong>
                   </span>
-                  <span className="text-lg font-semibold">
+                  {/* <span className="text-lg font-semibold">
                     Total: {price === 0 ? "-" : `$${price.toFixed(2)}`}
-                  </span>
+                  </span> */}
                 </div>
 
                 {!hasPricing && (
@@ -315,41 +312,19 @@ export default function ProductDetailsPage() {
             )}
 
             {/* Input section */}
-            {user &&
-              (purchaseByCarat ? (
-                <div className="flex items-center justify-between gap-2 mt-3">
-                  <div>Carat Weight:</div>
-                  <NumberInput
-                    value={caratWeight}
-                    onChange={(value: any) => handleCaratWeightChanges(value)}
-                    min={0.01}
-                    step={0.01}
-                  />
-                </div>
-              ) : (
-                <div className="flex items-center justify-between gap-2 mt-3">
-                  <div>Quantity:</div>
-                  <Button
-                    onClick={() => handlersRef.current?.decrement()}
-                    variant="default"
-                  >
-                    <IconMinus />
-                  </Button>
-                  <NumberInput
-                    value={quantity}
-                    onChange={(value: any) => handleQuantityChanges(value)}
-                    handlersRef={handlersRef}
-                    min={1}
-                    hideControls
-                  />
-                  <Button
-                    onClick={() => handlersRef.current?.increment()}
-                    variant="default"
-                  >
-                    <IconPlus />
-                  </Button>
-                </div>
-              ))}
+            {user && (
+              <GemstonesInputSection
+                purchaseByCarat={purchaseByCarat}
+                caratWeight={caratWeight}
+                product={product}
+                quantity={quantity}
+                setQuantity={setQuantity}
+                caratError={caratError}
+                recalcTotal={recalcTotal}
+                setCaratError={setCaratError}
+                setCaratWeight={setCaratWeight}
+              />
+            )}
 
             {/* ✅ Emerald Lab shade buttons */}
             {user &&

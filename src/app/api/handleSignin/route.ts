@@ -8,7 +8,8 @@ const JWT_SECRET = process.env.JWT_SECRET as string;
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password } = body;
+    const email = body.email?.toLowerCase();
+    const { password } = body;
 
     const userQuery = `SELECT * FROM app_users WHERE email = $1 LIMIT 1;`;
     const result = await pool.query(userQuery, [email]);

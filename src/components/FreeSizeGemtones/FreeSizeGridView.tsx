@@ -31,8 +31,8 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
   const [displayItems, setDisplayItems] = useState<any>([]);
 
   // Load more state
-  const [visibleCount, setVisibleCount] = useState(16); // initial items
-  const ITEMS_PER_PAGE = 16; // items per "Load More" click
+  const [visibleCount, setVisibleCount] = useState(18); 
+  const ITEMS_PER_PAGE = 18;
 
   const router = useRouter();
 

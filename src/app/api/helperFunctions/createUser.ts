@@ -19,7 +19,7 @@ export async function createUser(stepperUser: any) {
     const values: any = [
       firstName,
       lastName,
-      email,
+      email.toLowerCase(),
       hashedPassword,
       companyName,
       phoneNumber,
