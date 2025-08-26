@@ -69,6 +69,7 @@ export default async function CategoryPage({ params }: PageProps) {
         isEmerald={isEmerald}
         data={data}
         shapes={shapes}
+        handle={handle}
       />
     </div>
   );

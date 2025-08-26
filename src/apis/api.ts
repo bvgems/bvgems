@@ -3,6 +3,36 @@ const baseUrl =
   typeof window === "undefined"
     ? process.env.NEXT_PUBLIC_BASE_URL || "https://bvgems.com"
     : "";
+export const submitCustomDesignRequest = async (formData: FormData) => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}/api/customJewelryRequest`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while submitting custom design", error);
+    return null;
+  }
+};
+
+export const bookAppointment = async (user: any, payload: any) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/bookAppointment`, {
+      user,
+      payload,
+    });
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while booking appointment", error);
+    return null;
+  }
+};
 
 export const getHeroData = async () => {
   try {

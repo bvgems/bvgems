@@ -4,6 +4,67 @@ export const STONE_COLORS: any = {
   "Pink Sapphire": "Pink",
   "Blue Sapphire": "Blue",
 };
+export type BigThree = "sapphire" | "emerald" | "ruby";
+
+export interface GemLocation {
+  gem: BigThree;
+  country: string;
+  locality: string;
+  color_profile: string;
+  season_open: string;
+  coords: [number, number];
+}
+
+export const GEM_LOCATIONS: GemLocation[] = [
+  {
+    gem: "sapphire",
+    country: "Sri Lanka",
+    locality: "Ratnapura",
+    color_profile: "Wide palette: royal to pastel blues",
+    season_open: "Year-round; monsoon May–Sep disrupts",
+    coords: [6.6828, 80.3992],
+  },
+  {
+    gem: "sapphire",
+    country: "Myanmar",
+    locality: "Mogok",
+    color_profile: "Royal blue, vivid blues",
+    season_open: "Year-round",
+    coords: [22.918, 96.509],
+  },
+  {
+    gem: "emerald",
+    country: "Colombia",
+    locality: "Muzo",
+    color_profile: "Deep bluish green",
+    season_open: "Year-round",
+    coords: [5.5353, -74.1074],
+  },
+  {
+    gem: "emerald",
+    country: "Zambia",
+    locality: "Kagem",
+    color_profile: "Rich bluish-green",
+    season_open: "Year-round",
+    coords: [-13.0833, 28.05],
+  },
+  {
+    gem: "ruby",
+    country: "Myanmar",
+    locality: "Mogok",
+    color_profile: "Pigeon’s-blood reds",
+    season_open: "Year-round",
+    coords: [22.918, 96.509],
+  },
+  {
+    gem: "ruby",
+    country: "Mozambique",
+    locality: "Montepuez",
+    color_profile: "Vivid reds",
+    season_open: "Year-round; rains Dec–Mar slow mining",
+    coords: [-13.1333, 39.0833],
+  },
+];
 
 export const US_STATES = [
   { value: "AL", label: "AL" },
@@ -477,10 +538,10 @@ export const gemstoneOptions = [
     link: "/morganite",
   },
   {
-    label: "Pariba Tourmaline",
-    value: "Pariba Tourmaline",
+    label: "Paraiba Tourmaline",
+    value: "Paraiba Tourmaline",
     image: "/assets/pariba.png",
-    link: "/pariba-tourmaline",
+    link: "/paraiba-tourmaline",
   },
   {
     label: "Peridot",
@@ -814,6 +875,7 @@ export const links = [
       { link: "/jewelry/earrings", label: "Earrings" },
       { link: "/jewelry/necklaces", label: "Necklaces" },
       { link: "/jewelry/bracelets", label: "Bracelets" },
+      { link: "/custom-jewelry", label: "Build Custom Jewelry" },
     ],
   },
   { link: "/precious-beads", label: "Precious Beads" },
@@ -825,6 +887,10 @@ export const links = [
       {
         link: "/customer-support/education?activeStone=alexandrite",
         label: "Gemstones Education",
+      },
+      {
+        link: "/customer-support/gemstones-by-locations",
+        label: "Gemstones By Location",
       },
       { link: "/customer-support/about-us", label: "About B. V. Gems" },
       { link: "/customer-support/store-policy", label: "Store Policy" },
@@ -849,6 +915,7 @@ export const mobileLinks = [
       { link: "/jewelry/earrings", label: "Ear Rings" },
       { link: "/jewelry/necklaces", label: "Necklaces" },
       { link: "/jewelry/bracelets", label: "Bracelets" },
+      { link: "/jewelry/custom-jewelry", label: "Build Custom Jewelry" },
     ],
   },
   { link: "/precious-beads", label: "Precious Beads" },
@@ -860,6 +927,10 @@ export const mobileLinks = [
       {
         link: "/customer-support/education?activeStone=alexandrite",
         label: "Gemstones Education",
+      },
+      {
+        link: "/customer-support/gemstones-by-locations",
+        label: "Gemstones By Location",
       },
       { link: "/customer-support/about-us", label: "About B. V. Gems" },
       { link: "/customer-support/store-policy", label: "Store Policy" },

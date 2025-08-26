@@ -29,6 +29,7 @@ export const CategoryTable = ({
   typeFilter,
   emeraldShade,
 }: any) => {
+  console.log("fetcheddd", fetchedResult);
   const name = data?.handle;
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
@@ -70,6 +71,9 @@ export const CategoryTable = ({
   const getPerCaratPrice = (element: any) => {
     if (!element?.ct_weight || !element?.price) return 0;
     if (element?.type === "Lab Grown" || element?.quality === "Lab Grown") {
+      if (element?.collection_slug === "Alexandrite") {
+        return 85;
+      }
       return 50;
     }
     return (element?.price / element?.ct_weight).toFixed(2);
@@ -193,6 +197,7 @@ export const CategoryTable = ({
           <TableTbody>
             {filteredAndSortedRows.length > 0 ? (
               filteredAndSortedRows.map((element: any) => {
+                // console.log('elementtt',element)
                 const isExpanded = expandedRows[element.id];
                 return (
                   <React.Fragment key={element.id}>

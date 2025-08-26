@@ -3,12 +3,15 @@ import type { Metadata } from "next";
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
 import "@mantine/notifications/styles.css";
+import '@mantine/dates/styles.css';
 import "./globals.css";
+import "leaflet/dist/leaflet.css";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { ClientOnlyLayout } from "@/components/Layout/ClientOnlyLayout";
 import { EmailSubscribeModal } from "@/components/CommonComponents/EmailSubscribeModal";
 import Script from "next/script";
+
 
 const siteUrl = "https://bvgems.com";
 
@@ -64,7 +67,6 @@ export const metadata: Metadata = {
   },
   themeColor: "#ffffff",
 };
-
 
 export default function RootLayout({
   children,

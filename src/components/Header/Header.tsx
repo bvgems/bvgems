@@ -279,7 +279,7 @@ export function Header() {
             </div>
           </Menu.Target>
           <Menu.Dropdown
-            style={{ width: "200px" }}
+            style={{ width: "250px",paddingBottom:"20px" }}
             className="flex flex-col gap-5 text-xl"
           >
             {menuItems}

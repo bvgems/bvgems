@@ -44,11 +44,13 @@ export function CategoryContent({
   isEmerald,
   data,
   shapes,
+  handle,
 }: {
   isSapphire: boolean;
   isEmerald: boolean;
   data: any;
   shapes: string[];
+  handle: any;
 }) {
   const shapeOrder = [
     "Round",
@@ -379,6 +381,20 @@ export function CategoryContent({
                         <TableTh className="w-[120px]">Hardness</TableTh>
                         <TableTd>{data?.hardness?.value}</TableTd>
                       </TableTr>
+                      <TableTr>
+                        <TableTh className="w-[120px]">Chemical</TableTh>
+                        <TableTd>
+                          {handle === "alexandrite"
+                            ? "Chrysoberyl"
+                            : handle === "sapphire"
+                            ? "Blue & Pink Sapphire(Lab): Corundum"
+                            : handle === "emerald"
+                            ? "Beryl"
+                            : handle === "ruby"
+                            ? "Corundum"
+                            : "-"}
+                        </TableTd>
+                      </TableTr>
                     </TableTbody>
                   </Table>
 
@@ -414,14 +430,13 @@ export function CategoryContent({
                             minimal zoning, good polish, transparent
                           </TableTd>
                         </TableTr>
-                        {/* <TableTr>
+                        <TableTr>
                           <TableTh>Lab Grown</TableTh>
                           <TableTd>
                             Zero inclusions, excellent color, excellent cutting,
-                            excellent polish, Chemically (Beryl, Chrysoberyl,
-                            Corundum) optically perfect
+                            excellent polish.
                           </TableTd>
-                        </TableTr> */}
+                        </TableTr>
                       </TableTbody>
                     </Table>
                   </div>

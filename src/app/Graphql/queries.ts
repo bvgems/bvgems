@@ -197,6 +197,11 @@ export const getGemstoneByHandle = `
         value
         type
       }
+    chemical: metafield(namespace: "custom", key: "chemical") {
+  value
+  type
+}
+
       additionalImages: metafield(namespace: "custom", key: "additional_images") {
         type
         reference {

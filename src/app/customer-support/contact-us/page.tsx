@@ -1,3 +1,5 @@
+"use client";
+
 import { ContactUsForm } from "@/components/ContactUs/ContactUsForm";
 import {
   Button,
@@ -5,12 +7,9 @@ import {
   Container,
   Grid,
   GridCol,
-  Table,
-  TableTbody,
-  TableTd,
-  TableTh,
-  TableTr,
+  Select,
   Text,
+  Textarea,
   ThemeIcon,
   Title,
 } from "@mantine/core";
@@ -19,11 +18,68 @@ import {
   IconPhoneRinging,
   IconMail,
   IconMapPin,
+  IconCalendar,
+  IconCheck,
+  IconX,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { DatePicker } from "@mantine/dates";
+import { bookAppointment } from "@/apis/api";
+import { useAuth } from "@/hooks/useAuth";
+import { notifications } from "@mantine/notifications";
 
 export default function ContactUsPage() {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [reason, setReason] = useState<string>(""); // NEW STATE
+  const [loading, setLoading] = useState(false);
+
+  const { user } = useAuth();
+
+  const timeSlots = [
+    "10:00 AM",
+    "11:00 AM",
+    "12:00 PM",
+    "2:00 PM",
+    "3:00 PM",
+    "4:00 PM",
+  ];
+
+  const handleBookingSubmit = async () => {
+    setLoading(true);
+
+    if (!(selectedDate instanceof Date) || !selectedTime) {
+      alert("Please select both date and time before submitting.");
+      return;
+    }
+
+    const payload = {
+      date: selectedDate.toISOString().split("T")[0],
+      time: selectedTime,
+      reason: reason.trim() || "N/A",
+    };
+    const response = await bookAppointment(user, payload);
+    if (response?.flag) {
+      notifications.show({
+        icon: <IconCheck />,
+        color: "teal",
+        message: response?.message,
+        position: "top-right",
+        autoClose: 4000,
+      });
+    } else {
+      notifications.show({
+        icon: <IconX />,
+        color: "red",
+        message: response?.error,
+        position: "top-right",
+        autoClose: 4000,
+      });
+    }
+    setLoading(true);
+  };
+
   return (
     <Container size="xl">
       <div className="flex flex-col justify-center items-center gap-2">
@@ -47,6 +103,7 @@ export default function ContactUsPage() {
       </div>
 
       <Card className="mt-5" radius="md" withBorder p="xl">
+        {/* Contact Options */}
         <Grid>
           <GridCol span={{ base: 12, md: 4 }}>
             <Card
@@ -144,52 +201,70 @@ export default function ContactUsPage() {
             </Card>
           </GridCol>
         </Grid>
-        <div className="mt-8">
-          <ContactUsForm />
-        </div>
+
+        {/* Contact Form + Booking */}
         <Grid gutter="xl" className="mt-12">
           <GridCol span={{ base: 12, md: 6 }}>
-            <span className="text-[#0b182d] font-semibold">
-              Our Business Hours
-            </span>
-            <Table
-              className="mt-2.5"
-              variant="vertical"
-              layout="fixed"
-              striped
-              stripedColor=""
-            >
-              <TableTbody>
-                <TableTr>
-                  <TableTh>
-                    <span className="font-semibold">Mon - Fri</span>
-                  </TableTh>
-                  <TableTd>
-                    <span className=" font-medium">9:00 AM - 7:00 PM</span>
-                  </TableTd>
-                </TableTr>
-
-                <TableTr>
-                  <TableTh>
-                    {" "}
-                    <span className="font-semibold">Saturday</span>
-                  </TableTh>
-                  <TableTd>By Appointment Only</TableTd>
-                </TableTr>
-                <TableTr>
-                  <TableTh>
-                    {" "}
-                    <span className="font-semibold">Sunday</span>
-                  </TableTh>
-                  <TableTd>
-                    <span className="font-medium">Closed</span>
-                  </TableTd>
-                </TableTr>
-              </TableTbody>
-            </Table>
+            <ContactUsForm />
           </GridCol>
 
-          <GridCol className="flex flex-col" span={{ base: 12, md: 6 }}>
+          <GridCol span={{ base: 12, md: 6 }}>
+            <div className="mt-12">
+              <div className="flex items-center gap-2 mb-5">
+                <IconCalendar color="#0b182d" size="1.5rem" />
+                <span className="mt-1">Schedule an Appointment</span>
+              </div>
+              <Text size="sm" mb="sm" c="dimmed">
+                Select a date and time for your appointment.
+              </Text>
+              <DatePicker
+                type="default"
+                value={selectedDate ? new Date(selectedDate) : null}
+                onChange={(value: string | Date | null) => {
+                  if (value) {
+                    // normalize to Date
+                    setSelectedDate(new Date(value as any));
+                  } else {
+                    setSelectedDate(null);
+                  }
+                }}
+                minDate={new Date()}
+                className="mb-4"
+              />
+
+              <Select
+                label="Select a Time Slot"
+                placeholder="Choose time"
+                data={timeSlots}
+                value={selectedTime}
+                onChange={setSelectedTime}
+                disabled={!selectedDate}
+                className="mb-4"
+              />
+              <Textarea
+                label="Reason for Appointment"
+                placeholder="Briefly describe the purpose of your visit"
+                value={reason}
+                onChange={(event) => setReason(event.currentTarget.value)}
+                autosize
+                minRows={2}
+                className="mb-4"
+              />
+              <Button
+                loading={loading}
+                color="#0b182d"
+                fullWidth
+                onClick={handleBookingSubmit}
+              >
+                BOOK APPOINTMENT
+              </Button>
+            </div>
+          </GridCol>
+        </Grid>
+
+        {/* FAQ */}
+        <Grid gutter="xl" className="mt-12">
+          <GridCol className="flex flex-col mt-5" span={{ base: 12, md: 8 }}>
             <span className="text-[#0b182d] font-bold">FAQ</span>
             <div className="mt-3">
               Need a quick answer? Check out our{" "}
