@@ -1075,7 +1075,7 @@ export const mobileLinks = [
       { link: "/jewelry/earrings", label: "Ear Rings" },
       { link: "/jewelry/necklaces", label: "Necklaces" },
       { link: "/jewelry/bracelets", label: "Bracelets" },
-      { link: "/jewelry/custom-jewelry", label: "Build Custom Jewelry" },
+      { link: "/custom-jewelry", label: "Build Custom Jewelry" },
     ],
   },
   { link: "/precious-beads", label: "Precious Beads" },
