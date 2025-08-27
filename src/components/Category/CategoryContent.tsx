@@ -387,7 +387,7 @@ export function CategoryContent({
                           {handle === "alexandrite"
                             ? "Chrysoberyl"
                             : handle === "sapphire"
-                            ? "Blue & Pink Sapphire(Lab): Corundum"
+                            ? "Corundum"
                             : handle === "emerald"
                             ? "Beryl"
                             : handle === "ruby"
@@ -434,7 +434,7 @@ export function CategoryContent({
                           <TableTh>Lab Grown</TableTh>
                           <TableTd>
                             Zero inclusions, excellent color, excellent cutting,
-                            excellent polish.
+                            excellent polish, optically perfect.
                           </TableTd>
                         </TableTr>
                       </TableTbody>
