@@ -843,7 +843,7 @@ export const quickNavigationData = [
     children: [
       {
         label: "Site Map",
-        href: "/sitemap-0.xml",
+        href: "https://www.bvgems.com/sitemap-0.xml"
       },
     ],
   },
