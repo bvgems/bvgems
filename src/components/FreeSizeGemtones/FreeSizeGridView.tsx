@@ -9,11 +9,9 @@ import {
   Loader,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
-
 import { getGemstonesList } from "@/apis/api";
 import { IconSearch } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import Fuse from "fuse.js";
 import { AnimatedCard } from "../GridView/AnimatedCard";
 
 interface GridViewProps {
@@ -24,16 +22,14 @@ interface GridViewProps {
 
 export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
   const [loading, setLoading] = useState(false);
-  const [loadMoreLoading, setLoadMoreLoading] = useState(false); // NEW
+  const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [searchItems, setSearchItems] = useState<any>([]);
   const [allItems, setAllItems] = useState<any>([]);
   const [displayItems, setDisplayItems] = useState<any>([]);
+  const [visibleCount, setVisibleCount] = useState(18);
 
-  // Load more state
-  const [visibleCount, setVisibleCount] = useState(18); 
   const ITEMS_PER_PAGE = 18;
-
   const router = useRouter();
 
   useEffect(() => {
@@ -45,6 +41,12 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
       const timer = setTimeout(() => {
         setAllItems(gemstones || []);
         setDisplayItems(gemstones || []);
+        setSearchItems(
+          (gemstones || []).map((g: any) => ({
+            value: g.lot_number,
+            id: g.id,
+          }))
+        );
         setVisibleCount(ITEMS_PER_PAGE);
         setLoading(false);
       }, 500);
@@ -57,7 +59,12 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
       const response = await getGemstonesList();
       setAllItems(response?.data || []);
       setDisplayItems(response?.data || []);
-      setSearchItems(response?.allGemstones || []);
+      setSearchItems(
+        (response?.data || []).map((g: any) => ({
+          value: g.lot_number,
+          id: g.id,
+        }))
+      );
       setVisibleCount(ITEMS_PER_PAGE);
     } catch (error) {
       console.error("Error fetching fallback gemstones", error);
@@ -67,124 +74,17 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
     }
   };
 
-  // Search
-  const performAdvancedSearch = (query: string, items: any[]) => {
-    if (!query.trim()) return items;
-
-    const fuse = new Fuse(items, {
-      threshold: 0.6,
-      distance: 100,
-      minMatchCharLength: 2,
-      keys: [
-        { name: "color", weight: 0.3 },
-        { name: "shape", weight: 0.2 },
-        { name: "collection_slug", weight: 0.2 },
-        { name: "title", weight: 0.3 },
-        { name: "quality", weight: 0.2 },
-        { name: "size", weight: 0.1 },
-        { name: "ct_weight", weight: 0.1 },
-        { name: "description", weight: 0.1 },
-        { name: "type", weight: 0.2 },
-      ],
-      includeScore: true,
-      useExtendedSearch: true,
-      ignoreLocation: true,
-      ignoreFieldNorm: true,
-    });
-
-    const fuseResults = fuse.search(query);
-
-    const queryTokens = query
-      .toLowerCase()
-      .split(/\s+/)
-      .filter((token) => token.length > 1);
-
-    const tokenMatches = items.filter((item) => {
-      const searchableText = [
-        item.color,
-        item.shape,
-        item.collection_slug,
-        item.title,
-        item.quality,
-        item.size?.toString(),
-        item.ct_weight?.toString(),
-        item.description,
-        item.type,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-      return queryTokens.every(
-        (token) =>
-          searchableText.includes(token) ||
-          searchableText
-            .split(" ")
-            .some((word) => word.includes(token) || token.includes(word))
-      );
-    });
-
-    const partialMatches = items.filter((item) => {
-      const fields = [
-        item.color,
-        item.shape,
-        item.collection_slug,
-        item.title,
-        item.quality,
-        item.size?.toString(),
-        item.ct_weight?.toString(),
-      ];
-
-      return fields.some(
-        (field) =>
-          field && field.toString().toLowerCase().includes(query.toLowerCase())
-      );
-    });
-
-    const combinedResults = [
-      ...fuseResults.map((result) => ({
-        ...result.item,
-        _score: result.score,
-      })),
-      ...tokenMatches.map((item) => ({ ...item, _score: 0.5 })),
-      ...partialMatches.map((item) => ({ ...item, _score: 0.7 })),
-    ];
-
-    const uniqueResults = combinedResults.reduce((acc, current) => {
-      const existingItem = acc.find((item: any) => item.id === current.id);
-      if (!existingItem) {
-        acc.push(current);
-      } else if (current._score < existingItem._score) {
-        const index = acc.findIndex((item: any) => item.id === current.id);
-        acc[index] = current;
-      }
-      return acc;
-    }, [] as any[]);
-
-    return uniqueResults.sort(
-      (a: any, b: any) => (a._score || 0) - (b._score || 0)
-    );
-  };
-
-  useEffect(() => {
-    if (!searchValue) {
-      setDisplayItems(allItems);
-      setVisibleCount(ITEMS_PER_PAGE);
-    } else {
-      const results = performAdvancedSearch(searchValue, allItems);
-      setDisplayItems(results);
-      setVisibleCount(ITEMS_PER_PAGE);
-    }
-  }, [searchValue, allItems]);
-
   const handleSelect = (value: string) => {
-    const selected = searchItems.find((item: any) => item.value === value);
-    if (selected && selected.id) {
-      router.push(
-        `/product-details?id=${
-          selected?.id
-        }&name=${selected?.collection_slug?.toLowerCase()}`
-      );
+    setSearchValue(value);
+
+    // Find the matching gemstone by lot number
+    const selected = allItems.find((item: any) => item.lot_number === value);
+
+    if (selected) {
+      setDisplayItems([selected]); // show only that one
+      setVisibleCount(1); // only one item
+    } else {
+      setDisplayItems([]); // no match
     }
   };
 
@@ -228,7 +128,7 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
           onOptionSubmit={handleSelect}
           leftSectionPointerEvents="none"
           leftSection={<IconSearch />}
-          placeholder="Search by name, color, shape, weight, quality..."
+          placeholder="Search by lot number"
           clearable
         />
       </div>

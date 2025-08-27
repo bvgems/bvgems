@@ -18,7 +18,11 @@ import {
 import { useEffect, useState } from "react";
 import { getAllGemstones, subscribeEmail } from "@/apis/api";
 import { useRouter } from "next/navigation";
-import { quickNavigationData } from "@/utils/constants";
+import {
+  FreeSizeGemstonesList,
+  JewelryList,
+  quickNavigationData,
+} from "@/utils/constants";
 import Link from "next/link";
 import { notifications } from "@mantine/notifications";
 
@@ -81,65 +85,81 @@ export const Footer = () => {
     Array.isArray(item) ? item : [item]
   );
 
-  const data = [
-    {
-      title: "Loose Gemstones",
-      links: allGemstones,
-    },
-    {
-      title: "Customer Services",
-      links: flattenCustomerServices,
-    },
-  ];
-
-  const groups = data.map((group) => {
-    const links = group?.links?.map((link, index) => (
-      <h3
-        className="text-sm sm:text-base cursor-pointer hover:text-gray-500"
-        key={index}
-        onClick={() => {
-          router.push(`${link?.link}`);
-        }}
-      >
-        {link.label}
-      </h3>
-    ));
-
-    return (
-      <div key={group.title} className="mb-6 sm:mb-0">
-        <h1 className="text-lg sm:text-xl mb-3 font-semibold">{group.title}</h1>
-        <div className="flex flex-col gap-1">{links}</div>
-      </div>
-    );
-  });
-
   return (
     <footer className="pt-12 px-4 pb-6 bg-[#F9F5F0] text-black">
-      <Grid gutter="xl" className="mx-5">
-        <GridCol
-          span={{ base: 12, md: 3 }}
-          className="text-center sm:text-left"
-        >
-          <div className="flex flex-col gap-10">
-            <div className=" flex flex-col justify-center items-center">
-              <Image
-                h={100}
-                w={200}
-                onClick={() => router.push("/")}
-                src="/assets/logo2.png"
-                alt="Logo"
-                className="mx-auto md:mx-0 cursor-pointer"
-              />
-              <p className="text-sm mt-4 italic">
-                "Where Every Gem Tells a Story."
-              </p>
-            </div>
+      <Grid className="mx-12">
+        <GridCol span={{ base: 12, md: 2 }}>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-lg mb-3 font-semibold">Calibrated Gemstones</h1>
+            {allGemstones?.map((item: any, index: number) => {
+              return (
+                <h3
+                  className="text-md cursor-pointer hover:text-gray-500"
+                  key={index}
+                  onClick={() => {
+                    router.push(`${item?.link}`);
+                  }}
+                >
+                  {item.label}
+                </h3>
+              );
+            })}
+          </div>
+        </GridCol>
+        <GridCol span={{ base: 12, md: 2 }}>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-lg mb-3 font-semibold">Free Size Gemstones</h1>
+            {FreeSizeGemstonesList?.map((item: any, index: number) => {
+              return (
+                <h3
+                  className="text-md cursor-pointer hover:text-gray-500"
+                  key={index}
+                  onClick={() => {
+                    router.push(`${item?.link}`);
+                  }}
+                >
+                  {item.label}
+                </h3>
+              );
+            })}
           </div>
         </GridCol>
 
-        <GridCol span={{ base: 12, md: 4 }}>
-          <div className="flex flex-col sm:flex-row flex-wrap gap-6">
-            {groups}
+        <GridCol span={{ base: 12, md: 2 }}>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-lg mb-3 font-semibold">Jewelry</h1>
+            {JewelryList?.map((item: any, index: number) => {
+              return (
+                <h3
+                  key={index}
+                  className="text-md cursor-pointer hover:text-gray-500"
+                  onClick={() => {
+                    router.push(`${item?.link}`);
+                  }}
+                >
+                  {item.label}
+                </h3>
+              );
+            })}
+          </div>
+        </GridCol>
+
+        <GridCol span={{ base: 12, md: 2 }}>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-lg mb-3 font-semibold">Customer Services</h1>
+            {flattenCustomerServices?.map((item: any, index: number) => {
+              return (
+                <h3
+                  key={index}
+                  className="text-md cursor-pointer hover:text-gray-500"
+                  onClick={() => {
+                    router.push(`${item?.link}`);
+                  }}
+                >
+                  {item.label}
+                </h3>
+              );
+            })}
           </div>
         </GridCol>
 
@@ -147,7 +167,7 @@ export const Footer = () => {
           span={{ base: 12, md: 2 }}
           className="text-center sm:text-left"
         >
-          <h1 className="text-lg sm:text-xl mb-3 font-semibold">Visit Us</h1>
+          <h1 className="text-lg mb-3 font-semibold">Visit us</h1>
           <a
             href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
             className="hover:underline cursor-pointer text-sm"
@@ -158,20 +178,25 @@ export const Footer = () => {
           </a>
           <div className="mt-4">
             <h2 className="text-md font-medium">Customer Service Hours</h2>
-            <div className="flex flex-col justify-start mt-1.5 gap-1 text-sm">
+            <div className="flex flex-col justify-start mt-1.5 gap-1 text-sm mb-5">
               <span>Mon - Fri: 9:00 AM - 7:00 PM</span>
               <span>Sat: By Appointment Only</span>
               <span>Sun: Closed</span>
             </div>
           </div>
+          <Link href="/customer-support/contact-us#appointment-section">
+            <div className="text-sm cursor-pointer underline">
+              <span>Book Appointment Now</span>
+            </div>
+          </Link>
         </GridCol>
 
         <GridCol
-          span={{ base: 12, md: 3 }}
+          span={{ base: 12, md: 2 }}
           className="text-center sm:text-left"
         >
           <div className="flex flex-col gap-5">
-            <Text size="md">
+            <Text size="sm">
               Subscribe to our newsletter and get the latest trending products
               and offers updates.
             </Text>

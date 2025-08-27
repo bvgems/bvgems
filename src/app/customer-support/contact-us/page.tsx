@@ -203,7 +203,7 @@ export default function ContactUsPage() {
         </Grid>
 
         {/* Contact Form + Booking */}
-        <Grid gutter="xl" className="mt-12">
+        <Grid gutter="xl" className="mt-12" id="contact-section">
           <GridCol span={{ base: 12, md: 6 }}>
             <ContactUsForm />
           </GridCol>

@@ -3,6 +3,18 @@ const baseUrl =
   typeof window === "undefined"
     ? process.env.NEXT_PUBLIC_BASE_URL || "https://bvgems.com"
     : "";
+
+export const getFreeSizeFilteredData = async (options: any) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/getFilteredFreeSizeGemstones`, {
+      options,
+    });
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching free size gemstones", error);
+    return null;
+  }
+};
 export const submitCustomDesignRequest = async (formData: FormData) => {
   try {
     const response = await axios.post(
@@ -41,6 +53,16 @@ export const getHeroData = async () => {
     return response?.data;
   } catch (error) {
     console.log("Something went wrong while fetching hero data", error);
+    return null;
+  }
+};
+
+export const fetchAboutUsData = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/fetchAboutUsData`);
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching about us data", error);
     return null;
   }
 };

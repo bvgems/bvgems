@@ -88,7 +88,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   // Refetch when any filter changes
   useEffect(() => {
-    console.log("vchangesss");
     if (!didMount.current) return;
     fetchFilteredData();
     // eslint-disable-next-line react-hooks/exhaustive-deps

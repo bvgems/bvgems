@@ -3,15 +3,14 @@
 import {
   FreeSizeGemstonesList,
   FreeSizeOrigins,
+  SapphireLooseGemstoneColorOptions,
   ShapeFilterList,
-  shopByColorOptions,
 } from "@/utils/constants";
 import {
   Accordion,
   AccordionControl,
   AccordionItem,
   AccordionPanel,
-  Button,
   Checkbox,
   CheckboxGroup,
   createTheme,
@@ -31,6 +30,8 @@ const theme = createTheme({
 });
 
 export const FreeSizeFilterSideBar = ({
+  lotSearch,
+  setLotSearch,
   selectedStones,
   setSelectedStones,
   selectedColors,
@@ -39,12 +40,18 @@ export const FreeSizeFilterSideBar = ({
   setSelectedShapes,
   selectedOrigins,
   setSelectedOrigins,
+  weightRange,
+  setWeightRange,
+  singleOrMatched,
+  setSingleOrMatched,
+  enhancement,
+  setEnhancement,
+  certified,
+  setCertified,
   length,
   setLength,
   width,
   setWidth,
-  checked,
-  setChecked,
 }: any) => {
   const handleStoneChange = (stoneLabel: string, checked: boolean) => {
     if (checked) {
@@ -77,60 +84,27 @@ export const FreeSizeFilterSideBar = ({
     <div>
       <MantineProvider theme={theme}>
         <Accordion defaultValue={["shape"]} className="px-8 mt-4" multiple>
-          <AccordionItem className="mt-2" value="lotnumber">
-            <AccordionControl>Lot Number / Subitem</AccordionControl>
-            <AccordionPanel>
-              <div className="flex items-center gap-3">
-                <Input
-                  placeholder="Lot Number"
-                  leftSection={<IconSearch size={16} />}
-                />
-                <Button color="#0b182d" variant="outline" size="compact-sm">
-                  <IconSearch size={15} />
-                </Button>
-              </div>
-            </AccordionPanel>
-          </AccordionItem>
-          <AccordionItem className="mt-2" value="gemstone">
-            <AccordionControl>Gemstone Type</AccordionControl>
-            <AccordionPanel>
-              {FreeSizeGemstonesList.map((item, index) => (
-                <div className="mt-2 ml-5" key={index}>
-                  <Checkbox
-                    checked={selectedStones?.includes(item.label)}
-                    onChange={(event) =>
-                      handleStoneChange(item.label, event.currentTarget.checked)
-                    }
-                    color="#0b182d"
-                    size="16"
-                    className="mt-4"
-                    label={item.label}
-                    style={{ cursor: "pointer" }}
-                  />
-                </div>
-              ))}
-            </AccordionPanel>
-          </AccordionItem>
-
+          {/* Color (only for Sapphire) */}
           {selectedStones?.includes("Sapphire") && (
             <AccordionItem value="color">
               <AccordionControl>Color</AccordionControl>
               <AccordionPanel>
-                {shopByColorOptions.map((item, index) => (
+                {SapphireLooseGemstoneColorOptions.map((item, index) => (
                   <div className="mt-2 ml-5" key={index}>
                     <Checkbox
-                      checked={selectedColors?.includes(item.name)}
-                      onChange={(event) =>
+                      checked={selectedColors?.includes(item.value)}
+                      onChange={(event) => {
+                        const checked = event.currentTarget.checked;
                         setSelectedColors((prev: any) =>
-                          event.currentTarget.checked
-                            ? [...prev, item.name]
-                            : prev.filter((c: any) => c !== item.name)
-                        )
-                      }
+                          checked
+                            ? [...prev, item.value]
+                            : prev.filter((c: any) => c !== item.value)
+                        );
+                      }}
                       color="#0b182d"
                       size="16"
                       className="mt-4"
-                      label={item.name}
+                      label={item.value}
                     />
                   </div>
                 ))}
@@ -138,6 +112,7 @@ export const FreeSizeFilterSideBar = ({
             </AccordionItem>
           )}
 
+          {/* Shape */}
           <AccordionItem value="shape">
             <AccordionControl>Shape</AccordionControl>
             <AccordionPanel>
@@ -158,9 +133,6 @@ export const FreeSizeFilterSideBar = ({
                           <span className="text-md mb-2">{item.label}</span>
                         </div>
                       }
-                      styles={{
-                        label: { display: "flex", alignItems: "center" },
-                      }}
                     />
                   </div>
                 ))}
@@ -168,25 +140,24 @@ export const FreeSizeFilterSideBar = ({
             </AccordionPanel>
           </AccordionItem>
 
+          {/* Weight */}
           <AccordionItem value="weight">
             <AccordionControl>Weight Range (cts.)</AccordionControl>
             <AccordionPanel>
               <div className="mt-2 ml-5">
                 <RangeSlider
                   color="#0b182d"
-                  defaultValue={[1, 50]}
-                  min={0}
-                  max={100}
-                  labelTransitionProps={{
-                    transition: "skew-down",
-                    duration: 150,
-                    timingFunction: "linear",
-                  }}
+                  value={weightRange}
+                  onChange={setWeightRange}
+                  min={0.51}
+                  max={25}
+                  step={0.01}
                 />
               </div>
             </AccordionPanel>
           </AccordionItem>
 
+          {/* Origin */}
           {dynamicOrigins.length > 0 && (
             <AccordionItem value="origin">
               <AccordionControl>Origin</AccordionControl>
@@ -208,141 +179,35 @@ export const FreeSizeFilterSideBar = ({
               </AccordionPanel>
             </AccordionItem>
           )}
+
+          {/* Single / Matched */}
           <AccordionItem value="singleormatched">
             <AccordionControl>Single / Matched</AccordionControl>
             <AccordionPanel>
               <CheckboxGroup
-                value={selectedShapes}
-                onChange={setSelectedShapes}
+                value={singleOrMatched}
+                onChange={setSingleOrMatched}
               >
-                <Checkbox
-                  value={"single"}
-                  color="#0b182d"
-                  size="16"
-                  className="mt-4"
-                  label={
-                    <div className="flex items-center gap-2">
-                      <span className="text-md mb-2">Single</span>
-                    </div>
-                  }
-                />
-
-                <Checkbox
-                  value={"matched"}
-                  color="#0b182d"
-                  size="16"
-                  className="mt-4"
-                  label={
-                    <div className="flex items-center gap-2">
-                      <span className="text-md mb-2">Matched Pair</span>
-                    </div>
-                  }
-                />
+                <Checkbox value="single" label="Single" />
+                <Checkbox value="matched" label="Matched Pair" />
               </CheckboxGroup>
             </AccordionPanel>
           </AccordionItem>
+
+          {/* Enhancement */}
           <AccordionItem value="enhancement">
             <AccordionControl>Enhancement</AccordionControl>
             <AccordionPanel>
-              <CheckboxGroup
-                value={selectedShapes}
-                onChange={setSelectedShapes}
-              >
-                <Checkbox
-                  value={"heated"}
-                  color="#0b182d"
-                  size="16"
-                  className="mt-4"
-                  label={
-                    <div className="flex items-center gap-2">
-                      <span className="text-md mb-2">Heated</span>
-                    </div>
-                  }
-                />
-
-                <Checkbox
-                  value={"unheated"}
-                  color="#0b182d"
-                  size="16"
-                  className="mt-4"
-                  label={
-                    <div className="flex items-center gap-2">
-                      <span className="text-md mb-2">Unheated</span>
-                    </div>
-                  }
-                />
+              <CheckboxGroup value={enhancement} onChange={setEnhancement}>
+                <Checkbox value="oiled" label="Oiled" />
+                <Checkbox value="heated" label="Heated" />
+                <Checkbox value="unheated" label="Unheated" />
               </CheckboxGroup>
-            </AccordionPanel>
-          </AccordionItem>
-          <AccordionItem value="certified">
-            <AccordionControl>Certified</AccordionControl>
-            <AccordionPanel>
-              <Switch
-                checked
-                color="#0b182d"
-                label="Yes / No"
-                onChange={(event) => setChecked(event.currentTarget.checked)}
-              />
-            </AccordionPanel>
-          </AccordionItem>
-          <AccordionItem value="sizes">
-            <AccordionControl>Dimensions</AccordionControl>
-            <AccordionPanel>
-              <div className="mt-2">
-                <span>Length (mm)</span>
-                <div className="flex flex-col md:flex-row gap-4">
-                  <NumberInput
-                    value={length}
-                    onChange={setLength}
-                    min={0}
-                    step={0.25}
-                    label="From"
-                    placeholder="e.g., 8"
-                    className="w-full"
-                  />
-                  <NumberInput
-                    value={width}
-                    onChange={setWidth}
-                    min={0}
-                    step={0.25}
-                    label="To"
-                    placeholder="e.g., 6"
-                    className="w-full"
-                  />
-                </div>
-              </div>
-              <div className="mt-5">
-                <span>Width (mm)</span>
-                <div className="flex flex-col md:flex-row gap-4">
-                  <NumberInput
-                    value={length}
-                    onChange={setLength}
-                    min={0}
-                    step={0.25}
-                    label="From"
-                    placeholder="e.g., 8"
-                    className="w-full"
-                  />
-                  <NumberInput
-                    value={width}
-                    onChange={setWidth}
-                    min={0}
-                    step={0.25}
-                    label="To"
-                    placeholder="e.g., 6"
-                    className="w-full"
-                  />
-                </div>
-              </div>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
       </MantineProvider>
-      <Divider
-        orientation="vertical"
-        className="mx-4"
-        style={{ height: "auto" }}
-      />
+      <Divider orientation="vertical" className="mx-4" />
     </div>
   );
 };

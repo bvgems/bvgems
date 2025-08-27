@@ -1,83 +1,152 @@
 "use client";
-import { fetchFreeSizeGemstones } from "@/apis/api";
-import { FreeSizeFilterSideBar } from "@/components/FreeSizeGemtones/FreeSizeFilterSideBar";
+
+import { getFreeSizeFilteredData } from "@/apis/api";
 import { FreeSizeGridView } from "@/components/FreeSizeGemtones/FreeSizeGridView";
-import { Divider, Drawer, Grid, GridCol } from "@mantine/core";
+import { FreeSizeFilterSideBar } from "@/components/FreeSizeGemtones/FreeSizeFilterSideBar";
+import { Divider, Drawer, Grid, GridCol, ActionIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { IconFilter } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function FreeSizeGemstoneSelection() {
   const path = usePathname();
+  const segments = path.split("/").filter(Boolean);
+  const gemstoneType = segments[1] ? segments[1] : null; // e.g. "emerald"
+
+  const [filteredGemstones, setFilteredGemstones] = useState<any[]>([]);
+  const [filterTrigger, setFilterTrigger] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const [drawerOpened, { open, close }] = useDisclosure(false);
+  const didMount = useRef(false);
 
-  const segments = path.split("/").filter(Boolean);
-  const gemstoneType = segments[1];
-  const [selectedStones, setSelectedStones] = useState<string[]>([]);
-  const [filteredGemstones, setFilteredGemstones] = useState<any>([]);
-  const getFreeSizeGemstones = async () => {
-    const response = await fetchFreeSizeGemstones(gemstoneType);
-    setFilteredGemstones(response);
+  // --- FILTER STATES ---
+  const [lotSearch, setLotSearch] = useState("");
+  const [selectedStones, setSelectedStones] = useState<string[]>(
+    gemstoneType
+      ? [gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1)]
+      : []
+  );
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
+  const [selectedOrigins, setSelectedOrigins] = useState<string[]>([]);
+  const [weightRange, setWeightRange] = useState<[number, number]>([0.51, 25]);
+  const [singleOrMatched, setSingleOrMatched] = useState<string[]>([]);
+  const [enhancement, setEnhancement] = useState<string[]>([]);
+  const [certified, setCertified] = useState<boolean | null>(null);
+  const [length, setLength] = useState<any>({ min: "", max: "" });
+  const [width, setWidth] = useState<any>({ min: "", max: "" });
+
+  const fetchFilteredData = async () => {
+    setLoading(true);
+    const filterOptions = {
+      lot_number: lotSearch,
+      gemstone_type: gemstoneType
+        ? [gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1)]
+        : [],
+      color: selectedColors,
+      shape: selectedShapes,
+      origin: selectedOrigins,
+      weight: weightRange,
+      single_or_matched: singleOrMatched,
+      enhancement,
+      is_certified: certified,
+      length,
+      width,
+    };
+
+    const response = await getFreeSizeFilteredData(filterOptions);
+    setFilteredGemstones(response?.data || []);
+    setLoading(false);
+    setFilterTrigger((prev) => prev + 1);
   };
 
+  // Initial load
   useEffect(() => {
-    getFreeSizeGemstones();
+    fetchFilteredData().finally(() => {
+      didMount.current = true;
+    });
   }, [gemstoneType]);
+
+  // Refetch whenever filter changes
+  useEffect(() => {
+    if (!didMount.current) return;
+    fetchFilteredData();
+  }, [
+    lotSearch,
+    selectedColors,
+    selectedShapes,
+    selectedOrigins,
+    weightRange,
+    singleOrMatched,
+    enhancement,
+    certified,
+    length,
+    width,
+  ]);
 
   return (
     <div>
+      <div className="flex justify-center gap-6 py-10 bg-[#F9F5F0]">
+        <h1 className="text-3xl text-[#6B7280]">
+          Free Size Gemstones - {gemstoneType?.toUpperCase()}
+        </h1>
+      </div>
+
+      {/* Mobile Filter Button */}
+      <div className="lg:hidden flex justify-end px-4 mb-2 mt-5">
+        <ActionIcon onClick={open} variant="outline" color="gray" size="lg">
+          <IconFilter size={20} />
+        </ActionIcon>
+      </div>
+
       <Grid gutter="lg">
+        {/* Desktop Sidebar */}
         <GridCol span={{ base: 12, md: 3 }} className="hidden lg:flex">
           <FreeSizeFilterSideBar
+            lotSearch={lotSearch}
+            setLotSearch={setLotSearch}
             selectedStones={selectedStones}
-            setSelectedStones={(value: any) => {
-              setSelectedStones(value);
-              //   setFiltersChanged(true);
-            }}
-            // selectedColors={selectedColors}
-            // setSelectedColors={(value: any) => {
-            //   setSelectedColors(value);
-            //   setFiltersChanged(true);
-            // }}
-            // selectedShapes={selectedShapes}
-            // setSelectedShapes={(value: any) => {
-            //   setSelectedShapes(value);
-            //   setFiltersChanged(true);
-            // }}
-            // length={length}
-            // setLength={(value: any) => {
-            //   setLength(value);
-            //   setFiltersChanged(true);
-            // }}
-            // width={width}
-            // setWidth={(value: any) => {
-            //   setWidth(value);
-            //   setFiltersChanged(true);
-            // }}
-            // priceRange={priceRange}
-            // setPriceRange={(value: any) => {
-            //   setPriceRange(value);
-            //   setFiltersChanged(true);
-            // }}
-            // selectedRoundSizes={selectedRoundSizes}
-            // setSelectedRoundSizes={(value: any) => {
-            //   setSelectedRoundSizes(value);
-            //   setFiltersChanged(true);
-            // }}
-            // color={color}
+            setSelectedStones={setSelectedStones}
+            selectedColors={selectedColors}
+            setSelectedColors={setSelectedColors}
+            selectedShapes={selectedShapes}
+            setSelectedShapes={setSelectedShapes}
+            selectedOrigins={selectedOrigins}
+            setSelectedOrigins={setSelectedOrigins}
+            weightRange={weightRange}
+            setWeightRange={setWeightRange}
+            singleOrMatched={singleOrMatched}
+            setSingleOrMatched={setSingleOrMatched}
+            enhancement={enhancement}
+            setEnhancement={setEnhancement}
+            certified={certified}
+            setCertified={setCertified}
+            length={length}
+            setLength={setLength}
+            width={width}
+            setWidth={setWidth}
           />
           <Divider orientation="vertical" />
         </GridCol>
 
+        {/* Results */}
         <GridCol span={{ base: 12, md: 9 }}>
-          <FreeSizeGridView
-            gemstones={filteredGemstones}
-            // loadingTrigger={filterTrigger}
-          />
+          {loading ? (
+            <div className="px-5 py-10 text-center text-gray-500">
+              Loading gemstones...
+            </div>
+          ) : (
+            <FreeSizeGridView
+              gemstones={filteredGemstones}
+              loadingTrigger={filterTrigger}
+            />
+          )}
         </GridCol>
       </Grid>
 
+      {/* Mobile Drawer */}
       <Drawer
         opened={drawerOpened}
         onClose={close}
@@ -89,42 +158,28 @@ export default function FreeSizeGemstoneSelection() {
         withinPortal={false}
       >
         <FreeSizeFilterSideBar
-        //   selectedStones={selectedStones}
-        //   setSelectedStones={(value: any) => {
-        //     setSelectedStones(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   selectedColors={selectedColors}
-        //   setSelectedColors={(value: any) => {
-        //     setSelectedColors(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   selectedShapes={selectedShapes}
-        //   setSelectedShapes={(value: any) => {
-        //     setSelectedShapes(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   length={length}
-        //   setLength={(value: any) => {
-        //     setLength(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   width={width}
-        //   setWidth={(value: any) => {
-        //     setWidth(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   priceRange={priceRange}
-        //   setPriceRange={(value: any) => {
-        //     setPriceRange(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   selectedRoundSizes={selectedRoundSizes}
-        //   setSelectedRoundSizes={(value: any) => {
-        //     setSelectedRoundSizes(value);
-        //     setFiltersChanged(true);
-        //   }}
-        //   color={color}
+          lotSearch={lotSearch}
+          setLotSearch={setLotSearch}
+          selectedStones={selectedStones}
+          setSelectedStones={setSelectedStones}
+          selectedColors={selectedColors}
+          setSelectedColors={setSelectedColors}
+          selectedShapes={selectedShapes}
+          setSelectedShapes={setSelectedShapes}
+          selectedOrigins={selectedOrigins}
+          setSelectedOrigins={setSelectedOrigins}
+          weightRange={weightRange}
+          setWeightRange={setWeightRange}
+          singleOrMatched={singleOrMatched}
+          setSingleOrMatched={setSingleOrMatched}
+          enhancement={enhancement}
+          setEnhancement={setEnhancement}
+          certified={certified}
+          setCertified={setCertified}
+          length={length}
+          setLength={setLength}
+          width={width}
+          setWidth={setWidth}
         />
       </Drawer>
     </div>

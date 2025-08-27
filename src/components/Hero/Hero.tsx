@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 export function Hero({ jewelryRef, heroData }: any) {
   const [revealImage, setRevealImage] = useState(false);
   const router = useRouter();
-  console.log("color", heroData?.heroData?.page?.metafields[3]?.value);
 
   const alignment =
     heroData?.heroData?.page?.metafields[4]?.value?.toLowerCase() || "left";

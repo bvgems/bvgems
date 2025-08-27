@@ -50,8 +50,8 @@ export default function ShopByColor() {
                 transition={{ duration: 0.8, ease: "easeInOut" }}
               >
                 <Image
-                  h={150}
-                  w={150}
+                  h={index === 0 || index === 3 ? 165 : 150}
+                  w={index === 0 || index === 3 ? 165 : 150}
                   src={item?.image}
                   alt={item?.name}
                   className="transition-transform"

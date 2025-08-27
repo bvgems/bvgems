@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
 import "@mantine/notifications/styles.css";
-import '@mantine/dates/styles.css';
+import "@mantine/dates/styles.css";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 import { MantineProvider } from "@mantine/core";
@@ -11,7 +11,6 @@ import { Notifications } from "@mantine/notifications";
 import { ClientOnlyLayout } from "@/components/Layout/ClientOnlyLayout";
 import { EmailSubscribeModal } from "@/components/CommonComponents/EmailSubscribeModal";
 import Script from "next/script";
-
 
 const siteUrl = "https://bvgems.com";
 
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s | B. V. Gems",
   },
   description:
-    "Shop exquisite natural & lab-grown gemstones, fine jewelry, and custom designs at B. V. Gems. Quality, craftsmanship, and timeless beauty—delivered worldwide.",
+    "B.V. Gems — six generations of expertise in calibrated & free-size gemstones. Trusted New York Diamond District wholesale dealer for ruby, sapphire & emerald.",
   keywords: [
     "B. V. Gems",
     "gemstones",

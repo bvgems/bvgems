@@ -818,7 +818,7 @@ export const quickNavigationData = [
         href: "/customer-support/contact-us",
       },
       {
-        label: "Frequently Asked Questions",
+        label: "FAQs",
         href: "/customer-support/faqs",
       },
     ],
@@ -831,14 +831,10 @@ export const quickNavigationData = [
         label: "Store Policy",
         href: "/customer-support/store-policy",
       },
-      {
-        label: "Return Policy",
-        href: "/customer-support/return-policy",
-      },
-      {
-        label: "Shipping Policy",
-        href: "/customer-support/shipping-policy",
-      },
+      // {
+      //   label: "Return Policy",
+      //   href: "/customer-support/return-policy",
+      // },
     ],
   },
   {
@@ -847,11 +843,12 @@ export const quickNavigationData = [
     children: [
       {
         label: "Site Map",
-        href: "/customer-support/sitemap",
+        href: "/sitemap-0.xml",
       },
     ],
   },
 ];
+
 
 export const shopByColorOptions = [
   {
@@ -905,7 +902,7 @@ export const ShapeFilterList = [
     image: "/assets/princesscut.svg",
   },
   {
-    label: "Emerald",
+    label: "Emerald Cut",
     image: "/assets/emerald.svg",
   },
   {
@@ -1020,6 +1017,14 @@ export const SizeFilterList = {
   ],
 };
 
+export const JewelryList = [
+  { link: "/jewelry/rings", label: "Rings" },
+  { link: "/jewelry/earrings", label: "Earrings" },
+  { link: "/jewelry/necklaces", label: "Necklaces" },
+  { link: "/jewelry/bracelets", label: "Bracelets" },
+  { link: "/custom-jewelry", label: "Build Custom Jewelry" },
+];
+
 export const links = [
   { link: "/", label: "Home" },
   {
@@ -1030,13 +1035,7 @@ export const links = [
 
   {
     label: "Jewelry",
-    links: [
-      { link: "/jewelry/rings", label: "Rings" },
-      { link: "/jewelry/earrings", label: "Earrings" },
-      { link: "/jewelry/necklaces", label: "Necklaces" },
-      { link: "/jewelry/bracelets", label: "Bracelets" },
-      { link: "/custom-jewelry", label: "Build Custom Jewelry" },
-    ],
+    links: JewelryList,
   },
   { link: "/precious-beads", label: "Precious Beads" },
 
@@ -1070,13 +1069,7 @@ export const mobileLinks = [
 
   {
     label: "Jewelry",
-    links: [
-      { link: "/jewelry/rings", label: "Rings" },
-      { link: "/jewelry/earrings", label: "Ear Rings" },
-      { link: "/jewelry/necklaces", label: "Necklaces" },
-      { link: "/jewelry/bracelets", label: "Bracelets" },
-      { link: "/custom-jewelry", label: "Build Custom Jewelry" },
-    ],
+    links: JewelryList
   },
   { link: "/precious-beads", label: "Precious Beads" },
 

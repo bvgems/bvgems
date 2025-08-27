@@ -10,7 +10,7 @@ const jewelryItems = [
     handle: "earrings",
     image: "/assets/earring.png",
     alt: "Earrings",
-    title: "EAR RINGS",
+    title: "EARRINGS",
   },
   {
     handle: "necklaces",

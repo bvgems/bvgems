@@ -182,14 +182,11 @@ export default function JewelryProductPage() {
                 </div>
               </div>
 
-              <div className="mt-12">
+              <div className="mt-20 py-20">
                 <Grid>
-                  <GridCol span={{ base: 12, md: 6 }}>
-                    <HandTryOn ringImage={selectedImage} />
-                  </GridCol>
                   <GridCol
                     className="flex items-center justify-center relative"
-                    span={{ base: 12, md: 6 }}
+                    span={{ base: 12, md: 12 }}
                   >
                     <Grid>
                       <GridCol span={{ base: 12, md: 9 }}>
@@ -203,7 +200,10 @@ export default function JewelryProductPage() {
 
                       {/* Horizontal Arrow + Label */}
 
-                      <GridCol className="flex items-center" span={{ base: 12, md: 3 }}>
+                      <GridCol
+                        className="flex items-center"
+                        span={{ base: 12, md: 3 }}
+                      >
                         {/* Dime with measurement arrows */}
                         <div className="flex flex-col items-center">
                           <div className="relative mb-2">

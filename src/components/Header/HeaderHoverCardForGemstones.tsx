@@ -116,10 +116,10 @@ export const HeaderHoverCardForGemstones = ({
                 <h4 className="font-semibold mt-10">SHOP BY TYPE</h4>
                 <div className="flex flex-col gap-2 mt-4 text-blue-800 cursor-pointer">
                   <span onClick={() => handleNav(`type=Natural`)}>
-                    Naturals
+                    Natural
                   </span>
                   <span onClick={() => handleNav(`type=Lab Grown`)}>
-                    Lab Growns
+                    Lab Grown
                   </span>
                 </div>
               </div>
