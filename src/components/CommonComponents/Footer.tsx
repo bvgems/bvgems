@@ -160,6 +160,15 @@ export const Footer = () => {
                 </h3>
               );
             })}
+            <a
+              href="https://www.bvgems.com/sitemap-0.xml"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <h3 className="text-md cursor-pointer hover:text-gray-500">
+                Site Map
+              </h3>
+            </a>
           </div>
         </GridCol>
 

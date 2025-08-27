@@ -837,18 +837,7 @@ export const quickNavigationData = [
       // },
     ],
   },
-  {
-    value: "site-map",
-    label: "Site Map",
-    children: [
-      {
-        label: "Site Map",
-        href: "https://www.bvgems.com/sitemap-0.xml"
-      },
-    ],
-  },
 ];
-
 
 export const shopByColorOptions = [
   {
@@ -1069,7 +1058,7 @@ export const mobileLinks = [
 
   {
     label: "Jewelry",
-    links: JewelryList
+    links: JewelryList,
   },
   { link: "/precious-beads", label: "Precious Beads" },
 
