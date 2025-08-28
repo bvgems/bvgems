@@ -13,11 +13,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmail = async (to: string, subject: string, html: string) => {
+export const sendEmail = async (
+  to: string,
+  subject: string,
+  html: string,
+  attachments: any[] = []
+) => {
   await transporter.sendMail({
     from: `"BV Gems" <sales@bvgems.com>`,
     to,
     subject,
     html,
+    attachments,
   });
 };

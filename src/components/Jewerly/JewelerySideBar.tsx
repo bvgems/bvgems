@@ -1,13 +1,10 @@
 "use client";
 
 import {
-  gemstoneOptions,
-  GemstoneType,
+  EarringTypes,
   JewelryGemstones,
   RingTypes,
   ShapeFilterList,
-  shopByColorOptions,
-  SizeFilterList,
 } from "@/utils/constants";
 import {
   Accordion,
@@ -38,6 +35,7 @@ export const JewelerySideBar = ({
   priceRange,
   setPriceRange,
 }: any) => {
+  console.log("colllectionnnnn", collectionSlug);
   const handleStoneChange = (stoneLabel: string, checked: boolean) => {
     if (checked) {
       setSelectedStones([stoneLabel]); // replace existing with only this one
@@ -123,6 +121,34 @@ export const JewelerySideBar = ({
               <AccordionControl>Ring Type</AccordionControl>
               <AccordionPanel>
                 {RingTypes?.map((item: any, index: number) => (
+                  <div className="mt-2 ml-5" key={index}>
+                    <Checkbox
+                      checked={selectedTypes.includes(item.label)}
+                      onChange={(event) =>
+                        handleTypeChange(
+                          item.label,
+                          event.currentTarget.checked
+                        )
+                      }
+                      color="#0b182d"
+                      size="16"
+                      className="mt-4"
+                      label={<span className="text-md">{item.label}</span>}
+                      styles={{
+                        label: { display: "flex", alignItems: "center" },
+                      }}
+                    />
+                  </div>
+                ))}
+              </AccordionPanel>
+            </AccordionItem>
+          ) : null}
+
+          {collectionSlug === "earrings" ? (
+            <AccordionItem className="mt-2" value="ring-type">
+              <AccordionControl>Earring Type</AccordionControl>
+              <AccordionPanel>
+                {EarringTypes?.map((item: any, index: number) => (
                   <div className="mt-2 ml-5" key={index}>
                     <Checkbox
                       checked={selectedTypes.includes(item.label)}

@@ -39,20 +39,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const fetchFilteredData = async () => {
     setLoading(true);
     const filterOptions = {
-      // collection_slug: selectedStones,
       shape: selectedShapes,
       price: priceRange,
+      types:selectedTypes
     };
     const response = await getFilteredJewelry(filterOptions, collectionSlug);
 
     let products = response?.data || [];
 
-    // --- If gemstone filter applied, swap
-    // clg
-    //  to variant image ---
     if (selectedStones.length > 0) {
-      console.log("sesss", selectedStones);
-      console.log("prodcc", products);
       products = products.map((p: any) => {
         const gemstoneMatch = selectedStones[0];
         const matchedVariant = p?.variants?.edges?.find(
@@ -87,6 +82,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   // Filters change
   useEffect(() => {
+    console.log("something changess", selectedTypes);
     if (!didMount.current) return;
     fetchFilteredData();
   }, [

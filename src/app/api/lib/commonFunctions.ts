@@ -47,6 +47,9 @@ export const getAllJeweleryProducts = async (category: any) => {
       category: `product_type:${category}`,
     };
 
+    // For earrings → chronological (oldest first), others → reverse (newest first)
+    const isEarrings = category?.toLowerCase() === "earrings";
+
     const shopifyRes = await fetch(
       process.env.SHOPIFY_STOREFRONT_URL as string,
       {
@@ -57,7 +60,112 @@ export const getAllJeweleryProducts = async (category: any) => {
             "c64a5e6dbfa340f0bff88be9fde4b7a8",
         },
         body: JSON.stringify({
-          query: shopifyQuery,
+          query: `
+            query getProductsByCategory($category: String!) {
+              products(
+                first: 150, 
+                query: $category, 
+                sortKey: CREATED_AT, 
+                reverse: ${!isEarrings}   # 👈 dynamic reverse flag
+              ) {
+                edges {
+                  node {
+                    id
+                    title
+                    handle
+                    description
+                    productType
+                    createdAt
+                    tags
+                    images(first: 2) {
+                      edges {
+                        node {
+                          url
+                          altText
+                        }
+                      }
+                    }
+                    showshapeoptions: metafield(namespace: "custom", key: "showshapeoptions") {
+                      value
+                      type
+                    }
+                    isTwoStoneRing: metafield(namespace: "custom", key: "istwostonering") {
+                      value
+                      type
+                    }
+                    gemstone: metafield(namespace: "custom", key: "gemstone") {
+                      value
+                      type
+                    }
+                    stoneType: metafield(namespace: "custom", key: "stone_type") {
+                      value
+                      type
+                    }
+                    jewelryType: metafield(namespace: "custom", key: "jewelry_type") {
+                      value
+                      type
+                    }
+                    shape: metafield(namespace: "custom", key: "shape") {
+                      value
+                      type
+                    }
+                    color: metafield(namespace: "custom", key: "Color") {
+                      value
+                      type
+                    }
+                    ct_weight: metafield(namespace: "custom", key: "ct_weight") {
+                      value
+                      type
+                    }
+                    customization: metafield(namespace: "custom", key: "customization") {
+                      value
+                      type
+                    }
+                    showGoldColor: metafield(namespace: "custom", key: "showGoldColor") {
+                      value
+                      type
+                    }
+                    DiamondWeight: metafield(namespace: "custom", key: "diamonds") {
+                      value
+                      type
+                    }
+                    TotalWeight: metafield(namespace: "custom", key: "total_gemstone_ct_weight") {
+                      value
+                      type
+                    }
+                    TargetGender: metafield(namespace: "custom", key: "target_gender") {
+                      value
+                      type
+                    }
+                    firstShape: metafield(namespace: "custom", key: "first_stone") {
+                      value
+                      type
+                    }
+                    secondShape: metafield(namespace: "custom", key: "second_stone") {
+                      value
+                      type
+                    }
+                    variants(first: 10) {
+                      edges {
+                        node {
+                          price {
+                            amount
+                            currencyCode
+                          }
+                          title
+                          image {
+                            url
+                            altText
+                          }
+                          sku
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          `,
           variables,
         }),
       }

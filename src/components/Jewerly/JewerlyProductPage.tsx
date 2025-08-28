@@ -6,57 +6,9 @@ import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
 import { JewelryProductDetails } from "@/components/Jewerly/JewerlyProductDetails";
+import { RingComparison } from "./RingComparison";
 
 type Thumb = { url: string; title?: string | null };
-
-function HandTryOn({ ringImage }: { ringImage: string }) {
-  const [skinTone, setSkinTone] = useState(30);
-
-  return (
-    <div className="relative w-full flex flex-col items-center mb-5">
-      <div className="relative w-[450px] h-[450px]">
-        <img
-          src="/assets/hand-base2.png"
-          alt="Hand"
-          className="w-full h-full object-contain transition-all duration-300"
-          style={{
-            filter: `brightness(${1.2 - skinTone / 100}) sepia(${
-              skinTone / 200
-            }) saturate(1.2)`,
-          }}
-        />
-
-        {/* Ring overlay */}
-        {ringImage && (
-          <img
-            src={"/assets/removed-ring-preview.png"}
-            alt="Ring Preview"
-            className="absolute object-contain"
-            style={{
-              width: "54px",
-              top: "152px",
-              left: "157px",
-            }}
-          />
-        )}
-      </div>
-
-      {/* Skin tone slider */}
-      <div className="w-64 mt-4">
-        <Slider
-          value={skinTone}
-          onChange={setSkinTone}
-          min={0}
-          max={100}
-          step={1}
-          label={null}
-          color="brown"
-        />
-        <p className="text-center text-sm mt-1">Adjust Skin Tone</p>
-      </div>
-    </div>
-  );
-}
 
 export default function JewelryProductPage() {
   const { product } = useParams();
@@ -68,6 +20,7 @@ export default function JewelryProductPage() {
   const [selectedShape, setSelectedShape] = useState<string | null>(null);
   const [showShapeOptions, setShowShapeOptions] = useState<boolean>(false);
   const [twoStoneRings, setTwoStoneRings] = useState<boolean>(false);
+  const [productType, setProductType] = useState();
 
   useEffect(() => {
     const getProductByHandle = async () => {
@@ -79,12 +32,11 @@ export default function JewelryProductPage() {
 
       const isTwoStoneRing = productInfo?.isTwoStoneRing?.value === "true";
       const shapeOptionValue = productInfo?.showshapeoptions?.value === "true";
-
       setShowShapeOptions(shapeOptionValue);
       setTwoStoneRings(isTwoStoneRing);
+      setProductType(productInfo?.productType);
       setProductData(productInfo);
 
-      // ---- Normalize thumbnail list ----
       let images: Thumb[] = [];
 
       if (isTwoStoneRing) {
@@ -181,114 +133,9 @@ export default function JewelryProductPage() {
                   })}
                 </div>
               </div>
-
-              <div className="mt-20 py-20">
-                <Grid>
-                  <GridCol
-                    className="flex items-center justify-center relative"
-                    span={{ base: 12, md: 12 }}
-                  >
-                    <Grid>
-                      <GridCol span={{ base: 12, md: 9 }}>
-                        <Image
-                          src={productData?.images?.edges[4]?.node?.url}
-                          h={300}
-                          w={400}
-                          className="object-contain"
-                        />
-                      </GridCol>
-
-                      {/* Horizontal Arrow + Label */}
-
-                      <GridCol
-                        className="flex items-center"
-                        span={{ base: 12, md: 3 }}
-                      >
-                        {/* Dime with measurement arrows */}
-                        <div className="flex flex-col items-center">
-                          <div className="relative mb-2">
-                            <div className="flex justify-center items-center pointer-events-none">
-                              <svg width="84px" height="16">
-                                <line
-                                  x1="5%"
-                                  y1="8"
-                                  x2="95%"
-                                  y2="8"
-                                  stroke="black"
-                                  strokeWidth="1.5"
-                                  markerStart="url(#dimeTopArrowhead)"
-                                  markerEnd="url(#dimeTopArrowhead)"
-                                />
-                                <defs>
-                                  <marker
-                                    id="dimeTopArrowhead"
-                                    markerWidth="8"
-                                    markerHeight="6"
-                                    refX="4"
-                                    refY="3"
-                                    orient="auto"
-                                  >
-                                    <polygon
-                                      points="0 0, 8 3, 0 6"
-                                      fill="black"
-                                    />
-                                  </marker>
-                                </defs>
-                              </svg>
-                              <span className="absolute text-xs bg-white px-1 rounded shadow-sm">
-                                7.50 Ring Size
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Dime image with bottom measurement arrow */}
-                          <div className="relative">
-                            <img
-                              src="/assets/dime.png"
-                              alt="Dime for scale"
-                              className="w-[84px] h-[84px] object-contain"
-                            />
-
-                            {/* Bottom arrow below dime */}
-                            <div className="absolute top-full left-0 right-0 flex justify-center items-center pointer-events-none mt-2">
-                              <svg width="100%" height="16">
-                                <line
-                                  x1="5%"
-                                  y1="8"
-                                  x2="95%"
-                                  y2="8"
-                                  stroke="black"
-                                  strokeWidth="1.5"
-                                  markerStart="url(#dimeBottomArrowhead)"
-                                  markerEnd="url(#dimeBottomArrowhead)"
-                                />
-                                <defs>
-                                  <marker
-                                    id="dimeBottomArrowhead"
-                                    markerWidth="8"
-                                    markerHeight="6"
-                                    refX="4"
-                                    refY="3"
-                                    orient="auto"
-                                  >
-                                    <polygon
-                                      points="0 0, 8 3, 0 6"
-                                      fill="black"
-                                    />
-                                  </marker>
-                                </defs>
-                              </svg>
-                              <span className="absolute text-xs bg-white px-1 rounded shadow-sm">
-                                17.91 mm
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </GridCol>
-                    </Grid>
-                  </GridCol>
-                </Grid>
-              </div>
+              {productType === "Rings" ? (
+                <RingComparison productData={productData} />
+              ) : null}
             </motion.div>
           )}
         </GridCol>

@@ -25,24 +25,36 @@ export async function POST(request: NextRequest) {
     // File handling (optional inspiration photo)
     const inspirationFile = formData.get("inspirationFile") as File | null;
 
+    let attachments: any[] = [];
+    if (inspirationFile) {
+      const buffer = Buffer.from(await inspirationFile.arrayBuffer());
+      attachments.push({
+        filename: inspirationFile.name,
+        content: buffer,
+        cid: "inspirationImage",
+      });
+    }
+
     const ownerEmailHtml = buildCustomDesignOwnerEmail({
       user,
       payload,
-      file: inspirationFile,
+      hasFile: !!inspirationFile,
     });
+
     const confirmationEmailHtml = buildCustomDesignConfirmationEmail({
       user,
       payload,
     });
 
-    // Send to Shrey (Owner)
+    // Send to Shrey (Owner) with optional attachment
     await sendEmail(
       "sales@bvgems.com",
       "New Custom Design Request",
-      ownerEmailHtml
+      ownerEmailHtml,
+      attachments
     );
 
-    // Send confirmation to customer
+    // Send confirmation to customer (no attachment needed)
     await sendEmail(
       user.email,
       "Your Custom Jewelry Request is Confirmed",

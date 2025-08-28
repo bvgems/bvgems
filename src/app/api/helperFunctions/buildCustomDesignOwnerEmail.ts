@@ -1,7 +1,7 @@
 export function buildCustomDesignOwnerEmail({
   user,
   payload,
-  file,
+  hasFile,
 }: {
   user: { fullName: string; email: string; phoneNumber: string };
   payload: {
@@ -12,7 +12,7 @@ export function buildCustomDesignOwnerEmail({
     goldColor: string;
     additionalDetails: string;
   };
-  file?: File | null;
+  hasFile: boolean;
 }) {
   return `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
@@ -86,8 +86,9 @@ export function buildCustomDesignOwnerEmail({
         </table>
   
         ${
-          file
-            ? `<p style="margin-top: 15px;"><strong>Inspiration File Uploaded:</strong> ${file.name}</p>`
+          hasFile
+            ? `<p style="margin-top: 15px;"><strong>Inspiration File Uploaded:</strong><br/>
+               <img src="cid:inspirationImage" alt="Inspiration Image" style="max-width:100%; height:auto; border-radius:6px; margin-top:10px;" />`
             : "<p style='margin-top: 15px;'><em>No inspiration file uploaded.</em></p>"
         }
       </div>

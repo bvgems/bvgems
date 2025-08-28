@@ -642,6 +642,17 @@ export const RingTypes = [
   },
 ];
 
+export const EarringTypes = [
+  {
+    label: "Gold",
+    value: "Gold",
+  },
+  {
+    label: "Silver",
+    value: "Silver",
+  },
+];
+
 export const JewelryGemstones = [
   {
     label: "Ruby",

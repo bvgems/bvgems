@@ -7,7 +7,7 @@ const METAFIELD_MAP: Record<
 > = {
   color: { key: "color" },
   shape: { key: "shape" },
-  types: { key: "stoneType" },
+  types: { key: "jewelryType" },
   collection_slug: { key: "gemstone" },
 };
 
@@ -16,22 +16,18 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const options = body.options || {};
     const category = body.category;
-    console.log("optionssss", options);
 
-    // 1. Fetch products from Shopify
     const shopifyProducts = await getAllJeweleryProducts(category);
     const products = shopifyProducts?.edges || [];
-    console.log("Fetched products:", products.length);
 
-    // 2. Filter according to options
     const filtered = products.filter((p: any) => {
       const node = p.node;
 
       return Object.keys(options).every((key) => {
         const val = options[key];
+
         if (!val || (Array.isArray(val) && val.length === 0)) return true;
 
-        // ✅ Special handling for price, since it's on variants
         if (key === "price") {
           const [min, max] = val;
           const variantPrices =
@@ -50,6 +46,7 @@ export async function POST(req: NextRequest) {
         if (!mapDef) return true;
 
         const metafield = node[mapDef.key];
+
         if (!metafield || !metafield.value) return false;
 
         if (mapDef.type === "number") {

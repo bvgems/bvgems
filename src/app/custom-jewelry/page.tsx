@@ -18,7 +18,7 @@ import { PhoneNumberInput } from "@/components/CommonComponents/PhoneInput";
 import { gemstoneOptions } from "@/utils/constants";
 import { IconDiamond, IconCheck, IconX } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
-import { submitCustomDesignRequest } from "@/apis/api"; // 🔹 create this in your backend api
+import { submitCustomDesignRequest } from "@/apis/api";
 import { useState } from "react";
 
 export default function CustomDesignForm() {

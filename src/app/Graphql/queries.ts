@@ -323,6 +323,10 @@ export const shopifyQuery = `
             value
             type
           }
+            jewelryType: metafield(namespace: "custom", key: "jewelry_type") {
+            value
+            type
+          }
           shape: metafield(namespace: "custom", key: "shape") {
             value
             type
