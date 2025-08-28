@@ -140,42 +140,32 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
       }&name=${product?.collection_slug?.toLowerCase()}`
     );
   };
-  const shades = product?.extra_images?.map((url: string, index: number) => ({
-    name: index === 0 ? "Zambian" : "Colombian",
-    url,
-  }));
 
   return (
     <Card
       padding="lg"
-      radius="xl"
+      radius={0}
       className="
         relative overflow-hidden
-        bg-white/80 backdrop-blur
-        border border-gray-200
-        shadow-[0_10px_40px_-10px_rgba(2,6,23,0.25)]
-        dark:bg-zinc-900/70 dark:border-zinc-800
       "
     >
       {/* Gradient header strip */}
       <div
         className="absolute inset-x-0 -top-0.5 h-[3px]"
-        style={{
-          background:
-            "linear-gradient(90deg, #0b182d, #0b182d 30%, #3b82f6 70%, #06b6d4)",
-        }}
+        // style={{
+        //   background:
+        //     "linear-gradient(90deg, #0b182d, #0b182d 30%, #3b82f6 70%, #06b6d4)",
+        // }}
       />
 
       <Grid gutter="xl" align="stretch">
         {/* LEFT — Image */}
         <GridCol span={{ base: 12, md: 5 }}>
           <Card
-            radius="lg"
+            radius={0}
             p="md"
             className="
               h-full
-              bg-white/70 dark:bg-zinc-900/60
-              border border-gray-200 dark:border-zinc-800
               shadow-inner
             "
           >
@@ -191,7 +181,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
             </div>
 
             {/* Quick facts → now as details */}
-            <div className="mt-4 space-y-1 text-sm text-gray-700 dark:text-gray-300">
+            <div className="mt-4 space-y-1 text-sm text-black dark:text-gray-300">
               {product?.shape && (
                 <p>
                   <strong>Shape:</strong> {product.shape}
