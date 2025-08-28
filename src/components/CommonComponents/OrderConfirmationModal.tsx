@@ -45,18 +45,6 @@ export default function OrderConfirmationModal({
           Thank you for your purchase. We've received your order and will begin
           processing it shortly.
         </Text>
-
-        <Group justify="center" mt="sm">
-          <Button
-            variant="light"
-            color="green"
-            onClick={() => {
-              router?.push("/my-orders");
-            }}
-          >
-            View Order
-          </Button>
-        </Group>
       </Stack>
     </Modal>
   );
