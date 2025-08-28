@@ -96,6 +96,7 @@ export function CategoryContent({
       isSapphire,
       sapphireColor
     );
+    console.log("result", result?.data);
 
     const shape = selectedShape || "default";
     const uniqueSizes = Array.from(
@@ -339,28 +340,6 @@ export function CategoryContent({
                   />
                 </div>
 
-                {/* Emerald Shade filter */}
-                {isEmerald && typeFilter === "Lab Grown" && (
-                  <div className="mt-4">
-                    <p className="font-medium mb-2 text-gray-700">Shade:</p>
-                    <div className="flex gap-4">
-                      {["Zambian", "Colombian"].map((shade) => (
-                        <button
-                          key={shade}
-                          onClick={() => setEmeraldShade(shade)}
-                          className={`px-5 py-2 rounded-full border text-sm font-semibold transition-all duration-200 cursor-pointer ${
-                            emeraldShade === shade
-                              ? "bg-green-600 text-white shadow-md scale-105"
-                              : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-                          }`}
-                        >
-                          {shade}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 {/* Static Info Table */}
                 <div className="mt-3 max-w-[500px]">
                   <h1 className="text-lg font-semibold mb-3">
@@ -475,7 +454,6 @@ export function CategoryContent({
         selectedSizes={selectedSizes}
         data={data}
         typeFilter={typeFilter}
-        emeraldShade={emeraldShade}
       />
       <SizeToleranceGuide opened={opened} close={close} />
     </>

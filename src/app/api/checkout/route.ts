@@ -18,7 +18,6 @@ export async function POST(req: Request) {
       guestUser,
       paymentMethod,
     } = await req.json();
-    console.log("cartItemns", cartItems);
 
     const userId = user?.id || null;
     const guestEmail = !user?.id ? guestUser?.email || email : null;

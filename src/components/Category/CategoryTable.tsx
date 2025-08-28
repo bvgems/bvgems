@@ -29,7 +29,7 @@ export const CategoryTable = ({
   typeFilter,
   emeraldShade,
 }: any) => {
-  console.log("fetcheddd", fetchedResult);
+  // console.log("fetcheddd", fetchedResult);
   const name = data?.handle;
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";

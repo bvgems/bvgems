@@ -35,6 +35,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
 import { AuthForm } from "@/components/Auth/AuthForm";
 import { GemstonesInputSection } from "../CommonComponents/GemstonesInputSection";
+import { EmeraldShade } from "../CommonComponents/EmeraldShade";
 
 /** ---------- Helpers ---------- */
 const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
@@ -67,6 +68,7 @@ export default function ProductDetailsPage() {
   const [allProducts, setAllProducts] = useState<any>();
   const [quantity, setQuantity] = useState<number>(1);
   const [caratError, setCaratError] = useState<string | null>(null);
+  const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
 
   const [caratWeight, setCaratWeight] = useState<number>(0);
 
@@ -102,14 +104,16 @@ export default function ProductDetailsPage() {
   const getProduct = async (pid: string) => {
     const productDetails = await getParticularProductsData(pid);
 
-    // If it's Emerald + Lab Grown and no shade chosen yet, default to Zambian
-    if (
-      productDetails?.collection_slug === "Emerald" &&
-      isLabGrown(productDetails) &&
-      !productDetails?.shade
-    ) {
-      productDetails.shade = "Zambian";
-    }
+    // // If it's Emerald + Lab Grown and no shade chosen yet, default to Zambian
+    // if (
+    //   productDetails?.collection_slug === "Emerald" &&
+    //   isLabGrown(productDetails) &&
+    //   !productDetails?.shade
+    // ) {
+    //   productDetails.shade = "Zambian";
+    // }
+
+    console.log("emeralddddproddddd", productDetails);
 
     setProduct(productDetails);
 
@@ -144,7 +148,7 @@ export default function ProductDetailsPage() {
         color: product.color,
         ct_weight: product.ct_weight,
         cut: product.cut,
-        shade: product?.shade || "",
+        shade: emeraldShade || "",
         image_url: product.image_url,
         price: purchaseByCarat ? perCarat : perStone,
         quality: product.quality,
@@ -330,26 +334,11 @@ export default function ProductDetailsPage() {
             {user &&
               product?.collection_slug === "Emerald" &&
               isLabGrown(product) && (
-                <div className="mt-5 flex items-center gap-5 mb-5">
-                  <p className="font-medium text-gray-700">Shade:</p>
-                  <div className="flex gap-4">
-                    {["Zambian", "Colombian"].map((shade) => (
-                      <button
-                        key={shade}
-                        onClick={() =>
-                          setProduct((prev: any) => ({ ...prev, shade }))
-                        }
-                        className={`px-5 py-2 rounded-full border text-sm font-semibold transition-all duration-200 cursor-pointer ${
-                          product?.shade === shade
-                            ? "bg-green-600 text-white shadow-md scale-105"
-                            : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-                        }`}
-                      >
-                        {shade}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <EmeraldShade
+                  product={product}
+                  emeraldShade={emeraldShade}
+                  setEmeraldShade={setEmeraldShade}
+                />
               )}
 
             {user && (

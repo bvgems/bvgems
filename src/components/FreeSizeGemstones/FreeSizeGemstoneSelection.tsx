@@ -88,12 +88,6 @@ export default function FreeSizeGemstoneSelection() {
 
   return (
     <div>
-      <div className="flex justify-center gap-6 py-10 bg-[#F9F5F0]">
-        <h1 className="text-3xl text-[#6B7280]">
-          Free Size Gemstones - {gemstoneType?.toUpperCase()}
-        </h1>
-      </div>
-
       {/* Mobile Filter Button */}
       <div className="lg:hidden flex justify-end px-4 mb-2 mt-5">
         <ActionIcon onClick={open} variant="outline" color="gray" size="lg">

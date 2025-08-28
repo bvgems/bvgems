@@ -65,6 +65,12 @@ export const getOrderPayload = (
               properties?.push({ name: "Shade", value: item?.product?.shade });
             }
           }
+          if (item?.product?.additionalComments) {
+            properties?.push({
+              name: "Additional Comments",
+              value: item?.product?.additionalComments,
+            });
+          }
         } else if (isFreeGemstone) {
           price = item?.product?.price * Number(item?.product?.ct_weight);
           quantity = 1;

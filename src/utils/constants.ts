@@ -771,20 +771,20 @@ export const FreeSizeGemstonesList = [
     label: "Sapphire",
     value: "Sapphire",
     image: "/assets/freesizesapphire.png",
-    link: "/sapphire",
+    link: "/free-size-gemstones/sapphire",
   },
   {
     label: "Ruby",
     value: "Ruby",
     image: "/assets/freesizeruby.png",
-    link: "/ruby",
+    link: "/free-size-gemstones/ruby",
   },
 
   {
     label: "Emerald",
     value: "Emerald",
     image: "/assets/freesizeemerald.png",
-    link: "/emerald",
+    link: "/free-size-gemstones/emerald",
   },
 ];
 

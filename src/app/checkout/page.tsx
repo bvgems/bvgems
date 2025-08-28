@@ -69,6 +69,7 @@ export default function CheckoutSelectionPage() {
       guestUser,
       cart
     );
+    console.log("first", orderPayload);
 
     if (paymentMethod === "memo") {
       await createShopifyOrder(orderPayload);
