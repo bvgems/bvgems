@@ -23,12 +23,10 @@ const ringBaseOptions = {
 };
 
 export default function ShopByColor() {
+  type GoldColor = "white" | "yellow" | "rose";
   const router = useRouter();
   const [activeStone, setActiveStone] = useState(shopByColorOptions[0]);
-  const [goldColor, setGoldColor] = useState<"white" | "yellow" | "rose">(
-    "white"
-  );
-
+  const [goldColor, setGoldColor] = useState<GoldColor>("white");
   const handleShopByColor = (item: any) => {
     router.push(`/loose-gemstones?color=${item.color}`);
   };
@@ -83,13 +81,12 @@ export default function ShopByColor() {
           <div className="flex items-center justify-center mt-6 gap-5">
             <SegmentedControl
               value={goldColor}
-              onChange={(val: "white" | "yellow" | "rose") => setGoldColor(val)}
+              onChange={(val: string) => setGoldColor(val as GoldColor)}
               data={[
                 { label: "White", value: "white" },
                 { label: "Yellow", value: "yellow" },
                 { label: "Rose", value: "rose" },
               ]}
-              className="w-full max-w-[290px]"
             />
           </div>
         </GridCol>
