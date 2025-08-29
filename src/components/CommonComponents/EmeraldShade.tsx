@@ -5,8 +5,8 @@ export const EmeraldShade = ({
   product,
   emeraldShade,
   setEmeraldShade,
+  setDisplayImage,
 }: any) => {
-  console.log('prodd',product)
   return (
     <div className="mt-4">
       <p className="font-medium mb-2 text-gray-700">Shade:</p>
@@ -26,7 +26,10 @@ export const EmeraldShade = ({
                     ? "border-green-600 ring-2 ring-green-600"
                     : "border-gray-300 hover:border-gray-400"
                 }`}
-                onClick={() => setEmeraldShade(shade.name)}
+                onClick={() => {
+                  setDisplayImage(product?.extra_images[index]);
+                  setEmeraldShade(shade.name);
+                }}
               >
                 <Image
                   src={shade.url}

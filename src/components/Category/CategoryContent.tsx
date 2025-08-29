@@ -80,9 +80,35 @@ export function CategoryContent({
   const [allSizes, setAllSizes] = useState<{ [shape: string]: string[] }>({});
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
-
+  const [shaedImages, setShadeImages] = useState<any>([]);
   const [qualityImages, setQualityImages] = useState<any[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
+  const setEmeraldShaedImages = (data: any) => {
+    if (!Array.isArray(data)) return;
+
+    const matched = data.find(
+      (item: any) =>
+        item?.type === "Lab Grown" &&
+        item?.collection_slug === "Emerald" &&
+        Array.isArray(item?.extra_images) &&
+        item.extra_images.length > 0
+    );
+
+    if (matched) {
+      // Ensure Z (Zambian) always comes first, C (Colombian) second
+      const sortedImages = [...matched.extra_images].sort(
+        (a: string, b: string) => {
+          if (a.includes("_Z") && !b.includes("_Z")) return -1;
+          if (b.includes("_Z") && !a.includes("_Z")) return 1;
+          return 0;
+        }
+      );
+
+      setShadeImages(sortedImages);
+    } else {
+      setShadeImages([]);
+    }
+  };
 
   const fetchShapesData = async (
     selectedShape: string | null,
@@ -96,7 +122,6 @@ export function CategoryContent({
       isSapphire,
       sapphireColor
     );
-    console.log("result", result?.data);
 
     const shape = selectedShape || "default";
     const uniqueSizes = Array.from(
@@ -109,11 +134,12 @@ export function CategoryContent({
     }));
 
     setFetchedResult(result?.data || []);
+    setEmeraldShaedImages(result?.data);
 
     // Get one image per quality in fixed order
     const reps = getRepresentativeImages(result?.data || []);
     setQualityImages(reps);
-    setActiveSlide(0); // reset when new data loads
+    setActiveSlide(0);
   };
 
   useEffect(() => {
@@ -134,10 +160,6 @@ export function CategoryContent({
       `/customer-support/education?activeStone=${data?.title?.toLowerCase()}`
     );
   };
-
-  const currentQuality =
-    qualityImages?.[activeSlide]?.quality ??
-    (qualityImages?.[0]?.quality || "-");
 
   return (
     <>
@@ -207,6 +229,57 @@ export function CategoryContent({
                 )}
               </div>
             </motion.div>
+            {isEmerald &&
+            typeFilter === "Lab Grown" &&
+            shaedImages.length > 0 ? (
+              <div className="mt-10">
+                <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
+                  Emerald Shade Variations
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                  {/* Zambian */}
+                  <div className="flex flex-col items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
+                    <div className="h-[140px] w-[140px] flex items-center justify-center">
+                      <Image
+                        src={shaedImages[0]}
+                        fit="contain"
+                        radius="md"
+                        className="object-contain rounded-xl"
+                      />
+                    </div>
+                    <span className="mt-4 text-lg font-semibold text-gray-900">
+                      Zambian
+                    </span>
+                    <p className="mt-2 text-sm text-gray-600 leading-relaxed text-center">
+                      Darker, rich, and saturated forest green hue. Known for
+                      its depth and intensity.
+                    </p>
+                  </div>
+
+                  {/* Colombian */}
+                  {shaedImages[1] && (
+                    <div className="flex flex-col items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
+                      <div className="h-[140px] w-[140px] flex items-center justify-center">
+                        <Image
+                          src={shaedImages[1]}
+                          fit="contain"
+                          radius="md"
+                          className="object-contain rounded-xl"
+                        />
+                      </div>
+                      <span className="mt-4 text-lg font-semibold text-gray-900">
+                        Colombian
+                      </span>
+                      <p className="mt-2 text-sm text-gray-600 leading-relaxed text-center">
+                        Lighter and brighter green hue with vibrant brilliance
+                        and sparkle.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : null}
           </GridCol>
 
           <GridCol span={{ base: 12, md: 7 }}>

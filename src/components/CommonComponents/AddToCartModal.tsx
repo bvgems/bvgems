@@ -43,7 +43,7 @@ interface AddToCartModalProps {
 }
 
 export const AddToCartModal: React.FC<AddToCartModalProps> = ({
-  opened, // (kept for external Modal; not used internally)
+  opened,
   onClose,
   price,
   image_url,
@@ -54,6 +54,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   color,
   product,
 }) => {
+  console.log('cart ptodddd',product)
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
   const router = useRouter();
@@ -62,7 +63,9 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   const [additionalComments, setAdditionalComments] = useState("");
   const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
-
+  const [displayImage, setDisplayImage] = useState<any>(
+    product?.extra_images?.length > 0 ? product?.extra_images[0] : image_url
+  );
   const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(false);
   const [caratError, setCaratError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
@@ -159,7 +162,6 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
       />
 
       <Grid gutter="xl" align="stretch">
-        {/* LEFT — Image */}
         <GridCol span={{ base: 12, md: 5 }}>
           <Card
             radius={0}
@@ -171,7 +173,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
           >
             <div className="relative rounded-xl overflow-hidden ring-1 ring-gray-200 dark:ring-zinc-800">
               <Image
-                src={image_url}
+                src={displayImage}
                 alt={name}
                 radius="md"
                 className="transition-transform duration-300 hover:scale-[1.02]"
@@ -253,6 +255,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                 product={product}
                 emeraldShade={emeraldShade}
                 setEmeraldShade={setEmeraldShade}
+                setDisplayImage={setDisplayImage}
               />
             ) : null}
 

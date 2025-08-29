@@ -24,18 +24,14 @@ export async function GET(req: Request) {
 
     const json = await res.json();
 
-    // Shopify’s response is nested under json.data.page
     const page = json?.data?.page;
 
     if (!page) {
       return NextResponse.json({ error: "No page found" }, { status: 404 });
     }
 
-    // If you want plain text (no <p> tags), strip HTML
     const plainText = page.body.replace(/<[^>]*>/g, "").trim();
-    console.log("page full content:", plainText);
 
-    // Return the full HTML so frontend can render it nicely
     return NextResponse.json(
       {
         title: page.title,

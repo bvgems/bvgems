@@ -852,39 +852,39 @@ export const quickNavigationData = [
 
 export const shopByColorOptions = [
   {
-    name: "Red",
-    image: "/assets/redcolor.png",
-    href: "/shop-by-color/red",
+    name: "Ruby Red",
+    image: "/assets/ruby-red-by-color.png",
+    color: "red",
   },
   {
-    name: "Pink",
+    name: "Pink Sapphire",
 
-    image: "/assets/pinkcolor.png",
-    href: "/shop-by-color/pink",
+    image: "/assets/pink-sapphire-by-color.png",
+    color: "pink",
   },
   {
-    name: "Purple",
+    name: "Tanzanite",
 
-    image: "/assets/purplecolor.png",
-    href: "/shop-by-color/purple",
+    image: "/assets/tanzanite-color.png",
+    color: "purple",
   },
   {
-    name: "Blue",
+    name: "Blue Sapphire",
 
-    image: "/assets/bluecolor.png",
-    href: "/shop-by-color/blue",
+    image: "/assets/blue-sapphire-by-color.png",
+    color: "blue",
   },
   {
-    name: "Green",
+    name: "Emerald Green",
 
-    image: "/assets/greencolor.png",
-    href: "/shop-by-color/green",
+    image: "/assets/green-emerald-by-color.png",
+    color: "green",
   },
   {
-    name: "Yellow",
+    name: "Yellow Sapphire",
 
-    image: "/assets/yellowcolor.png",
-    href: "/shop-by-color/yellow",
+    image: "/assets/yellow-sapphire-color.png",
+    color: "yellow",
   },
 ];
 

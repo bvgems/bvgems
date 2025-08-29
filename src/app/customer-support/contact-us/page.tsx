@@ -30,7 +30,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { notifications } from "@mantine/notifications";
 
 export default function ContactUsPage() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<any>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [reason, setReason] = useState<string>(""); // NEW STATE
   const [loading, setLoading] = useState(false);
@@ -39,45 +39,86 @@ export default function ContactUsPage() {
 
   const timeSlots = [
     "10:00 AM",
+    "10:30 AM",
     "11:00 AM",
+    "11:30 AM",
     "12:00 PM",
+    "12:30 PM",
+    "1:00 PM",
+    "1:30 PM",
     "2:00 PM",
+    "2:30 PM",
     "3:00 PM",
+    "3:30 PM",
     "4:00 PM",
+    "4:30 PM",
+    "5:00 PM",
   ];
 
   const handleBookingSubmit = async () => {
-    setLoading(true);
-
-    if (!(selectedDate instanceof Date) || !selectedTime) {
-      alert("Please select both date and time before submitting.");
-      return;
-    }
-
-    const payload = {
-      date: selectedDate.toISOString().split("T")[0],
-      time: selectedTime,
-      reason: reason.trim() || "N/A",
-    };
-    const response = await bookAppointment(user, payload);
-    if (response?.flag) {
-      notifications.show({
-        icon: <IconCheck />,
-        color: "teal",
-        message: response?.message,
-        position: "top-right",
-        autoClose: 4000,
-      });
-    } else {
+    // Add validation before proceeding
+    if (!selectedDate || !selectedTime) {
       notifications.show({
         icon: <IconX />,
         color: "red",
-        message: response?.error,
+        message: "Please select both date and time for your appointment.",
         position: "top-right",
         autoClose: 4000,
       });
+      return;
     }
+
     setLoading(true);
+
+    try {
+      const dateObj =
+        selectedDate instanceof Date ? selectedDate : new Date(selectedDate);
+
+      if (isNaN(dateObj.getTime())) {
+        throw new Error("Invalid date selected");
+      }
+
+      const payload = {
+        date: dateObj.toISOString().split("T")[0],
+        time: selectedTime,
+        reason: reason.trim() || "N/A",
+      };
+
+      const response = await bookAppointment(user, payload);
+
+      if (response?.flag) {
+        notifications.show({
+          icon: <IconCheck />,
+          color: "teal",
+          message: response?.message,
+          position: "top-right",
+          autoClose: 4000,
+        });
+        // Reset form after successful booking
+        setSelectedDate(null);
+        setSelectedTime(null);
+        setReason("");
+      } else {
+        notifications.show({
+          icon: <IconX />,
+          color: "red",
+          message: response?.error || "Failed to book appointment",
+          position: "top-right",
+          autoClose: 4000,
+        });
+      }
+    } catch (error) {
+      notifications.show({
+        icon: <IconX />,
+        color: "red",
+        message: "An error occurred while booking the appointment.",
+        position: "top-right",
+        autoClose: 4000,
+      });
+      console.error("Booking error:", error);
+    } finally {
+      setLoading(false); // This was the bug - you had setLoading(true) instead of false
+    }
   };
 
   return (
@@ -219,15 +260,11 @@ export default function ContactUsPage() {
               </Text>
               <DatePicker
                 type="default"
-                value={selectedDate ? new Date(selectedDate) : null}
-                onChange={(value: string | Date | null) => {
-                  if (value) {
-                    // normalize to Date
-                    setSelectedDate(new Date(value as any));
-                  } else {
-                    setSelectedDate(null);
-                  }
+                value={selectedDate}
+                onChange={(value) => {
+                  setSelectedDate(value); // value is already Date | null
                 }}
+                weekendDays={[0]}
                 minDate={new Date()}
                 className="mb-4"
               />

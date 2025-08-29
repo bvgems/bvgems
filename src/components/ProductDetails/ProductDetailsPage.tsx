@@ -64,6 +64,7 @@ export default function ProductDetailsPage() {
   const [modalOpened, { open, close }] = useDisclosure(false);
 
   const [product, setProduct] = useState<any>();
+  const [displayImage, setDisplayImage] = useState<any>();
   const [shopifyProduct, setShopifyProduct] = useState<any>();
   const [allProducts, setAllProducts] = useState<any>();
   const [quantity, setQuantity] = useState<number>(1);
@@ -103,17 +104,6 @@ export default function ProductDetailsPage() {
 
   const getProduct = async (pid: string) => {
     const productDetails = await getParticularProductsData(pid);
-
-    // // If it's Emerald + Lab Grown and no shade chosen yet, default to Zambian
-    // if (
-    //   productDetails?.collection_slug === "Emerald" &&
-    //   isLabGrown(productDetails) &&
-    //   !productDetails?.shade
-    // ) {
-    //   productDetails.shade = "Zambian";
-    // }
-
-    console.log("emeralddddproddddd", productDetails);
 
     setProduct(productDetails);
 
@@ -175,6 +165,14 @@ export default function ProductDetailsPage() {
   }, [id]);
 
   useEffect(() => {
+    setDisplayImage(
+      product?.extra_images?.length > 0
+        ? product?.extra_images[0]
+        : product?.image_url
+    );
+  }, [product]);
+
+  useEffect(() => {
     if (product) recalcTotal(product, quantity, caratWeight);
   }, [product, purchaseByCarat]);
 
@@ -201,7 +199,7 @@ export default function ProductDetailsPage() {
         <div className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full md:w-7/12 flex flex-col items-center">
-              <ImageZoom src={product?.image_url} />
+              <ImageZoom src={displayImage} />
               <div className="text-xs text-gray-500 flex items-center mt-2">
                 <IconZoomIn size={15} className="mr-1" />
                 Hover on the image to zoom
@@ -338,6 +336,7 @@ export default function ProductDetailsPage() {
                   product={product}
                   emeraldShade={emeraldShade}
                   setEmeraldShade={setEmeraldShade}
+                  setDisplayImage={setDisplayImage}
                 />
               )}
 

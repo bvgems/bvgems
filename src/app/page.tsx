@@ -20,8 +20,8 @@ export default function Home() {
   return (
     <>
       {heroData && <Hero jewelryRef={{ current: null }} heroData={heroData} />}
-      <ShopByColor />
       <JewelrySection ref={jewelrySectionRef} />
+      <ShopByColor />
       <OwnJewelry />
       <Testimonials />
       <CustomerBenefits />

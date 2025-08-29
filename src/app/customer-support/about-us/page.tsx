@@ -27,7 +27,7 @@ import { motion } from "framer-motion";
 // ---------- Stats with Icons ----------
 const stats = [
   { number: 6, label: "Generations", icon: IconUsers },
-  { number: 100, label: "Years Experience", icon: IconAward },
+  { number: 75, label: "Years Experience", icon: IconAward },
   { number: 1000, label: "Happy Clients", icon: IconHeart },
   { number: 50, label: "Countries Served", icon: IconMapPin },
 ];
@@ -135,8 +135,7 @@ export default function AboutUsPage() {
                       className="mx-auto mb-4 text-amber-600"
                     />
                     <Text className="text-4xl font-bold text-slate-800 mb-2">
-                      {count}
-                      {stat.label.includes("+") ? "+" : ""}
+                      {index !== 0 ? count + "+" : count}
                     </Text>
                     <Text className="text-slate-600 font-medium">
                       {stat.label}

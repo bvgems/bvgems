@@ -5,6 +5,7 @@ export function buildAppointmentConfirmationEmail({
   user: { firstName?: string; lastName?: string; email: string };
   payload: { date: string; time: string; reason?: string };
 }) {
+  
   return `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">

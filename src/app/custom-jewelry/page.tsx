@@ -130,7 +130,9 @@ export default function CustomDesignForm() {
     <Container size="lg" py="lg">
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <div className="flex flex-col gap-4 px-5 sm:px-8 lg:px-28 py-10">
-          <h1 className="text-center mt-5 text-2xl">Build Custom Jewelry</h1>
+          <h1 className="text-center mt-5 text-2xl">
+            Custom Jewelry Request Form
+          </h1>
 
           {/* Full Name */}
           <TextInput
