@@ -80,28 +80,30 @@ export default function ShopByColor() {
               viewport={{ once: true, amount: 0.2 }}
               variants={itemVariants}
             >
-              <Card.Section
-                inheritPadding
-                py="md"
-                className="flex justify-center"
-              >
-                <Image
-                  src={item?.image}
-                  alt={item?.name}
-                  h={140}
-                  w={140}
-                  fit="contain"
-                />
+              <Card.Section inheritPadding py="md">
+                <div className="flex justify-center items-center w-full">
+                  <Image
+                    src={item?.image}
+                    alt={item?.name}
+                    h={140}
+                    w={140}
+                    fit="contain"
+                    className="mx-auto"
+                  />
+                </div>
               </Card.Section>
-
-              <Text fw={700} size="lg" mt="md" className="text-[#0b182d]">
+              <Text
+                fw={700}
+                size="lg"
+                mt="md"
+                className="text-[#0b182d] text-center sm:text-left"
+              >
                 {item?.name}
               </Text>
-
-              <div className="text-[#0b182d] mt-2 flex flex-row items-center gap-1">
+              <div className="text-[#0b182d] mt-2 flex flex-row items-center gap-1 justify-center sm:justify-start">
                 <span>Shop now</span>
                 <IconArrowRight size={15} />
-              </div>
+              </div>{" "}
             </MotionCard>
           </Grid.Col>
         ))}
