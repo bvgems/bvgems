@@ -1,3 +1,18 @@
+function formatDate(dateStr: string): string {
+  if (!dateStr) return "N/A";
+
+  const [year, month, day] = dateStr.split("-").map(Number);
+  if (!year || !month || !day) return "N/A";
+
+  // Construct a local date (month is 0-based in JS Date)
+  const dateObj = new Date(year, month - 1, day);
+
+  return dateObj.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
 export function buildAppointmentConfirmationEmail({
   user,
   payload,
@@ -5,7 +20,8 @@ export function buildAppointmentConfirmationEmail({
   user: { firstName?: string; lastName?: string; email: string };
   payload: { date: string; time: string; reason?: string };
 }) {
-  
+  const formattedDate = formatDate(payload.date);
+
   return `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
@@ -19,14 +35,12 @@ export function buildAppointmentConfirmationEmail({
         <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
           <tr>
             <td style="padding: 8px; border: 1px solid #eee;"><strong>Date:</strong></td>
-            <td style="padding: 8px; border: 1px solid #eee;">${
-              payload.date
-            }</td>
+            <td style="padding: 8px; border: 1px solid #eee;">${formattedDate}</td>
           </tr>
           <tr>
             <td style="padding: 8px; border: 1px solid #eee;"><strong>Time:</strong></td>
             <td style="padding: 8px; border: 1px solid #eee;">${
-              payload.time
+              payload.time || "N/A"
             }</td>
           </tr>
           ${

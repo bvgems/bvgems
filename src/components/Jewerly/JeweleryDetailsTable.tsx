@@ -54,8 +54,10 @@ export const JeweleryDetailsAccordion = ({ productData, gemstone }: any) => {
                 <TableTh>Total Weight</TableTh>
                 <TableTd>
                   {" "}
-                  {Number(productData?.ct_weight?.value) +
-                    Number(productData?.DiamondWeight?.value) || "-"}{" "}
+                  {(
+                    Number(productData?.ct_weight?.value) +
+                    Number(productData?.DiamondWeight?.value)
+                  ).toFixed(2) || "-"}{" "}
                   ct.
                 </TableTd>
               </TableTr>

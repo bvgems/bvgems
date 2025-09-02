@@ -1,124 +1,111 @@
 "use client";
 
-import {
-  Container,
-  Image,
-  Grid,
-  Card,
-  Text,
-  GridCol,
-  SegmentedControl,
-} from "@mantine/core";
+import { Container, Grid, Card, Text, Image } from "@mantine/core";
 import { motion } from "framer-motion";
+import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { shopByColorOptions } from "@/utils/constants";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { AnimatedText } from "../CommonComponents/AnimatedText";
+import { forwardRef, useMemo } from "react";
+import { IconArrowRight } from "@tabler/icons-react";
+import { CardProps } from "@mui/material/Card";
 
-// Ring base images by gold color
-const ringBaseOptions = {
-  white: "/assets/ring-base-white.png",
-  yellow: "/assets/ring-base-yellow.png",
-  rose: "/assets/ring-base-rose.png",
+const MotionCard = motion(
+  forwardRef<HTMLDivElement, CardProps>((props: any, ref: any) => (
+    <Card ref={ref} {...props} />
+  ))
+);
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.06, duration: 0.45, ease: "easeOut" },
+  }),
+};
+
+const descMap: Record<string, string> = {
+  Red: "Bold and fiery hues for striking pieces.",
+  Pink: "Soft, romantic tones with feminine charm.",
+  Purple: "Regal shades that feel rare and luxurious.",
+  Blue: "Calm oceanic blues for timeless styles.",
+  Green: "Lively, lush tones with vivid brilliance.",
+  Yellow: "Sunny sparkle with cheerful energy.",
 };
 
 export default function ShopByColor() {
-  type GoldColor = "white" | "yellow" | "rose";
   const router = useRouter();
-  const [activeStone, setActiveStone] = useState(shopByColorOptions[0]);
-  const [goldColor, setGoldColor] = useState<GoldColor>("white");
-  const handleShopByColor = (item: any) => {
-    router.push(`/loose-gemstones?color=${item.color}`);
+
+  const items = useMemo(
+    () =>
+      (shopByColorOptions || []).map((x: any) => ({
+        ...x,
+        desc:
+          descMap[x?.name] ??
+          `Explore ${String(x?.name).toLowerCase()} gemstones.`,
+      })),
+    []
+  );
+
+  const handleClick = (item: any) => {
+    router.push(`/loose-gemstones?color=${item?.name?.toLowerCase()}`);
   };
 
   return (
-    <div className="mt-20 py-12 bg-[#f9f9f9]">
-      <Grid>
-        <GridCol span={{ base: 12, sm: 4 }}>
-          <h1 className="text-center text-2xl text-[#0b182d]">
-            Shop Gemstones By Color
-          </h1>
-          <div className="relative w-[250px] mx-auto mt-5">
-            <Image
-              src={ringBaseOptions[goldColor]}
-              alt={`Ring Base - ${goldColor}`}
-              w={250}
-              h="auto"
-              className="mx-auto"
-            />
+    <Container size={1250} className="mt-20">
+      <AnimatedText
+        text="Shop Calibrated Gemstones By Color"
+        className="text-center text-4xl text-[#0b182d] mb-6"
+      />
 
-            <Image
-              src={activeStone?.image}
-              alt={activeStone?.name}
-              // make Tanzanite smaller on ring
-              w={activeStone?.name === "Tanzanite" ? 80 : 95}
-              h={
-                activeStone?.name === "Tanzanite"
-                  ? 130
-                  : activeStone?.name === "Blue Sapphire" ||
-                    activeStone?.name === "Yellow Sapphire" ||
-                    activeStone?.name === "Pink Sapphire"
-                  ? 150
-                  : 140
-              }
-              className={`absolute ${
-                activeStone?.name === "Tanzanite"
-                  ? "top-[7%]"
-                  : activeStone?.name === "Blue Sapphire" ||
-                    activeStone?.name === "Yellow Sapphire" ||
-                    activeStone?.name === "Pink Sapphire"
-                  ? "top-[3%]"
-                  : "top-[6%]"
-              }  ${
-                activeStone?.name === "Emerald Green"
-                  ? "left-[50%]"
-                  : "left-[49%]"
-              } -translate-x-1/2`}
-            />
-          </div>
-
-          {/* Gold Color Selector */}
-          <div className="flex items-center justify-center mt-6 gap-5">
-            <SegmentedControl
-              value={goldColor}
-              onChange={(val: string) => setGoldColor(val as GoldColor)}
-              data={[
-                { label: "White", value: "white" },
-                { label: "Yellow", value: "yellow" },
-                { label: "Rose", value: "rose" },
-              ]}
-            />
-          </div>
-        </GridCol>
-
-        <GridCol span={{ base: 12, sm: 8 }}>
-          <div className="grid grid-cols-3 gap-x-6 gap-y-4">
-            {shopByColorOptions?.map((item: any, index: number) => (
-              <div
-                key={index}
-                className="p-2 cursor-pointer transition-all flex flex-col items-center"
-                onMouseEnter={() => setActiveStone(item)}
-                onClick={() => handleShopByColor(item)}
+      <Grid gutter="xl" justify="center">
+        {items.map((item: any, index: number) => (
+          <Grid.Col
+            key={item?.name ?? index}
+            span={{ base: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
+          >
+            <MotionCard
+              component="a"
+              onClick={() => handleClick(item)}
+              className="cursor-pointer transition-all hover:-translate-y-1"
+              style={{
+                height: 280,
+                borderRadius: "12px",
+                boxShadow:
+                  "0 4px 6px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06)",
+              }}
+              custom={index}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={itemVariants}
+            >
+              <Card.Section
+                inheritPadding
+                py="md"
+                className="flex justify-center"
               >
                 <Image
-                  h={130}
-                  w={130}
                   src={item?.image}
                   alt={item?.name}
-                  className={`transition-transform duration-300 ${
-                    item?.name === "Tanzanite"
-                      ? "hover:scale-90"
-                      : "hover:scale-110"
-                  }`}
+                  h={140}
+                  w={140}
+                  fit="contain"
                 />
-                <Text mt={4} className="text-base text-[#0b182d]">
-                  {item?.name}
-                </Text>
+              </Card.Section>
+
+              <Text fw={700} size="lg" mt="md" className="text-[#0b182d]">
+                {item?.name}
+              </Text>
+
+              <div className="text-[#0b182d] mt-2 flex flex-row items-center gap-1">
+                <span>Shop now</span>
+                <IconArrowRight size={15} />
               </div>
-            ))}
-          </div>
-        </GridCol>
+            </MotionCard>
+          </Grid.Col>
+        ))}
       </Grid>
-    </div>
+    </Container>
   );
 }

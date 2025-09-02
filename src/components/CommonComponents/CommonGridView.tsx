@@ -2,7 +2,7 @@
 import { useGridView } from "@/hooks/useGridView";
 import { ViewAllProductComponent } from "./ViewAllProductComponent";
 import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
-import { Skeleton, Grid, GridCol } from "@mantine/core";
+import { Skeleton, Grid, GridCol, Anchor, Breadcrumbs } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 export const CommonGridView = ({
@@ -11,24 +11,33 @@ export const CommonGridView = ({
   selectedStones,
 }: any) => {
   const { category, activeTab, allProducts, beads } = useGridView();
-  console.log("selected stonesss", selectedStones);
-
   const isLoading = !allProducts?.length && !beads?.length;
   const [totalDisplayedProducts, setTotalDispalyedProducts] = useState<any>();
   const [finalProducts, setFinalProducts] = useState<any>();
-
+  const capitalize = (str: any) =>
+    str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
   useEffect(() => {
     if (filteredJewelry === undefined) {
-      setTotalDispalyedProducts(allProducts?.length);
-      setFinalProducts(allProducts);
+      if (isBead) {
+        setTotalDispalyedProducts(beads?.length);
+        setFinalProducts(beads);
+      } else {
+        setTotalDispalyedProducts(allProducts?.length);
+        setFinalProducts(allProducts);
+      }
     } else {
       const timer = setTimeout(() => {
-        setTotalDispalyedProducts(filteredJewelry?.length);
-        setFinalProducts(filteredJewelry);
+        if (isBead) {
+          setTotalDispalyedProducts(beads?.length);
+          setFinalProducts(filteredJewelry || beads);
+        } else {
+          setTotalDispalyedProducts(allProducts?.length);
+          setFinalProducts(filteredJewelry || allProducts);
+        }
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [filteredJewelry]);
+  }, [filteredJewelry, isBead, beads, allProducts]);
 
   if (isLoading) {
     return (
@@ -45,9 +54,40 @@ export const CommonGridView = ({
       </div>
     );
   }
+  const breadcrumbItemsForBeads = [
+    { title: "Home", href: "/" },
+    { title: "Precious Beads" },
+  ].map((item, index) => (
+    <Anchor
+      size="sm"
+      href={item.href}
+      key={index}
+      className="text-gray-600 hover:text-black"
+    >
+      {item.title}
+    </Anchor>
+  ));
+  const breadcrumbItemsForJewelry = [
+    { title: "Home", href: "/" },
+    { title: capitalize(category) },
+  ].map((item, index) => (
+    <Anchor
+      size="sm"
+      href={item.href}
+      key={index}
+      className="text-gray-600 hover:text-black"
+    >
+      {item.title}
+    </Anchor>
+  ));
 
   return (
     <div className="px-4 sm:px-8 pt-6 pb-14">
+      {isBead ? (
+        <Breadcrumbs>{breadcrumbItemsForBeads}</Breadcrumbs>
+      ) : (
+        <Breadcrumbs className="mb-3">{breadcrumbItemsForJewelry}</Breadcrumbs>
+      )}
       <p>Showing {totalDisplayedProducts} results</p>
       <ViewAllProductComponent
         keyProp={activeTab}

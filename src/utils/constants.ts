@@ -676,67 +676,67 @@ export const gemstoneOptions = [
     label: "Alexandrite",
     value: "Alexandrite",
     image: "/assets/sapphire.png",
-    link: "/alexandrite",
+    link: "/calibrated-faceted-gemstones/alexandrite",
   },
   {
     label: "Amethyst",
     value: "Amethyst",
     image: "/assets/amethyst.png",
-    link: "/amethyst",
+    link: "/calibrated-faceted-gemstones/amethyst",
   },
   {
     label: "Aquamarine",
     value: "Aquamarine",
     image: "/assets/aquamarine.png",
-    link: "/aquamarine",
+    link: "/calibrated-faceted-gemstones/aquamarine",
   },
   {
     label: "Citrine",
     value: "Citrine",
     image: "/assets/citrine.png",
-    link: "/citrine",
+    link: "/calibrated-faceted-gemstones/citrine",
   },
   {
     label: "Emerald",
     value: "Emerald",
     image: "/assets/emerald.png",
-    link: "/emerald",
+    link: "/calibrated-faceted-gemstones/emerald",
   },
   {
     label: "Morganite",
     value: "Morganite",
     image: "/assets/morganite.png",
-    link: "/morganite",
+    link: "/calibrated-faceted-gemstones/morganite",
   },
   {
     label: "Paraiba Tourmaline",
     value: "Paraiba Tourmaline",
     image: "/assets/pariba.png",
-    link: "/paraiba-tourmaline",
+    link: "/calibrated-faceted-gemstones/paraiba-tourmaline",
   },
   {
     label: "Peridot",
     value: "Peridot",
     image: "/assets/peridot.png",
-    link: "/peridot",
+    link: "/calibrated-faceted-gemstones/peridot",
   },
   {
     label: "Ruby",
     value: "Ruby",
     image: "/assets/ruby.png",
-    link: "/ruby",
+    link: "/calibrated-faceted-gemstones/ruby",
   },
   {
     label: "Sapphire",
     value: "Sapphire",
     image: "/assets/sapphire.png",
-    link: "/sapphire",
+    link: "/calibrated-faceted-gemstones/sapphire",
   },
   {
     label: "Tanzanite",
     value: "Tanzanite",
     image: "/assets/tanzanite.png",
-    link: "/tanzanite",
+    link: "/calibrated-faceted-gemstones/tanzanite",
   },
 ];
 
@@ -852,39 +852,45 @@ export const quickNavigationData = [
 
 export const shopByColorOptions = [
   {
-    name: "Ruby Red",
-    image: "/assets/ruby-red-by-color.png",
-    color: "red",
+    name: "Red",
+    image:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755880995/RD_A_RR00003278_jvtgbl.jpg",
+    href: "/shop-by-color/red",
   },
   {
-    name: "Pink Sapphire",
+    name: "Pink",
 
-    image: "/assets/pink-sapphire-by-color.png",
-    color: "pink",
+    image:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756151841/IMG_3689_yknaro.jpg",
+    href: "/shop-by-color/pink",
   },
   {
-    name: "Tanzanite",
+    name: "Blue",
 
-    image: "/assets/tanzanite-color.png",
-    color: "purple",
+    image:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755880916/RD_B_SRD00129472_ufy2pm.jpg",
+    href: "/shop-by-color/blue",
   },
   {
-    name: "Blue Sapphire",
+    name: "Purple",
 
-    image: "/assets/blue-sapphire-by-color.png",
-    color: "blue",
+    image:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755718446/PRRD00001146_xw7qy4.jpg",
+    href: "/shop-by-color/purple",
   },
   {
-    name: "Emerald Green",
+    name: "Green",
 
-    image: "/assets/green-emerald-by-color.png",
-    color: "green",
+    image:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755878079/Round_B_ERDC6001_oqpfwd.png",
+    href: "/shop-by-color/green",
   },
   {
-    name: "Yellow Sapphire",
+    name: "Yellow",
 
-    image: "/assets/yellow-sapphire-color.png",
-    color: "yellow",
+    image:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756132523/IMG_3099_ao80ds.jpg",
+    href: "/shop-by-color/yellow",
   },
 ];
 

@@ -2,7 +2,9 @@
 
 import {
   Alert,
+  Anchor,
   Badge,
+  Breadcrumbs,
   Button,
   Checkbox,
   Modal,
@@ -72,7 +74,22 @@ export default function ProductDetailsPage() {
   const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
 
   const [caratWeight, setCaratWeight] = useState<number>(0);
-
+  const breadcrumbItems = [
+    { title: "Home", href: "/" },
+    { title: "Calibrated Faceted Gemstones", href: "/loose-gemstones" },
+    {
+      title: product?.collection_slug,
+      href: `/calibrated-faceted-gemstones/${name}`,
+    },
+  ].map((item, index) => (
+    <Anchor
+      href={item.href}
+      key={index}
+      className="text-gray-600 hover:text-black"
+    >
+      {item.title}
+    </Anchor>
+  ));
   useEffect(() => {
     if (product?.ct_weight) {
       setCaratWeight(product.ct_weight);
@@ -196,6 +213,9 @@ export default function ProductDetailsPage() {
 
       {/* Left: Image and specs */}
       <div className="w-full md:w-2/3 pr-2">
+        <Breadcrumbs separator="›" className="mb-4">
+          {breadcrumbItems}
+        </Breadcrumbs>
         <div className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full md:w-7/12 flex flex-col items-center">

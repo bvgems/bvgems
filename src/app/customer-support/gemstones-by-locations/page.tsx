@@ -9,7 +9,7 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { GEM_LOCATIONS, GemLocation } from "@/utils/constants";
-import { Image } from "@mantine/core";
+import { Anchor, Breadcrumbs, Image } from "@mantine/core";
 
 export type BigThree = "sapphire" | "emerald" | "ruby";
 
@@ -56,6 +56,21 @@ export default function LocationMap() {
   const [selected, setSelected] = useState<GemLocation | null>(null);
   const [isClient, setIsClient] = useState(false);
   const [showContent, setShowContent] = useState(true);
+  const breadcrumbItems = [
+    { title: "Home", href: "/" },
+    {
+      title: "Gemstones By Location",
+    },
+  ].map((item, index) => (
+    <Anchor
+      size="sm"
+      href={item.href}
+      key={index}
+      className="text-gray-600 hover:text-black"
+    >
+      {item.title}
+    </Anchor>
+  ));
 
   useEffect(() => {
     setIsClient(true);
@@ -125,6 +140,9 @@ export default function LocationMap() {
           overflow-y-auto
         `}
         >
+          <Breadcrumbs separator="›" className="mb-6 p-6">
+            {breadcrumbItems}
+          </Breadcrumbs>
           <div className="p-4 sm:p-6 lg:p-8 xl:p-12">
             {/* Header Section */}
             <div className="mb-8 lg:mb-12">
@@ -153,9 +171,7 @@ export default function LocationMap() {
               <div className="bg-white rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-start mb-3 lg:mb-4">
                   <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-100 rounded-lg lg:rounded-xl flex items-center justify-center mr-3 lg:mr-4 flex-shrink-0">
-                    <Image src={"/assets/emerald.png"}/>
-
-
+                    <Image src={"/assets/emerald.png"} />
                   </div>
                   <div>
                     <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-1 lg:mb-2">
@@ -178,7 +194,7 @@ export default function LocationMap() {
               <div className="bg-white rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-start mb-3 lg:mb-4">
                   <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-100 rounded-lg lg:rounded-xl flex items-center justify-center mr-3 lg:mr-4 flex-shrink-0">
-                  <Image src={"/assets/ruby.png"}/>
+                    <Image src={"/assets/ruby.png"} />
                   </div>
                   <div>
                     <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-1 lg:mb-2">
@@ -201,7 +217,7 @@ export default function LocationMap() {
               <div className="bg-white rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-start mb-3 lg:mb-4">
                   <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-100 rounded-lg lg:rounded-xl flex items-center justify-center mr-3 lg:mr-4 flex-shrink-0">
-                  <Image src={"/assets/sapphire.png"}/>
+                    <Image src={"/assets/sapphire.png"} />
                   </div>
                   <div>
                     <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-1 lg:mb-2">

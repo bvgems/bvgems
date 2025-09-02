@@ -13,6 +13,8 @@ import {
   TableTr,
   TableTh,
   TableTd,
+  Breadcrumbs,
+  Anchor,
 } from "@mantine/core";
 import { motion } from "framer-motion";
 import { getShapesData } from "@/apis/api";
@@ -161,9 +163,26 @@ export function CategoryContent({
     );
   };
 
+  const breadcrumbItems = [
+    { title: "Home", href: "/" },
+    { title: "Calibrated Faceted Gemstones", href: "/loose-gemstones" },
+    { title: data?.title || handle, href: `/loose-gemstones/${handle}` },
+  ].map((item, index) => (
+    <Anchor
+      size="sm"
+      href={item.href}
+      key={index}
+      className="text-gray-600 hover:text-black"
+    >
+      {item.title}
+    </Anchor>
+  ));
   return (
     <>
       <div className="mt-9 px-6">
+        <Breadcrumbs separator="›" className="mb-6">
+          {breadcrumbItems}
+        </Breadcrumbs>
         <Grid>
           {/* Left: Image + Carousel */}
           <GridCol span={{ base: 12, md: 5 }}>

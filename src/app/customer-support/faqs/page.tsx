@@ -2,6 +2,8 @@
 import { getFAQs } from "@/apis/api";
 import { FAQComponent } from "@/components/FAQs/FAQComponent";
 import {
+  Anchor,
+  Breadcrumbs,
   Card,
   Container,
   Group,
@@ -14,6 +16,21 @@ import { useEffect, useState } from "react";
 
 export default function FAQPage() {
   const [faqContent, setFaqContent] = useState();
+  const breadcrumbItems = [
+    { title: "Home", href: "/" },
+    {
+      title: "FAQs",
+    },
+  ].map((item, index) => (
+    <Anchor
+      size="sm"
+      href={item.href}
+      key={index}
+      className="text-gray-600 hover:text-black"
+    >
+      {item.title}
+    </Anchor>
+  ));
   const fetchFAQs = async () => {
     const response = await getFAQs();
     if (response) {
@@ -35,6 +52,9 @@ export default function FAQPage() {
   }, []);
   return (
     <Container size="xl">
+      <Breadcrumbs separator="›" className="mb-6">
+        {breadcrumbItems}
+      </Breadcrumbs>
       <div className="flex justify-center items-center gap-2">
         <ThemeIcon
           variant="gradient"

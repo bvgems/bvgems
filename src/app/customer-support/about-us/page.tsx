@@ -11,6 +11,8 @@ import {
   Card,
   SimpleGrid,
   Skeleton,
+  Anchor,
+  Breadcrumbs,
 } from "@mantine/core";
 import {
   IconDiamond,
@@ -63,6 +65,21 @@ const useCounter = (end: number, duration = 1500) => {
 };
 
 export default function AboutUsPage() {
+  const breadcrumbItems = [
+    { title: "Home", href: "/" },
+    {
+      title: "About B. V. Gems",
+    },
+  ].map((item, index) => (
+    <Anchor
+      size="sm"
+      href={item.href}
+      key={index}
+      className="text-gray-600 hover:text-black"
+    >
+      {item.title}
+    </Anchor>
+  ));
   const [aboutData, setAboutData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -78,6 +95,9 @@ export default function AboutUsPage() {
 
   return (
     <div className="font-sans">
+      <Breadcrumbs separator="›" className="mb-6">
+        {breadcrumbItems}
+      </Breadcrumbs>
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0 }}

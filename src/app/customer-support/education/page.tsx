@@ -36,7 +36,7 @@ export default function EducationPage() {
         />
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-8 relative">
+      <div className="flex-1 overflow-y-auto p-4 md:px-8 relative">
         <div className="lg:hidden mb-4 flex justify-start">
           <button onClick={open} className="p-2 hover:bg-gray-100 rounded">
             <IconLayoutSidebar size={24} />
