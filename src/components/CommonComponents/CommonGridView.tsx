@@ -10,6 +10,9 @@ export const CommonGridView = ({
   isBead = false,
   selectedStones,
 }: any) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { category, activeTab, allProducts, beads } = useGridView();
   const isLoading = !allProducts?.length && !beads?.length;
   const [totalDisplayedProducts, setTotalDispalyedProducts] = useState<any>();

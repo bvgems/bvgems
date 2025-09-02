@@ -8,6 +8,7 @@ import { OwnJewelry } from "@/components/OwnJewerly/OwnJewerly";
 import { Testimonials } from "@/components/Testimonials/Testimonials";
 import { CustomerBenefits } from "@/components/CustomerBenefits/CustomerBenefits";
 import { IndustryAffiliation } from "@/components/IndustryAffiliation/IndustryAffiliation";
+import { BirthStoneComponent } from "@/components/BirthStone/BirthStoneComponent";
 
 export default function Home() {
   const jewelrySectionRef = useRef<HTMLDivElement>(null);
@@ -23,6 +24,7 @@ export default function Home() {
       <JewelrySection ref={jewelrySectionRef} />
       <ShopByColor />
       <OwnJewelry />
+      <BirthStoneComponent />
       <Testimonials />
       <CustomerBenefits />
       <IndustryAffiliation />

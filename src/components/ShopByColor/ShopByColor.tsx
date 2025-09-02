@@ -24,15 +24,6 @@ const itemVariants = {
   }),
 };
 
-const descMap: Record<string, string> = {
-  Red: "Bold and fiery hues for striking pieces.",
-  Pink: "Soft, romantic tones with feminine charm.",
-  Purple: "Regal shades that feel rare and luxurious.",
-  Blue: "Calm oceanic blues for timeless styles.",
-  Green: "Lively, lush tones with vivid brilliance.",
-  Yellow: "Sunny sparkle with cheerful energy.",
-};
-
 export default function ShopByColor() {
   const router = useRouter();
 
@@ -40,9 +31,6 @@ export default function ShopByColor() {
     () =>
       (shopByColorOptions || []).map((x: any) => ({
         ...x,
-        desc:
-          descMap[x?.name] ??
-          `Explore ${String(x?.name).toLowerCase()} gemstones.`,
       })),
     []
   );
@@ -55,7 +43,7 @@ export default function ShopByColor() {
     <Container size={1250} className="mt-20">
       <AnimatedText
         text="Shop Calibrated Gemstones By Color"
-        className="text-center text-4xl text-[#0b182d] mb-6"
+        className="text-center text-4xl text-[#0b182d] mb-12"
       />
 
       <Grid gutter="xl" justify="center">

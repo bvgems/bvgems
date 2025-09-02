@@ -24,7 +24,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const segments = pathname.split("/").filter(Boolean);
   const collectionSlug = segments[1]; // jewelry/[category]
 
-  const [selectedStones, setSelectedStones] = useState<string[]>([]);
+  // ✅ Initialize from URL query
+  const initialStone = searchParams.get("stone")
+    ? decodeURIComponent(searchParams.get("stone") as string)
+    : "";
+
+  const [selectedStones, setSelectedStones] = useState<string[]>(
+    initialStone ? [initialStone] : []
+  );
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([100, 15000]);
@@ -41,7 +48,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const filterOptions = {
       shape: selectedShapes,
       price: priceRange,
-      types:selectedTypes
+      types: selectedTypes,
     };
     const response = await getFilteredJewelry(filterOptions, collectionSlug);
 
@@ -73,16 +80,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     setLoading(false);
   };
 
-  // First load + when category changes
+  // ✅ On mount, apply filter from URL if present
   useEffect(() => {
+    if (initialStone) {
+      setSelectedStones([initialStone]);
+    }
     fetchFilteredData().finally(() => {
       didMount.current = true;
     });
   }, [collectionSlug]);
 
-  // Filters change
+  // ✅ Refetch when filters change
   useEffect(() => {
-    console.log("something changess", selectedTypes);
     if (!didMount.current) return;
     fetchFilteredData();
   }, [

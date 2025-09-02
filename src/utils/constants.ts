@@ -1,3 +1,143 @@
+export const GemstonesByBirthMonths = [
+  // {
+  //   month: "February",
+  //   gemstone: "Amethyst",
+  //   image_url:
+  //     "https://res.cloudinary.com/dabdvgxd4/image/upload/v1753367228/144070001_wgwjpa.jpg",
+  // },
+  // {
+  //   month: "March",
+  //   gemstone: "Aquamarine",
+  //   image_url:
+  //     "https://res.cloudinary.com/dabdvgxd4/image/upload/v1753371670/2136532_rc3p0k.jpg",
+  // },
+  {
+    month: "May",
+    gemstone: "Emerald",
+    image_url:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756317899/RD_Z_emh9yw.jpg",
+    products: [
+      {
+        image:
+          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_3fc1e418-4c8c-4f90-a898-6b0a640705c3.png?v=1755283409",
+        title: "Emerald Rings",
+        link: "jewelry/rings?stone=emerald",
+      },
+      {
+        image:
+          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_b75b25f6-c44b-4583-90e1-1a5ff66519e3.png?v=1755801060",
+        title: "Emerald Necklaces",
+        link: "jewelry/necklaces?stone=emerald",
+      },
+      {
+        image:
+          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/7ce09a_44524ec8cc1b4b5ca2e91179c3727ed6_mv2.webp?v=1753808342",
+        title: "Emerald Earrings",
+        link: "jewelry/earrings?stone=emerald",
+      },
+      {
+        image:
+          "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756317899/RD_Z_emh9yw.jpg",
+        title: "Loose Gemstones",
+        link: "/calibrated-faceted-gemstones/emerald",
+      },
+    ],
+  },
+  {
+    month: "June",
+    gemstone: "Alexandrite",
+    image_url:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755717221/IMG_2131_zgoi6w.png",
+  },
+  {
+    month: "July",
+    gemstone: "Ruby",
+    image_url:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756410867/IMG_2626-3_pju0li.png",
+    products: [
+      {
+        image:
+          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_5acd9d11-d4b6-439f-bf4f-25dc5f8a3034.png?v=1755266622",
+        title: "Ruby Rings",
+        link: "jewelry/rings?stone=ruby",
+      },
+      {
+        image:
+          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_18e3b9eb-f92d-4b56-9a42-d49d793e789a.png?v=1755801187",
+        title: "Ruby Necklaces",
+        link: "jewelry/necklaces?stone=ruby",
+      },
+      {
+        image:
+          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/7ce09a_81f8b76367114ed69b9b62e79d3604cb_mv2.webp?v=1753808472",
+        title: "Ruby Earrings",
+        link: "jewelry/earrings?stone=ruby",
+      },
+      {
+        image:
+          "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756410867/IMG_2626-3_pju0li.png",
+        title: "Loose Gemstones",
+        link: "/calibrated-faceted-gemstones/ruby",
+      },
+    ],
+  },
+  // {
+  //   month: "August",
+  //   gemstone: "Peridot",
+  //   image_url:
+  //     "https://res.cloudinary.com/dabdvgxd4/image/upload/v1753369202/107490995_mojuuq.jpg",
+  // },
+  {
+    month: "September",
+    gemstone: "Sapphire",
+    image_url:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755880908/RD_AA_SRD00042208_p8ijmh.jpg",
+    products: [
+      {
+        image:
+          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_5b0afe2d-24fd-4837-9272-a3649b33c9f8.png?v=1755276530",
+        title: "Sapphire Rings",
+        link: "jewelry/rings?stone=Blue Sapphire",
+      },
+      {
+        image:
+          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_13243bcb-54ea-48f8-8b75-413502f71169.png?v=1755802135",
+        title: "Sapphire Necklaces",
+        link: "jewelry/necklaces?stone=Blue Sapphire",
+      },
+      {
+        image:
+          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/7ce09a_c5beda9eb5684a3e925328c2385e3d6d_mv2.webp?v=1753808539",
+        title: "Sapphire Earrings",
+        link: "jewelry/earrings?stone=Blue Sapphire",
+      },
+      {
+        image:
+          "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755880908/RD_AA_SRD00042208_p8ijmh.jpg",
+        title: "Loose Gemstones",
+        link: "/calibrated-faceted-gemstones/sapphire",
+      },
+    ],
+  },
+  // {
+  //   month: "October",
+  //   gemstone: "Paraiba Tourmaline",
+  //   image_url: "/assets/pariba.png",
+  // },
+  // {
+  //   month: "November",
+  //   gemstone: "Citrine",
+  //   image_url:
+  //     "https://res.cloudinary.com/dabdvgxd4/image/upload/v1753304168/2136541_z7ryya.jpg",
+  // },
+  // {
+  //   month: "December",
+  //   gemstone: "Tanzanite",
+  //   image_url:
+  //     "https://res.cloudinary.com/dabdvgxd4/image/upload/v1753297250/2136778_ngahyp.jpg",
+  // },
+];
+
 export const STONE_COLORS: any = {
   Ruby: "Red",
   Emerald: "Green",
