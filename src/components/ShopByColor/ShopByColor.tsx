@@ -40,7 +40,7 @@ export default function ShopByColor() {
   };
 
   return (
-    <Container size={1250} className="mt-20">
+    <Container size={1350} className="mt-20">
       <AnimatedText
         text="Shop Calibrated Gemstones By Color"
         className="text-center text-4xl text-[#0b182d] mb-12"

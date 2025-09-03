@@ -951,29 +951,26 @@ export const quickNavigationData = [
     ],
   },
   {
-    value: "get-to-know-us",
-    label: "Get to Know Us",
+    value: "location",
+    label: "Gemstone By Location",
     children: [
       {
-        label: "About Us",
-        href: "/customer-support/about-us",
+        label: "Gemstone By Location",
+        href: "/customer-support/gemstones-by-locations",
       },
     ],
   },
   {
-    value: "customer-center",
-    label: "Customer Center",
+    value: "get-to-know-us",
+    label: "Get to Know Us",
     children: [
       {
-        label: "Contact Us",
-        href: "/customer-support/contact-us",
-      },
-      {
-        label: "FAQs",
-        href: "/customer-support/faqs",
+        label: "About B. V. Gems",
+        href: "/customer-support/about-us",
       },
     ],
   },
+
   {
     value: "our-policies",
     label: "Our Policies",
@@ -986,6 +983,30 @@ export const quickNavigationData = [
       //   label: "Return Policy",
       //   href: "/customer-support/return-policy",
       // },
+    ],
+  },
+  {
+    value: "customer-center",
+    label: "Customer Center",
+    children: [
+      {
+        label: "FAQs",
+        href: "/customer-support/faqs",
+      },
+      {
+        label: "Contact Us",
+        href: "/customer-support/contact-us",
+      },
+    ],
+  },
+  {
+    value: "blogs",
+    label: "Blogs",
+    children: [
+      {
+        label: "Blogs",
+        href: "/blogs",
+      },
     ],
   },
 ];
@@ -1201,6 +1222,7 @@ export const links = [
       { link: "/customer-support/store-policy", label: "Store Policy" },
       { link: "/customer-support/faqs", label: "FAQ" },
       { link: "/customer-support/contact-us", label: "Contact Us" },
+      { link: "/blogs", label: "Blogs" },
     ],
   },
 ];
@@ -1235,6 +1257,7 @@ export const mobileLinks = [
       { link: "/customer-support/store-policy", label: "Store Policy" },
       { link: "/customer-support/faqs", label: "FAQ" },
       { link: "/customer-support/contact-us", label: "Contact Us" },
+      { link: "/blogs", label: "Blogs" },
     ],
   },
 ];

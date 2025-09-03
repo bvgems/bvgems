@@ -67,7 +67,7 @@ export const BirthStoneComponent = () => {
   const currentStone = currentItem?.gemstone;
 
   return (
-    <Container size={1250} className="mt-20">
+    <Container size={1350} className="mt-20">
       <AnimatedText
         text="Shine with Your Birthstone"
         className="text-center text-4xl text-[#0b182d] mb-12"

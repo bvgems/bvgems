@@ -9,6 +9,9 @@ import { Testimonials } from "@/components/Testimonials/Testimonials";
 import { CustomerBenefits } from "@/components/CustomerBenefits/CustomerBenefits";
 import { IndustryAffiliation } from "@/components/IndustryAffiliation/IndustryAffiliation";
 import { BirthStoneComponent } from "@/components/BirthStone/BirthStoneComponent";
+import { BestSellingProductsComponents } from "@/components/BestSellingProducts/BestSellingProductsComponents";
+import { BookAppointment } from "@/components/BookAppointment/BookAppointment";
+import { BlogsSection } from "@/components/BlogsSection/BlogsSection";
 
 export default function Home() {
   const jewelrySectionRef = useRef<HTMLDivElement>(null);
@@ -23,10 +26,13 @@ export default function Home() {
       {heroData && <Hero jewelryRef={{ current: null }} heroData={heroData} />}
       <JewelrySection ref={jewelrySectionRef} />
       <ShopByColor />
-      <OwnJewelry />
+      {/* <OwnJewelry /> */}
+      <BestSellingProductsComponents />
       <BirthStoneComponent />
       <Testimonials />
+      <BookAppointment />
       <CustomerBenefits />
+      <BlogsSection />
       <IndustryAffiliation />
     </>
   );

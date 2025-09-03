@@ -47,7 +47,6 @@ export const getAllJeweleryProducts = async (category: any) => {
       category: `product_type:${category}`,
     };
 
-    // For earrings → chronological (oldest first), others → reverse (newest first)
     const isEarrings = category?.toLowerCase() === "earrings";
 
     const shopifyRes = await fetch(
@@ -86,6 +85,10 @@ export const getAllJeweleryProducts = async (category: any) => {
                       }
                     }
                     showshapeoptions: metafield(namespace: "custom", key: "showshapeoptions") {
+                      value
+                      type
+                    }
+                       bestSelling: metafield(namespace: "custom", key: "best_selling") {
                       value
                       type
                     }

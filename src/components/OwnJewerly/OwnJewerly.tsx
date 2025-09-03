@@ -18,7 +18,7 @@ const jewelryItems = [
 
 export const OwnJewelry = () => {
   return (
-    <Container size={1250} className="mt-20">
+    <Container size={1350} className="mt-20">
       <AnimatedText
         text="Build Your Own Jewelry"
         className="text-center text-4xl text-[#0b182d] mb-12"

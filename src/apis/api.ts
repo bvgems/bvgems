@@ -4,11 +4,45 @@ const baseUrl =
     ? process.env.NEXT_PUBLIC_BASE_URL || "https://bvgems.com"
     : "";
 
+export const getBlogByHandle = async (blogName: any) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/api/getSingleBlogContent?blogName=${blogName}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching blog post", error);
+    return null;
+  }
+};
+
+export const getBlogPosts = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/getBlogPosts`);
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching blog posts", error);
+    return null;
+  }
+};
+export const getBestSellingProducts = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/getBestSellingProducts`);
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching best selling products", error);
+    return null;
+  }
+};
+
 export const getFreeSizeFilteredData = async (options: any) => {
   try {
-    const response = await axios.post(`${baseUrl}/api/getFilteredFreeSizeGemstones`, {
-      options,
-    });
+    const response = await axios.post(
+      `${baseUrl}/api/getFilteredFreeSizeGemstones`,
+      {
+        options,
+      }
+    );
     return response?.data;
   } catch (error) {
     console.error("Error fetching free size gemstones", error);

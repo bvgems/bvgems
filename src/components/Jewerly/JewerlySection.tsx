@@ -84,7 +84,7 @@ export const JewelrySection = forwardRef<HTMLDivElement>((_, ref) => {
     router.push(`/jewelry/${handle}`);
   };
   return (
-    <Container size={1250} ref={ref} className="mt-20">
+    <Container size={1350} ref={ref} className="mt-20">
       <AnimatedText
         text="Our Jewelry Collection"
         className="text-center text-4xl text-[#0b182d] mb-6"
