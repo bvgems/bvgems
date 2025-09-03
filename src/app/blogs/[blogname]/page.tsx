@@ -3,7 +3,6 @@ import React from "react";
 
 async function getBlogByHandle(handle: string) {
   const endpoint = process.env.SHOPIFY_STOREFRONT_URL as string;
-
   const query = `
     {
       blog(handle: "news") {
@@ -37,16 +36,18 @@ async function getBlogByHandle(handle: string) {
   });
 
   const result = await response.json();
-  console.log("hey", result?.data?.blog?.articleByHandle);
   return result?.data?.blog?.articleByHandle;
 }
 
+// ✅ Correct typing for Next.js 15 - params is now a Promise
 export default async function BlogPostPage({
   params,
 }: {
-  params: { blogname: string };
+  params: Promise<{ blogname: string }>;
 }) {
-  const post = await getBlogByHandle(params.blogname);
+  // Await the params Promise
+  const { blogname } = await params;
+  const post = await getBlogByHandle(blogname);
 
   if (!post) {
     return (
@@ -70,10 +71,8 @@ export default async function BlogPostPage({
         </div>
       )}
 
-      {/* Title */}
       <h1 className="text-4xl font-bold text-[#0b182d] mb-4">{post.title}</h1>
 
-      {/* Author + Date */}
       <p className="text-gray-500 text-sm mb-8">
         {post.authorV2?.name || "B.V. Gems"} ·{" "}
         {new Date(post.publishedAt).toLocaleDateString("en-US", {
@@ -83,7 +82,6 @@ export default async function BlogPostPage({
         })}
       </p>
 
-      {/* Content */}
       <div
         className="prose prose-lg max-w-none prose-headings:text-[#0b182d] prose-a:text-blue-600 hover:prose-a:underline"
         dangerouslySetInnerHTML={{ __html: post.contentHtml }}
