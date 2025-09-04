@@ -263,7 +263,7 @@ export const addProductToCart = (
   secondStone: any
 ) => {
   if (!productData) return;
-  console.log("prodd", productData);
+  console.log("prodd", variables);
 
   const showshapeoptions = productData?.showshapeoptions?.value === "true";
 

@@ -163,7 +163,7 @@ export function CartComponent() {
             <Button
               color="#0b182d"
               size="compact-sm"
-              leftSection={<IconTrash size={14}/>}
+              leftSection={<IconTrash size={14} />}
               onClick={() => {
                 cartStore.getState().clearCart();
               }}
@@ -247,7 +247,21 @@ export function CartComponent() {
                           )}
                           {value?.product?.productType === "necklaceJewelry" &&
                             value?.product?.length && (
-                              <>Length: {value?.product?.length}</>
+                              <>
+                                Gold Color: {value?.product?.goldColor} |
+                                Length: {value?.product?.length}
+                              </>
+                            )}
+                          {value?.product?.productType === "braceletJewelry" &&
+                            value?.product?.length && (
+                              <>
+                                Gold Color: {value?.product?.goldColor} |
+                                Length: {value?.product?.length}
+                              </>
+                            )}
+                          {value?.product?.productType === "earringJewelry" &&
+                            value?.product?.goldColor && (
+                              <>Gold Color: {value?.product?.goldColor}</>
                             )}
                         </Text>
                       </div>

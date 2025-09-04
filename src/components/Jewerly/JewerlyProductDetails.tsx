@@ -18,6 +18,8 @@ import {
   IconCheck,
   IconDiamond,
   IconHeart,
+  IconShoppingBag,
+  IconShoppingCart,
   IconTruckDelivery,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -70,14 +72,23 @@ export const JewelryProductDetails = ({
     }
   };
 
+  const braceletLength = () => {
+    const lengths = Array.from({ length: 4 }, (_, i) =>
+      (6 + i * 0.5).toFixed(2)
+    );
+    return lengths;
+  };
+
   const [selectedRingSize, setSelectedRingSize] = useState<any>();
   const [selectedNecklaceStoneSize, setSelectedNecklacesStoneSize] =
     useState<any>("2.0 MM");
+  const [selectedBraceletLength, setSelectedBraceletLength] =
+    useState<any>("6.0");
   const [selectedBeadStoneSize, setSelectedBeadStoneSize] =
     useState<any>("2.0 MM");
 
   const [selectedNecklaceLength, setSelectedNecklaceLength] =
-    useState<any>("16 INCH");
+    useState<any>("16 Inch");
 
   const userKey = user?.id?.toString() || "guest";
   const cartStore = getCartStore(userKey);
@@ -109,10 +120,7 @@ export const JewelryProductDetails = ({
           productData?.showGoldColor?.value === "true"
             ? selectedNecklaceStoneSize
             : null,
-        length:
-          productData?.showGoldColor?.value === "true"
-            ? selectedNecklaceLength
-            : null,
+        length: selectedNecklaceLength,
       };
     } else if (isEarringCategory) {
       variables = {
@@ -122,6 +130,7 @@ export const JewelryProductDetails = ({
     } else if (isBracelets) {
       variables = {
         goldColor: selectedGoldColor,
+        length: selectedBraceletLength,
       };
     } else if (isBead) {
       variables = {
@@ -199,12 +208,8 @@ export const JewelryProductDetails = ({
   };
 
   const getLengthData = () => {
-    const lengthSet = new Set<string>();
-    productData?.variants?.edges?.forEach(({ node }: any) => {
-      const parts = node?.title?.split(" / ");
-      if (parts?.length === 3) lengthSet.add(parts[2].trim());
-    });
-    return Array.from(lengthSet);
+    const lengths = [16, 18, 20, 22];
+    return lengths.map((len) => `${len} Inch`);
   };
 
   const isDisabled = () => {
@@ -464,14 +469,21 @@ export const JewelryProductDetails = ({
                     },
                   }}
                 />
+              </>
+            ) : null}
+          </>
+        ) : (
+          <>
+            <div className="flex gap-4 w-full">
+              {isBead ? (
                 <Select
                   className="flex-1"
                   leftSection={<IconDiamond size={20} />}
-                  label={`Select Length`}
-                  placeholder={`${"Length of Necklace"}`}
-                  data={getLengthData()}
-                  value={selectedNecklaceLength}
-                  onChange={setSelectedNecklaceLength}
+                  label="Select Stone Size"
+                  placeholder="Stone Size"
+                  data={getData()}
+                  value={selectedBeadStoneSize}
+                  onChange={setSelectedBeadStoneSize}
                   styles={{
                     input: {
                       padding: "22px 35px",
@@ -479,76 +491,40 @@ export const JewelryProductDetails = ({
                     },
                   }}
                 />
-              </>
-            ) : null}
+              ) : (
+                <Autocomplete
+                  className="flex-1"
+                  leftSection={<IconDiamond size={20} />}
+                  label="Select Gold Color"
+                  placeholder="Gold Color"
+                  clearable
+                  data={GoldColorData.map((item) => item.value)}
+                  value={selectedGoldColor}
+                  onChange={setSelectedGoldColor}
+                  renderOption={({ option }) => {
+                    const matched = GoldColorData.find(
+                      (c) => c.value === option.value
+                    );
+                    return (
+                      <Group gap="sm">
+                        <span
+                          className="w-4 h-4 rounded-full border"
+                          style={{ backgroundColor: matched?.color }}
+                        />
+                        <Text size="sm">{option.value}</Text>
+                      </Group>
+                    );
+                  }}
+                  styles={{
+                    input: {
+                      padding: "22px 35px",
+                      // backgroundColor: "#dbdddf",
+                    },
+                  }}
+                />
+              )}
+            </div>
           </>
-        ) : (
-          <div className="flex gap-4 w-full">
-            {isBead ? (
-              <Select
-                className="flex-1"
-                leftSection={<IconDiamond size={20} />}
-                label="Select Stone Size"
-                placeholder="Stone Size"
-                data={getData()}
-                value={selectedBeadStoneSize}
-                onChange={setSelectedBeadStoneSize}
-                styles={{
-                  input: {
-                    padding: "22px 35px",
-                    // backgroundColor: "#dbdddf",
-                  },
-                }}
-              />
-            ) : (
-              <Autocomplete
-                className="flex-1"
-                leftSection={<IconDiamond size={20} />}
-                label="Select Gold Color"
-                placeholder="Gold Color"
-                clearable
-                data={GoldColorData.map((item) => item.value)}
-                value={selectedGoldColor}
-                onChange={setSelectedGoldColor}
-                renderOption={({ option }) => {
-                  const matched = GoldColorData.find(
-                    (c) => c.value === option.value
-                  );
-                  return (
-                    <Group gap="sm">
-                      <span
-                        className="w-4 h-4 rounded-full border"
-                        style={{ backgroundColor: matched?.color }}
-                      />
-                      <Text size="sm">{option.value}</Text>
-                    </Group>
-                  );
-                }}
-                styles={{
-                  input: {
-                    padding: "22px 35px",
-                    // backgroundColor: "#dbdddf",
-                  },
-                }}
-              />
-            )}
-
-            <NumberInput
-              className="flex-1"
-              label="Quantity"
-              min={1}
-              value={quantity}
-              onChange={(value) => setQuantity(value || 1)}
-              allowNegative={false}
-              radius={0}
-              styles={{
-                input: {
-                  padding: "22px 15px",
-                  // backgroundColor: "#dbdddf",
-                },
-              }}
-            />
-          </div>
         )}
 
         {isRingCategory ? (
@@ -562,6 +538,48 @@ export const JewelryProductDetails = ({
               data={ringSizes()}
               value={selectedRingSize}
               onChange={setSelectedRingSize}
+              styles={{
+                input: {
+                  padding: "22px 35px",
+                  // backgroundColor: "#dbdddf",
+                },
+              }}
+            />
+          </div>
+        ) : null}
+
+        {isBracelets ? (
+          <div>
+            <Autocomplete
+              className="flex-1"
+              clearable
+              leftSection={<IconDiamond size={20} />}
+              label="Select Bracelet Length"
+              placeholder="Bracelet Length"
+              data={braceletLength()}
+              value={selectedBraceletLength}
+              onChange={setSelectedBraceletLength}
+              styles={{
+                input: {
+                  padding: "22px 35px",
+                  // backgroundColor: "#dbdddf",
+                },
+              }}
+            />
+          </div>
+        ) : null}
+
+        {isNecklaces ? (
+          <div>
+            <Autocomplete
+              className="flex-1"
+              clearable
+              leftSection={<IconDiamond size={20} />}
+              label="Select Necklace Length"
+              placeholder="Necklace Length"
+              data={getLengthData()}
+              value={selectedNecklaceLength}
+              onChange={setSelectedNecklaceLength}
               styles={{
                 input: {
                   padding: "22px 35px",
@@ -615,12 +633,28 @@ export const JewelryProductDetails = ({
             </div>
           )
         ) : null}
-        <div className="mt-3 flex flex-col gap-2">
+        <div className="mt-3 flex gap-5 items-center">
+          <NumberInput
+            // className="flex-3"
+            // label="Quantity"
+            min={1}
+            value={quantity}
+            onChange={(value) => setQuantity(value || 1)}
+            allowNegative={false}
+            radius={0}
+            styles={{
+              input: {
+                // padding: "22px 15px",
+                // backgroundColor: "#dbdddf",
+              },
+            }}
+          />
           <Button
             disabled={isDisabled()}
             color="#0b182d"
             onClick={addProduct}
-            fullWidth
+            leftSection={<IconShoppingCart size={20} />}
+            w={300}
           >
             ADD TO CART
           </Button>
