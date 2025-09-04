@@ -25,7 +25,7 @@ export const BestSellingProductsComponents = () => {
   return (
     <Container size={1350} className="mt-25">
       <AnimatedText
-        text="Our Best Selling Jewelry Products"
+        text="Best Sellers"
         className="text-center text-4xl text-[#0b182d] mb-6"
       />
       <div

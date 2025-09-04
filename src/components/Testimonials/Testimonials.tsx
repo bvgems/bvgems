@@ -61,7 +61,7 @@ export const Testimonials = () => {
   return (
     <Container size={1350} className="mt-20 pb-20">
       <AnimatedText
-        text="From Our People"
+        text="What Our Customer Say About Us"
         className="text-center text-3xl sm:text-4xl text-[#0b182d]"
       />
 

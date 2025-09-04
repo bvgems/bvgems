@@ -90,7 +90,7 @@ export function Hero({ jewelryRef, heroData }: any) {
               rightSection={<IconArrowRight size={18} />}
               onClick={() => router.push("/loose-gemstones")}
             >
-              Shop Calibrated
+              Shop Calibrated Gemstones
             </Button>
             <Button
               size="md"
@@ -99,7 +99,7 @@ export function Hero({ jewelryRef, heroData }: any) {
               rightSection={<IconArrowRight size={18} />}
               onClick={() => router.push("/free-size-gemstones")}
             >
-              Shop Free Size
+              Shop Free Size Gemstones
             </Button>
           </div>
         </motion.div>

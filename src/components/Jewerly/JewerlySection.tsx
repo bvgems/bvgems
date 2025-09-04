@@ -86,7 +86,7 @@ export const JewelrySection = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <Container size={1350} ref={ref} className="mt-20">
       <AnimatedText
-        text="Our Jewelry Collection"
+        text="Jewelry Collection"
         className="text-center text-4xl text-[#0b182d] mb-6"
       />
       <div className="p-4">

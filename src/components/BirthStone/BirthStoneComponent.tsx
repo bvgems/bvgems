@@ -69,7 +69,7 @@ export const BirthStoneComponent = () => {
   return (
     <Container size={1350} className="mt-20">
       <AnimatedText
-        text="Shine with Your Birthstone"
+        text="Shop By Birthstone"
         className="text-center text-4xl text-[#0b182d] mb-12"
       />
 

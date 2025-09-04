@@ -38,6 +38,38 @@ export default function FreeSizeGemstoneSelection() {
   const [length, setLength] = useState<any>({ min: "", max: "" });
   const [width, setWidth] = useState<any>({ min: "", max: "" });
 
+  // --- Sorting helper ---
+  // --- Sorting helper ---
+  const sortBySize = (data: any[]) => {
+    return [...data].sort((a, b) => {
+      const parseDims = (dimStr: string) => {
+        if (!dimStr) return 0;
+
+        // Normalize: remove extra spaces
+        const clean = dimStr.trim();
+
+        if (clean.includes("x")) {
+          // Case: "10.1 x 7.1"
+          const parts = clean.split("x").map((p) => parseFloat(p.trim()));
+          if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+            return parts[0] * parts[1]; // area = length * width
+          }
+        } else {
+          // Case: single value "6" or "9"
+          const val = parseFloat(clean);
+          if (!isNaN(val)) return val;
+        }
+
+        return 0; // fallback
+      };
+
+      const sizeA = parseDims(a.dimension || a.Dimension || "");
+      const sizeB = parseDims(b.dimension || b.Dimension || "");
+
+      return sizeB - sizeA; // largest first
+    });
+  };
+
   const fetchFilteredData = async () => {
     setLoading(true);
     const filterOptions = {
@@ -57,7 +89,11 @@ export default function FreeSizeGemstoneSelection() {
     };
 
     const response = await getFreeSizeFilteredData(filterOptions);
-    setFilteredGemstones(response?.data || []);
+
+    // Apply sorting here
+    const sorted = sortBySize(response?.data || []);
+    setFilteredGemstones(sorted);
+
     setLoading(false);
     setFilterTrigger((prev) => prev + 1);
   };

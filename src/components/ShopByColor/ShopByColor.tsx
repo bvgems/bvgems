@@ -1,101 +1,69 @@
-"use client";
-
-import { Container, Grid, Card, Text, Image } from "@mantine/core";
+import { Container, Image, Grid, Card } from "@mantine/core";
 import { motion } from "framer-motion";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { shopByColorOptions } from "@/utils/constants";
 import { useRouter } from "next/navigation";
-import { forwardRef, useMemo } from "react";
-import { IconArrowRight } from "@tabler/icons-react";
-import { CardProps } from "@mui/material/Card";
-
-const MotionCard = motion(
-  forwardRef<HTMLDivElement, CardProps>((props: any, ref: any) => (
-    <Card ref={ref} {...props} />
-  ))
-);
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, x: 100 },
   visible: (i: number) => ({
     opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.06, duration: 0.45, ease: "easeOut" },
+    x: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.6,
+      type: "spring",
+    },
   }),
 };
 
 export default function ShopByColor() {
   const router = useRouter();
 
-  const items = useMemo(
-    () =>
-      (shopByColorOptions || []).map((x: any) => ({
-        ...x,
-      })),
-    []
-  );
-
-  const handleClick = (item: any) => {
-    router.push(`/loose-gemstones?color=${item?.name?.toLowerCase()}`);
+  const handleShopByColor = (item: any) => {
+    router?.push(`/loose-gemstones?color=${item?.name?.toLowerCase()}`);
   };
 
   return (
     <Container size={1350} className="mt-20">
       <AnimatedText
-        text="Shop Calibrated Gemstones By Color"
-        className="text-center text-4xl text-[#0b182d] mb-12"
+        text="Shop Stone By Color"
+        className="text-center text-4xl text-[#0b182d] mb-8"
       />
 
-      <Grid gutter="xl" justify="center">
-        {items.map((item: any, index: number) => (
-          <Grid.Col
-            key={item?.name ?? index}
-            span={{ base: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
+      {/* FLEX WRAPPER to avoid wrapping issue */}
+      <div className="flex flex-wrap justify-center gap-8">
+        {shopByColorOptions?.map((item: any, index: number) => (
+          <motion.div
+            key={index}
+            custom={index}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={itemVariants}
           >
-            <MotionCard
-              component="a"
-              onClick={() => handleClick(item)}
-              className="cursor-pointer transition-all hover:-translate-y-1"
-              style={{
-                height: 280,
-                borderRadius: "12px",
-                boxShadow:
-                  "0 4px 6px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06)",
-              }}
-              custom={index}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              variants={itemVariants}
+            <Card
+              shadow="sm"
+              radius="lg"
+              withBorder
+              className="w-[150px] flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 hover:shadow-lg"
+              onClick={() => handleShopByColor(item)}
             >
-              <Card.Section inheritPadding py="md">
-                <div className="flex justify-center items-center w-full">
-                  <Image
-                    src={item?.image}
-                    alt={item?.name}
-                    h={140}
-                    w={140}
-                    fit="contain"
-                    className="mx-auto"
-                  />
-                </div>
-              </Card.Section>
-              <Text
-                fw={700}
-                size="lg"
-                mt="md"
-                className="text-[#0b182d] text-center sm:text-left"
-              >
-                {item?.name}
-              </Text>
-              <div className="text-[#0b182d] mt-2 flex flex-row items-center gap-1 justify-center sm:justify-start">
-                <span>Shop now</span>
-                <IconArrowRight size={15} />
-              </div>{" "}
-            </MotionCard>
-          </Grid.Col>
+              <div className="flex items-center justify-center">
+                <Image
+                  h={130}
+                  w={130}
+                  fit="contain"
+                  src={item?.image}
+                  alt={item?.name}
+                  // className="object-cover rounded-full"
+                />
+              </div>
+              <span className=" text-[#0b182d] mt-3">{item?.name}</span>
+            </Card>
+          </motion.div>
         ))}
-      </Grid>
+      </div>
     </Container>
   );
 }

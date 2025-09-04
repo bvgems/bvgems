@@ -1014,44 +1014,44 @@ export const quickNavigationData = [
 export const shopByColorOptions = [
   {
     name: "Red",
-    image:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755880995/RD_A_RR00003278_jvtgbl.jpg",
+    image: "/assets/red1.png",
     href: "/shop-by-color/red",
   },
   {
     name: "Pink",
 
-    image:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756151841/IMG_3689_yknaro.jpg",
+    image: "/assets/pinkcolor.png",
     href: "/shop-by-color/pink",
   },
   {
     name: "Blue",
 
-    image:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755880916/RD_B_SRD00129472_ufy2pm.jpg",
+    image: "/assets/blue2.png",
     href: "/shop-by-color/blue",
   },
   {
     name: "Purple",
 
-    image:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755718446/PRRD00001146_xw7qy4.jpg",
+    image: "/assets/purplecolor.png",
     href: "/shop-by-color/purple",
   },
   {
     name: "Green",
 
-    image:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755878079/Round_B_ERDC6001_oqpfwd.png",
+    image: "/assets/greencolor.png",
     href: "/shop-by-color/green",
   },
   {
     name: "Yellow",
 
-    image:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756132523/IMG_3099_ao80ds.jpg",
+    image: "/assets/yellowcolor.png",
     href: "/shop-by-color/yellow",
+  },
+  {
+    name: "Orange",
+
+    image: "/assets/orange1.png",
+    href: "/shop-by-color/orange",
   },
 ];
 

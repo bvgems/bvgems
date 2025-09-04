@@ -35,7 +35,6 @@ export const JewelerySideBar = ({
   priceRange,
   setPriceRange,
 }: any) => {
-  console.log("colllectionnnnn", collectionSlug);
   const handleStoneChange = (stoneLabel: string, checked: boolean) => {
     if (checked) {
       setSelectedStones([stoneLabel]); // replace existing with only this one
