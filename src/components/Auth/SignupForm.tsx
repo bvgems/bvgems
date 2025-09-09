@@ -13,10 +13,12 @@ import { handleEmailExists } from "@/apis/api";
 export const SignupForm = ({
   onClose,
   isStepper,
+  goToSignin,
   nextStep,
 }: {
   onClose?: () => void;
   isStepper?: boolean;
+  goToSignin: any;
   nextStep?: any;
 }) => {
   const router = useRouter();
@@ -138,7 +140,9 @@ export const SignupForm = ({
 
   return (
     <>
-      {isStepper ? <h1 className="text-center mt-5 text-2xl">Personal Information</h1> : null}
+      {isStepper ? (
+        <h1 className="text-center mt-5 text-2xl">Personal Information</h1>
+      ) : null}
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <div>
           <div
@@ -208,12 +212,17 @@ export const SignupForm = ({
               >
                 Save and Continue
               </Button>
+              <button
+                type="button"
+                onClick={goToSignin}
+                className="text-[#0b182d] text-[0.90rem] flex justify-center font-medium mt-3 cursor-pointer"
+              >
+                Already have an account? SIGN IN
+              </button>
               <Link
                 className="text-[0b182d] text-[0.90rem] flex justify-center font-medium mt-3"
                 href="/login"
-              >
-                Already have an account? SIGN IN
-              </Link>
+              ></Link>
             </div>
           </div>
         </div>

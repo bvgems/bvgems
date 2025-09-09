@@ -4,6 +4,32 @@ const baseUrl =
     ? process.env.NEXT_PUBLIC_BASE_URL || "https://bvgems.com"
     : "";
 
+export const resetPassword = async (token: any, values: any) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/resetPassword`, {
+      token,
+      values,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error in reseting the password", error);
+    return null;
+  }
+};
+
+export const handleForgotPassword = async (email: any) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/forgotPassword`, {
+      email,
+    });
+    console.log("ressss", response);
+    return response;
+  } catch (error) {
+    console.error("Error in reseting the password", error);
+    return null;
+  }
+};
+
 export const fetchLayoutDataByHandle = async (layout: any) => {
   try {
     const response = await axios.post(`${baseUrl}/api/getLayoutDataByHandle`, {
@@ -280,13 +306,10 @@ export const getFilteredData = async (options: any) => {
 
 export const getFilteredColorStoneLayouts = async (options: any) => {
   try {
-    console.log('optionssss',options)
-    const response = await axios.post(
-      `${baseUrl}/api/filter-layouts`,
-      {
-        options,
-      }
-    );
+    console.log("optionssss", options);
+    const response = await axios.post(`${baseUrl}/api/filter-layouts`, {
+      options,
+    });
 
     return response?.data;
   } catch (error) {

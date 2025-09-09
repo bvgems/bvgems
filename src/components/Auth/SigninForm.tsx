@@ -7,17 +7,21 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconExclamationCircle, IconX } from "@tabler/icons-react";
 import { useUserStore } from "@/store/useUserStore";
 
-export const SigninForm = ({ onClose }: { onClose: () => void }) => {
+export const SigninForm = ({
+  onClose,
+  goToSignup,
+  goToForgot,
+}: {
+  onClose: () => void;
+  goToSignup: () => void;
+  goToForgot: () => void;
+}) => {
   const [loading, setLoading] = useState(false);
   const { setUser } = useUserStore();
 
   const form = useForm({
-    initialValues: {
-      email: "",
-      password: "",
-    },
+    initialValues: { email: "", password: "" },
     validateInputOnChange: true,
-
     validate: {
       email: (value) =>
         /^\S+@\S+$/.test(value) ? null : "Invalid email address",
@@ -28,12 +32,7 @@ export const SigninForm = ({ onClose }: { onClose: () => void }) => {
 
   const handleSubmit = async (values: any) => {
     setLoading(true);
-
-    const payload = {
-      email: values.email,
-      password: values.password,
-    };
-
+    const payload = { email: values.email, password: values.password };
     const signinResponse = await handleSignin(payload);
 
     if (signinResponse?.data?.flag) {
@@ -71,43 +70,45 @@ export const SigninForm = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <div>
-        <div className="mt-10 flex flex-col gap-4 px-3">
-          <TextInput
-            label="Enter Email Address"
-            placeholder="your email address"
-            {...form.getInputProps("email")}
-          />
-          <PasswordInput
-            label="Enter Your Password"
-            placeholder="your password"
-            {...form.getInputProps("password")}
-          />
-          <div className="flex flex-col gap-2">
-            <Link
-              className="text-[#0b182d] text-[0.90rem] font-medium flex justify-end"
-              href="#"
-            >
-              Forgot Password?
-            </Link>
+      <div className="mt-10 flex flex-col gap-4 px-3">
+        <TextInput
+          label="Enter Email Address"
+          placeholder="your email address"
+          {...form.getInputProps("email")}
+        />
+        <PasswordInput
+          label="Enter Your Password"
+          placeholder="your password"
+          {...form.getInputProps("password")}
+        />
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={goToForgot}
+            className="text-[#0b182d] text-[0.90rem] font-medium flex justify-end cursor-pointer"
+          >
+            Forgot Password?
+          </button>
 
-            <Button type="submit" color="#0b182d" loading={loading}>
-              Sign In
-            </Button>
-            <Link
-              className="text-[#0b182d] text-[0.90rem] flex justify-center font-medium mt-3"
-              href="#"
-            >
-              Don't have an account? SIGN UP
-            </Link>
-          </div>
-          <div className="flex justify-center text-gray-400">Or</div>
-          <div className="flex gap-4 justify-center">
-            <Image src="/assets/google.png" h="44" w="40" />
-            <Image src="/assets/facebook.png" h="40" w="40" />
-            <Image src="/assets/apple.png" h="40" w="40" />
-          </div>
+          <Button type="submit" color="#0b182d" loading={loading}>
+            Sign In
+          </Button>
+
+          <button
+            type="button"
+            onClick={goToSignup}
+            className="text-[#0b182d] text-[0.90rem] flex justify-center font-medium mt-3 cursor-pointer"
+          >
+            Don't have an account? SIGN UP
+          </button>
         </div>
+
+        {/* <div className="flex justify-center text-gray-400">Or</div> */}
+        {/* <div className="flex gap-4 justify-center">
+          <Image src="/assets/google.png" h="44" w="40" />
+          <Image src="/assets/facebook.png" h="40" w="40" />
+          <Image src="/assets/apple.png" h="40" w="40" />
+        </div> */}
       </div>
     </form>
   );
