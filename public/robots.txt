@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://bvgems.com
+Host: https://www.bvgems.com
 
 # Sitemaps
-Sitemap: https://bvgems.com/sitemap.xml
+Sitemap: https://www.bvgems.com/sitemap.xml
