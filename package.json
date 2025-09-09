@@ -84,5 +84,11 @@
     "postcss-simple-vars": "^7.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  
+    "resolutions": {
+      "core-js": "^3.37.1"
+    }
+  
+  
 }

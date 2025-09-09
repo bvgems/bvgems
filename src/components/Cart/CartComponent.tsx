@@ -265,14 +265,22 @@ export function CartComponent() {
                                 Length: {value?.product?.length}
                               </>
                             )}
-                          {value?.product?.productType === "earringJewelry" &&
-                            value?.product?.goldColor && (
-                              <>
-                                Gold Color: {value?.product?.goldColor} | Total
-                                Carat Weight: {value?.product?.totalCaratWeight}{" "}
-                                ct. | Stone: {value?.product?.gemstone}
-                              </>
-                            )}
+                          {value?.product?.productType === "earringJewelry" && (
+                            <>
+                              {value?.product?.goldColor && (
+                                <>Gold Color: {value.product.goldColor} </>
+                              )}
+                              {value?.product?.totalCaratWeight && (
+                                <>
+                                  | Total Carat Weight:{" "}
+                                  {value.product.totalCaratWeight} ct.{" "}
+                                </>
+                              )}
+                              {value?.product?.gemstone && (
+                                <>| Stone: {value.product.gemstone}</>
+                              )}
+                            </>
+                          )}
                         </Text>
                       </div>
                       <Button

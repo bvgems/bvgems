@@ -42,7 +42,6 @@ export function useJewelryFunctions(
   const [firstStone, setFirstStone] = useState<any>(null);
   const [secondStone, setSecondStone] = useState<any>(null);
 
-  // ---------- Default Variant Initialization ----------
   useEffect(() => {
     if (!isNecklaces || !productData?.variants?.edges?.length) return;
     const firstVariant = productData.variants.edges[0]?.node;
@@ -209,7 +208,6 @@ export function useJewelryFunctions(
     const variables: any = {};
 
     if (isRingCategory) {
-      console.log("istwoooo", isTwoStoneRing, selectedShape, productData);
       variables.goldColor = selectedGoldColor;
       variables.size = selectedRingSize;
       variables.stone = isTwoStoneRing
@@ -258,8 +256,9 @@ export function useJewelryFunctions(
         image_url:
           variables?.image || productData?.images?.edges?.[0]?.node?.url,
         price: isEarringCategory
-          ? displayPrice
+          ? displayPrice.replace(/[^0-9.]/g, "")
           : productData?.variants?.edges?.[0]?.node?.price?.amount,
+
         gemstone: variables?.stone,
         size: variables?.size || "",
         goldColor: variables?.goldColor || "",

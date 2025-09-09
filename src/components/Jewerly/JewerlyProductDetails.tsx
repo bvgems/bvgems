@@ -142,14 +142,16 @@ export const JewelryProductDetails = ({
           </>
         ) : null}
       </Group>
-
       <div className="mt-4 flex flex-col gap-6">
-        {!jf.isBead && (
-          <GoldColorInput
-            selectedGoldColor={jf.selectedGoldColor}
-            setSelectedGoldColor={jf.setSelectedGoldColor}
-          />
-        )}
+        {!jf.isBead &&
+          !(
+            jf.isEarringCategory && productData?.jewelryType?.value === "Silver"
+          ) && (
+            <GoldColorInput
+              selectedGoldColor={jf.selectedGoldColor}
+              setSelectedGoldColor={jf.setSelectedGoldColor}
+            />
+          )}
 
         {/* Earrings */}
         {jf.isEarringCategory && parsed.length > 0 && (
