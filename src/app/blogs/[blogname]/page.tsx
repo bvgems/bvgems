@@ -32,20 +32,19 @@ async function getBlogByHandle(handle: string) {
         .SHOPIFY_STOREFRONT_ACCESS_TOKEN as string,
     },
     body: JSON.stringify({ query }),
-    next: { revalidate: 60 },
+    next: { revalidate: 60 }, // ISR
   });
 
   const result = await response.json();
   return result?.data?.blog?.articleByHandle;
 }
 
-// ✅ Correct typing for Next.js 15 - params is now a Promise
+// 🚀 This stays a Server Component (async is allowed)
 export default async function BlogPostPage({
   params,
 }: {
   params: Promise<{ blogname: string }>;
 }) {
-  // Await the params Promise
   const { blogname } = await params;
   const post = await getBlogByHandle(blogname);
 
@@ -58,34 +57,43 @@ export default async function BlogPostPage({
   }
 
   return (
-    <article className="container mx-auto px-4 md:px-8 py-12">
+    <article className="flex flex-col">
+      {/* Hero Section */}
       {post.image?.url && (
-        <div className="relative w-full h-[300px] mb-10">
+        <div className="relative w-full h-[400px]">
           <Image
             src={post.image?.url}
-            alt={post.title}
-            h={300}
-            fit="contain"
-            className="object-cover rounded-2xl shadow-lg"
+            alt={post.image?.altText || post.title}
+            className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+          <div className="absolute bottom-6 left-6 text-white max-w-3xl">
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+              {post.title}
+            </h1>
+            <p className="mt-2 text-sm opacity-90">
+              {post.authorV2?.name || "B.V. Gems"} ·{" "}
+              {new Date(post.publishedAt).toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </p>
+          </div>
         </div>
       )}
 
-      <h1 className="text-4xl font-bold text-[#0b182d] mb-4">{post.title}</h1>
-
-      <p className="text-gray-500 text-sm mb-8">
-        {post.authorV2?.name || "B.V. Gems"} ·{" "}
-        {new Date(post.publishedAt).toLocaleDateString("en-US", {
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-        })}
-      </p>
-
-      <div
-        className="prose prose-lg max-w-none prose-headings:text-[#0b182d] prose-a:text-blue-600 hover:prose-a:underline"
-        dangerouslySetInnerHTML={{ __html: post.contentHtml }}
-      />
+      {/* Content Section */}
+      <div className="container mx-auto max-w-3xl px-5 md:px-0 py-12">
+        <div
+          className="prose prose-lg prose-blue max-w-none
+          prose-headings:text-[#0b182d] prose-headings:font-semibold
+          prose-p:text-gray-700 prose-li:marker:text-blue-600
+          prose-a:text-blue-600 hover:prose-a:underline
+          leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+        />
+      </div>
     </article>
   );
 }
