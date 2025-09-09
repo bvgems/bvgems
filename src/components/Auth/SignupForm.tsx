@@ -18,7 +18,7 @@ export const SignupForm = ({
 }: {
   onClose?: () => void;
   isStepper?: boolean;
-  goToSignin: any;
+  goToSignin?: any;
   nextStep?: any;
 }) => {
   const router = useRouter();
