@@ -6,15 +6,7 @@ import {
   IconCheck,
   IconMail,
 } from "@tabler/icons-react";
-import {
-  ActionIcon,
-  Button,
-  Grid,
-  GridCol,
-  Image,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { ActionIcon, Grid, GridCol, Text, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { getAllGemstones, subscribeEmail } from "@/apis/api";
 import { useRouter } from "next/navigation";
@@ -58,7 +50,7 @@ export const Footer = () => {
       const formattedGemstones = response
         ?.map((item: any) => ({
           label: item?.title,
-          link: item?.handle,
+          link: `/calibrated-faceted-gemstones/${item?.handle}`,
         }))
         .sort((a: any, b: any) => a.label.localeCompare(b.label));
       setAllGemstoenes(formattedGemstones);

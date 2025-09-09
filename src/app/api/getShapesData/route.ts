@@ -8,8 +8,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing data" }, { status: 400 });
     }
 
-    console.log("collection", collection);
-
     let result;
 
     if (isSapphire) {
@@ -37,7 +35,7 @@ export async function POST(req: Request) {
            GROUP BY gs.id`,
           [shape, collection]
         );
-        console.log('resulttt',result?.rows)
+        console.log("resulttt", result?.rows);
       } else {
         // Other collections
         result = await pool.query(

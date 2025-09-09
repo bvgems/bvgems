@@ -12,6 +12,7 @@ import { BirthStoneComponent } from "@/components/BirthStone/BirthStoneComponent
 import { BestSellingProductsComponents } from "@/components/BestSellingProducts/BestSellingProductsComponents";
 import { BookAppointment } from "@/components/BookAppointment/BookAppointment";
 import { BlogsSection } from "@/components/BlogsSection/BlogsSection";
+import TradeShows from "@/components/TradeShows/TradeShows";
 
 export default function Home() {
   const jewelrySectionRef = useRef<HTMLDivElement>(null);
@@ -32,7 +33,8 @@ export default function Home() {
       <Testimonials />
       <BookAppointment />
       <CustomerBenefits />
-      <BlogsSection />
+      {/* <BlogsSection /> */}
+      <TradeShows />
       <IndustryAffiliation />
     </>
   );

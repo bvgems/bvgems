@@ -1,76 +1,124 @@
+// JeweleryDetailsAccordion.tsx
 import { STONE_COLORS } from "@/utils/constants";
-import {
-  Accordion,
-  Badge,
-  Table,
-  TableTbody,
-  TableTd,
-  TableTh,
-  TableTr,
-} from "@mantine/core";
-import React from "react";
+import { Accordion, Group, Text, Divider } from "@mantine/core";
+import React, { useMemo } from "react";
 
-export const JeweleryDetailsAccordion = ({ productData, gemstone }: any) => {
+type Props = {
+  productData: any;
+  gemstone?: string | null;
+  jf: any;
+  earringMetafields: any; // single selected option
+};
+
+export const JeweleryDetailsAccordion = ({
+  productData,
+  gemstone,
+  jf,
+  earringMetafields,
+}: Props) => {
+  const stoneWeight = Number(productData?.ct_weight?.value);
+  const diamondWeight = Number(productData?.DiamondWeight?.value);
+
+  const totalWeight = useMemo(() => {
+    const sum =
+      (isNaN(stoneWeight) ? 0 : stoneWeight) +
+      (isNaN(diamondWeight) ? 0 : diamondWeight);
+    return sum > 0 ? sum.toFixed(2) : "-";
+  }, [stoneWeight, diamondWeight]);
+
+  const Row = ({ label, value }: { label: string; value: React.ReactNode }) => (
+    <Group justify="flex-start" gap="md" wrap="nowrap">
+      <Text fw={600} w={180}>
+        {label}
+      </Text>
+      <Text>{value}</Text>
+    </Group>
+  );
+
   return (
     <Accordion variant="separated" radius="md" defaultValue={"jewelry-details"}>
       <Accordion.Item value="jewelry-details">
-        <Accordion.Control>Jewelry Details</Accordion.Control>
+        <Accordion.Control>More Details</Accordion.Control>
         <Accordion.Panel>
-          <Table
-            horizontalSpacing="lg"
-            withRowBorders={false}
-            variant="vertical"
-            layout="fixed"
-          >
-            <TableTbody>
-              <TableTr className="text-lg">
-                <TableTh w={160}>Gemstone</TableTh>
-                <TableTd>{gemstone || "-"}</TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh w={160}>Type</TableTh>
-                <TableTd>{productData?.stoneType?.value || "-"}</TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh w={160}>Shape</TableTh>
-                <TableTd>{productData?.shape?.value || "-"}</TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh w={160}>Stone Color</TableTh>
-                <TableTd>{STONE_COLORS[gemstone] || "-"}</TableTd>
-              </TableTr>
+          <div className="space-y-3">
+            <Row label="Gemstone:" value={gemstone || "-"} />
+            <Row
+              label="Stone Type:"
+              value={productData?.stoneType?.value || "Natural"}
+            />
+            <Row label="Shape:" value={productData?.shape?.value || "-"} />
+            <Row
+              label="Stone Color:"
+              value={gemstone ? STONE_COLORS[gemstone] || "-" : "-"}
+            />
 
-              <TableTr className="text-lg">
-                <TableTh>Stone Weight</TableTh>
-                <TableTd>{productData?.ct_weight?.value || "-"} ct.</TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh>Diamond Weight</TableTh>
-                <TableTd>
-                  {productData?.DiamondWeight?.value || "-"} ct.
-                </TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh>Total Weight</TableTh>
-                <TableTd>
-                  {" "}
-                  {(
-                    Number(productData?.ct_weight?.value) +
-                    Number(productData?.DiamondWeight?.value)
-                  ).toFixed(2) || "-"}{" "}
-                  ct.
-                </TableTd>
-              </TableTr>
-              <TableTr className="text-lg">
-                <TableTh w={160}>Customization</TableTh>
-                <TableTd>
-                  <Badge radius={0} size="lg" color={"green"}>
-                    YES
-                  </Badge>
-                </TableTd>
-              </TableTr>
-            </TableTbody>
-          </Table>
+            <Divider my="xs" />
+
+            {/* Earrings custom details */}
+            {jf.isEarringCategory && earringMetafields ? (
+              <>
+                <Row
+                  label="Gemstone Size:"
+                  value={earringMetafields.gemstone_size || "-"}
+                />
+                <Row
+                  label="Stone Weight:"
+                  value={
+                    earringMetafields.gemstone_weight
+                      ? `${earringMetafields.gemstone_weight} ct.`
+                      : "-"
+                  }
+                />
+                <Row
+                  label="Total Carat:"
+                  value={earringMetafields.carat || "-"}
+                />
+              </>
+            ) : (
+              <>
+                <Row
+                  label="Stone Weight:"
+                  value={
+                    isNaN(stoneWeight) ? (
+                      "-"
+                    ) : (
+                      <>
+                        {stoneWeight} <span className="ml-1">ct.</span>
+                      </>
+                    )
+                  }
+                />
+                <Row
+                  label="Diamond Weight:"
+                  value={
+                    isNaN(diamondWeight) ? (
+                      "-"
+                    ) : (
+                      <>
+                        {diamondWeight} <span className="ml-1">ct.</span>
+                      </>
+                    )
+                  }
+                />
+                <Row
+                  label="Total Weight:"
+                  value={
+                    totalWeight === "-" ? (
+                      "-"
+                    ) : (
+                      <>
+                        {totalWeight} <span className="ml-1">ct.</span>
+                      </>
+                    )
+                  }
+                />
+              </>
+            )}
+
+            <Divider my="xs" />
+
+            <Row label="Customization:" value="Yes" />
+          </div>
         </Accordion.Panel>
       </Accordion.Item>
     </Accordion>

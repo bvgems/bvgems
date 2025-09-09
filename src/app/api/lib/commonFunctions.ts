@@ -1,6 +1,93 @@
 import { GetAllBeads, shopifyQuery } from "@/app/Graphql/queries";
 import { pool } from "@/lib/pool";
 
+export const getLayouts = async () => {
+  const variables = {
+    category: `product_type:layouts`,
+  };
+
+  const shopifyRes = await fetch(process.env.SHOPIFY_STOREFRONT_URL as string, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Shopify-Storefront-Access-Token": "c64a5e6dbfa340f0bff88be9fde4b7a8",
+    },
+    body: JSON.stringify({
+      query: `
+          query getProductsByCategory($category: String!) {
+            products(
+              first: 150, 
+              query: $category, 
+              sortKey: CREATED_AT, 
+            ) {
+              edges {
+                node {
+                  id
+                  title
+                  handle
+                  description
+                  productType
+                  createdAt
+                  tags
+                  images(first: 2) {
+                    edges {
+                      node {
+                        url
+                        altText
+                      }
+                    }
+                  }
+                
+                  gemstone: metafield(namespace: "custom", key: "gemstone") {
+                    value
+                    type
+                  }
+                 
+                  shape: metafield(namespace: "custom", key: "shape") {
+                    value
+                    type
+                  }
+                     size: metafield(namespace: "custom", key: "size") {
+                    value
+                    type
+                  }
+                  color: metafield(namespace: "custom", key: "Color") {
+                    value
+                    type
+                  }
+                  ct_weight: metafield(namespace: "custom", key: "ct_weight") {
+                    value
+                    type
+                  }
+                  variants(first: 10) {
+                    edges {
+                      node {
+                        price {
+                          amount
+                          currencyCode
+                        }
+                        title
+                        image {
+                          url
+                          altText
+                        }
+                        sku
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `,
+      variables,
+    }),
+  });
+
+  const result = await shopifyRes.json();
+  return result?.data?.products
+};
+
 export const getAllLooseGemstones = async () => {
   try {
     const allGemStonesQuery = `SELECT * FROM gemstone_specs`;

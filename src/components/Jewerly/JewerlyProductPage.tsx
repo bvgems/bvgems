@@ -1,15 +1,19 @@
 "use client";
+
 import { fetchProductByHandle } from "@/apis/api";
 import {
   Anchor,
   Breadcrumbs,
+  Card,
+  Container,
+  Flex,
   Grid,
   GridCol,
   Image,
-  Slider,
+  Text,
 } from "@mantine/core";
 import { useParams, usePathname } from "next/navigation";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
 import { JewelryProductDetails } from "@/components/Jewerly/JewerlyProductDetails";
@@ -29,20 +33,21 @@ export default function JewelryProductPage() {
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [thumbnails, setThumbnails] = useState<Thumb[]>([]);
   const [selectedShape, setSelectedShape] = useState<string | null>(null);
-  const [showShapeOptions, setShowShapeOptions] = useState<boolean>(false);
   const [twoStoneRings, setTwoStoneRings] = useState<boolean>(false);
-  const [productType, setProductType] = useState();
+  const [productType, setProductType] = useState<string | undefined>();
+
   const breadcrumbItems = [
     { title: "Home", href: "/" },
     { title: capitalize(category), href: `/jewelry/${category}` },
-    { title: productData?.title },
+    { title: productData?.title, href: undefined as any },
   ].map((item, index) => (
     <Anchor
-    size="sm"
+      size="sm"
       href={item.href}
       key={index}
-      style={{
-        fontSize: "10px",
+      style={{ fontSize: 12 }}
+      onClick={(e) => {
+        if (!item.href) e.preventDefault();
       }}
     >
       {item.title}
@@ -59,7 +64,7 @@ export default function JewelryProductPage() {
 
       const isTwoStoneRing = productInfo?.isTwoStoneRing?.value === "true";
       const shapeOptionValue = productInfo?.showshapeoptions?.value === "true";
-      setShowShapeOptions(shapeOptionValue);
+
       setTwoStoneRings(isTwoStoneRing);
       setProductType(productInfo?.productType);
       setProductData(productInfo);
@@ -114,71 +119,88 @@ export default function JewelryProductPage() {
 
   return (
     <>
-      <div className="p-6">
-        <Breadcrumbs separator=">" className="mb-6">
-          {breadcrumbItems}
-        </Breadcrumbs>
-      </div>
-      <div className="p-9">
-        <Grid>
+      <Container size={1350} className="py-6">
+        <Breadcrumbs separator=">">{breadcrumbItems}</Breadcrumbs>
+      </Container>
+
+      <Container size={1350} className="pb-14">
+        <Grid gutter="xl" align="flex-start">
           {/* LEFT: Imagery */}
           <GridCol span={{ base: 12, md: 7 }}>
             {productData && (
               <motion.div
-                initial={{ opacity: 0, y: 80 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
               >
-                {/* Product Image */}
                 <div className="flex flex-col items-center">
                   <ImageZoom
                     src={selectedImage || "/placeholder.png"}
                     alt={productData?.title}
+                    radius="md"
+                    fit="contain"
+                    height={420}
+                    style={{ objectFit: "contain" }}
                   />
-
-                  {/* Thumbnails below ONLY the product image */}
-                  <div className="flex gap-3 flex-wrap justify-center mt-6">
-                    {thumbnails.map((thumb, idx) => {
-                      const isActive = idx === selectedIdx;
-                      return (
-                        <button
-                          key={`${thumb.url}-${idx}`}
-                          type="button"
-                          onClick={() => {
-                            setSelectedImage(thumb.url);
-                            if (thumb.title) setSelectedShape(thumb.title);
-                          }}
-                          aria-selected={isActive}
-                          className={`rounded border overflow-hidden w-20 h-20 focus:outline-none ${
-                            isActive ? "border-black" : "border-gray-300"
-                          }`}
-                          title={thumb.title ?? `Image ${idx + 1}`}
-                        >
-                          <Image
-                            src={thumb.url}
-                            alt={thumb.title || `thumb-${idx}`}
-                            fit="cover"
-                            height={80}
-                            width={80}
-                          />
-                        </button>
-                      );
-                    })}
-                  </div>
                 </div>
+
+                {/* Thumbnails row */}
+                <Flex justify="center" gap="md" mt="md" wrap="wrap">
+                  {thumbnails.map((thumb, idx) => {
+                    const isActive = idx === selectedIdx;
+                    return (
+                      <Card
+                        key={`${thumb.url}-${idx}`}
+                        radius="md"
+                        shadow="sm"
+                        padding={4}
+                        withBorder
+                        style={{
+                          cursor: "pointer",
+                          border: isActive
+                            ? "2px solid #0b182d"
+                            : "1px solid #ddd",
+                          width: 82,
+                          height: 82,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        onClick={() => {
+                          setSelectedImage(thumb.url);
+                          if (thumb.title) setSelectedShape(thumb.title);
+                        }}
+                        title={thumb.title ?? `Image ${idx + 1}`}
+                        aria-selected={isActive}
+                      >
+                        <Image
+                          src={thumb.url}
+                          alt={thumb.title || `thumb-${idx}`}
+                          fit="contain"
+                          width={72}
+                          height={72}
+                          style={{ objectFit: "contain" }}
+                        />
+                      </Card>
+                    );
+                  })}
+                </Flex>
+
                 {productType === "Rings" ? (
-                  <RingComparison productData={productData} />
+                  <div className="mt-10">
+                    <RingComparison productData={productData} />
+                  </div>
                 ) : null}
               </motion.div>
             )}
           </GridCol>
 
-          {/* RIGHT: Details */}
+          {/* RIGHT: Details panel (unchanged logic, new visuals) */}
           <GridCol span={{ base: 12, md: 5 }}>
             <motion.div
-              initial={{ opacity: 0, y: 80 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.05 }}
             >
               <JewelryProductDetails
                 path={path}
@@ -191,7 +213,7 @@ export default function JewelryProductPage() {
             </motion.div>
           </GridCol>
         </Grid>
-      </div>
+      </Container>
     </>
   );
 }

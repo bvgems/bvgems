@@ -145,7 +145,7 @@ export const JewelerySideBar = ({
 
           {collectionSlug === "earrings" ? (
             <AccordionItem className="mt-2" value="ring-type">
-              <AccordionControl>Earring Type</AccordionControl>
+              <AccordionControl>Metal Type</AccordionControl>
               <AccordionPanel>
                 {EarringTypes?.map((item: any, index: number) => (
                   <div className="mt-2 ml-5" key={index}>

@@ -1050,7 +1050,7 @@ export const shopByColorOptions = [
   {
     name: "Orange",
 
-    image: "/assets/orange1.png",
+    image: "/assets/orange2.png",
     href: "/shop-by-color/orange",
   },
 ];
@@ -1206,7 +1206,7 @@ export const links = [
   },
   { link: "/precious-beads", label: "Precious Beads" },
 
-  { link: "/create-colorstone-layout", label: "Colorstone Layouts" },
+  { link: "/colorstone-layouts", label: "Colorstone Layouts" },
   {
     label: "More",
     links: [
@@ -1221,8 +1221,8 @@ export const links = [
       { link: "/customer-support/about-us", label: "About B. V. Gems" },
       { link: "/customer-support/store-policy", label: "Store Policy" },
       { link: "/customer-support/faqs", label: "FAQ" },
-      { link: "/customer-support/contact-us", label: "Contact Us" },
       { link: "/blogs", label: "Blogs" },
+      { link: "/customer-support/contact-us", label: "Contact Us" },
     ],
   },
 ];
@@ -1241,7 +1241,7 @@ export const mobileLinks = [
   },
   { link: "/precious-beads", label: "Precious Beads" },
 
-  { link: "/create-colorstone-layout", label: "Colorstone Layouts" },
+  { link: "/colorstone-layouts", label: "Colorstone Layouts" },
   {
     label: "More",
     links: [
@@ -1256,8 +1256,8 @@ export const mobileLinks = [
       { link: "/customer-support/about-us", label: "About B. V. Gems" },
       { link: "/customer-support/store-policy", label: "Store Policy" },
       { link: "/customer-support/faqs", label: "FAQ" },
-      { link: "/customer-support/contact-us", label: "Contact Us" },
       { link: "/blogs", label: "Blogs" },
+      { link: "/customer-support/contact-us", label: "Contact Us" },
     ],
   },
 ];
@@ -1311,5 +1311,45 @@ export const GemstoneType = [
   },
   {
     label: "Lab Grown",
+  },
+];
+
+export interface TradeShow {
+  name: string;
+  booth: string;
+  website: string;
+  logo: string;
+  location: string;
+  start: string;
+  end: string;
+}
+
+export const tradeShows: TradeShow[] = [
+  {
+    name: "JIS Miami",
+    booth: "Booth #1339 or 1245",
+    website: "https://www.jisshow.com/fall/en-us.html",
+    logo: "https://www.jisshow.com/content/dam/sitebuilder/rna/jis/2021/spring/JISFall.png/_jcr_content/renditions/original.image_file.592.300.file/367267082/JISFall.png",
+    location: "Miami, Florida",
+    start: "10-10-2025",
+    end: "10-13-2025",
+  },
+  {
+    name: "Tucson GJX",
+    booth: "Booth #1234",
+    website: "https://gjx.rocks",
+    logo: "https://gjx.rocks/wp-content/themes/gjx-2020/images/logo.png",
+    location: "Tucson, Arizona",
+    start: "02-02-2026",
+    end: "02-07-2026",
+  },
+  {
+    name: "Las Vegas AGTA",
+    booth: "Booth #A-28057",
+    website: "https://agta.org/trade-shows/agta-gemfair-las-vegas/",
+    logo: "https://agta.org/wp-content/uploads/2024/08/AGTA-Horiz-Logo.svg",
+    location: "Las Vegas, Nevada",
+    start: "05-28-2026",
+    end: "06-01-2026",
   },
 ];

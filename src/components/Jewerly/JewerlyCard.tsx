@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Tooltip, Skeleton } from "@mantine/core";
+import { Card, Tooltip, Skeleton, NumberFormatter } from "@mantine/core";
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -41,11 +41,11 @@ export const JewelryCategoryCard = ({
   useEffect(() => {
     if (selectedStones?.length) {
       const matchStone = selectedStones[0].toLowerCase();
-      console.log("matchedd", matchStone);
+
       const matchedVariant = variants.find(
         (v: any) => v?.node?.title?.toLowerCase() === matchStone
       );
-      console.log("heyyy", matchedVariant);
+
       if (matchedVariant?.node?.image?.url) {
         setMainImage(matchedVariant.node.image.url);
         return;
@@ -162,7 +162,12 @@ export const JewelryCategoryCard = ({
 
       {/* PRICE */}
       <div className="mt-1 text-[1rem] font-semibold text-gray-900">
-        {priceText}
+        <NumberFormatter
+          thousandSeparator
+          prefix="$"
+          value={priceText}
+          suffix=" USD"
+        />{" "}
       </div>
     </Card>
   );

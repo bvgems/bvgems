@@ -17,6 +17,7 @@ import {
   Stack,
   Badge,
   Checkbox,
+  NumberFormatter,
 } from "@mantine/core";
 import {
   IconArrowNarrowRight,
@@ -88,12 +89,15 @@ export function CartComponent() {
   };
 
   const redirectToProduct = (value: any) => {
+    console.log("valueeee", value);
     if (value?.product?.productType === "stone") {
       router.push(
         `/product-details?id=${value?.product?.id}&name=${value?.product?.handle}`
       );
     } else if (value?.product?.productType === "freeSizeStone") {
       router.push(`/free-size-gemstone-details/${value?.product?.id}`);
+    } else if (value?.product?.productType === "layouts") {
+      router.push(`colorstone-layouts/${value?.product?.handle}`);
     } else {
       const category = getCategory(value?.product);
       router.push(`/jewelry/${category}/${value?.product?.handle}`);
@@ -112,7 +116,7 @@ export function CartComponent() {
           ? getTotalCaratPrice(value)
           : value.product.price * value.quantity;
       } else {
-        productTotal = value.product.price * value.quantity;
+        productTotal = Number(value.product.price) * value.quantity;
       }
 
       if (value.product.needCertification) {
@@ -236,12 +240,14 @@ export function CartComponent() {
                                 )}
                             </>
                           )}
+                          {value?.product?.productType === "freeSizeStone" && (
+                            <>Size: {value?.product?.size}</>
+                          )}
 
                           {value?.product?.productType === "ringJewelry" && (
                             <>
                               Gold Color: {value?.product?.goldColor} | Size:{" "}
-                              {value?.product?.size} | Shape:{" "}
-                              {value?.product?.shape} | Stones:{" "}
+                              {value?.product?.size} | Stones:{" "}
                               {value?.product?.gemstone}
                             </>
                           )}
@@ -261,7 +267,11 @@ export function CartComponent() {
                             )}
                           {value?.product?.productType === "earringJewelry" &&
                             value?.product?.goldColor && (
-                              <>Gold Color: {value?.product?.goldColor}</>
+                              <>
+                                Gold Color: {value?.product?.goldColor} | Total
+                                Carat Weight: {value?.product?.totalCaratWeight}{" "}
+                                ct. | Stone: {value?.product?.gemstone}
+                              </>
                             )}
                         </Text>
                       </div>
@@ -278,7 +288,14 @@ export function CartComponent() {
                     </Group>
                     <Group mt="sm" align="center" justify="space-between">
                       <Text fw={500} size="lg">
-                        ${value?.jewelryProduct?.price ?? value?.product?.price}
+                        <NumberFormatter
+                          thousandSeparator
+                          prefix="$"
+                          value={
+                            value?.jewelryProduct?.price ??
+                            value?.product?.price
+                          }
+                        />{" "}
                       </Text>
                       {value?.product?.purchaseByCarat ? (
                         <Badge color="gray" variant="light">
@@ -305,7 +322,11 @@ export function CartComponent() {
                         />
                       )}
                       <Text fw={600} size="lg">
-                        ${total.toFixed(2)}
+                        <NumberFormatter
+                          thousandSeparator
+                          prefix="$"
+                          value={total.toFixed(2)}
+                        />{" "}
                       </Text>
                     </Group>
 

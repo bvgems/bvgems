@@ -424,6 +424,11 @@ export const GetProductByHandle = `
       productType
       createdAt
       tags
+  
+      earring_metafielcd:metafield(namespace: "custom", key: "earring_metafielcd") {
+            value
+            type
+          }
       gemstone:metafield(namespace: "custom", key: "gemstone") {
             value
             type
@@ -433,6 +438,10 @@ export const GetProductByHandle = `
             type
           }
       shape: metafield(namespace: "custom", key: "shape") {
+            value
+            type
+          }
+       size: metafield(namespace: "custom", key: "size") {
             value
             type
           }
@@ -488,7 +497,6 @@ export const GetProductByHandle = `
             value
             type
           }
-           
 
       images(first: 10) {
         edges {

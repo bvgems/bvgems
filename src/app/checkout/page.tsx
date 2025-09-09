@@ -7,6 +7,7 @@ import {
   Button,
   Image,
   Divider,
+  Badge,
 } from "@mantine/core";
 import { createShopifyOrder, makeCheckout } from "@/apis/api";
 import { loadStripe } from "@stripe/stripe-js";
@@ -30,6 +31,7 @@ export default function CheckoutSelectionPage() {
     [user?.id]
   );
   const cart = cartStore((state: any) => state.cart);
+  console.log("cart items", cart);
 
   const { shippingAddress } = useStpperStore();
 
@@ -187,6 +189,21 @@ export default function CheckoutSelectionPage() {
                                 </span>
                               </div>
                             ) : null}
+                            {item?.product?.purchaseByCarat ? (
+                              <Badge color="gray" variant="light">
+                                Carat Weight:{" "}
+                                {item?.product?.productType === "stone"
+                                  ? item?.caratWeight
+                                  : item?.product?.ct_weight}
+                              </Badge>
+                            ) : (
+                              <div className="text-gray-600">
+                                Qty::{" "}
+                                <span className="font-medium">
+                                  {item?.quantity}
+                                </span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -261,6 +278,14 @@ export default function CheckoutSelectionPage() {
                                 Length:{" "}
                                 <span className="font-medium">
                                   {item?.product?.length}
+                                </span>
+                              </div>
+                            )}
+                            {item?.quantity && (
+                              <div className="text-gray-600">
+                                Qty::{" "}
+                                <span className="font-medium">
+                                  {item?.quantity}
                                 </span>
                               </div>
                             )}

@@ -38,6 +38,7 @@ import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
 import { AuthForm } from "@/components/Auth/AuthForm";
 import { GemstonesInputSection } from "../CommonComponents/GemstonesInputSection";
 import { EmeraldShade } from "../CommonComponents/EmeraldShade";
+import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
 
 /** ---------- Helpers ---------- */
 const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
@@ -364,31 +365,8 @@ export default function ProductDetailsPage() {
               <Checkbox label="Match For Size and Color" color="#0b182d" />
             )}
 
-            {/* Alert */}
-            <Alert
-              variant="light"
-              color="#0b182d"
-              title="HAVE A QUESTION?"
-              icon={<IconInfoCircle />}
-            >
-              <div className="flex flex-col gap-3">
-                <Text size="md">Contact us now</Text>
-                <Text size="sm" c="dimmed">
-                  We're here to help with any questions or concerns about your
-                  order — feel free to reach out for assistance.
-                </Text>
-                <Button
-                  onClick={() => router.push("/customer-support/contact-us")}
-                  color="#99a1af"
-                  size="xs"
-                  className="self-start"
-                >
-                  CONTACT US NOW
-                </Button>
-              </div>
-            </Alert>
+            <QuestionAndDeliveryAccordian />
 
-            <ProductAccordion />
             {user && (
               <Button color="#0b182d" onClick={addProductToCart} fullWidth>
                 ADD TO CART

@@ -329,7 +329,7 @@ export const ProductSpecifications = ({
             </Table.Tr>
             <Table.Tr>
               <Table.Th>
-                <span className="font-semibold">Enhancement</span>
+                <span className="font-semibold">Treatment</span>
               </Table.Th>
               <Table.Td>{product?.enhancement}</Table.Td>
             </Table.Tr>

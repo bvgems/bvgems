@@ -4,6 +4,27 @@ const baseUrl =
     ? process.env.NEXT_PUBLIC_BASE_URL || "https://bvgems.com"
     : "";
 
+export const fetchLayoutDataByHandle = async (layout: any) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/getLayoutDataByHandle`, {
+      layout,
+    });
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching colorstone layouts data", error);
+    return null;
+  }
+};
+
+export const getColorstoneLayouts = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/getColorstoneLayouts`);
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching colorstone layouts", error);
+    return null;
+  }
+};
 export const getBlogByHandle = async (blogName: any) => {
   try {
     const response = await axios.get(
@@ -249,6 +270,23 @@ export const getFilteredData = async (options: any) => {
     const response = await axios.post(`${baseUrl}/api/getFilteredGemStones`, {
       options,
     });
+
+    return response?.data;
+  } catch (error) {
+    console.log("Something went wrong while checkout", error);
+    return null;
+  }
+};
+
+export const getFilteredColorStoneLayouts = async (options: any) => {
+  try {
+    console.log('optionssss',options)
+    const response = await axios.post(
+      `${baseUrl}/api/filter-layouts`,
+      {
+        options,
+      }
+    );
 
     return response?.data;
   } catch (error) {

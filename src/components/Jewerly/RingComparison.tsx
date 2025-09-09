@@ -1,7 +1,7 @@
 import { Grid, GridCol, Image } from "@mantine/core";
 import React from "react";
 
-export const RingComparison = ({productData}:any) => {
+export const RingComparison = ({ productData }: any) => {
   return (
     <div className="mt-20 py-20">
       <Grid>

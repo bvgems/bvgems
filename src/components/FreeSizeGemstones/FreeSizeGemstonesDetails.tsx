@@ -128,7 +128,7 @@ export default function FreeSizeGemstoneDetails({
       </div>
 
       {/* Right: Pricing and actions */}
-      <div className="w-full md:w-1/3">
+      <div className="w-full md:w-1/3 py-6">
         <div className="sticky top-5">
           <div className="flex flex-col gap-4">
             {/* Title */}
@@ -209,6 +209,13 @@ export default function FreeSizeGemstoneDetails({
                 ADD TO CART
               </Button>
             )}
+            <div className="flex gap-2">
+              <IconInfoCircle size={20} color="gray"/>
+              <p className="text-sm text-gray-400">
+                Prices and availability are subject to change without notice.
+                All weights and dimensions are approximate.
+              </p>
+            </div>
           </div>
         </div>
       </div>
