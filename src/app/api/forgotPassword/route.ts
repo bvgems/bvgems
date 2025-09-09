@@ -29,7 +29,8 @@ export async function POST(request: NextRequest) {
       return new Response(
         JSON.stringify({
           success: true,
-          message: "If this email exists, a reset link has been sent.",
+          message:
+            "If this email exists, a reset link will be sent to the email.",
         }),
         {
           status: 200,

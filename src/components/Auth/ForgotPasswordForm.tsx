@@ -30,7 +30,7 @@ export const ForgotPasswordForm = ({
         notifications.show({
           icon: <IconCheck />,
           color: "teal",
-          message: "Reset link sent to your email!",
+          message: res?.data?.message,
           position: "top-right",
         });
         form.reset();
