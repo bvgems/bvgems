@@ -1,9 +1,11 @@
-import { Card, GridCol, Tooltip } from "@mantine/core";
+import { Card, GridCol, Slider, Tooltip } from "@mantine/core";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ImageZoom } from "../CommonComponents/ImageZoom";
+import { useMediaQuery } from "@mantine/hooks";
+import { ImageZoomMobile } from "../CommonComponents/ImageZoomMobile";
 
 const MotionDiv = motion.div;
 export const ProductCard = ({ node, index }: { node: any; index: number }) => {
@@ -17,6 +19,8 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
   const [hoverPreviewImage, setHoverPreviewImage] = useState<string | null>(
     null
   );
+  const isMobile = useMediaQuery("(max-width: 1100px)");
+  const [scale, setScale] = useState(2);
 
   useEffect(() => {
     setMainImage(defaultMain);
@@ -75,18 +79,21 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
         >
           {/* IMAGE AREA */}
           <div className="relative w-full h-[350px] flex items-center justify-center overflow-hidden bg-gray-50">
-            <AnimatePresence mode="wait">
-              <ImageZoom
-                key={displayImage}
+            {isMobile ? (
+              <ImageZoomMobile
                 src={displayImage}
                 alt={node?.title}
-                // style={{ width: "100%", height: "100%" }}
-                // initial={{ opacity: 0, scale: 1.02 }}
-                // animate={{ opacity: 1, scale: 1 }}
-                // exit={{ opacity: 0, scale: 1.02 }}
-                // transition={{ duration: 0.3, ease: "easeOut" }}
+                scale={scale}
               />
-            </AnimatePresence>
+            ) : (
+              <AnimatePresence mode="wait">
+                <ImageZoom
+                  key={displayImage}
+                  src={displayImage}
+                  alt={node?.title}
+                />
+              </AnimatePresence>
+            )}
           </div>
 
           {/* VARIANT SWATCHES */}
@@ -119,6 +126,25 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
                   </button>
                 </Tooltip>
               ))}
+            </div>
+          )}
+
+          {isMobile && (
+            <div
+              className="px-4 mt-3"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <p className="text-xs">Zoom In</p>
+              <Slider
+                size={"xs"}
+                color="#0b182d"
+                min={1}
+                max={4}
+                step={0.1}
+                value={scale}
+                onChange={setScale}
+                label={(value) => `${value.toFixed(1)}x`}
+              />
             </div>
           )}
 

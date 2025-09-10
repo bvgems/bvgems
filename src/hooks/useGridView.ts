@@ -3,7 +3,6 @@ import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const useGridView = () => {
-  const [rawProducts, setRawProducts] = useState<any>([]);
   const [allProducts, setAllProducts] = useState<any>([]);
   const [beads, setBeads] = useState<any>([]);
   const [activeTab, setActiveTab] = useState("alphabetical");
@@ -21,32 +20,13 @@ export const useGridView = () => {
     const fetchJewelryData = async () => {
       if (category) {
         const response = await getJewelryData(category);
-        const products: any = response?.products?.edges || [];
-        setRawProducts(products);
-        setAllProducts(
-          [...products].sort((a, b) => a.node.title.localeCompare(b.node.title))
-        );
+        const products: any = response?.products || [];
+        setAllProducts(products);
       }
     };
 
     fetchJewelryData();
   }, [category]);
-
-  useEffect(() => {
-    if (activeTab === "alphabetical") {
-      const sorted = [...rawProducts].sort((a, b) =>
-        a.node.title.localeCompare(b.node.title)
-      );
-      setAllProducts(sorted);
-    } else if (activeTab === "newest") {
-      const sorted: any = [...rawProducts].sort(
-        (a: any, b: any) =>
-          new Date(b.node.createdAt).getTime() -
-          new Date(a.node.createdAt).getTime()
-      );
-      setAllProducts(sorted);
-    }
-  }, [activeTab, rawProducts]);
 
   const getBeads = async () => {
     const response = await fetchBeads();

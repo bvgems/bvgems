@@ -240,6 +240,9 @@ export function CartComponent() {
                                 )}
                             </>
                           )}
+                          {value?.product?.productType === "bead" && (
+                            <>Stone Size: {value?.product?.size}</>
+                          )}
                           {value?.product?.productType === "freeSizeStone" && (
                             <>Size: {value?.product?.size}</>
                           )}

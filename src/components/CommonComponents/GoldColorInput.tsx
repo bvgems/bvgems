@@ -1,6 +1,7 @@
 "use client";
 
-import { Group, Stack, Text } from "@mantine/core";
+import { useEffect } from "react";
+import { Group, Text } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 
 interface GoldColorInputProps {
@@ -18,6 +19,13 @@ export const GoldColorInput = ({
   selectedGoldColor,
   setSelectedGoldColor,
 }: GoldColorInputProps) => {
+  // ✅ Set first color as default if none is selected
+  useEffect(() => {
+    if (!selectedGoldColor && GOLD_COLORS.length > 0) {
+      setSelectedGoldColor(GOLD_COLORS[0].value);
+    }
+  }, [selectedGoldColor, setSelectedGoldColor]);
+
   return (
     <div>
       <div className="flex flex-col gap-1 mb-3">

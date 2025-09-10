@@ -13,6 +13,7 @@ import {
   Badge,
   NumberInput,
   Flex,
+  Slider,
 } from "@mantine/core";
 import {
   IconCheck,
@@ -25,6 +26,9 @@ import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDel
 import { useAuth } from "@/hooks/useAuth";
 import { getCartStore } from "@/store/useCartStore";
 import { notifications } from "@mantine/notifications";
+import { useMediaQuery } from "@mantine/hooks";
+import { ImageZoomMobile } from "../CommonComponents/ImageZoomMobile";
+import { AnimatePresence } from "framer-motion";
 
 interface ProductPageProps {
   product: any; // Shopify product JSON response
@@ -34,6 +38,8 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
   const images = product?.images?.edges?.map((img: any) => img.node.url) || [];
   const [mainImage, setMainImage] = useState(images?.[2] || images?.[0]); // default main image
   const { user } = useAuth();
+  const isMobile = useMediaQuery("(max-width: 1100px)"); // ✅ fixed typo
+  const [scale, setScale] = useState(2);
 
   const price = product?.variants?.edges?.[0]?.node?.price?.amount || "0.00";
   const currency =
@@ -44,6 +50,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
   const userKey = user?.id?.toString() || "guest";
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
+
   const addProductInCart = () => {
     try {
       addToCart({
@@ -85,15 +92,39 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
         {/* LEFT - Product Image */}
         <GridCol span={{ base: 12, md: 6 }}>
           <Card radius="md" shadow="sm" padding="md" withBorder>
-            <ImageZoom
-              src={mainImage}
-              alt={product.title}
-              radius="md"
-              fit="contain"
-              height={400}
-              style={{ objectFit: "contain" }}
-            />
+            {isMobile ? (
+              <ImageZoomMobile
+                src={mainImage}
+                alt={product?.title}
+                scale={scale}
+              />
+            ) : (
+              <AnimatePresence mode="wait">
+                <ImageZoom
+                  key={mainImage}
+                  src={mainImage}
+                  alt={product?.title}
+                />
+              </AnimatePresence>
+            )}
           </Card>
+
+          {/* Mobile Zoom Slider */}
+          {isMobile && (
+            <div className="px-4 mt-3" onClick={(e) => e.stopPropagation()}>
+              <p className="text-xs mb-1">Zoom In</p>
+              <Slider
+                size="xs"
+                color="#0b182d"
+                min={1}
+                max={4}
+                step={0.1}
+                value={scale}
+                onChange={setScale}
+                label={(value) => `${value.toFixed(1)}x`}
+              />
+            </div>
+          )}
 
           {/* Thumbnails */}
           <Flex justify="center" gap="md" mt="md">
@@ -108,8 +139,8 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
                   cursor: "pointer",
                   border:
                     mainImage === img ? "2px solid #0b182d" : "1px solid #ddd",
-                  width: 80, // ✅ fixed width
-                  height: 80, // ✅ fixed height
+                  width: 80,
+                  height: 80,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -131,8 +162,6 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
 
         {/* RIGHT - Product Info */}
         <GridCol span={{ base: 12, md: 6 }}>
-          {/* Title */}
-
           <div className="px-12 mt-5 md:px-32 md:mt-10 lg:px-0 lg:mt-0">
             <h1 className="text-2xl mb-3">{product.title}</h1>
 
@@ -192,7 +221,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
             </div>
 
             {/* Quantity + Add to Cart */}
-            <Group mt="lg" gap="md" mb={"xl"}>
+            <Group mt="lg" gap="md" mb="xl">
               <NumberInput
                 value={quantity}
                 onChange={(val: any) => setQuantity(val || 1)}
@@ -212,6 +241,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
                 ADD TO CART
               </Button>
             </Group>
+
             <div className="max-w-3xl">
               <QuestionAndDeliveryAccordian />
             </div>

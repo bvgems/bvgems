@@ -10,10 +10,12 @@ import {
   NumberFormatter,
   NumberInput,
   ScrollArea,
+  Select,
   Text,
 } from "@mantine/core";
 import {
   IconCheck,
+  IconDiamond,
   IconShoppingCart,
   IconStarFilled,
 } from "@tabler/icons-react";
@@ -27,12 +29,34 @@ import { GoldColorInput } from "../CommonComponents/GoldColorInput";
 import { OptionSquare } from "../CommonComponents/OptionSquare";
 import { FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+
+// 🔹 Hook to generate fake review count
+function useFakeReviewCount(jf: any) {
+  return useMemo(() => {
+    if (jf.isRingCategory) {
+      return Math.floor(Math.random() * (350 - 120 + 1)) + 120; // 120–350
+    }
+    if (jf.isNecklaces) {
+      return Math.floor(Math.random() * (280 - 100 + 1)) + 100; // 100–280
+    }
+    if (jf.isBracelets) {
+      return Math.floor(Math.random() * (150 - 50 + 1)) + 50; // 50–150
+    }
+    if (jf.isEarringCategory) {
+      return Math.floor(Math.random() * (120 - 30 + 1)) + 30; // 30–120
+    }
+    if (jf.isBead) {
+      return Math.floor(Math.random() * (60 - 15 + 1)) + 15; // 15–60
+    }
+    return Math.floor(Math.random() * (80 - 20 + 1)) + 20; // fallback
+  }, [jf]);
+}
 
 export const JewelryProductDetails = ({
   path,
@@ -98,6 +122,9 @@ export const JewelryProductDetails = ({
     jf.setCustomPrice(Number(option.price));
   };
 
+  // 🔹 Fake review count
+  const reviewCount = useFakeReviewCount(jf);
+
   return (
     <>
       <h1 className="capitalize text-[1.6rem] leading-snug tracking-wide mb-2">
@@ -107,14 +134,10 @@ export const JewelryProductDetails = ({
       {/* ⭐ Ratings */}
       <Group gap="xs" mb="sm">
         {Array.from({ length: 5 }).map((_, i) => (
-          <IconStarFilled
-            key={i}
-            size={18}
-            color={i < 5 ? "gold" : "lightgray"}
-          />
+          <IconStarFilled key={i} size={18} color="gold" />
         ))}
         <Text size="sm" c="dimmed">
-          137 Reviews
+          {reviewCount} Reviews
         </Text>
       </Group>
 
@@ -142,6 +165,8 @@ export const JewelryProductDetails = ({
           </>
         ) : null}
       </Group>
+
+      {/* 🔹 All product options (same as your code) */}
       <div className="mt-4 flex flex-col gap-6">
         {!jf.isBead &&
           !(
@@ -153,7 +178,30 @@ export const JewelryProductDetails = ({
             />
           )}
 
-        {/* Earrings */}
+        {jf.isBead && (
+          <div>
+            <p className="mb-2 font-medium">Select Stone Size</p>
+            <Swiper
+              modules={[FreeMode]}
+              spaceBetween={12}
+              slidesPerView="auto"
+              freeMode={true}
+              style={{ padding: "6px 0" }}
+            >
+              {jf.getBeadStoneSize().map((size: string) => (
+                <SwiperSlide key={size} style={{ width: "auto" }}>
+                  <OptionSquare
+                    label={size}
+                    value={size}
+                    selected={jf.selectedBeadStoneSize === size}
+                    onClick={jf.setSelectedBeadStoneSize}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        )}
+
         {jf.isEarringCategory && parsed.length > 0 && (
           <div>
             <p className="mb-2 font-medium">Select Total Carat Weight</p>
@@ -178,7 +226,6 @@ export const JewelryProductDetails = ({
           </div>
         )}
 
-        {/* Rings */}
         {jf.isRingCategory && (
           <div>
             <p className="mb-2 font-medium">Select Ring Size</p>
@@ -227,7 +274,6 @@ export const JewelryProductDetails = ({
           </div>
         )}
 
-        {/* Necklaces */}
         {jf.isNecklaces && (
           <div>
             <p className="mb-2 font-medium">Select Necklace Length</p>
@@ -251,7 +297,7 @@ export const JewelryProductDetails = ({
             </Swiper>
           </div>
         )}
-        {/* Shapes */}
+
         {productData?.showshapeoptions?.value === "true" && (
           <div>
             <p className="mb-2 font-medium">
@@ -307,7 +353,6 @@ export const JewelryProductDetails = ({
         </Grid>
       </div>
 
-      {/* Details */}
       {(jf.isRingCategory || jf.isEarringCategory) && (
         <div className="mt-6">
           <JeweleryDetailsAccordion

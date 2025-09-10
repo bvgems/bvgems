@@ -8,10 +8,22 @@ export async function GET(request: NextRequest) {
     const category = url.searchParams.get("category");
 
     const result = await getAllJeweleryProducts(category);
-    return NextResponse.json(
-      { products: result},
-      { status: 200 }
-    );
+    let products: any = [];
+    if (category === "earrings") {
+      const goldEarrings = result?.edges?.filter((item: any) => {
+        return item?.node?.jewelryType?.value === "Gold";
+      });
+
+      const silverEarrings = result?.edges?.filter((item: any) => {
+        return item?.node?.jewelryType?.value === "Silver";
+      });
+
+      products = [...goldEarrings, ...silverEarrings];
+    } else {
+      products = result?.edges;
+    }
+    console.log("prodddd", products[0]);
+    return NextResponse.json({ products: products }, { status: 200 });
   } catch (error) {
     console.error("GET error:", error);
     return new Response(JSON.stringify({ flag: false }), { status: 500 });

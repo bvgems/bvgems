@@ -31,8 +31,7 @@ export function useJewelryFunctions(
     useState<any>("2.0 MM");
   const [selectedBraceletLength, setSelectedBraceletLength] =
     useState<any>("6.0");
-  const [selectedBeadStoneSize, setSelectedBeadStoneSize] =
-    useState<any>("2.0 MM");
+  const [selectedBeadStoneSize, setSelectedBeadStoneSize] = useState<any>();
   const [selectedNecklaceLength, setSelectedNecklaceLength] =
     useState<any>("16 Inch");
 
@@ -72,14 +71,13 @@ export function useJewelryFunctions(
   }, [productData, isRingCategory, isTwoStoneRing]);
 
   // ---------- Derived Price ----------
+  const getPrice = (title: string) => {
+    const variant = productData?.variants?.edges?.find(
+      (v: any) => v?.node?.title === title
+    );
+    return variant?.node?.price?.amount;
+  };
   const displayPrice = useMemo(() => {
-    const getPrice = (title: string) => {
-      const variant = productData?.variants?.edges?.find(
-        (v: any) => v?.node?.title === title
-      );
-      return variant?.node?.price?.amount;
-    };
-
     // 💎 Earrings use custom price
     if (isEarringCategory && customPrice) {
       return `${Number(customPrice).toFixed(2)}`;
@@ -173,6 +171,24 @@ export function useJewelryFunctions(
       return Array.from({ length: 15 }, (_, i) => (4 + i * 0.5).toFixed(2));
     }
   };
+  useEffect(() => {
+    const sizes = ringSizes();
+    if (isRingCategory && sizes.length > 0 && !selectedRingSize) {
+      setSelectedRingSize(sizes[0]);
+    }
+  }, [isRingCategory, ringSizes, selectedRingSize]);
+  useEffect(() => {
+    const beadSizes = getBeadStoneSize();
+    if (isBead && beadSizes.length > 0 && !selectedBeadStoneSize) {
+      setSelectedBeadStoneSize(beadSizes[0]);
+    }
+  }, [isBead, productData, selectedBeadStoneSize]);
+
+  const getBeadStoneSize = () => {
+    return (
+      productData?.variants?.edges?.map((item: any) => item?.node?.title) || []
+    );
+  };
 
   const isDisabled = () => {
     if (isBead) return !selectedBeadStoneSize;
@@ -207,6 +223,9 @@ export function useJewelryFunctions(
   const addProductInCart = () => {
     const variables: any = {};
 
+    if (isBead) {
+      variables.size = selectedBeadStoneSize;
+    }
     if (isRingCategory) {
       variables.goldColor = selectedGoldColor;
       variables.size = selectedRingSize;
@@ -235,8 +254,6 @@ export function useJewelryFunctions(
       variables.size = selectedBeadStoneSize;
     }
 
-    console.log("varsss", variables);
-
     addToCart({
       product: {
         productType: isBead
@@ -257,6 +274,8 @@ export function useJewelryFunctions(
           variables?.image || productData?.images?.edges?.[0]?.node?.url,
         price: isEarringCategory
           ? displayPrice.replace(/[^0-9.]/g, "")
+          : isBead
+          ? getPrice(selectedBeadStoneSize)
           : productData?.variants?.edges?.[0]?.node?.price?.amount,
 
         gemstone: variables?.stone,
@@ -310,6 +329,7 @@ export function useJewelryFunctions(
     getLengthData,
     braceletLength,
     ringSizes,
+    getBeadStoneSize,
     isDisabled,
     addProductInCart,
   };

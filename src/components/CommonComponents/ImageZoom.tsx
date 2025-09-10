@@ -16,7 +16,7 @@ export const ImageZoom = ({ src, alt, className = "" }: any) => {
     setOpacity(0);
   };
 
-  const handleMouseMove = (e: any) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!targetRef.current || !sourceRef.current || !containerRef.current)
       return;
 
@@ -24,18 +24,19 @@ export const ImageZoom = ({ src, alt, className = "" }: any) => {
     const sourceRect = sourceRef.current.getBoundingClientRect();
     const containerRect = containerRef.current.getBoundingClientRect();
 
-    const xRatio = (targetRect.width - containerRect.width) / sourceRect.width;
-    const yRatio =
-      (targetRect.height - containerRect.height) / sourceRect.height;
-
+    // Use mouse position relative to the source image
     const left = Math.max(
-      Math.min(e.pageX - sourceRect.left, sourceRect.width),
+      Math.min(e.clientX - sourceRect.left, sourceRect.width),
       0
     );
     const top = Math.max(
-      Math.min(e.pageY - sourceRect.top, sourceRect.height),
+      Math.min(e.clientY - sourceRect.top, sourceRect.height),
       0
     );
+
+    const xRatio = (targetRect.width - containerRect.width) / sourceRect.width;
+    const yRatio =
+      (targetRect.height - containerRect.height) / sourceRect.height;
 
     setOffset({
       left: left * -xRatio,

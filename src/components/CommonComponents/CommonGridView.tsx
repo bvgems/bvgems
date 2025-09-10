@@ -1,6 +1,5 @@
 "use client";
 import { useGridView } from "@/hooks/useGridView";
-import { ViewAllProductComponent } from "./ViewAllProductComponent";
 import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
 import { Skeleton, Grid, GridCol, Anchor, Breadcrumbs } from "@mantine/core";
 import { useEffect, useState } from "react";
@@ -13,12 +12,16 @@ export const CommonGridView = ({
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   const { category, activeTab, allProducts, beads } = useGridView();
   const isLoading = !allProducts?.length && !beads?.length;
+
   const [totalDisplayedProducts, setTotalDispalyedProducts] = useState<any>();
   const [finalProducts, setFinalProducts] = useState<any>();
+
   const capitalize = (str: any) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
+
   useEffect(() => {
     if (filteredJewelry === undefined) {
       if (isBead) {
@@ -34,7 +37,7 @@ export const CommonGridView = ({
           setTotalDispalyedProducts(beads?.length);
           setFinalProducts(filteredJewelry || beads);
         } else {
-          setTotalDispalyedProducts(allProducts?.length);
+          setTotalDispalyedProducts(filteredJewelry?.length);
           setFinalProducts(filteredJewelry || allProducts);
         }
       }, 500);
@@ -47,7 +50,7 @@ export const CommonGridView = ({
       <div className="px-4 sm:px-8 pt-6 pb-14">
         <Grid gutter="lg">
           {Array.from({ length: 8 }).map((_, i) => (
-            <GridCol span={{ base: 6, sm: 4, md: 3 }} key={i}>
+            <GridCol span={{ base: 6, sm: 6, md: 3, lg: 3 }} key={i}>
               <Skeleton height={260} radius="md" mb="sm" />
               <Skeleton height={20} width="80%" mb="xs" />
               <Skeleton height={16} width="40%" />
@@ -57,6 +60,7 @@ export const CommonGridView = ({
       </div>
     );
   }
+
   const breadcrumbItemsForBeads = [
     { title: "Home", href: "/" },
     { title: "Precious Beads" },
@@ -70,6 +74,7 @@ export const CommonGridView = ({
       {item.title}
     </Anchor>
   ));
+
   const breadcrumbItemsForJewelry = [
     { title: "Home", href: "/" },
     { title: capitalize(category) },
@@ -91,20 +96,26 @@ export const CommonGridView = ({
       ) : (
         <Breadcrumbs className="mb-3">{breadcrumbItemsForJewelry}</Breadcrumbs>
       )}
-      <p>Showing {totalDisplayedProducts} results</p>
-      <ViewAllProductComponent
-        keyProp={activeTab}
-        items={finalProducts?.length ? finalProducts : beads}
-        renderItem={(product, index) => (
-          <JewelryCategoryCard
-            isBead={isBead}
-            category={category}
-            product={product}
-            index={index}
-            selectedStones={selectedStones}
-          />
+      <p className="mb-4 text-sm text-gray-600">
+        Showing {totalDisplayedProducts} results
+      </p>
+
+      {/* ✅ Responsive grid: 2 per row on mobile, 4 per row on desktop */}
+      <Grid gutter="lg">
+        {(finalProducts?.length ? finalProducts : beads)?.map(
+          (product: any, index: number) => (
+            <GridCol span={{ base: 6, sm: 6, md: 3, lg: 3 }} key={index}>
+              <JewelryCategoryCard
+                isBead={isBead}
+                category={category}
+                product={product}
+                index={index}
+                selectedStones={selectedStones}
+              />
+            </GridCol>
+          )
         )}
-      />
+      </Grid>
     </div>
   );
 };

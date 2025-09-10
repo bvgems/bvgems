@@ -18,7 +18,22 @@ export async function POST(req: NextRequest) {
     const category = body.category;
 
     const shopifyProducts = await getAllJeweleryProducts(category);
-    const products = shopifyProducts?.edges || [];
+    let fetchedProducts: any = [];
+    if (category === "earrings") {
+      const goldEarrings = shopifyProducts?.edges?.filter((item: any) => {
+        return item?.node?.jewelryType?.value === "Gold";
+      });
+
+      const silverEarrings = shopifyProducts?.edges?.filter((item: any) => {
+        return item?.node?.jewelryType?.value === "Silver";
+      });
+
+      fetchedProducts = [...goldEarrings, ...silverEarrings];
+    } else {
+      fetchedProducts = shopifyProducts?.edges;
+    }
+    const products = fetchedProducts || [];
+    console.log('shoppppp',products)
 
     const filtered = products.filter((p: any) => {
       const node = p.node;
