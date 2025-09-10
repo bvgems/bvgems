@@ -85,7 +85,7 @@ export const getLayouts = async () => {
   });
 
   const result = await shopifyRes.json();
-  return result?.data?.products
+  return result?.data?.products;
 };
 
 export const getAllLooseGemstones = async () => {
@@ -235,6 +235,10 @@ export const getAllJeweleryProducts = async (category: any) => {
                       value
                       type
                     }
+                         earring_metafielcd:metafield(namespace: "custom", key: "earring_metafielcd") {
+            value
+            type
+          }
                     variants(first: 10) {
                       edges {
                         node {

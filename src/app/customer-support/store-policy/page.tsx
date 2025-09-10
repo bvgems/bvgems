@@ -1,116 +1,63 @@
-import { Image } from "@mantine/core";
-import React from "react";
+"use client";
 
-async function getBlogByHandle(handle: string) {
-  const endpoint = process.env.SHOPIFY_STOREFRONT_URL as string;
-  const query = `
-    {
-      blog(handle: "news") {
-        articleByHandle(handle: "${handle}") {
-          id
-          title
-          contentHtml
-          excerpt
-          publishedAt
-          authorV2 {
-            name
-          }
-          image {
-            url
-            altText
-          }
-        }
-      }
+import { getStorePolicies } from "@/apis/api";
+import RichTextRenderer from "@/components/StorePolicy/RichTextRenderer";
+import {
+  Container,
+  Title,
+  Card,
+  Text,
+  Group,
+  ThemeIcon,
+  Loader,
+} from "@mantine/core";
+import { IconShieldCheck } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+
+export default function StorePolicy() {
+  const [policyContent, setPolicyContent] = useState<any>(null);
+
+  const fetchStorePolicies = async () => {
+    const response = await getStorePolicies();
+    if (response) {
+      const policyData = JSON.parse(
+        response?.storePolicies?.data?.page?.metafield?.value
+      );
+      setPolicyContent(policyData);
     }
-  `;
+  };
 
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": process.env
-        .SHOPIFY_STOREFRONT_ACCESS_TOKEN as string,
-    },
-    body: JSON.stringify({ query }),
-    next: { revalidate: 60 }, // ISR
-  });
-
-  const result = await response.json();
-  return result?.data?.blog?.articleByHandle;
-}
-
-// 🔹 Transform Shopify HTML (adds styled Tip boxes)
-function transformContentHtml(html: string) {
-  return html.replace(
-    /• Tip:(.*?)(<\/p>|<\/li>|$)/g,
-    `<div class="p-4 my-6 border-l-4 border-blue-600 bg-blue-50 rounded-lg shadow-sm">
-       <strong class="text-blue-800">💡 Tip:</strong>$1
-     </div>`
-  );
-}
-
-export default async function BlogPostPage({
-  params,
-}: {
-  params: Promise<{ blogname: string }>;
-}) {
-  const { blogname } = await params;
-  const post = await getBlogByHandle(blogname);
-
-  if (!post) {
-    return (
-      <div className="container mx-auto py-20 text-center">
-        <h2 className="text-2xl font-semibold">Blog not found</h2>
-      </div>
-    );
-  }
+  useEffect(() => {
+    fetchStorePolicies();
+  }, []);
 
   return (
-    <article className="flex flex-col">
-      {/* Hero Section */}
-      {post.image?.url && (
-        <div className="relative w-full h-[400px]">
-          <Image
-            src={post.image?.url}
-            alt={post.image?.altText || post.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-          <div className="absolute bottom-6 left-6 text-white max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight drop-shadow-lg">
-              {post.title}
-            </h1>
-            <p className="mt-2 text-sm opacity-90">
-              {post.authorV2?.name || "B.V. Gems"} ·{" "}
-              {new Date(post.publishedAt).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Content Section */}
-      <div className="container mx-auto max-w-3xl px-5 md:px-0 py-12">
-        <div
-          className="
-            prose prose-lg md:prose-xl max-w-none
-            prose-headings:text-[#0b182d] prose-headings:font-semibold
-            prose-h1:text-4xl prose-h2:text-2xl prose-h3:text-xl
-            prose-p:leading-relaxed prose-p:mb-6 prose-p:text-gray-700
-            prose-li:mb-2 prose-li:marker:text-blue-600
-            prose-strong:text-[#0b182d]
-            prose-blockquote:border-l-4 prose-blockquote:border-blue-600 prose-blockquote:pl-4 prose-blockquote:italic
-            prose-img:rounded-2xl prose-img:shadow-md
-            prose-a:text-blue-600 hover:prose-a:underline
-          "
-          dangerouslySetInnerHTML={{
-            __html: transformContentHtml(post.contentHtml),
-          }}
-        />
+    <Container size="xl">
+      <div className="flex justify-center items-center gap-2">
+        <ThemeIcon
+          variant="gradient"
+          size="lg"
+          gradient={{ from: "black", to: "#0b182d" }}
+        >
+          <IconShieldCheck size="1.5rem" />
+        </ThemeIcon>{" "}
+        <Title order={1} className="text-center" mb="xs">
+          <span className="text-[1.7rem] text-[#0b182d]">Store Policy</span>
+        </Title>
       </div>
-    </article>
+      <Text className="text-center" size="md" color="dimmed" mb="lg">
+        At B. V. Gems, we uphold the highest ethical standards as proud members
+        of the AGTA. Read our comprehensive store policy below.
+      </Text>
+      <Card className="mt-5" radius="md" withBorder p="xl">
+        {policyContent ? (
+          <RichTextRenderer content={policyContent} />
+        ) : (
+          <Group>
+            <Loader variant="dots" />
+          </Group>
+        )}
+      </Card>
+    </Container>
   );
 }

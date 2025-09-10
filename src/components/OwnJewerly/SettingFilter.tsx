@@ -81,7 +81,7 @@ export const SettingFilter = () => {
         custom={0}
         initial="hidden"
         animate="visible"
-        variants={fadeUp}
+        // variants={fadeUp}
       >
         <StyleFilter
           selected={selectedStyles}
@@ -93,7 +93,7 @@ export const SettingFilter = () => {
         custom={1}
         initial="hidden"
         animate="visible"
-        variants={fadeUp}
+        // variants={fadeUp}
       >
         <Grid gutter="md">
           <GridCol span={{ base: 12, md: 6 }}>
@@ -116,7 +116,7 @@ export const SettingFilter = () => {
         custom={2}
         initial="hidden"
         animate="visible"
-        variants={fadeUp}
+        // variants={fadeUp}
       >
         <StoneFilter
           stone="Side"
@@ -129,7 +129,7 @@ export const SettingFilter = () => {
         custom={3}
         initial="hidden"
         animate="visible"
-        variants={fadeUp}
+        // variants={fadeUp}
       >
         <Grid gutter="xl">
           <GridCol span={{ base: 12, md: 6 }}>

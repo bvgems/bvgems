@@ -1,10 +1,9 @@
 "use client";
 
-import { Card, Tooltip, Skeleton, NumberFormatter } from "@mantine/core";
+import { Card, Tooltip, Skeleton } from "@mantine/core";
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 
 export const JewelryCategoryCard = ({
   isBead,
@@ -14,7 +13,6 @@ export const JewelryCategoryCard = ({
   selectedStones, // ⬅️ new prop
 }: any) => {
   const router = useRouter();
-  const { user } = useAuth();
 
   const isLoading = !product?.node;
   if (isLoading) {
@@ -32,12 +30,12 @@ export const JewelryCategoryCard = ({
 
   // 🔑 Decide main image
   const [mainImage, setMainImage] = useState<string>(defaultMain);
-
   const [selectedImage, setSelectedImage] = useState<string>(mainImage);
   const [hoverPreviewImage, setHoverPreviewImage] = useState<string | null>(
     null
   );
 
+  // Handle stone selection image
   useEffect(() => {
     if (selectedStones?.length) {
       const matchStone = selectedStones[0].toLowerCase();
@@ -58,7 +56,31 @@ export const JewelryCategoryCard = ({
     setSelectedImage(mainImage);
   }, [mainImage]);
 
+  // 🔑 Price calculation
   const priceText = useMemo(() => {
+    // 1. If earrings + metafield exists, use it
+    if (
+      category?.toLowerCase() === "earrings" &&
+      product?.node?.earring_metafielcd?.value
+    ) {
+      try {
+        const parsed = JSON.parse(product.node.earring_metafielcd.value);
+        const prices = parsed
+          .map((p: any) => Number(p?.price))
+          .filter((n: number) => Number.isFinite(n));
+        if (prices.length) {
+          const min = Math.min(...prices);
+          const max = Math.max(...prices);
+          return min === max
+            ? `$${min.toFixed(2)} USD`
+            : `$${min.toFixed(2)} – $${max.toFixed(2)} USD`;
+        }
+      } catch (err) {
+        console.warn("Invalid earring_metafielcd JSON", err);
+      }
+    }
+
+    // 2. Fallback: use variant prices
     const amounts =
       variants
         ?.map((e: any) => Number(e?.node?.price?.amount ?? 0))
@@ -70,7 +92,7 @@ export const JewelryCategoryCard = ({
     return min === max
       ? `$${min.toFixed(2)} USD`
       : `$${min.toFixed(2)} – $${max.toFixed(2)} USD`;
-  }, [product]);
+  }, [category, product, variants]);
 
   const variantImages: { title?: string; image: string }[] =
     variants
@@ -162,12 +184,7 @@ export const JewelryCategoryCard = ({
 
       {/* PRICE */}
       <div className="mt-1 text-[1rem] font-semibold text-gray-900">
-        <NumberFormatter
-          thousandSeparator
-          prefix="$"
-          value={priceText}
-          suffix=" USD"
-        />{" "}
+        {priceText}
       </div>
     </Card>
   );

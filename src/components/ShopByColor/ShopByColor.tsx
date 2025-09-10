@@ -40,7 +40,7 @@ export default function ShopByColor() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={itemVariants}
+            // variants={itemVariants}
           >
             <Card
               shadow="sm"
