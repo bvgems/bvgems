@@ -424,6 +424,16 @@ export const GetProductByHandle = `
       productType
       createdAt
       tags
+
+        dimension: metafield(namespace: "custom", key: "dimension") {
+            value
+            type
+          }
+
+        shapeSizes: metafield(namespace: "custom", key: "shape_sizes") {
+            value
+            type
+          }
   
       earring_metafielcd:metafield(namespace: "custom", key: "earring_metafielcd") {
             value

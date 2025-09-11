@@ -33,10 +33,10 @@ export interface TradeShow {
 export const tradeShows: TradeShow[] = [
   {
     name: "JIS Miami",
-    booth: "Booth #1339 or 1245",
+    booth: "",
     website: "https://www.jisshow.com/fall/en-us.html",
     logo: "https://www.jisshow.com/content/dam/sitebuilder/rna/jis/2021/spring/JISFall.png/_jcr_content/renditions/original.image_file.592.300.file/367267082/JISFall.png",
-    location: "Miami, Florida",
+    location: "Miami Beach Convention Center | Miami Beach, FL",
     start: "10-10-2025",
     end: "10-13-2025",
   },
@@ -45,7 +45,7 @@ export const tradeShows: TradeShow[] = [
     booth: "Booth #1234",
     website: "https://gjx.rocks",
     logo: "https://gjx.rocks/wp-content/themes/gjx-2020/images/logo.png",
-    location: "Tucson, Arizona",
+    location: "198 S. Granada Tucson, AZ 85701",
     start: "02-02-2026",
     end: "02-07-2026",
   },

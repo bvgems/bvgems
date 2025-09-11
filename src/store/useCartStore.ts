@@ -27,6 +27,7 @@ export interface CartItem {
     needCertification: boolean;
     additionalComments: string;
     totalCaratWeight: string;
+    stoneCount:any
   };
   quantity: number;
   caratWeight: string;

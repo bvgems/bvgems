@@ -243,6 +243,13 @@ export function CartComponent() {
                           {value?.product?.productType === "bead" && (
                             <>Stone Size: {value?.product?.size}</>
                           )}
+                          {value?.product?.productType === "layouts" && (
+                            <>
+                              Stone Size: {value?.product?.size} | Weight:{" "}
+                              {value?.product?.ct_weight} | Stone Count:{" "}
+                              {value?.product?.stoneCount}
+                            </>
+                          )}
                           {value?.product?.productType === "freeSizeStone" && (
                             <>Size: {value?.product?.size}</>
                           )}

@@ -47,6 +47,12 @@ export const JeweleryDetailsAccordion = ({
               value={productData?.stoneType?.value || "Natural"}
             />
             <Row label="Shape:" value={productData?.shape?.value || "-"} />
+            {productData?.dimension?.value && (
+              <Row
+                label="Dimension:"
+                value={productData?.dimension?.value || "-"}
+              />
+            )}
             <Row
               label="Stone Color:"
               value={gemstone ? STONE_COLORS[gemstone] || "-" : "-"}

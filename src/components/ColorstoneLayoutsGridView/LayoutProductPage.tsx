@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Grid,
@@ -30,11 +30,21 @@ import { useMediaQuery } from "@mantine/hooks";
 import { ImageZoomMobile } from "../CommonComponents/ImageZoomMobile";
 import { AnimatePresence } from "framer-motion";
 
+import { FreeMode } from "swiper/modules";
+
+import { OptionSquare } from "../CommonComponents/OptionSquare";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 interface ProductPageProps {
-  product: any; // Shopify product JSON response
+  product: any;
 }
 
 export default function LayoutProductPage({ product }: ProductPageProps) {
+  const shapeSize = JSON.parse(product?.shapeSizes?.value);
   const images = product?.images?.edges?.map((img: any) => img.node.url) || [];
   const [mainImage, setMainImage] = useState(images?.[2] || images?.[0]); // default main image
   const { user } = useAuth();
@@ -46,10 +56,23 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
     product?.variants?.edges?.[0]?.node?.price?.currencyCode || "USD";
 
   const [quantity, setQuantity] = useState(1);
-
+  const [selectedSize, setSelectedSize] = useState<any>(
+    shapeSize[0]?.size || ""
+  );
+  const [stoneCount, setStoneCount] = useState(shapeSize[0]?.stone_count || "");
+  const [caratWeight, setCaratWeight] = useState(shapeSize[0]?.ct_weight || "");
   const userKey = user?.id?.toString() || "guest";
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
+
+  useEffect(() => {
+    const matched = shapeSize?.find((item: any) => item?.size === selectedSize);
+
+    if (matched) {
+      setCaratWeight(matched.ct_weight || "");
+      setStoneCount(matched.stone_count || "");
+    }
+  }, [selectedSize, shapeSize]);
 
   const addProductInCart = () => {
     try {
@@ -59,12 +82,13 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
           title: product?.title,
           handle: product?.handle,
           productType: "layouts",
-          productId: product.id,
-          ct_weight: product.ct_weight?.value,
+          productId: `${product.id}-${selectedSize}`,
+          ct_weight: caratWeight,
           image_url: product.images?.edges[0]?.node?.url,
           price: product?.variants?.edges?.[0]?.node?.price?.amount || "0.00",
           shape: product.shape?.value,
-          size: product.size?.value,
+          size: selectedSize,
+          stoneCount: stoneCount,
         },
         quantity: quantity,
       });
@@ -84,6 +108,12 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
         autoClose: 3500,
       });
     }
+  };
+
+  const getShapeSizes = () => {
+    return shapeSize?.map((item: any) => {
+      return item?.size;
+    });
   };
 
   return (
@@ -191,15 +221,30 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
                 10% OFF
               </Badge>
             </Group>
+            <div className="mb-5">
+              <p className="font-medium">Stone Size</p>
+              <Swiper
+                modules={[FreeMode]}
+                spaceBetween={12}
+                slidesPerView="auto"
+                freeMode={true}
+                style={{ padding: "6px 0" }}
+              >
+                {getShapeSizes()?.map((size: string) => (
+                  <SwiperSlide key={size} style={{ width: "auto" }}>
+                    <OptionSquare
+                      label={size}
+                      value={size}
+                      selected={selectedSize === size}
+                      onClick={setSelectedSize}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
 
             {/* Product Specs */}
-            <div className="space-y-3 mb-6">
-              <Group>
-                <Text fw={600} w={150}>
-                  Total Carat Weight:
-                </Text>
-                <Text>{product?.ct_weight?.value || "-"}</Text>
-              </Group>
+            <div className="space-y-3 mb-6 ">
               <Group>
                 <Text fw={600} w={150}>
                   Shape:
@@ -208,10 +253,17 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
               </Group>
               <Group>
                 <Text fw={600} w={150}>
-                  Size:
+                  Total Carat Weight:
                 </Text>
-                <Text>{product?.size?.value || "-"}</Text>
+                <Text>{caratWeight || "-"} ct.</Text>
               </Group>
+              <Group>
+                <Text fw={600} w={150}>
+                  Stone Count:
+                </Text>
+                <Text>{stoneCount || "-"}</Text>
+              </Group>
+
               <Group>
                 <Text fw={600} w={150}>
                   Stone Type:

@@ -10,16 +10,13 @@ import {
   NumberFormatter,
   NumberInput,
   ScrollArea,
-  Select,
   Text,
 } from "@mantine/core";
 import {
   IconCheck,
-  IconDiamond,
   IconShoppingCart,
   IconStarFilled,
 } from "@tabler/icons-react";
-import { Carousel } from "@mantine/carousel";
 import { JeweleryDetailsAccordion } from "./JeweleryDetailsTable";
 import { getCartStore } from "@/store/useCartStore";
 import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
@@ -353,7 +350,7 @@ export const JewelryProductDetails = ({
         </Grid>
       </div>
 
-      {(jf.isRingCategory || jf.isEarringCategory) && (
+      {(jf.isRingCategory || jf.isEarringCategory || jf.isNecklaces) && (
         <div className="mt-6">
           <JeweleryDetailsAccordion
             productData={productData}
