@@ -10,7 +10,7 @@ export const BuildJeweleryStepper = () => {
     {
       label: "Choose Jewelry",
       description: "Bracelet or necklace",
-      content: <JeweleryFilter  />,
+      // content: <JeweleryFilter  />,
     },
     {
       label: "Choose Gold Color",
