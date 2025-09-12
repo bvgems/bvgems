@@ -17,6 +17,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconFilter } from "@tabler/icons-react";
 import { ColorstoneLayoutsGridView } from "@/components/ColorstoneLayoutsGridView/ColorstoneLayoutsGridView";
 import { ColorstoneFilterSidebar } from "@/components/ColorstoneLayoutsGridView/ColorstoneFilterSidebar";
+import Script from "next/script";
 
 export default function ColorStoneLayouts() {
   const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
@@ -153,6 +154,24 @@ export default function ColorStoneLayouts() {
           setSelectedRoundSizes={setSelectedRoundSizes}
         />
       </Drawer>
+      {!loading && layouts?.length > 0 && (
+        <Script
+          id="colorstone-itemlist-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              itemListElement: layouts.map((item: any, i: number) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                url: `https://bvgems.com/color-stone-layouts/${item?.id || i}`,
+                name: item?.title || `Color Stone Layout ${i + 1}`,
+              })),
+            }),
+          }}
+        />
+      )}
     </div>
   );
 }

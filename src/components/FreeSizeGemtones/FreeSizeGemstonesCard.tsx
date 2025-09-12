@@ -11,7 +11,6 @@ export const FreeSizeGemstonesCard = () => {
   const router = useRouter();
 
   const redirectToProduct = (product: any) => {
-    console.log("Redirecting to:", product?.label);
     router?.push(`/free-size-gemstones/${product?.label?.toLowerCase()}`);
   };
 

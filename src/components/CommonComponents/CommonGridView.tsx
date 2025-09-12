@@ -3,6 +3,7 @@ import { useGridView } from "@/hooks/useGridView";
 import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
 import { Skeleton, Grid, GridCol, Anchor, Breadcrumbs } from "@mantine/core";
 import { useEffect, useState } from "react";
+import Script from "next/script";
 
 export const CommonGridView = ({
   filteredJewelry,
@@ -13,7 +14,7 @@ export const CommonGridView = ({
     window.scrollTo(0, 0);
   }, []);
 
-  const { category, activeTab, allProducts, beads } = useGridView();
+  const { category, allProducts, beads } = useGridView();
   const isLoading = !allProducts?.length && !beads?.length;
 
   const [totalDisplayedProducts, setTotalDispalyedProducts] = useState<any>();
@@ -92,15 +93,27 @@ export const CommonGridView = ({
   return (
     <div className="px-4 sm:px-8 pt-6 pb-14">
       {isBead ? (
-        <Breadcrumbs>{breadcrumbItemsForBeads}</Breadcrumbs>
+        <Breadcrumbs aria-label="breadcrumb">
+          {breadcrumbItemsForBeads}
+        </Breadcrumbs>
       ) : (
-        <Breadcrumbs className="mb-3">{breadcrumbItemsForJewelry}</Breadcrumbs>
+        <Breadcrumbs className="mb-3" aria-label="breadcrumb">
+          {breadcrumbItemsForJewelry}
+        </Breadcrumbs>
       )}
+
+      <h1 className="flex justify-center font-bold text-2xl mb-2">
+        {isBead
+          ? "Precious Beads Collection"
+          : `Gemstone ${capitalize(category)}`}
+      </h1>
+
+      {/* ✅ Result count */}
       <p className="mb-4 text-sm text-gray-600">
         Showing {totalDisplayedProducts} results
       </p>
 
-      {/* ✅ Responsive grid: 2 per row on mobile, 4 per row on desktop */}
+      {/* ✅ Responsive grid */}
       <Grid gutter="lg">
         {(finalProducts?.length ? finalProducts : beads)?.map(
           (product: any, index: number) => (
@@ -116,6 +129,28 @@ export const CommonGridView = ({
           )
         )}
       </Grid>
+
+      {/* ✅ Schema.org ItemList */}
+      {finalProducts?.length > 0 && (
+        <Script
+          id="itemlist-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              itemListElement: finalProducts.map((item: any, i: number) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                url: `https://bvgems.com/${isBead ? "beads" : category}/${
+                  item?.node?.handle || item?.id
+                }`,
+                name: item?.node?.title || item?.name || "Gemstone Jewelry",
+              })),
+            }),
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -39,6 +39,7 @@ import { AuthForm } from "@/components/Auth/AuthForm";
 import { GemstonesInputSection } from "../CommonComponents/GemstonesInputSection";
 import { EmeraldShade } from "../CommonComponents/EmeraldShade";
 import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
+import Script from "next/script";
 
 /** ---------- Helpers ---------- */
 const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
@@ -220,7 +221,10 @@ export default function ProductDetailsPage() {
         <div className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full md:w-7/12 flex flex-col items-center">
-              <ImageZoom src={displayImage} />
+              <ImageZoom
+                alt={`${product?.collection_slug} ${product?.shape} ${product?.size} gemstone – ${product?.quality} Quality`}
+                src={displayImage}
+              />
               <div className="text-xs text-gray-500 flex items-center mt-2">
                 <IconZoomIn size={15} className="mr-1" />
                 Hover on the image to zoom
@@ -253,8 +257,9 @@ export default function ProductDetailsPage() {
             {/* Title */}
             <div>
               <h1 className="text-xl font-semibold">
-                {product?.collection_slug} {product?.shape} {product?.size}{" "}
-                {product?.ct_weight}cts., {product?.quality} Quality
+                Loose {product?.collection_slug} {product?.shape}{" "}
+                {product?.size} – {product?.ct_weight} Carat {product?.quality}{" "}
+                Quality Calibrated Gemstone
               </h1>
               <div className="flex justify-between items-center mt-2">
                 <span className="text-sm text-gray-500">
@@ -268,6 +273,15 @@ export default function ProductDetailsPage() {
                 </Badge>
               </div>
             </div>
+            <p className="text-sm text-gray-700 leading-relaxed">
+              This {product?.collection_slug?.toLowerCase()} gemstone is
+              carefully cut and calibrated for precision. Perfect for fine
+              jewelry designs such as engagement rings, necklaces, and earrings,
+              our gemstones are ethically sourced and graded for brilliance and
+              clarity. Located in NYC’s Diamond District, B.V. Gems provides
+              jewelers and collectors with trusted quality stones for
+              generations.
+            </p>
 
             {/* Price section */}
             {user ? (
@@ -376,6 +390,30 @@ export default function ProductDetailsPage() {
         </div>
       </div>
       <SizeToleranceGuide opened={tableOpened} close={closeTable} />
+      {product && (
+        <Script
+          id="product-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org/",
+              "@type": "Product",
+              name: `Loose ${product?.collection_slug} ${product?.shape} ${product?.size}`,
+              image: product?.image_url,
+              description: `${product?.quality} quality ${product?.collection_slug} gemstone, calibrated and ethically sourced from B.V. Gems, NYC Diamond District.`,
+              sku: product?.id,
+              brand: { "@type": "Brand", name: "B.V. Gems" },
+              offers: {
+                "@type": "Offer",
+                url: `https://bvgems.com/product?id=${product?.id}&name=${product?.collection_slug}`,
+                priceCurrency: "USD",
+                price: getPerStonePrice(product) || getPerCaratPrice(product),
+                availability: "http://schema.org/InStock",
+              },
+            }),
+          }}
+        />
+      )}
     </div>
   );
 }

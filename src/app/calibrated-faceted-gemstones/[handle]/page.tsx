@@ -16,14 +16,39 @@ export async function generateMetadata({
     return {
       title: "Gemstone Collection | B.V. Gems",
       description:
-        "Explore our exquisite collection of natural & lab-grown gemstones at B.V. Gems.",
+        "Explore natural & lab-grown gemstones from B.V. Gems — trusted NYC Diamond District supplier of sapphires, rubies, emeralds & more.",
+      keywords: [
+        "loose gemstones",
+        "wholesale gemstones NYC",
+        "diamond district gemstones",
+        "calibrated gemstones",
+        "custom jewelry stones",
+      ],
+      alternates: {
+        canonical: `https://bvgems.com/${handle}`,
+      },
       openGraph: {
         title: "Gemstone Collection | B.V. Gems",
         description:
-          "Shop ethically sourced gemstones for fine jewelry & custom designs.",
+          "Shop ethically sourced gemstones for fine jewelry & custom designs. Calibrated stones available for wholesale in New York.",
         url: `https://bvgems.com/${handle}`,
         siteName: "B.V. Gems",
         type: "website",
+        images: [
+          {
+            url: data?.image || "/default-gemstone.jpg",
+            width: 800,
+            height: 800,
+            alt: "B.V. Gems gemstone collection",
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "Gemstone Collection | B.V. Gems",
+        description:
+          "Natural & lab-grown gemstones from B.V. Gems in NYC Diamond District. Shop sapphires, rubies, emeralds & more.",
+        images: [data?.image || "/default-gemstone.jpg"],
       },
     };
   }
@@ -33,11 +58,22 @@ export async function generateMetadata({
     gemstoneName.charAt(0).toUpperCase() + gemstoneName.slice(1);
 
   return {
-    title: `${formattedName} – Natural & Lab Grown Loose ${formattedName} Gemstones | B.V. Gems`,
-    description: `Shop ${formattedName.toLowerCase()} gemstones at B.V. Gems. Discover natural loose ${formattedName.toLowerCase()} stones in various shapes and sizes, perfect for rings, necklaces, and custom jewelry.`,
+    title: `${formattedName} – Natural & Wholesale Loose ${formattedName} Gemstones | B.V. Gems NYC`,
+    description: `Shop ${formattedName.toLowerCase()} gemstones at B.V. Gems, NYC Diamond District. Discover natural & lab-grown loose ${formattedName.toLowerCase()} stones in calibrated sizes, perfect for rings, necklaces, and custom jewelry.`,
+    keywords: [
+      `${formattedName} gemstones`,
+      `loose ${formattedName}`,
+      `wholesale ${formattedName} NYC`,
+      `calibrated ${formattedName} stones`,
+      `natural ${formattedName} jewelry`,
+      "diamond district gemstones",
+    ],
+    alternates: {
+      canonical: `https://bvgems.com/${handle}`,
+    },
     openGraph: {
-      title: `${formattedName} – Natural & Lab Grown Loose ${formattedName} Gemstones | B.V. Gems`,
-      description: `Browse our ${formattedName.toLowerCase()} gemstone collection. Choose from a variety of shapes, sizes, and qualities, ethically sourced for your jewelry needs.`,
+      title: `${formattedName} – Natural & Wholesale Loose ${formattedName} Gemstones | B.V. Gems`,
+      description: `Browse our ${formattedName.toLowerCase()} gemstone collection. Ethically sourced, calibrated stones in a variety of shapes & sizes for jewelers & designers.`,
       url: `https://bvgems.com/${handle}`,
       siteName: "B.V. Gems",
       type: "website",
@@ -49,6 +85,12 @@ export async function generateMetadata({
           alt: `${formattedName} gemstone collection`,
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${formattedName} Gemstones | B.V. Gems NYC`,
+      description: `Explore ${formattedName.toLowerCase()} gemstones at B.V. Gems. Loose calibrated stones available for wholesale in NYC’s Diamond District.`,
+      images: [data?.image || "/default-gemstone.jpg"],
     },
   };
 }

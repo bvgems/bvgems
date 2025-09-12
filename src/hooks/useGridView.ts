@@ -7,7 +7,7 @@ export const useGridView = () => {
   const [beads, setBeads] = useState<any>([]);
   const [activeTab, setActiveTab] = useState("alphabetical");
 
-  const { category } = useParams();
+  const { category }: any = useParams();
   const path = usePathname();
 
   useEffect(() => {

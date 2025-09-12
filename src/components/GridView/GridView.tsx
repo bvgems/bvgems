@@ -14,6 +14,7 @@ import { getGemstonesList } from "@/apis/api";
 import { IconSearch } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import Fuse from "fuse.js";
+import Script from "next/script";
 
 interface GridViewProps {
   gemstones?: any;
@@ -275,6 +276,24 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
             </div>
           )}
         </>
+      )}
+      {displayItems?.length > 0 && (
+        <Script
+          id="itemlist-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              itemListElement: displayItems.map((item: any, i: number) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                url: `https://bvgems.com/product-details?id=${item?.id}&name=${item?.collection_slug}`,
+                name: item?.title || `${item?.collection_slug} Gemstone`,
+              })),
+            }),
+          }}
+        />
       )}
     </div>
   );

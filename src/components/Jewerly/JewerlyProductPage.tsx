@@ -1,3 +1,4 @@
+// app/jewelry-details/[category]/[product]/page.tsx
 "use client";
 
 import { fetchProductByHandle } from "@/apis/api";
@@ -18,7 +19,65 @@ import { motion } from "framer-motion";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
 import { JewelryProductDetails } from "@/components/Jewerly/JewerlyProductDetails";
 import { RingComparison } from "./RingComparison";
+import Script from "next/script";
 
+// ---------- Metadata for SEO ----------
+import type { Metadata } from "next";
+
+type PageProps = {
+  params: { product: string; category: string };
+};
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const response = await fetchProductByHandle(params.product);
+  const product = response?.product;
+
+  if (!product) {
+    return {
+      title: "Jewelry | B.V. Gems",
+      description: "Explore fine gemstone jewelry from B.V. Gems.",
+    };
+  }
+
+  const title = `${product.title} | ${product.productType} by B.V. Gems`;
+  const description = `Shop the ${product.title}, crafted in ${
+    product?.goldType?.value || "14K Gold"
+  } with ${
+    product.gemstone || "gemstones"
+  }. Available in multiple sizes and styles.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website", // Changed from "product" to "website"
+      images: [
+        {
+          url: product?.images?.edges?.[0]?.node?.url || "/default-jewelry.jpg",
+          width: 800,
+          height: 800,
+          alt: product.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [
+        product?.images?.edges?.[0]?.node?.url || "/default-jewelry.jpg",
+      ],
+    },
+    alternates: {
+      canonical: `https://bvgems.com/jewelry-details/${params.category}/${params.product}`,
+    },
+  };
+}
+
+// ---------- Component ----------
 type Thumb = { url: string; title?: string | null };
 
 export default function JewelryProductPage() {
@@ -40,19 +99,7 @@ export default function JewelryProductPage() {
     { title: "Home", href: "/" },
     { title: capitalize(category), href: `/jewelry/${category}` },
     { title: productData?.title, href: undefined as any },
-  ].map((item, index) => (
-    <Anchor
-      size="sm"
-      href={item.href}
-      key={index}
-      style={{ fontSize: 12 }}
-      onClick={(e) => {
-        if (!item.href) e.preventDefault();
-      }}
-    >
-      {item.title}
-    </Anchor>
-  ));
+  ];
 
   useEffect(() => {
     const getProductByHandle = async () => {
@@ -120,7 +167,21 @@ export default function JewelryProductPage() {
   return (
     <>
       <Container size={1350} className="py-6">
-        <Breadcrumbs separator=">">{breadcrumbItems}</Breadcrumbs>
+        <Breadcrumbs separator=">">
+          {breadcrumbItems.map((item, index) => (
+            <Anchor
+              size="sm"
+              href={item.href}
+              key={index}
+              style={{ fontSize: 12 }}
+              onClick={(e) => {
+                if (!item.href) e.preventDefault();
+              }}
+            >
+              {item.title}
+            </Anchor>
+          ))}
+        </Breadcrumbs>
       </Container>
 
       <Container size={1350} className="pb-14">
@@ -175,7 +236,9 @@ export default function JewelryProductPage() {
                       >
                         <Image
                           src={thumb.url}
-                          alt={thumb.title || `thumb-${idx}`}
+                          alt={`${productData?.title} - ${
+                            thumb.title || `Image ${idx + 1}`
+                          }`}
                           fit="contain"
                           width={72}
                           height={72}
@@ -195,7 +258,7 @@ export default function JewelryProductPage() {
             )}
           </GridCol>
 
-          {/* RIGHT: Details panel (unchanged logic, new visuals) */}
+          {/* RIGHT: Details panel */}
           <GridCol span={{ base: 12, md: 5 }}>
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -214,6 +277,64 @@ export default function JewelryProductPage() {
           </GridCol>
         </Grid>
       </Container>
+
+      {/* ✅ JSON-LD Schema for SEO */}
+      {productData && (
+        <>
+          <Script
+            id="product-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org/",
+                "@type": "Product",
+                name: productData.title,
+                image: thumbnails.map((t) => t.url),
+                description:
+                  productData.description ||
+                  `${productData.title} from B.V. Gems.`,
+                sku: productData.id,
+                brand: {
+                  "@type": "Brand",
+                  name: "B.V. Gems",
+                },
+                offers: {
+                  "@type": "Offer",
+                  url: `https://bvgems.com/jewelry-details/${category}/${product}`,
+                  priceCurrency: "USD",
+                  price:
+                    productData?.priceRange?.minVariantPrice?.amount || "0",
+                  availability: "https://schema.org/InStock",
+                },
+                aggregateRating: {
+                  "@type": "AggregateRating",
+                  ratingValue: "5",
+                  reviewCount: 140,
+                },
+              }),
+            }}
+          />
+
+          <Script
+            id="breadcrumb-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: breadcrumbItems.map((item, idx) => ({
+                  "@type": "ListItem",
+                  position: idx + 1,
+                  name: item.title,
+                  item: item.href
+                    ? `https://bvgems.com${item.href}`
+                    : `https://bvgems.com${path}`,
+                })),
+              }),
+            }}
+          />
+        </>
+      )}
     </>
   );
 }

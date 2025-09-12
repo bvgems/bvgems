@@ -26,6 +26,7 @@ import { ImageZoom } from "../CommonComponents/ImageZoom";
 import { IconDiamond } from "@tabler/icons-react";
 import { SapphireLooseGemstoneColorOptions } from "@/utils/constants";
 import { Carousel } from "@mantine/carousel";
+import Script from "next/script";
 
 // Utility: pick one representative image per quality
 const getRepresentativeImages = (items: any[]) => {
@@ -308,8 +309,9 @@ export function CategoryContent({
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
             >
               <div className="px-4 flex flex-col gap-4">
-                <h1 className="uppercase text-[2rem] font-bold tracking-wide">
-                  {data?.title}
+                <h1 className="text-[1.5rem] font-bold tracking-wide">
+                  Calibrated Faceted Loose {data?.title} Gemstones – Natural &
+                  Lab Grown Calibrated Stones
                 </h1>
 
                 <div className="flex flex-wrap gap-3 mt-4">
@@ -431,6 +433,15 @@ export function CategoryContent({
                     clearable
                   />
                 </div>
+                <p className="text-gray-700 leading-relaxed mt-4">
+                  {data?.title} gemstones are prized for their rarity,
+                  brilliance, and versatility. At B.V. Gems in New York’s
+                  Diamond District, we offer both natural and lab-grown{" "}
+                  {data?.title.toLowerCase()} gemstones in calibrated sizes for
+                  rings, necklaces, earrings, and custom jewelry. Each stone is
+                  ethically sourced and inspected for quality, ensuring
+                  brilliance and durability.
+                </p>
 
                 {/* Static Info Table */}
                 <div className="mt-3 max-w-[500px]">
@@ -548,6 +559,29 @@ export function CategoryContent({
         typeFilter={typeFilter}
       />
       <SizeToleranceGuide opened={opened} close={close} />
+      <Script
+        id="product-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            name: `${data?.title} Gemstones`,
+            image: qualityImages.map((item: any) => item.image_url),
+            description: `Natural & lab-grown ${data?.title} gemstones in calibrated sizes from B.V. Gems, NYC Diamond District.`,
+            brand: { "@type": "Brand", name: "B.V. Gems" },
+            offers: {
+              "@type": "AggregateOffer",
+              url: `https://bvgems.com/loose-gemstones/${handle}`,
+              priceCurrency: "USD",
+              lowPrice: fetchedResult?.[0]?.price || "100",
+              highPrice:
+                fetchedResult?.[fetchedResult.length - 1]?.price || "5000",
+              offerCount: fetchedResult?.length || 0,
+            },
+          }),
+        }}
+      />
     </>
   );
 }

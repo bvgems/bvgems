@@ -22,6 +22,7 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconInfoCircle, IconZoomIn } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import Script from "next/script";
 import React, { useEffect, useState } from "react";
 
 type FreeSizeGemstoneDetailsProps = {
@@ -46,11 +47,6 @@ export default function FreeSizeGemstoneDetails({
   const router = useRouter();
   const addProductToCart = () => {
     if (!product) return;
-
-    const getPerCaratPrice = (item: any): number => {
-      if (!item) return 0;
-      return Number((item.price * caratWeight).toFixed(2));
-    };
 
     addToCart({
       product: {
@@ -109,7 +105,10 @@ export default function FreeSizeGemstoneDetails({
         <div className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full md:w-7/12 flex flex-col items-center">
-              <ImageZoom src={product?.image_url} />
+              <ImageZoom
+                alt={`Loose ${product?.gemstone_type} ${product?.shape} ${product?.dimension} gemstone – Free Size`}
+                src={product?.image_url}
+              />
               <div className="text-xs text-gray-500 flex items-center mt-2">
                 <IconZoomIn size={15} className="mr-1" />
                 Hover on the image to zoom
@@ -134,8 +133,9 @@ export default function FreeSizeGemstoneDetails({
             {/* Title */}
             <div>
               <h1 className="text-xl font-semibold">
-                {product?.gemstone_type} {product?.shape} {product?.size}{" "}
-                {product?.ct_weight}cts.
+                Loose {product?.gemstone_type} {product?.shape}{" "}
+                {product?.dimension} – {product?.ct_weight} Carat Free Size
+                Gemstone
               </h1>
               <div className="flex justify-between items-center mt-2">
                 <span className="text-sm text-gray-500">
@@ -176,6 +176,16 @@ export default function FreeSizeGemstoneDetails({
                 to view gemstone prices.
               </Alert>
             )}
+            <p className="text-sm text-gray-700 leading-relaxed">
+              This {product?.gemstone_type?.toLowerCase()} free size gemstone is
+              cut and polished to showcase its brilliance. Measuring{" "}
+              {product?.dimension} and weighing {product?.ct_weight} carats, it
+              is ideal for custom jewelry designs where flexibility in size is
+              required. B.V. Gems provides a curated collection of loose
+              gemstones, ethically sourced and hand-inspected in New York’s
+              Diamond District. Perfect for jewelers, collectors, and designers
+              seeking high-quality stones for unique projects.
+            </p>
 
             {/* Switch for mode selection */}
 
@@ -210,7 +220,7 @@ export default function FreeSizeGemstoneDetails({
               </Button>
             )}
             <div className="flex gap-2">
-              <IconInfoCircle size={20} color="gray"/>
+              <IconInfoCircle size={20} color="gray" />
               <p className="text-sm text-gray-400">
                 Prices and availability are subject to change without notice.
                 All weights and dimensions are approximate.
@@ -219,6 +229,30 @@ export default function FreeSizeGemstoneDetails({
           </div>
         </div>
       </div>
+      {product && (
+        <Script
+          id="product-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org/",
+              "@type": "Product",
+              name: `Loose ${product?.gemstone_type} ${product?.shape} ${product?.dimension}`,
+              image: product?.image_url,
+              description: `Loose ${product?.gemstone_type} gemstone (${product?.shape}, ${product?.dimension}, ${product?.ct_weight} carats). Free size stone ideal for custom jewelry.`,
+              sku: product?.lot_number,
+              brand: { "@type": "Brand", name: "B.V. Gems" },
+              offers: {
+                "@type": "Offer",
+                url: `https://bvgems.com/free-size/${product?.id}`,
+                priceCurrency: "USD",
+                price: product?.price,
+                availability: "http://schema.org/InStock",
+              },
+            }),
+          }}
+        />
+      )}
     </div>
   );
 }
