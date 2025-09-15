@@ -8,19 +8,35 @@ import {
   Text,
 } from "@mantine/core";
 import {
+  IconBubbleText,
   IconCreditCardPay,
-  IconQuestionMark,
   IconTruckDelivery,
 } from "@tabler/icons-react";
 import { PaymentOptions } from "../CommonComponents/PaymentOptions";
 
-export const ProductAccordion = () => {
+export const ProductAccordion = ({ description }: any) => {
   return (
     <Accordion variant="contained">
+      <AccordionItem value="print">
+        <AccordionControl
+          icon={
+            <IconBubbleText size={20} color="var(--mantine-color-blue-6)" />
+          }
+        >
+          <Text fw={510}>Read More</Text>
+        </AccordionControl>
+        <AccordionPanel>
+          <div className="pl-6">
+            <p className="text-sm text-gray-700 leading-relaxed">
+              {description}
+            </p>
+          </div>
+        </AccordionPanel>
+      </AccordionItem>
       <AccordionItem value="photos">
         <AccordionControl
           icon={
-            <IconTruckDelivery size={20} color="var(--mantine-color-red-6)" />
+            <IconTruckDelivery size={20} color="var(--mantine-color-blue-6)" />
           }
         >
           <Text fw={510}>Shipping And Return</Text>

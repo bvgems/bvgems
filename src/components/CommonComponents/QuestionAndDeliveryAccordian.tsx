@@ -4,7 +4,7 @@ import { ProductAccordion } from "../ProductDetails/ProductAccordion";
 import { IconMessageCircle } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
-export const QuestionAndDeliveryAccordian = () => {
+export const QuestionAndDeliveryAccordian = ({description}:any) => {
   const router = useRouter();
 
   return (
@@ -39,7 +39,7 @@ export const QuestionAndDeliveryAccordian = () => {
       </Card>
 
       {/* Accordion Section */}
-      <ProductAccordion />
+      <ProductAccordion description={description}/>
     </div>
   );
 };

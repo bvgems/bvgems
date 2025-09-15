@@ -64,6 +64,7 @@ export default function ProductDetailsPage() {
   const [quantity, setQuantity] = useState<number>(1);
   const [caratError, setCaratError] = useState<string | null>(null);
   const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
+  const [description, setDescription] = useState("");
 
   const [caratWeight, setCaratWeight] = useState<number>(0);
   const breadcrumbItems = [
@@ -115,6 +116,9 @@ export default function ProductDetailsPage() {
     const productDetails = await getParticularProductsData(pid);
 
     setProduct(productDetails);
+    setDescription(
+      `This ${productDetails?.collection_slug?.toLowerCase()} gemstone is carefully cut and calibrated for precision. Perfect for fine jewelry designs such as engagement rings, necklaces, and earrings, our gemstones are ethically sourced and graded for brilliance and clarity. Located in NYC’s Diamond District, B.V. Gems provides jewelers and collectors with trusted quality stones for generations.`
+    );
 
     const allDetails = await getShapesData(
       productDetails?.shape,
@@ -263,15 +267,6 @@ export default function ProductDetailsPage() {
                 </Badge>
               </div>
             </div>
-            <p className="text-sm text-gray-700 leading-relaxed">
-              This {product?.collection_slug?.toLowerCase()} gemstone is
-              carefully cut and calibrated for precision. Perfect for fine
-              jewelry designs such as engagement rings, necklaces, and earrings,
-              our gemstones are ethically sourced and graded for brilliance and
-              clarity. Located in NYC’s Diamond District, B.V. Gems provides
-              jewelers and collectors with trusted quality stones for
-              generations.
-            </p>
 
             {/* Price section */}
             {user ? (
@@ -368,14 +363,12 @@ export default function ProductDetailsPage() {
             {user && (
               <Checkbox label="Match For Size and Color" color="#0b182d" />
             )}
-
-            <QuestionAndDeliveryAccordian />
-
             {user && (
               <Button color="#0b182d" onClick={addProductToCart} fullWidth>
                 ADD TO CART
               </Button>
             )}
+            <QuestionAndDeliveryAccordian description={description} />
           </div>
         </div>
       </div>

@@ -33,7 +33,7 @@ const getRepresentativeImages = (items: any[]) => {
   const qualityMap: Record<string, any> = {};
   items.forEach((item) => {
     if (!qualityMap[item.quality]) {
-      qualityMap[item.quality] = item; // take the first one found
+      qualityMap[item.quality] = item; 
     }
   });
 
@@ -225,7 +225,7 @@ export function CategoryContent({
         </Breadcrumbs>
         <Grid>
           {/* Left: Image + Carousel */}
-          <GridCol span={{ base: 12, md: 5 }}>
+          <GridCol span={{ base: 12, md: 6 }}>
             <motion.div
               initial={{ opacity: 0, y: 80 }}
               animate={{ opacity: 1, y: 0 }}
@@ -341,7 +341,7 @@ export function CategoryContent({
             ) : null}
           </GridCol>
 
-          <GridCol span={{ base: 12, md: 7 }}>
+          <GridCol span={{ base: 12, md: 6 }}>
             <motion.div
               initial={{ opacity: 0, y: 80 }}
               animate={{ opacity: 1, y: 0 }}
