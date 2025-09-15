@@ -63,7 +63,6 @@ export const JewelryProductDetails = ({
   selectedImage,
   twoStoneRings,
 }: any) => {
-  console.log('proddd',productData)
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
   const cartStore = getCartStore(userKey);
@@ -163,20 +162,6 @@ export const JewelryProductDetails = ({
           </>
         ) : null}
       </Group>
-
-      {(jf.isRingCategory ||
-        jf.isEarringCategory ||
-        jf.isNecklaces ||
-        jf.isBracelets) && (
-        <div className="mt-6">
-          <JeweleryDetailsAccordion
-            productData={productData}
-            gemstone={selectedShape}
-            jf={jf}
-            earringMetafields={selectedEarring}
-          />
-        </div>
-      )}
 
       {/* 🔹 All product options (same as your code) */}
       <div className="mt-4 flex flex-col gap-6">
@@ -364,16 +349,23 @@ export const JewelryProductDetails = ({
           </GridCol>
         </Grid>
       </div>
+      {(jf.isRingCategory ||
+        jf.isEarringCategory ||
+        jf.isNecklaces ||
+        jf.isBracelets) && (
+        <div className="mt-6">
+          <JeweleryDetailsAccordion
+            productData={productData}
+            gemstone={selectedShape}
+            jf={jf}
+            earringMetafields={selectedEarring}
+          />
+        </div>
+      )}
 
       <div className="mt-4">
         <QuestionAndDeliveryAccordian description={productData?.description} />
       </div>
-
-      {/* {productData?.description && (
-        <Text mt="xl" size="sm" c="dimmed" className="italic mb-6">
-          {productData.description}
-        </Text>
-      )} */}
     </>
   );
 };
