@@ -37,6 +37,16 @@ export const getLayouts = async () => {
                       }
                     }
                   }
+
+                   layout_type:metafield(namespace: "custom", key: "layout_type") {
+            value
+            type
+          }
+
+           jewelry_type:metafield(namespace: "custom", key: "jewelry_type") {
+            value
+            type
+          }
                 
                   gemstone: metafield(namespace: "custom", key: "gemstone") {
                     value

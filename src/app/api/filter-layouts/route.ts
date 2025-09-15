@@ -6,10 +6,13 @@ const METAFIELD_MAP: Record<
   string,
   { key: string; type?: "number" | "string" }
 > = {
+  gemstone: { key: "gemstone", type: "string" },
   shape: { key: "shape", type: "string" },
-  size: { key: "size", type: "string" }, // Changed to string since it contains "5x3" format
-  length: { key: "size", type: "number" }, // Extract from size field
-  width: { key: "size", type: "number" }, // Extract from size field
+  type: { key: "layout_type", type: "string" },
+  layoutType: { key: "jewelry_type", type: "string" },
+  size: { key: "size", type: "string" },
+  length: { key: "size", type: "number" },
+  width: { key: "size", type: "number" },
 };
 
 export async function POST(req: NextRequest) {
@@ -20,17 +23,12 @@ export async function POST(req: NextRequest) {
 
     const layouts = await getLayouts();
 
-    const allShapes = layouts?.edges
-      ?.map((p: any) => p.node.shape?.value)
-      .filter(Boolean);
-
     const filtered = layouts?.edges?.filter((p: any) => {
       const node = p.node;
 
       const result = Object.keys(options).every((key) => {
         const val = options[key];
 
-        // Skip empty filters
         if (
           !val ||
           (Array.isArray(val) && val.length === 0) ||
@@ -52,7 +50,6 @@ export async function POST(req: NextRequest) {
           return false;
         }
 
-        // Handle length and width extraction from size field (e.g., "5x3")
         if (key === "length" || key === "width") {
           const sizeValue = metafield.value; // e.g., "5x3"
           const dimensions = sizeValue.split("x");

@@ -1,9 +1,9 @@
 "use client";
 
 import {
-  EarringTypes,
-  JewelryGemstones,
-  RingTypes,
+  ColorStoneGemstonesList,
+  ColorStoneLayoutType,
+  ColorStoneTypesList,
   ShapeFilterList,
 } from "@/utils/constants";
 import {
@@ -17,7 +17,6 @@ import {
   Divider,
   Image,
   MantineProvider,
-  RangeSlider,
 } from "@mantine/core";
 import { SizeFilter } from "../CommonComponents/SizeFilter";
 
@@ -28,6 +27,12 @@ const theme = createTheme({
 export const ColorstoneFilterSidebar = ({
   selectedShapes,
   setSelectedShapes,
+  selectedGemstones,
+  setSelectedGemstones,
+  selectedType,
+  setSelectedType,
+  selectedLayoutType,
+  setSelectedLayoutType,
   priceRange,
   setPriceRange,
   length,
@@ -52,6 +57,8 @@ export const ColorstoneFilterSidebar = ({
           multiple
           defaultValue={[
             "gemstone",
+            "type",
+            "layout-type",
             "color",
             "shape",
             "round-sizes",
@@ -59,6 +66,91 @@ export const ColorstoneFilterSidebar = ({
             "price",
           ]}
         >
+          <AccordionItem value="gemstone">
+            <AccordionControl>Gemstone</AccordionControl>
+            <AccordionPanel>
+              <CheckboxGroup
+                value={selectedGemstones}
+                onChange={setSelectedGemstones}
+              >
+                {ColorStoneGemstonesList?.map(
+                  (item: { label: string }, index: number) => (
+                    <div className="mt-2 ml-5" key={index}>
+                      <Checkbox
+                        value={item.label}
+                        checked={selectedGemstones.includes(item.label)}
+                        color="#0b182d"
+                        size="16"
+                        className="mt-4"
+                        label={
+                          <span className="text-md mb-2">{item.label}</span>
+                        }
+                        styles={{
+                          label: { display: "flex", alignItems: "center" },
+                        }}
+                      />
+                    </div>
+                  )
+                )}
+              </CheckboxGroup>
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem value="type">
+            <AccordionControl>Type</AccordionControl>
+            <AccordionPanel>
+              <CheckboxGroup value={selectedType} onChange={setSelectedType}>
+                {ColorStoneTypesList?.map(
+                  (item: { label: string }, index: number) => (
+                    <div className="mt-2 ml-5" key={index}>
+                      <Checkbox
+                        value={item.label}
+                        checked={selectedType.includes(item.label)}
+                        color="#0b182d"
+                        size="16"
+                        className="mt-4"
+                        label={
+                          <span className="text-md mb-2">{item.label}</span>
+                        }
+                        styles={{
+                          label: { display: "flex", alignItems: "center" },
+                        }}
+                      />
+                    </div>
+                  )
+                )}
+              </CheckboxGroup>
+            </AccordionPanel>
+          </AccordionItem>
+
+          <AccordionItem value="layout-type">
+            <AccordionControl>Layout Type</AccordionControl>
+            <AccordionPanel>
+              <CheckboxGroup
+                value={selectedLayoutType}
+                onChange={setSelectedLayoutType}
+              >
+                {ColorStoneLayoutType?.map(
+                  (item: { label: string }, index: number) => (
+                    <div className="mt-2 ml-5" key={index}>
+                      <Checkbox
+                        value={item.label}
+                        checked={selectedLayoutType.includes(item.label)}
+                        color="#0b182d"
+                        size="16"
+                        className="mt-4"
+                        label={
+                          <span className="text-md mb-2">{item.label}</span>
+                        }
+                        styles={{
+                          label: { display: "flex", alignItems: "center" },
+                        }}
+                      />
+                    </div>
+                  )
+                )}
+              </CheckboxGroup>
+            </AccordionPanel>
+          </AccordionItem>
           {/* Shape */}
           <AccordionItem value="shape">
             <AccordionControl>Gemstone Shape</AccordionControl>

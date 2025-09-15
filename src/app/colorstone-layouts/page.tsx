@@ -21,6 +21,9 @@ import Script from "next/script";
 
 export default function ColorStoneLayouts() {
   const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
+  const [selectedGemstones, setSelectedGemstones] = useState<string[]>([]);
+  const [selectedType, setSelectedType] = useState([]);
+  const [selectedLayoutType, setSelectedLayoutType] = useState([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([100, 15000]);
   const [length, setLength] = useState<number | string>("");
   const [width, setWidth] = useState<number | string>("");
@@ -35,7 +38,10 @@ export default function ColorStoneLayouts() {
   const fetchFilteredData = async () => {
     setLoading(true);
     const filterOptions = {
+      gemstone: selectedGemstones,
       shape: selectedShapes,
+      type: selectedType,
+      layoutType: selectedLayoutType,
       size: selectedRoundSizes,
       length,
       width,
@@ -71,7 +77,16 @@ export default function ColorStoneLayouts() {
   useEffect(() => {
     if (!didMount?.current) return;
     fetchFilteredData();
-  }, [selectedShapes, selectedRoundSizes, length, width, priceRange]);
+  }, [
+    selectedShapes,
+    selectedGemstones,
+    selectedType,
+    selectedLayoutType,
+    selectedRoundSizes,
+    length,
+    width,
+    priceRange,
+  ]);
 
   return (
     <div>
@@ -86,6 +101,12 @@ export default function ColorStoneLayouts() {
           <ColorstoneFilterSidebar
             selectedShapes={selectedShapes}
             setSelectedShapes={setSelectedShapes}
+            selectedGemstones={selectedGemstones}
+            setSelectedGemstones={setSelectedGemstones}
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+            selectedLayoutType={selectedLayoutType}
+            setSelectedLayoutType={setSelectedLayoutType}
             priceRange={priceRange}
             setPriceRange={setPriceRange}
             length={length}
@@ -144,6 +165,12 @@ export default function ColorStoneLayouts() {
         <ColorstoneFilterSidebar
           selectedShapes={selectedShapes}
           setSelectedShapes={setSelectedShapes}
+          selectedGemstones={selectedGemstones}
+          setSelectedGemstones={setSelectedGemstones}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          selectedLayoutType={selectedLayoutType}
+          setSelectedLayoutType={setSelectedLayoutType}
           priceRange={priceRange}
           setPriceRange={setPriceRange}
           length={length}

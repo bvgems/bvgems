@@ -1097,6 +1097,39 @@ export const ShapeFilterList = [
     image: "/assets/baguette.svg",
   },
 ];
+export const ColorStoneGemstonesList = [
+  {
+    label: "Sapphire",
+  },
+  {
+    label: "Ruby",
+  },
+  {
+    label: "Emerald",
+  },
+  {
+    label: "Tsavorite",
+  },
+];
+export const ColorStoneTypesList = [
+  {
+    label: "Ombre",
+  },
+  {
+    label: "Straight",
+  },
+  {
+    label: "Multi",
+  },
+];
+export const ColorStoneLayoutType = [
+  {
+    label: "Bracelet",
+  },
+  {
+    label: "Necklace",
+  },
+];
 
 export const SizeFilterList = {
   Round: [

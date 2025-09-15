@@ -164,6 +164,45 @@ export function CategoryContent({
     );
   };
 
+  const getQuality = () => {
+    switch (data?.title) {
+      case "Alexandrite":
+        return "Lab Grown Quality ";
+
+      case "Amethyst":
+        return "A Quality ";
+
+      case "Aquamarine":
+        return "AA And AAA Quality ";
+
+      case "Citrine":
+        return "AA Quality ";
+
+      case "Emerald":
+        return "All Natural and Lab Grown Quality ";
+
+      case "Morganite":
+        return "A Quality ";
+
+      case "Amethyst":
+        return "A Quality ";
+
+      case "Peridot":
+        return "A Quality ";
+
+      case "Ruby":
+        return "All Natural and Lab Grown Quality ";
+
+      case "Sapphire":
+        return "All Natural and Lab Grown Quality ";
+      case "Tanzanite":
+        return "AA Quality ";
+
+      default:
+        break;
+    }
+  };
+
   const breadcrumbItems = [
     { title: "Home", href: "/" },
     { title: "Calibrated Faceted Gemstones", href: "/loose-gemstones" },
@@ -436,7 +475,7 @@ export function CategoryContent({
                 <p className="text-gray-700 leading-relaxed mt-4">
                   {data?.title} gemstones are prized for their rarity,
                   brilliance, and versatility. At B.V. Gems in New York’s
-                  Diamond District, we offer both natural and lab-grown{" "}
+                  Diamond District, we offer {getQuality()}
                   {data?.title.toLowerCase()} gemstones in calibrated sizes for
                   rings, necklaces, earrings, and custom jewelry. Each stone is
                   ethically sourced and inspected for quality, ensuring

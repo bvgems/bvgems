@@ -130,10 +130,7 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
           )}
 
           {isMobile && (
-            <div
-              className="px-4 mt-3"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <div className="px-4 mt-3" onClick={(e) => e.stopPropagation()}>
               <p className="text-xs">Zoom In</p>
               <Slider
                 size={"xs"}
@@ -153,11 +150,6 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
             <h3 className="text-[1.05rem] leading-snug text-gray-800 line-clamp-2 min-h-[40px]">
               {node?.title}
             </h3>
-          </div>
-
-          {/* SHAPE + WEIGHT */}
-          <div className="px-4 mt-1 text-[0.95rem] text-gray-500">
-            {node.shape?.value} • {node.ct_weight?.value} ct
           </div>
 
           {/* PRICE */}

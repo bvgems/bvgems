@@ -44,6 +44,7 @@ interface ProductPageProps {
 }
 
 export default function LayoutProductPage({ product }: ProductPageProps) {
+  console.log("prodd", product);
   const shapeSize = JSON.parse(product?.shapeSizes?.value);
   const images = product?.images?.edges?.map((img: any) => img.node.url) || [];
   const [mainImage, setMainImage] = useState(images?.[2] || images?.[0]); // default main image
@@ -247,6 +248,12 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
             <div className="space-y-3 mb-6 ">
               <Group>
                 <Text fw={600} w={150}>
+                  Gemstone:
+                </Text>
+                <Text>{product?.gemstone?.value || "-"}</Text>
+              </Group>
+              <Group>
+                <Text fw={600} w={150}>
                   Shape:
                 </Text>
                 <Text>{product?.shape?.value || "-"}</Text>
@@ -269,6 +276,16 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
                   Stone Type:
                 </Text>
                 <Text>{product?.stoneType?.value || "Natural"}</Text>
+              </Group>
+              <Group>
+                <Text fw={600} w={150}>
+                  Product Type:
+                </Text>
+                <Text>
+                  {`${product?.jewelryType?.value} - ${
+                    product?.layout_type?.value || ""
+                  }`}
+                </Text>
               </Group>
             </div>
 

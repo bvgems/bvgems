@@ -443,6 +443,11 @@ export const GetProductByHandle = `
             value
             type
           }
+
+        layout_type:metafield(namespace: "custom", key: "layout_type") {
+            value
+            type
+          }
       stoneType: metafield(namespace: "custom", key: "stone_type") {
             value
             type
@@ -508,6 +513,11 @@ export const GetProductByHandle = `
             type
           }
               jewelryType: metafield(namespace: "custom", key: "jewelry_type") {
+                      value
+                      type
+                    }
+
+               product_type: metafield(namespace: "custom", key: "producttype") {
                       value
                       type
                     }

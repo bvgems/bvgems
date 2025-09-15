@@ -350,7 +350,10 @@ export const JewelryProductDetails = ({
         </Grid>
       </div>
 
-      {(jf.isRingCategory || jf.isEarringCategory || jf.isNecklaces) && (
+      {(jf.isRingCategory ||
+        jf.isEarringCategory ||
+        jf.isNecklaces ||
+        jf.isBracelets) && (
         <div className="mt-6">
           <JeweleryDetailsAccordion
             productData={productData}

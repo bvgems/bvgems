@@ -1,7 +1,14 @@
 "use client";
 import { useGridView } from "@/hooks/useGridView";
 import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
-import { Skeleton, Grid, GridCol, Anchor, Breadcrumbs } from "@mantine/core";
+import {
+  Skeleton,
+  Grid,
+  GridCol,
+  Anchor,
+  Breadcrumbs,
+  Image,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
 import Script from "next/script";
 

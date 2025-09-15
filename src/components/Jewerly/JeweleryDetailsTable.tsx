@@ -41,7 +41,10 @@ export const JeweleryDetailsAccordion = ({
         <Accordion.Control>More Details</Accordion.Control>
         <Accordion.Panel>
           <div className="space-y-3">
-            <Row label="Gemstone:" value={gemstone || "-"} />
+            <Row
+              label="Gemstone:"
+              value={gemstone ? gemstone : productData?.gemstone?.value || "-"}
+            />
             <Row
               label="Stone Type:"
               value={productData?.stoneType?.value || "Natural"}
@@ -50,7 +53,7 @@ export const JeweleryDetailsAccordion = ({
             {productData?.dimension?.value && (
               <Row
                 label="Dimension:"
-                value={productData?.dimension?.value || "-"}
+                value={productData?.dimension?.value + "mm" || "-"}
               />
             )}
             <Row

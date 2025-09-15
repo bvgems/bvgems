@@ -8,12 +8,9 @@ import {
   Button,
   Checkbox,
   Modal,
-  NumberInput,
-  NumberInputHandlers,
   Switch,
-  Text,
 } from "@mantine/core";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   getCategoryData,
@@ -21,14 +18,7 @@ import {
   getShapesData,
 } from "@/apis/api";
 import { ProductSpecifications } from "@/components/ProductDetails/ProductSpecifications";
-import {
-  IconCheck,
-  IconInfoCircle,
-  IconMinus,
-  IconPlus,
-  IconZoomIn,
-} from "@tabler/icons-react";
-import { ProductAccordion } from "@/components/ProductDetails/ProductAccordion";
+import { IconCheck, IconZoomIn } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { SizeToleranceGuide } from "@/components/Tolerance/SizeToleranceGuide";
 import { getCartStore } from "@/store/useCartStore";
