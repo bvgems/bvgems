@@ -56,10 +56,10 @@ export const JeweleryDetailsAccordion = ({
                 value={productData?.dimension?.value + "mm" || "-"}
               />
             )}
-            <Row
+            {/* <Row
               label="Stone Color:"
               value={gemstone ? STONE_COLORS[gemstone] || "-" : "-"}
-            />
+            /> */}
 
             <Divider my="xs" />
 

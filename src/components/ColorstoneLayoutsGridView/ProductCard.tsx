@@ -1,18 +1,22 @@
-import { Card, GridCol, Slider, Tooltip } from "@mantine/core";
+import { Card, GridCol, Modal, Slider, Tooltip } from "@mantine/core";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ImageZoom } from "../CommonComponents/ImageZoom";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { ImageZoomMobile } from "../CommonComponents/ImageZoomMobile";
+import { useAuth } from "@/hooks/useAuth";
+import { AuthForm } from "../Auth/AuthForm";
 
 const MotionDiv = motion.div;
 export const ProductCard = ({ node, index }: { node: any; index: number }) => {
   const router = useRouter();
+  const { user } = useAuth();
 
   const variants = node?.variants?.edges || [];
   const defaultMain = node?.images?.edges?.[1]?.node?.url || "";
+  const [modalOpened, { open, close }] = useDisclosure(false);
 
   const [mainImage, setMainImage] = useState<string>(defaultMain);
   const [selectedImage, setSelectedImage] = useState<string>(mainImage);
@@ -64,100 +68,129 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
   const displayImage = hoverPreviewImage || selectedImage || mainImage;
 
   return (
-    <GridCol key={node.id} span={{ base: 12, sm: 12, md: 6, lg: 6 }}>
-      <MotionDiv
-        className="h-full"
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
+    <>
+      <Modal
+        opened={modalOpened}
+        onClose={close}
+        overlayProps={{ style: { backdropFilter: "blur(4px)" } }}
+        transitionProps={{ transition: "slide-right" }}
+        centered
       >
-        <Card
-          radius="md"
-          shadow="none"
-          className="overflow-hidden flex flex-col h-full cursor-pointer bg-transparent"
-          onClick={redirectToProduct}
-          style={{ height: "100%" }}
+        <AuthForm onClose={close} />
+      </Modal>
+      <GridCol key={node.id} span={{ base: 12, sm: 12, md: 6, lg: 6 }}>
+        <MotionDiv
+          className="h-full"
+          whileHover={{ y: -4 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
         >
-          {/* IMAGE AREA */}
-          <div className="relative w-full h-[350px] flex items-center justify-center overflow-hidden bg-gray-50">
-            {isMobile ? (
-              <ImageZoomMobile
-                src={displayImage}
-                alt={node?.title}
-                scale={scale}
-              />
-            ) : (
-              <AnimatePresence mode="wait">
-                <ImageZoom
-                  key={displayImage}
+          <Card
+            radius="md"
+            shadow="none"
+            className="overflow-hidden flex flex-col h-full cursor-pointer bg-transparent"
+            onClick={redirectToProduct}
+            style={{ height: "100%" }}
+          >
+            {/* IMAGE AREA */}
+            <div className="relative w-full h-[350px] flex items-center justify-center overflow-hidden bg-gray-50">
+              {isMobile ? (
+                <ImageZoomMobile
                   src={displayImage}
                   alt={node?.title}
+                  scale={scale}
                 />
-              </AnimatePresence>
-            )}
-          </div>
+              ) : (
+                <AnimatePresence mode="wait">
+                  <ImageZoom
+                    key={displayImage}
+                    src={displayImage}
+                    alt={node?.title}
+                  />
+                </AnimatePresence>
+              )}
+            </div>
 
-          {/* VARIANT SWATCHES */}
-          {variantImages.length > 1 && (
-            <div
-              className="mt-3 flex items-center gap-2 px-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {variantImages.slice(0, 6).map((variant: any, i: number) => (
-                <Tooltip
-                  key={`${variant?.image}-${i}`}
-                  label={variant?.title || `Variant ${i + 1}`}
-                >
-                  <button
-                    onClick={() => setSelectedImage(variant.image)}
-                    onMouseEnter={() => setHoverPreviewImage(variant.image)}
-                    onMouseLeave={() => setHoverPreviewImage(null)}
-                    className={`w-7 h-7 rounded-full overflow-hidden ring-0 outline-none transition transform hover:scale-[1.06] ${
-                      selectedImage === variant.image
-                        ? "shadow-[0_0_0_2px_rgba(0,0,0,0.5)]"
-                        : ""
-                    }`}
-                    aria-label={`Variant ${variant.title || i + 1}`}
+            {/* VARIANT SWATCHES */}
+            {variantImages.length > 1 && (
+              <div
+                className="mt-3 flex items-center gap-2 px-4"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {variantImages.slice(0, 6).map((variant: any, i: number) => (
+                  <Tooltip
+                    key={`${variant?.image}-${i}`}
+                    label={variant?.title || `Variant ${i + 1}`}
                   >
-                    <img
-                      src={variant.image}
-                      alt={variant.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                </Tooltip>
-              ))}
+                    <button
+                      onClick={() => setSelectedImage(variant.image)}
+                      onMouseEnter={() => setHoverPreviewImage(variant.image)}
+                      onMouseLeave={() => setHoverPreviewImage(null)}
+                      className={`w-7 h-7 rounded-full overflow-hidden ring-0 outline-none transition transform hover:scale-[1.06] ${
+                        selectedImage === variant.image
+                          ? "shadow-[0_0_0_2px_rgba(0,0,0,0.5)]"
+                          : ""
+                      }`}
+                      aria-label={`Variant ${variant.title || i + 1}`}
+                    >
+                      <img
+                        src={variant.image}
+                        alt={variant.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  </Tooltip>
+                ))}
+              </div>
+            )}
+
+            {isMobile && (
+              <div className="px-4 mt-3" onClick={(e) => e.stopPropagation()}>
+                <p className="text-xs">Zoom In</p>
+                <Slider
+                  size={"xs"}
+                  color="#0b182d"
+                  min={1}
+                  max={4}
+                  step={0.1}
+                  value={scale}
+                  onChange={setScale}
+                  label={(value) => `${value.toFixed(1)}x`}
+                />
+              </div>
+            )}
+
+            {/* TITLE */}
+            <div className="mt-2 px-4">
+              <h3 className="text-[1.05rem] leading-snug text-gray-800 line-clamp-2 min-h-[40px]">
+                {node?.title}
+              </h3>
             </div>
-          )}
 
-          {isMobile && (
-            <div className="px-4 mt-3" onClick={(e) => e.stopPropagation()}>
-              <p className="text-xs">Zoom In</p>
-              <Slider
-                size={"xs"}
-                color="#0b182d"
-                min={1}
-                max={4}
-                step={0.1}
-                value={scale}
-                onChange={setScale}
-                label={(value) => `${value.toFixed(1)}x`}
-              />
-            </div>
-          )}
+            {!user ? (
+              <p className="px-4 pb-4 text-gray-700 text-sm font-medium mt-2">
+                Please{" "}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    open();
+                  }}
+                  className="underline text-blue-600 hover:text-blue-800 cursor-pointer"
+                >
+                  sign in
+                </button>{" "}
+                to view layouts prices.
+              </p>
+            ) : (
+              <div className="mt-2 px-4 pb-4 text-[1rem] font-semibold text-gray-900">
+                {priceText}
+              </div>
+            )}
 
-          {/* TITLE */}
-          <div className="mt-2 px-4">
-            <h3 className="text-[1.05rem] leading-snug text-gray-800 line-clamp-2 min-h-[40px]">
-              {node?.title}
-            </h3>
-          </div>
-
-          {/* PRICE */}
-          <div className="mt-2 px-4 pb-4 text-[1rem] font-semibold text-gray-900">
-            {priceText}
-          </div>
-        </Card>
-      </MotionDiv>
-    </GridCol>
+            {/* PRICE */}
+          </Card>
+        </MotionDiv>
+      </GridCol>
+    </>
   );
 };
