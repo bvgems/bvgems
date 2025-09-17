@@ -67,7 +67,7 @@ export const JewelryProductDetails = ({
   onShapeChange,
   selectedImage,
   twoStoneRings,
-  category
+  category,
 }: any) => {
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
@@ -139,7 +139,7 @@ export const JewelryProductDetails = ({
         />
       </Drawer>
       <h1 className="capitalize text-[1.6rem] leading-snug tracking-wide mb-2">
-        {selectedShape || productData?.title}
+        {jf.isBead ? productData?.title : selectedShape || productData?.title}
       </h1>
 
       {/* ⭐ Ratings */}
@@ -177,7 +177,6 @@ export const JewelryProductDetails = ({
         ) : null}
       </Group>
 
-      {/* 🔹 Product Options */}
       <div className="mt-4 flex flex-col gap-6">
         {!jf.isBead &&
           !(

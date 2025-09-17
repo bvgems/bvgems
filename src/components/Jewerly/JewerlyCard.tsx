@@ -75,10 +75,11 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
 
     if (!handle) return;
 
+    const finalCategory = isBead ? "beads" : category;
     if (stoneSlug) {
-      router.push(`/jewelry-details/${category}/${handle}/${stoneSlug}`);
+      router.push(`/jewelry-details/${finalCategory}/${handle}/${stoneSlug}`);
     } else {
-      router.push(`/jewelry-details/${category}/${handle}`);
+      router.push(`/jewelry-details/${finalCategory}/${handle}`);
     }
   };
 

@@ -14,6 +14,7 @@ export function useJewelryFunctions(
 ) {
   const segments = path?.split("/").filter(Boolean);
   const category = segments?.[1];
+  // console.log('categoryy',segments)
 
   const showShapeOptions = productData?.showshapeoptions?.value === "true";
   const isTwoStoneRing = productData?.isTwoStoneRing?.value === "true";
