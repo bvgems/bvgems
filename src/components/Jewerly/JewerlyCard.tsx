@@ -82,17 +82,19 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
     }
   };
 
-  const seoTitle =
-    product?.node?.variants?.edges?.length > 1
+  const seoTitle = !isBead
+    ? product?.node?.variants?.edges?.length > 1
       ? `${selectedVariant?.node?.title}`
-      : `${product?.node?.title}`;
+      : `${product?.node?.title}`
+    : product?.node?.title;
 
-  const displayImage =
-    hoverPreviewImage ||
-    (product?.node?.variants?.edges?.length > 1
-      ? selectedVariant?.node?.image?.url
-      : product?.node?.image?.url ||
-        product?.node?.images?.edges[0]?.node?.url);
+  const displayImage = !isBead
+    ? hoverPreviewImage ||
+      (product?.node?.variants?.edges?.length > 1
+        ? selectedVariant?.node?.image?.url
+        : product?.node?.image?.url ||
+          product?.node?.images?.edges[0]?.node?.url)
+    : product?.node?.image?.url || product?.node?.images?.edges[0]?.node?.url;
 
   return (
     <Card
