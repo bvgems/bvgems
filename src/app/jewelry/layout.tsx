@@ -53,20 +53,28 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const response = await getFilteredJewelry(filterOptions, collectionSlug);
 
     let products = response?.data || [];
+    // console.log('proddd',products)
 
     if (selectedStones.length > 0) {
       products = products.map((p: any) => {
         const gemstoneMatch = selectedStones[0];
-        const matchedVariant = p?.variants?.edges?.find(
-          (v: any) =>
-            v?.node?.title?.toLowerCase() === gemstoneMatch.toLowerCase()
-        );
+
+        const matchedVariant = p?.node?.variants?.edges?.find((v: any) => {
+          return v?.node?.metafield
+            ? v?.node?.metafield?.value?.toLowerCase() ===
+                gemstoneMatch.toLowerCase()
+            : false;
+        });
 
         return {
           ...p,
-          mainImage:
-            matchedVariant?.node?.image?.url ||
-            p?.images?.edges?.[0]?.node?.url,
+          mainImage: matchedVariant
+            ? matchedVariant?.node?.image?.url
+            : p?.images?.edges?.[0]?.node?.url,
+
+          matchedTitle: matchedVariant
+            ? matchedVariant?.node?.metafield?.value
+            : matchedVariant?.node?.title,
         };
       });
     } else {
@@ -75,7 +83,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         mainImage: p?.images?.edges?.[0]?.node?.url,
       }));
     }
-
+    console.log('prooo',products)
     setFilteredJewelry(products);
     setLoading(false);
   };

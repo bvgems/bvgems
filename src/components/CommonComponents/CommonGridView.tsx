@@ -1,14 +1,7 @@
 "use client";
 import { useGridView } from "@/hooks/useGridView";
 import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
-import {
-  Skeleton,
-  Grid,
-  GridCol,
-  Anchor,
-  Breadcrumbs,
-  Image,
-} from "@mantine/core";
+import { Skeleton, Grid, GridCol, Anchor, Breadcrumbs } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Script from "next/script";
 
@@ -17,6 +10,7 @@ export const CommonGridView = ({
   isBead = false,
   selectedStones,
 }: any) => {
+  // console.log('filterddddd',filteredJewelry)
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -58,7 +52,7 @@ export const CommonGridView = ({
       <div className="px-4 sm:px-8 pt-6 pb-14">
         <Grid gutter="lg">
           {Array.from({ length: 8 }).map((_, i) => (
-            <GridCol span={{ base: 6, sm: 6, md: 3, lg: 3 }} key={i}>
+            <GridCol span={{ base: 6, sm: 6, md: 4, lg: 4 }} key={i}>
               <Skeleton height={260} radius="md" mb="sm" />
               <Skeleton height={20} width="80%" mb="xs" />
               <Skeleton height={16} width="40%" />
@@ -123,17 +117,20 @@ export const CommonGridView = ({
       {/* ✅ Responsive grid */}
       <Grid gutter="lg">
         {(finalProducts?.length ? finalProducts : beads)?.map(
-          (product: any, index: number) => (
-            <GridCol span={{ base: 6, sm: 6, md: 3, lg: 3 }} key={index}>
-              <JewelryCategoryCard
-                isBead={isBead}
-                category={category}
-                product={product}
-                index={index}
-                selectedStones={selectedStones}
-              />
-            </GridCol>
-          )
+          (product: any, index: number) => {
+            // console.log('proooo at',product)
+            return (
+              <GridCol span={{ base: 6, sm: 6, md: 4, lg: 4 }} key={index}>
+                <JewelryCategoryCard
+                  isBead={isBead}
+                  category={category}
+                  product={product}
+                  index={index}
+                  selectedStones={selectedStones}
+                />
+              </GridCol>
+            );
+          }
         )}
       </Grid>
 

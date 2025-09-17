@@ -261,6 +261,9 @@ export const getAllJeweleryProducts = async (category: any) => {
                             url
                             altText
                           }
+                             metafield(namespace: "custom", key: "gemstones") {
+                            value
+                              }
                           sku
                         }
                       }

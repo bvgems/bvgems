@@ -306,7 +306,6 @@ export const getFilteredData = async (options: any) => {
 
 export const getFilteredColorStoneLayouts = async (options: any) => {
   try {
-    console.log("optionssss", options);
     const response = await axios.post(`${baseUrl}/api/filter-layouts`, {
       options,
     });

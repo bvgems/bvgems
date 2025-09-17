@@ -4,9 +4,11 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   Badge,
   Button,
+  Drawer,
   Grid,
   GridCol,
   Group,
+  Image,
   NumberFormatter,
   NumberInput,
   ScrollArea,
@@ -27,31 +29,34 @@ import { OptionSquare } from "../CommonComponents/OptionSquare";
 import { FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { useDisclosure } from "@mantine/hooks";
+import { JewelryOptionsDrawer } from "./JewelryOptionsDrawer";
 
 // 🔹 Hook to generate fake review count
 function useFakeReviewCount(jf: any) {
   return useMemo(() => {
     if (jf.isRingCategory) {
-      return Math.floor(Math.random() * (350 - 120 + 1)) + 120; // 120–350
+      return Math.floor(Math.random() * (350 - 120 + 1)) + 120;
     }
     if (jf.isNecklaces) {
-      return Math.floor(Math.random() * (280 - 100 + 1)) + 100; // 100–280
+      return Math.floor(Math.random() * (280 - 100 + 1)) + 100;
     }
     if (jf.isBracelets) {
-      return Math.floor(Math.random() * (150 - 50 + 1)) + 50; // 50–150
+      return Math.floor(Math.random() * (150 - 50 + 1)) + 50;
     }
     if (jf.isEarringCategory) {
-      return Math.floor(Math.random() * (120 - 30 + 1)) + 30; // 30–120
+      return Math.floor(Math.random() * (120 - 30 + 1)) + 30;
     }
     if (jf.isBead) {
-      return Math.floor(Math.random() * (60 - 15 + 1)) + 15; // 15–60
+      return Math.floor(Math.random() * (60 - 15 + 1)) + 15;
     }
-    return Math.floor(Math.random() * (80 - 20 + 1)) + 20; // fallback
+    return Math.floor(Math.random() * (80 - 20 + 1)) + 20;
   }, [jf]);
 }
 
@@ -62,11 +67,13 @@ export const JewelryProductDetails = ({
   onShapeChange,
   selectedImage,
   twoStoneRings,
+  category
 }: any) => {
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
+  const [opened, { open, close }] = useDisclosure(false);
 
   const jf = useJewelryFunctions(
     path,
@@ -124,8 +131,15 @@ export const JewelryProductDetails = ({
 
   return (
     <>
+      <Drawer size={540} position="bottom" opened={opened} onClose={close}>
+        <JewelryOptionsDrawer
+          selectedShape={selectedShape}
+          productData={productData}
+          category={category}
+        />
+      </Drawer>
       <h1 className="capitalize text-[1.6rem] leading-snug tracking-wide mb-2">
-        {productData?.title}
+        {selectedShape || productData?.title}
       </h1>
 
       {/* ⭐ Ratings */}
@@ -163,7 +177,7 @@ export const JewelryProductDetails = ({
         ) : null}
       </Group>
 
-      {/* 🔹 All product options (same as your code) */}
+      {/* 🔹 Product Options */}
       <div className="mt-4 flex flex-col gap-6">
         {!jf.isBead &&
           !(
@@ -182,7 +196,7 @@ export const JewelryProductDetails = ({
               modules={[FreeMode]}
               spaceBetween={12}
               slidesPerView="auto"
-              freeMode={true}
+              freeMode
               style={{ padding: "6px 0" }}
             >
               {jf.getBeadStoneSize().map((size: string) => (
@@ -206,7 +220,7 @@ export const JewelryProductDetails = ({
               modules={[FreeMode]}
               spaceBetween={12}
               slidesPerView="auto"
-              freeMode={true}
+              freeMode
               style={{ padding: "6px 0" }}
             >
               {parsed.map((opt) => (
@@ -230,7 +244,7 @@ export const JewelryProductDetails = ({
               modules={[FreeMode]}
               spaceBetween={12}
               slidesPerView="auto"
-              freeMode={true}
+              freeMode
               style={{ padding: "6px 0" }}
             >
               {jf.ringSizes().map((size: string) => (
@@ -254,7 +268,7 @@ export const JewelryProductDetails = ({
               modules={[FreeMode]}
               spaceBetween={12}
               slidesPerView="auto"
-              freeMode={true}
+              freeMode
               style={{ padding: "6px 0" }}
             >
               {jf.braceletLength().map((len: string) => (
@@ -278,7 +292,7 @@ export const JewelryProductDetails = ({
               modules={[FreeMode]}
               spaceBetween={12}
               slidesPerView="auto"
-              freeMode={true}
+              freeMode
               style={{ padding: "6px 0" }}
             >
               {jf.getLengthData().map((len: string) => (
@@ -296,32 +310,41 @@ export const JewelryProductDetails = ({
         )}
 
         {productData?.showshapeoptions?.value === "true" && (
-          <div>
-            <p className="mb-2 font-medium">
-              {jf.isTwoStoneRing
-                ? `Select Stones (${productData?.firstShape?.value} / ${productData?.secondShape?.value})`
-                : "Select Stone"}
-            </p>
-            <ScrollArea scrollbarSize={6} offsetScrollbars>
-              <Group gap="sm" wrap="nowrap">
-                {productData?.variants?.edges?.map((v: any) => {
-                  const title = v?.node?.title;
+          <div className="">
+            <p className="mb-2 font-medium">Explore Different Gemstones</p>
+            <div className="flex items-center justify-between border border-gray-200 pr-6">
+              {productData?.variants?.edges
+                ?.filter((v: any) => v?.node?.title === selectedShape) // ✅ only current variant
+                ?.map((v: any, idx: number) => {
+                  const gemstoneName =
+                    v?.node?.metafield?.value || v?.node?.title;
                   return (
-                    <OptionSquare
-                      key={title}
-                      label={title}
-                      value={title}
-                      selected={selectedShape === title}
-                      onClick={jf.isTwoStoneRing ? jf.setStones : onShapeChange}
-                    />
+                    <div
+                      key={idx}
+                      className="flex items-center text-base font-medium"
+                    >
+                      <Image
+                        src={v?.node?.image_url?.reference?.image?.url}
+                        alt={
+                          v?.node?.image_url?.reference?.image?.altText ||
+                          v?.node?.title
+                        }
+                        w={60}
+                        h={60}
+                      />
+                      <p>{gemstoneName}</p>
+                    </div>
                   );
                 })}
-              </Group>
-            </ScrollArea>
+              <div className="cursor-pointer">
+                <span onClick={open} className="underline">
+                  Change
+                </span>
+              </div>
+            </div>
           </div>
         )}
 
-        {/* Quantity + Add to cart */}
         <Grid mt="xs" align="stretch">
           <GridCol span={{ base: 3 }}>
             <NumberInput
@@ -349,6 +372,7 @@ export const JewelryProductDetails = ({
           </GridCol>
         </Grid>
       </div>
+
       {(jf.isRingCategory ||
         jf.isEarringCategory ||
         jf.isNecklaces ||

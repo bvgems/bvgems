@@ -1,4 +1,3 @@
-// app/jewelry-details/[category]/[product]/page.tsx
 "use client";
 
 import { fetchProductByHandle } from "@/apis/api";
@@ -11,41 +10,42 @@ import {
   Grid,
   GridCol,
   Image,
-  Text,
 } from "@mantine/core";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
 import { JewelryProductDetails } from "@/components/Jewerly/JewerlyProductDetails";
-import { RingComparison } from "./RingComparison";
 import Script from "next/script";
-
-// ---------- Metadata for SEO ----------
 import type { Metadata } from "next";
+import { RingComparison } from "./RingComparison";
 
 type PageProps = {
-  params: { product: string; category: string };
+  params: any;
 };
+
+// ---------- Metadata for SEO ----------
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const response = await fetchProductByHandle(params.product);
-  const product = response?.product;
+  const { product, category, stone } = params;
+  const response = await fetchProductByHandle(product);
+  const productData = response?.product;
 
-  if (!product) {
+  if (!productData) {
     return {
       title: "Jewelry | B.V. Gems",
       description: "Explore fine gemstone jewelry from B.V. Gems.",
     };
   }
 
-  const title = `${product.title} | ${product.productType} by B.V. Gems`;
-  const description = `Shop the ${product.title}, crafted in ${
-    product?.goldType?.value || "14K Gold"
-  } with ${
-    product.gemstone || "gemstones"
-  }. Available in multiple sizes and styles.`;
+  const gemstone = stone ? stone.replace(/-/g, " ") : "";
+  const title = `${productData.title} in ${gemstone} | B.V. Gems`;
+  const description = `Shop the ${
+    productData.title
+  } with ${gemstone} gemstones at B.V. Gems. Crafted in ${
+    productData?.goldType?.value || "14K Gold"
+  }, ethically sourced and shipped free in the U.S.`;
 
   return {
     title,
@@ -53,26 +53,22 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      type: "website", // Changed from "product" to "website"
-      images: [
-        {
-          url: product?.images?.edges?.[0]?.node?.url || "/default-jewelry.jpg",
-          width: 800,
-          height: 800,
-          alt: product.title,
-        },
-      ],
+      type: "website", // ✅ changed from "product" to "website"
+      images:
+        productData?.images?.edges?.map((img: any) => img?.node?.url) || [],
+      url: `https://bvgems.com/jewelry-details/${category}/${product}/${stone}`,
+      siteName: "B.V. Gems",
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
       images: [
-        product?.images?.edges?.[0]?.node?.url || "/default-jewelry.jpg",
+        productData?.images?.edges?.[0]?.node?.url || "/default-jewelry.jpg",
       ],
     },
     alternates: {
-      canonical: `https://bvgems.com/jewelry-details/${params.category}/${params.product}`,
+      canonical: `https://bvgems.com/jewelry-details/${category}/${product}/${stone}`,
     },
   };
 }
@@ -81,10 +77,9 @@ export async function generateMetadata({
 type Thumb = { url: string; title?: string | null };
 
 export default function JewelryProductPage() {
-  const { product } = useParams();
+  const { product, category, stone } = useParams<any>();
+
   const path = usePathname();
-  const pathArray = path?.split("/");
-  const category = pathArray[2];
   const capitalize = (str: string) =>
     str.charAt(0).toUpperCase() + str.slice(1);
 
@@ -98,7 +93,8 @@ export default function JewelryProductPage() {
   const breadcrumbItems = [
     { title: "Home", href: "/" },
     { title: capitalize(category), href: `/jewelry/${category}` },
-    { title: productData?.title, href: undefined as any },
+    // { title: productData?.title, href: undefined as any },
+    { title: capitalize(stone), href: undefined as any },
   ];
 
   useEffect(() => {
@@ -117,6 +113,7 @@ export default function JewelryProductPage() {
       setProductData(productInfo);
 
       let images: Thumb[] = [];
+      const variantEdges = productInfo?.variants?.edges ?? []; // ✅ define here
 
       if (isTwoStoneRing) {
         images =
@@ -125,7 +122,6 @@ export default function JewelryProductPage() {
             title: null,
           })) ?? [];
       } else if (shapeOptionValue) {
-        const variantEdges = productInfo?.variants?.edges ?? [];
         images = variantEdges
           .map((v: any) => ({
             url: v?.node?.image?.url,
@@ -141,6 +137,22 @@ export default function JewelryProductPage() {
       }
 
       setThumbnails(images);
+
+      const slugify = (str: string) => str.toLowerCase().replace(/\s+/g, "-");
+
+      // Inside your effect:
+      if (stone && variantEdges?.length) {
+        const match = variantEdges.find(
+          (v: any) => slugify(v?.node?.title || "") === stone.toLowerCase()
+        );
+
+        if (match?.node) {
+          setSelectedShape(match.node.title);
+          setSelectedImage(match.node.image?.url || images?.[0]?.url);
+          return;
+        }
+      }
+
       const firstUrl = images?.[0]?.url || "/placeholder.png";
       setSelectedImage(firstUrl);
 
@@ -149,12 +161,12 @@ export default function JewelryProductPage() {
     };
 
     getProductByHandle();
-  }, [product]);
+  }, [product, stone]);
 
   const handleShapeChange = (shape: string) => {
     setSelectedShape(shape);
-    const matched = thumbnails.find((t) =>
-      (t.title || "").toLowerCase().includes(shape.toLowerCase())
+    const matched = thumbnails.find(
+      (t) => (t.title || "").toLowerCase() === shape.toLowerCase()
     );
     if (matched?.url) setSelectedImage(matched.url);
   };
@@ -197,7 +209,7 @@ export default function JewelryProductPage() {
                 <div className="flex flex-col items-center">
                   <ImageZoom
                     src={selectedImage || "/placeholder.png"}
-                    alt={productData?.title}
+                    alt={`${productData?.title} - ${selectedShape}`}
                     radius="md"
                     fit="contain"
                     height={420}
@@ -272,6 +284,7 @@ export default function JewelryProductPage() {
                 onShapeChange={handleShapeChange}
                 selectedImage={selectedImage}
                 twoStoneRings={twoStoneRings}
+                category={category}
               />
             </motion.div>
           </GridCol>
@@ -288,7 +301,7 @@ export default function JewelryProductPage() {
               __html: JSON.stringify({
                 "@context": "https://schema.org/",
                 "@type": "Product",
-                name: productData.title,
+                name: `${productData.title} - ${selectedShape}`,
                 image: thumbnails.map((t) => t.url),
                 description:
                   productData.description ||
@@ -300,16 +313,11 @@ export default function JewelryProductPage() {
                 },
                 offers: {
                   "@type": "Offer",
-                  url: `https://bvgems.com/jewelry-details/${category}/${product}`,
+                  url: `https://bvgems.com/jewelry-details/${category}/${product}/${stone}`,
                   priceCurrency: "USD",
                   price:
                     productData?.priceRange?.minVariantPrice?.amount || "0",
                   availability: "https://schema.org/InStock",
-                },
-                aggregateRating: {
-                  "@type": "AggregateRating",
-                  ratingValue: "5",
-                  reviewCount: 140,
                 },
               }),
             }}

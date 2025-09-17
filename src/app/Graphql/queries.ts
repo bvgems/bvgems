@@ -425,102 +425,110 @@ export const GetProductByHandle = `
       createdAt
       tags
 
-        dimension: metafield(namespace: "custom", key: "dimension") {
-            value
-            type
-          }
+      dimension: metafield(namespace: "custom", key: "dimension") {
+        value
+        type
+      }
 
-        shapeSizes: metafield(namespace: "custom", key: "shape_sizes") {
-            value
-            type
-          }
-  
-      earring_metafielcd:metafield(namespace: "custom", key: "earring_metafielcd") {
-            value
-            type
-          }
-      gemstone:metafield(namespace: "custom", key: "gemstone") {
-            value
-            type
-          }
+      shapeSizes: metafield(namespace: "custom", key: "shape_sizes") {
+        value
+        type
+      }
 
-        layout_type:metafield(namespace: "custom", key: "layout_type") {
-            value
-            type
-          }
+      earring_metafield: metafield(namespace: "custom", key: "earring_metafield") {
+        value
+        type
+      }
+
+      gemstone: metafield(namespace: "custom", key: "gemstone") {
+        value
+        type
+      }
+
+      layout_type: metafield(namespace: "custom", key: "layout_type") {
+        value
+        type
+      }
+
       stoneType: metafield(namespace: "custom", key: "stone_type") {
-            value
-            type
-          }
+        value
+        type
+      }
+
       shape: metafield(namespace: "custom", key: "shape") {
-            value
-            type
-          }
-       size: metafield(namespace: "custom", key: "size") {
-            value
-            type
-          }
+        value
+        type
+      }
+
+      size: metafield(namespace: "custom", key: "size") {
+        value
+        type
+      }
 
       color: metafield(namespace: "custom", key: "Color") {
-            value
-            type
-          }
+        value
+        type
+      }
 
       ct_weight: metafield(namespace: "custom", key: "ct_weight") {
-            value
-            type
-          }
+        value
+        type
+      }
 
       customization: metafield(namespace: "custom", key: "customization") {
-            value
-            type
-          }
+        value
+        type
+      }
+
       showshapeoptions: metafield(namespace: "custom", key: "showshapeoptions") {
-            value
-            type
-          }
-      isTwoStoneRing:metafield(namespace: "custom", key: "istwostonering") {
-            value
-            type
-          }
+        value
+        type
+      }
 
-      showGoldColor:metafield(namespace: "custom", key: "showGoldColor") {
-            value
-            type
-          }
-      DiamondWeight:metafield(namespace: "custom", key: "diamonds") {
-            value
-            type
-          }
+      isTwoStoneRing: metafield(namespace: "custom", key: "istwostonering") {
+        value
+        type
+      }
 
-    TotalWeight:metafield(namespace: "custom", key: "total_gemstone_ct_weight") {
-            value
-            type
-          }
+      showGoldColor: metafield(namespace: "custom", key: "showGoldColor") {
+        value
+        type
+      }
 
+      DiamondWeight: metafield(namespace: "custom", key: "diamonds") {
+        value
+        type
+      }
 
-           TargetGender:metafield(namespace: "custom", key: "target_gender") {
-            value
-            type
-          }
+      TotalWeight: metafield(namespace: "custom", key: "total_gemstone_ct_weight") {
+        value
+        type
+      }
 
-      firstShape:metafield(namespace: "custom", key: "first_stone") {
-            value
-            type
-          }
-           secondShape:metafield(namespace: "custom", key: "second_stone") {
-            value
-            type
-          }
-              jewelryType: metafield(namespace: "custom", key: "jewelry_type") {
-                      value
-                      type
-                    }
+      TargetGender: metafield(namespace: "custom", key: "target_gender") {
+        value
+        type
+      }
 
-               product_type: metafield(namespace: "custom", key: "producttype") {
-                      value
-                      type
-                    }
+      firstShape: metafield(namespace: "custom", key: "first_stone") {
+        value
+        type
+      }
+
+      secondShape: metafield(namespace: "custom", key: "second_stone") {
+        value
+        type
+      }
+
+      jewelryType: metafield(namespace: "custom", key: "jewelry_type") {
+        value
+        type
+      }
+
+      product_type: metafield(namespace: "custom", key: "producttype") {
+        value
+        type
+      }
 
       images(first: 10) {
         edges {
@@ -530,23 +538,42 @@ export const GetProductByHandle = `
           }
         }
       }
-      variants(first: 50) {
-        edges {
-          node {
-            price {
-              amount
-              currencyCode
-            }
-            title
-             image {
+
+     variants(first: 50) {
+  edges {
+    node {
+      price {
+        amount
+        currencyCode
+      }
+      title
+      image {
         url
         altText
       }
-            sku
-            availableForSale
+      metafield(namespace: "custom", key: "gemstones") {
+        value
+      }
+      image_url: metafield(namespace: "custom", key: "image") {
+        value
+        reference {
+          ... on MediaImage {
+            id
+            image {
+              url
+              altText
+              width
+              height
+            }
           }
         }
       }
+      sku
+      availableForSale
+    }
+  }
+}
+
     }
   }
 `;
