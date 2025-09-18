@@ -221,7 +221,11 @@ export const ProductSpecifications = ({
 
           <div className="flex flex-row justify-between items-center">
             <div className="font-semibold">Color</div>
-            <Text className="font-bold">{product?.color}</Text>
+            <Text className="font-bold">
+              {product?.collection_slug === "Tanzanite"
+                ? "Purplish Blue"
+                : product?.color}
+            </Text>
           </div>
 
           <div className="flex flex-row justify-between items-center">

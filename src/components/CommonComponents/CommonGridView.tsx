@@ -10,7 +10,6 @@ export const CommonGridView = ({
   isBead = false,
   selectedStones,
 }: any) => {
-  // console.log('filterddddd',filteredJewelry)
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

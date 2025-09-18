@@ -18,7 +18,7 @@ export const GetAllBeads = `
           metafield(namespace: "custom", key: "productType") {
             value
           }
-          variants(first: 5) {
+          variants(first: 10) {
             edges {
               node {
                 id
@@ -435,7 +435,7 @@ export const GetProductByHandle = `
         type
       }
 
-      earring_metafield: metafield(namespace: "custom", key: "earring_metafield") {
+      earring_metafield: metafield(namespace: "custom", key: "earring_metafielcd") {
         value
         type
       }

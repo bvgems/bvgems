@@ -11,7 +11,6 @@ import {
   Image,
   NumberFormatter,
   NumberInput,
-  ScrollArea,
   Text,
 } from "@mantine/core";
 import {
@@ -99,11 +98,11 @@ export const JewelryProductDetails = ({
   let parsed: any[] = [];
   try {
     if (
-      productData?.earring_metafielcd?.type === "json" &&
-      productData?.earring_metafielcd?.value &&
+      productData?.earring_metafield?.type === "json" &&
+      productData?.earring_metafield?.value &&
       jf?.isEarringCategory
     ) {
-      parsed = JSON.parse(productData.earring_metafielcd.value);
+      parsed = JSON.parse(productData.earring_metafield.value);
     }
   } catch (err) {
     console.error("Failed to parse earring options:", err);

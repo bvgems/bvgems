@@ -37,6 +37,12 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
     null
   );
 
+  const [priceText, setPriceText] = useState<any>();
+  const [minPrice, setMinPrice] = useState<any>();
+  const [maxPrice, setMaxPrice] = useState<any>();
+
+  const [isEarringVariants, setIsEarringVarinats] = useState(false);
+
   const setVariant = () => {
     const variant = product?.mainImage
       ? product?.node?.variants?.edges?.find(
@@ -49,23 +55,44 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
     setSelectedVariant(variant);
   };
 
+  const setPrice = () => {
+    if (category === "earrings") {
+      if (product?.node?.earring_metafielcd) {
+        setIsEarringVarinats(true);
+        const parsedArray = JSON.parse(
+          product?.node?.earring_metafielcd?.value
+        );
+
+        const prices = parsedArray.map((item: any) => Number(item.price));
+
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+        setMinPrice(minPrice);
+        setMaxPrice(maxPrice);
+      } else {
+        const price = product?.node?.variants?.edges[0]?.node?.price?.amount;
+        setPriceText(Math.round(Number(price)));
+      }
+    } else if (isBead) {
+      setIsEarringVarinats(true);
+      // console.log("pro", product);
+      const prices = product?.node?.variants?.edges.map((item: any) =>
+        Number(item?.node?.price?.amount)
+      );
+
+      const minPrice = Number(Math.min(...prices));
+      const maxPrice = Number(Math.max(...prices));
+      setMinPrice(minPrice);
+      setMaxPrice(maxPrice);
+    } else {
+      const price = product?.node?.variants?.edges[0]?.node?.price?.amount;
+      setPriceText(Math.round(Number(price)));
+    }
+  };
   useEffect(() => {
     setVariant();
+    setPrice();
   }, [product]);
-
-  const priceText = useMemo(() => {
-    const amounts =
-      variants
-        ?.map((e: any) => Number(e?.node?.price?.amount ?? 0))
-        ?.filter((n: number) => Number.isFinite(n)) || [];
-
-    if (!amounts.length) return "$0.00 USD";
-    const min = Math.min(...amounts);
-    const max = Math.max(...amounts);
-    return min === max
-      ? `$${min.toFixed(2)} USD`
-      : `$${min.toFixed(2)} – $${max.toFixed(2)} USD`;
-  }, [variants]);
 
   const redirectToProduct = () => {
     const handle = product?.node?.handle;
@@ -163,14 +190,33 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
       <div className="mt-2">
         <h3 className="text-md font-medium text-gray-500 mt-3">{seoTitle}</h3>
       </div>
-
-      <NumberFormatter
-        thousandSeparator
-        prefix="$"
-        className="text-md text-gray-500 mt-2"
-        value={priceText}
-        suffix=" USD"
-      />
+      {isEarringVariants ? (
+        <div className="flex items-center gap-2">
+          <NumberFormatter
+            thousandSeparator
+            prefix="$"
+            className="text-md text-gray-500 mt-2"
+            value={minPrice}
+            suffix=" USD"
+          />{" "}
+          -{" "}
+          <NumberFormatter
+            thousandSeparator
+            prefix="$"
+            className="text-md text-gray-500 mt-2"
+            value={maxPrice}
+            suffix=" USD"
+          />
+        </div>
+      ) : (
+        <NumberFormatter
+          thousandSeparator
+          prefix="$"
+          className="text-md text-gray-500 mt-2"
+          value={priceText}
+          suffix=" USD"
+        />
+      )}
     </Card>
   );
 };

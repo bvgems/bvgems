@@ -24,7 +24,7 @@ export async function GET(req: Request) {
     );
 
     const data = await shopifyRes.json();
-    console.log('dataaaaaaa',data)
+
 
     return new Response(JSON.stringify(data?.data?.productByHandle), {
       status: 200,

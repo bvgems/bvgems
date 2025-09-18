@@ -83,7 +83,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         mainImage: p?.images?.edges?.[0]?.node?.url,
       }));
     }
-    console.log('prooo',products)
     setFilteredJewelry(products);
     setLoading(false);
   };

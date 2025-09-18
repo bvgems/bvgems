@@ -219,7 +219,11 @@ export const CategoryTable = ({
                       <TableTd className="capitalize">
                         {element.collection_slug}
                       </TableTd>
-                      <TableTd>{element.color}</TableTd>
+                      <TableTd>
+                        {element.collection_slug === "Tanzanite"
+                          ? "Purplish Blue"
+                          : element.color}
+                      </TableTd>
                       <TableTd>{element.size}</TableTd>
                       <TableTd>{element.ct_weight}</TableTd>
                       <TableTd>{element.quality}</TableTd>

@@ -186,6 +186,7 @@ export function useJewelryFunctions(
   }, [isBead, productData, selectedBeadStoneSize]);
 
   const getBeadStoneSize = () => {
+    console.log('prooddddddd',productData)
     return (
       productData?.variants?.edges?.map((item: any) => item?.node?.title) || []
     );
