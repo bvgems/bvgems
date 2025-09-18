@@ -1009,6 +1009,16 @@ export const quickNavigationData = [
       },
     ],
   },
+  {
+    value: "trade-shows",
+    label: "Trade Shows",
+    children: [
+      {
+        label: "Trade Shows",
+        href: "/trade-shows",
+      },
+    ],
+  },
 ];
 
 export const shopByColorOptions = [

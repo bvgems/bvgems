@@ -33,7 +33,7 @@ const getRepresentativeImages = (items: any[]) => {
   const qualityMap: Record<string, any> = {};
   items.forEach((item) => {
     if (!qualityMap[item.quality]) {
-      qualityMap[item.quality] = item; 
+      qualityMap[item.quality] = item;
     }
   });
 
@@ -203,6 +203,10 @@ export function CategoryContent({
     }
   };
 
+  const getItemQuality = (item: any) => {
+    return item?.quality || "";
+  };
+
   const breadcrumbItems = [
     { title: "Home", href: "/" },
     { title: "Calibrated Faceted Gemstones", href: "/loose-gemstones" },
@@ -277,7 +281,7 @@ export function CategoryContent({
                             className="rounded"
                           />
                           <span className="text-xs font-medium mt-1">
-                            {item.quality}
+                            {getItemQuality(item)}
                           </span>
                         </div>
                       ))}
@@ -289,11 +293,12 @@ export function CategoryContent({
               </div>
             </motion.div>
             {isEmerald &&
-            typeFilter === "Lab Grown" &&
-            shaedImages.length > 0 ? (
+            shaedImages.length > 0 &&
+            (typeFilter === "Lab Grown" ||
+              getItemQuality(qualityImages[activeSlide]) === "Lab Grown") ? (
               <div className="mt-10">
                 <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
-                  Emerald Shade Variations
+                  Lab Emerald Shade Variations
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-3xl mx-auto">

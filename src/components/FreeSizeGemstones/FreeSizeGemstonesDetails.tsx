@@ -24,6 +24,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
 import React, { useEffect, useState } from "react";
+import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
 
 type FreeSizeGemstoneDetailsProps = {
   id: string;
@@ -176,44 +177,21 @@ export default function FreeSizeGemstoneDetails({
                 to view gemstone prices.
               </Alert>
             )}
-            <p className="text-sm text-gray-700 leading-relaxed">
-              This {product?.gemstone_type?.toLowerCase()} free size gemstone is
-              cut and polished to showcase its brilliance. Measuring{" "}
-              {product?.dimension} and weighing {product?.ct_weight} carats, it
+
+            {/* Switch for mode selection */}
+
+            <QuestionAndDeliveryAccordian
+              description={` This ${product?.gemstone_type?.toLowerCase()} free size gemstone is
+              cut and polished to showcase its brilliance. Measuring
+              ${product?.dimension} and weighing ${
+                product?.ct_weight
+              } carats, it
               is ideal for custom jewelry designs where flexibility in size is
               required. B.V. Gems provides a curated collection of loose
               gemstones, ethically sourced and hand-inspected in New York’s
               Diamond District. Perfect for jewelers, collectors, and designers
-              seeking high-quality stones for unique projects.
-            </p>
-
-            {/* Switch for mode selection */}
-
-            {/* Alert */}
-            <Alert
-              variant="light"
-              color="#0b182d"
-              title="HAVE A QUESTION?"
-              icon={<IconInfoCircle />}
-            >
-              <div className="flex flex-col gap-3">
-                <Text size="md">Contact us now</Text>
-                <Text size="sm" c="dimmed">
-                  We're here to help with any questions or concerns about your
-                  order — feel free to reach out for assistance.
-                </Text>
-                <Button
-                  onClick={() => router.push("/customer-support/contact-us")}
-                  color="#99a1af"
-                  size="xs"
-                  className="self-start"
-                >
-                  CONTACT US NOW
-                </Button>
-              </div>
-            </Alert>
-
-            <ProductAccordion />
+              seeking high-quality stones for unique projects.`}
+            />
             {user && (
               <Button color="#0b182d" onClick={addProductToCart} fullWidth>
                 ADD TO CART
