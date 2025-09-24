@@ -4,6 +4,27 @@ const baseUrl =
     ? process.env.NEXT_PUBLIC_BASE_URL || "https://bvgems.com"
     : "";
 
+export const sendCustomJewelryRequest = async (
+  email: any,
+  variables: any,
+  currentUrl: any
+) => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}/api/sendCustomJewelryRequest`,
+      {
+        email,
+        variables,
+        currentUrl,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error in reseting the password", error);
+    return null;
+  }
+};
+
 export const resetPassword = async (token: any, values: any) => {
   try {
     const response = await axios.post(`${baseUrl}/api/resetPassword`, {
@@ -604,7 +625,7 @@ export const getCategoryData = async (handle: string) => {
 
 export const getShapesData = async (
   shape: string | null,
-  collection: string,
+  collection?: string,
   isSapphire?: boolean,
   sapphireColor?: string
 ) => {

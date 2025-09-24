@@ -50,7 +50,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
   const [mainImage, setMainImage] = useState(images?.[2] || images?.[0]); // default main image
   const { user } = useAuth();
   const isMobile = useMediaQuery("(max-width: 1100px)"); // ✅ fixed typo
-  const [scale, setScale] = useState(2);
+  const [scale, setScale] = useState(1);
 
   const price = product?.variants?.edges?.[0]?.node?.price?.amount || "0.00";
   const currency =

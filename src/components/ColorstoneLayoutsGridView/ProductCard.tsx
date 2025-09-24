@@ -11,6 +11,8 @@ import { AuthForm } from "../Auth/AuthForm";
 
 const MotionDiv = motion.div;
 export const ProductCard = ({ node, index }: { node: any; index: number }) => {
+
+  const selectedHeight = node?.jewelry_type?.value === "Bracelet" ? "450px" : "300px";
   const router = useRouter();
   const { user } = useAuth();
 
@@ -24,7 +26,7 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
     null
   );
   const isMobile = useMediaQuery("(max-width: 1100px)");
-  const [scale, setScale] = useState(2);
+  const [scale, setScale] = useState(1);
 
   useEffect(() => {
     setMainImage(defaultMain);
@@ -105,6 +107,7 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
                     key={displayImage}
                     src={displayImage}
                     alt={node?.title}
+                    h={selectedHeight}
                   />
                 </AnimatePresence>
               )}

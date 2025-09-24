@@ -849,12 +849,6 @@ export const gemstoneOptions = [
     link: "/calibrated-faceted-gemstones/morganite",
   },
   {
-    label: "Paraiba Tourmaline",
-    value: "Paraiba Tourmaline",
-    image: "/assets/pariba.png",
-    link: "/calibrated-faceted-gemstones/paraiba-tourmaline",
-  },
-  {
     label: "Peridot",
     value: "Peridot",
     image: "/assets/peridot.png",
@@ -872,6 +866,107 @@ export const gemstoneOptions = [
     image: "/assets/sapphire.png",
     link: "/calibrated-faceted-gemstones/sapphire",
   },
+  {
+    label: "Tanzanite",
+    value: "Tanzanite",
+    image: "/assets/tanzanite.png",
+    link: "/calibrated-faceted-gemstones/tanzanite",
+  },
+];
+export const gemstoneOptionsForCustomization = [
+  {
+    label: "Alexandrite",
+    value: "Alexandrite",
+    image: "/assets/sapphire.png",
+    link: "/calibrated-faceted-gemstones/alexandrite",
+  },
+  {
+    label: "Amethyst",
+    value: "Amethyst",
+    image: "/assets/amethyst.png",
+    link: "/calibrated-faceted-gemstones/amethyst",
+  },
+  {
+    label: "Aquamarine",
+    value: "Aquamarine",
+    image: "/assets/aquamarine.png",
+    link: "/calibrated-faceted-gemstones/aquamarine",
+  },
+  {
+    label: "Citrine",
+    value: "Citrine",
+    image: "/assets/citrine.png",
+    link: "/calibrated-faceted-gemstones/citrine",
+  },
+  {
+    label: "Emerald",
+    value: "Emerald",
+    image: "/assets/emerald.png",
+    link: "/calibrated-faceted-gemstones/emerald",
+  },
+  {
+    label: "Morganite",
+    value: "Morganite",
+    image: "/assets/morganite.png",
+    link: "/calibrated-faceted-gemstones/morganite",
+  },
+  {
+    label: "Peridot",
+    value: "Peridot",
+    image: "/assets/peridot.png",
+    link: "/calibrated-faceted-gemstones/peridot",
+  },
+  {
+    label: "Ruby",
+    value: "Ruby",
+    image: "/assets/ruby.png",
+    link: "/calibrated-faceted-gemstones/ruby",
+  },
+  // {
+  //   label: "Sapphire",
+  //   value: "Sapphire",
+  //   image: "/assets/sapphire.png",
+  //   link: "/calibrated-faceted-gemstones/sapphire",
+  // },
+  {
+    label: "Blue Sapphire",
+    value: "Blue Sapphire",
+    image: "/assets/blue2.png",
+    link: "/calibrated-faceted-gemstones/tanzanite",
+  },
+  {
+    label: "Yellow Sapphire",
+    value: "Yellow Sapphire",
+    image: "/assets/yellowcolor.png",
+    link: "/calibrated-faceted-gemstones/tanzanite",
+  },
+  {
+    label: "Pink Sapphire",
+    value: "Pink Sapphire",
+    image: "/assets/pinkcolor.png",
+    link: "/calibrated-faceted-gemstones/tanzanite",
+  },
+  {
+    label: "Green Sapphire",
+    value: "Green Sapphire",
+    image: "/assets/greencolor.png",
+    link: "/calibrated-faceted-gemstones/tanzanite",
+  },
+  {
+    label: "Orange Sapphire",
+    value: "Orange Sapphire",
+    image: "/assets/orange2.png",
+    link: "/calibrated-faceted-gemstones/tanzanite",
+  },
+  {
+    label: "Purple Sapphire",
+    value: "Purple Sapphire",
+    image: "/assets/purplecolor.png",
+    link: "/calibrated-faceted-gemstones/tanzanite",
+  },
+  // { value: "Black", color: "#000000" },
+  // { value: "White", color: "#808080" },
+  // { value: "Red", color: "#FF0000" },
   {
     label: "Tanzanite",
     value: "Tanzanite",
@@ -1065,46 +1160,62 @@ export const shopByColorOptions = [
   },
 ];
 
+export const GOLD_COLORS = [
+  { label: "Yellow Gold", value: "yellow", hex: "#FFD700" },
+  { label: "White Gold", value: "white", hex: "#E5E4E2" },
+  { label: "Rose Gold", value: "rose", hex: "#B76E79" },
+];
+
 export const ShapeFilterList = [
   {
     label: "Round",
     image: "/assets/round.svg",
+    value: "Round",
   },
   {
     label: "Oval",
     image: "/assets/oval.svg",
+    value: "Oval",
   },
   {
     label: "Princess Cut",
     image: "/assets/princesscut.svg",
+    value: "Princess Cut",
   },
   {
     label: "Emerald Cut",
     image: "/assets/emerald.svg",
+    value: "Emerald Cut",
   },
   {
     label: "Pear",
     image: "/assets/pear.svg",
+    value: "Pear",
   },
   {
     label: "Marquise",
     image: "/assets/marquise.svg",
+    value: "Marquise",
   },
   {
     label: "Cushion",
     image: "/assets/cushion.svg",
+    value: "Cushion",
   },
   {
     label: "Trillion",
     image: "/assets/trillion.svg",
+    value: "Trillion",
   },
   {
     label: "Heart",
     image: "/assets/heart.svg",
+    value: "Heart",
   },
   {
     label: "Straight Baguette",
     image: "/assets/baguette.svg",
+    value: "Straight Baguette",
   },
 ];
 export const ColorStoneGemstonesList = [

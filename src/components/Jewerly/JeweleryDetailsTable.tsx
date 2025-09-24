@@ -7,7 +7,8 @@ type Props = {
   productData: any;
   gemstone?: string | null;
   jf: any;
-  earringMetafields: any; // single selected option
+  earringMetafields: any;
+  value: any;
 };
 
 export const JeweleryDetailsAccordion = ({
@@ -15,6 +16,7 @@ export const JeweleryDetailsAccordion = ({
   gemstone,
   jf,
   earringMetafields,
+  value,
 }: Props) => {
   const stoneWeight = Number(productData?.ct_weight?.value);
   const diamondWeight = Number(productData?.DiamondWeight?.value);
@@ -53,7 +55,9 @@ export const JeweleryDetailsAccordion = ({
             {productData?.dimension?.value && (
               <Row
                 label="Dimension:"
-                value={productData?.dimension?.value + "mm" || "-"}
+                value={
+                  value ? value : productData?.dimension?.value + "mm" || "-"
+                }
               />
             )}
             {/* <Row

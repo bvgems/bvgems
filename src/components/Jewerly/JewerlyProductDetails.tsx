@@ -16,6 +16,7 @@ import {
 import {
   IconCheck,
   IconShoppingCart,
+  IconSparkles,
   IconStarFilled,
 } from "@tabler/icons-react";
 import { JeweleryDetailsAccordion } from "./JeweleryDetailsTable";
@@ -36,6 +37,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { useDisclosure } from "@mantine/hooks";
 import { JewelryOptionsDrawer } from "./JewelryOptionsDrawer";
+import { CustomizeJewelryDrawer } from "./CustomizeJewelryDrawer";
 
 // 🔹 Hook to generate fake review count
 function useFakeReviewCount(jf: any) {
@@ -73,6 +75,28 @@ export const JewelryProductDetails = ({
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
   const [opened, { open, close }] = useDisclosure(false);
+  const [value, setValue] = useState<string>("");
+  const [customizedDrawerTitle, setCustomizedDrawerTitle] = useState("");
+
+  useEffect(() => {
+    switch (category) {
+      case "necklaces":
+        setCustomizedDrawerTitle("Necklace");
+        break;
+      case "rings":
+        setCustomizedDrawerTitle("Ring");
+        break;
+      case "bracelets":
+        setCustomizedDrawerTitle("Bracelet");
+        break;
+
+      case "earrings":
+        setCustomizedDrawerTitle("Earring");
+
+      default:
+        break;
+    }
+  }, [category]);
 
   const jf = useJewelryFunctions(
     path,
@@ -84,7 +108,7 @@ export const JewelryProductDetails = ({
   );
 
   const addProduct = () => {
-    jf.addProductInCart();
+    jf.addProductInCart(value);
     notifications.show({
       icon: <IconCheck />,
       color: "teal",
@@ -109,6 +133,8 @@ export const JewelryProductDetails = ({
   }
 
   const [selectedEarring, setSelectedEarring] = useState<any | null>(null);
+  const [customizeOpened, { open: openCustomize, close: closeCustomize }] =
+    useDisclosure(false);
 
   useEffect(() => {
     if (jf.isEarringCategory && parsed.length > 0 && !selectedEarring) {
@@ -130,6 +156,22 @@ export const JewelryProductDetails = ({
 
   return (
     <>
+      <Drawer
+        size={500}
+        position="right"
+        opened={customizeOpened}
+        onClose={closeCustomize}
+        title={`Customize This ${customizedDrawerTitle}`}
+        overlayProps={{ backgroundOpacity: 0.5, blur: 0 }}
+      >
+        <CustomizeJewelryDrawer
+          productData={productData}
+          close={closeCustomize}
+          value={value}
+          setValue={setValue}
+        />
+      </Drawer>
+
       <Drawer size={540} position="bottom" opened={opened} onClose={close}>
         <JewelryOptionsDrawer
           selectedShape={selectedShape}
@@ -137,7 +179,7 @@ export const JewelryProductDetails = ({
           category={category}
         />
       </Drawer>
-      <h1 className="capitalize text-[1.6rem] leading-snug tracking-wide mb-2">
+      <h1 className="capitalize text-[1.25rem] leading-snug tracking-wide mb-2">
         {jf.isBead ? productData?.title : selectedShape || productData?.title}
       </h1>
 
@@ -151,7 +193,7 @@ export const JewelryProductDetails = ({
         </Text>
       </Group>
 
-      <Group mb="md" gap="md" align="center">
+      <Group gap="md" align="center">
         <Text fw={700} fz="xl">
           <NumberFormatter
             thousandSeparator
@@ -175,8 +217,16 @@ export const JewelryProductDetails = ({
           </>
         ) : null}
       </Group>
+      <div className="mt-2">
+        <span
+          onClick={openCustomize}
+          className="cursor-pointer text-sm underline text-gray-500"
+        >
+          Customize This {customizedDrawerTitle}?
+        </span>
+      </div>
 
-      <div className="mt-4 flex flex-col gap-6">
+      <div className="mt-3 flex flex-col gap-4">
         {!jf.isBead &&
           !(
             jf.isEarringCategory && productData?.jewelryType?.value === "Silver"
@@ -381,6 +431,7 @@ export const JewelryProductDetails = ({
             gemstone={selectedShape}
             jf={jf}
             earringMetafields={selectedEarring}
+            value={value}
           />
         </div>
       )}

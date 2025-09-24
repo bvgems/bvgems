@@ -6,19 +6,18 @@ import {
   Breadcrumbs,
   Card,
   Container,
-  Flex,
   Grid,
   GridCol,
   Image,
 } from "@mantine/core";
 import { useParams, usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
-import { JewelryProductDetails } from "@/components/Jewerly/JewerlyProductDetails";
 import Script from "next/script";
 import type { Metadata } from "next";
 import { RingComparison } from "./RingComparison";
+import { JewelryProductDetails } from "@/components/Jewerly/JewerlyProductDetails";
+import { useMediaQuery } from "@mantine/hooks";
 
 type PageProps = {
   params: any;
@@ -53,7 +52,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      type: "website", // ✅ changed from "product" to "website"
+      type: "website",
       images:
         productData?.images?.edges?.map((img: any) => img?.node?.url) || [],
       url: `https://bvgems.com/jewelry-details/${category}/${product}/${stone}`,
@@ -78,22 +77,22 @@ type Thumb = { url: string; title?: string | null };
 
 export default function JewelryProductPage() {
   const { product, category, stone } = useParams<any>();
-
   const path = usePathname();
   const capitalize = (str: string) =>
     str.charAt(0).toUpperCase() + str.slice(1);
 
   const [productData, setProductData] = useState<any>(null);
-  const [selectedImage, setSelectedImage] = useState<string>("");
-  const [thumbnails, setThumbnails] = useState<Thumb[]>([]);
+  const [images, setImages] = useState<Thumb[]>([]);
   const [selectedShape, setSelectedShape] = useState<string | null>(null);
   const [twoStoneRings, setTwoStoneRings] = useState<boolean>(false);
   const [productType, setProductType] = useState<string | undefined>();
+  const [mainImage, setMainImage] = useState<string | null>(null);
+
+  const isMobile = useMediaQuery("(max-width: 800px)");
 
   const breadcrumbItems = [
     { title: "Home", href: "/" },
     { title: capitalize(category), href: `/jewelry/${category}` },
-    // { title: productData?.title, href: undefined as any },
     { title: capitalize(stone), href: undefined as any },
   ];
 
@@ -106,75 +105,68 @@ export default function JewelryProductPage() {
       if (!productInfo) return;
 
       const isTwoStoneRing = productInfo?.isTwoStoneRing?.value === "true";
-      const shapeOptionValue = productInfo?.showshapeoptions?.value === "true";
-
       setTwoStoneRings(isTwoStoneRing);
       setProductType(productInfo?.productType);
       setProductData(productInfo);
 
-      let images: Thumb[] = [];
-      const variantEdges = productInfo?.variants?.edges ?? []; // ✅ define here
+      // Base image list
+      let imgs: Thumb[] =
+        productInfo?.images?.edges?.map((e: any) => ({
+          url: e?.node?.url,
+          title: null,
+        })) ?? [];
 
-      if (isTwoStoneRing) {
-        images =
-          productInfo?.images?.edges?.map((e: any) => ({
-            url: e?.node?.url,
-            title: null,
-          })) ?? [];
-      } else if (shapeOptionValue) {
-        images = variantEdges
-          .map((v: any) => ({
+      const variantImgs =
+        productInfo?.variants?.edges
+          ?.map((v: any) => ({
             url: v?.node?.image?.url,
             title: v?.node?.title,
           }))
-          .filter((t: Thumb) => !!t.url);
-      } else {
-        images =
-          productInfo?.images?.edges?.map((e: any) => ({
-            url: e?.node?.url,
-            title: null,
-          })) ?? [];
+          .filter((t: Thumb) => !!t.url) ?? [];
+
+      imgs = [...imgs, ...variantImgs].filter(
+        (v, i, arr) => arr.findIndex((x) => x.url === v.url) === i
+      );
+
+      // Always extract the last image (keep aside for 2nd position)
+      let lastImage: Thumb | undefined;
+      if (imgs.length > 1) {
+        lastImage = imgs[imgs.length - 1];
+        imgs = imgs.slice(0, -1);
       }
 
-      setThumbnails(images);
-
+      // Handle variant selection
       const slugify = (str: string) => str.toLowerCase().replace(/\s+/g, "-");
-
-      // Inside your effect:
+      const variantEdges = productInfo?.variants?.edges ?? [];
       if (stone && variantEdges?.length) {
         const match = variantEdges.find(
           (v: any) => slugify(v?.node?.title || "") === stone.toLowerCase()
         );
-
         if (match?.node) {
           setSelectedShape(match.node.title);
-          setSelectedImage(match.node.image?.url || images?.[0]?.url);
-          return;
+
+          if (match.node.image?.url) {
+            const variantImgUrl = match.node.image.url;
+            imgs = [
+              { url: variantImgUrl, title: match.node.title },
+              ...imgs.filter((img) => img.url !== variantImgUrl),
+            ];
+          }
         }
       }
 
-      const firstUrl = images?.[0]?.url || "/placeholder.png";
-      setSelectedImage(firstUrl);
+      // Reinsert last image always at index 1
+      if (lastImage) {
+        imgs.splice(1, 0, lastImage);
+      }
 
-      const firstShape = images?.[0]?.title || null;
-      if (firstShape) setSelectedShape(firstShape);
+      // Update state
+      setImages(imgs);
+      setMainImage(imgs[0]?.url || null);
     };
 
     getProductByHandle();
   }, [product, stone]);
-
-  const handleShapeChange = (shape: string) => {
-    setSelectedShape(shape);
-    const matched = thumbnails.find(
-      (t) => (t.title || "").toLowerCase() === shape.toLowerCase()
-    );
-    if (matched?.url) setSelectedImage(matched.url);
-  };
-
-  const selectedIdx = useMemo(
-    () => thumbnails.findIndex((t) => t.url === selectedImage),
-    [thumbnails, selectedImage]
-  );
 
   return (
     <>
@@ -196,55 +188,39 @@ export default function JewelryProductPage() {
         </Breadcrumbs>
       </Container>
 
-      <Container size={1350} className="pb-14">
+      <div className="mx-6 pb-14">
         <Grid gutter="xl" align="flex-start">
-          {/* LEFT: Imagery */}
-          <GridCol span={{ base: 12, md: 7 }}>
+          {/* LEFT: Images */}
+          <GridCol span={{ base: 12, md: 8 }}>
             {productData && (
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, ease: "easeOut" }}
               >
-                <div className="flex flex-col items-center">
-                  <ImageZoom
-                    src={selectedImage || "/placeholder.png"}
-                    alt={`${productData?.title} - ${selectedShape}`}
-                    radius="md"
-                    fit="contain"
-                    height={420}
-                    style={{ objectFit: "contain" }}
-                  />
-                </div>
-
-                {/* Thumbnails row */}
-                <Flex justify="center" gap="md" mt="md" wrap="wrap">
-                  {thumbnails.map((thumb, idx) => {
-                    const isActive = idx === selectedIdx;
-                    return (
+                {!isMobile ? (
+                  // ✅ Desktop: Grid layout
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(2, 1fr)",
+                      gap: "16px",
+                    }}
+                  >
+                    {images.map((thumb, idx) => (
                       <Card
                         key={`${thumb.url}-${idx}`}
-                        radius="md"
-                        shadow="sm"
-                        padding={4}
+                        radius="0"
+                        shadow="0"
+                        padding={0}
                         withBorder
                         style={{
-                          cursor: "pointer",
-                          border: isActive
-                            ? "2px solid #0b182d"
-                            : "1px solid #ddd",
-                          width: 82,
-                          height: 82,
+                          aspectRatio: "1 / 1",
+                          overflow: "hidden",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                         }}
-                        onClick={() => {
-                          setSelectedImage(thumb.url);
-                          if (thumb.title) setSelectedShape(thumb.title);
-                        }}
-                        title={thumb.title ?? `Image ${idx + 1}`}
-                        aria-selected={isActive}
                       >
                         <Image
                           src={thumb.url}
@@ -252,14 +228,82 @@ export default function JewelryProductPage() {
                             thumb.title || `Image ${idx + 1}`
                           }`}
                           fit="contain"
-                          width={72}
-                          height={72}
-                          style={{ objectFit: "contain" }}
+                          width="100%"
+                          height="100%"
+                          style={{ objectFit: "contain", padding: "6px" }}
                         />
                       </Card>
-                    );
-                  })}
-                </Flex>
+                    ))}
+                  </div>
+                ) : (
+                  // ✅ Mobile: main image + thumbnails
+                  <div>
+                    {mainImage && (
+                      <Card
+                        radius="0"
+                        shadow="0"
+                        padding={0}
+                        withBorder
+                        style={{
+                          width: "100%",
+                          height: "420px",
+                          marginBottom: "12px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Image
+                          src={mainImage}
+                          alt={`${productData?.title} - Main`}
+                          fit="fill"
+                          width="100%"
+                          height="100%"
+                        />
+                      </Card>
+                    )}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: "8px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {images.map((thumb, idx) => (
+                        <Card
+                          key={`${thumb.url}-${idx}`}
+                          radius="0"
+                          shadow="0"
+                          padding={0}
+                          withBorder
+                          onClick={() => setMainImage(thumb.url)}
+                          style={{
+                            width: "70px",
+                            height: "70px",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            border:
+                              thumb.url === mainImage
+                                ? "2px solid #000"
+                                : "1px solid #ddd",
+                          }}
+                        >
+                          <Image
+                            src={thumb.url}
+                            alt={`${productData?.title} - Thumb ${idx + 1}`}
+                            fit="contain"
+                            width="100%"
+                            height="100%"
+                            style={{ objectFit: "contain", padding: "4px" }}
+                          />
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {productType === "Rings" ? (
                   <div className="mt-10">
@@ -270,8 +314,8 @@ export default function JewelryProductPage() {
             )}
           </GridCol>
 
-          {/* RIGHT: Details panel */}
-          <GridCol span={{ base: 12, md: 5 }}>
+          {/* RIGHT: Details */}
+          <GridCol span={{ base: 12, md: 4 }}>
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
@@ -281,17 +325,17 @@ export default function JewelryProductPage() {
                 path={path}
                 productData={productData}
                 selectedShape={selectedShape}
-                onShapeChange={handleShapeChange}
-                selectedImage={selectedImage}
+                onShapeChange={() => {}}
+                selectedImage={mainImage || images[0]?.url}
                 twoStoneRings={twoStoneRings}
                 category={category}
               />
             </motion.div>
           </GridCol>
         </Grid>
-      </Container>
+      </div>
 
-      {/* ✅ JSON-LD Schema for SEO */}
+      {/* ✅ JSON-LD */}
       {productData && (
         <>
           <Script
@@ -301,8 +345,8 @@ export default function JewelryProductPage() {
               __html: JSON.stringify({
                 "@context": "https://schema.org/",
                 "@type": "Product",
-                name: `${productData.title} - ${selectedShape}`,
-                image: thumbnails.map((t) => t.url),
+                name: `${productData.title}`,
+                image: images.map((t) => t.url),
                 description:
                   productData.description ||
                   `${productData.title} from B.V. Gems.`,

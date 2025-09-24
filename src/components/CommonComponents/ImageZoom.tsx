@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-export const ImageZoom = ({ src, alt, className = "" }: any) => {
+export const ImageZoom = ({ src, alt, className = "", h = "450px" }: any) => {
   const sourceRef: any = useRef(null);
   const targetRef: any = useRef(null);
   const containerRef: any = useRef(null);
@@ -57,7 +57,7 @@ export const ImageZoom = ({ src, alt, className = "" }: any) => {
         ref={sourceRef}
         src={src}
         alt={alt}
-        className={`w-full h-[300px] md:h-[450px] block object-contain`}
+        className={`w-full h-[300px] md:h-[${h}] block object-contain`}
       />
       <img
         ref={targetRef}

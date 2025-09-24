@@ -266,6 +266,8 @@ export function CartComponent() {
                               <>
                                 Gold Color: {value?.product?.goldColor} |
                                 Length: {value?.product?.length}
+                                {value?.product?.size &&
+                                  ` | Gemstone Size: ${value?.product?.size}`}
                               </>
                             )}
                           {value?.product?.productType === "braceletJewelry" &&

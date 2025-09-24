@@ -29,7 +29,7 @@ export function useJewelryFunctions(
   const [selectedCarat, setSelectedCarat] = useState<any>();
 
   const [selectedNecklaceStoneSize, setSelectedNecklacesStoneSize] =
-    useState<any>("2.0 MM");
+    useState<any>("");
   const [selectedBraceletLength, setSelectedBraceletLength] =
     useState<any>("6.0");
   const [selectedBeadStoneSize, setSelectedBeadStoneSize] = useState<any>();
@@ -134,8 +134,8 @@ export function useJewelryFunctions(
     isNecklaces,
     isRingCategory,
     isTwoStoneRing,
-    isEarringCategory, // 👈 add this
-    customPrice, // 👈 add this
+    isEarringCategory,
+    customPrice,
     showShapeOptions,
     selectedBeadStoneSize,
     selectedGoldColor,
@@ -186,7 +186,7 @@ export function useJewelryFunctions(
   }, [isBead, productData, selectedBeadStoneSize]);
 
   const getBeadStoneSize = () => {
-    console.log('prooddddddd',productData)
+    console.log("prooddddddd", productData);
     return (
       productData?.variants?.edges?.map((item: any) => item?.node?.title) || []
     );
@@ -222,7 +222,8 @@ export function useJewelryFunctions(
     setSecondStone(splitedStones[1]);
   };
 
-  const addProductInCart = () => {
+  const addProductInCart = (value?: any) => {
+    console.log('value',value)
     const variables: any = {};
 
     if (isBead) {
@@ -237,10 +238,7 @@ export function useJewelryFunctions(
       variables.image = selectedImage;
     } else if (isNecklaces) {
       variables.goldColor = selectedGoldColor;
-      variables.size =
-        productData?.showGoldColor?.value === "true"
-          ? selectedNecklaceStoneSize
-          : null;
+      variables.size = value ? value : "";
       variables.length = selectedNecklaceLength;
       variables.image = selectedImage;
     } else if (isEarringCategory) {

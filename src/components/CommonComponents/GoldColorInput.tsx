@@ -3,17 +3,14 @@
 import { useEffect } from "react";
 import { Group, Text } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
+import { GOLD_COLORS } from "@/utils/constants";
 
 interface GoldColorInputProps {
   selectedGoldColor: string;
   setSelectedGoldColor: (color: string) => void;
 }
 
-const GOLD_COLORS = [
-  { label: "Yellow Gold", value: "yellow", hex: "#FFD700" },
-  { label: "White Gold", value: "white", hex: "#E5E4E2" },
-  { label: "Rose Gold", value: "rose", hex: "#B76E79" },
-];
+
 
 export const GoldColorInput = ({
   selectedGoldColor,
