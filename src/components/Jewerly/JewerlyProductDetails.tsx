@@ -165,6 +165,7 @@ export const JewelryProductDetails = ({
         overlayProps={{ backgroundOpacity: 0.5, blur: 0 }}
       >
         <CustomizeJewelryDrawer
+          type={customizedDrawerTitle}
           productData={productData}
           close={closeCustomize}
           value={value}
@@ -177,6 +178,8 @@ export const JewelryProductDetails = ({
           selectedShape={selectedShape}
           productData={productData}
           category={category}
+          close={close}
+          open={openCustomize}
         />
       </Drawer>
       <h1 className="capitalize text-[1.25rem] leading-snug tracking-wide mb-2">
@@ -220,7 +223,7 @@ export const JewelryProductDetails = ({
       <div className="mt-2">
         <span
           onClick={openCustomize}
-          className="cursor-pointer text-sm underline text-gray-500"
+          className="cursor-pointer text-sm underline"
         >
           Customize This {customizedDrawerTitle}?
         </span>

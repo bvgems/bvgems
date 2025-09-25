@@ -6,6 +6,8 @@ export const JewelryOptionsDrawer = ({
   selectedShape,
   productData,
   category,
+  close,
+  open,
 }: any) => {
   const router = useRouter();
 
@@ -61,6 +63,15 @@ export const JewelryOptionsDrawer = ({
             </div>
           );
         })}
+      </div>
+      <div
+        onClick={() => {
+          close();
+          open();
+        }}
+        className="text-md underline cursor-pointer flex justify-center mt-10"
+      >
+        Want this style with your favorite gemstone? Start here.
       </div>
     </div>
   );

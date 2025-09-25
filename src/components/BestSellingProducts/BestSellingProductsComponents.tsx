@@ -44,35 +44,40 @@ export const BestSellingProductsComponents = () => {
         emblaOptions={{ loop: true }}
         className="py-3"
       >
-        {bestSellingProducts?.map((item: any, idx: number) => (
-          <Carousel.Slide key={idx}>
-            <motion.div
-              onClick={() => {
-                router?.push(
-                  `/jewelry-details/${item?.node?.productType?.toLowerCase()}/${
-                    item?.node?.handle
-                  }`
-                );
-              }}
-              whileHover={{ scale: 1.05 }}
-              className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer p-6 flex flex-col items-center justify-between h-[300px]"
-            >
-              <div className="w-full flex justify-center">
-                <Image
-                  radius="md"
-                  h={200}
-                  fit="contain"
-                  src={item?.node?.images?.edges[0]?.node?.url}
-                  alt={item?.node?.title || "Product image"}
-                  className="object-contain transition-transform duration-300 hover:scale-105"
-                />
-              </div>
-              <p className="text-sm text-gray-700 mt-2 text-center">
-                {item?.node?.title}
-              </p>
-            </motion.div>
-          </Carousel.Slide>
-        ))}
+        {bestSellingProducts?.map((item: any, idx: number) => {
+          console.log("item node", item);
+          return (
+            <Carousel.Slide key={idx}>
+              <motion.div
+                onClick={() => {
+                  router?.push(
+                    `/jewelry-details/${item?.node?.productType?.toLowerCase()}/${
+                      item?.node?.handle
+                    }/${item?.node?.variants.edges[0]?.node?.title
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")}`
+                  );
+                }}
+                whileHover={{ scale: 1.05 }}
+                className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer p-6 flex flex-col items-center justify-between h-[300px]"
+              >
+                <div className="w-full flex justify-center">
+                  <Image
+                    radius="md"
+                    h={200}
+                    fit="contain"
+                    src={item?.node?.images?.edges[0]?.node?.url}
+                    alt={item?.node?.title || "Product image"}
+                    className="object-contain transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
+                <p className="text-sm text-gray-700 mt-2 text-center">
+                  {item?.node?.title}
+                </p>
+              </motion.div>
+            </Carousel.Slide>
+          );
+        })}
       </Carousel>
     </Container>
   );

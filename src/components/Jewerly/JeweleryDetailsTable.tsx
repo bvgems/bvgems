@@ -18,10 +18,18 @@ export const JeweleryDetailsAccordion = ({
   earringMetafields,
   value,
 }: Props) => {
+  // console.log("prpd data", gemstone);
+  const selectedVariant = productData?.variants?.edges?.filter(
+    (v: any) => v?.node?.title === gemstone
+  );
+  console.log("see", selectedVariant);
+
+  const gemstoneName =
+    selectedVariant && selectedVariant[0]?.node?.metafield?.value;
   const stoneWeight = Number(productData?.ct_weight?.value);
   const diamondWeight = Number(productData?.DiamondWeight?.value);
 
-  const totalWeight = useMemo(() => {
+const totalWeight = useMemo(() => {
     const sum =
       (isNaN(stoneWeight) ? 0 : stoneWeight) +
       (isNaN(diamondWeight) ? 0 : diamondWeight);
@@ -45,7 +53,11 @@ export const JeweleryDetailsAccordion = ({
           <div className="space-y-3">
             <Row
               label="Gemstone:"
-              value={gemstone ? gemstone : productData?.gemstone?.value || "-"}
+              value={
+                gemstoneName
+                  ? gemstoneName
+                  : productData?.gemstone?.value || "-"
+              }
             />
             <Row
               label="Stone Type:"

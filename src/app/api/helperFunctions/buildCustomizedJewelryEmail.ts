@@ -122,14 +122,8 @@ export function buildCustomizedJewelryEmail(
                 <strong>Gemstone</strong>
                 <span>${selectedGemstone || "Not provided"}</span>
               </div>
-              <div class="detail">
-                <strong>Shape</strong>
-                <span>${selectedShape || "Not provided"}</span>
-              </div>
-              <div class="detail">
-                <strong>Size</strong>
-                <span>${size || "Not provided"}</span>
-              </div>
+
+            
               <div class="detail">
                 <strong>Gold Color</strong>
                 <span>${selectedGoldColor || "Not provided"}</span>
