@@ -331,16 +331,21 @@ export default function ProductDetailsPage() {
           ],
         })
       ) {
-        const file = new File([pdfBlob], "product-details.pdf", {
-          type: "application/pdf",
-        });
+        const file = new File(
+          [pdfBlob],
+          `${product?.size}_${product?.collection_slug}_${product?.ct_weight}_Details.pdf`,
+          {
+            type: "application/pdf",
+          }
+        );
         await navigator.share({
-          title: "Product Details",
-          text: "Check out this gemstone from B.V. Gems",
+          title: `${product?.size} ${product?.collection_slug} ${product?.ct_weight} Details`,
           files: [file],
         });
       } else {
-        pdf.save("product-details.pdf");
+        pdf.save(
+          `${product?.size}_${product?.collection_slug}_${product?.ct_weight}_Details.pdf`
+        );
       }
     } catch (err) {
       console.error("Share failed:", err);

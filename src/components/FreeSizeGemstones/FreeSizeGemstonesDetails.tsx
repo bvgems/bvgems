@@ -215,16 +215,21 @@ export default function FreeSizeGemstoneDetails({
         ],
       })
     ) {
-      const file = new File([pdfBlob], "free-size-product.pdf", {
-        type: "application/pdf",
-      });
+      const file = new File(
+        [pdfBlob],
+        `${product?.size}_${product?.gemstone_type}_${product?.ct_weight}_Details`,
+        {
+          type: "application/pdf",
+        }
+      );
       await navigator.share({
-        title: "Free Size Gemstone",
-        text: "Check out this gemstone from B.V. Gems",
+        title: `${product?.size} ${product?.gemstone_type} ${product?.ct_weight} Details`,
         files: [file],
       });
     } else {
-      pdf.save("free-size-product.pdf");
+      pdf.save(
+        `${product?.size}_${product?.gemstone_type}_${product?.ct_weight}_Details`
+      );
     }
   };
 

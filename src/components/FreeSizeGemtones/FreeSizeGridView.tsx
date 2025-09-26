@@ -7,6 +7,7 @@ import {
   Autocomplete,
   Button,
   Loader,
+  Select,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { getGemstonesList } from "@/apis/api";
@@ -28,6 +29,7 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
   const [allItems, setAllItems] = useState<any>([]);
   const [displayItems, setDisplayItems] = useState<any>([]);
   const [visibleCount, setVisibleCount] = useState(18);
+  const [sortOrder, setSortOrder] = useState<any>("lowToHigh");
 
   const ITEMS_PER_PAGE = 18;
   const router = useRouter();
@@ -77,16 +79,28 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
   const handleSelect = (value: string) => {
     setSearchValue(value);
 
-    // Find the matching gemstone by lot number
     const selected = allItems.find((item: any) => item.lot_number === value);
 
     if (selected) {
-      setDisplayItems([selected]); // show only that one
-      setVisibleCount(1); // only one item
+      setDisplayItems([selected]);
+      setVisibleCount(1);
     } else {
-      setDisplayItems([]); // no match
+      setDisplayItems([]);
     }
   };
+
+  // ✅ Apply sorting whenever sortOrder or allItems changes
+  useEffect(() => {
+    if (!allItems.length) return;
+
+    let sorted = [...allItems];
+    if (sortOrder === "lowToHigh") {
+      sorted.sort((a, b) => parseFloat(a.ct_weight) - parseFloat(b.ct_weight));
+    } else if (sortOrder === "highToLow") {
+      sorted.sort((a, b) => parseFloat(b.ct_weight) - parseFloat(a.ct_weight));
+    }
+    setDisplayItems(sorted);
+  }, [sortOrder, allItems]);
 
   const SkeletonCard = () => (
     <Card
@@ -119,18 +133,33 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
     <div>
       <div className="mt-4 flex flex-col md:flex-row items-center px-4 md:px-8 justify-between gap-4">
         <span>Showing {displayItems?.length} results</span>
-        <Autocomplete
-          size="md"
-          w={400}
-          data={searchItems}
-          value={searchValue}
-          onChange={setSearchValue}
-          onOptionSubmit={handleSelect}
-          leftSectionPointerEvents="none"
-          leftSection={<IconSearch />}
-          placeholder="Search by lot number"
-          clearable
-        />
+
+        <div className="flex gap-4 items-center">
+          <Autocomplete
+            size="md"
+            w={300}
+            data={searchItems}
+            value={searchValue}
+            onChange={setSearchValue}
+            onOptionSubmit={handleSelect}
+            leftSectionPointerEvents="none"
+            leftSection={<IconSearch />}
+            placeholder="Search by lot number"
+            clearable
+          />
+
+          <Select
+            placeholder="Sort by Carat Weight"
+            value={sortOrder}
+            onChange={setSortOrder}
+            data={[
+              { label: "Low to High", value: "lowToHigh" },
+              { label: "High to Low", value: "highToLow" },
+            ]}
+            clearable={false} // ✅ prevent clearing, always one option selected
+            className="w-[220px] hidden md:block"
+          />
+        </div>
       </div>
 
       {displayItems.length === 0 ? (
