@@ -1,4 +1,5 @@
 import {
+  Anchor,
   CheckIcon,
   Combobox,
   ComboboxChevron,
@@ -16,6 +17,7 @@ import {
 } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { IconCertificate } from "@tabler/icons-react";
 
 export const ProductSpecifications = ({
   getProduct,
@@ -343,11 +345,27 @@ export const ProductSpecifications = ({
               </Table.Th>
               <Table.Td>{product?.origin}</Table.Td>
             </Table.Tr>
+
             <Table.Tr>
               <Table.Th>
-                <span className="font-semibold">Is Certified</span>
+                <span className="font-semibold">Certified</span>
               </Table.Th>
-              <Table.Td>{product?.is_certified ? "True" : "False"}</Table.Td>
+              <Table.Td>
+                {product?.is_certified ? (
+                  // <Anchor
+                  //   rel="noopener noreferrer"
+                  //   className="flex flex-row items-center gap-1 text-blue-600"
+                  // >
+                  <div className="flex items-center text-blue-600 underline">
+                    <a href={product?.certification} target="_blank">
+                      View Certificate
+                    </a>
+                  </div>
+                ) : (
+                  // </Anchor>
+                  "NO"
+                )}
+              </Table.Td>
             </Table.Tr>
           </Table.Tbody>
         </Table>

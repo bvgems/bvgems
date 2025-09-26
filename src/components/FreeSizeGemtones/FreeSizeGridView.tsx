@@ -133,8 +133,7 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
     <div>
       <div className="mt-4 flex flex-col md:flex-row items-center px-4 md:px-8 justify-between gap-4">
         <span>Showing {displayItems?.length} results</span>
-
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-3 items-center flex-col md:flex-row">
           <Autocomplete
             size="md"
             w={300}
@@ -156,8 +155,8 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
               { label: "Low to High", value: "lowToHigh" },
               { label: "High to Low", value: "highToLow" },
             ]}
-            clearable={false} // ✅ prevent clearing, always one option selected
-            className="w-[220px] hidden md:block"
+            clearable={false}
+            className="w-[220px]"
           />
         </div>
       </div>
