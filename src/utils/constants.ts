@@ -1425,15 +1425,15 @@ export const GoldColorData = [
 ];
 
 export const SapphireLooseGemstoneColorOptions = [
-  { value: "Blue", color: "#1E40AF" },
-  { value: "Yellow", color: "#FACC15" },
-  { value: "Pink", color: "#EC4899" },
-  { value: "Green", color: "#22C55E" },
-  { value: "Orange", color: "#F97316" },
+  { value: "Blue", color: "#1E40AF", image: "/assets/blue2.png" },
+  { value: "Yellow", color: "#FACC15", image: "/assets/yellowcolor.png" },
+  { value: "Pink", color: "#EC4899", image: "/assets/pinkcolor.png" },
+  { value: "Green", color: "#22C55E", image: "/assets/greencolor.png" },
+  { value: "Orange", color: "#F97316", image: "/assets/orange2.png" },
   // { value: "Black", color: "#000000" },
   // { value: "White", color: "#808080" },
   // { value: "Red", color: "#FF0000" },
-  { value: "Purple", color: "#800080" },
+  { value: "Purple", color: "#800080", image: "/assets/purplecolor.png" },
 ];
 
 export const FreeSizeOrigins: any = {

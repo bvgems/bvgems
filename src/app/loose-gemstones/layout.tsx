@@ -4,16 +4,20 @@ import { getFilteredData } from "@/apis/api";
 import { GridView } from "@/components/GridView/GridView";
 import { FilterSideBar } from "@/components/LooseGemstones/FilterSideBar";
 import { Divider, Grid, GridCol, Drawer, ActionIcon } from "@mantine/core";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFilter } from "@tabler/icons-react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const colorParam = searchParams.get("color");
   const shapeParam = searchParams.get("shape");
-  const type = searchParams?.get("type");
+  const typeParam = searchParams.get("type");
+  const priceParam = searchParams.get("price");
+  const stoneParam = searchParams.get("stone"); // 👈 added
 
   const capitalizeWords = (str: string) =>
     str
@@ -24,8 +28,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const color = colorParam ? capitalizeWords(colorParam) : null;
   const shape = shapeParam ? capitalizeWords(shapeParam) : null;
 
-  const [selectedStones, setSelectedStones] = useState<string[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<any>(type ? [type] : []);
+  // --- FILTER STATES ---
+  const [selectedStones, setSelectedStones] = useState<string[]>(
+    stoneParam ? stoneParam.split(",").map(capitalizeWords) : []
+  );
+  const [selectedTypes, setSelectedTypes] = useState<any>(
+    typeParam ? [typeParam] : []
+  );
   const [selectedColors, setSelectedColors] = useState<string[]>(
     color ? [color] : []
   );
@@ -35,21 +44,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [selectedRoundSizes, setSelectedRoundSizes] = useState<string[]>([]);
   const [length, setLength] = useState<number | string>("");
   const [width, setWidth] = useState<number | string>("");
-  const [priceRange, setPriceRange] = useState<[number, number]>([100, 5000]);
+
+  const [priceRange, setPriceRange] = useState<[number, number]>(
+    priceParam
+      ? (priceParam.split("-").map(Number) as [number, number])
+      : [100, 5000]
+  );
 
   const [filteredGemstones, setFilteredGemstones] = useState<any[]>([]);
   const [filterTrigger, setFilterTrigger] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const [drawerOpened, { open, close }] = useDisclosure(false);
-
   const didMount = useRef(false);
 
   const fetchFilteredData = async () => {
     setLoading(true);
     const filterOptions = {
       types: selectedTypes,
-      collection_slug: selectedStones,
+      collection_slug: selectedStones, // 👈 stone filter is used here
       color: selectedColors,
       shape: selectedShapes,
       size: selectedRoundSizes,
@@ -63,34 +76,49 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     setFilterTrigger((prev) => prev + 1);
   };
 
-  // Update filters when URL params change
+  // Restore filters from URL on first mount
   useEffect(() => {
-    if (color) {
-      setSelectedColors([color]);
-    } else {
-      setSelectedColors([]);
+    if (color) setSelectedColors([color]);
+    if (shape) setSelectedShapes([shape]);
+    if (typeParam) setSelectedTypes([typeParam]);
+    if (stoneParam)
+      setSelectedStones(stoneParam.split(",").map(capitalizeWords));
+    if (priceParam) {
+      const parsed = priceParam.split("-").map(Number);
+      if (parsed.length === 2) setPriceRange(parsed as [number, number]);
     }
+  }, []);
 
-    if (shape) {
-      setSelectedShapes([shape]);
-    } else {
-      setSelectedShapes([]);
-    }
-  }, [color, shape]);
+  // Persist filters into URL whenever they change
+  useEffect(() => {
+    if (!didMount.current) return;
 
-  // Always fetch once on mount
+    const params = new URLSearchParams();
+    if (selectedColors.length) params.set("color", selectedColors.join(","));
+    if (selectedShapes.length) params.set("shape", selectedShapes.join(","));
+    if (selectedTypes.length) params.set("type", selectedTypes.join(","));
+    if (selectedStones.length) params.set("stone", selectedStones.join(",")); // 👈 persist stones
+    if (priceRange) params.set("price", priceRange.join("-"));
+
+    router.replace(`?${params.toString()}`);
+  }, [
+    selectedColors,
+    selectedShapes,
+    selectedTypes,
+    selectedStones,
+    priceRange,
+    router,
+  ]);
+
   useEffect(() => {
     fetchFilteredData().finally(() => {
       didMount.current = true;
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Refetch when any filter changes
   useEffect(() => {
     if (!didMount.current) return;
     fetchFilteredData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedTypes,
     selectedStones,

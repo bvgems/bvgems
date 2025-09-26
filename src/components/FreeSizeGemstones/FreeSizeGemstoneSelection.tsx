@@ -6,20 +6,19 @@ import { FreeSizeFilterSideBar } from "@/components/FreeSizeGemtones/FreeSizeFil
 import { Divider, Drawer, Grid, GridCol, ActionIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFilter } from "@tabler/icons-react";
-import { usePathname } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 export default function FreeSizeGemstoneSelection() {
   const path = usePathname();
   const segments = path.split("/").filter(Boolean);
-  const gemstoneType = segments[1] ? segments[1] : null; // e.g. "emerald"
+  const gemstoneType = segments[1] ? segments[1] : null;
 
   const [filteredGemstones, setFilteredGemstones] = useState<any[]>([]);
   const [filterTrigger, setFilterTrigger] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const [drawerOpened, { open, close }] = useDisclosure(false);
-  const didMount = useRef(false);
 
   // --- FILTER STATES ---
   const [lotSearch, setLotSearch] = useState("");
@@ -38,40 +37,58 @@ export default function FreeSizeGemstoneSelection() {
   const [length, setLength] = useState<any>({ min: "", max: "" });
   const [width, setWidth] = useState<any>({ min: "", max: "" });
 
-  // --- Sorting helper ---
-  // --- Sorting helper ---
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Restore filters from URL on first mount
+  useEffect(() => {
+    const shape = searchParams.get("shape")?.split(",") || [];
+    const color = searchParams.get("color")?.split(",") || [];
+    const weight = searchParams.get("weight")?.split("-").map(Number) || [
+      0.51, 25,
+    ];
+
+    setSelectedShapes(shape);
+    setSelectedColors(color);
+    setWeightRange(weight as [number, number]);
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (selectedShapes.length) params.set("shape", selectedShapes.join(","));
+    if (selectedColors.length) params.set("color", selectedColors.join(","));
+    if (weightRange) params.set("weight", weightRange.join("-"));
+
+    router.replace(`?${params.toString()}`);
+  }, [selectedShapes, selectedColors, weightRange, router]);
+
   const sortBySize = (data: any[]) => {
     return [...data].sort((a, b) => {
       const parseDims = (dimStr: string) => {
         if (!dimStr) return 0;
-
-        // Normalize: remove extra spaces
         const clean = dimStr.trim();
 
         if (clean.includes("x")) {
-          // Case: "10.1 x 7.1"
           const parts = clean.split("x").map((p) => parseFloat(p.trim()));
           if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
-            return parts[0] * parts[1]; // area = length * width
+            return parts[0] * parts[1];
           }
         } else {
-          // Case: single value "6" or "9"
           const val = parseFloat(clean);
           if (!isNaN(val)) return val;
         }
-
-        return 0; // fallback
+        return 0;
       };
 
       const sizeA = parseDims(a.dimension || a.Dimension || "");
       const sizeB = parseDims(b.dimension || b.Dimension || "");
-
-      return sizeB - sizeA; // largest first
+      return sizeB - sizeA;
     });
   };
 
   const fetchFilteredData = async () => {
     setLoading(true);
+
     const filterOptions = {
       lot_number: lotSearch,
       gemstone_type: gemstoneType
@@ -89,8 +106,6 @@ export default function FreeSizeGemstoneSelection() {
     };
 
     const response = await getFreeSizeFilteredData(filterOptions);
-
-    // Apply sorting here
     const sorted = sortBySize(response?.data || []);
     setFilteredGemstones(sorted);
 
@@ -98,16 +113,8 @@ export default function FreeSizeGemstoneSelection() {
     setFilterTrigger((prev) => prev + 1);
   };
 
-  // Initial load
+  // Fetch whenever filters change
   useEffect(() => {
-    fetchFilteredData().finally(() => {
-      didMount.current = true;
-    });
-  }, [gemstoneType]);
-
-  // Refetch whenever filter changes
-  useEffect(() => {
-    if (!didMount.current) return;
     fetchFilteredData();
   }, [
     lotSearch,
@@ -124,7 +131,6 @@ export default function FreeSizeGemstoneSelection() {
 
   return (
     <div>
-      {/* Mobile Filter Button */}
       <div className="lg:hidden flex justify-end px-4 mb-2 mt-5">
         <ActionIcon onClick={open} variant="outline" color="gray" size="lg">
           <IconFilter size={20} />
@@ -132,7 +138,6 @@ export default function FreeSizeGemstoneSelection() {
       </div>
 
       <Grid gutter="lg">
-        {/* Desktop Sidebar */}
         <GridCol span={{ base: 12, md: 3 }} className="hidden lg:flex">
           <FreeSizeFilterSideBar
             lotSearch={lotSearch}
@@ -161,7 +166,6 @@ export default function FreeSizeGemstoneSelection() {
           <Divider orientation="vertical" />
         </GridCol>
 
-        {/* Results */}
         <GridCol span={{ base: 12, md: 9 }}>
           {loading ? (
             <div className="px-5 py-10 text-center text-gray-500">
@@ -176,7 +180,6 @@ export default function FreeSizeGemstoneSelection() {
         </GridCol>
       </Grid>
 
-      {/* Mobile Drawer */}
       <Drawer
         opened={drawerOpened}
         onClose={close}

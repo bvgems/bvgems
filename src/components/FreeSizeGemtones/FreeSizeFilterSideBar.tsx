@@ -19,7 +19,6 @@ import {
   Input,
   MantineProvider,
   NumberInput,
-  RangeSlider,
   Switch,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
@@ -140,18 +139,32 @@ export const FreeSizeFilterSideBar = ({
             </AccordionPanel>
           </AccordionItem>
 
-          {/* Weight */}
+          {/* Weight - replaced slider with min/max number inputs */}
           <AccordionItem value="weight">
             <AccordionControl>Weight Range (cts.)</AccordionControl>
             <AccordionPanel>
-              <div className="mt-2 ml-5">
-                <RangeSlider
-                  color="#0b182d"
-                  value={weightRange}
-                  onChange={setWeightRange}
+              <div className="flex gap-4 mt-2 ml-5">
+                <NumberInput
+                  label="Min"
+                  value={weightRange[0]}
+                  onChange={(val) =>
+                    setWeightRange([val || 0.51, weightRange[1]])
+                  }
                   min={0.51}
                   max={25}
                   step={0.01}
+                  maw={100}
+                />
+                <NumberInput
+                  label="Max"
+                  value={weightRange[1]}
+                  onChange={(val) =>
+                    setWeightRange([weightRange[0], val || 25])
+                  }
+                  min={0.51}
+                  max={25}
+                  step={0.01}
+                  maw={100}
                 />
               </div>
             </AccordionPanel>

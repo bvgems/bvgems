@@ -15,6 +15,7 @@ import {
   TableTd,
   Breadcrumbs,
   Anchor,
+  Badge,
 } from "@mantine/core";
 import { motion } from "framer-motion";
 import { getShapesData } from "@/apis/api";
@@ -125,6 +126,7 @@ export function CategoryContent({
       isSapphire,
       sapphireColor
     );
+    console.log("resss", result);
 
     const shape = selectedShape || "default";
     const uniqueSizes = Array.from(
@@ -163,6 +165,10 @@ export function CategoryContent({
       `/customer-support/education?activeStone=${data?.title?.toLowerCase()}`
     );
   };
+
+  const uniqueTypes = Array.from(
+    new Set(fetchedResult?.map((item: any) => item.type))
+  );
 
   const getQuality = () => {
     switch (data?.title) {
@@ -263,28 +269,30 @@ export function CategoryContent({
 
                     {/* Thumbnails */}
                     <div className="mt-4 flex gap-4 flex-wrap justify-center">
-                      {qualityImages.map((item: any, index: number) => (
-                        <div
-                          key={index}
-                          className={`flex flex-col items-center cursor-pointer border rounded-lg p-2 transition-all ${
-                            activeSlide === index
-                              ? "border-black shadow-md"
-                              : "border-gray-300"
-                          }`}
-                          onClick={() => setActiveSlide(index)}
-                        >
-                          <Image
-                            src={item.image_url}
-                            h={70}
-                            w={70}
-                            fit="contain"
-                            className="rounded"
-                          />
-                          <span className="text-xs font-medium mt-1">
-                            {getItemQuality(item)}
-                          </span>
-                        </div>
-                      ))}
+                      {qualityImages
+                        .filter((item: any) => item?.is_available === true)
+                        .map((item: any, index: number) => (
+                          <div
+                            key={index}
+                            className={`flex flex-col items-center cursor-pointer border rounded-lg p-2 transition-all ${
+                              activeSlide === index
+                                ? "border-black shadow-md"
+                                : "border-gray-300"
+                            }`}
+                            onClick={() => setActiveSlide(index)}
+                          >
+                            <Image
+                              src={item.image_url}
+                              h={70}
+                              w={70}
+                              fit="contain"
+                              className="rounded"
+                            />
+                            <span className="text-xs font-medium mt-1">
+                              {getItemQuality(item)}
+                            </span>
+                          </div>
+                        ))}
                     </div>
                   </div>
                 ) : (
@@ -357,6 +365,17 @@ export function CategoryContent({
                   Calibrated Faceted Loose {data?.title} Gemstones – Natural &
                   Lab Grown Calibrated Stones
                 </h1>
+                <div className="flex justify-end gap-2 mt-2">
+                  {uniqueTypes.map((t: string, index: number) => (
+                    <Badge
+                      key={index}
+                      color={t === "Natural" ? "green" : "blue"}
+                      radius="xs"
+                    >
+                      {t}
+                    </Badge>
+                  ))}
+                </div>
 
                 <div className="flex flex-wrap gap-3 mt-4">
                   {sortedShapes?.map((shape: string, index: number) => {
@@ -416,7 +435,8 @@ export function CategoryContent({
                                   : "border-gray-300"
                               }`}
                             >
-                              <IconDiamond color={item?.color} size={30} />
+                              {/* <IconDiamond color={item?.color} size={30} /> */}
+                              <Image src={item?.image} h={40} w={40} />
                             </span>
                           </Tooltip>
                         )

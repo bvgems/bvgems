@@ -9,8 +9,10 @@ import {
   Checkbox,
   Modal,
   Switch,
+  Tooltip,
+  ActionIcon,
 } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   getCategoryData,
@@ -18,7 +20,7 @@ import {
   getShapesData,
 } from "@/apis/api";
 import { ProductSpecifications } from "@/components/ProductDetails/ProductSpecifications";
-import { IconCheck, IconZoomIn } from "@tabler/icons-react";
+import { IconCheck, IconZoomIn, IconShare } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { SizeToleranceGuide } from "@/components/Tolerance/SizeToleranceGuide";
 import { getCartStore } from "@/store/useCartStore";
@@ -30,6 +32,8 @@ import { GemstonesInputSection } from "../CommonComponents/GemstonesInputSection
 import { EmeraldShade } from "../CommonComponents/EmeraldShade";
 import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
 import Script from "next/script";
+
+import jsPDF from "jspdf";
 
 /** ---------- Helpers ---------- */
 const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
@@ -83,6 +87,7 @@ export default function ProductDetailsPage() {
       {item.title}
     </Anchor>
   ));
+
   useEffect(() => {
     if (product?.ct_weight) {
       setCaratWeight(product.ct_weight);
@@ -100,6 +105,9 @@ export default function ProductDetailsPage() {
 
   const [tableOpened, { open: openTable, close: closeTable }] =
     useDisclosure(false);
+
+  // 📌 Ref to capture page content for PDF
+  const pageRef = useRef<HTMLDivElement>(null);
 
   const recalcTotal = (item: any, qty: number, ctw?: number) => {
     if (!item) return;
@@ -172,6 +180,176 @@ export default function ProductDetailsPage() {
     });
   };
 
+  const [isSharing, setIsSharing] = useState(false);
+
+  const handleShareAsPDF = async () => {
+    if (!product || isSharing) return; // prevent double trigger
+    setIsSharing(true);
+    try {
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+
+      // ---------------------------
+      // 1. Add Image at Top Center
+      // ---------------------------
+      if (product?.image_url) {
+        try {
+          const imgData = await fetch(product.image_url)
+            .then((res) => res.blob())
+            .then(
+              (blob) =>
+                new Promise<string>((resolve) => {
+                  const reader = new FileReader();
+                  reader.onload = () => resolve(reader.result as string);
+                  reader.readAsDataURL(blob);
+                })
+            );
+
+          const imgWidth = 60;
+          const imgHeight = 60;
+          pdf.addImage(
+            imgData,
+            "JPEG",
+            (pageWidth - imgWidth) / 2,
+            15,
+            imgWidth,
+            imgHeight
+          );
+        } catch (err) {
+          console.error("Image load failed:", err);
+        }
+      }
+
+      let y = 85; // below image
+
+      // ---------------------------
+      // 2. Title (Centered)
+      // ---------------------------
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(16);
+      pdf.text(
+        `Loose ${product?.collection_slug} ${product?.shape} ${product?.size}`,
+        pageWidth / 2,
+        y,
+        { align: "center" }
+      );
+      y += 8;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(12);
+      pdf.text(
+        `${product?.ct_weight} Carat ${product?.quality} Quality Calibrated Gemstone`,
+        pageWidth / 2,
+        y,
+        { align: "center" }
+      );
+
+      y += 15;
+
+      // ---------------------------
+      // 3. Two Column Section
+      // ---------------------------
+      const leftX = 20;
+      const rightX = pageWidth / 2 + 5;
+
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "normal");
+
+      // Left column - product details
+      let leftY = y;
+      pdf.text(`Item ID: ${product?.id}`, leftX, leftY);
+      leftY += 6;
+      pdf.text(`Stone: ${product?.collection_slug}`, leftX, leftY);
+      leftY += 6;
+      pdf.text(`Shape: ${product?.shape}`, leftX, leftY);
+      leftY += 6;
+      pdf.text(`Size: ${product?.size}`, leftX, leftY);
+      leftY += 6;
+      pdf.text(`Color: ${product?.color}`, leftX, leftY);
+      leftY += 6;
+      pdf.text(`Cut: ${product?.cut}`, leftX, leftY);
+      leftY += 6;
+      pdf.text(`Quality: ${product?.quality}`, leftX, leftY);
+      leftY += 6;
+      pdf.text(`Carat Weight: ${product?.ct_weight}`, leftX, leftY);
+
+      // Right column - pricing
+      let rightY = y;
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Pricing:", rightX, rightY);
+      rightY += 7;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.text(
+        `Per Stone Price: $${getPerStonePrice(product).toFixed(2)}`,
+        rightX,
+        rightY
+      );
+      rightY += 6;
+      pdf.text(
+        `Per Carat Price: $${getPerCaratPrice(product).toFixed(2)}`,
+        rightX,
+        rightY
+      );
+
+      // ---------------------------
+      // 4. Description (Full Width)
+      // ---------------------------
+      let descY = Math.max(leftY, rightY) + 15;
+
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Description:", 20, descY);
+      descY += 7;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(11);
+      const desc =
+        `This ${product?.collection_slug?.toLowerCase()} gemstone is carefully cut and calibrated for precision. ` +
+        `Perfect for fine jewelry designs such as engagement rings, necklaces, and earrings. ` +
+        `Ethically sourced and graded for brilliance and clarity.`;
+      const wrapped = pdf.splitTextToSize(desc, pageWidth - 40);
+      pdf.text(wrapped, 20, descY);
+
+      // ---------------------------
+      // 5. Footer (Brand Info)
+      // ---------------------------
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      pdf.setFontSize(9);
+      pdf.setFont("helvetica", "italic");
+      pdf.setTextColor(100);
+
+      // Export
+      const pdfBlob = pdf.output("blob");
+
+      if (
+        navigator.share &&
+        navigator.canShare?.({
+          files: [
+            new File([pdfBlob], "product-details.pdf", {
+              type: "application/pdf",
+            }),
+          ],
+        })
+      ) {
+        const file = new File([pdfBlob], "product-details.pdf", {
+          type: "application/pdf",
+        });
+        await navigator.share({
+          title: "Product Details",
+          text: "Check out this gemstone from B.V. Gems",
+          files: [file],
+        });
+      } else {
+        pdf.save("product-details.pdf");
+      }
+    } catch (err) {
+      console.error("Share failed:", err);
+    } finally {
+      // release lock whether success or fail
+      setIsSharing(false);
+    }
+  };
+
   useEffect(() => {
     if (id) getProduct(id);
     if (name) getData(name);
@@ -196,7 +374,7 @@ export default function ProductDetailsPage() {
   );
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 px-5 mt-6">
+    <div ref={pageRef} className="flex flex-col md:flex-row gap-6 px-5 mt-6">
       <Modal
         opened={modalOpened}
         onClose={close}
@@ -213,6 +391,18 @@ export default function ProductDetailsPage() {
           {breadcrumbItems}
         </Breadcrumbs>
         <div className="p-4">
+          <div className="flex mt-3">
+            <Tooltip label="Share As PDF" position="left" withArrow>
+              {/* <ActionIcon color="black" onClick={handleShareAsPDF}> */}
+              <IconShare
+                className=""
+                color="gray"
+                size={20}
+                onClick={handleShareAsPDF}
+              />
+              {/* </ActionIcon> */}
+            </Tooltip>
+          </div>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full md:w-7/12 flex flex-col items-center">
               <ImageZoom
@@ -248,6 +438,8 @@ export default function ProductDetailsPage() {
       <div className="w-full md:w-1/3 pb-9">
         <div className="sticky top-5">
           <div className="flex flex-col gap-4">
+            {/* 🔹 Share Button */}
+
             {/* Title */}
             <div>
               <h1 className="text-xl font-semibold">
@@ -288,9 +480,6 @@ export default function ProductDetailsPage() {
                         : `$${getPerCaratPrice(product).toFixed(2)}`}
                     </strong>
                   </span>
-                  {/* <span className="text-lg font-semibold">
-                    Total: {price === 0 ? "-" : `$${price.toFixed(2)}`}
-                  </span> */}
                 </div>
 
                 {!hasPricing && (
