@@ -16,13 +16,11 @@ import {
   createTheme,
   Divider,
   Image,
-  Input,
   MantineProvider,
   NumberInput,
   Switch,
 } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
-import React, { useMemo } from "react";
+import React from "react";
 
 const theme = createTheme({
   cursorType: "pointer",
@@ -52,37 +50,30 @@ export const FreeSizeFilterSideBar = ({
   width,
   setWidth,
 }: any) => {
-  const handleStoneChange = (stoneLabel: string, checked: boolean) => {
-    if (checked) {
-      setSelectedStones((prev: any) => [...prev, stoneLabel]);
-    } else {
-      setSelectedStones((prev: any) =>
-        prev.filter((stone: any) => stone !== stoneLabel)
-      );
-    }
-  };
-
-  const handleOriginChange = (originName: string, checked: boolean) => {
-    if (checked) {
-      setSelectedOrigins((prev: any) => [...prev, originName]);
-    } else {
-      setSelectedOrigins((prev: any) =>
-        prev.filter((origin: any) => origin !== originName)
-      );
-    }
-  };
-
-  const dynamicOrigins = useMemo(() => {
-    const allOrigins = selectedStones.flatMap(
-      (stone: string) => FreeSizeOrigins[stone] || []
-    );
-    return Array.from(new Set(allOrigins));
-  }, [selectedStones]);
-
   return (
     <div>
       <MantineProvider theme={theme}>
         <Accordion defaultValue={["shape"]} className="px-8 mt-4" multiple>
+          {/* Certified */}
+          <AccordionItem value="certified">
+            <AccordionControl>Certified</AccordionControl>
+            <AccordionPanel>
+              <Switch
+                color="#0b182d"
+                size="md"
+                label="Certified Stones"
+                checked={certified === true}
+                onChange={(e) => {
+                  if (e.currentTarget.checked) {
+                    setCertified(true);
+                  } else {
+                    setCertified(null); 
+                  }
+                }}
+              />
+            </AccordionPanel>
+          </AccordionItem>
+
           {/* Color (only for Sapphire) */}
           {selectedStones?.includes("Sapphire") && (
             <AccordionItem value="color">
@@ -139,7 +130,7 @@ export const FreeSizeFilterSideBar = ({
             </AccordionPanel>
           </AccordionItem>
 
-          {/* Weight - replaced slider with min/max number inputs */}
+          {/* Weight Range */}
           <AccordionItem value="weight">
             <AccordionControl>Weight Range (cts.)</AccordionControl>
             <AccordionPanel>
@@ -167,55 +158,6 @@ export const FreeSizeFilterSideBar = ({
                   maw={100}
                 />
               </div>
-            </AccordionPanel>
-          </AccordionItem>
-
-          {/* Origin */}
-          {dynamicOrigins.length > 0 && (
-            <AccordionItem value="origin">
-              <AccordionControl>Origin</AccordionControl>
-              <AccordionPanel>
-                {dynamicOrigins.map((origin: any, index: any) => (
-                  <div className="mt-2 ml-5" key={index}>
-                    <Checkbox
-                      checked={selectedOrigins?.includes(origin)}
-                      onChange={(event) =>
-                        handleOriginChange(origin, event.currentTarget.checked)
-                      }
-                      color="#0b182d"
-                      size="16"
-                      className="mt-4"
-                      label={origin}
-                    />
-                  </div>
-                ))}
-              </AccordionPanel>
-            </AccordionItem>
-          )}
-
-          {/* Single / Matched */}
-          <AccordionItem value="singleormatched">
-            <AccordionControl>Single / Matched</AccordionControl>
-            <AccordionPanel>
-              <CheckboxGroup
-                value={singleOrMatched}
-                onChange={setSingleOrMatched}
-              >
-                <Checkbox value="single" label="Single" />
-                <Checkbox value="matched" label="Matched Pair" />
-              </CheckboxGroup>
-            </AccordionPanel>
-          </AccordionItem>
-
-          {/* Enhancement */}
-          <AccordionItem value="enhancement">
-            <AccordionControl>Enhancement</AccordionControl>
-            <AccordionPanel>
-              <CheckboxGroup value={enhancement} onChange={setEnhancement}>
-                <Checkbox value="oiled" label="Oiled" />
-                <Checkbox value="heated" label="Heated" />
-                <Checkbox value="unheated" label="Unheated" />
-              </CheckboxGroup>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>

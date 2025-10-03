@@ -352,10 +352,6 @@ export const ProductSpecifications = ({
               </Table.Th>
               <Table.Td>
                 {product?.is_certified ? (
-                  // <Anchor
-                  //   rel="noopener noreferrer"
-                  //   className="flex flex-row items-center gap-1 text-blue-600"
-                  // >
                   <div className="flex items-center text-blue-600 underline">
                     <a href={product?.certification} target="_blank">
                       View Certificate

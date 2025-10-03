@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     }
     if (options.is_certified !== null && options.is_certified !== undefined) {
       whereClauses.push(`is_certified = $${paramIndex++}`);
-      values.push(options.is_certified);
+      values.push(Boolean(options.is_certified));
     }
     if (options.length && (options.length.min || options.length.max)) {
       const min = options.length.min || 0;

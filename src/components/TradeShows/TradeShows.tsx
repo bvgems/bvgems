@@ -33,7 +33,7 @@ export interface TradeShow {
 export const tradeShows: TradeShow[] = [
   {
     name: "JIS Miami",
-    booth: "",
+    booth: "Booth #1339",
     website: "https://www.jisshow.com/fall/en-us.html",
     logo: "https://www.jisshow.com/content/dam/sitebuilder/rna/jis/2021/spring/JISFall.png/_jcr_content/renditions/original.image_file.592.300.file/367267082/JISFall.png",
     location: "Miami Beach Convention Center | Miami Beach, FL",
