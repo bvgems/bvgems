@@ -1237,10 +1237,10 @@ export const ColorStoneTypesList = [
     label: "Ombre",
   },
   {
-    label: "Straight",
+    label: "Single Color",
   },
   {
-    label: "Multi",
+    label: "Multi-Sapphire",
   },
 ];
 export const ColorStoneLayoutType = [

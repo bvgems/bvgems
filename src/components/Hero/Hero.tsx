@@ -13,10 +13,10 @@ export function Hero({ jewelryRef, heroData }: any) {
   const alignment =
     heroData?.heroData?.page?.metafields[4]?.value?.toLowerCase() || "left";
 
-  const textAlignmentClass =
-    alignment === "Right"
-      ? "right-[8%] text-right items-end"
-      : "left-[8%] text-left items-start";
+  // const textAlignmentClass =
+  //   alignment === "right"
+  //     ? "right-[8%] text-right items-end"
+  //     : "left-[8%] text-left items-start";
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -61,9 +61,11 @@ export function Hero({ jewelryRef, heroData }: any) {
               ?.image?.url || "/assets/hero-bg2.png"
           }
           alt="Hero Image"
-          className="w-full h-full object-cover"
+          fit="cover"
+          className="w-full h-full"
         />
       </motion.div>
+
       {revealImage && (
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-10 md:opacity-0 z-20 pointer-events-none" />
       )}
@@ -73,33 +75,28 @@ export function Hero({ jewelryRef, heroData }: any) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className={`absolute top-1/2 transform -translate-y-1/2 z-30 max-w-[650px] px-4 flex flex-col text-[#333333] gap-4 ${textAlignmentClass}`}
+          className={`absolute top-1/2 transform -translate-y-1/2 px-6 flex flex-col z-30 ml-12`}
         >
-          <h1 className="text-3xl md:text-5xl mb-2 drop-shadow-lg">
-            {heroData?.heroData?.page?.metafields[1]?.value ||
-              "Discover Timeless Beauty in Every Stone"}
-          </h1>
-          <p className="text-lg md:text-xl mb-4 drop-shadow-md">
-            {heroData?.heroData?.page?.metafields[2]?.value ||
-              "Shop our curated selection of calibrated and free size gemstones, ethically sourced and precision cut for brilliance."}
-          </p>
-          <div className="flex gap-4 flex-wrap">
+          <div className="flex justify-center flex-col items-center">
+            <h2 className="text-2xl tracking-[0.2em] uppercase mb-2 text-white sm:text-black">
+              Fall Fashion,
+            </h2>
+            <h1 className="uppercase text-6xl font-light tracking-wide  mb-3 drop-shadow-sm leading-tight text-white sm:text-black">
+              redefined
+            </h1>
+            <p className="text-lg  mb-8 max-w-xl leading-relaxed text-white sm:text-black">
+              Refine Your Fall Look with Timeless Luxury and Radiant Gemstones.
+            </p>
+
             <Button
               size="md"
+              radius="0"
               color="dark"
+              className="bg-white text-black hover:bg-gray-100 transition-all duration-300"
               rightSection={<IconArrowRight size={18} />}
-              onClick={() => router.push("/loose-gemstones")}
+              onClick={() => router.push("/jewelry/rings")}
             >
-              Shop Calibrated Gemstones
-            </Button>
-            <Button
-              size="md"
-              variant="white"
-              color="dark"
-              rightSection={<IconArrowRight size={18} />}
-              onClick={() => router.push("/free-size-gemstones")}
-            >
-              Shop Free Size Gemstones
+              Shop Jewelry
             </Button>
           </div>
         </motion.div>

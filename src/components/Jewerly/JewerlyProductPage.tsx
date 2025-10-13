@@ -18,6 +18,7 @@ import type { Metadata } from "next";
 import { RingComparison } from "./RingComparison";
 import { JewelryProductDetails } from "@/components/Jewerly/JewerlyProductDetails";
 import { useMediaQuery } from "@mantine/hooks";
+import { JewelryImageZoom } from "./JewelryImageZoom";
 
 type PageProps = {
   params: any;
@@ -222,15 +223,13 @@ export default function JewelryProductPage() {
                           justifyContent: "center",
                         }}
                       >
-                        <Image
+                        <JewelryImageZoom
                           src={thumb.url}
                           alt={`${productData?.title} - ${
                             thumb.title || `Image ${idx + 1}`
                           }`}
-                          fit="contain"
-                          width="100%"
-                          height="100%"
-                          style={{ objectFit: "contain", padding: "6px" }}
+                          zoom={2.5} 
+                          style={{ borderRadius: "6px" }}
                         />
                       </Card>
                     ))}

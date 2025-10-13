@@ -53,7 +53,9 @@ export const ProductAccordion = ({ description }: any) => {
 
             <ListItem>All Packages Require Signature.</ListItem>
             <ListItem>
-              The Package Can Be Returned Within 10 Business Days
+              All sales are final; however, we are happy to provide
+              complimentary size adjustments as needed, though returns will not
+              be accepted.
             </ListItem>
           </List>
         </AccordionPanel>
