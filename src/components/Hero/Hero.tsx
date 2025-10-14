@@ -10,14 +10,6 @@ export function Hero({ jewelryRef, heroData }: any) {
   const [revealImage, setRevealImage] = useState(false);
   const router = useRouter();
 
-  const alignment =
-    heroData?.heroData?.page?.metafields[4]?.value?.toLowerCase() || "left";
-
-  // const textAlignmentClass =
-  //   alignment === "right"
-  //     ? "right-[8%] text-right items-end"
-  //     : "left-[8%] text-left items-start";
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setRevealImage(true);

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Anchor,
   CheckIcon,
@@ -14,10 +16,12 @@ import {
   Table,
   Text,
   useCombobox,
+  Modal,
 } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { IconCertificate } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { IconCertificate } from "@tabler/icons-react";
 
 export const ProductSpecifications = ({
   getProduct,
@@ -26,16 +30,15 @@ export const ProductSpecifications = ({
   isFreeSize = false,
 }: any) => {
   const router = useRouter();
+  const [opened, { open, close }] = useDisclosure(false);
 
   const [allSizes, setAllSizes] = useState<any[]>([]);
   const [value, setValue] = useState<string | null>(product?.size ?? null);
   const [selectedQuality, setSelectedQuality] = useState<string | null>(
     product?.quality ?? null
   );
-
   const [isSizeChangedByUser, setIsSizeChangedByUser] = useState(false);
   const [isQualityChangedByUser, setIsQualityChangedByUser] = useState(false);
-
   const [qualityOptions, setQualityOptions] = useState<any[]>([]);
 
   const combobox = useCombobox({
@@ -74,6 +77,7 @@ export const ProductSpecifications = ({
     const isTriggeredByUser = isSizeChangedByUser || isQualityChangedByUser;
     if (!isTriggeredByUser || !allProducts || !value || !selectedQuality)
       return;
+
     const isSapphire = product?.collection_slug === "Sapphire";
 
     let newProduct;
@@ -282,7 +286,6 @@ export const ProductSpecifications = ({
         </div>
       ) : (
         /** ---------------- Free Size Vertical Table ---------------- */
-        /** ---------------- Free Size Vertical Table ---------------- */
         <Table
           horizontalSpacing="lg"
           verticalSpacing="md"
@@ -297,48 +300,56 @@ export const ProductSpecifications = ({
               </Table.Th>
               <Table.Td>{product?.gemstone_type}</Table.Td>
             </Table.Tr>
+
             <Table.Tr>
               <Table.Th>
                 <span className="font-semibold">Shape</span>
               </Table.Th>
               <Table.Td>{product?.shape}</Table.Td>
             </Table.Tr>
+
             <Table.Tr>
               <Table.Th>
                 <span className="font-semibold">Size</span>
               </Table.Th>
               <Table.Td>{product?.dimension}</Table.Td>
             </Table.Tr>
+
             <Table.Tr>
               <Table.Th>
                 <span className="font-semibold">Color</span>
               </Table.Th>
               <Table.Td>{product?.color}</Table.Td>
             </Table.Tr>
+
             <Table.Tr>
               <Table.Th>
                 <span className="font-semibold">CT. Weight</span>
               </Table.Th>
               <Table.Td>{product?.ct_weight}</Table.Td>
             </Table.Tr>
+
             <Table.Tr>
               <Table.Th>
                 <span className="font-semibold">Lot Number</span>
               </Table.Th>
               <Table.Td>{product?.lot_number}</Table.Td>
             </Table.Tr>
+
             <Table.Tr>
               <Table.Th>
                 <span className="font-semibold">Single / Matched</span>
               </Table.Th>
               <Table.Td>{product?.single_or_matched}</Table.Td>
             </Table.Tr>
+
             <Table.Tr>
               <Table.Th>
                 <span className="font-semibold">Treatment</span>
               </Table.Th>
               <Table.Td>{product?.enhancement}</Table.Td>
             </Table.Tr>
+
             <Table.Tr>
               <Table.Th>
                 <span className="font-semibold">Origin</span>
@@ -352,13 +363,31 @@ export const ProductSpecifications = ({
               </Table.Th>
               <Table.Td>
                 {product?.is_certified ? (
-                  <div className="flex items-center text-blue-600 underline">
-                    <a href={product?.certification} target="_blank">
-                      View Certificate
-                    </a>
-                  </div>
+                  <>
+                    <div
+                      onClick={open}
+                      className="flex items-center gap-2 text-blue-600 underline cursor-pointer hover:text-blue-800"
+                    >
+                      <IconCertificate size={18} />
+                      <span>View Certificate</span>
+                    </div>
+
+                    <Modal
+                      opened={opened}
+                      onClose={close}
+                      title="Gemstone Certificate"
+                      size="80%"
+                      centered
+                    >
+                      <iframe
+                        src={product?.certification}
+                        width="100%"
+                        height="600px"
+                        style={{ border: "none" }}
+                      />
+                    </Modal>
+                  </>
                 ) : (
-                  // </Anchor>
                   "NO"
                 )}
               </Table.Td>
