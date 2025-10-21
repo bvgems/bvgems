@@ -186,7 +186,6 @@ export function useJewelryFunctions(
   }, [isBead, productData, selectedBeadStoneSize]);
 
   const getBeadStoneSize = () => {
-    console.log("prooddddddd", productData);
     return (
       productData?.variants?.edges?.map((item: any) => item?.node?.title) || []
     );
@@ -200,12 +199,12 @@ export function useJewelryFunctions(
     if (isRingCategory && !selectedRingSize) return true;
     if (!selectedGoldColor && !isBead) return true;
 
-    if (
-      productData?.showshapeoptions?.value === "true" &&
-      twoStoneRings &&
-      (!firstStone || !secondStone)
-    )
-      return true;
+    // if (
+    //   productData?.showshapeoptions?.value === "true" &&
+    //   twoStoneRings &&
+    //   (!firstStone || !secondStone)
+    // )
+    //   return true;
     if (
       productData?.showshapeoptions?.value === "true" &&
       !twoStoneRings &&
@@ -223,7 +222,6 @@ export function useJewelryFunctions(
   };
 
   const addProductInCart = (value?: any) => {
-    console.log('value',value)
     const variables: any = {};
 
     if (isBead) {
@@ -232,9 +230,7 @@ export function useJewelryFunctions(
     if (isRingCategory) {
       variables.goldColor = selectedGoldColor;
       variables.size = selectedRingSize;
-      variables.stone = isTwoStoneRing
-        ? `${firstStone} - ${productData?.firstShape?.value} , ${secondStone} - ${productData?.secondShape?.value}`
-        : selectedShape || productData?.gemstone?.value;
+      variables.stone = productData?.gemstone?.value || "";
       variables.image = selectedImage;
     } else if (isNecklaces) {
       variables.goldColor = selectedGoldColor;

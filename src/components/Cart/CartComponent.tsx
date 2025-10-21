@@ -257,8 +257,7 @@ export function CartComponent() {
                           {value?.product?.productType === "ringJewelry" && (
                             <>
                               Gold Color: {value?.product?.goldColor} | Size:{" "}
-                              {value?.product?.size} | Stones:{" "}
-                              {value?.product?.gemstone}
+                              {value?.product?.size}
                             </>
                           )}
                           {value?.product?.productType === "necklaceJewelry" &&
