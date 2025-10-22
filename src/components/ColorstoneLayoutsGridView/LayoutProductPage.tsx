@@ -44,16 +44,14 @@ interface ProductPageProps {
 }
 
 export default function LayoutProductPage({ product }: ProductPageProps) {
-  console.log("prodd", product);
   const shapeSize = JSON.parse(product?.shapeSizes?.value);
   const images = product?.images?.edges?.map((img: any) => img.node.url) || [];
-  const [mainImage, setMainImage] = useState(images?.[2] || images?.[0]); // default main image
+  const [mainImage, setMainImage] = useState(images?.[2] || images?.[0]);
   const { user } = useAuth();
-  const isMobile = useMediaQuery("(max-width: 1100px)"); // ✅ fixed typo
+  const isMobile = useMediaQuery("(max-width: 1100px)");
   const [scale, setScale] = useState(1);
 
-  let description =
-    "Our colorstone layouts feature carefully calibrated natural gemstones arranged in ready-to-set sequences — ideal for tennis bracelets, bezel mountings, eternity bands, and fine jewelry designs. Each gemstone layout is meticulously matched for color, cut, clarity, and size consistency, ensuring a perfectly graded flow when set. The round gemstones are diamond-cut for maximum brilliance, fire, and sparkle. Every sapphire layout, ruby layout, and emerald layout is precision-calibrated and harmonized, making the setting process faster, easier, and more professional. A perfect choice for jewelers, designers, and manufacturers seeking premium calibrated gemstone layouts with exceptional uniformity and visual balance.";
+  let description = "";
 
   const price = product?.variants?.edges?.[0]?.node?.price?.amount || "0.00";
   const currency =
