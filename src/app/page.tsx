@@ -11,6 +11,8 @@ import { BirthStoneComponent } from "@/components/BirthStone/BirthStoneComponent
 import { BestSellingProductsComponents } from "@/components/BestSellingProducts/BestSellingProductsComponents";
 import { BookAppointment } from "@/components/BookAppointment/BookAppointment";
 import TradeShows from "@/components/TradeShows/TradeShows";
+import { ShopCalibrated } from "@/components/ShopCalibrated/ShopCalibrated";
+import { ShopByShape } from "@/components/ShopByShape/ShopByShape";
 
 export default function Home() {
   const jewelrySectionRef = useRef<HTMLDivElement>(null);
@@ -23,8 +25,10 @@ export default function Home() {
   return (
     <>
       {heroData && <Hero jewelryRef={{ current: null }} heroData={heroData} />}
-      <JewelrySection ref={jewelrySectionRef} />
+      <ShopCalibrated />
+      <ShopByShape/>
       <ShopByColor />
+      <JewelrySection ref={jewelrySectionRef} />
       <BestSellingProductsComponents />
       <BirthStoneComponent />
       <Testimonials />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { FreeSizeGemstonesCard } from "@/components/FreeSizeGemtones/FreeSizeGemstonesCard";
+import FreeSizeGemstoneSelection from "@/components/FreeSizeGemstones/FreeSizeGemstoneSelection";
 
 export const metadata: Metadata = {
   title: "Free Size Gemstones – Sapphire, Ruby & Emerald | B.V. Gems",
@@ -16,12 +17,11 @@ export const metadata: Metadata = {
 };
 
 export default function FreeSizeGemstonePage() {
-  return (
-    <>
-      <div className="flex justify-center gap-6 py-10 bg-[#E5E7EB]">
-        <h1 className="text-3xl text-[#6B7280]">Free Size Gemstones</h1>
-      </div>
-      <FreeSizeGemstonesCard />
-    </>
-  );
+  return <FreeSizeGemstoneSelection />;
+  // <>
+  //   {/* <div className="flex justify-center gap-6 py-10 bg-[#E5E7EB]">
+  //     <h1 className="text-3xl text-[#6B7280]">Free Size Gemstones</h1>
+  //   </div> */}
+  //   {/* <FreeSizeGemstonesCard /> */}
+  // </>
 }

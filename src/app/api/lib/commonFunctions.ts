@@ -321,11 +321,14 @@ export const getBeads = async () => {
     const result = await shopifyRes.json();
     const allProducts = result?.data?.products;
 
-    const filteredProducts = allProducts?.edges.filter(
-      (product: any) =>
+    const filteredProducts = allProducts?.edges.filter((product: any) => {
+      console.log("product?.nodee",product?.node?.title ,product?.node?.metafield?.value);
+      return (
         product?.node?.metafield?.value &&
         product?.node.metafield.value === '["Beads"]'
-    );
+      );
+    });
+    console.log("all beads", filteredProducts?.length);
     return filteredProducts;
   } catch (error) {
     console.error(error);

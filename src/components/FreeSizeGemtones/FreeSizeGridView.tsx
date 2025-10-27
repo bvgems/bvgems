@@ -8,23 +8,33 @@ import {
   Button,
   Loader,
   Select,
+  Flex,
+  Text,
+  Group,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { getGemstonesList } from "@/apis/api";
 import { IconSearch } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { AnimatedCard } from "../GridView/AnimatedCard";
+import { FreeSizeGemstonesList } from "@/utils/constants";
 
 interface GridViewProps {
+  isViewAll: any;
   gemstones?: any;
   loadingTrigger?: any;
   color?: any;
 }
 
-export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
+export function FreeSizeGridView({
+  isViewAll,
+  gemstones,
+  loadingTrigger,
+}: GridViewProps) {
   const [loading, setLoading] = useState(false);
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [selectedGem, setSelectedGem] = useState<string | null>(null);
   const [searchItems, setSearchItems] = useState<any>([]);
   const [allItems, setAllItems] = useState<any>([]);
   const [displayItems, setDisplayItems] = useState<any>([]);
@@ -78,9 +88,7 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
 
   const handleSelect = (value: string) => {
     setSearchValue(value);
-
     const selected = allItems.find((item: any) => item.lot_number === value);
-
     if (selected) {
       setDisplayItems([selected]);
       setVisibleCount(1);
@@ -89,10 +97,9 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
     }
   };
 
-  // ✅ Apply sorting whenever sortOrder or allItems changes
+  // ✅ Sort items
   useEffect(() => {
     if (!allItems.length) return;
-
     let sorted = [...allItems];
     if (sortOrder === "lowToHigh") {
       sorted.sort((a, b) => parseFloat(a.ct_weight) - parseFloat(b.ct_weight));
@@ -131,36 +138,93 @@ export function FreeSizeGridView({ gemstones, loadingTrigger }: GridViewProps) {
 
   return (
     <div>
-      <div className="mt-4 flex flex-col md:flex-row items-center px-4 md:px-8 justify-between gap-4">
-        <span>Showing {displayItems?.length} results</span>
-        <div className="flex gap-3 items-center flex-col md:flex-row">
-          <Autocomplete
-            size="md"
-            w={300}
-            data={searchItems}
-            value={searchValue}
-            onChange={setSearchValue}
-            onOptionSubmit={handleSelect}
-            leftSectionPointerEvents="none"
-            leftSection={<IconSearch />}
-            placeholder="Search by lot number"
-            clearable
-          />
+      {/* === Top Controls Section === */}
+      <div className="mt-6 px-4 md:px-8">
+        <Flex
+          justify="space-between"
+          align="center"
+          direction={{ base: "column", md: "row" }}
+          wrap="wrap"
+          gap="md"
+        >
+          <Text fw={500}>Showing {displayItems?.length} results</Text>
 
-          <Select
-            placeholder="Sort by Carat Weight"
-            value={sortOrder}
-            onChange={setSortOrder}
-            data={[
-              { label: "Low to High", value: "lowToHigh" },
-              { label: "High to Low", value: "highToLow" },
-            ]}
-            clearable={false}
-            className="w-[220px]"
-          />
-        </div>
+          <div className="w-full flex flex-col gap-2 md:flex-row md:items-center md:justify-end">
+            {/* --- Row 1: Two side-by-side inputs --- */}
+            <div className="flex flex-row gap-2 w-full md:w-auto">
+              <Autocomplete
+                placeholder="Choose Gemstone"
+                data={FreeSizeGemstonesList.map((item) => item.label)}
+                size="md"
+                w="100%"
+                value={selectedGem || ""}
+                onChange={setSelectedGem}
+                renderOption={({ option }) => {
+                  const gem = FreeSizeGemstonesList.find(
+                    (g) => g.label === option.value
+                  );
+                  return (
+                    <Group gap="sm">
+                      <img
+                        src={gem?.image}
+                        alt={gem?.label}
+                        width={35}
+                        height={35}
+                        style={{ objectFit: "contain", borderRadius: "8px" }}
+                      />
+                      <Text size="sm" fw={500}>
+                        {gem?.label}
+                      </Text>
+                    </Group>
+                  );
+                }}
+                onOptionSubmit={(value) => {
+                  const gem = FreeSizeGemstonesList.find(
+                    (g) => g.label === value
+                  );
+                  if (gem) {
+                    setSelectedGem(gem.label);
+                    router.push(
+                      `/free-size-gemstones/${gem.label.toLowerCase()}`
+                    );
+                  }
+                }}
+              />
+
+              <Autocomplete
+                size="md"
+                w="100%"
+                data={searchItems}
+                value={searchValue}
+                onChange={setSearchValue}
+                onOptionSubmit={handleSelect}
+                leftSectionPointerEvents="none"
+                leftSection={<IconSearch size={16} />}
+                placeholder="Search by lot number"
+                clearable
+              />
+            </div>
+
+            {/* --- Row 2: Sort dropdown --- */}
+            <div className="w-full md:w-[180px]">
+              <Select
+                size="md"
+                placeholder="Sort by Carat"
+                value={sortOrder}
+                onChange={setSortOrder}
+                data={[
+                  { label: "Low to High", value: "lowToHigh" },
+                  { label: "High to Low", value: "highToLow" },
+                ]}
+                clearable={false}
+                className="w-full"
+              />
+            </div>
+          </div>
+        </Flex>
       </div>
 
+      {/* === Grid Section === */}
       {displayItems.length === 0 ? (
         <div className="text-center text-gray-500 py-6">
           No gemstones found matching your search.

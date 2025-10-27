@@ -27,7 +27,7 @@ export default function ShopByColor() {
   return (
     <Container size={1350} className="mt-20">
       <AnimatedText
-        text="Shop Stone By Color"
+        text="Shop Gemstone By Color"
         className="text-center text-4xl text-[#0b182d] mb-8"
       />
 

@@ -816,60 +816,76 @@ export const gemstoneOptions = [
     label: "Alexandrite",
     value: "Alexandrite",
     image: "/assets/sapphire.png",
+    shopImage:
+      "/assets/alexandrite-shop-cali.png",
     link: "/calibrated-faceted-gemstones/alexandrite",
   },
   {
     label: "Amethyst",
     value: "Amethyst",
     image: "/assets/amethyst.png",
+    shopImage:
+      "/assets/amethyst-shop-cali.png",
     link: "/calibrated-faceted-gemstones/amethyst",
   },
   {
     label: "Aquamarine",
     value: "Aquamarine",
     image: "/assets/aquamarine.png",
+    shopImage:
+      "/assets/aquamarine-shop-cali.png",
     link: "/calibrated-faceted-gemstones/aquamarine",
   },
   {
     label: "Citrine",
     value: "Citrine",
     image: "/assets/citrine.png",
+    shopImage:"/assets/citrine-shop-cal.png",
     link: "/calibrated-faceted-gemstones/citrine",
   },
   {
     label: "Emerald",
     value: "Emerald",
     image: "/assets/emerald.png",
+    shopImage: "/assets/emerald-shop-cal.png",
     link: "/calibrated-faceted-gemstones/emerald",
   },
   {
     label: "Morganite",
     value: "Morganite",
     image: "/assets/morganite.png",
+    shopImage:
+      "/assets/morganite-shop-cal.png",
     link: "/calibrated-faceted-gemstones/morganite",
   },
   {
     label: "Peridot",
     value: "Peridot",
     image: "/assets/peridot.png",
+    shopImage:
+      "/assets/peridot-shop-cal.png",
     link: "/calibrated-faceted-gemstones/peridot",
   },
   {
     label: "Ruby",
     value: "Ruby",
     image: "/assets/ruby.png",
+    shopImage:
+      "/assets/ruby-shop-cali.png",
     link: "/calibrated-faceted-gemstones/ruby",
   },
   {
-    label: "Sapphire",
+    label: "Sapphire (All Colors)",
     value: "Sapphire",
     image: "/assets/sapphire.png",
+    shopImage: "/assets/sapphire-shop-calibrated.png",
     link: "/calibrated-faceted-gemstones/sapphire",
   },
   {
     label: "Tanzanite",
     value: "Tanzanite",
     image: "/assets/tanzanite.png",
+    shopImage: "/assets/tanzanite-shop-cali1.png",
     link: "/calibrated-faceted-gemstones/tanzanite",
   },
 ];
@@ -1014,9 +1030,15 @@ export const patternOptions = [
 
 export const FreeSizeGemstonesList = [
   {
-    label: "Sapphire",
-    value: "Sapphire",
+    label: "Blue Sapphire",
+    value: "Blue Sapphire",
     image: "/assets/freesizesapphire.png",
+    link: "/free-size-gemstones/sapphire",
+  },
+  {
+    label: "Fancy Sapphire",
+    value: "Fancy Sapphire",
+    image: "/assets/fancy-sapphire.png",
     link: "/free-size-gemstones/sapphire",
   },
   {
