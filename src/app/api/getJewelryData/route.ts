@@ -22,7 +22,6 @@ export async function GET(request: NextRequest) {
     } else {
       products = result?.edges;
     }
-    console.log("prodddd", products[0]);
     return NextResponse.json({ products: products }, { status: 200 });
   } catch (error) {
     console.error("GET error:", error);

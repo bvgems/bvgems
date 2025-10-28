@@ -50,6 +50,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       price: priceRange,
       types: selectedTypes,
     };
+    console.log('hereeeee',filterOptions)
     const response = await getFilteredJewelry(filterOptions, collectionSlug);
 
     let products = response?.data || [];

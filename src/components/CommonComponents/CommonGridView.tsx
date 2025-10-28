@@ -4,6 +4,7 @@ import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
 import { Skeleton, Grid, GridCol, Anchor, Breadcrumbs } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Script from "next/script";
+import { ChildProcess } from "child_process";
 
 export const CommonGridView = ({
   filteredJewelry,
@@ -15,6 +16,8 @@ export const CommonGridView = ({
   }, []);
 
   const { category, allProducts, beads } = useGridView();
+  console.log("all proddddd", allProducts?.length);
+  console.log('filteredddd',filteredJewelry)
   const isLoading = !allProducts?.length && !beads?.length;
 
   const [totalDisplayedProducts, setTotalDispalyedProducts] = useState<any>();
@@ -24,6 +27,7 @@ export const CommonGridView = ({
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
 
   useEffect(() => {
+    
     if (filteredJewelry === undefined) {
       if (isBead) {
         setTotalDispalyedProducts(beads?.length);

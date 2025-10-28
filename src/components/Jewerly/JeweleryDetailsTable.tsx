@@ -1,6 +1,7 @@
-// JeweleryDetailsAccordion.tsx
-import { STONE_COLORS } from "@/utils/constants";
-import { Accordion, Group, Text, Divider } from "@mantine/core";
+// JeweleryDetailsTable.tsx
+"use client";
+
+import { Table, Text, Divider } from "@mantine/core";
 import React, { useMemo } from "react";
 
 type Props = {
@@ -11,141 +12,116 @@ type Props = {
   value: any;
 };
 
-export const JeweleryDetailsAccordion = ({
+export const JeweleryDetailsTable = ({
   productData,
   gemstone,
   jf,
   earringMetafields,
   value,
 }: Props) => {
-  // console.log("prpd data", gemstone);
   const selectedVariant = productData?.variants?.edges?.filter(
     (v: any) => v?.node?.title === gemstone
   );
-  console.log("see", selectedVariant);
 
   const gemstoneName =
     selectedVariant && selectedVariant[0]?.node?.metafield?.value;
   const stoneWeight = Number(productData?.ct_weight?.value);
   const diamondWeight = Number(productData?.DiamondWeight?.value);
 
-const totalWeight = useMemo(() => {
+  const totalWeight = useMemo(() => {
     const sum =
       (isNaN(stoneWeight) ? 0 : stoneWeight) +
       (isNaN(diamondWeight) ? 0 : diamondWeight);
     return sum > 0 ? sum.toFixed(2) : "-";
   }, [stoneWeight, diamondWeight]);
 
-  const Row = ({ label, value }: { label: string; value: React.ReactNode }) => (
-    <Group justify="flex-start" gap="md" wrap="nowrap">
-      <Text fw={600} w={180}>
-        {label}
-      </Text>
-      <Text>{value}</Text>
-    </Group>
+  const renderRow = (label: string, val: any) => (
+    <Table.Tr>
+      <Table.Td width="35%">
+        <Text fw={600}>{label}</Text>
+      </Table.Td>
+      <Table.Td>
+        <Text>{val ?? "-"}</Text>
+      </Table.Td>
+    </Table.Tr>
   );
 
   return (
-    <Accordion variant="separated" radius="md" defaultValue={"jewelry-details"}>
-      <Accordion.Item value="jewelry-details">
-        <Accordion.Control>More Details</Accordion.Control>
-        <Accordion.Panel>
-          <div className="space-y-3">
-            <Row
-              label="Gemstone:"
-              value={
-                gemstoneName
-                  ? gemstoneName
-                  : productData?.gemstone?.value || "-"
-              }
-            />
-            <Row
-              label="Stone Type:"
-              value={productData?.stoneType?.value || "Natural"}
-            />
-            <Row label="Shape:" value={productData?.shape?.value || "-"} />
-            {productData?.dimension?.value && (
-              <Row
-                label="Dimension:"
-                value={
-                  value ? value : productData?.dimension?.value + "mm" || "-"
-                }
-              />
-            )}
-            {/* <Row
-              label="Stone Color:"
-              value={gemstone ? STONE_COLORS[gemstone] || "-" : "-"}
-            /> */}
+    <div className="space-y-3">
+      <Table
+        // striped
+        highlightOnHover
+        withRowBorders={false}
+        withColumnBorders={false}
+      >
+        <Table.Tbody>
+          {renderRow(
+            "Gemstone:",
+            gemstoneName ? gemstoneName : productData?.gemstone?.value || "-"
+          )}
+          {renderRow("Stone Type:", productData?.stoneType?.value || "Natural")}
+          {renderRow("Shape:", productData?.shape?.value || "-")}
 
-            <Divider my="xs" />
-
-            {/* Earrings custom details */}
-            {jf.isEarringCategory && earringMetafields ? (
-              <>
-                <Row
-                  label="Gemstone Size:"
-                  value={earringMetafields.gemstone_size || "-"}
-                />
-                <Row
-                  label="Stone Weight:"
-                  value={
-                    earringMetafields.gemstone_weight
-                      ? `${earringMetafields.gemstone_weight} ct.`
-                      : "-"
-                  }
-                />
-                <Row
-                  label="Total Carat:"
-                  value={earringMetafields.carat || "-"}
-                />
-              </>
-            ) : (
-              <>
-                <Row
-                  label="Stone Weight:"
-                  value={
-                    isNaN(stoneWeight) ? (
-                      "-"
-                    ) : (
-                      <>
-                        {stoneWeight} <span className="ml-1">ct.</span>
-                      </>
-                    )
-                  }
-                />
-                <Row
-                  label="Diamond Weight:"
-                  value={
-                    isNaN(diamondWeight) ? (
-                      "-"
-                    ) : (
-                      <>
-                        {diamondWeight} <span className="ml-1">ct.</span>
-                      </>
-                    )
-                  }
-                />
-                <Row
-                  label="Total Weight:"
-                  value={
-                    totalWeight === "-" ? (
-                      "-"
-                    ) : (
-                      <>
-                        {totalWeight} <span className="ml-1">ct.</span>
-                      </>
-                    )
-                  }
-                />
-              </>
+          {productData?.dimension?.value &&
+            renderRow(
+              "Dimension:",
+              value ? value : `${productData?.dimension?.value} mm`
             )}
 
-            <Divider my="xs" />
+          {/* Divider */}
+          <Table.Tr>
+            <Table.Td colSpan={2}>
+              <Divider />
+            </Table.Td>
+          </Table.Tr>
 
-            <Row label="Customization:" value="Yes" />
-          </div>
-        </Accordion.Panel>
-      </Accordion.Item>
-    </Accordion>
+          {/* Earrings details */}
+          {jf.isEarringCategory && earringMetafields ? (
+            <>
+              {renderRow("Gemstone Size:", earringMetafields.gemstone_size)}
+              {renderRow(
+                "Stone Weight:",
+                earringMetafields.gemstone_weight
+                  ? `${earringMetafields.gemstone_weight} ct.`
+                  : "-"
+              )}
+              {renderRow("Total Carat:", earringMetafields.carat || "-")}
+            </>
+          ) : (
+            <>
+              {renderRow(
+                "Stone Weight:",
+                isNaN(stoneWeight) ? "-" : `${stoneWeight} ct.`
+              )}
+              {renderRow(
+                "Diamond Weight:",
+                isNaN(diamondWeight) ? "-" : `${diamondWeight} ct.`
+              )}
+              {renderRow(
+                "Total Weight:",
+                totalWeight === "-" ? "-" : `${totalWeight} ct.`
+              )}
+            </>
+          )}
+          {productData?.careNotes?.value &&
+            renderRow(
+              "Other Details:",
+              productData?.careNotes?.value && (
+                <p className="text-md text-[#0b182d] leading-relaxed mb-2">
+                  {(() => {
+                    const val = productData.careNotes.value;
+                    try {
+                      const parsed = JSON.parse(val);
+                      return Array.isArray(parsed) ? parsed[0] : parsed;
+                    } catch {
+                      return val;
+                    }
+                  })()}
+                </p>
+              )
+            )}
+        </Table.Tbody>
+      </Table>
+    </div>
   );
 };

@@ -425,6 +425,15 @@ export const GetProductByHandle = `
       createdAt
       tags
 
+       inHand: metafield(namespace: "custom", key: "in_hand") {
+            value
+            type
+          }
+
+          careNotes: metafield(namespace: "custom", key: "care_notes") {
+            value
+            type
+          }
       dimension: metafield(namespace: "custom", key: "dimension") {
         value
         type

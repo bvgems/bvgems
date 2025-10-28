@@ -18,6 +18,7 @@ import { IconSearch } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { AnimatedCard } from "../GridView/AnimatedCard";
 import { FreeSizeGemstonesList } from "@/utils/constants";
+import { useMediaQuery } from "@mantine/hooks";
 
 interface GridViewProps {
   isViewAll: any;
@@ -44,6 +45,7 @@ export function FreeSizeGridView({
   const ITEMS_PER_PAGE = 18;
   const router = useRouter();
 
+  const isMobile = useMediaQuery("(max-width: 1024px)");
   useEffect(() => {
     if (gemstones === undefined) {
       setLoading(true);
@@ -97,7 +99,6 @@ export function FreeSizeGridView({
     }
   };
 
-  // ✅ Sort items
   useEffect(() => {
     if (!allItems.length) return;
     let sorted = [...allItems];
@@ -152,44 +153,46 @@ export function FreeSizeGridView({
           <div className="w-full flex flex-col gap-2 md:flex-row md:items-center md:justify-end">
             {/* --- Row 1: Two side-by-side inputs --- */}
             <div className="flex flex-row gap-2 w-full md:w-auto">
-              <Autocomplete
-                placeholder="Choose Gemstone"
-                data={FreeSizeGemstonesList.map((item) => item.label)}
-                size="md"
-                w="100%"
-                value={selectedGem || ""}
-                onChange={setSelectedGem}
-                renderOption={({ option }) => {
-                  const gem = FreeSizeGemstonesList.find(
-                    (g) => g.label === option.value
-                  );
-                  return (
-                    <Group gap="sm">
-                      <img
-                        src={gem?.image}
-                        alt={gem?.label}
-                        width={35}
-                        height={35}
-                        style={{ objectFit: "contain", borderRadius: "8px" }}
-                      />
-                      <Text size="sm" fw={500}>
-                        {gem?.label}
-                      </Text>
-                    </Group>
-                  );
-                }}
-                onOptionSubmit={(value) => {
-                  const gem = FreeSizeGemstonesList.find(
-                    (g) => g.label === value
-                  );
-                  if (gem) {
-                    setSelectedGem(gem.label);
-                    router.push(
-                      `/free-size-gemstones/${gem.label.toLowerCase()}`
+              {!isMobile && (
+                <Autocomplete
+                  placeholder="Choose Gemstone"
+                  data={FreeSizeGemstonesList.map((item) => item.label)}
+                  size="md"
+                  w="100%"
+                  value={selectedGem || ""}
+                  onChange={setSelectedGem}
+                  renderOption={({ option }) => {
+                    const gem = FreeSizeGemstonesList.find(
+                      (g) => g.label === option.value
                     );
-                  }
-                }}
-              />
+                    return (
+                      <Group gap="sm">
+                        <img
+                          src={gem?.image}
+                          alt={gem?.label}
+                          width={35}
+                          height={35}
+                          style={{ objectFit: "contain", borderRadius: "8px" }}
+                        />
+                        <Text size="sm" fw={500}>
+                          {gem?.label}
+                        </Text>
+                      </Group>
+                    );
+                  }}
+                  onOptionSubmit={(value) => {
+                    const gem = FreeSizeGemstonesList.find(
+                      (g) => g.label === value
+                    );
+                    if (gem) {
+                      setSelectedGem(gem.label);
+                      router.push(
+                        `/free-size-gemstones/${gem.label.toLowerCase()}`
+                      );
+                    }
+                  }}
+                />
+              )}
 
               <Autocomplete
                 size="md"
@@ -213,8 +216,8 @@ export function FreeSizeGridView({
                 value={sortOrder}
                 onChange={setSortOrder}
                 data={[
-                  { label: "Low to High", value: "lowToHigh" },
-                  { label: "High to Low", value: "highToLow" },
+                  { label: "Ctw. Low to High", value: "lowToHigh" },
+                  { label: "Ctw. High to Low", value: "highToLow" },
                 ]}
                 clearable={false}
                 className="w-full"

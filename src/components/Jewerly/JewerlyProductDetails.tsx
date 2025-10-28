@@ -19,7 +19,7 @@ import {
   IconSparkles,
   IconStarFilled,
 } from "@tabler/icons-react";
-import { JeweleryDetailsAccordion } from "./JeweleryDetailsTable";
+
 import { getCartStore } from "@/store/useCartStore";
 import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
 import { useJewelryFunctions } from "@/hooks/useJewlryFunctions";
@@ -38,6 +38,7 @@ import "swiper/css/scrollbar";
 import { useDisclosure } from "@mantine/hooks";
 import { JewelryOptionsDrawer } from "./JewelryOptionsDrawer";
 import { CustomizeJewelryDrawer } from "./CustomizeJewelryDrawer";
+import { JeweleryDetailsTable } from "./JeweleryDetailsTable";
 
 // 🔹 Hook to generate fake review count
 function useFakeReviewCount(jf: any) {
@@ -77,6 +78,7 @@ export const JewelryProductDetails = ({
   const [opened, { open, close }] = useDisclosure(false);
   const [value, setValue] = useState<string>("");
   const [customizedDrawerTitle, setCustomizedDrawerTitle] = useState("");
+  console.log("prod dta", productData);
 
   useEffect(() => {
     switch (category) {
@@ -186,7 +188,6 @@ export const JewelryProductDetails = ({
         {jf.isBead ? productData?.title : selectedShape || productData?.title}
       </h1>
 
-      {/* ⭐ Ratings */}
       <Group gap="xs" mb="sm">
         {Array.from({ length: 5 }).map((_, i) => (
           <IconStarFilled key={i} size={18} color="gold" />
@@ -233,7 +234,9 @@ export const JewelryProductDetails = ({
         {!jf.isBead &&
           !(
             jf.isEarringCategory && productData?.jewelryType?.value === "Silver"
-          ) && (
+          ) &&
+          (!jf.isBracelets ||
+            (jf.isBracelets && productData?.inHand?.value === "true")) && (
             <GoldColorInput
               selectedGoldColor={jf.selectedGoldColor}
               setSelectedGoldColor={jf.setSelectedGoldColor}
@@ -312,7 +315,7 @@ export const JewelryProductDetails = ({
           </div>
         )}
 
-        {jf.isBracelets && (
+        {jf.isBracelets && productData?.inHand?.value === "true" && (
           <div>
             <p className="mb-2 font-medium">Select Bracelet Length</p>
             <Swiper
@@ -429,7 +432,7 @@ export const JewelryProductDetails = ({
         jf.isNecklaces ||
         jf.isBracelets) && (
         <div className="mt-6">
-          <JeweleryDetailsAccordion
+          <JeweleryDetailsTable
             productData={productData}
             gemstone={selectedShape}
             jf={jf}

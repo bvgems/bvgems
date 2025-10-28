@@ -1,10 +1,9 @@
 "use client";
 
 import {
-  FreeSizeGemstonesList,
-  FreeSizeOrigins,
   SapphireLooseGemstoneColorOptions,
   ShapeFilterList,
+  FreeSizeGemstonesList,
 } from "@/utils/constants";
 import {
   Checkbox,
@@ -15,10 +14,13 @@ import {
   MantineProvider,
   NumberInput,
   MultiSelect,
-  Select,
   Switch,
+  Text,
+  Group,
+  Autocomplete,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const theme = createTheme({
@@ -26,6 +28,7 @@ const theme = createTheme({
 });
 
 export const FreeSizeFilterSideBar = ({
+  isFancySapphire,
   lotSearch,
   setLotSearch,
   selectedStones,
@@ -49,15 +52,133 @@ export const FreeSizeFilterSideBar = ({
   width,
   setWidth,
 }: any) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 1024px)");
+  const router = useRouter();
+
+  const [selectedGem, setSelectedGem] = React.useState<string | null>(null);
+
+
+  const minVal = weightRange?.[0] ?? null;
+  const maxVal = weightRange?.[1] ?? null;
 
   return (
     <div>
       <MantineProvider theme={theme}>
         {isMobile ? (
-          // ---------- MOBILE VIEW (Multi-Select Dropdown Style) ----------
           <div className="px-4 py-3 space-y-5">
-            {/* Certified */}
+            <div>
+              <p className="font-medium mb-2">Choose Gemstone</p>
+              <Autocomplete
+                placeholder="Choose Gemstone"
+                data={FreeSizeGemstonesList.map((item) => item.label)}
+                size="md"
+                w="100%"
+                value={selectedGem || ""}
+                onChange={setSelectedGem}
+                renderOption={({ option }) => {
+                  const gem = FreeSizeGemstonesList.find(
+                    (g) => g.label === option.value
+                  );
+                  return (
+                    <Group gap="sm">
+                      <img
+                        src={gem?.image}
+                        alt={gem?.label}
+                        width={35}
+                        height={35}
+                        style={{ objectFit: "contain", borderRadius: "8px" }}
+                      />
+                      <Text size="sm" fw={500}>
+                        {gem?.label}
+                      </Text>
+                    </Group>
+                  );
+                }}
+                onOptionSubmit={(value) => {
+                  const gem = FreeSizeGemstonesList.find(
+                    (g) => g.label === value
+                  );
+                  if (gem) {
+                    setSelectedGem(gem.label);
+                    router.push(
+                      `/free-size-gemstones/${gem.label.toLowerCase()}`
+                    );
+                  }
+                }}
+              />
+            </div>
+
+            {/* === Shape === */}
+            <MultiSelect
+              label="Shape"
+              placeholder="Select shapes"
+              data={ShapeFilterList.map((item) => ({
+                value: item.label,
+                label: item.label,
+              }))}
+              value={selectedShapes}
+              onChange={(val) => setSelectedShapes(val)}
+              searchable
+              clearable
+              nothingFoundMessage="No shapes"
+              className="w-full"
+            />
+
+            {/* === Color (Fancy Sapphire only) === */}
+            {isFancySapphire && (
+              <MultiSelect
+                label="Color"
+                placeholder="Select colors"
+                data={SapphireLooseGemstoneColorOptions.map((item) => ({
+                  value: item.value,
+                  label: item.value,
+                }))}
+                value={selectedColors}
+                onChange={(val) => setSelectedColors(val)}
+                searchable
+                clearable
+                nothingFoundMessage="No colors"
+                className="w-full"
+              />
+            )}
+
+            {/* === Weight Range (EMPTY by default) === */}
+            <div>
+              <p className="font-medium mb-2">Weight Range (cts.)</p>
+              <div className="flex gap-4">
+                <NumberInput
+                  label="Min"
+                  placeholder="Min"
+                  value={minVal ?? undefined}
+                  onChange={(val) =>
+                    setWeightRange([
+                      typeof val === "number" && !Number.isNaN(val)
+                        ? val
+                        : null,
+                      maxVal,
+                    ])
+                  }
+                  step={0.01}
+                  // no min/max bounds → user controls it; we only filter if provided
+                />
+                <NumberInput
+                  label="Max"
+                  placeholder="Max"
+                  value={maxVal ?? undefined}
+                  onChange={(val) =>
+                    setWeightRange([
+                      minVal,
+                      typeof val === "number" && !Number.isNaN(val)
+                        ? val
+                        : null,
+                    ])
+                  }
+                  step={0.01}
+                />
+              </div>
+            </div>
+
+            {/* === Certified === */}
             <div>
               <p className="font-medium mb-2">Certified</p>
               <Switch
@@ -74,70 +195,9 @@ export const FreeSizeFilterSideBar = ({
                 }}
               />
             </div>
-
-            {/* Color (Multi-select) */}
-            <MultiSelect
-              label="Color"
-              placeholder="Select colors"
-              data={SapphireLooseGemstoneColorOptions.map((item) => ({
-                value: item.value,
-                label: item.value,
-              }))}
-              value={selectedColors}
-              onChange={(val) => setSelectedColors(val)}
-              searchable
-              clearable
-              nothingFoundMessage="No colors"
-              className="w-full"
-            />
-
-            {/* Shape (Multi-select) */}
-            <MultiSelect
-              label="Shape"
-              placeholder="Select shapes"
-              data={ShapeFilterList.map((item) => ({
-                value: item.label,
-                label: item.label,
-              }))}
-              value={selectedShapes}
-              onChange={(val) => setSelectedShapes(val)}
-              searchable
-              clearable
-              nothingFoundMessage="No shapes"
-              className="w-full"
-            />
-
-            {/* Weight Range */}
-            <div>
-              <p className="font-medium mb-2">Weight Range (cts.)</p>
-              <div className="flex gap-4">
-                <NumberInput
-                  label="Min"
-                  value={weightRange[0]}
-                  onChange={(val) =>
-                    setWeightRange([val || 0.51, weightRange[1]])
-                  }
-                  min={0.51}
-                  max={25}
-                  step={0.01}
-                  maw={100}
-                />
-                <NumberInput
-                  label="Max"
-                  value={weightRange[1]}
-                  onChange={(val) =>
-                    setWeightRange([weightRange[0], val || 25])
-                  }
-                  min={0.51}
-                  max={25}
-                  step={0.01}
-                  maw={100}
-                />
-              </div>
-            </div>
           </div>
         ) : (
-          // ---------- DESKTOP VIEW (Accordion-style Sidebar) ----------
+          // ---------- DESKTOP VIEW ----------
           <div className="px-8 mt-4">
             {/* Certified */}
             <div className="mb-6">
@@ -155,28 +215,6 @@ export const FreeSizeFilterSideBar = ({
                   }
                 }}
               />
-            </div>
-
-            {/* Color */}
-            <div className="mb-6">
-              <h3 className="font-semibold text-lg mb-2">Color</h3>
-              {SapphireLooseGemstoneColorOptions.map((item, index) => (
-                <div className="mt-2 ml-2" key={index}>
-                  <Checkbox
-                    checked={selectedColors?.includes(item.value)}
-                    onChange={(event) => {
-                      const checked = event.currentTarget.checked;
-                      setSelectedColors((prev: any) =>
-                        checked
-                          ? [...prev, item.value]
-                          : prev.filter((c: any) => c !== item.value)
-                      );
-                    }}
-                    color="#0b182d"
-                    label={item.value}
-                  />
-                </div>
-              ))}
             </div>
 
             {/* Shape */}
@@ -203,31 +241,63 @@ export const FreeSizeFilterSideBar = ({
               </CheckboxGroup>
             </div>
 
-            {/* Weight Range */}
+            {/* Color */}
+            {isFancySapphire && (
+              <div className="mb-6">
+                <h3 className="font-semibold text-lg mb-2">Color</h3>
+                {SapphireLooseGemstoneColorOptions.map((item, index) => (
+                  <div className="mt-2 ml-2" key={index}>
+                    <Checkbox
+                      checked={selectedColors?.includes(item.value)}
+                      onChange={(event) => {
+                        const checked = event.currentTarget.checked;
+                        setSelectedColors((prev: any) =>
+                          checked
+                            ? [...prev, item.value]
+                            : prev.filter((c: any) => c !== item.value)
+                        );
+                      }}
+                      color="#0b182d"
+                      label={item.value}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Weight Range (EMPTY by default) */}
             <div>
-              <h3 className="font-semibold text-lg mb-2">Weight Range (cts.)</h3>
+              <h3 className="font-semibold text-lg mb-2">
+                Weight Range (cts.)
+              </h3>
               <div className="flex gap-4 mt-2 ml-2">
                 <NumberInput
                   label="Min"
-                  value={weightRange[0]}
+                  placeholder="Min"
+                  value={minVal ?? undefined}
                   onChange={(val) =>
-                    setWeightRange([val || 0.51, weightRange[1]])
+                    setWeightRange([
+                      typeof val === "number" && !Number.isNaN(val)
+                        ? val
+                        : null,
+                      maxVal,
+                    ])
                   }
-                  min={0.51}
-                  max={25}
                   step={0.01}
-                  maw={100}
                 />
                 <NumberInput
                   label="Max"
-                  value={weightRange[1]}
+                  placeholder="Max"
+                  value={maxVal ?? undefined}
                   onChange={(val) =>
-                    setWeightRange([weightRange[0], val || 25])
+                    setWeightRange([
+                      minVal,
+                      typeof val === "number" && !Number.isNaN(val)
+                        ? val
+                        : null,
+                    ])
                   }
-                  min={0.51}
-                  max={25}
                   step={0.01}
-                  maw={100}
                 />
               </div>
             </div>
