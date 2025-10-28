@@ -196,6 +196,9 @@ export function useJewelryFunctions(
     if (isEarringCategory) {
       return !selectedGoldColor;
     }
+    if (isBracelets) {
+      if (productData?.inHand?.value === "false") return false;
+    }
     if (isRingCategory && !selectedRingSize) return true;
     if (!selectedGoldColor && !isBead) return true;
 
