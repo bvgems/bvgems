@@ -36,7 +36,7 @@ export function FreeSizeGridView({
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [selectedGem, setSelectedGem] = useState<string | null>(null);
-  const [searchItems, setSearchItems] = useState<any>([]);
+  const [searchItems, setSearchItems] = useState<string[]>([]);
   const [allItems, setAllItems] = useState<any>([]);
   const [displayItems, setDisplayItems] = useState<any>([]);
   const [visibleCount, setVisibleCount] = useState(18);
@@ -46,6 +46,7 @@ export function FreeSizeGridView({
   const router = useRouter();
 
   const isMobile = useMediaQuery("(max-width: 1024px)");
+
   useEffect(() => {
     if (gemstones === undefined) {
       setLoading(true);
@@ -55,11 +56,11 @@ export function FreeSizeGridView({
       const timer = setTimeout(() => {
         setAllItems(gemstones || []);
         setDisplayItems(gemstones || []);
+        // FIX: Filter out null/undefined lot_numbers
         setSearchItems(
-          (gemstones || []).map((g: any) => ({
-            value: g.lot_number,
-            id: g.id,
-          }))
+          (gemstones || [])
+            .map((g: any) => g.lot_number)
+            .filter((lot: any) => lot != null && lot !== "")
         );
         setVisibleCount(ITEMS_PER_PAGE);
         setLoading(false);
@@ -73,11 +74,11 @@ export function FreeSizeGridView({
       const response = await getGemstonesList();
       setAllItems(response?.data || []);
       setDisplayItems(response?.data || []);
+      // FIX: Filter out null/undefined lot_numbers
       setSearchItems(
-        (response?.data || []).map((g: any) => ({
-          value: g.lot_number,
-          id: g.id,
-        }))
+        (response?.data || [])
+          .map((g: any) => g.lot_number)
+          .filter((lot: any) => lot != null && lot !== "")
       );
       setVisibleCount(ITEMS_PER_PAGE);
     } catch (error) {
