@@ -236,7 +236,9 @@ export const JewelryProductDetails = ({
             jf.isEarringCategory && productData?.jewelryType?.value === "Silver"
           ) &&
           (!jf.isBracelets ||
-            (jf.isBracelets && productData?.inHand?.value === "true")) && (
+            (jf.isBracelets && productData?.inHand?.value === "true")) &&
+          (!jf.isNecklaces ||
+            (jf.isNecklaces && productData?.inHand?.value === "true")) && (
             <GoldColorInput
               selectedGoldColor={jf.selectedGoldColor}
               setSelectedGoldColor={jf.setSelectedGoldColor}
@@ -339,7 +341,7 @@ export const JewelryProductDetails = ({
           </div>
         )}
 
-        {jf.isNecklaces && (
+        {jf.isBracelets && productData?.inHand?.value === "true" && (
           <div>
             <p className="mb-2 font-medium">Select Necklace Length</p>
             <Swiper
@@ -363,41 +365,43 @@ export const JewelryProductDetails = ({
           </div>
         )}
 
-        {productData?.showshapeoptions?.value === "true" && (
-          <div className="">
-            <p className="mb-2 font-medium">Explore Different Gemstones</p>
-            <div className="flex items-center justify-between border border-gray-200 pr-6">
-              {productData?.variants?.edges
-                ?.filter((v: any) => v?.node?.title === selectedShape) // ✅ only current variant
-                ?.map((v: any, idx: number) => {
-                  const gemstoneName =
-                    v?.node?.metafield?.value || v?.node?.title;
-                  return (
-                    <div
-                      key={idx}
-                      className="flex items-center text-base font-medium"
-                    >
-                      <Image
-                        src={v?.node?.image_url?.reference?.image?.url}
-                        alt={
-                          v?.node?.image_url?.reference?.image?.altText ||
-                          v?.node?.title
-                        }
-                        w={60}
-                        h={60}
-                      />
-                      <p>{gemstoneName}</p>
-                    </div>
-                  );
-                })}
-              <div className="cursor-pointer">
-                <span onClick={open} className="underline">
-                  Change
-                </span>
+        {productData?.showshapeoptions?.value === "true" &&
+          (!jf.isNecklaces ||
+            (jf.isNecklaces && productData?.inHand?.value === "true")) && (
+            <div className="">
+              <p className="mb-2 font-medium">Explore Different Gemstones</p>
+              <div className="flex items-center justify-between border border-gray-200 pr-6">
+                {productData?.variants?.edges
+                  ?.filter((v: any) => v?.node?.title === selectedShape) // ✅ only current variant
+                  ?.map((v: any, idx: number) => {
+                    const gemstoneName =
+                      v?.node?.metafield?.value || v?.node?.title;
+                    return (
+                      <div
+                        key={idx}
+                        className="flex items-center text-base font-medium"
+                      >
+                        <Image
+                          src={v?.node?.image_url?.reference?.image?.url}
+                          alt={
+                            v?.node?.image_url?.reference?.image?.altText ||
+                            v?.node?.title
+                          }
+                          w={60}
+                          h={60}
+                        />
+                        <p>{gemstoneName}</p>
+                      </div>
+                    );
+                  })}
+                <div className="cursor-pointer">
+                  <span onClick={open} className="underline">
+                    Change
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
         <Grid mt="xs" align="stretch">
           <GridCol span={{ base: 3 }}>
