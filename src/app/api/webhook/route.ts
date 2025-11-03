@@ -21,6 +21,7 @@ async function sendOrderReceipt(shopifyOrderId: string) {
     );
 
     const order = orderResponse.data.order;
+    console.log('ordeerr',order)
 
     await axios.put(
       `${process.env.SHOPIFY_ADMIN_API_URL}/orders/${shopifyOrderId}.json`,
@@ -56,6 +57,8 @@ async function sendOrderReceipt(shopifyOrderId: string) {
 }
 
 export async function POST(req: NextRequest) {
+
+  console.log('*************WEBHOOK CALLEDDDDDD***************')
   const rawBody = await req.text();
   const sig = req.headers.get("stripe-signature")!;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -63,7 +66,7 @@ export async function POST(req: NextRequest) {
   let event: Stripe.Event;
 
   try {
-    console.log("called the webhook");
+    console.log("*********************called the webhook");
     event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
     console.log("✅ Stripe Event Received:", event.type);
   } catch (err: any) {
