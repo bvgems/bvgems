@@ -196,7 +196,7 @@ export function useJewelryFunctions(
     if (isEarringCategory) {
       return !selectedGoldColor;
     }
-    if (isBracelets) {
+    if (isBracelets || isNecklaces) {
       if (productData?.inHand?.value === "false") return false;
     }
     if (isRingCategory && !selectedRingSize) return true;
