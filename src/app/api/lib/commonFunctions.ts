@@ -301,10 +301,13 @@ export const getBusinessReferences = async (userId: any) => {
 };
 
 export const getBeads = async () => {
+  let allProducts: any[] = [];
+  let hasNextPage = true;
+  let endCursor = null;
+
   try {
-    const shopifyRes = await fetch(
-      process.env.SHOPIFY_STOREFRONT_URL as string,
-      {
+    while (hasNextPage) {
+      const res:any = await fetch(process.env.SHOPIFY_STOREFRONT_URL as string, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -313,24 +316,33 @@ export const getBeads = async () => {
         },
         body: JSON.stringify({
           query: GetAllBeads,
-          variables: { first: 100 },
+          variables: { first: 250, after: endCursor },
         }),
-      }
-    );
+      });
 
-    const result = await shopifyRes.json();
-    const allProducts = result?.data?.products;
+      const result = await res.json();
+      const products = result?.data?.products;
 
-    const filteredProducts = allProducts?.edges.filter((product: any) => {
-      console.log("product?.nodee",product?.node?.title ,product?.node?.metafield?.value);
-      return (
-        product?.node?.metafield?.value &&
-        product?.node.metafield.value === '["Beads"]'
+      const edges = products?.edges || [];
+      allProducts.push(...edges);
+
+      console.log(
+        `Fetched ${edges.length} products, total so far: ${allProducts.length}`
       );
+
+      hasNextPage = products?.pageInfo?.hasNextPage;
+      endCursor = products?.pageInfo?.endCursor;
+    }
+
+    // Filter products by "Beads"
+    const beads = allProducts.filter((p: any) => {
+      return p?.node?.metafield?.value === '["Beads"]';
     });
-    console.log("all beads", filteredProducts?.length);
-    return filteredProducts;
+
+    console.log(`✅ Total beads found: ${beads.length}`);
+    return beads;
   } catch (error) {
-    console.error(error);
+    console.error("❌ Error fetching beads:", error);
+    return [];
   }
 };

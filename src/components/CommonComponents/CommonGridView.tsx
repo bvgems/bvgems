@@ -4,7 +4,6 @@ import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
 import { Skeleton, Grid, GridCol, Anchor, Breadcrumbs } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Script from "next/script";
-import { ChildProcess } from "child_process";
 
 export const CommonGridView = ({
   filteredJewelry,
@@ -16,8 +15,6 @@ export const CommonGridView = ({
   }, []);
 
   const { category, allProducts, beads } = useGridView();
-  console.log("all proddddd", allProducts?.length);
-  console.log('filteredddd',filteredJewelry)
   const isLoading = !allProducts?.length && !beads?.length;
 
   const [totalDisplayedProducts, setTotalDispalyedProducts] = useState<any>();
@@ -27,7 +24,6 @@ export const CommonGridView = ({
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
 
   useEffect(() => {
-    
     if (filteredJewelry === undefined) {
       if (isBead) {
         setTotalDispalyedProducts(beads?.length);
@@ -112,32 +108,26 @@ export const CommonGridView = ({
           : `Gemstone ${capitalize(category)}`}
       </h1>
 
-      {/* ✅ Result count */}
       <p className="mb-4 text-sm text-gray-600">
         Showing {totalDisplayedProducts} results
       </p>
 
-      {/* ✅ Responsive grid */}
       <Grid gutter="lg">
         {(finalProducts?.length ? finalProducts : beads)?.map(
-          (product: any, index: number) => {
-            // console.log('proooo at',product)
-            return (
-              <GridCol span={{ base: 6, sm: 6, md: 4, lg: 4 }} key={index}>
-                <JewelryCategoryCard
-                  isBead={isBead}
-                  category={category}
-                  product={product}
-                  index={index}
-                  selectedStones={selectedStones}
-                />
-              </GridCol>
-            );
-          }
+          (product: any, index: number) => (
+            <GridCol span={{ base: 6, sm: 6, md: 4, lg: 4 }} key={index}>
+              <JewelryCategoryCard
+                isBead={isBead}
+                category={category}
+                product={product}
+                index={index}
+                selectedStones={selectedStones}
+              />
+            </GridCol>
+          )
         )}
       </Grid>
 
-      {/* ✅ Schema.org ItemList */}
       {finalProducts?.length > 0 && (
         <Script
           id="itemlist-schema"

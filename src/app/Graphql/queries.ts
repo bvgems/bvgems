@@ -1,13 +1,17 @@
 export const GetAllBeads = `
-  query GetProducts($first: Int!) {
-    products(first: $first) {
+  query GetProducts($first: Int!, $after: String) {
+    products(first: $first, after: $after) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       edges {
         node {
           id
           title
           handle
           description
-           images(first: 5) {
+          images(first: 5) {
             edges {
               node {
                 url
