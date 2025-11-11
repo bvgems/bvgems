@@ -31,10 +31,12 @@ export default function CheckoutSelectionPage() {
     [user?.id]
   );
   const cart = cartStore((state: any) => state.cart);
-  console.log("cart items", cart);
+  const cartTotal = cartStore((state: any) => state.cartTotal);
+  const shippingTotal = cartStore((state: any) => state.shippingTotal);
+  const grandTotal = cartStore((state: any) => state.grandTotal);
+  const updateTotals = cartStore((state: any) => state.updateTotals);
 
   const { shippingAddress } = useStpperStore();
-
   const [deliveryMethod, setDeliveryMethod] = useState();
   const [paymentMethod, setPaymentMethod] = useState();
   const [opened, { open, close }] = useDisclosure(false);
@@ -42,6 +44,11 @@ export default function CheckoutSelectionPage() {
   const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
   );
+
+  // Ensure totals are updated before checkout
+  useMemo(() => {
+    updateTotals();
+  }, [cart, updateTotals]);
 
   const handlePayment = async () => {
     const stripe = await stripePromise;
@@ -62,7 +69,7 @@ export default function CheckoutSelectionPage() {
 
   const handleOrderPlacing = async () => {
     if (!deliveryMethod || !paymentMethod) return;
-    const orderPayload = getOrderPayload(
+    const orderPayload: any = getOrderPayload(
       paymentMethod,
       deliveryMethod,
       shippingAddress,
@@ -71,6 +78,11 @@ export default function CheckoutSelectionPage() {
       guestUser,
       cart
     );
+
+    // ✅ Add same totals for memo orders
+    orderPayload.subtotal = cartTotal;
+    orderPayload.shipping = shippingTotal;
+    orderPayload.grandTotal = grandTotal;
 
     if (paymentMethod === "memo") {
       await createShopifyOrder(orderPayload);
@@ -111,7 +123,8 @@ export default function CheckoutSelectionPage() {
               setDeliveryMethod={setDeliveryMethod}
             />
             <div className="px-10">
-              <BillingSummary />
+              <BillingSummary deliveryMethod={deliveryMethod} />
+
               <Button
                 disabled={
                   !deliveryMethod || !paymentMethod || cart?.length === 0

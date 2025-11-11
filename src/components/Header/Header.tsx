@@ -55,8 +55,8 @@ export function Header() {
     () => getCartStore(user?.id || "guest"),
     [user?.id]
   );
-  const cart = cartStore((state: any) => state.cart);
-  const cartCount = cart.reduce(
+  const cart = cartStore((state: any) => state?.cart);
+  const cartCount = cart?.reduce(
     (sum: any, item: any) => sum + item.quantity,
     0
   );

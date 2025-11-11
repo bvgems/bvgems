@@ -39,7 +39,7 @@ const AnimatedGridCol = ({
 export const CustomerBenefits = () => {
   const customerBenefits = [
     {
-      title: "Free Shipping, Always",
+      title: "Free Shipping on Orders $200+",
       description:
         "Enjoy complimentary worldwide shipping on every order—because exceptional service begins at your doorstep.",
       icon: <IconTruckDelivery size={42} stroke={1.5} />,

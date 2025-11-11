@@ -4,7 +4,7 @@ import { CommonGridView } from "@/components/CommonComponents/CommonGridView";
 export const metadata: Metadata = {
   title: "Precious Gemstone Beads – Moonstone, Emerald & More | B.V. Gems",
   description:
-    "Shop precious gemstone beads at B.V. Gems. Discover moonstone, emerald, ruby, sapphire beads and more. Ethically sourced, high quality, free U.S. shipping.",
+    "Shop precious gemstone beads at B.V. Gems. Discover moonstone, emerald, ruby, sapphire beads and more. Ethically sourced, high quality, free U.S. shipping on or above $200.",
   openGraph: {
     title: "Precious Gemstone Beads – Moonstone, Emerald & More | B.V. Gems",
     description:

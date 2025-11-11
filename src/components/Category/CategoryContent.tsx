@@ -208,6 +208,10 @@ export function CategoryContent({
         break;
     }
   };
+  // Filter only available quality images once
+  const availableQualityImages = qualityImages.filter(
+    (item: any) => item?.is_available
+  );
 
   const getItemQuality = (item: any) => {
     return item?.quality || "";
@@ -252,28 +256,27 @@ export function CategoryContent({
                       onSlideChange={(index) => setActiveSlide(index)}
                       className="w-full max-w-[420px]"
                       slideGap="md"
-                      // align="center"
                       slideSize="100%"
                       initialSlide={activeSlide}
                     >
-                      {qualityImages.map((item: any, index: number) => (
-                        <Carousel.Slide key={index}>
-                          <div className="flex flex-col items-center">
-                            <div className="h-[500px] w-[300px]">
-                              <ImageZoom src={item.image_url} />
+                      {availableQualityImages.map(
+                        (item: any, index: number) => (
+                          <Carousel.Slide key={item.id}>
+                            <div className="flex flex-col items-center">
+                              <div className="h-[500px] w-[300px]">
+                                <ImageZoom src={item.image_url} />
+                              </div>
                             </div>
-                          </div>
-                        </Carousel.Slide>
-                      ))}
+                          </Carousel.Slide>
+                        )
+                      )}
                     </Carousel>
-
                     {/* Thumbnails */}
                     <div className="mt-4 flex gap-4 flex-wrap justify-center">
-                      {qualityImages
-                        .filter((item: any) => item?.is_available === true)
-                        .map((item: any, index: number) => (
+                      {availableQualityImages.map(
+                        (item: any, index: number) => (
                           <div
-                            key={index}
+                            key={item.id}
                             className={`flex flex-col items-center cursor-pointer border rounded-lg p-2 transition-all ${
                               activeSlide === index
                                 ? "border-black shadow-md"
@@ -289,10 +292,11 @@ export function CategoryContent({
                               className="rounded"
                             />
                             <span className="text-xs font-medium mt-1">
-                              {getItemQuality(item)}
+                              {item.quality}
                             </span>
                           </div>
-                        ))}
+                        )
+                      )}
                     </div>
                   </div>
                 ) : (

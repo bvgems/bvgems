@@ -20,7 +20,7 @@ export async function generateMetadata({
 
   return {
     title: `${product.collection_slug} ${product.shape} ${product.size} ${product.ct_weight}ct ${product.quality} Quality – B.V. Gems`,
-    description: `Buy ${product.collection_slug} ${product.shape} ${product.size}, ${product.ct_weight} ct, ${product.quality} quality at B.V. Gems. Ethically sourced, precision cut, free U.S. shipping.`,
+    description: `Buy ${product.collection_slug} ${product.shape} ${product.size}, ${product.ct_weight} ct, ${product.quality} quality at B.V. Gems. Ethically sourced, precision cut, free U.S. shipping on or above $200.`,
     openGraph: {
       title: `${product.collection_slug} ${product.shape} ${product.size} ${product.ct_weight}ct ${product.quality} Quality – B.V. Gems`,
       description: `Shop ${product.collection_slug} gemstones at B.V. Gems. Ethically sourced, precision cut, and shipped worldwide.`,

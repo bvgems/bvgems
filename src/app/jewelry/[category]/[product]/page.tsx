@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${title} ${gemstone ? `– ${gemstone}` : ""} | B.V. Gems`,
     description: `Shop ${title}${
       gemstone ? ` with ${gemstone}` : ""
-    } at B.V. Gems. Ethically sourced, crafted with precision, starting at $${price}. Free U.S. shipping.`,
+    } at B.V. Gems. Ethically sourced, crafted with precision, starting at $${price}. Free U.S. shipping on or above $200.`,
     openGraph: {
       title: `${title} | B.V. Gems`,
       description: `Explore ${title} at B.V. Gems. Ethically sourced gemstones, precision craftsmanship, insured delivery.`,

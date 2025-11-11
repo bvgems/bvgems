@@ -27,7 +27,7 @@ export interface CartItem {
     needCertification: boolean;
     additionalComments: string;
     totalCaratWeight: string;
-    stoneCount:any
+    stoneCount: any;
   };
   quantity: number;
   caratWeight: string;
@@ -35,13 +35,16 @@ export interface CartItem {
 
 interface CartStore {
   cart: CartItem[];
+  cartTotal: number;
+  shippingTotal: number;
+  grandTotal: number;
   addToCart: (item: CartItem) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   toggleCertification: (productId: string, checked: boolean) => void;
   clearCart: () => void;
   getTotalPrice: () => number;
-  cartTotal: number;
+  updateTotals: () => void;
   setCartTotal: (total: number) => void;
 }
 
@@ -54,7 +57,11 @@ export const getCartStore = (userKey: string) => {
         (set, get) => ({
           cart: [],
           cartTotal: 0,
+          shippingTotal: 0,
+          grandTotal: 0,
+
           setCartTotal: (total) => set({ cartTotal: total }),
+
           addToCart: (newItem) =>
             set((state) => {
               const existingItem = state.cart.find(
@@ -72,12 +79,14 @@ export const getCartStore = (userKey: string) => {
                 return { cart: [...state.cart, newItem] };
               }
             }),
+
           removeFromCart: (productId) =>
             set((state) => ({
               cart: state.cart.filter(
                 (item) => item.product.productId !== productId
               ),
             })),
+
           updateQuantity: (productId, quantity) =>
             set((state) => ({
               cart: state.cart.map((item) =>
@@ -86,6 +95,7 @@ export const getCartStore = (userKey: string) => {
                   : item
               ),
             })),
+
           toggleCertification: (productId, checked) =>
             set((state) => ({
               cart: state.cart.map((item) =>
@@ -97,16 +107,30 @@ export const getCartStore = (userKey: string) => {
                   : item
               ),
             })),
-          clearCart: () => set({ cart: [] }),
+
+          clearCart: () =>
+            set({ cart: [], cartTotal: 0, shippingTotal: 0, grandTotal: 0 }),
+
           getTotalPrice: () => {
             const cart = get().cart;
             return cart.reduce((total, item) => {
               let productTotal = item.product.price * item.quantity;
               if (item.product.needCertification) {
-                productTotal += 75;
+                productTotal += 75 * item.quantity;
               }
               return total + productTotal;
             }, 0);
+          },
+
+          updateTotals: () => {
+            const subtotal = get().getTotalPrice();
+            const shipping = subtotal < 200 && subtotal > 0 ? 15 : 0;
+            const grandTotal = subtotal + shipping;
+            set({
+              cartTotal: subtotal,
+              shippingTotal: shipping,
+              grandTotal,
+            });
           },
         }),
         {

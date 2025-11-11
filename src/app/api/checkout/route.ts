@@ -19,9 +19,12 @@ export async function POST(req: Request) {
       paymentMethod,
     } = await req.json();
 
+    console.log("Delivery Method:", deliveryMethod);
+
     const userId = user?.id || null;
     const guestEmail = !user?.id ? guestUser?.email || email : null;
 
+    // 🧾 Store cart in DB for reference
     const result = await pool.query(
       `INSERT INTO checkout_carts (cart, user_id, guest_email)
        VALUES ($1, $2, $3)
@@ -29,14 +32,18 @@ export async function POST(req: Request) {
       [JSON.stringify(cartItems), userId, guestEmail]
     );
     const cartId = result.rows[0].id;
+
     const formatCurrency = (value: number) =>
       `$${Number(value).toLocaleString("en-US", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`;
 
+    let subtotal = 0;
+
+    // 🧮 Build line items and compute subtotal
     const line_items = cartItems.map((item: any) => {
-      let amount: number = 0;
+      let amount = 0;
       const product = item?.product ?? {};
       const isCalibrated = product?.productType === "stone";
       const isFreeGemstone = product?.productType === "freeSizeStone";
@@ -56,8 +63,10 @@ export async function POST(req: Request) {
       }
 
       if (product?.needCertification) {
-        amount = amount + 75 * item?.quantity;
+        amount += 75 * (item?.quantity || 1);
       }
+
+      subtotal += amount;
 
       const unit_amount = Math.max(
         0,
@@ -73,16 +82,16 @@ export async function POST(req: Request) {
 
       if (isFreeGemstone) {
         productData.description = `
-           Price per Carat: ${formatCurrency(product?.price)},\n
-           Carat Weight Of Stone: ${product?.ct_weight}
+          Price per Carat: ${formatCurrency(product?.price)}
+          Carat Weight Of Stone: ${product?.ct_weight}
         `;
       } else if (isCalibrated && product?.purchaseByCarat) {
         productData.description = `
-            Per Carat Price : ${formatCurrency(Number(product?.price))},\n
-            Purchased Carat: ${item?.caratWeight}\n
+          Per Carat Price : ${formatCurrency(Number(product?.price))}
+          Purchased Carat: ${item?.caratWeight}
         `;
       } else {
-        productData.description = `Quantity: ${item?.quantity}\n`;
+        productData.description = `Quantity: ${item?.quantity}`;
       }
 
       if (product?.image_url && String(product.image_url).trim()) {
@@ -99,8 +108,29 @@ export async function POST(req: Request) {
       };
     });
 
+    // 🚚 Apply conditional shipping: only if deliveryMethod === 'delivery'
+    let shippingFee = 0;
+    if (deliveryMethod === "delivery" && subtotal < 200 && subtotal > 0) {
+      shippingFee = 15;
+      line_items.push({
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "Shipping Fee",
+            description:
+              "Standard shipping within the US (applied for delivery orders under $200)",
+          },
+          unit_amount: shippingFee * 100, // $15 → 1500 cents
+        },
+        quantity: 1,
+      });
+    }
+
+    const grandTotal = subtotal + shippingFee;
+
     const origin = req.headers.get("origin") || process.env.BASE_URL;
 
+    // 💳 Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items,
@@ -116,6 +146,9 @@ export async function POST(req: Request) {
         guestUser: JSON.stringify(guestUser || {}),
         cart: cartId,
         paymentMethod: paymentMethod || "online",
+        subtotal: subtotal.toFixed(2),
+        shipping: shippingFee.toFixed(2),
+        grandTotal: grandTotal.toFixed(2),
       },
     });
 

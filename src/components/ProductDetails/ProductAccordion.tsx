@@ -49,7 +49,10 @@ export const ProductAccordion = ({ description }: any) => {
             withPadding
             styles={{ itemWrapper: { paddingLeft: "0.5rem" } }}
           >
-            <ListItem>Free Shipping With FedEx</ListItem>
+            <ListItem>
+              Free shipping on purchases of $200 or more. A $15 delivery
+              charge applies to orders below $200 within the United States.
+            </ListItem>
 
             <ListItem>All Packages Require Signature.</ListItem>
             <ListItem>

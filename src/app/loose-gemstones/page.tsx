@@ -4,7 +4,7 @@ import { GridView } from "@/components/GridView/GridView";
 export const metadata: Metadata = {
   title: "Loose Calibrated Faceted Gemstones – Shop Online | B.V. Gems",
   description:
-    "Discover over 5,000 calibrated faceted gemstones at B.V. Gems. Shop natural & lab-grown sapphires, emeralds, rubies, citrine & more. Free U.S. shipping.",
+    "Discover over 5,000 calibrated faceted gemstones at B.V. Gems. Shop natural & lab-grown sapphires, emeralds, rubies, citrine & more. Free U.S. shipping on or above $200.",
   openGraph: {
     title: "Loose Calibrated Faceted Gemstones – Shop Online | B.V. Gems",
     description:
