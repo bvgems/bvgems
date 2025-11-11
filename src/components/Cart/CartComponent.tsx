@@ -44,6 +44,7 @@ export function CartComponent() {
   );
 
   const cart = cartStore((state: any) => state.cart);
+  console.log('carttyy',cart)
   const removeProduct = cartStore((state: any) => state.removeFromCart);
   const updateQuantity = cartStore((state: any) => state.updateQuantity);
   const setCartTotal = cartStore((state: any) => state.setCartTotal);
