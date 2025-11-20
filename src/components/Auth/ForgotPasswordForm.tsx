@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
-import { handleForgotPassword } from "@/apis/api"; // 👈 implement API call here
+import { handleForgotPassword } from "@/apis/api";
 
 export const ForgotPasswordForm = ({
   onClose,

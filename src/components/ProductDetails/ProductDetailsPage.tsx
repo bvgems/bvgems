@@ -43,7 +43,11 @@ const isLabGrown = (item: any) =>
 
 const getPerCaratPrice = (item: any): number => {
   if (!item) return 0;
-  if (isLabGrown(item)) return 50;
+  if (isLabGrown(item)) {
+    if (item?.collection_slug === "Alexandrite") {
+      return 85;
+    }
+  }
   if (!item?.ct_weight || !item?.price) return 0;
   return Number((item.price / item.ct_weight).toFixed(2));
 };
@@ -51,7 +55,13 @@ const getPerCaratPrice = (item: any): number => {
 const getPerStonePrice = (item: any): number => {
   if (!item) return 0;
   if (!item?.ct_weight) return 0;
-  if (isLabGrown(item)) return Number((50 * item.ct_weight).toFixed(2));
+  if (isLabGrown(item)) {
+    if (item?.collection_slug === "Alexandrite") {
+      return Number((85 * item.ct_weight).toFixed(2));
+    } else {
+      return Number((50 * item.ct_weight).toFixed(2));
+    }
+  }
   return item?.price ? Number(item.price) : 0;
 };
 
