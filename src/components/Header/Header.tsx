@@ -66,9 +66,12 @@ export function Header() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeFilter, setActiveFilter] = useState<
-    "all" | "calibrated" | "freeSize" | "jewelry"
-  >("all");
+    "item" | "calibrated" | "freeSize" | "jewelry"
+  >("item");
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // FIXED: Add ref to track the latest query being processed
+  const latestQueryRef = useRef<string>("");
 
   useEffect(() => {
     if (searchOpen && searchInputRef.current) {
@@ -77,7 +80,11 @@ export function Header() {
   }, [searchOpen]);
 
   useEffect(() => {
+    // FIXED: Store the current query in the ref
+    latestQueryRef.current = searchQuery;
+
     const fetchResults = async () => {
+      // FIXED: Clear results immediately if query is empty
       if (!searchQuery) {
         setSearchResults([]);
         setLoading(false);
@@ -85,23 +92,42 @@ export function Header() {
       }
 
       setLoading(true);
-      const data: any = await getSearchResult(searchQuery, activeFilter);
-      setSearchResults(
-        data?.map((item: any) => {
-          const display = `${
-            item.collection_slug ?? item.gemstone_type ?? ""
-          } ${item.shape ?? ""}  ${item.size ?? item.dimension ?? ""} - ${
-            item.id
-          }`.trim();
 
-          return {
-            ...item,
-            value: display,
-            label: display,
-          };
-        })
-      );
-      setLoading(false);
+      try {
+        const data: any = await getSearchResult(searchQuery, activeFilter);
+        console.log("dataaaa", data);
+
+        // FIXED: Only update results if this is still the latest query
+        // This prevents stale results from appearing
+        if (latestQueryRef.current === searchQuery) {
+          setSearchResults(
+            data?.map((item: any) => {
+              const display = `${
+                item.collection_slug ?? item.gemstone_type ?? ""
+              } ${item.shape ?? ""}  ${item.size ?? item.dimension ?? ""} - ${
+                item.id
+              }`.trim();
+
+              return {
+                ...item,
+                value: display,
+                label: display,
+              };
+            }) || []
+          );
+        }
+      } catch (error) {
+        console.error("Search error:", error);
+        // Only clear results if this is still the latest query
+        if (latestQueryRef.current === searchQuery) {
+          setSearchResults([]);
+        }
+      } finally {
+        // Only update loading state if this is still the latest query
+        if (latestQueryRef.current === searchQuery) {
+          setLoading(false);
+        }
+      }
     };
 
     const debounceTimer = setTimeout(fetchResults, 400);
@@ -131,6 +157,8 @@ export function Header() {
     setSearchOpen(false);
     setSearchQuery("");
     setSearchResults([]);
+    // FIXED: Clear the ref when closing search
+    latestQueryRef.current = "";
   };
 
   const renderSearchOption = ({ option, ...props }: any) => (
@@ -180,7 +208,7 @@ export function Header() {
   const FilterButtons = ({ className = "" }: { className?: string }) => (
     <div className={`flex gap-2 ${className}`}>
       {[
-        { key: "all", label: "All" },
+        { key: "item", label: "Item #" },
         { key: "calibrated", label: "Calibrated" },
         { key: "freeSize", label: "Free Size" },
         { key: "jewelry", label: "Jewelry" },
@@ -189,7 +217,7 @@ export function Header() {
           key={filter.key}
           onClick={() =>
             setActiveFilter(
-              filter.key as "all" | "calibrated" | "freeSize" | "jewelry"
+              filter.key as "item" | "calibrated" | "freeSize" | "jewelry"
             )
           }
           className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
@@ -279,7 +307,7 @@ export function Header() {
             </div>
           </Menu.Target>
           <Menu.Dropdown
-            style={{ width: "250px",paddingBottom:"20px" }}
+            style={{ width: "250px", paddingBottom: "20px" }}
             className="flex flex-col gap-5 text-xl"
           >
             {menuItems}
@@ -398,8 +426,6 @@ export function Header() {
                   value={searchQuery}
                   onChange={setSearchQuery}
                   renderOption={renderSearchOption}
-                  // loading={loading}
-                  // nothingFound={loading ? <Loader size="sm" /> : "No results"}
                   onOptionSubmit={(val) => {
                     const selectedItem = searchResults.find(
                       (item) => item.value.toLowerCase() === val.toLowerCase()

@@ -27,6 +27,45 @@ export async function GET(req: NextRequest) {
     const norm = normalizeSizeQuery(query);
     const tokens = tokenizeQuery(norm);
 
+    if (category === "item") {
+      // ===== Calibrated Gemstone ID Match =====
+      const calibratedRes = await pool.query(
+        `SELECT id, shape, collection_slug, size, color, image_url, quality
+         FROM gemstone_specs WHERE CAST(id AS TEXT) = $1 LIMIT 1`,
+        [query]
+      );
+
+      if (calibratedRes.rows?.length > 0) {
+        return NextResponse.json({
+          data: calibratedRes.rows.map((item) => ({
+            ...item,
+            value: `${item.shape} ${item.collection_slug} ${item.size} - ${item.id}`,
+            category: "Calibrated (ID Match)",
+          })),
+        });
+      }
+
+      // ===== FREE SIZE: Lot Number Exact Match =====
+      const freeSizeRes = await pool.query(
+        `SELECT id, shape, gemstone_type, dimension, origin, image_url, lot_number
+         FROM free_size_gemstones WHERE CAST(lot_number AS TEXT) = $1 LIMIT 1`,
+        [query]
+      );
+
+      if (freeSizeRes.rows?.length > 0) {
+        return NextResponse.json({
+          data: freeSizeRes.rows.map((item) => ({
+            ...item,
+            value: `${item.shape} ${item.gemstone_type} ${item.dimension} - ${item.id}`,
+            category: "Free Size Gemstone (Lot Match)",
+          })),
+        });
+      }
+
+      // If nothing found
+      return NextResponse.json({ data: [] });
+    }
+
     // ===== Loose Gemstones =====
     if (category === "all" || category === "calibrated") {
       if (isAlpha && tokens.length === 1) {
@@ -78,21 +117,24 @@ export async function GET(req: NextRequest) {
 
     // ===== Free Size Gemstones =====
     if (category === "all" || category === "freeSize") {
-      // lot_number exact match
+      // FIXED: lot_number exact match - now checked FIRST, not nested
       const lotRes = await pool.query(
         `SELECT id, shape, gemstone_type, dimension, origin, image_url, lot_number
          FROM free_size_gemstones
-         WHERE lot_number = $1
+         WHERE CAST(lot_number AS TEXT) = $1
          LIMIT 1;`,
         [query]
       );
+
       if (lotRes.rows.length > 0) {
         results.push({
           ...lotRes.rows[0],
           value: `${lotRes.rows[0].shape} ${lotRes.rows[0].gemstone_type} ${lotRes.rows[0].dimension} - ${lotRes.rows[0].id}`,
-          category: "Free Size Gemstone",
+          category: "Free Size Gemstone (Lot Match)",
         });
-      } else if (isAlpha && tokens.length === 1) {
+      }
+      // Only search by other fields if no lot number match found
+      else if (isAlpha && tokens.length === 1) {
         const freeRes = await pool.query(
           `SELECT id, shape, gemstone_type, dimension, origin, image_url,
                   ts_rank(search_vector, to_tsquery('english', $1 || ':*')) AS rank
