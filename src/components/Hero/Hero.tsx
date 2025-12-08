@@ -5,10 +5,12 @@ import { IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useMediaQuery } from "@mantine/hooks";
 
 export function Hero({ jewelryRef, heroData }: any) {
   const [revealImage, setRevealImage] = useState(false);
   const router = useRouter();
+  const isMobile = useMediaQuery("(max-width: 908px)");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -50,14 +52,18 @@ export function Hero({ jewelryRef, heroData }: any) {
         transition={{ duration: 0.5, delay: 0.4 }}
         className="w-full h-full absolute top-0 left-0 z-10"
       >
+        {/* DESKTOP IMAGE */}
         <Image
           src={
-            heroData?.heroData?.page?.metafields[0]?.references?.edges[0]?.node
-              ?.image?.url || "/assets/hero-bg2.png"
+            isMobile
+              ? heroData?.heroData?.page?.metafields[0]?.references?.edges[1]
+                  ?.node?.image?.url || "/assets/hero-bg2.png"
+              : heroData?.heroData?.page?.metafields[0]?.references?.edges[0]
+                  ?.node?.image?.url || "/assets/hero-bg2.png"
           }
-          alt="Hero Image"
+          alt="Hero Desktop"
           fit="cover"
-          className="w-full h-full"
+          className="w-full h-full hidden md:block"
         />
       </motion.div>
 
