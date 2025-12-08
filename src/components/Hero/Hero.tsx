@@ -18,7 +18,10 @@ export function Hero({ jewelryRef, heroData }: any) {
   }, []);
 
   return (
-    <div className="relative w-full h-[550px] bg-white overflow-hidden">
+    <div
+      onClick={() => router.push("/jewelry/bracelets")}
+      className="relative w-full h-[550px] bg-white overflow-hidde cursor-pointer"
+    >
       <AnimatePresence>
         {!revealImage && (
           <>
@@ -69,8 +72,8 @@ export function Hero({ jewelryRef, heroData }: any) {
           transition={{ duration: 0.8, delay: 0.9 }}
           className={`absolute top-1/2 transform -translate-y-1/2 px-6 flex flex-col z-30 ml-12`}
         >
-          <div className="flex justify-center flex-col items-center">
-            <h2 className="text-2xl tracking-[0.2em] uppercase mb-2 text-white sm:text-black">
+          <div className="">
+            {/* <h2 className="text-2xl tracking-[0.2em] uppercase mb-2 text-white sm:text-black">
               Fall Fashion,
             </h2>
             <h1 className="uppercase text-6xl font-light tracking-wide  mb-3 drop-shadow-sm leading-tight text-white sm:text-black">
@@ -78,9 +81,9 @@ export function Hero({ jewelryRef, heroData }: any) {
             </h1>
             <p className="text-lg  mb-8 max-w-xl leading-relaxed text-white sm:text-black">
               Refine Your Fall Look with Timeless Luxury and Radiant Gemstones.
-            </p>
+            </p> */}
 
-            <Button
+            {/* <Button
               size="md"
               radius="0"
               color="dark"
@@ -89,7 +92,7 @@ export function Hero({ jewelryRef, heroData }: any) {
               onClick={() => router.push("/jewelry/rings")}
             >
               Shop Jewelry
-            </Button>
+            </Button> */}
           </div>
         </motion.div>
       )}
