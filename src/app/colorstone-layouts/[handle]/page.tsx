@@ -19,9 +19,14 @@ async function getLayoutDataByHandle(layout: string) {
   return result?.data?.productByHandle;
 }
 
-export default async function LayoutPage({ params }: any) {
-  const { layout } = params;
-  const layoutData = await getLayoutDataByHandle(layout);
+export default async function LayoutPage({
+  params,
+}: {
+  params: Promise<{ handle: string }>;
+}) {
+  const { handle } = await params;
+
+  const layoutData = await getLayoutDataByHandle(handle);
 
   return <LayoutProductPage product={layoutData} />;
 }
