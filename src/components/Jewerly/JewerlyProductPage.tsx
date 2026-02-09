@@ -74,7 +74,7 @@ export async function generateMetadata({
 }
 
 // ---------- Component ----------
-type Thumb = { url: string; title?: string | null };
+type Thumb = { url: string; title?: string | null; type?: string };
 
 export default function JewelryProductPage() {
   const { product, category, stone } = useParams<any>();
@@ -112,21 +112,36 @@ export default function JewelryProductPage() {
 
       // Base image list
       let imgs: Thumb[] =
-        productInfo?.images?.edges?.map((e: any) => ({
-          url: e?.node?.url,
-          title: null,
-        })) ?? [];
+        productInfo?.media?.edges?.map((e: any) => {
+          console.log("here", e?.node?.__typename);
+          if (e?.node?.__typename === "MediaImage") {
+            return {
+              url: e?.node?.image?.url,
+              title: null,
+              type: "image",
+            };
+          } else if (e?.node?.__typename === "Video") {
+            return {
+              url: e?.node?.sources[0]?.url,
+              title: null,
+              type: "video",
+              videoType: e?.node?.sources[0]?.mimeType,
+            };
+          }
+        }) ?? [];
 
       const variantImgs =
         productInfo?.variants?.edges
           ?.map((v: any) => ({
             url: v?.node?.image?.url,
             title: v?.node?.title,
+            type: "image",
           }))
           .filter((t: Thumb) => !!t.url) ?? [];
 
+      console.log("imgs1", imgs);
       imgs = [...imgs, ...variantImgs].filter(
-        (v, i, arr) => arr.findIndex((x) => x.url === v.url) === i
+        (v, i, arr) => arr.findIndex((x) => x.url === v.url) === i,
       );
 
       // Always extract the last image (keep aside for 2nd position)
@@ -141,7 +156,7 @@ export default function JewelryProductPage() {
       const variantEdges = productInfo?.variants?.edges ?? [];
       if (stone && variantEdges?.length) {
         const match = variantEdges.find(
-          (v: any) => slugify(v?.node?.title || "") === stone.toLowerCase()
+          (v: any) => slugify(v?.node?.title || "") === stone.toLowerCase(),
         );
         if (match?.node) {
           setSelectedShape(match.node.title);
@@ -149,7 +164,7 @@ export default function JewelryProductPage() {
           if (match.node.image?.url) {
             const variantImgUrl = match.node.image.url;
             imgs = [
-              { url: variantImgUrl, title: match.node.title },
+              { url: variantImgUrl, title: match.node.title, type: "image" },
               ...imgs.filter((img) => img.url !== variantImgUrl),
             ];
           }
@@ -162,6 +177,7 @@ export default function JewelryProductPage() {
       }
 
       // Update state
+      console.log("images2", imgs);
       setImages(imgs);
       setMainImage(imgs[0]?.url || null);
     };
@@ -223,14 +239,26 @@ export default function JewelryProductPage() {
                           justifyContent: "center",
                         }}
                       >
-                        <JewelryImageZoom
-                          src={thumb.url}
-                          alt={`${productData?.title} - ${
-                            thumb.title || `Image ${idx + 1}`
-                          }`}
-                          zoom={2.5} 
-                          style={{ borderRadius: "6px" }}
-                        />
+                        {thumb?.type === "image" ? (
+                          <JewelryImageZoom
+                            src={thumb.url}
+                            alt={`${productData?.title} - ${
+                              thumb.title || `Image ${idx + 1}`
+                            }`}
+                            zoom={2.5}
+                            style={{ borderRadius: "6px" }}
+                          />
+                        ) : (
+                          <video
+                            src={thumb.url}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            preload="metadata"
+                            style={{ width: "100%", height: "auto" }}
+                          />
+                        )}
                       </Card>
                     ))}
                   </div>
@@ -252,13 +280,25 @@ export default function JewelryProductPage() {
                           justifyContent: "center",
                         }}
                       >
-                        <Image
-                          src={mainImage}
-                          alt={`${productData?.title} - Main`}
-                          fit="fill"
-                          width="100%"
-                          height="100%"
-                        />
+                        {mainImage.endsWith(".mp4") ? (
+                          <video
+                            src={mainImage}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            preload="metadata"
+                            style={{ width: "100%", height: "auto" }}
+                          />
+                        ) : (
+                          <Image
+                            src={mainImage}
+                            alt={`${productData?.title} - Main`}
+                            fit="fill"
+                            width="100%"
+                            height="100%"
+                          />
+                        )}
                       </Card>
                     )}
                     <div
@@ -290,21 +330,33 @@ export default function JewelryProductPage() {
                                 : "1px solid #ddd",
                           }}
                         >
-                          <Image
-                            src={thumb.url}
-                            alt={`${productData?.title} - Thumb ${idx + 1}`}
-                            fit="contain"
-                            width="100%"
-                            height="100%"
-                            style={{ objectFit: "contain", padding: "4px" }}
-                          />
+                          {thumb?.type === "image" ? (
+                            <Image
+                              src={thumb.url}
+                              alt={`${productData?.title} - Thumb ${idx + 1}`}
+                              fit="contain"
+                              width="100%"
+                              height="100%"
+                              style={{ objectFit: "contain", padding: "4px" }}
+                            />
+                          ) : (
+                            <video
+                              src={thumb.url}
+                              autoPlay
+                              muted
+                              loop
+                              playsInline
+                              preload="metadata"
+                              style={{ width: "100%", height: "auto" }}
+                            />
+                          )}
                         </Card>
                       ))}
                     </div>
                   </div>
                 )}
-
-                {productType === "Rings" ? (
+                {productData?.images?.edges[4]?.node?.url &&
+                productType === "Rings" ? (
                   <div className="mt-10">
                     <RingComparison productData={productData} />
                   </div>

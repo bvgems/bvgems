@@ -429,15 +429,16 @@ export const GetProductByHandle = `
       createdAt
       tags
 
-       inHand: metafield(namespace: "custom", key: "in_hand") {
-            value
-            type
-          }
+      inHand: metafield(namespace: "custom", key: "in_hand") {
+        value
+        type
+      }
 
-          careNotes: metafield(namespace: "custom", key: "care_notes") {
-            value
-            type
-          }
+      careNotes: metafield(namespace: "custom", key: "care_notes") {
+        value
+        type
+      }
+
       dimension: metafield(namespace: "custom", key: "dimension") {
         value
         type
@@ -552,41 +553,72 @@ export const GetProductByHandle = `
         }
       }
 
-     variants(first: 50) {
-  edges {
-    node {
-      price {
-        amount
-        currencyCode
-      }
-      title
-      image {
-        url
-        altText
-      }
-      metafield(namespace: "custom", key: "gemstones") {
-        value
-      }
-      image_url: metafield(namespace: "custom", key: "image") {
-        value
-        reference {
-          ... on MediaImage {
-            id
-            image {
-              url
-              altText
-              width
-              height
+      media(first: 20) {
+        edges {
+          node {
+            __typename
+
+            ... on MediaImage {
+              id
+              image {
+                url
+                altText
+                width
+                height
+              }
+            }
+
+            ... on Video {
+              id
+              sources {
+                url
+                mimeType
+              }
+            }
+
+            ... on ExternalVideo {
+              id
+              embeddedUrl
+              host
             }
           }
         }
       }
-      sku
-      availableForSale
-    }
-  }
-}
 
+      variants(first: 50) {
+        edges {
+          node {
+            price {
+              amount
+              currencyCode
+            }
+            title
+            image {
+              url
+              altText
+            }
+            metafield(namespace: "custom", key: "gemstones") {
+              value
+            }
+            image_url: metafield(namespace: "custom", key: "image") {
+              value
+              reference {
+                ... on MediaImage {
+                  id
+                  image {
+                    url
+                    altText
+                    width
+                    height
+                  }
+                }
+              }
+            }
+            sku
+            availableForSale
+          }
+        }
+      }
     }
   }
 `;

@@ -23,14 +23,15 @@ export async function GET(request: NextRequest) {
           query: GetProductByHandle,
           variables: { handle },
         }),
-      }
+      },
     );
 
     const result = await shopifyRes.json();
+    // console.log("product", result.data.productByHandle);
 
     return NextResponse.json(
       { product: result.data.productByHandle },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("GET error:", error);

@@ -7,7 +7,7 @@ const baseUrl =
 export const sendCustomJewelryRequest = async (
   email: any,
   variables: any,
-  currentUrl: any
+  currentUrl: any,
 ) => {
   try {
     const response = await axios.post(
@@ -16,7 +16,7 @@ export const sendCustomJewelryRequest = async (
         email,
         variables,
         currentUrl,
-      }
+      },
     );
     return response.data;
   } catch (error) {
@@ -75,7 +75,7 @@ export const getColorstoneLayouts = async () => {
 export const getBlogByHandle = async (blogName: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getSingleBlogContent?blogName=${blogName}`
+      `${baseUrl}/api/getSingleBlogContent?blogName=${blogName}`,
     );
     return response?.data;
   } catch (error) {
@@ -109,7 +109,7 @@ export const getFreeSizeFilteredData = async (options: any) => {
       `${baseUrl}/api/getFilteredFreeSizeGemstones`,
       {
         options,
-      }
+      },
     );
     return response?.data;
   } catch (error) {
@@ -126,7 +126,7 @@ export const submitCustomDesignRequest = async (formData: FormData) => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      }
+      },
     );
     return response?.data;
   } catch (error) {
@@ -172,7 +172,7 @@ export const fetchAboutUsData = async () => {
 export const fetchFreeSizeGemstonesById = async (id: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getFreeSizeGemstonesById?id=${id}`
+      `${baseUrl}/api/getFreeSizeGemstonesById?id=${id}`,
     );
     return response?.data[0];
   } catch (error) {
@@ -184,7 +184,7 @@ export const fetchFreeSizeGemstonesById = async (id: any) => {
 export const fetchFreeSizeGemstones = async (gemstone: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getFreeSizeGemstones?gemstone=${gemstone}`
+      `${baseUrl}/api/getFreeSizeGemstones?gemstone=${gemstone}`,
     );
     console.log("resss of free", response);
     return response?.data;
@@ -221,14 +221,14 @@ export const submitInquiry = async (values: any) => {
 export const handleEmailExists = async (email: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/checkEmailExists?email=${email}`
+      `${baseUrl}/api/checkEmailExists?email=${email}`,
     );
 
     return response?.data;
   } catch (error) {
     console.log(
       "Something went wrong while checking the email existance",
-      error
+      error,
     );
     return null;
   }
@@ -244,7 +244,7 @@ export const sendMemoRequestEmail = async (user: any, cartItems: any) => {
   } catch (error) {
     console.log(
       "Something went wrong while fetching the orders from shopify",
-      error
+      error,
     );
     return null;
   }
@@ -252,14 +252,14 @@ export const sendMemoRequestEmail = async (user: any, cartItems: any) => {
 export const fetchAllOrders = async (email: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/fetchOrders?email=${email}`
+      `${baseUrl}/api/fetchOrders?email=${email}`,
     );
 
     return response?.data;
   } catch (error) {
     console.log(
       "Something went wrong while fetching the orders from shopify",
-      error
+      error,
     );
     return null;
   }
@@ -269,14 +269,14 @@ export const createShopifyOrder = async (payload: any) => {
     console.log("payloadddd", payload);
     const response = await axios.post(
       `${baseUrl}/api/createShopifyOrder`,
-      payload
+      payload,
     );
     console.log("res", response);
     return response?.data;
   } catch (error) {
     console.log(
       "Something went wrong while sending the order to shopify",
-      error
+      error,
     );
     return null;
   }
@@ -284,7 +284,7 @@ export const createShopifyOrder = async (payload: any) => {
 export const redirectToStripeCheckout = async (
   cart: any,
   shippingAddress: any,
-  guestUser: any
+  guestUser: any,
 ) => {
   try {
     const response = await axios.post(`${baseUrl}/api/createShopifyCheckout`, {
@@ -296,7 +296,7 @@ export const redirectToStripeCheckout = async (
   } catch (error) {
     console.log(
       "Something went wrong while sending the order to shopify",
-      error
+      error,
     );
     return null;
   }
@@ -376,7 +376,7 @@ export const getSampleLayoutUrl = async (
   gemstone: string,
   shape: string,
   pattern: string,
-  color: string
+  color: string,
 ) => {
   try {
     const response = await axios.post(`${baseUrl}/api/getSampleLayoutUrl`, {
@@ -390,7 +390,7 @@ export const getSampleLayoutUrl = async (
   } catch (error) {
     console.log(
       "Something went wrong while fetching the color stone layout",
-      error
+      error,
     );
     return null;
   }
@@ -408,8 +408,9 @@ export const fetchColorstoneLayouts = async () => {
 export const fetchProductByHandle = async (handle: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getJewelryProduct?handle=${handle}`
+      `${baseUrl}/api/getJewelryProduct?handle=${handle}`,
     );
+    console.log("response", response);
     return response.data;
   } catch (error) {
     console.log("Something went wrong while fetching the jewelry product data");
@@ -419,12 +420,12 @@ export const fetchProductByHandle = async (handle: any) => {
 export const getJewelryData = async (category: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getJewelryData?category=${category}`
+      `${baseUrl}/api/getJewelryData?category=${category}`,
     );
     return response.data;
   } catch (error) {
     console.log(
-      "Something went wrong while fetching the jewelry category data"
+      "Something went wrong while fetching the jewelry category data",
     );
   }
 };
@@ -463,7 +464,7 @@ export const applyForAccount = async (
   businessVerification: any,
   shippingAddress: any,
   businessReference: any,
-  amlInfo: any
+  amlInfo: any,
 ) => {
   try {
     const response = await axios.post(`${baseUrl}/api/applyForAccount`, {
@@ -483,7 +484,7 @@ export const applyForAccount = async (
 export const getUserProfile = async (userId: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getUserProfile?id=${userId}`
+      `${baseUrl}/api/getUserProfile?id=${userId}`,
     );
 
     return response?.data;
@@ -498,7 +499,7 @@ export const upsertShippingAddress = async (isEdit: boolean, payload: any) => {
     if (isEdit) {
       response = await axios.put(
         `${baseUrl}/api/updateShippingAddress`,
-        payload
+        payload,
       );
     } else {
       response = await axios.post(`${baseUrl}/api/storeAddress`, payload);
@@ -506,32 +507,32 @@ export const upsertShippingAddress = async (isEdit: boolean, payload: any) => {
     return response;
   } catch (error) {
     console.log(
-      "Something went wrong while performing operation for shipping address"
+      "Something went wrong while performing operation for shipping address",
     );
   }
 };
 
 export const upsertBusinessReference = async (
   isEdit: boolean,
-  payload: any
+  payload: any,
 ) => {
   try {
     let response;
     if (isEdit) {
       response = await axios.put(
         `${baseUrl}/api/updateBusinessReference`,
-        payload
+        payload,
       );
     } else {
       response = await axios.post(
         `${baseUrl}/api/storeBusinessReference`,
-        payload
+        payload,
       );
     }
     return response;
   } catch (error) {
     console.log(
-      "Something went wrong while performing operation for business reference"
+      "Something went wrong while performing operation for business reference",
     );
   }
 };
@@ -539,7 +540,7 @@ export const upsertBusinessReference = async (
 export const deleteAddress = async (toDeleteId: any) => {
   try {
     const response = await axios.delete(
-      `${baseUrl}/api/deleteShippingAddress?toDeleteId=${toDeleteId}`
+      `${baseUrl}/api/deleteShippingAddress?toDeleteId=${toDeleteId}`,
     );
     return response?.data;
   } catch (error) {
@@ -550,7 +551,7 @@ export const deleteAddress = async (toDeleteId: any) => {
 export const deleteReference = async (toDeleteId: any) => {
   try {
     const response = await axios.delete(
-      `${baseUrl}/api/deleteBusinessReference?toDeleteId=${toDeleteId}`
+      `${baseUrl}/api/deleteBusinessReference?toDeleteId=${toDeleteId}`,
     );
     return response?.data;
   } catch (error) {
@@ -561,7 +562,7 @@ export const deleteReference = async (toDeleteId: any) => {
 export const getShippingAddresses = async (userId: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getShippingAddress?id=${userId}`
+      `${baseUrl}/api/getShippingAddress?id=${userId}`,
     );
     return response?.data;
   } catch (error) {
@@ -571,12 +572,12 @@ export const getShippingAddresses = async (userId: any) => {
 export const getBusinessVerification = async (userId: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getBusinessVerification?id=${userId}`
+      `${baseUrl}/api/getBusinessVerification?id=${userId}`,
     );
     return response?.data;
   } catch (error) {
     console.log(
-      "Something went wrong while fetching business verification data"
+      "Something went wrong while fetching business verification data",
     );
   }
 };
@@ -584,7 +585,7 @@ export const getBusinessVerification = async (userId: any) => {
 export const getBusinessReferences = async (userId: any) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getBusinessReferences?id=${userId}`
+      `${baseUrl}/api/getBusinessReferences?id=${userId}`,
     );
     return response?.data;
   } catch (error) {
@@ -614,7 +615,7 @@ export const getGemstonesList = async () => {
 export const getCategoryData = async (handle: string) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getCategoryData?handle=${handle}`
+      `${baseUrl}/api/getCategoryData?handle=${handle}`,
     );
 
     return response?.data;
@@ -627,7 +628,7 @@ export const getShapesData = async (
   shape: string | null,
   collection?: string,
   isSapphire?: boolean,
-  sapphireColor?: string
+  sapphireColor?: string,
 ) => {
   try {
     const response = await axios.post(`${baseUrl}/api/getShapesData`, {
@@ -675,7 +676,7 @@ export const getParticularProductsData = async (id: string) => {
 export const getTolerance = async (collection: string) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getTolerance?collection=${collection}`
+      `${baseUrl}/api/getTolerance?collection=${collection}`,
     );
 
     return response?.data;
@@ -687,7 +688,7 @@ export const getTolerance = async (collection: string) => {
 export const getGemStoneKnowledge = async (stone: string) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getGemStoneKnowledge?stone=${stone}`
+      `${baseUrl}/api/getGemStoneKnowledge?stone=${stone}`,
     );
 
     return response?.data;
@@ -735,7 +736,7 @@ export const storeShippingAddress = async (payload: any) => {
 export const getAMLInfo = async (userId: string) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/getAMLInfo?userId=${userId}`
+      `${baseUrl}/api/getAMLInfo?userId=${userId}`,
     );
 
     return response.data;
@@ -769,8 +770,8 @@ export const getSearchResult = async (searchQuery: any, activeFilter: any) => {
   try {
     const response = await axios.get(
       `${baseUrl}/api/search?q=${encodeURIComponent(
-        searchQuery
-      )}&category=${activeFilter}`
+        searchQuery,
+      )}&category=${activeFilter}`,
     );
     console.log("response of search", response);
     return response?.data?.data;

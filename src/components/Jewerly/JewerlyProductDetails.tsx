@@ -78,7 +78,6 @@ export const JewelryProductDetails = ({
   const [opened, { open, close }] = useDisclosure(false);
   const [value, setValue] = useState<string>("");
   const [customizedDrawerTitle, setCustomizedDrawerTitle] = useState("");
-  console.log("prod dta", productData);
 
   useEffect(() => {
     switch (category) {
@@ -106,7 +105,7 @@ export const JewelryProductDetails = ({
     selectedShape,
     selectedImage,
     twoStoneRings,
-    addToCart
+    addToCart,
   );
 
   const addProduct = () => {
