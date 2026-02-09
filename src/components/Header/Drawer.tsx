@@ -135,6 +135,15 @@ export const DrawerComponent = ({
             >
               Profile
             </div>
+            <div
+              onClick={() => {
+                toggle();
+                router.push("/my-orders");
+              }}
+              className="mt-4 pl-2.5 cursor-pointer"
+            >
+              My Orders
+            </div>
             {user ? (
               <Button
                 color="#0b182d"
