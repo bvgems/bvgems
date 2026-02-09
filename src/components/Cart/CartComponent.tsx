@@ -33,23 +33,23 @@ import { BillingSummary } from "../CommonComponents/BillingSummary";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
-  { ssr: false }
+  { ssr: false },
 );
 
 export function CartComponent() {
   const { user } = useAuth();
   const cartStore = useMemo(
     () => getCartStore(user?.id || "guest"),
-    [user?.id]
+    [user?.id],
   );
 
   const cart = cartStore((state: any) => state.cart);
-  console.log('carttyy',cart)
+  console.log("carttyy", cart);
   const removeProduct = cartStore((state: any) => state.removeFromCart);
   const updateQuantity = cartStore((state: any) => state.updateQuantity);
   const setCartTotal = cartStore((state: any) => state.setCartTotal);
   const toggleCertification = cartStore(
-    (state: any) => state.toggleCertification
+    (state: any) => state.toggleCertification,
   );
   const router = useRouter();
 
@@ -93,7 +93,7 @@ export function CartComponent() {
     console.log("valueeee", value);
     if (value?.product?.productType === "stone") {
       router.push(
-        `/product-details?id=${value?.product?.id}&name=${value?.product?.handle}`
+        `/product-details?id=${value?.product?.id}&name=${value?.product?.handle}`,
       );
     } else if (value?.product?.productType === "freeSizeStone") {
       router.push(`/free-size-gemstone-details/${value?.product?.id}`);
@@ -234,7 +234,8 @@ export function CartComponent() {
                             <>
                               Size: {value?.product?.size} | Weight:{" "}
                               {value?.product?.ct_weight} | Quality:{" "}
-                              {value?.product?.quality}
+                              {value?.product?.quality} | Color:{" "}
+                              {value?.product?.color}
                               {value?.product?.collection_slug === "Emerald" &&
                                 value?.product?.shade && (
                                   <> | Shade: {value?.product?.shade}</>
@@ -252,7 +253,10 @@ export function CartComponent() {
                             </>
                           )}
                           {value?.product?.productType === "freeSizeStone" && (
-                            <>Size: {value?.product?.size}</>
+                            <>
+                              Size: {value?.product?.size} | Color:{" "}
+                              {value?.product?.color}
+                            </>
                           )}
 
                           {value?.product?.productType === "ringJewelry" && (
@@ -333,7 +337,7 @@ export function CartComponent() {
                               typeof newQuantity === "number" ? newQuantity : 1;
                             updateQuantity(
                               value.product.productId,
-                              safeQuantity
+                              safeQuantity,
                             );
                           }}
                           allowNegative={false}
@@ -363,7 +367,7 @@ export function CartComponent() {
                       onChange={(e) =>
                         toggleCertification(
                           value.product.productId,
-                          e.currentTarget.checked
+                          e.currentTarget.checked,
                         )
                       }
                     />

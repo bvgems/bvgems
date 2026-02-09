@@ -22,11 +22,12 @@ export const getOrderPayload = (
   selectedShippingAddress: any,
   user: any,
   guestUser: any,
-  cart: any
+  cart: any,
 ) => {
   const orderPayload = {
     order: {
       line_items: cart?.map((item: any) => {
+        console.log("first", item);
         const productType = item?.product?.productType;
         const isStone = productType === "stone";
         const isFreeGemstone = productType === "freeSizeStone";
@@ -48,7 +49,7 @@ export const getOrderPayload = (
                 name: "Selected Carat Weight",
                 value: formatCarat(item?.caratWeight),
               },
-              { name: "Total Amount", value: formatCurrency(price) }
+              { name: "Total Amount", value: formatCurrency(price) },
             );
           } else {
             price = item?.product?.price;
@@ -56,7 +57,8 @@ export const getOrderPayload = (
             properties.push(
               { name: "Shape", value: item?.product?.shape },
               { name: "Size", value: item?.product?.size },
-              { name: "Quality", value: item?.product?.quality }
+              { name: "Color", value: item?.product?.color },
+              { name: "Quality", value: item?.product?.quality },
             );
           }
           if (item?.product?.collection_slug === "Emerald") {
@@ -76,6 +78,7 @@ export const getOrderPayload = (
           properties.push(
             { name: "Shape", value: item?.product?.shape },
             { name: "Size", value: item?.product?.size },
+            { name: "Color", value: item?.product?.color },
             { name: "Quality", value: item?.product?.quality },
             {
               name: "Price per Carat",
@@ -84,7 +87,7 @@ export const getOrderPayload = (
             {
               name: "Gemstone Carat Weight",
               value: formatCarat(item?.product?.ct_weight),
-            }
+            },
           );
         } else {
           quantity = Number(item?.quantity) || 1;
@@ -93,7 +96,7 @@ export const getOrderPayload = (
               name: "Price per Unit",
               value: formatCurrency(item?.product?.price),
             },
-            { name: "Quantity", value: String(item?.quantity) }
+            { name: "Quantity", value: String(item?.quantity) },
           );
 
           if (item?.product?.goldColor) {
@@ -158,8 +161,8 @@ export const getOrderPayload = (
         paymentMethod === "memo"
           ? "Memo Purchase"
           : paymentMethod === "online"
-          ? "Already Paid"
-          : "",
+            ? "Already Paid"
+            : "",
       email: guestUser?.email || user?.email,
       phone: guestUser?.phoneNumber || user?.phoneNumber,
       customer: {

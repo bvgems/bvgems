@@ -28,7 +28,7 @@ export default function CheckoutSelectionPage() {
 
   const cartStore = useMemo(
     () => getCartStore(user?.id || "guest"),
-    [user?.id]
+    [user?.id],
   );
   const cart = cartStore((state: any) => state.cart);
   const cartTotal = cartStore((state: any) => state.cartTotal);
@@ -42,7 +42,7 @@ export default function CheckoutSelectionPage() {
   const [opened, { open, close }] = useDisclosure(false);
 
   const stripePromise = loadStripe(
-    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
   );
 
   // Ensure totals are updated before checkout
@@ -76,7 +76,7 @@ export default function CheckoutSelectionPage() {
       selectedShippingAddress,
       user,
       guestUser,
-      cart
+      cart,
     );
 
     // ✅ Add same totals for memo orders
@@ -97,12 +97,12 @@ export default function CheckoutSelectionPage() {
   const stoneItems = cart.filter(
     (value: any) =>
       value?.product?.productType === "stone" ||
-      value?.product?.productType === "freeSizeStone"
+      value?.product?.productType === "freeSizeStone",
   );
   const otherItems = cart.filter(
     (value: any) =>
       value?.product?.productType !== "stone" &&
-      value?.product?.productType !== "freeSizeStone"
+      value?.product?.productType !== "freeSizeStone",
   );
 
   return (
@@ -182,6 +182,12 @@ export default function CheckoutSelectionPage() {
                               Weight:{" "}
                               <span className="font-medium">
                                 {item?.product?.ct_weight}
+                              </span>
+                            </div>
+                            <div className="text-gray-600">
+                              Color:{" "}
+                              <span className="font-medium">
+                                {item?.product?.color}
                               </span>
                             </div>
                             {item?.product?.quality && (
