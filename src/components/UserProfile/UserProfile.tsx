@@ -63,7 +63,7 @@ export const UserProfile = ({ isSmaller, user }: any) => {
           }}
           leftSection={<IconBasketCheck size={16} stroke={1.5} />}
         >
-          My Past Orders
+          My Orders
         </MenuItem>
         <MenuItem
           onClick={handleLogout}

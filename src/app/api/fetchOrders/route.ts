@@ -24,11 +24,10 @@ export async function GET(req: NextRequest) {
           "X-Shopify-Access-Token": SHOPIFY_ADMIN_API_ACCESS_TOKEN || "",
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     const { orders } = shopifyRes.data;
-    console.log("orders", orders[0]);
 
     if (!orders || orders.length === 0) {
       return NextResponse.json({ error: "No orders found" }, { status: 404 });
@@ -44,6 +43,7 @@ export async function GET(req: NextRequest) {
       fulfillments: order.fulfillments,
       line_items: order.line_items.map((item: any) => ({
         name: item.name,
+        price: item.price,
         quantity: item.quantity,
         image: item?.image,
       })),
@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
   } catch (error: any) {
     console.error(
       "GET /api/orders error:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
