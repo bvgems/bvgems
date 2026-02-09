@@ -26,7 +26,7 @@ export default function Home() {
     <>
       {heroData && <Hero jewelryRef={{ current: null }} heroData={heroData} />}
       <ShopCalibrated />
-      <ShopByShape/>
+      <ShopByShape />
       <ShopByColor />
       <JewelrySection ref={jewelrySectionRef} />
       <BestSellingProductsComponents />

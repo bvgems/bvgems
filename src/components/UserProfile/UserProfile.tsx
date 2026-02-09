@@ -2,19 +2,15 @@ import {
   Avatar,
   Group,
   Menu,
-  MenuDivider,
   MenuDropdown,
   MenuItem,
-  MenuLabel,
-  Text,
   UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
+  IconBasketCheck,
   IconChevronDown,
-  IconDiamond,
   IconLogout,
-  IconTrash,
   IconUser,
 } from "@tabler/icons-react";
 import { useState } from "react";
@@ -61,7 +57,14 @@ export const UserProfile = ({ isSmaller, user }: any) => {
         >
           My Profile
         </MenuItem>
-
+        <MenuItem
+          onClick={() => {
+            router.push("/my-orders");
+          }}
+          leftSection={<IconBasketCheck size={16} stroke={1.5} />}
+        >
+          My Orders
+        </MenuItem>
         <MenuItem
           onClick={handleLogout}
           leftSection={<IconLogout size={16} stroke={1.5} />}
