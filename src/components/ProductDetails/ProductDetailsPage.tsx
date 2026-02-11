@@ -11,6 +11,7 @@ import {
   Switch,
   Tooltip,
   ActionIcon,
+  Textarea,
 } from "@mantine/core";
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -108,6 +109,7 @@ export default function ProductDetailsPage() {
   const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(false);
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
+  const [additionalComments, setAdditionalComments] = useState("");
 
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
@@ -135,12 +137,12 @@ export default function ProductDetailsPage() {
 
     setProduct(productDetails);
     setDescription(
-      `This ${productDetails?.collection_slug?.toLowerCase()} gemstone is carefully cut and calibrated for precision. Perfect for fine jewelry designs such as engagement rings, necklaces, and earrings, our gemstones are ethically sourced and graded for brilliance and clarity. Located in NYC’s Diamond District, B.V. Gems provides jewelers and collectors with trusted quality stones for generations.`
+      `This ${productDetails?.collection_slug?.toLowerCase()} gemstone is carefully cut and calibrated for precision. Perfect for fine jewelry designs such as engagement rings, necklaces, and earrings, our gemstones are ethically sourced and graded for brilliance and clarity. Located in NYC’s Diamond District, B.V. Gems provides jewelers and collectors with trusted quality stones for generations.`,
     );
 
     const allDetails = await getShapesData(
       productDetails?.shape,
-      productDetails?.collection_slug
+      productDetails?.collection_slug,
     );
     setAllProducts(allDetails?.data);
 
@@ -176,6 +178,7 @@ export default function ProductDetailsPage() {
         shape: product.shape,
         size: product.size,
         type: product.type,
+        additionalComments: additionalComments,
       },
       quantity: purchaseByCarat ? 1 : quantity,
       caratWeight: purchaseByCarat ? `${caratWeight}` : undefined,
@@ -212,7 +215,7 @@ export default function ProductDetailsPage() {
                   const reader = new FileReader();
                   reader.onload = () => resolve(reader.result as string);
                   reader.readAsDataURL(blob);
-                })
+                }),
             );
 
           const imgWidth = 60;
@@ -223,7 +226,7 @@ export default function ProductDetailsPage() {
             (pageWidth - imgWidth) / 2,
             15,
             imgWidth,
-            imgHeight
+            imgHeight,
           );
         } catch (err) {
           console.error("Image load failed:", err);
@@ -241,7 +244,7 @@ export default function ProductDetailsPage() {
         `Loose ${product?.collection_slug} ${product?.shape} ${product?.size}`,
         pageWidth / 2,
         y,
-        { align: "center" }
+        { align: "center" },
       );
       y += 8;
 
@@ -251,7 +254,7 @@ export default function ProductDetailsPage() {
         `${product?.ct_weight} Carat ${product?.quality} Quality Calibrated Gemstone`,
         pageWidth / 2,
         y,
-        { align: "center" }
+        { align: "center" },
       );
 
       y += 15;
@@ -293,13 +296,13 @@ export default function ProductDetailsPage() {
       pdf.text(
         `Per Stone Price: $${getPerStonePrice(product).toFixed(2)}`,
         rightX,
-        rightY
+        rightY,
       );
       rightY += 6;
       pdf.text(
         `Per Carat Price: $${getPerCaratPrice(product).toFixed(2)}`,
         rightX,
-        rightY
+        rightY,
       );
 
       // ---------------------------
@@ -346,7 +349,7 @@ export default function ProductDetailsPage() {
           `${product?.size}_${product?.collection_slug}_${product?.ct_weight}_Details.pdf`,
           {
             type: "application/pdf",
-          }
+          },
         );
         await navigator.share({
           title: `${product?.size} ${product?.collection_slug} ${product?.ct_weight} Details`,
@@ -354,7 +357,7 @@ export default function ProductDetailsPage() {
         });
       } else {
         pdf.save(
-          `${product?.size}_${product?.collection_slug}_${product?.ct_weight}_Details.pdf`
+          `${product?.size}_${product?.collection_slug}_${product?.ct_weight}_Details.pdf`,
         );
       }
     } catch (err) {
@@ -374,7 +377,7 @@ export default function ProductDetailsPage() {
     setDisplayImage(
       product?.extra_images?.length > 0
         ? product?.extra_images[0]
-        : product?.image_url
+        : product?.image_url,
     );
   }, [product]);
 
@@ -500,9 +503,9 @@ export default function ProductDetailsPage() {
                 {!hasPricing && (
                   <a
                     href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                      `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${product?.ct_weight}cts., ${product?.quality} Quality`
+                      `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${product?.ct_weight}cts., ${product?.quality} Quality`,
                     )}&body=${encodeURIComponent(
-                      `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${product?.ct_weight} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`
+                      `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${product?.ct_weight} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`,
                     )}`}
                     className="underline text-blue-600"
                   >
@@ -566,6 +569,19 @@ export default function ProductDetailsPage() {
 
             {user && (
               <Checkbox label="Match For Size and Color" color="#0b182d" />
+            )}
+            {user && (
+              <Textarea
+                className="mt-4"
+                autosize
+                onChange={(event) =>
+                  setAdditionalComments(event.currentTarget.value)
+                }
+                minRows={2}
+                maxRows={4}
+                label="Special instructions for B. V."
+                placeholder="e.g., Match a slightly bluer shade to my ring center stone."
+              />
             )}
             {user && (
               <Button color="#0b182d" onClick={addProductToCart} fullWidth>
