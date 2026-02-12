@@ -11,6 +11,8 @@ const getTitle = (item: any, productType: any) => {
     return `${item?.product?.collection_slug} ${item?.product?.shape} ${item?.product?.size} ${item?.product?.ct_weight}`;
   } else if (productType === "stone") {
     return `${item?.product?.collection_slug} ${item?.product?.shape} ${item?.product?.size} ${item?.product?.ct_weight} Quality ${item?.product?.quality}`;
+  } else if (productType === "bead") {
+    return `${item?.product?.title}`;
   }
   return item?.product?.collection_slug || "Custom Product";
 };
