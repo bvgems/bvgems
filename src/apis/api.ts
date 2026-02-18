@@ -4,9 +4,18 @@ const baseUrl =
     ? process.env.NEXT_PUBLIC_BASE_URL || "https://bvgems.com"
     : "";
 
+export const getStudsDetails = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/getStudsDetails`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getting the orders", error);
+    return null;
+  }
+};
+
 export const getOrders = async (email: any) => {
   try {
-    console.log("hey fenil");
     const response = await axios.get(
       `${baseUrl}/api/fetchOrders?email=${email}`,
     );

@@ -18,18 +18,21 @@ import {
   Badge,
   Checkbox,
   NumberFormatter,
+  Title,
 } from "@mantine/core";
 import {
   IconArrowNarrowRight,
   IconCheck,
+  IconGift,
   IconInfoCircle,
   IconTrash,
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { notifications } from "@mantine/notifications";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { BillingSummary } from "../CommonComponents/BillingSummary";
+import { getStudsDetails } from "@/apis/api";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
@@ -44,7 +47,6 @@ export function CartComponent() {
   );
 
   const cart = cartStore((state: any) => state.cart);
-  console.log("carttyy", cart);
   const removeProduct = cartStore((state: any) => state.removeFromCart);
   const updateQuantity = cartStore((state: any) => state.updateQuantity);
   const setCartTotal = cartStore((state: any) => state.setCartTotal);
@@ -52,6 +54,72 @@ export function CartComponent() {
     (state: any) => state.toggleCertification,
   );
   const router = useRouter();
+  const [hasMounted, setHasMounted] = useState(false);
+  const [subtotal, setSubtotal] = useState(0);
+  const [grandTotal, setGrandTotal] = useState(0);
+  const [isFreeStuds, setIsFreeStuds] = useState(false);
+  const [studsDetails, setStudsDetails] = useState<any>({});
+  useEffect(() => setHasMounted(true), []);
+
+  useEffect(() => {
+    checkFreeStuds();
+  }, [cart, grandTotal]);
+
+  const checkFreeStuds = () => {
+    setIsFreeStuds(false);
+    cart?.map((item: any) => {
+      let productType = item?.product?.productType;
+      if (
+        productType === "braceletJewelry" ||
+        productType === "ringJewelry" ||
+        productType === "earringJewelry" ||
+        productType === "necklaceJewelry"
+      ) {
+        if (Number(item?.product?.price) * item?.quantity > 1000) {
+          setIsFreeStuds(true);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (!hasMounted) return;
+
+    let total = 0;
+
+    cart.forEach((item: any) => {
+      const price = parseFloat(item.product.price);
+      const weight = parseFloat(
+        item.caratWeight || item.product.ct_weight || "1",
+      );
+      const quantity = item.quantity || 1;
+
+      // 💎 Handle per-carat logic
+      if (item.product.purchaseByCarat) {
+        total += price * weight;
+      } else {
+        total += price * quantity;
+      }
+
+      // ✅ Add certification fee if selected
+      if (item.product.needCertification) total += 75 * quantity;
+    });
+
+    // Base subtotal
+    setSubtotal(total);
+
+    const shippingCost = total >= 200 ? 0 : 15;
+    setGrandTotal(total + shippingCost);
+  }, [cart, hasMounted]);
+
+  useEffect(() => {
+    fetchStudsDetails();
+  }, [isFreeStuds]);
+
+  const fetchStudsDetails = async () => {
+    const response = await getStudsDetails();
+    setStudsDetails(response?.product);
+  };
 
   const handleRemoveProduct = (id: any, product: any) => {
     removeProduct(product?.productId);
@@ -90,7 +158,6 @@ export function CartComponent() {
   };
 
   const redirectToProduct = (value: any) => {
-    console.log("valueeee", value);
     if (value?.product?.productType === "stone") {
       router.push(
         `/product-details?id=${value?.product?.id}&name=${value?.product?.handle}`,
@@ -132,6 +199,13 @@ export function CartComponent() {
 
   const handleCheckout = () => {
     router.push("/checkout");
+  };
+
+  const handleCustomization = () => {
+    cartStore.getState().setFreeGiftSession(true);
+    router.push(
+      `/jewelry-details/earrings/natural-round-blue-sapphire-studs-earrings/natural-round-blue-sapphire-studs-earring?freeGift=true`,
+    );
   };
 
   if (cart.length === 0) {
@@ -375,6 +449,54 @@ export function CartComponent() {
                 </Paper>
               );
             })}
+            {isFreeStuds && studsDetails ? (
+              <Paper
+                shadow="md"
+                radius="lg"
+                p="lg"
+                withBorder
+                style={{
+                  border: "2px dashed #0b182d",
+                  background: "#f8fafc",
+                }}
+              >
+                <Group align="center" gap="md">
+                  <IconGift size={40} color="#0b182d" />
+                  <div>
+                    <Title order={4}>
+                      🎉 Congratulations! You’ve Unlocked a FREE Gift!
+                    </Title>
+                    <Text size="sm" c="dimmed" mt={4}>
+                      You’re receiving a complimentary pair of premium stud
+                      earrings — absolutely FREE.
+                    </Text>
+                  </div>
+                </Group>
+
+                <Divider my="md" />
+
+                <Group justify="space-between">
+                  <Group>
+                    <Image
+                      src={studsDetails?.images?.edges[0]?.node?.url}
+                      w={80}
+                      h={80}
+                      radius="md"
+                    />
+                    <div>
+                      <Text fw={600}>{studsDetails?.title}</Text>
+                      <Text size="sm" c="dimmed">
+                        Complimentary Gift
+                      </Text>
+                    </div>
+                  </Group>
+
+                  <Button onClick={handleCustomization} color="green" size="sm">
+                    CLICK TO CUSTOMIZE
+                  </Button>
+                </Group>
+              </Paper>
+            ) : null}
           </Stack>
         </GridCol>
 
