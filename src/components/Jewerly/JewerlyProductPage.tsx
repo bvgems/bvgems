@@ -355,12 +355,12 @@ export default function JewelryProductPage() {
                     </div>
                   </div>
                 )}
-                {productData?.images?.edges[4]?.node?.url &&
+                {/* {productData?.images?.edges[4]?.node?.url &&
                 productType === "Rings" ? (
                   <div className="mt-10">
                     <RingComparison productData={productData} />
                   </div>
-                ) : null}
+                ) : null} */}
               </motion.div>
             )}
           </GridCol>
