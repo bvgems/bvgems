@@ -10,11 +10,10 @@ export function useJewelryFunctions(
   selectedShape: any,
   selectedImage: any,
   twoStoneRings: any,
-  addToCart: any
+  addToCart: any,
 ) {
   const segments = path?.split("/").filter(Boolean);
   const category = segments?.[1];
-  // console.log('categoryy',segments)
 
   const showShapeOptions = productData?.showshapeoptions?.value === "true";
   const isTwoStoneRing = productData?.isTwoStoneRing?.value === "true";
@@ -26,6 +25,7 @@ export function useJewelryFunctions(
 
   // ---------- State ----------
   const [selectedRingSize, setSelectedRingSize] = useState<any>();
+  const [selectedVariant, setSelectedVariant] = useState();
   const [selectedCarat, setSelectedCarat] = useState<any>();
 
   const [selectedNecklaceStoneSize, setSelectedNecklacesStoneSize] =
@@ -74,7 +74,7 @@ export function useJewelryFunctions(
   // ---------- Derived Price ----------
   const getPrice = (title: string) => {
     const variant = productData?.variants?.edges?.find(
-      (v: any) => v?.node?.title === title
+      (v: any) => v?.node?.title === title,
     );
     return variant?.node?.price?.amount;
   };
@@ -103,26 +103,30 @@ export function useJewelryFunctions(
         if (!selectedGoldColor || !selectedRingSize) return "Select options";
         const title = `${selectedGoldColor} / ${selectedRingSize.replace(
           " mm",
-          ""
+          "",
         )}`;
         const price = getPrice(title);
         return price ? `$${Number(price).toFixed(2)}` : "Unavailable";
       } else if (!isTwoStoneRing && showShapeOptions) {
         const m = productData?.variants?.edges?.find(
-          (item: any) => item?.node?.title === selectedShape
+          (item: any) => item?.node?.title === selectedShape,
         );
         if (m?.node?.price?.amount) {
           return `$${Number(m.node.price.amount).toFixed(2)}`;
         }
         return "Select Options";
       } else if (isTwoStoneRing) {
-        const m = productData?.variants?.edges?.find(
-          (item: any) => item?.node?.title === `${firstStone}/${secondStone}`
+        const price: any = Number(
+          productData?.variants?.edges[0]?.node?.price?.amount,
         );
-        if (m?.node?.price?.amount) {
-          return `$${Number(m.node.price.amount).toFixed(2)}`;
-        }
-        return "Select Options";
+        return price;
+        // const m = productData?.variants?.edges?.find(
+        //   (item: any) => item?.node?.title === `${firstStone}/${secondStone}`,
+        // );
+        // if (m?.node?.price?.amount) {
+        //   return `$${Number(m.node.price.amount).toFixed(2)}`;
+        // }
+        // return "Select Options";
       }
     }
 
@@ -224,7 +228,7 @@ export function useJewelryFunctions(
     setSecondStone(splitedStones[1]);
   };
 
-  const addProductInCart = (value?: any) => {
+  const addProductInCart = (value?: any, variantTitle?: any) => {
     const variables: any = {};
 
     if (isBead) {
@@ -258,24 +262,24 @@ export function useJewelryFunctions(
         productType: isBead
           ? "bead"
           : isRingCategory
-          ? "ringJewelry"
-          : isNecklaces
-          ? "necklaceJewelry"
-          : isBracelets
-          ? "braceletJewelry"
-          : isEarringCategory
-          ? "earringJewelry"
-          : "Product",
+            ? "ringJewelry"
+            : isNecklaces
+              ? "necklaceJewelry"
+              : isBracelets
+                ? "braceletJewelry"
+                : isEarringCategory
+                  ? "earringJewelry"
+                  : "Product",
         productId: productData?.id,
         handle: productData?.handle,
-        title: productData?.title,
+        title: variantTitle || productData?.title,
         image_url:
           variables?.image || productData?.images?.edges?.[0]?.node?.url,
         price: isEarringCategory
           ? displayPrice.replace(/[^0-9.]/g, "")
           : isBead
-          ? getPrice(selectedBeadStoneSize)
-          : productData?.variants?.edges?.[0]?.node?.price?.amount,
+            ? getPrice(selectedBeadStoneSize)
+            : productData?.variants?.edges?.[0]?.node?.price?.amount,
 
         gemstone: variables?.stone,
         size: variables?.size || "",
@@ -321,7 +325,8 @@ export function useJewelryFunctions(
     setSelectedCarat,
     customPrice,
     setCustomPrice,
-
+    selectedVariant,
+    setSelectedVariant,
     // helpers
     displayPrice,
     numericPrice,

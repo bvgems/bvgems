@@ -14,7 +14,9 @@ const getTitle = (item: any, productType: any) => {
   } else if (productType === "bead") {
     return `${item?.product?.title}`;
   }
-  return item?.product?.collection_slug || "Custom Product";
+  return (
+    item?.product?.collection_slug || item?.product?.title || "Custom Product"
+  );
 };
 
 export const getOrderPayload = (
