@@ -11,8 +11,8 @@ import { AuthForm } from "../Auth/AuthForm";
 
 const MotionDiv = motion.div;
 export const ProductCard = ({ node, index }: { node: any; index: number }) => {
-
-  const selectedHeight = node?.jewelry_type?.value === "Bracelet" ? "450px" : "300px";
+  const selectedHeight =
+    node?.jewelry_type?.value === "Bracelet" ? "450px" : "300px";
   const router = useRouter();
   const { user } = useAuth();
 
@@ -23,7 +23,7 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
   const [mainImage, setMainImage] = useState<string>(defaultMain);
   const [selectedImage, setSelectedImage] = useState<string>(mainImage);
   const [hoverPreviewImage, setHoverPreviewImage] = useState<string | null>(
-    null
+    null,
   );
   const isMobile = useMediaQuery("(max-width: 1100px)");
   const [scale, setScale] = useState(1);
@@ -38,18 +38,29 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
 
   // 💲 Price text
   const priceText = useMemo(() => {
-    const amounts =
-      variants
-        ?.map((e: any) => Number(e?.node?.price?.amount ?? 0))
-        ?.filter((n: number) => Number.isFinite(n)) || [];
+    try {
+      const raw = node?.shapeSizes?.value;
+      if (!raw) return "Price on Request";
 
-    if (!amounts.length) return "Price on Request";
-    const min = Math.min(...amounts);
-    const max = Math.max(...amounts);
-    return min === max
-      ? `$${min.toFixed(2)} USD`
-      : `$${min.toFixed(2)} – $${max.toFixed(2)} USD`;
-  }, [variants]);
+      const parsed = JSON.parse(raw);
+      console.log("row parsd", parsed);
+
+      const amounts = parsed
+        ?.map((item: any) => Number(item?.price ?? 0))
+        ?.filter((price: number) => Number.isFinite(price) && price > 0);
+
+      if (!amounts.length) return "Price on Request";
+
+      const min = Math.min(...amounts);
+      const max = Math.max(...amounts);
+
+      return min === max
+        ? `$${min.toFixed(2)} USD`
+        : `$${min.toFixed(2)} - $${max.toFixed(2)} USD`;
+    } catch (err) {
+      return "Price on Request";
+    }
+  }, [node]);
 
   const variantImages: { title?: string; image: string }[] = useMemo(
     () =>
@@ -59,7 +70,7 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
           image: v?.node?.image?.url || defaultMain,
         }))
         ?.filter((v: any) => !!v.image) || [],
-    [variants, defaultMain]
+    [variants, defaultMain],
   );
 
   const redirectToProduct = () => {

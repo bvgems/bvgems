@@ -61,6 +61,10 @@ export const getLayouts = async () => {
                     value
                     type
                   }
+                     shapeSizes: metafield(namespace: "custom", key: "shape_sizes") {
+                    value
+                    type
+                    }
                   color: metafield(namespace: "custom", key: "Color") {
                     value
                     type

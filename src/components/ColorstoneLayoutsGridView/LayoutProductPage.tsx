@@ -14,6 +14,7 @@ import {
   NumberInput,
   Flex,
   Slider,
+  NumberFormatter,
 } from "@mantine/core";
 import {
   IconCheck,
@@ -45,6 +46,7 @@ interface ProductPageProps {
 
 export default function LayoutProductPage({ product }: ProductPageProps) {
   const shapeSize = JSON.parse(product?.shapeSizes?.value);
+  console.log("shape details etc", shapeSize);
   const images = product?.images?.edges?.map((img: any) => img.node.url) || [];
   const [mainImage, setMainImage] = useState(images?.[2] || images?.[0]);
   const { user } = useAuth();
@@ -59,10 +61,13 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
 
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState<any>(
-    shapeSize[0]?.size || ""
+    shapeSize[0]?.size || "",
   );
   const [stoneCount, setStoneCount] = useState(shapeSize[0]?.stone_count || "");
   const [caratWeight, setCaratWeight] = useState(shapeSize[0]?.ct_weight || "");
+  const [selectedSizePrice, setSelectedSizePrice] = useState<any>(
+    Number(shapeSize[0]?.price ?? 0),
+  );
   const userKey = user?.id?.toString() || "guest";
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
@@ -73,6 +78,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
     if (matched) {
       setCaratWeight(matched.ct_weight || "");
       setStoneCount(matched.stone_count || "");
+      setSelectedSizePrice(Number(matched?.price ?? 0));
     }
   }, [selectedSize, shapeSize]);
 
@@ -214,10 +220,21 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
             {/* Pricing */}
             <Group mb="lg">
               <Text fw={700} fz="xl">
-                {currency} {parseFloat(price).toFixed(2)}
+                <Text fw={700} fz="xl">
+                  <NumberFormatter
+                    thousandSeparator
+                    prefix="$"
+                    value={selectedSizePrice}
+                    suffix=" USD"
+                  />
+                </Text>
               </Text>
               <Text c="dimmed" td="line-through">
-                {currency} {(parseFloat(price) * 1.1).toFixed(2)}
+                <NumberFormatter
+                  prefix="$ "
+                  value={(selectedSizePrice * 1.1).toFixed(2)}
+                  suffix=" USD"
+                />
               </Text>
               <Badge color="green" radius="sm">
                 10% OFF
