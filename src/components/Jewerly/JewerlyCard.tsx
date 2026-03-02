@@ -22,7 +22,7 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
   const variants = product?.node?.variants?.edges || [];
   const [selectedVariant, setSelectedVariant] = useState<any>();
   const [hoverPreviewImage, setHoverPreviewImage] = useState<string | null>(
-    null
+    null,
   );
   const [priceText, setPriceText] = useState<any>();
   const [minPrice, setMinPrice] = useState<any>();
@@ -32,11 +32,11 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
   const setVariant = () => {
     const variant = product?.mainImage
       ? product?.node?.variants?.edges?.find(
-          (item: any) => item?.node?.metafield?.value === product?.matchedTitle
+          (item: any) => item?.node?.metafield?.value === product?.matchedTitle,
         )
       : variants?.length > 1
-      ? variants[0]
-      : product;
+        ? variants[0]
+        : product;
     setSelectedVariant(variant);
   };
 
@@ -45,7 +45,7 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
       if (product?.node?.earring_metafielcd) {
         setIsEarringVarinats(true);
         const parsedArray = JSON.parse(
-          product?.node?.earring_metafielcd?.value
+          product?.node?.earring_metafielcd?.value,
         );
         const prices = parsedArray.map((item: any) => Number(item.price));
         setMinPrice(Math.min(...prices));
@@ -57,7 +57,7 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
     } else if (isBead) {
       setIsEarringVarinats(true);
       const prices = product?.node?.variants?.edges.map((item: any) =>
-        Number(item?.node?.price?.amount)
+        Number(item?.node?.price?.amount),
       );
       setMinPrice(Number(Math.min(...prices)));
       setMaxPrice(Number(Math.max(...prices)));
@@ -73,10 +73,12 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
   }, [product]);
 
   const redirectToProduct = () => {
+    console.log("sele var", selectedVariant);
     const handle = product?.node?.handle;
     const stoneSlug = selectedVariant?.node?.title
       ? selectedVariant?.node?.title.toLowerCase().replace(/\s+/g, "-")
       : null;
+    console.log("first", stoneSlug);
     const finalCategory = isBead ? "beads" : category;
     if (!handle) return;
     if (stoneSlug) {

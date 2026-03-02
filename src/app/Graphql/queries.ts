@@ -544,6 +544,26 @@ export const GetProductByHandle = `
         type
       }
 
+      relatedProducts: metafield(
+  namespace: "shopify--discovery--product_recommendation",
+  key: "related_products"
+) {
+  references(first: 10) {
+    edges {
+      node {
+        ... on Product {
+          id
+          title
+          handle
+          featuredImage {
+            url
+          }
+        }
+      }
+    }
+  }
+}
+
       images(first: 10) {
         edges {
           node {

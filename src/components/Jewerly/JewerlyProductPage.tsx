@@ -1,5 +1,4 @@
 "use client";
-
 import { fetchProductByHandle } from "@/apis/api";
 import {
   Anchor,
@@ -10,8 +9,8 @@ import {
   GridCol,
   Image,
 } from "@mantine/core";
-import { useParams, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Script from "next/script";
 import type { Metadata } from "next";
@@ -19,6 +18,8 @@ import { RingComparison } from "./RingComparison";
 import { JewelryProductDetails } from "@/components/Jewerly/JewerlyProductDetails";
 import { useMediaQuery } from "@mantine/hooks";
 import { JewelryImageZoom } from "./JewelryImageZoom";
+import { useAuth } from "@/hooks/useAuth";
+import { getCartStore } from "@/store/useCartStore";
 
 type PageProps = {
   params: any;
@@ -78,6 +79,7 @@ type Thumb = { url: string; title?: string | null; type?: string };
 
 export default function JewelryProductPage() {
   const { product, category, stone } = useParams<any>();
+
   const path = usePathname();
   const capitalize = (str: string) =>
     str.charAt(0).toUpperCase() + str.slice(1);
@@ -90,6 +92,15 @@ export default function JewelryProductPage() {
   const [mainImage, setMainImage] = useState<string | null>(null);
 
   const isMobile = useMediaQuery("(max-width: 800px)");
+  const searchParams = useSearchParams();
+  const { user } = useAuth();
+  const cartStore = useMemo(
+    () => getCartStore(user?.id || "guest"),
+    [user?.id],
+  );
+  const isFreeGift =
+    searchParams.get("freeGift") === "true" &&
+    cartStore((state: any) => state.freeGiftSession);
 
   const breadcrumbItems = [
     { title: "Home", href: "/" },
@@ -176,8 +187,6 @@ export default function JewelryProductPage() {
         imgs.splice(1, 0, lastImage);
       }
 
-      // Update state
-      console.log("images2", imgs);
       setImages(imgs);
       setMainImage(imgs[0]?.url || null);
     };
@@ -380,6 +389,7 @@ export default function JewelryProductPage() {
                 selectedImage={mainImage || images[0]?.url}
                 twoStoneRings={twoStoneRings}
                 category={category}
+                isFreeGift={isFreeGift}
               />
             </motion.div>
           </GridCol>

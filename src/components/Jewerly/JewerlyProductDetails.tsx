@@ -9,13 +9,16 @@ import {
   GridCol,
   Group,
   Image,
+  Modal,
   NumberFormatter,
   NumberInput,
   Text,
 } from "@mantine/core";
 import {
   IconCheck,
+  IconGift,
   IconShoppingCart,
+  IconSparkles,
   IconStarFilled,
 } from "@tabler/icons-react";
 
@@ -37,7 +40,7 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { JewelryOptionsDrawer } from "./JewelryOptionsDrawer";
 import { CustomizeJewelryDrawer } from "./CustomizeJewelryDrawer";
 import { JeweleryDetailsTable } from "./JeweleryDetailsTable";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 // 🔹 Hook to generate fake review count
 function useFakeReviewCount(jf: any) {
@@ -69,6 +72,7 @@ export const JewelryProductDetails = ({
   selectedImage,
   twoStoneRings,
   category,
+  isFreeGift,
 }: any) => {
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
@@ -77,10 +81,10 @@ export const JewelryProductDetails = ({
   const [opened, { open, close }] = useDisclosure(false);
   const [value, setValue] = useState<string>("");
   const [customizedDrawerTitle, setCustomizedDrawerTitle] = useState("");
+  const [freeGiftModalOpened, setFreeGiftModalOpened] = useState(false);
   const pathname = usePathname();
-
+  const searchParams = useSearchParams();
   const currentVariantSlug = pathname?.split("/").filter(Boolean).pop();
-
   useEffect(() => {
     switch (category) {
       case "necklaces":
@@ -101,6 +105,18 @@ export const JewelryProductDetails = ({
     }
   }, [category]);
 
+  useEffect(() => {
+    const fromCart = searchParams.get("fromCart");
+    const freeGift = searchParams.get("freeGift");
+
+    const alreadyShown = sessionStorage.getItem("freeGiftShown");
+
+    if (freeGift === "true" && fromCart === "true" && !alreadyShown) {
+      setFreeGiftModalOpened(true);
+      sessionStorage.setItem("freeGiftShown", "true");
+    }
+  }, [searchParams]);
+
   const jf = useJewelryFunctions(
     path,
     productData,
@@ -108,6 +124,7 @@ export const JewelryProductDetails = ({
     selectedImage,
     twoStoneRings,
     addToCart,
+    userKey,
   );
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -126,7 +143,7 @@ export const JewelryProductDetails = ({
       jf.setSelectedVariant(variantTitle);
     }
 
-    jf.addProductInCart(value, variantTitle);
+    jf.addProductInCart(value, variantTitle, isFreeGift);
 
     notifications.show({
       icon: <IconCheck />,
@@ -157,11 +174,21 @@ export const JewelryProductDetails = ({
 
   useEffect(() => {
     if (jf.isEarringCategory && parsed.length > 0 && !selectedEarring) {
-      setSelectedEarring(parsed[0]);
-      jf.setSelectedCarat(parsed[0].carat);
-      jf.setCustomPrice(Number(parsed[0].price));
+      if (isFreeGift) {
+        const freeOption = parsed.find((opt) => opt.carat === "0.65");
+
+        if (freeOption) {
+          setSelectedEarring(freeOption);
+          jf.setSelectedCarat(freeOption.carat);
+          jf.setCustomPrice(0); // FREE
+        }
+      } else {
+        setSelectedEarring(parsed[0]);
+        jf.setSelectedCarat(parsed[0].carat);
+        jf.setCustomPrice(Number(parsed[0].price));
+      }
     }
-  }, [jf.isEarringCategory, parsed, selectedEarring]);
+  }, [jf.isEarringCategory, parsed, selectedEarring, isFreeGift]);
 
   // 🔹 Handle option change
   const handleEarringChange = (option: any) => {
@@ -175,6 +202,41 @@ export const JewelryProductDetails = ({
 
   return (
     <>
+      <Modal
+        opened={freeGiftModalOpened}
+        onClose={() => setFreeGiftModalOpened(false)}
+        centered
+        withCloseButton
+        title={
+          <Group gap="xs">
+            <IconSparkles size={20} color="gold" />
+            <Text fw={600}>Congratulations!</Text>
+          </Group>
+        }
+      >
+        <div className="flex flex-col gap-3">
+          <Text>
+            🎉 You’re receiving a <strong>FREE 0.65 Carat Stud Earring</strong>{" "}
+            as a gift!
+          </Text>
+
+          <Text size="sm" c="dimmed">
+            You can personalize your gift by changing the gemstone. Click on{" "}
+            <strong>“Explore Different Gemstones”</strong> below the product
+            image.
+          </Text>
+
+          <Button
+            mt="sm"
+            color="#0b182d"
+            onClick={() => setFreeGiftModalOpened(false)}
+            fullWidth
+          >
+            Continue Customizing
+          </Button>
+        </div>
+      </Modal>
+
       <Drawer
         size={500}
         position="right"
@@ -199,6 +261,7 @@ export const JewelryProductDetails = ({
           category={category}
           close={close}
           open={openCustomize}
+          isFreeGift={isFreeGift}
         />
       </Drawer>
       <h1 className="capitalize text-[1.25rem] leading-snug tracking-wide mb-2">
@@ -302,7 +365,10 @@ export const JewelryProductDetails = ({
                     label={opt.carat}
                     value={opt.carat}
                     selected={selectedEarring?.carat === opt.carat}
-                    onClick={() => handleEarringChange(opt)}
+                    disabled={isFreeGift && opt.carat !== "0.65"}
+                    onClick={() => {
+                      if (!isFreeGift) handleEarringChange(opt);
+                    }}
                   />
                 </SwiperSlide>
               ))}
@@ -393,31 +459,100 @@ export const JewelryProductDetails = ({
               size="md"
               w={110}
               style={{ height: "100%" }}
+              disabled={isFreeGift}
             />
           </GridCol>
           <GridCol span={{ base: 9 }}>
-            <Button
-              disabled={jf.isDisabled()}
-              color="#0b182d"
-              onClick={addProduct}
-              leftSection={<IconShoppingCart size={20} />}
-              fullWidth
-              h="100%"
-            >
-              ADD TO CART
-            </Button>
+            {isFreeGift ? (
+              <Button
+                disabled={jf.isDisabled()}
+                color="#0b182d"
+                onClick={() => {
+                  addProduct();
+                }}
+                leftSection={<IconGift size={20} />}
+                fullWidth
+                h="100%"
+              >
+                CLAIM YOUR FREE GIFT
+              </Button>
+            ) : (
+              <Button
+                disabled={jf.isDisabled()}
+                color="#0b182d"
+                onClick={addProduct}
+                leftSection={<IconShoppingCart size={20} />}
+                fullWidth
+                h="100%"
+              >
+                ADD TO CART
+              </Button>
+            )}
           </GridCol>
         </Grid>
 
         {productData?.showshapeoptions?.value === "true" &&
-          (!jf.isNecklaces ||
-            (jf.isNecklaces && productData?.inHand?.value === "true")) && (
-            <>
-              <h1 className="text-md px-6 pb-6 text-center">
-                More Options For This Design
-              </h1>
-              <div className="grid grid-cols-2 gap-4">
-                {productData?.variants?.edges?.map((item: any, idx: number) => {
+        (!jf.isNecklaces ||
+          (jf.isNecklaces && productData?.inHand?.value === "true")) ? (
+          <>
+            <h1 className="text-md px-6 pb-6 text-center">
+              More Options For This Design
+            </h1>
+            <div className="grid grid-cols-2 gap-4">
+              {productData?.variants?.edges?.map((item: any, idx: number) => {
+                const slug = item?.node?.title
+                  ?.toLowerCase()
+                  .replace(/\s+/g, "-");
+
+                const isActive = slug === currentVariantSlug;
+                return (
+                  <div
+                    key={idx}
+                    className={`bg-white transition-all duration-300 cursor-pointer p-4 flex flex-col justify-between shadow-md hover:shadow-xl rounded-xl
+        ${isActive ? "border-2 border-[#9aa7bb]" : "border border-transparent"}
+      `}
+                    onClick={() => {
+                      router.push(
+                        `/jewelry-details/${category}/${
+                          productData?.handle
+                        }/${item?.node?.title.toLowerCase().replace(/\s+/g, "-")}`,
+                      );
+                    }}
+                  >
+                    <div className="w-full flex justify-center">
+                      <Image
+                        radius="md"
+                        h={200}
+                        fit="contain"
+                        src={item?.node?.image?.url}
+                        alt={item?.node?.title}
+                        className="object-contain transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
+
+                    <p className="text-sm  font-medium text-gray-500 mt-3">
+                      {item?.node?.title}
+                    </p>
+                    <NumberFormatter
+                      thousandSeparator
+                      prefix="$"
+                      className="text-sm  text-gray-500 mt-2"
+                      value={item?.node?.price?.amount}
+                      suffix=" USD"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        ) : productData?.relatedProducts?.references?.edges ? (
+          <>
+            <h1 className="text-md px-6 pb-6 text-center">
+              More Options For This Design
+            </h1>
+            <div className="grid grid-cols-2 gap-4">
+              {productData?.relatedProducts?.references?.edges.map(
+                (item: any, idx: number) => {
                   const slug = item?.node?.title
                     ?.toLowerCase()
                     .replace(/\s+/g, "-");
@@ -430,11 +565,15 @@ export const JewelryProductDetails = ({
         ${isActive ? "border-2 border-[#9aa7bb]" : "border border-transparent"}
       `}
                       onClick={() => {
-                        router.push(
-                          `/jewelry-details/${category}/${
-                            productData?.handle
-                          }/${item?.node?.title.toLowerCase().replace(/\s+/g, "-")}`,
-                        );
+                        const baseUrl = `/jewelry-details/${category}/${
+                          item?.node?.handle
+                        }/${item?.node?.title.toLowerCase().replace(/\s+/g, "-")}`;
+
+                        const finalUrl = isFreeGift
+                          ? `${baseUrl}?freeGift=true`
+                          : baseUrl;
+
+                        router.push(finalUrl);
                       }}
                     >
                       <div className="w-full flex justify-center">
@@ -442,7 +581,7 @@ export const JewelryProductDetails = ({
                           radius="md"
                           h={200}
                           fit="contain"
-                          src={item?.node?.image?.url}
+                          src={item?.node?.featuredImage?.url}
                           alt={item?.node?.title}
                           className="object-contain transition-transform duration-300 hover:scale-105"
                         />
@@ -460,10 +599,11 @@ export const JewelryProductDetails = ({
                       />
                     </div>
                   );
-                })}
-              </div>
-            </>
-          )}
+                },
+              )}
+            </div>
+          </>
+        ) : null}
       </div>
 
       {(jf.isRingCategory ||

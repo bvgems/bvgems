@@ -92,7 +92,6 @@ export default function ProductDetailsPage() {
       if (item?.collection_slug === "Alexandrite") {
         return Number((85 * item.ct_weight).toFixed(2));
       } else {
-        console.log("flag", allowPurchaseByCarat);
         if (!allowPurchaseByCarat) {
           return Number(item?.price);
         }
@@ -382,7 +381,6 @@ export default function ProductDetailsPage() {
         size === "1.50 mm" ||
         size === "1.75 mm"
       ) {
-        console.log("inside");
         setAllowPurchaseByCarat(false);
         return;
       }

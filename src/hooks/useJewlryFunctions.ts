@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { notifications } from "@mantine/notifications";
 import { IconCheck } from "@tabler/icons-react";
+import { getCartStore } from "@/store/useCartStore";
 
 export function useJewelryFunctions(
   path: string,
@@ -11,6 +12,7 @@ export function useJewelryFunctions(
   selectedImage: any,
   twoStoneRings: any,
   addToCart: any,
+  userKey: any,
 ) {
   const segments = path?.split("/").filter(Boolean);
   const category = segments?.[1];
@@ -22,6 +24,7 @@ export function useJewelryFunctions(
   const isNecklaces = category === "necklaces";
   const isBracelets = category === "bracelets";
   const isBead = category === "beads";
+  const { updateGiftItem } = getCartStore(userKey).getState();
 
   // ---------- State ----------
   const [selectedRingSize, setSelectedRingSize] = useState<any>();
@@ -228,8 +231,25 @@ export function useJewelryFunctions(
     setSecondStone(splitedStones[1]);
   };
 
-  const addProductInCart = (value?: any, variantTitle?: any) => {
+  const addProductInCart = (
+    value?: any,
+    variantTitle?: any,
+    isFreeGift?: any,
+  ) => {
     const variables: any = {};
+
+    if (isFreeGift) {
+      updateGiftItem({
+        title: productData?.title,
+        handle: productData?.handle,
+        goldColor: selectedGoldColor,
+        totalCaratWeight: selectedCarat,
+        // gemstone: selectedStone,
+        image_url: selectedImage,
+      });
+
+      return;
+    }
 
     if (isBead) {
       variables.size = selectedBeadStoneSize;
@@ -270,16 +290,20 @@ export function useJewelryFunctions(
                 : isEarringCategory
                   ? "earringJewelry"
                   : "Product",
-        productId: productData?.id,
+        productId: isFreeGift
+          ? `${productData?.id}-FREE-GIFT`
+          : productData?.id,
         handle: productData?.handle,
         title: variantTitle || productData?.title,
         image_url:
           variables?.image || productData?.images?.edges?.[0]?.node?.url,
-        price: isEarringCategory
-          ? displayPrice.replace(/[^0-9.]/g, "")
-          : isBead
-            ? getPrice(selectedBeadStoneSize)
-            : productData?.variants?.edges?.[0]?.node?.price?.amount,
+        price: isFreeGift
+          ? 0
+          : isEarringCategory
+            ? displayPrice.replace(/[^0-9.]/g, "")
+            : isBead
+              ? getPrice(selectedBeadStoneSize)
+              : productData?.variants?.edges?.[0]?.node?.price?.amount,
 
         gemstone: variables?.stone,
         size: variables?.size || "",
@@ -288,6 +312,7 @@ export function useJewelryFunctions(
         firstStone: isRingCategory ? firstStone : "",
         secondStone: isRingCategory ? secondStone : "",
         totalCaratWeight: isEarringCategory ? variables?.totalCaratWeight : "",
+        isGift: Boolean(isFreeGift),
       },
       quantity,
     });

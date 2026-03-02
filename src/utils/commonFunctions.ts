@@ -136,6 +136,13 @@ export const getOrderPayload = (
           });
         }
 
+        if (item?.product?.isGift) {
+          properties.push({
+            name: "FREE GIFT",
+            value: "STUDS EARRINGS",
+          });
+        }
+
         const imageUrl =
           item?.jewelryProduct?.image_url ?? item?.product?.image_url ?? "";
         const isStored = !!item?.product?.variantId;

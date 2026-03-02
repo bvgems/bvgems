@@ -28,6 +28,7 @@ export interface CartItem {
     additionalComments: string;
     totalCaratWeight: string;
     stoneCount: any;
+    isGift: boolean;
   };
   quantity: number;
   caratWeight: string;
@@ -46,6 +47,9 @@ interface CartStore {
   getTotalPrice: () => number;
   updateTotals: () => void;
   setCartTotal: (total: number) => void;
+  freeGiftSession: boolean;
+  setFreeGiftSession: (value: boolean) => void;
+  updateGiftItem: (updatedProduct: Partial<CartItem["product"]>) => void;
 }
 
 const storeRegistry: any = {};
@@ -59,31 +63,59 @@ export const getCartStore = (userKey: string) => {
           cartTotal: 0,
           shippingTotal: 0,
           grandTotal: 0,
+          freeGiftSession: false,
 
           setCartTotal: (total) => set({ cartTotal: total }),
+          setFreeGiftSession: (value) => set({ freeGiftSession: value }),
 
           addToCart: (newItem) =>
             set((state) => {
+              if (newItem.product.isGift) {
+                const alreadyExists = state.cart.find(
+                  (item) => item.product.isGift,
+                );
+
+                if (alreadyExists) return state;
+              }
+
               const existingItem = state.cart.find(
-                (item) => item.product.productId === newItem.product.productId
+                (item) =>
+                  item.product.productId === newItem.product.productId &&
+                  !item.product.isGift,
               );
+
               if (existingItem) {
                 return {
                   cart: state.cart.map((item) =>
                     item.product.productId === newItem.product.productId
                       ? { ...item, quantity: item.quantity + newItem.quantity }
-                      : item
+                      : item,
                   ),
                 };
-              } else {
-                return { cart: [...state.cart, newItem] };
               }
+
+              return { cart: [...state.cart, newItem] };
             }),
+
+          updateGiftItem: (updatedProduct) =>
+            set((state) => ({
+              cart: state.cart.map((item) =>
+                item.product.isGift
+                  ? {
+                      ...item,
+                      product: {
+                        ...item.product,
+                        ...updatedProduct,
+                      },
+                    }
+                  : item,
+              ),
+            })),
 
           removeFromCart: (productId) =>
             set((state) => ({
               cart: state.cart.filter(
-                (item) => item.product.productId !== productId
+                (item) => item.product.productId !== productId,
               ),
             })),
 
@@ -92,7 +124,7 @@ export const getCartStore = (userKey: string) => {
               cart: state.cart.map((item) =>
                 item.product.productId === productId
                   ? { ...item, quantity }
-                  : item
+                  : item,
               ),
             })),
 
@@ -104,7 +136,7 @@ export const getCartStore = (userKey: string) => {
                       ...item,
                       product: { ...item.product, needCertification: checked },
                     }
-                  : item
+                  : item,
               ),
             })),
 
@@ -135,8 +167,8 @@ export const getCartStore = (userKey: string) => {
         }),
         {
           name: `cart-storage-${userKey}`,
-        }
-      )
+        },
+      ),
     );
   }
   return storeRegistry[userKey];

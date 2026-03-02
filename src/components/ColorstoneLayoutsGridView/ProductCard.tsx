@@ -43,7 +43,6 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
       if (!raw) return "Price on Request";
 
       const parsed = JSON.parse(raw);
-      console.log("row parsd", parsed);
 
       const amounts = parsed
         ?.map((item: any) => Number(item?.price ?? 0))
