@@ -14,7 +14,9 @@ const getTitle = (item: any, productType: any) => {
   } else if (productType === "bead") {
     return `${item?.product?.title}`;
   }
-  return item?.product?.collection_slug || "Custom Product";
+  return (
+    item?.product?.collection_slug || item?.product?.title || "Custom Product"
+  );
 };
 
 export const getOrderPayload = (
@@ -131,6 +133,13 @@ export const getOrderPayload = (
           properties.push({
             name: "Need Certification",
             value: item?.product?.needCertification === true ? "YES" : "NO",
+          });
+        }
+
+        if (item?.product?.isGift) {
+          properties.push({
+            name: "FREE GIFT",
+            value: "STUDS EARRINGS",
           });
         }
 

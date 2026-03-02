@@ -89,7 +89,7 @@ export default function CheckoutSelectionPage() {
       cartStore.getState().clearCart();
       open();
     } else {
-      // await handlePayment();
+      await handlePayment();
       cartStore.getState().clearCart();
     }
   };

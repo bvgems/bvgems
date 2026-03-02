@@ -61,6 +61,10 @@ export const getLayouts = async () => {
                     value
                     type
                   }
+                     shapeSizes: metafield(namespace: "custom", key: "shape_sizes") {
+                    value
+                    type
+                    }
                   color: metafield(namespace: "custom", key: "Color") {
                     value
                     type
@@ -159,7 +163,7 @@ export const getAllJeweleryProducts = async (category: any) => {
           query: `
             query getProductsByCategory($category: String!) {
               products(
-                first: 150, 
+                first: 250, 
                 query: $category, 
                 sortKey: CREATED_AT, 
                 reverse: ${!isEarrings}   # 👈 dynamic reverse flag
@@ -275,14 +279,14 @@ export const getAllJeweleryProducts = async (category: any) => {
           `,
           variables,
         }),
-      }
+      },
     );
 
     const result = await shopifyRes.json();
     return result?.data?.products;
   } catch (error) {
     console.error(
-      "Something went wrong while fetching all the jewlery gemstones!"
+      "Something went wrong while fetching all the jewlery gemstones!",
     );
   }
 };
@@ -291,7 +295,7 @@ export const getBusinessReferences = async (userId: any) => {
   try {
     const result = await pool.query(
       `SELECT * FROM business_reference WHERE user_id = $1 ORDER BY created_at DESC`,
-      [userId]
+      [userId],
     );
 
     return result?.rows;
@@ -307,18 +311,21 @@ export const getBeads = async () => {
 
   try {
     while (hasNextPage) {
-      const res:any = await fetch(process.env.SHOPIFY_STOREFRONT_URL as string, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Shopify-Storefront-Access-Token":
-            "c64a5e6dbfa340f0bff88be9fde4b7a8",
+      const res: any = await fetch(
+        process.env.SHOPIFY_STOREFRONT_URL as string,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Shopify-Storefront-Access-Token":
+              "c64a5e6dbfa340f0bff88be9fde4b7a8",
+          },
+          body: JSON.stringify({
+            query: GetAllBeads,
+            variables: { first: 250, after: endCursor },
+          }),
         },
-        body: JSON.stringify({
-          query: GetAllBeads,
-          variables: { first: 250, after: endCursor },
-        }),
-      });
+      );
 
       const result = await res.json();
       const products = result?.data?.products;
@@ -327,7 +334,7 @@ export const getBeads = async () => {
       allProducts.push(...edges);
 
       console.log(
-        `Fetched ${edges.length} products, total so far: ${allProducts.length}`
+        `Fetched ${edges.length} products, total so far: ${allProducts.length}`,
       );
 
       hasNextPage = products?.pageInfo?.hasNextPage;

@@ -53,19 +53,6 @@ const getPerCaratPrice = (item: any): number => {
   return Number((item.price / item.ct_weight).toFixed(2));
 };
 
-const getPerStonePrice = (item: any): number => {
-  if (!item) return 0;
-  if (!item?.ct_weight) return 0;
-  if (isLabGrown(item)) {
-    if (item?.collection_slug === "Alexandrite") {
-      return Number((85 * item.ct_weight).toFixed(2));
-    } else {
-      return Number((50 * item.ct_weight).toFixed(2));
-    }
-  }
-  return item?.price ? Number(item.price) : 0;
-};
-
 export default function ProductDetailsPage() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -98,6 +85,21 @@ export default function ProductDetailsPage() {
       {item.title}
     </Anchor>
   ));
+  const getPerStonePrice = (item: any): number => {
+    if (!item) return 0;
+    if (!item?.ct_weight) return 0;
+    if (isLabGrown(item)) {
+      if (item?.collection_slug === "Alexandrite") {
+        return Number((85 * item.ct_weight).toFixed(2));
+      } else {
+        if (!allowPurchaseByCarat) {
+          return Number(item?.price);
+        }
+        return Number((50 * item.ct_weight).toFixed(2));
+      }
+    }
+    return item?.price ? Number(item.price) : 0;
+  };
 
   useEffect(() => {
     if (product?.ct_weight) {
@@ -107,6 +109,7 @@ export default function ProductDetailsPage() {
 
   const [price, setPrice] = useState<number>(0);
   const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(false);
+  const [allowPurchaseByCarat, setAllowPurchaseByCarat] = useState(true);
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
   const [additionalComments, setAdditionalComments] = useState("");
@@ -368,12 +371,30 @@ export default function ProductDetailsPage() {
     }
   };
 
+  const isPurchaseByCarat = (product: any) => {
+    const size = product?.size;
+    console.log("size", size);
+    if (product?.quality === "Lab Grown") {
+      if (
+        size === "1.00 mm" ||
+        size === "1.25 mm" ||
+        size === "1.50 mm" ||
+        size === "1.75 mm"
+      ) {
+        setAllowPurchaseByCarat(false);
+        return;
+      }
+    }
+    setAllowPurchaseByCarat(true);
+  };
+
   useEffect(() => {
     if (id) getProduct(id);
     if (name) getData(name);
   }, [id]);
 
   useEffect(() => {
+    isPurchaseByCarat(product);
     setDisplayImage(
       product?.extra_images?.length > 0
         ? product?.extra_images[0]
@@ -490,14 +511,16 @@ export default function ProductDetailsPage() {
                         : `$${getPerStonePrice(product).toFixed(2)}`}
                     </strong>
                   </span>
-                  <span>
-                    Per Carat Price:{" "}
-                    <strong>
-                      {getPerCaratPrice(product) === 0
-                        ? "-"
-                        : `$${getPerCaratPrice(product).toFixed(2)}`}
-                    </strong>
-                  </span>
+                  {allowPurchaseByCarat && (
+                    <span>
+                      Per Carat Price:{" "}
+                      <strong>
+                        {getPerCaratPrice(product) === 0
+                          ? "-"
+                          : `$${getPerCaratPrice(product).toFixed(2)}`}
+                      </strong>
+                    </span>
+                  )}
                 </div>
 
                 {!hasPricing && (
@@ -527,7 +550,7 @@ export default function ProductDetailsPage() {
             )}
 
             {/* Switch for mode selection */}
-            {user && (
+            {user && allowPurchaseByCarat && (
               <Switch
                 checked={purchaseByCarat}
                 onChange={(event) =>

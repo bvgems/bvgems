@@ -41,10 +41,12 @@ const Player = dynamic(
 
 export function CartComponent() {
   const { user } = useAuth();
+
   const cartStore = useMemo(
     () => getCartStore(user?.id || "guest"),
     [user?.id],
   );
+  const addToCart = cartStore((state: any) => state.addToCart);
 
   const cart = cartStore((state: any) => state.cart);
   const removeProduct = cartStore((state: any) => state.removeFromCart);
@@ -66,9 +68,11 @@ export function CartComponent() {
   }, [cart, grandTotal]);
 
   const checkFreeStuds = () => {
-    setIsFreeStuds(false);
-    cart?.map((item: any) => {
-      let productType = item?.product?.productType;
+    let eligible = false;
+
+    cart?.forEach((item: any) => {
+      const productType = item?.product?.productType;
+
       if (
         productType === "braceletJewelry" ||
         productType === "ringJewelry" ||
@@ -76,10 +80,18 @@ export function CartComponent() {
         productType === "necklaceJewelry"
       ) {
         if (Number(item?.product?.price) * item?.quantity > 1000) {
-          setIsFreeStuds(true);
+          eligible = true;
         }
       }
     });
+
+    setIsFreeStuds(eligible);
+
+    const giftItem = cart.find((item: any) => item.product.isGift);
+
+    if (!eligible && giftItem) {
+      removeProduct(giftItem.product.productId);
+    }
   };
 
   useEffect(() => {
@@ -113,12 +125,40 @@ export function CartComponent() {
   }, [cart, hasMounted]);
 
   useEffect(() => {
-    fetchStudsDetails();
+    // fetchStudsDetails();
+    if (isFreeStuds && !cart.some((item: any) => item.product.isGift)) {
+      addProductInCart();
+    }
   }, [isFreeStuds]);
 
-  const fetchStudsDetails = async () => {
-    const response = await getStudsDetails();
-    setStudsDetails(response?.product);
+  const addProductInCart = () => {
+    const variables: any = {};
+    variables.goldColor = "white";
+    variables.totalCaratWeight = "0.65";
+    variables.stone = null;
+    variables.image =
+      "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/1233_Y.png?v=1772054851";
+    addToCart({
+      product: {
+        productType: "earringJewelry",
+
+        productId: `gid://shopify/Product/7963364196405-FREE-GIFT`,
+        handle: "natural-round-blue-sapphire-studs-earrings",
+        title: "Natural Round Blue Sapphire Studs Earrings",
+        image_url:
+          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/1233_Y.png?v=1772054851",
+        price: 0,
+        gemstone: variables?.stone,
+        size: variables?.size || "",
+        goldColor: variables?.goldColor || "",
+        length: variables?.length || "",
+        firstStone: "",
+        secondStone: "",
+        totalCaratWeight: variables?.totalCaratWeight,
+        isGift: Boolean(true),
+      },
+      quantity: 1,
+    });
   };
 
   const handleRemoveProduct = (id: any, product: any) => {
@@ -201,10 +241,10 @@ export function CartComponent() {
     router.push("/checkout");
   };
 
-  const handleCustomization = () => {
+  const handleCustomization = (value: any) => {
     cartStore.getState().setFreeGiftSession(true);
     router.push(
-      `/jewelry-details/earrings/natural-round-blue-sapphire-studs-earrings/natural-round-blue-sapphire-studs-earring?freeGift=true`,
+      `/jewelry-details/earrings/${value?.product?.handle}/${value?.product?.handle}?freeGift=true&fromCart=true`,
     );
   };
 
@@ -250,8 +290,15 @@ export function CartComponent() {
               CLEAR CART
             </Button>
           </div>
+          {cart.some((item: any) => item.product.isGift) && (
+            <Alert mb="md" color="green" icon={<IconGift />} radius="md">
+              🎉 Congratulations! You've unlocked a complimentary gift with your
+              purchase.
+            </Alert>
+          )}
           <Stack gap="md">
             {cart.map((value: any, index: number) => {
+              const isGift = value?.product?.isGift;
               let total =
                 value.product.productType === "stone" ||
                 value.product.productType === "freeSizeStone"
@@ -275,6 +322,9 @@ export function CartComponent() {
                     display: "flex",
                     gap: "1rem",
                     alignItems: "flex-start",
+                    border: isGift ? "2px dashed #0b182d" : undefined,
+                    background: isGift ? "#f8fafc" : undefined,
+                    position: "relative",
                   }}
                 >
                   <Image
@@ -373,16 +423,28 @@ export function CartComponent() {
                           )}
                         </Text>
                       </div>
-                      <Button
-                        color="red"
-                        variant="subtle"
-                        onClick={() =>
-                          handleRemoveProduct(value.cartItemId, value.product)
-                        }
-                        leftSection={<IconTrash size={16} />}
-                      >
-                        Remove
-                      </Button>
+                      {!isGift ? (
+                        <Button
+                          color="red"
+                          variant="subtle"
+                          onClick={() =>
+                            handleRemoveProduct(value.cartItemId, value.product)
+                          }
+                          leftSection={<IconTrash size={16} />}
+                        >
+                          Remove
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="light"
+                          color="dark"
+                          size="xs"
+                          leftSection={<IconGift size={14} />}
+                          onClick={() => handleCustomization(value)}
+                        >
+                          Click to Customize
+                        </Button>
+                      )}
                     </Group>
                     <Group mt="sm" align="center" justify="space-between">
                       <Text fw={500} size="lg">
@@ -395,7 +457,11 @@ export function CartComponent() {
                           }
                         />{" "}
                       </Text>
-                      {value?.product?.purchaseByCarat ? (
+                      {isGift ? (
+                        <Badge color="gray" variant="light">
+                          Quantity: 1
+                        </Badge>
+                      ) : value?.product?.purchaseByCarat ? (
                         <Badge color="gray" variant="light">
                           Carat Weight:{" "}
                           {value?.product?.productType === "stone"
@@ -428,75 +494,29 @@ export function CartComponent() {
                       </Text>
                     </Group>
 
-                    <Checkbox
-                      color="#0b182d"
-                      size="sm"
-                      mt="sm"
-                      label={
-                        <span className="text-gray-500">
-                          Add certification for this item (+$75)
-                        </span>
-                      }
-                      checked={!!value.product.needCertification}
-                      onChange={(e) =>
-                        toggleCertification(
-                          value.product.productId,
-                          e.currentTarget.checked,
-                        )
-                      }
-                    />
+                    {!isGift && (
+                      <Checkbox
+                        color="#0b182d"
+                        size="sm"
+                        mt="sm"
+                        label={
+                          <span className="text-gray-500">
+                            Add certification for this item (+$75)
+                          </span>
+                        }
+                        checked={!!value.product.needCertification}
+                        onChange={(e) =>
+                          toggleCertification(
+                            value.product.productId,
+                            e.currentTarget.checked,
+                          )
+                        }
+                      />
+                    )}
                   </div>
                 </Paper>
               );
             })}
-            {isFreeStuds && studsDetails ? (
-              <Paper
-                shadow="md"
-                radius="lg"
-                p="lg"
-                withBorder
-                style={{
-                  border: "2px dashed #0b182d",
-                  background: "#f8fafc",
-                }}
-              >
-                <Group align="center" gap="md">
-                  <IconGift size={40} color="#0b182d" />
-                  <div>
-                    <Title order={4}>
-                      🎉 Congratulations! You’ve Unlocked a FREE Gift!
-                    </Title>
-                    <Text size="sm" c="dimmed" mt={4}>
-                      You’re receiving a complimentary pair of premium stud
-                      earrings — absolutely FREE.
-                    </Text>
-                  </div>
-                </Group>
-
-                <Divider my="md" />
-
-                <Group justify="space-between">
-                  <Group>
-                    <Image
-                      src={studsDetails?.images?.edges[0]?.node?.url}
-                      w={80}
-                      h={80}
-                      radius="md"
-                    />
-                    <div>
-                      <Text fw={600}>{studsDetails?.title}</Text>
-                      <Text size="sm" c="dimmed">
-                        Complimentary Gift
-                      </Text>
-                    </div>
-                  </Group>
-
-                  <Button onClick={handleCustomization} color="green" size="sm">
-                    CLICK TO CUSTOMIZE
-                  </Button>
-                </Group>
-              </Paper>
-            ) : null}
           </Stack>
         </GridCol>
 

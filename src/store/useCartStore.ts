@@ -49,6 +49,7 @@ interface CartStore {
   setCartTotal: (total: number) => void;
   freeGiftSession: boolean;
   setFreeGiftSession: (value: boolean) => void;
+  updateGiftItem: (updatedProduct: Partial<CartItem["product"]>) => void;
 }
 
 const storeRegistry: any = {};
@@ -69,9 +70,20 @@ export const getCartStore = (userKey: string) => {
 
           addToCart: (newItem) =>
             set((state) => {
+              if (newItem.product.isGift) {
+                const alreadyExists = state.cart.find(
+                  (item) => item.product.isGift,
+                );
+
+                if (alreadyExists) return state;
+              }
+
               const existingItem = state.cart.find(
-                (item) => item.product.productId === newItem.product.productId,
+                (item) =>
+                  item.product.productId === newItem.product.productId &&
+                  !item.product.isGift,
               );
+
               if (existingItem) {
                 return {
                   cart: state.cart.map((item) =>
@@ -80,10 +92,25 @@ export const getCartStore = (userKey: string) => {
                       : item,
                   ),
                 };
-              } else {
-                return { cart: [...state.cart, newItem] };
               }
+
+              return { cart: [...state.cart, newItem] };
             }),
+
+          updateGiftItem: (updatedProduct) =>
+            set((state) => ({
+              cart: state.cart.map((item) =>
+                item.product.isGift
+                  ? {
+                      ...item,
+                      product: {
+                        ...item.product,
+                        ...updatedProduct,
+                      },
+                    }
+                  : item,
+              ),
+            })),
 
           removeFromCart: (productId) =>
             set((state) => ({
