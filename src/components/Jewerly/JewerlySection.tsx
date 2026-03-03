@@ -5,22 +5,22 @@ import { motion, useInView } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const jewelryItems = [
-  { handle: "rings", image: "/assets/ring.png", alt: "Ring", title: "RINGS" },
+  { handle: "rings", image: "/assets/jcring.png", alt: "Ring", title: "RINGS" },
   {
     handle: "earrings",
-    image: "/assets/earring.png",
+    image: "/assets/jcearrings.png",
     alt: "Earrings",
     title: "EARRINGS",
   },
   {
     handle: "necklaces",
-    image: "/assets/necklace.png",
+    image: "/assets/jcnecklace.png",
     alt: "Necklace",
     title: "NECKLACE",
   },
   {
     handle: "bracelets",
-    image: "/assets/bracelet.png",
+    image: "/assets/jcbracelet.jpg",
     alt: "Bracelet",
     title: "BRACELETS",
   },
@@ -104,7 +104,8 @@ export const JewelrySection = forwardRef<HTMLDivElement>((_, ref) => {
                   <Image
                     src={item.image}
                     alt={item.alt}
-                    className="object-cover w-full h-full transform transition-transform duration-500 group-hover:scale-110"
+                    fit="contain"
+                    className="object-fill w-full h-full transform transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute bottom-0 left-0 w-full h-1/4 group-hover:h-full transition-all duration-500">
                     <div

@@ -816,31 +816,28 @@ export const gemstoneOptions = [
     label: "Alexandrite",
     value: "Alexandrite",
     image: "/assets/sapphire.png",
-    shopImage:
-      "/assets/alexandrite-shop-cali.png",
+    shopImage: "/assets/alexandrite-shop-cali.png",
     link: "/calibrated-faceted-gemstones/alexandrite",
   },
   {
     label: "Amethyst",
     value: "Amethyst",
     image: "/assets/amethyst.png",
-    shopImage:
-      "/assets/amethyst-shop-cali.png",
+    shopImage: "/assets/amethyst-shop-cali.png",
     link: "/calibrated-faceted-gemstones/amethyst",
   },
   {
     label: "Aquamarine",
     value: "Aquamarine",
     image: "/assets/aquamarine.png",
-    shopImage:
-      "/assets/aquamarine-shop-cali.png",
+    shopImage: "/assets/aquamarine-shop-cali.png",
     link: "/calibrated-faceted-gemstones/aquamarine",
   },
   {
     label: "Citrine",
     value: "Citrine",
     image: "/assets/citrine.png",
-    shopImage:"/assets/citrine-shop-cal.png",
+    shopImage: "/assets/citrine-shop-cal.png",
     link: "/calibrated-faceted-gemstones/citrine",
   },
   {
@@ -854,24 +851,28 @@ export const gemstoneOptions = [
     label: "Morganite",
     value: "Morganite",
     image: "/assets/morganite.png",
-    shopImage:
-      "/assets/morganite-shop-cal.png",
+    shopImage: "/assets/morganite-shop-cal.png",
     link: "/calibrated-faceted-gemstones/morganite",
+  },
+  {
+    label: "Paraiba Tourmaline",
+    value: "Paraiba Tourmaline",
+    image: "/assets/paraiba-img.jpg",
+    shopImage: "/assets/paraiba-img.jpg",
+    link: "/calibrated-faceted-gemstones/paraiba-tourmaline",
   },
   {
     label: "Peridot",
     value: "Peridot",
     image: "/assets/peridot.png",
-    shopImage:
-      "/assets/peridot-shop-cal.png",
+    shopImage: "/assets/peridot-shop-cal.png",
     link: "/calibrated-faceted-gemstones/peridot",
   },
   {
     label: "Ruby",
     value: "Ruby",
     image: "/assets/ruby.png",
-    shopImage:
-      "/assets/ruby-shop-cali.png",
+    shopImage: "/assets/ruby-shop-cali.png",
     link: "/calibrated-faceted-gemstones/ruby",
   },
   {

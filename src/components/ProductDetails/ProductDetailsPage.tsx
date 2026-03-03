@@ -45,7 +45,10 @@ const isLabGrown = (item: any) =>
 const getPerCaratPrice = (item: any): number => {
   if (!item) return 0;
   if (isLabGrown(item)) {
-    if (item?.collection_slug === "Alexandrite") {
+    if (
+      item?.collection_slug === "Alexandrite" ||
+      item?.collection_slug === "Paraiba Tourmaline"
+    ) {
       return 85;
     }
   }
@@ -89,7 +92,13 @@ export default function ProductDetailsPage() {
     if (!item) return 0;
     if (!item?.ct_weight) return 0;
     if (isLabGrown(item)) {
-      if (item?.collection_slug === "Alexandrite") {
+      if (
+        item?.collection_slug === "Alexandrite" ||
+        item?.collection_slug === "Paraiba Tourmaline"
+      ) {
+        if (!allowPurchaseByCarat) {
+          return Number(item?.price);
+        }
         return Number((85 * item.ct_weight).toFixed(2));
       } else {
         if (!allowPurchaseByCarat) {
@@ -373,7 +382,6 @@ export default function ProductDetailsPage() {
 
   const isPurchaseByCarat = (product: any) => {
     const size = product?.size;
-    console.log("size", size);
     if (product?.quality === "Lab Grown") {
       if (
         size === "1.00 mm" ||

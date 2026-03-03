@@ -89,7 +89,7 @@ export default function JewelryProductPage() {
   const [selectedShape, setSelectedShape] = useState<string | null>(null);
   const [twoStoneRings, setTwoStoneRings] = useState<boolean>(false);
   const [productType, setProductType] = useState<string | undefined>();
-  const [mainImage, setMainImage] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const isMobile = useMediaQuery("(max-width: 800px)");
   const searchParams = useSearchParams();
@@ -150,7 +150,6 @@ export default function JewelryProductPage() {
           }))
           .filter((t: Thumb) => !!t.url) ?? [];
 
-      console.log("imgs1", imgs);
       imgs = [...imgs, ...variantImgs].filter(
         (v, i, arr) => arr.findIndex((x) => x.url === v.url) === i,
       );
@@ -188,11 +187,19 @@ export default function JewelryProductPage() {
       }
 
       setImages(imgs);
-      setMainImage(imgs[0]?.url || null);
+      setCurrentIndex(0);
     };
 
     getProductByHandle();
   }, [product, stone]);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
 
   return (
     <>
@@ -274,7 +281,7 @@ export default function JewelryProductPage() {
                 ) : (
                   // ✅ Mobile: main image + thumbnails
                   <div>
-                    {mainImage && (
+                    {images[currentIndex] && (
                       <Card
                         radius="0"
                         shadow="0"
@@ -289,9 +296,30 @@ export default function JewelryProductPage() {
                           justifyContent: "center",
                         }}
                       >
-                        {mainImage.endsWith(".mp4") ? (
+                        <div
+                          onClick={handlePrev}
+                          style={{
+                            position: "absolute",
+                            left: "10px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            background: "rgba(0,0,0,0.2)",
+                            color: "#fff",
+                            width: "35px",
+                            height: "35px",
+                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            zIndex: 10,
+                          }}
+                        >
+                          ‹
+                        </div>
+                        {images[currentIndex]?.url.endsWith(".mp4") ? (
                           <video
-                            src={mainImage}
+                            src={images[currentIndex]?.url}
                             autoPlay
                             muted
                             loop
@@ -301,13 +329,34 @@ export default function JewelryProductPage() {
                           />
                         ) : (
                           <Image
-                            src={mainImage}
+                            src={images[currentIndex]?.url}
                             alt={`${productData?.title} - Main`}
                             fit="fill"
                             width="100%"
                             height="100%"
                           />
                         )}
+                        <div
+                          onClick={handleNext}
+                          style={{
+                            position: "absolute",
+                            right: "10px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            background: "rgba(0,0,0,0.2)",
+                            color: "#fff",
+                            width: "35px",
+                            height: "35px",
+                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            zIndex: 10,
+                          }}
+                        >
+                          ›
+                        </div>
                       </Card>
                     )}
                     <div
@@ -325,7 +374,7 @@ export default function JewelryProductPage() {
                           shadow="0"
                           padding={0}
                           withBorder
-                          onClick={() => setMainImage(thumb.url)}
+                          onClick={() => setCurrentIndex(idx)}
                           style={{
                             width: "70px",
                             height: "70px",
@@ -334,7 +383,7 @@ export default function JewelryProductPage() {
                             alignItems: "center",
                             justifyContent: "center",
                             border:
-                              thumb.url === mainImage
+                              thumb.url === images[currentIndex]?.url
                                 ? "2px solid #000"
                                 : "1px solid #ddd",
                           }}
@@ -386,7 +435,7 @@ export default function JewelryProductPage() {
                 productData={productData}
                 selectedShape={selectedShape}
                 onShapeChange={() => {}}
-                selectedImage={mainImage || images[0]?.url}
+                selectedImage={images[currentIndex]?.url || images[0]?.url}
                 twoStoneRings={twoStoneRings}
                 category={category}
                 isFreeGift={isFreeGift}

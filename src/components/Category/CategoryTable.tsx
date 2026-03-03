@@ -29,7 +29,6 @@ export const CategoryTable = ({
   typeFilter,
   emeraldShade,
 }: any) => {
-  // console.log("fetcheddd", fetchedResult);
   const name = data?.handle;
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
@@ -71,7 +70,10 @@ export const CategoryTable = ({
   const getPerCaratPrice = (element: any) => {
     if (!element?.ct_weight || !element?.price) return 0;
     if (element?.type === "Lab Grown" || element?.quality === "Lab Grown") {
-      if (element?.collection_slug === "Alexandrite") {
+      if (
+        element?.collection_slug === "Alexandrite" ||
+        element?.collection_slug === "Paraiba Tourmaline"
+      ) {
         return 85;
       }
       return 50;
@@ -105,7 +107,6 @@ export const CategoryTable = ({
 
   const isPurchaseByCarat = (product: any) => {
     const size = product?.size;
-    console.log("size", size);
     if (product?.quality === "Lab Grown") {
       if (
         size === "1.00 mm" ||
