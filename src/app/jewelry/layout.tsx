@@ -22,7 +22,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
-  const collectionSlug = segments[1]; // jewelry/[category]
+  const collectionSlug = segments[1];
 
   // ✅ Initialize from URL query
   const initialStone = searchParams.get("stone")
@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     : "";
 
   const [selectedStones, setSelectedStones] = useState<string[]>(
-    initialStone ? [initialStone] : []
+    initialStone ? [initialStone] : [],
   );
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
@@ -50,34 +50,41 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       price: priceRange,
       types: selectedTypes,
     };
-    console.log('hereeeee',filterOptions)
     const response = await getFilteredJewelry(filterOptions, collectionSlug);
 
     let products = response?.data || [];
-    // console.log('proddd',products)
 
     if (selectedStones.length > 0) {
-      products = products.map((p: any) => {
-        const gemstoneMatch = selectedStones[0];
+      if (collectionSlug === "rings") {
+        products = products.map((p: any) => {
+          const gemstoneMatch = selectedStones[0];
 
-        const matchedVariant = p?.node?.variants?.edges?.find((v: any) => {
-          return v?.node?.metafield
-            ? v?.node?.metafield?.value?.toLowerCase() ===
-                gemstoneMatch.toLowerCase()
-            : false;
+          const matchedVariant = p?.node?.variants?.edges?.find((v: any) => {
+            return v?.node?.metafield
+              ? v?.node?.metafield?.value?.toLowerCase() ===
+                  gemstoneMatch.toLowerCase()
+              : false;
+          });
+
+          return {
+            ...p,
+            mainImage: matchedVariant
+              ? matchedVariant?.node?.image?.url
+              : p?.images?.edges?.[0]?.node?.url,
+
+            matchedTitle: matchedVariant
+              ? matchedVariant?.node?.metafield?.value
+              : matchedVariant?.node?.title,
+          };
         });
+      } else {
+        products = products?.filter((p: any) => {
+          const gemstoneMatch = selectedStones[0];
+          const matchedVariant = p?.node?.gemstone?.value;
 
-        return {
-          ...p,
-          mainImage: matchedVariant
-            ? matchedVariant?.node?.image?.url
-            : p?.images?.edges?.[0]?.node?.url,
-
-          matchedTitle: matchedVariant
-            ? matchedVariant?.node?.metafield?.value
-            : matchedVariant?.node?.title,
-        };
-      });
+          return gemstoneMatch === matchedVariant;
+        });
+      }
     } else {
       products = products.map((p: any) => ({
         ...p,

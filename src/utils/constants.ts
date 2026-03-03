@@ -795,20 +795,32 @@ export const EarringTypes = [
 
 export const JewelryGemstones = [
   {
-    label: "Ruby",
-    value: "Ruby",
+    label: "Amethyst",
+    value: "Amethyst",
+  },
+  {
+    label: "Aquamarine",
+    value: "Aquamarine",
+  },
+  {
+    label: "Blue Sapphire",
+    value: "Blue Sapphire",
   },
   {
     label: "Emerald",
     value: "Emerald",
   },
   {
+    label: "Multicolor Sapphire",
+    value: "Multicolor Sapphire",
+  },
+  {
     label: "Pink Sapphire",
     value: "Pink Sapphire",
   },
   {
-    label: "Blue Sapphire",
-    value: "Blue Sapphire",
+    label: "Ruby",
+    value: "Ruby",
   },
 ];
 export const gemstoneOptions = [

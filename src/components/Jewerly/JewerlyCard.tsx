@@ -73,12 +73,11 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
   }, [product]);
 
   const redirectToProduct = () => {
-    console.log("sele var", selectedVariant);
     const handle = product?.node?.handle;
     const stoneSlug = selectedVariant?.node?.title
       ? selectedVariant?.node?.title.toLowerCase().replace(/\s+/g, "-")
       : null;
-    console.log("first", stoneSlug);
+
     const finalCategory = isBead ? "beads" : category;
     if (!handle) return;
     if (stoneSlug) {
@@ -96,6 +95,7 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
 
   const displayImage =
     hoverPreviewImage ||
+    product?.mainImage || // 👈 ADD THIS
     product?.node?.image?.url ||
     product?.node?.images?.edges?.[0]?.node?.url;
 
