@@ -20,11 +20,15 @@ export const JeweleryDetailsTable = ({
   value,
 }: Props) => {
   const selectedVariant = productData?.variants?.edges?.filter(
-    (v: any) => v?.node?.title === gemstone
+    (v: any) => v?.node?.title === gemstone,
   );
 
-  const gemstoneName =
-    selectedVariant && selectedVariant[0]?.node?.metafield?.value;
+  const gemstoneName = jf?.isRingCategory
+    ? productData?.variants?.edges?.length > 1 &&
+      selectedVariant &&
+      selectedVariant[0]?.node?.metafield?.value
+    : productData?.gemstone?.value;
+
   const stoneWeight = Number(productData?.ct_weight?.value);
   const diamondWeight = Number(productData?.DiamondWeight?.value);
 
@@ -57,7 +61,7 @@ export const JeweleryDetailsTable = ({
         <Table.Tbody>
           {renderRow(
             "Gemstone:",
-            gemstoneName ? gemstoneName : productData?.gemstone?.value || "-"
+            gemstoneName ? gemstoneName : productData?.gemstone?.value || "-",
           )}
           {renderRow("Stone Type:", productData?.stoneType?.value || "Natural")}
           {renderRow("Shape:", productData?.shape?.value || "-")}
@@ -65,7 +69,7 @@ export const JeweleryDetailsTable = ({
           {productData?.dimension?.value &&
             renderRow(
               "Dimension:",
-              value ? value : `${productData?.dimension?.value} mm`
+              value ? value : `${productData?.dimension?.value} mm`,
             )}
 
           {/* Divider */}
@@ -83,7 +87,7 @@ export const JeweleryDetailsTable = ({
                 "Stone Weight:",
                 earringMetafields.gemstone_weight
                   ? `${earringMetafields.gemstone_weight} ct.`
-                  : "-"
+                  : "-",
               )}
               {renderRow("Total Carat:", earringMetafields.carat || "-")}
             </>
@@ -91,15 +95,15 @@ export const JeweleryDetailsTable = ({
             <>
               {renderRow(
                 "Stone Weight:",
-                isNaN(stoneWeight) ? "-" : `${stoneWeight} ct.`
+                isNaN(stoneWeight) ? "-" : `${stoneWeight} ct.`,
               )}
               {renderRow(
                 "Diamond Weight:",
-                isNaN(diamondWeight) ? "-" : `${diamondWeight} ct.`
+                isNaN(diamondWeight) ? "-" : `${diamondWeight} ct.`,
               )}
               {renderRow(
                 "Total Weight:",
-                totalWeight === "-" ? "-" : `${totalWeight} ct.`
+                totalWeight === "-" ? "-" : `${totalWeight} ct.`,
               )}
             </>
           )}
@@ -118,7 +122,7 @@ export const JeweleryDetailsTable = ({
                     }
                   })()}
                 </p>
-              )
+              ),
             )}
         </Table.Tbody>
       </Table>

@@ -4,6 +4,7 @@ import { JewelryCategoryCard } from "../Jewerly/JewerlyCard";
 import { Skeleton, Grid, GridCol, Anchor, Breadcrumbs } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Script from "next/script";
+import { useRef } from "react";
 
 export const CommonGridView = ({
   filteredJewelry,
@@ -16,12 +17,30 @@ export const CommonGridView = ({
 
   const { category, allProducts, beads } = useGridView();
   const isLoading = !allProducts?.length && !beads?.length;
+  const firstSwatchRef = useRef<HTMLDivElement | null>(null);
 
   const [totalDisplayedProducts, setTotalDispalyedProducts] = useState<any>();
   const [finalProducts, setFinalProducts] = useState<any>();
 
   const capitalize = (str: any) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
+
+  useEffect(() => {
+    if (!selectedStones?.length) return;
+
+    const hasVariantsProduct = finalProducts?.find(
+      (p: any) => p?.node?.variants?.edges?.length > 1,
+    );
+
+    if (hasVariantsProduct && firstSwatchRef.current) {
+      setTimeout(() => {
+        firstSwatchRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 300);
+    }
+  }, [selectedStones, finalProducts]);
 
   useEffect(() => {
     if (filteredJewelry === undefined) {
@@ -90,6 +109,10 @@ export const CommonGridView = ({
     </Anchor>
   ));
 
+  const firstVariantIndex = finalProducts?.findIndex(
+    (p: any) => p?.node?.variants?.edges?.length > 1,
+  );
+
   return (
     <div className="px-4 sm:px-8 pt-6 pb-14">
       {isBead ? (
@@ -115,7 +138,11 @@ export const CommonGridView = ({
       <Grid gutter="lg">
         {(finalProducts?.length ? finalProducts : beads)?.map(
           (product: any, index: number) => (
-            <GridCol span={{ base: 6, sm: 6, md: 4, lg: 4 }} key={index}>
+            <GridCol
+              span={{ base: 6, sm: 6, md: 4, lg: 4 }}
+              key={index}
+              ref={index === firstVariantIndex ? firstSwatchRef : null}
+            >
               <JewelryCategoryCard
                 isBead={isBead}
                 category={category}
@@ -124,7 +151,7 @@ export const CommonGridView = ({
                 selectedStones={selectedStones}
               />
             </GridCol>
-          )
+          ),
         )}
       </Grid>
 
