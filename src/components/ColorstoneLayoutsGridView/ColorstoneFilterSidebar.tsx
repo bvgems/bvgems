@@ -4,6 +4,7 @@ import {
   ColorStoneGemstonesList,
   ColorStoneLayoutType,
   ColorStoneTypesList,
+  LayoutQuality,
   ShapeFilterList,
 } from "@/utils/constants";
 import {
@@ -15,8 +16,10 @@ import {
   CheckboxGroup,
   createTheme,
   Divider,
+  Group,
   Image,
   MantineProvider,
+  Radio,
 } from "@mantine/core";
 import { SizeFilter } from "../CommonComponents/SizeFilter";
 
@@ -41,6 +44,8 @@ export const ColorstoneFilterSidebar = ({
   setWidth,
   selectedRoundSizes,
   setSelectedRoundSizes,
+  selectedQuality,
+  setSelectedQuality,
 }: any) => {
   const handleRoundSizeChange = (size: string, checked: boolean) => {
     if (checked) {
@@ -64,8 +69,32 @@ export const ColorstoneFilterSidebar = ({
             "round-sizes",
             "other-sizes",
             "price",
+            "quality",
           ]}
         >
+          <AccordionItem value="quality">
+            <AccordionControl>Quality</AccordionControl>
+            <AccordionPanel>
+              <Radio.Group
+                name="quality"
+                value={selectedQuality || "AA"}
+                onChange={setSelectedQuality}
+              >
+                <Group mt="xs">
+                  {LayoutQuality?.map(
+                    (item: { label: string }, index: number) => (
+                      <Radio
+                        key={index}
+                        value={item.label}
+                        label={item.label}
+                        color="#0b182d"
+                      />
+                    ),
+                  )}
+                </Group>
+              </Radio.Group>
+            </AccordionPanel>
+          </AccordionItem>
           <AccordionItem value="gemstone">
             <AccordionControl>Gemstone</AccordionControl>
             <AccordionPanel>
@@ -90,7 +119,7 @@ export const ColorstoneFilterSidebar = ({
                         }}
                       />
                     </div>
-                  )
+                  ),
                 )}
               </CheckboxGroup>
             </AccordionPanel>
@@ -116,7 +145,7 @@ export const ColorstoneFilterSidebar = ({
                         }}
                       />
                     </div>
-                  )
+                  ),
                 )}
               </CheckboxGroup>
             </AccordionPanel>
@@ -146,7 +175,7 @@ export const ColorstoneFilterSidebar = ({
                         }}
                       />
                     </div>
-                  )
+                  ),
                 )}
               </CheckboxGroup>
             </AccordionPanel>
@@ -184,7 +213,7 @@ export const ColorstoneFilterSidebar = ({
                         }}
                       />
                     </div>
-                  )
+                  ),
                 )}
               </CheckboxGroup>
             </AccordionPanel>

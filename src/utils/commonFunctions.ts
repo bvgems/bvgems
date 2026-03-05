@@ -143,6 +143,13 @@ export const getOrderPayload = (
           });
         }
 
+        if (item?.product?.quality) {
+          properties.push({
+            name: "Quality",
+            value: item?.product?.quality,
+          });
+        }
+
         const imageUrl =
           item?.jewelryProduct?.image_url ?? item?.product?.image_url ?? "";
         const isStored = !!item?.product?.variantId;

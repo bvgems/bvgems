@@ -10,7 +10,15 @@ import { useAuth } from "@/hooks/useAuth";
 import { AuthForm } from "../Auth/AuthForm";
 
 const MotionDiv = motion.div;
-export const ProductCard = ({ node, index }: { node: any; index: number }) => {
+export const ProductCard = ({
+  node,
+  index,
+  selectedQuality,
+}: {
+  node: any;
+  index: number;
+  selectedQuality: string;
+}) => {
   const selectedHeight =
     node?.jewelry_type?.value === "Bracelet" ? "450px" : "300px";
   const router = useRouter();
@@ -36,7 +44,6 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
     setSelectedImage(mainImage);
   }, [mainImage]);
 
-  // 💲 Price text
   const priceText = useMemo(() => {
     try {
       const raw = node?.shapeSizes?.value;
@@ -44,11 +51,16 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
 
       const parsed = JSON.parse(raw);
 
-      const amounts = parsed
+      let amounts = parsed
         ?.map((item: any) => Number(item?.price ?? 0))
         ?.filter((price: number) => Number.isFinite(price) && price > 0);
 
       if (!amounts.length) return "Price on Request";
+
+      // 🔥 Apply 25% reduction if quality is A
+      if (selectedQuality === "A") {
+        amounts = amounts.map((price: number) => price * 0.75);
+      }
 
       const min = Math.min(...amounts);
       const max = Math.max(...amounts);
@@ -59,7 +71,7 @@ export const ProductCard = ({ node, index }: { node: any; index: number }) => {
     } catch (err) {
       return "Price on Request";
     }
-  }, [node]);
+  }, [node, selectedQuality]);
 
   const variantImages: { title?: string; image: string }[] = useMemo(
     () =>

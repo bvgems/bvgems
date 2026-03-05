@@ -1,9 +1,19 @@
 "use client";
 
-import { Card, Skeleton, Container, Grid, GridCol, Accordion } from "@mantine/core";
+import {
+  Card,
+  Skeleton,
+  Container,
+  Grid,
+  GridCol,
+  Accordion,
+} from "@mantine/core";
 import { ProductCard } from "./ProductCard";
 
-export const ColorstoneLayoutsGridView = ({ products }: any) => {
+export const ColorstoneLayoutsGridView = ({
+  products,
+  selectedQuality,
+}: any) => {
   return (
     <>
       <h1 className="text-2xl flex justify-center mt-12">
@@ -51,7 +61,14 @@ export const ColorstoneLayoutsGridView = ({ products }: any) => {
               );
             }
 
-            return <ProductCard key={node.id} node={node} index={index} />;
+            return (
+              <ProductCard
+                key={node.id}
+                node={node}
+                index={index}
+                selectedQuality={selectedQuality}
+              />
+            );
           })}
         </Grid>
       </Container>

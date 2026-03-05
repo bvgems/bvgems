@@ -870,7 +870,7 @@ export const gemstoneOptions = [
     label: "Paraiba Tourmaline",
     value: "Paraiba Tourmaline",
     image: "/assets/paraiba-img.jpg",
-    shopImage: "/assets/paraiba-img.jpg",
+    shopImage: "/assets/paraiba-shop.jpg",
     link: "/calibrated-faceted-gemstones/paraiba-tourmaline",
   },
   {
@@ -1251,6 +1251,15 @@ export const ShapeFilterList = [
     label: "Straight Baguette",
     image: "/assets/baguette.svg",
     value: "Straight Baguette",
+  },
+];
+
+export const LayoutQuality = [
+  {
+    label: "A",
+  },
+  {
+    label: "AA",
   },
 ];
 export const ColorStoneGemstonesList = [

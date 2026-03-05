@@ -373,7 +373,8 @@ export function CartComponent() {
                             <>
                               Stone Size: {value?.product?.size} | Weight:{" "}
                               {value?.product?.ct_weight} | Stone Count:{" "}
-                              {value?.product?.stoneCount}
+                              {value?.product?.stoneCount} | Quality:{" "}
+                              {value?.product?.quality}
                             </>
                           )}
                           {value?.product?.productType === "freeSizeStone" && (

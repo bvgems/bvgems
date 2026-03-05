@@ -69,15 +69,15 @@ export function CategoryContent({
     "Trillion",
   ];
   const sortedShapes = [...(shapes || [])].sort(
-    (a, b) => shapeOrder.indexOf(a) - shapeOrder.indexOf(b)
+    (a, b) => shapeOrder.indexOf(a) - shapeOrder.indexOf(b),
   );
   const [selectedShape, setSelectedShape] = useState<string | null>(
-    shapes?.length ? shapes[0] : null
+    shapes?.length ? shapes[0] : null,
   );
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
   const [selectedSapphireColor, setSelectedSapphireColor] = useState(
-    SapphireLooseGemstoneColorOptions[0]?.value
+    SapphireLooseGemstoneColorOptions[0]?.value,
   );
   const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
   const [fetchedResult, setFetchedResult] = useState<any[]>([]);
@@ -95,7 +95,7 @@ export function CategoryContent({
         item?.type === "Lab Grown" &&
         item?.collection_slug === "Emerald" &&
         Array.isArray(item?.extra_images) &&
-        item.extra_images.length > 0
+        item.extra_images.length > 0,
     );
 
     if (matched) {
@@ -105,7 +105,7 @@ export function CategoryContent({
           if (a.includes("_Z") && !b.includes("_Z")) return -1;
           if (b.includes("_Z") && !a.includes("_Z")) return 1;
           return 0;
-        }
+        },
       );
 
       setShadeImages(sortedImages);
@@ -118,19 +118,19 @@ export function CategoryContent({
     selectedShape: string | null,
     title: string,
     isSapphire: boolean,
-    sapphireColor: string
+    sapphireColor: string,
   ) => {
     const result: any = await getShapesData(
       selectedShape,
       title,
       isSapphire,
-      sapphireColor
+      sapphireColor,
     );
     console.log("resss", result);
 
     const shape = selectedShape || "default";
     const uniqueSizes = Array.from(
-      new Set(result?.data?.map((item: any) => item.size))
+      new Set(result?.data?.map((item: any) => item.size)),
     ).sort((a: any, b: any) => parseFloat(a) - parseFloat(b));
 
     setAllSizes((prev: any) => ({
@@ -153,7 +153,7 @@ export function CategoryContent({
         selectedShape,
         data?.title,
         isSapphire,
-        selectedSapphireColor
+        selectedSapphireColor,
       );
       setSelectedSizes([]);
     }
@@ -162,12 +162,12 @@ export function CategoryContent({
 
   const redirectToEducation = () => {
     router.push(
-      `/customer-support/education?activeStone=${data?.title?.toLowerCase()}`
+      `/customer-support/education?activeStone=${data?.title?.toLowerCase()}`,
     );
   };
 
   const uniqueTypes = Array.from(
-    new Set(fetchedResult?.map((item: any) => item.type))
+    new Set(fetchedResult?.map((item: any) => item.type)),
   );
 
   const getQuality = () => {
@@ -210,7 +210,7 @@ export function CategoryContent({
   };
   // Filter only available quality images once
   const availableQualityImages = qualityImages.filter(
-    (item: any) => item?.is_available
+    (item: any) => item?.is_available,
   );
 
   const getItemQuality = (item: any) => {
@@ -268,7 +268,7 @@ export function CategoryContent({
                               </div>
                             </div>
                           </Carousel.Slide>
-                        )
+                        ),
                       )}
                     </Carousel>
                     {/* Thumbnails */}
@@ -295,7 +295,7 @@ export function CategoryContent({
                               {item.quality}
                             </span>
                           </div>
-                        )
+                        ),
                       )}
                     </div>
                   </div>
@@ -353,6 +353,65 @@ export function CategoryContent({
                       </p>
                     </div>
                   )}
+                </div>
+              </div>
+            ) : null}
+            {isSapphire &&
+            selectedSapphireColor === "Blue" &&
+            (typeFilter === "Lab Grown" ||
+              getItemQuality(qualityImages[activeSlide]) === "Lab Grown") ? (
+              <div className="mt-10">
+                <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
+                  Lab Blue Sapphire
+                </h3>
+
+                <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
+                  <div className="h-[160px] w-[160px] flex items-center justify-center">
+                    <Image
+                      src="/assets/lab-blue.png"
+                      fit="contain"
+                      radius="md"
+                      className="object-contain rounded-xl"
+                    />
+                  </div>
+
+                  <p className="mt-4 text-sm text-gray-600 leading-relaxed text-center">
+                    Blue sapphires are prized for their rich, velvety blue color
+                    and exceptional brilliance. Lab grown blue sapphires display
+                    vivid saturation, excellent clarity, and remarkable
+                    durability, making them ideal for fine jewelry with a
+                    luxurious yet modern appeal.
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
+            {isSapphire &&
+            selectedSapphireColor === "Pink" &&
+            (typeFilter === "Lab Grown" ||
+              getItemQuality(qualityImages[activeSlide]) === "Lab Grown") ? (
+              <div className="mt-10">
+                <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
+                  Lab Pink Sapphire
+                </h3>
+
+                <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
+                  <div className="h-[160px] w-[160px] flex items-center justify-center">
+                    <Image
+                      src="/assets/lab-pink.png"
+                      fit="contain"
+                      radius="md"
+                      className="object-contain rounded-xl"
+                    />
+                  </div>
+
+                  <p className="mt-4 text-sm text-gray-600 leading-relaxed text-center">
+                    Pink sapphires are admired for their romantic blush tones
+                    and vibrant brilliance. Lab grown pink sapphires showcase
+                    vivid color, exceptional clarity, and remarkable durability,
+                    offering a refined and feminine alternative to traditional
+                    gemstones.
+                  </p>
                 </div>
               </div>
             ) : null}
@@ -443,7 +502,7 @@ export function CategoryContent({
                               <Image src={item?.image} h={40} w={40} />
                             </span>
                           </Tooltip>
-                        )
+                        ),
                       )}
                     </div>
                   </div>
@@ -537,12 +596,12 @@ export function CategoryContent({
                           {handle === "alexandrite"
                             ? "Chrysoberyl"
                             : handle === "sapphire"
-                            ? "Corundum"
-                            : handle === "emerald"
-                            ? "Beryl"
-                            : handle === "ruby"
-                            ? "Corundum"
-                            : "-"}
+                              ? "Corundum"
+                              : handle === "emerald"
+                                ? "Beryl"
+                                : handle === "ruby"
+                                  ? "Corundum"
+                                  : "-"}
                         </TableTd>
                       </TableTr>
                     </TableTbody>

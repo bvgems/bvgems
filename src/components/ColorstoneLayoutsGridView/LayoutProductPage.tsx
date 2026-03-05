@@ -64,6 +64,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
   const [selectedSize, setSelectedSize] = useState<any>(
     shapeSize[0]?.size || "",
   );
+  const [selectedQuality, setSelectedQuality] = useState<"AA" | "A">("AA");
   const [stoneCount, setStoneCount] = useState(shapeSize[0]?.stone_count || "");
   const [caratWeight, setCaratWeight] = useState(shapeSize[0]?.ct_weight || "");
   const [selectedSizePrice, setSelectedSizePrice] = useState<any>(
@@ -78,11 +79,16 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
     const matched = shapeSize?.find((item: any) => item?.size === selectedSize);
 
     if (matched) {
+      const basePrice = Number(matched?.price ?? 0);
+
       setCaratWeight(matched.ct_weight || "");
       setStoneCount(matched.stone_count || "");
-      setSelectedSizePrice(Number(matched?.price ?? 0));
+
+      const finalPrice = selectedQuality === "A" ? basePrice * 0.75 : basePrice;
+
+      setSelectedSizePrice(finalPrice);
     }
-  }, [selectedSize, shapeSize]);
+  }, [selectedSize, shapeSize, selectedQuality]);
 
   const addProductInCart = () => {
     try {
@@ -99,6 +105,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
           shape: product.shape?.value,
           size: selectedSize,
           stoneCount: stoneCount,
+          quality: selectedQuality,
         },
         quantity: quantity,
       });
@@ -237,12 +244,25 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
                 <Group mb="lg">
                   <Text fw={700} fz="xl">
                     <Text fw={700} fz="xl">
-                      <NumberFormatter
-                        thousandSeparator
-                        prefix="$"
-                        value={selectedSizePrice}
-                        suffix=" USD"
-                      />
+                      {selectedSizePrice === 0 ? (
+                        <a
+                          href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
+                            `Price Request for ${product?.title}, ${product?.size}`,
+                          )}&body=${encodeURIComponent(
+                            `Hello,\n\nI would like to request the price for ${product?.title}, ${selectedSize} mm layout\nPlease let me know the pricing and availability.\n\nThank you!`,
+                          )}`}
+                          className="underline text-blue-600"
+                        >
+                          Request Pricing
+                        </a>
+                      ) : (
+                        <NumberFormatter
+                          thousandSeparator
+                          prefix="$"
+                          value={selectedSizePrice}
+                          suffix=" USD"
+                        />
+                      )}
                     </Text>
                   </Text>
                   <Text c="dimmed" td="line-through">
@@ -289,6 +309,25 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
                   ))}
                 </Swiper>
               </div>
+
+              {/* Quality Selector */}
+              <Group mb="md">
+                <Button
+                  variant={selectedQuality === "AA" ? "filled" : "outline"}
+                  color="#0b182d"
+                  onClick={() => setSelectedQuality("AA")}
+                >
+                  AA Quality
+                </Button>
+
+                <Button
+                  variant={selectedQuality === "A" ? "filled" : "outline"}
+                  color="#0b182d"
+                  onClick={() => setSelectedQuality("A")}
+                >
+                  A Quality
+                </Button>
+              </Group>
 
               {/* Product Specs */}
               <div className="space-y-3 mb-6 ">

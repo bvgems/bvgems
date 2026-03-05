@@ -31,6 +31,7 @@ export default function ColorStoneLayouts() {
   const [layouts, setLayouts] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRoundSizes, setSelectedRoundSizes] = useState<string[]>([]);
+  const [selectedQuality, setSelectedQuality] = useState<string>("AA");
 
   const [drawerOpened, { open, close }] = useDisclosure(false);
   const didMount = useRef(false);
@@ -45,6 +46,7 @@ export default function ColorStoneLayouts() {
       size: selectedRoundSizes,
       length,
       width,
+      quality: selectedQuality,
     };
 
     const response = await getFilteredColorStoneLayouts(filterOptions);
@@ -86,6 +88,7 @@ export default function ColorStoneLayouts() {
     length,
     width,
     priceRange,
+    selectedQuality,
   ]);
 
   return (
@@ -115,6 +118,8 @@ export default function ColorStoneLayouts() {
             setWidth={setWidth}
             selectedRoundSizes={selectedRoundSizes}
             setSelectedRoundSizes={setSelectedRoundSizes}
+            selectedQuality={selectedQuality}
+            setSelectedQuality={setSelectedQuality}
           />
           <Divider orientation="vertical" />
         </GridCol>
@@ -146,7 +151,10 @@ export default function ColorStoneLayouts() {
               </Center>
             </div>
           ) : (
-            <ColorstoneLayoutsGridView products={layouts} />
+            <ColorstoneLayoutsGridView
+              products={layouts}
+              selectedQuality={selectedQuality}
+            />
           )}
         </GridCol>
       </Grid>
@@ -179,6 +187,8 @@ export default function ColorStoneLayouts() {
           setWidth={setWidth}
           selectedRoundSizes={selectedRoundSizes}
           setSelectedRoundSizes={setSelectedRoundSizes}
+          selectedQuality={selectedQuality}
+          setSelectedQuality={setSelectedQuality}
         />
       </Drawer>
       {!loading && layouts?.length > 0 && (

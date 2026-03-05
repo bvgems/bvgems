@@ -300,6 +300,14 @@ export default function CheckoutSelectionPage() {
                                 </span>
                               </div>
                             )}
+                            {item?.product?.quality && (
+                              <div className="text-gray-600">
+                                Quality:{" "}
+                                <span className="font-medium">
+                                  {item?.product?.quality}
+                                </span>
+                              </div>
+                            )}
                             {item?.quantity && (
                               <div className="text-gray-600">
                                 Qty::{" "}
