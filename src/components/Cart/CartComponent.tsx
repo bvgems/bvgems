@@ -364,6 +364,12 @@ export function CartComponent() {
                                 value?.product?.shade && (
                                   <> | Shade: {value?.product?.shade}</>
                                 )}
+                              {value?.product?.collection_slug === "Sapphire" &&
+                                value?.product?.color === "Blue" &&
+                                value?.product?.quality !== "Lab Grown" &&
+                                value?.product?.shade && (
+                                  <> | Shade: {value?.product?.shade}</>
+                                )}
                             </>
                           )}
                           {value?.product?.productType === "bead" && (

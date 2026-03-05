@@ -13,12 +13,11 @@ import {
   Pagination,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconCheck, IconShoppingCart } from "@tabler/icons-react";
+import { IconShoppingCart } from "@tabler/icons-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { AuthForm } from "../Auth/AuthForm";
 import { getCartStore } from "@/store/useCartStore";
-import { notifications } from "@mantine/notifications";
 import React, { useMemo, useState, useEffect } from "react";
 import { AddToCartModal } from "../CommonComponents/AddToCartModal";
 
@@ -133,7 +132,7 @@ export const CategoryTable = ({
       </Modal>
       <Modal
         p={0}
-        size={"xl"}
+        size={1000}
         opened={productModal}
         onClose={closeProductModal}
         overlayProps={{ style: { backdropFilter: "blur(4px)" } }}

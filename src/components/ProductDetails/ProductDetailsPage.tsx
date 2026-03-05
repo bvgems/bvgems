@@ -35,6 +35,7 @@ import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDel
 import Script from "next/script";
 
 import jsPDF from "jspdf";
+import { BlueSapphireShade } from "../CommonComponents/BlueSapphireShade";
 
 /** ---------- Helpers ---------- */
 const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
@@ -122,7 +123,9 @@ export default function ProductDetailsPage() {
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
   const [additionalComments, setAdditionalComments] = useState("");
-
+  const [sapphireShade, setSapphireShade] = useState<string | null>(
+    "Vivid Royal Blue",
+  );
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
   const router = useRouter();
@@ -183,8 +186,25 @@ export default function ProductDetailsPage() {
         color: product.color,
         ct_weight: product.ct_weight,
         cut: product.cut,
-        shade: emeraldShade || "",
-        image_url: product.image_url,
+        shade:
+          product?.collection_slug === "Emerald" &&
+          product?.quality === "Lab Grown"
+            ? emeraldShade
+            : product?.collection_slug === "Sapphire" &&
+                product?.color === "Blue" &&
+                product?.quality !== "Lab Grown"
+              ? sapphireShade
+              : "",
+        image_url:
+          product?.collection_slug === "Emerald" &&
+          product?.quality === "Lab Grown"
+            ? displayImage
+            : product?.collection_slug === "Sapphire" &&
+                product?.color === "Blue" &&
+                product?.quality !== "Lab Grown" &&
+                product?.shape === "Round"
+              ? displayImage
+              : product?.image_url,
         price: purchaseByCarat ? perCarat : perStone,
         quality: product.quality,
         shape: product.shape,
@@ -594,6 +614,17 @@ export default function ProductDetailsPage() {
                   product={product}
                   emeraldShade={emeraldShade}
                   setEmeraldShade={setEmeraldShade}
+                  setDisplayImage={setDisplayImage}
+                />
+              )}
+
+            {product?.collection_slug === "Sapphire" &&
+              product?.quality !== "Lab Grown" &&
+              product?.color === "Blue" && (
+                <BlueSapphireShade
+                  product={product}
+                  sapphireShade={sapphireShade}
+                  setSapphireShade={setSapphireShade}
                   setDisplayImage={setDisplayImage}
                 />
               )}

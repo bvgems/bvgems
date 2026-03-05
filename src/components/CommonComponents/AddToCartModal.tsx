@@ -28,6 +28,8 @@ import { notifications } from "@mantine/notifications";
 import { getCartStore } from "@/store/useCartStore";
 import { useRouter } from "next/navigation";
 import { EmeraldShade } from "./EmeraldShade";
+import { BlueSapphireShade } from "./BlueSapphireShade";
+import { shades } from "@/utils/constants";
 
 interface AddToCartModalProps {
   opened: boolean;
@@ -54,7 +56,6 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   color,
   product,
 }) => {
-  console.log('cart ptodddd',product)
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
   const router = useRouter();
@@ -63,8 +64,18 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   const [additionalComments, setAdditionalComments] = useState("");
   const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
+  const [sapphireShade, setSapphireShade] = useState<string | null>(
+    "Vivid Royal Blue",
+  );
   const [displayImage, setDisplayImage] = useState<any>(
-    product?.extra_images?.length > 0 ? product?.extra_images[0] : image_url
+    product?.collection_slug === "Sapphire" &&
+      product?.color === "Blue" &&
+      product?.quality !== "Lab Grown" &&
+      product?.shape === "Round"
+      ? shades[0]?.image
+      : product?.extra_images?.length > 0
+        ? product?.extra_images[0]
+        : image_url,
   );
   const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(false);
   const [caratError, setCaratError] = useState<string | null>(null);
@@ -113,8 +124,26 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
         color: product.color,
         ct_weight: product.ct_weight,
         cut: product.cut,
-        shade: emeraldShade || "",
-        image_url: product.image_url,
+        shade:
+          product?.collection_slug === "Emerald" &&
+          product?.quality === "Lab Grown"
+            ? emeraldShade
+            : product?.collection_slug === "Sapphire" &&
+                product?.color === "Blue" &&
+                product?.quality !== "Lab Grown"
+              ? sapphireShade
+              : "",
+        image_url:
+          product?.collection_slug === "Emerald" &&
+          product?.quality === "Lab Grown"
+            ? displayImage
+            : product?.collection_slug === "Sapphire" &&
+                product?.color === "Blue" &&
+                product?.quality !== "Lab Grown" &&
+                product?.shape === "Round"
+              ? displayImage
+              : product?.image_url,
+
         price: purchaseByCarat ? perCarat : perStone,
         quality: product.quality,
         shape: product.shape,
@@ -140,7 +169,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
     router?.push(
       `/product-details?id=${
         product?.id
-      }&name=${product?.collection_slug?.toLowerCase()}`
+      }&name=${product?.collection_slug?.toLowerCase()}`,
     );
   };
 
@@ -255,6 +284,17 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                 product={product}
                 emeraldShade={emeraldShade}
                 setEmeraldShade={setEmeraldShade}
+                setDisplayImage={setDisplayImage}
+              />
+            ) : null}
+
+            {product?.collection_slug === "Sapphire" &&
+            product?.color === "Blue" &&
+            product?.quality !== "Lab Grown" ? (
+              <BlueSapphireShade
+                product={product}
+                sapphireShade={sapphireShade}
+                setSapphireShade={setSapphireShade}
                 setDisplayImage={setDisplayImage}
               />
             ) : null}

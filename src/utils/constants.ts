@@ -1,3 +1,23 @@
+export const shades = [
+  {
+    name: "Vivid Royal Blue",
+    image: "/assets/royal-blue.png",
+    description:
+      "Darker, rich, and saturated royal blue hue. Known for its depth and intensity.",
+  },
+  {
+    name: "Medium Light Cornflower Blue",
+    image: "/assets/medium-cornflower.png",
+    description:
+      "Lighter and brighter blue hue with vibrant brilliance and sparkle.",
+  },
+  {
+    name: "Medium Navy Blue",
+    image: "/assets/navy-blue.png",
+    description: "Deep navy tone with elegant brilliance and rich saturation.",
+  },
+];
+
 export const GemstonesByBirthMonths = [
   // {
   //   month: "February",

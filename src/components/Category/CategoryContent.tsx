@@ -28,6 +28,8 @@ import { IconDiamond } from "@tabler/icons-react";
 import { SapphireLooseGemstoneColorOptions } from "@/utils/constants";
 import { Carousel } from "@mantine/carousel";
 import Script from "next/script";
+import { EmeraldDetails } from "./EmeraldDetails";
+import { LabSapphire } from "./LabSapphire";
 
 // Utility: pick one representative image per quality
 const getRepresentativeImages = (items: any[]) => {
@@ -126,7 +128,6 @@ export function CategoryContent({
       isSapphire,
       sapphireColor,
     );
-    console.log("resss", result);
 
     const shape = selectedShape || "default";
     const uniqueSizes = Array.from(
@@ -304,114 +305,98 @@ export function CategoryContent({
                 )}
               </div>
             </motion.div>
-            {isEmerald &&
-            shaedImages.length > 0 &&
-            (typeFilter === "Lab Grown" ||
-              getItemQuality(qualityImages[activeSlide]) === "Lab Grown") ? (
+            <EmeraldDetails
+              isEmerald={isEmerald}
+              shaedImages={shaedImages}
+              typeFilter={typeFilter}
+              getItemQuality={getItemQuality}
+              qualityImages={qualityImages}
+              activeSlide={activeSlide}
+            />
+            <LabSapphire
+              isSapphire={isSapphire}
+              selectedSapphireColor={selectedSapphireColor}
+              typeFilter={typeFilter}
+              getItemQuality={getItemQuality}
+              qualityImages={qualityImages}
+              activeSlide={activeSlide}
+            />
+
+            {isSapphire &&
+            selectedSapphireColor === "Blue" &&
+            (typeFilter !== "Lab Grown" ||
+              getItemQuality(qualityImages[activeSlide]) === "Natural") ? (
               <div className="mt-10">
                 <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
-                  Lab Emerald Shade Variations
+                  Natural Blue Sapphire Shade Variations
                 </h3>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                  {/* Zambian */}
-                  <div className="flex flex-col items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
-                    <div className="h-[140px] w-[140px] flex items-center justify-center">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                  {/* Card 1 */}
+                  <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
+                    <div className="w-[140px] h-[140px] flex items-center justify-center">
                       <Image
-                        src={shaedImages[0]}
+                        src="/assets/royal-blue.png"
+                        w={140}
+                        h={140}
                         fit="contain"
-                        radius="md"
-                        className="object-contain rounded-xl"
+                        className="object-contain"
                       />
                     </div>
+
                     <span className="mt-4 text-lg font-semibold text-gray-900">
-                      Zambian
+                      Vivid Royal Blue Sapphire
                     </span>
-                    <p className="mt-2 text-sm text-gray-600 leading-relaxed text-center">
-                      Darker, rich, and saturated forest green hue. Known for
-                      its depth and intensity.
+
+                    <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+                      Darker, rich, and saturated royal blue hue. Known for its
+                      depth and intensity.
                     </p>
                   </div>
 
-                  {/* Colombian */}
-                  {shaedImages[1] && (
-                    <div className="flex flex-col items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
-                      <div className="h-[140px] w-[140px] flex items-center justify-center">
-                        <Image
-                          src={shaedImages[1]}
-                          fit="contain"
-                          radius="md"
-                          className="object-contain rounded-xl"
-                        />
-                      </div>
-                      <span className="mt-4 text-lg font-semibold text-gray-900">
-                        Colombian
-                      </span>
-                      <p className="mt-2 text-sm text-gray-600 leading-relaxed text-center">
-                        Lighter and brighter green hue with vibrant brilliance
-                        and sparkle.
-                      </p>
+                  {/* Card 2 */}
+                  <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
+                    <div className="w-[140px] h-[140px] flex items-center justify-center">
+                      <Image
+                        src="/assets/medium-cornflower.png"
+                        w={140}
+                        h={140}
+                        fit="contain"
+                        className="object-contain"
+                      />
                     </div>
-                  )}
-                </div>
-              </div>
-            ) : null}
-            {isSapphire &&
-            selectedSapphireColor === "Blue" &&
-            (typeFilter === "Lab Grown" ||
-              getItemQuality(qualityImages[activeSlide]) === "Lab Grown") ? (
-              <div className="mt-10">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
-                  Lab Blue Sapphire
-                </h3>
 
-                <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
-                  <div className="h-[160px] w-[160px] flex items-center justify-center">
-                    <Image
-                      src="/assets/lab-blue.png"
-                      fit="contain"
-                      radius="md"
-                      className="object-contain rounded-xl"
-                    />
+                    <span className="mt-4 text-lg font-semibold text-gray-900">
+                      Medium Light Cornflower Blue Sapphire
+                    </span>
+
+                    <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+                      Lighter and brighter blue hue with vibrant brilliance and
+                      sparkle.
+                    </p>
                   </div>
 
-                  <p className="mt-4 text-sm text-gray-600 leading-relaxed text-center">
-                    Blue sapphires are prized for their rich, velvety blue color
-                    and exceptional brilliance. Lab grown blue sapphires display
-                    vivid saturation, excellent clarity, and remarkable
-                    durability, making them ideal for fine jewelry with a
-                    luxurious yet modern appeal.
-                  </p>
-                </div>
-              </div>
-            ) : null}
+                  {/* Card 3 */}
+                  <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
+                    <div className="w-[140px] h-[140px] flex items-center justify-center">
+                      <Image
+                        src="/assets/navy-blue.png"
+                        w={140}
+                        h={140}
+                        fit="contain"
+                        className="object-contain"
+                      />
+                    </div>
 
-            {isSapphire &&
-            selectedSapphireColor === "Pink" &&
-            (typeFilter === "Lab Grown" ||
-              getItemQuality(qualityImages[activeSlide]) === "Lab Grown") ? (
-              <div className="mt-10">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
-                  Lab Pink Sapphire
-                </h3>
+                    <span className="mt-4 text-lg font-semibold text-gray-900">
+                      Medium Navy Blue Sapphire
+                    </span>
 
-                <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
-                  <div className="h-[160px] w-[160px] flex items-center justify-center">
-                    <Image
-                      src="/assets/lab-pink.png"
-                      fit="contain"
-                      radius="md"
-                      className="object-contain rounded-xl"
-                    />
+                    <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+                      Deep navy tone with elegant brilliance and rich
+                      saturation.
+                    </p>
                   </div>
-
-                  <p className="mt-4 text-sm text-gray-600 leading-relaxed text-center">
-                    Pink sapphires are admired for their romantic blush tones
-                    and vibrant brilliance. Lab grown pink sapphires showcase
-                    vivid color, exceptional clarity, and remarkable durability,
-                    offering a refined and feminine alternative to traditional
-                    gemstones.
-                  </p>
                 </div>
               </div>
             ) : null}

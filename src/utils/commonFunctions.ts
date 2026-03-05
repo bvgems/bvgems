@@ -70,6 +70,12 @@ export const getOrderPayload = (
               properties?.push({ name: "Shade", value: item?.product?.shade });
             }
           }
+
+          if (item?.product?.collection_slug === "Sapphire") {
+            if (item?.product?.shade) {
+              properties?.push({ name: "Shade", value: item?.product?.shade });
+            }
+          }
           if (item?.product?.additionalComments) {
             properties?.push({
               name: "Additional Comments",
