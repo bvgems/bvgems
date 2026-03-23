@@ -52,7 +52,17 @@ export const ShippingAddressForm = ({
       addressLine1: (v) => (v.trim() ? null : "Required"),
       city: (v) => (v.trim() ? null : "Required"),
       state: (v) => (v.trim() ? null : "Required"),
-      zipCode: (v) => (/^\d{5}(-\d{4})?$/.test(v) ? null : "Invalid ZIP"),
+      zipCode: (value) => {
+        if (!value || value.trim().length < 3) {
+          return "Postal code is too short";
+        }
+
+        if (value.length > 10) {
+          return "Postal code is too long";
+        }
+
+        return null;
+      },
       email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : "Invalid email"),
       phoneNumber: (value) => {
         if (!value) return "Phone number is required.";
