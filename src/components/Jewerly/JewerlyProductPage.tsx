@@ -317,7 +317,7 @@ export default function JewelryProductPage() {
                         >
                           ‹
                         </div>
-                        {images[currentIndex]?.url.endsWith(".mp4") ? (
+                        {images[currentIndex]?.type === "video" ? (
                           <video
                             src={images[currentIndex]?.url}
                             autoPlay
