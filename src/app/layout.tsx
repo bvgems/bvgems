@@ -188,7 +188,7 @@ export default function RootLayout({
         <MantineProvider>
           <Notifications />
           <ClientOnlyLayout>
-            <EmailSubscribeModal />
+            {/* <EmailSubscribeModal /> */}
             {children}
           </ClientOnlyLayout>
         </MantineProvider>

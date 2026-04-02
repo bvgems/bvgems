@@ -27,19 +27,7 @@ export const ShopByShape = () => {
       />
 
       <Grid gutter="xl" align="center">
-        <GridCol span={{ base: 12, md: 5 }}>
-          <div className="flex justify-center">
-            <Image
-              src="/assets/shop-by-shape.png"
-              alt="Gemstone model"
-              h={450}
-              w={450}
-              fit="cover"
-            />
-          </div>
-        </GridCol>
-
-        <GridCol span={{ base: 12, md: 7 }}>
+        <GridCol span={{ base: 12 }}>
           <SimpleGrid cols={{ base: 2, sm: 3, md: 3, lg: 4 }} spacing="xl">
             {ShapeFilterList.map((shape, index) => (
               <div
@@ -54,7 +42,7 @@ export const ShopByShape = () => {
                   height={45}
                   fit="contain"
                   className="mb-2 opacity-90"
-                  style={{ maxWidth: "50px" }}
+                  style={{ maxWidth: "60px" }}
                 />
                 <Text
                   size="sm"
