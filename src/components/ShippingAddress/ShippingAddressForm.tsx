@@ -124,7 +124,7 @@ export const ShippingAddressForm = ({
     // ✅ Always set in store for guest users
     if (!userId) {
       setShippingAddress(newAddress);
-      onSuccess?.(); // close modal, refresh UI
+      nextStep();
       return;
     }
 
