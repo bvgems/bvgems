@@ -13,7 +13,7 @@ export const BillingSummary = ({
   const { user } = useAuth();
   const cartStore = useMemo(
     () => getCartStore(user?.id || "guest"),
-    [user?.id]
+    [user?.id],
   );
 
   const cart = cartStore((state: any) => state.cart);
@@ -33,7 +33,7 @@ export const BillingSummary = ({
     cart.forEach((item: any) => {
       const price = parseFloat(item.product.price);
       const weight = parseFloat(
-        item.caratWeight || item.product.ct_weight || "1"
+        item.caratWeight || item.product.ct_weight || "1",
       );
       const quantity = item.quantity || 1;
 
@@ -60,7 +60,8 @@ export const BillingSummary = ({
       setGrandTotal(total);
     } else {
       // Normal delivery logic
-      const shippingCost = total >= 200 ? 0 : 15;
+      // const shippingCost = total >= 200 ? 0 : 15;
+      const shippingCost = 0;
       setShipping(shippingCost);
       setGrandTotal(total + shippingCost);
     }

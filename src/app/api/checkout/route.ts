@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       `INSERT INTO checkout_carts (cart, user_id, guest_email)
        VALUES ($1, $2, $3)
        RETURNING id`,
-      [JSON.stringify(cartItems), userId, guestEmail]
+      [JSON.stringify(cartItems), userId, guestEmail],
     );
     const cartId = result.rows[0].id;
 
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
 
       const unit_amount = Math.max(
         0,
-        Math.round((Number.isFinite(amount) ? amount : 0) * 100)
+        Math.round((Number.isFinite(amount) ? amount : 0) * 100),
       );
 
       const productData: any = {
@@ -110,21 +110,21 @@ export async function POST(req: Request) {
 
     // 🚚 Apply conditional shipping: only if deliveryMethod === 'delivery'
     let shippingFee = 0;
-    if (deliveryMethod === "delivery" && subtotal < 200 && subtotal > 0) {
-      shippingFee = 15;
-      line_items.push({
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: "Shipping Fee",
-            description:
-              "Standard shipping within the US (applied for delivery orders under $200)",
-          },
-          unit_amount: shippingFee * 100, // $15 → 1500 cents
-        },
-        quantity: 1,
-      });
-    }
+    // if (deliveryMethod === "delivery" && subtotal < 200 && subtotal > 0) {
+    //   shippingFee = 15;
+    //   line_items.push({
+    //     price_data: {
+    //       currency: "usd",
+    //       product_data: {
+    //         name: "Shipping Fee",
+    //         description:
+    //           "Standard shipping within the US (applied for delivery orders under $200)",
+    //       },
+    //       unit_amount: shippingFee * 100, // $15 → 1500 cents
+    //     },
+    //     quantity: 1,
+    //   });
+    // }
 
     const grandTotal = subtotal + shippingFee;
 
@@ -157,7 +157,7 @@ export async function POST(req: Request) {
     console.error("Stripe Checkout Error:", error);
     return NextResponse.json(
       { error: "Failed to create Stripe session" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

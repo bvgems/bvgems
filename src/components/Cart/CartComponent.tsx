@@ -120,7 +120,8 @@ export function CartComponent() {
     // Base subtotal
     setSubtotal(total);
 
-    const shippingCost = total >= 200 ? 0 : 15;
+    // const shippingCost = total >= 200 ? 0 : 15;
+    const shippingCost = 0;
     setGrandTotal(total + shippingCost);
   }, [cart, hasMounted]);
 
