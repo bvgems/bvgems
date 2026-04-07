@@ -60,8 +60,7 @@ export const BillingSummary = ({
       setGrandTotal(total);
     } else {
       // Normal delivery logic
-      // const shippingCost = total >= 200 ? 0 : 15;
-      const shippingCost = 0;
+      const shippingCost = total >= 200 ? 0 : 15;
       setShipping(shippingCost);
       setGrandTotal(total + shippingCost);
     }
