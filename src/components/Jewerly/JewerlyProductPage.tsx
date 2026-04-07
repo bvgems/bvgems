@@ -20,6 +20,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { JewelryImageZoom } from "./JewelryImageZoom";
 import { useAuth } from "@/hooks/useAuth";
 import { getCartStore } from "@/store/useCartStore";
+import { VideoAutoPlay } from "./VideoAutoPlay";
 
 type PageProps = {
   params: any;
@@ -265,15 +266,7 @@ export default function JewelryProductPage() {
                             style={{ borderRadius: "6px" }}
                           />
                         ) : (
-                          <video
-                            src={thumb.url}
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            preload="metadata"
-                            style={{ width: "100%", height: "auto" }}
-                          />
+                          <VideoAutoPlay src={thumb.url} />
                         )}
                       </Card>
                     ))}

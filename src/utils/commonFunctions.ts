@@ -121,12 +121,23 @@ export const getOrderPayload = (
           if (item?.product?.shape) {
             properties.push({ name: "Shape", value: item?.product?.shape });
           }
-          if (item?.product?.size) {
-            properties.push({ name: "Stone Size", value: item?.product?.size });
+          // if (item?.product?.size) {
+          //   properties.push({ name: "Stone Size", value: item?.product?.size });
+          // }
+
+          if (item?.product?.productType === "ringJewelry") {
+            properties.push({ name: "Ring Size", value: item?.product?.size });
           }
-          if (item?.product?.length) {
-            properties.push({ name: "Length", value: item?.product?.length });
+          if (item?.product?.productType === "braceletJewelry") {
+            properties.push({
+              name: "Bracelet Length",
+              value: item?.product?.length,
+            });
           }
+
+          // if (item?.product?.length) {
+          //   properties.push({ name: "Length", value: item?.product?.length });
+          // }
           if (item?.product?.totalCaratWeight) {
             properties.push({
               name: "Total Carat Weight",

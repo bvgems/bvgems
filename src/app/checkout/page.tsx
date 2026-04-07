@@ -83,6 +83,7 @@ export default function CheckoutSelectionPage() {
     orderPayload.subtotal = cartTotal;
     orderPayload.shipping = shippingTotal;
     orderPayload.grandTotal = grandTotal;
+    console.log("order payload", orderPayload);
 
     if (paymentMethod === "memo") {
       await createShopifyOrder(orderPayload);

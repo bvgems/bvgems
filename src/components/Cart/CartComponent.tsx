@@ -542,17 +542,6 @@ export function CartComponent() {
           >
             CHECKOUT
           </Button>
-          <Alert
-            mt="lg"
-            color="#0b182d"
-            title="Hassle-Free Returns"
-            icon={<IconInfoCircle />}
-            radius="md"
-          >
-            We offer a 15-day return policy on all gemstone purchases. If you're
-            not 100% satisfied, return it for a full refund or exchange. No
-            questions asked.
-          </Alert>
         </GridCol>
       </Grid>
     </Container>
