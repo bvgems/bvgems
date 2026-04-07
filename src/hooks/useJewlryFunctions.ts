@@ -179,6 +179,20 @@ export function useJewelryFunctions(
       return Array.from({ length: 15 }, (_, i) => (4 + i * 0.5).toFixed(2));
     }
   };
+
+  const gemstoneName = useMemo(() => {
+    if (isRingCategory) {
+      if ((productData?.variants?.edges?.length ?? 0) <= 1) {
+        return productData?.gemstone?.value || "";
+      }
+      const selectedVariant = productData?.variants?.edges?.find(
+        (v: any) => v?.node?.title === selectedShape,
+      );
+      const fromVariant = selectedVariant?.node?.metafield?.value;
+      return fromVariant || productData?.gemstone?.value || "";
+    }
+    return productData?.gemstone?.value || "";
+  }, [isRingCategory, selectedShape, productData]);
   useEffect(() => {
     const sizes = ringSizes();
     if (isRingCategory && sizes.length > 0 && !selectedRingSize) {
@@ -257,7 +271,7 @@ export function useJewelryFunctions(
     if (isRingCategory) {
       variables.goldColor = selectedGoldColor;
       variables.size = selectedRingSize;
-      variables.stone = productData?.gemstone?.value || "";
+      variables.stone = gemstoneName;
       variables.image = selectedImage;
     } else if (isNecklaces) {
       variables.goldColor = selectedGoldColor;
@@ -329,6 +343,7 @@ export function useJewelryFunctions(
     showShapeOptions,
 
     // states
+    gemstoneName,
     selectedRingSize,
     setSelectedRingSize,
     selectedNecklaceStoneSize,

@@ -424,7 +424,7 @@ export const JewelryProductDetails = ({
           </div>
         )}
 
-        {jf.isBracelets && productData?.inHand?.value === "true" && (
+        {jf.isNecklaces && productData?.inHand?.value === "true" && (
           <div>
             <p className="mb-2 font-medium">Select Necklace Length</p>
             <Swiper
