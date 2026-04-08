@@ -16,6 +16,7 @@ import {
   Breadcrumbs,
   Anchor,
   Badge,
+  Container,
 } from "@mantine/core";
 import { motion } from "framer-motion";
 import { getShapesData } from "@/apis/api";
@@ -664,6 +665,125 @@ export function CategoryContent({
         </Grid>
       </div>
 
+      {/* FILTER BAR */}
+      <Container size="lg" className="mt-10 mx-auto">
+        <div className="bg-white p-6">
+          {/* SHAPE (Centered Icons) */}
+          <div className="mb-6">
+            <h3 className="text-sm font-medium text-gray-600 mb-3 text-center">
+              Shape
+            </h3>
+
+            <div className="flex flex-wrap justify-center gap-6">
+              {sortedShapes.map((shape: string, index: number) => {
+                const isSelected = shape === selectedShape;
+
+                const shapeImageMap: Record<string, string> = {
+                  Round: "/assets/round.svg",
+                  Oval: "/assets/oval.svg",
+                  "Emerald Cut": "/assets/emerald.svg",
+                  Pear: "/assets/pear.svg",
+                  "Princess Cut": "/assets/princesscut.svg",
+                  Marquise: "/assets/marquise.svg",
+                  Heart: "/assets/heart.svg",
+                  "Straight Baguette": "/assets/baguette.svg",
+                  Cushion: "/assets/cushion.svg",
+                  Trillion: "/assets/trillion.svg",
+                };
+
+                return (
+                  <div
+                    key={index}
+                    onClick={() => setSelectedShape(shape)}
+                    className="flex flex-col items-center cursor-pointer group"
+                  >
+                    <div
+                      className={`p-3 rounded-xl border transition-all duration-200 ${
+                        isSelected
+                          ? "border-black shadow-md scale-105"
+                          : "border-gray-300 hover:border-black"
+                      }`}
+                    >
+                      <Image
+                        src={shapeImageMap[shape]}
+                        h={40}
+                        w={40}
+                        fit="contain"
+                      />
+                    </div>
+
+                    <span
+                      className={`text-xs mt-2 ${
+                        isSelected ? "text-black font-medium" : "text-gray-500"
+                      }`}
+                    >
+                      {shape}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* OTHER FILTERS */}
+          <div className="flex flex-wrap gap-4 justify-center">
+            {/* Size */}
+            <div className="flex flex-col min-w-[180px]">
+              <span className="text-sm font-medium text-gray-600 mb-1">
+                Size
+              </span>
+              <Select
+                placeholder="Select Size"
+                data={allSizes[selectedShape || ""]?.map((size: string) => ({
+                  label: size,
+                  value: size,
+                }))}
+                value={selectedSizes[0] || null}
+                onChange={(val) => setSelectedSizes(val ? [val] : [])}
+                searchable
+                clearable
+              />
+            </div>
+
+            {/* Type */}
+            <div className="flex flex-col min-w-[180px]">
+              <span className="text-sm font-medium text-gray-600 mb-1">
+                Natural / Lab
+              </span>
+              <Select
+                placeholder="Select Type"
+                data={[
+                  { label: "All", value: "" },
+                  { label: "Natural", value: "Natural" },
+                  { label: "Lab Grown", value: "Lab Grown" },
+                ]}
+                value={typeFilter || ""}
+                onChange={(val) => setTypeFilter(val)}
+                clearable
+              />
+            </div>
+
+            {/* Sapphire Color */}
+            {isSapphire && (
+              <div className="flex flex-col min-w-[200px]">
+                <span className="text-sm font-medium text-gray-600 mb-1">
+                  Color
+                </span>
+                <Select
+                  data={SapphireLooseGemstoneColorOptions.map((c: any) => ({
+                    label: c.value,
+                    value: c.value,
+                  }))}
+                  value={selectedSapphireColor}
+                  onChange={(val) => setSelectedSapphireColor(val!)}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </Container>
+
+      {/* TABLE */}
       <CategoryTable
         fetchedResult={fetchedResult}
         selectedSizes={selectedSizes}
