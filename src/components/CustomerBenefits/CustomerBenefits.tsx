@@ -53,7 +53,7 @@ export const CustomerBenefits = () => {
     {
       title: "Shop with Confidence",
       description:
-        "We stand behind every piece with a 15-Day Hassle-Free Return Policy and a Lifetime Warranty—your satisfaction is our promise.",
+        "We are happy to provide complimentary size adjustments as needed, though returns will not be accepted",
       icon: <IconTruckReturn size={42} stroke={1.5} />,
     },
     {
