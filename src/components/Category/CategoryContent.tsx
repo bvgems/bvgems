@@ -90,6 +90,7 @@ export function CategoryContent({
   const [shaedImages, setShadeImages] = useState<any>([]);
   const [qualityImages, setQualityImages] = useState<any[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
+
   const setEmeraldShaedImages = (data: any) => {
     if (!Array.isArray(data)) return;
 
@@ -215,6 +216,8 @@ export function CategoryContent({
     (item: any) => item?.is_available,
   );
 
+  const [selectedThumbnail, setSelectedThumbnail] = useState("A");
+
   const getItemQuality = (item: any) => {
     return item?.quality || "";
   };
@@ -284,7 +287,10 @@ export function CategoryContent({
                                 ? "border-black shadow-md"
                                 : "border-gray-300"
                             }`}
-                            onClick={() => setActiveSlide(index)}
+                            onClick={() => {
+                              setActiveSlide(index);
+                              setSelectedThumbnail(item?.quality);
+                            }}
                           >
                             <Image
                               src={item.image_url}
@@ -314,92 +320,173 @@ export function CategoryContent({
               qualityImages={qualityImages}
               activeSlide={activeSlide}
             />
-            <LabSapphire
+            {/* <LabSapphire
               isSapphire={isSapphire}
               selectedSapphireColor={selectedSapphireColor}
               typeFilter={typeFilter}
               getItemQuality={getItemQuality}
               qualityImages={qualityImages}
               activeSlide={activeSlide}
-            />
+            /> */}
 
-            {isSapphire &&
-            selectedSapphireColor === "Blue" &&
-            (typeFilter !== "Lab Grown" ||
-              getItemQuality(qualityImages[activeSlide]) === "Natural") ? (
+            {handle === "paraiba-tourmaline" && (
               <div className="mt-10">
                 <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
-                  Natural Blue Sapphire Shade Variations
+                  Lab Pariba Tourmaline
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                  {/* Card 1 */}
-                  <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
-                    <div className="w-[140px] h-[140px] flex items-center justify-center">
-                      <Image
-                        src="/assets/royal-blue.png"
-                        w={140}
-                        h={140}
-                        fit="contain"
-                        className="object-contain"
-                      />
-                    </div>
-
-                    <span className="mt-4 text-lg font-semibold text-gray-900">
-                      Vivid Royal Blue Sapphire
-                    </span>
-
-                    <p className="mt-2 text-sm text-gray-600 leading-relaxed">
-                      Darker, rich, and saturated royal blue hue. Known for its
-                      depth and intensity.
-                    </p>
+                <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
+                  <div className="h-[160px] w-[160px] flex items-center justify-center">
+                    <Image
+                      src="/assets/pariba-desc.jpg"
+                      fit="contain"
+                      radius="md"
+                      className="object-contain rounded-xl"
+                    />
                   </div>
 
-                  {/* Card 2 */}
-                  <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
-                    <div className="w-[140px] h-[140px] flex items-center justify-center">
-                      <Image
-                        src="/assets/medium-cornflower.png"
-                        w={140}
-                        h={140}
-                        fit="contain"
-                        className="object-contain"
-                      />
-                    </div>
+                  <p className="mt-4 text-sm text-gray-600 leading-relaxed text-center">
+                    Paraiba tourmalines are celebrated for their electrifying,
+                    neon-lit hues and luminous depth. Lab grown Paraiba
+                    tourmalines capture that iconic Windex blue brilliance —
+                    vivid, saturated, and almost otherworldly — offering a
+                    striking and contemporary alternative to traditional
+                    gemstones.
+                  </p>
+                </div>
+              </div>
+            )}
 
-                    <span className="mt-4 text-lg font-semibold text-gray-900">
-                      Medium Light Cornflower Blue Sapphire
-                    </span>
+            {handle === "alexandrite" && (
+              <div className="mt-10">
+                <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
+                  Lab Alexandrite
+                </h3>
 
-                    <p className="mt-2 text-sm text-gray-600 leading-relaxed">
-                      Lighter and brighter blue hue with vibrant brilliance and
-                      sparkle.
-                    </p>
+                <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
+                  <div className="h-[160px] w-[160px] flex items-center justify-center">
+                    <Image
+                      src="/assets/alex-desc.png"
+                      fit="contain"
+                      radius="md"
+                      className="object-contain rounded-xl"
+                    />
                   </div>
 
-                  {/* Card 3 */}
-                  <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
-                    <div className="w-[140px] h-[140px] flex items-center justify-center">
+                  <p className="mt-4 text-sm text-gray-600 leading-relaxed text-center">
+                    Alexandrite is a rare, color-changing gemstone that
+                    typically shifts from a bluish-green in daylight (or
+                    fluorescent light) to a purplish-red in incandescent (warm)
+                    light. This phenomenon, caused by chromium impurities in its
+                    crystal structure and high-intensity light absorption.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {isSapphire && selectedSapphireColor === "Blue" ? (
+              typeFilter === "Lab Grown" ||
+              selectedThumbnail === "Lab Grown" ? (
+                <div className="mt-10">
+                  <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
+                    Lab Blue Sapphire
+                  </h3>
+
+                  <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
+                    <div className="h-[160px] w-[160px] flex items-center justify-center">
                       <Image
-                        src="/assets/navy-blue.png"
-                        w={140}
-                        h={140}
+                        src="/assets/lab-blue.png"
                         fit="contain"
-                        className="object-contain"
+                        radius="md"
+                        className="object-contain rounded-xl"
                       />
                     </div>
 
-                    <span className="mt-4 text-lg font-semibold text-gray-900">
-                      Medium Navy Blue Sapphire
-                    </span>
-
-                    <p className="mt-2 text-sm text-gray-600 leading-relaxed">
-                      Deep navy tone with elegant brilliance and rich
-                      saturation.
+                    <p className="mt-4 text-sm text-gray-600 leading-relaxed text-center">
+                      Blue sapphires are prized for their rich, velvety blue
+                      color and exceptional brilliance. Lab grown blue sapphires
+                      display vivid saturation, excellent clarity, and
+                      remarkable durability, making them ideal for fine jewelry
+                      with a luxurious yet modern appeal.
                     </p>
                   </div>
                 </div>
-              </div>
+              ) : (selectedThumbnail === "A" || selectedThumbnail === "AA") &&
+                typeFilter !== "Lab Grown" ? (
+                <div className="mt-10">
+                  <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
+                    Natural Blue Sapphire Shade Variations
+                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    {/* Card 1 */}
+                    <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
+                      <div className="w-[140px] h-[140px] flex items-center justify-center">
+                        <Image
+                          src="/assets/royal-blue.png"
+                          w={140}
+                          h={140}
+                          fit="contain"
+                          className="object-contain"
+                        />
+                      </div>
+
+                      <span className="mt-4 text-lg font-semibold text-gray-900">
+                        Vivid Royal Blue Sapphire
+                      </span>
+
+                      <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+                        Darker, rich, and saturated royal blue hue. Known for
+                        its depth and intensity.
+                      </p>
+                    </div>
+
+                    {/* Card 2 */}
+                    <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
+                      <div className="w-[140px] h-[140px] flex items-center justify-center">
+                        <Image
+                          src="/assets/medium-cornflower.png"
+                          w={140}
+                          h={140}
+                          fit="contain"
+                          className="object-contain"
+                        />
+                      </div>
+
+                      <span className="mt-4 text-lg font-semibold text-gray-900">
+                        Medium Light Cornflower Blue Sapphire
+                      </span>
+
+                      <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+                        Lighter and brighter blue hue with vibrant brilliance
+                        and sparkle.
+                      </p>
+                    </div>
+
+                    {/* Card 3 */}
+                    <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
+                      <div className="w-[140px] h-[140px] flex items-center justify-center">
+                        <Image
+                          src="/assets/navy-blue.png"
+                          w={140}
+                          h={140}
+                          fit="contain"
+                          className="object-contain"
+                        />
+                      </div>
+
+                      <span className="mt-4 text-lg font-semibold text-gray-900">
+                        Medium Navy Blue Sapphire
+                      </span>
+
+                      <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+                        Deep navy tone with elegant brilliance and rich
+                        saturation.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : null
             ) : null}
           </GridCol>
 
