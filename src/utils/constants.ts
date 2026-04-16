@@ -1,19 +1,22 @@
 export const shades = [
   {
     name: "Vivid Royal Blue",
-    image: "/assets/royal-blue.png",
+    image:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1776363412/royal-blue_miap0z.png",
     description:
       "Darker, rich, and saturated royal blue hue. Known for its depth and intensity.",
   },
   {
     name: "Medium Light Cornflower Blue",
-    image: "/assets/medium-cornflower.png",
+    image:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1776363428/medium-cornflower_fewy1r.png",
     description:
       "Lighter and brighter blue hue with vibrant brilliance and sparkle.",
   },
   {
     name: "Medium Navy Blue",
-    image: "/assets/navy-blue.png",
+    image:
+      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1776363440/navy-blue_gqxfn3.png",
     description: "Deep navy tone with elegant brilliance and rich saturation.",
   },
 ];
