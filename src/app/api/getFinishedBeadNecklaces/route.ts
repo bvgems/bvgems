@@ -1,3 +1,4 @@
+import { GetAllBeads } from "@/app/Graphql/queries";
 import { NextRequest, NextResponse } from "next/server";
 import { getBeads } from "../lib/commonFunctions";
 

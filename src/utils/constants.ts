@@ -1422,7 +1422,19 @@ export const links = [
     label: "Jewelry",
     links: JewelryList,
   },
-  { link: "/precious-beads", label: "Precious Beads" },
+  {
+    label: "Precious Beads",
+    links: [
+      {
+        link: "/precious-beads",
+        label: "Precious Beads",
+      },
+      {
+        link: "/precious-beads",
+        label: "Finishsed Bead Necklace ",
+      },
+    ],
+  },
 
   { link: "/colorstone-layouts", label: "Colorstone Layouts" },
   {

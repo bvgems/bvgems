@@ -9,6 +9,7 @@ import { useRef } from "react";
 export const CommonGridView = ({
   filteredJewelry,
   isBead = false,
+  isBeadNecklace = false,
   selectedStones,
 }: any) => {
   useEffect(() => {
