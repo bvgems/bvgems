@@ -301,17 +301,21 @@ export const JewelryProductDetails = ({
           </>
         ) : null}
       </Group>
-      <div className="mt-2">
-        <span
-          onClick={openCustomize}
-          className="cursor-pointer text-sm underline"
-        >
-          Customize This {customizedDrawerTitle}?
-        </span>
-      </div>
+
+      {!jf.isFinishedNecklaces && (
+        <div className="mt-2">
+          <span
+            onClick={openCustomize}
+            className="cursor-pointer text-sm underline"
+          >
+            Customize This {customizedDrawerTitle}?
+          </span>
+        </div>
+      )}
 
       <div className="mt-3 flex flex-col gap-4">
         {!jf.isBead &&
+          !jf.isFinishedNecklaces &&
           !(
             jf.isEarringCategory && productData?.jewelryType?.value === "Silver"
           ) &&
@@ -609,7 +613,8 @@ export const JewelryProductDetails = ({
       {(jf.isRingCategory ||
         jf.isEarringCategory ||
         jf.isNecklaces ||
-        jf.isBracelets) && (
+        jf.isBracelets ||
+        jf.isFinishedNecklaces) && (
         <div className="mt-6">
           <JeweleryDetailsTable
             productData={productData}
@@ -617,6 +622,7 @@ export const JewelryProductDetails = ({
             jf={jf}
             earringMetafields={selectedEarring}
             value={value}
+            isFinishedNecklaces={jf.isFinishedNecklaces}
           />
         </div>
       )}

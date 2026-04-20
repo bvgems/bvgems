@@ -335,7 +335,7 @@ export const fetchBeads = async () => {
 
 export const fetchFinishedBeadNecklace = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/api/getFinishedBeadNecklace`);
+    const response = await axios.get(`${baseUrl}/api/getFinishedBeadNecklaces`);
 
     return response?.data;
   } catch (error) {

@@ -1430,8 +1430,8 @@ export const links = [
         label: "Precious Beads",
       },
       {
-        link: "/precious-beads",
-        label: "Finishsed Bead Necklace ",
+        link: "/finished-bead-necklaces",
+        label: "Finished Bead Necklace ",
       },
     ],
   },

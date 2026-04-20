@@ -52,5 +52,6 @@ export const useGridView = () => {
     allProducts,
     setAllProducts,
     beads,
+    finishedBeadNeclace,
   };
 };

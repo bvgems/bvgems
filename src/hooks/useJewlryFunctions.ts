@@ -24,6 +24,7 @@ export function useJewelryFunctions(
   const isNecklaces = category === "necklaces";
   const isBracelets = category === "bracelets";
   const isBead = category === "beads";
+  const isFinishedNecklaces = category === "finished-bead-necklaces";
   const { updateGiftItem } = getCartStore(userKey).getState();
 
   // ---------- State ----------
@@ -213,6 +214,7 @@ export function useJewelryFunctions(
   };
 
   const isDisabled = () => {
+    if (isFinishedNecklaces) return false;
     if (isBead) return !selectedBeadStoneSize;
     if (isEarringCategory) {
       return !selectedGoldColor;
@@ -223,12 +225,6 @@ export function useJewelryFunctions(
     if (isRingCategory && !selectedRingSize) return true;
     if (!selectedGoldColor && !isBead) return true;
 
-    // if (
-    //   productData?.showshapeoptions?.value === "true" &&
-    //   twoStoneRings &&
-    //   (!firstStone || !secondStone)
-    // )
-    //   return true;
     if (
       productData?.showshapeoptions?.value === "true" &&
       !twoStoneRings &&
@@ -339,6 +335,7 @@ export function useJewelryFunctions(
     isNecklaces,
     isBracelets,
     isBead,
+    isFinishedNecklaces,
     isTwoStoneRing,
     showShapeOptions,
 

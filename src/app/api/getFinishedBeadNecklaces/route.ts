@@ -1,10 +1,10 @@
-import { GetAllBeads } from "@/app/Graphql/queries";
 import { NextRequest, NextResponse } from "next/server";
-import { getBeads } from "../lib/commonFunctions";
+import { getFinishedBeadNecklaces } from "../lib/commonFunctions";
 
 export async function GET(request: NextRequest) {
   try {
-    const filteredProducts = await getBeads();
+    const filteredProducts = await getFinishedBeadNecklaces();
+
     return NextResponse.json(filteredProducts);
   } catch (error) {
     console.error("GET error:", error);

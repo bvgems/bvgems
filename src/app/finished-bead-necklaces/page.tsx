@@ -15,6 +15,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PreciousBeads() {
-  return <CommonGridView isBead={true} isBeadNecklace={true} />;
+export default function FinishedBeadNecklaces() {
+  return <CommonGridView isBeadNecklace={true} />;
 }
