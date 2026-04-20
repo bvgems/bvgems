@@ -11,6 +11,7 @@ import { Notifications } from "@mantine/notifications";
 import { ClientOnlyLayout } from "@/components/Layout/ClientOnlyLayout";
 import { EmailSubscribeModal } from "@/components/CommonComponents/EmailSubscribeModal";
 import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const siteUrl = "https://bvgems.com";
 
@@ -193,6 +194,7 @@ export default function RootLayout({
           </ClientOnlyLayout>
         </MantineProvider>
       </body>
+      <GoogleAnalytics gaId="G-784DDN0WVP" />
     </html>
   );
 }
