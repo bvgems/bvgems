@@ -333,6 +333,19 @@ export const fetchBeads = async () => {
   }
 };
 
+export const fetchFinishedBeadNecklace = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/getFinishedBeadNecklaces`);
+
+    return response?.data;
+  } catch (error) {
+    console.log(
+      "Something went wrong while fetching the finished bead necklaces",
+      error,
+    );
+    return null;
+  }
+};
 export const getFilteredData = async (options: any) => {
   try {
     const response = await axios.post(`${baseUrl}/api/getFilteredGemStones`, {

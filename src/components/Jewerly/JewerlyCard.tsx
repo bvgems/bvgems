@@ -5,7 +5,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 
-export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
+export const JewelryCategoryCard = ({
+  isBead,
+  isBeadNecklace,
+  category,
+  product,
+}: any) => {
   const router = useRouter();
 
   const isLoading = !product?.node;
@@ -78,7 +83,11 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
       ? selectedVariant?.node?.title.toLowerCase().replace(/\s+/g, "-")
       : null;
 
-    const finalCategory = isBead ? "beads" : category;
+    const finalCategory = isBead
+      ? "beads"
+      : isBeadNecklace
+        ? "finished-bead-necklaces"
+        : category;
     if (!handle) return;
     if (stoneSlug) {
       router.push(`/jewelry-details/${finalCategory}/${handle}/${stoneSlug}`);
@@ -100,7 +109,7 @@ export const JewelryCategoryCard = ({ isBead, category, product }: any) => {
     product?.node?.images?.edges?.[0]?.node?.url;
 
   // 🟣 Separate UI for beads
-  if (isBead) {
+  if (isBead || isBeadNecklace) {
     return (
       <Card
         radius="lg"

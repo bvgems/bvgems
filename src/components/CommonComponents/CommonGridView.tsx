@@ -9,14 +9,16 @@ import { useRef } from "react";
 export const CommonGridView = ({
   filteredJewelry,
   isBead = false,
+  isBeadNecklace = false,
   selectedStones,
 }: any) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { category, allProducts, beads } = useGridView();
-  const isLoading = !allProducts?.length && !beads?.length;
+  const { category, allProducts, beads, finishedBeadNeclace } = useGridView();
+  const isLoading =
+    !allProducts?.length && !beads?.length && !finishedBeadNeclace?.length;
   const firstSwatchRef = useRef<HTMLDivElement | null>(null);
 
   const [totalDisplayedProducts, setTotalDispalyedProducts] = useState<any>();
@@ -47,6 +49,9 @@ export const CommonGridView = ({
       if (isBead) {
         setTotalDispalyedProducts(beads?.length);
         setFinalProducts(beads);
+      } else if (isBeadNecklace) {
+        setTotalDispalyedProducts(finishedBeadNeclace?.length);
+        setFinalProducts(finishedBeadNeclace);
       } else {
         setTotalDispalyedProducts(allProducts?.length);
         setFinalProducts(allProducts);
@@ -56,6 +61,9 @@ export const CommonGridView = ({
         if (isBead) {
           setTotalDispalyedProducts(beads?.length);
           setFinalProducts(filteredJewelry || beads);
+        } else if (isBeadNecklace) {
+          setTotalDispalyedProducts(finishedBeadNeclace?.length);
+          setFinalProducts(filteredJewelry || finishedBeadNeclace);
         } else {
           setTotalDispalyedProducts(filteredJewelry?.length);
           setFinalProducts(filteredJewelry || allProducts);
@@ -63,7 +71,7 @@ export const CommonGridView = ({
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [filteredJewelry, isBead, beads, allProducts]);
+  }, [filteredJewelry, isBead, beads, allProducts, finishedBeadNeclace]);
 
   if (isLoading) {
     return (
@@ -128,7 +136,9 @@ export const CommonGridView = ({
       <h1 className="flex justify-center font-bold text-2xl mb-2">
         {isBead
           ? "Precious Beads Collection"
-          : `Gemstone ${capitalize(category)}`}
+          : isBeadNecklace
+            ? "Finished Bead Necklaces"
+            : `Gemstone ${capitalize(category)}`}
       </h1>
 
       <p className="mb-4 text-sm text-gray-600">
@@ -136,23 +146,27 @@ export const CommonGridView = ({
       </p>
 
       <Grid gutter="lg">
-        {(finalProducts?.length ? finalProducts : beads)?.map(
-          (product: any, index: number) => (
-            <GridCol
-              span={{ base: 6, sm: 6, md: 4, lg: 4 }}
-              key={index}
-              ref={index === firstVariantIndex ? firstSwatchRef : null}
-            >
-              <JewelryCategoryCard
-                isBead={isBead}
-                category={category}
-                product={product}
-                index={index}
-                selectedStones={selectedStones}
-              />
-            </GridCol>
-          ),
-        )}
+        {(finalProducts?.length
+          ? finalProducts
+          : isBead
+            ? beads
+            : finishedBeadNeclace
+        )?.map((product: any, index: number) => (
+          <GridCol
+            span={{ base: 6, sm: 6, md: 4, lg: 4 }}
+            key={index}
+            ref={index === firstVariantIndex ? firstSwatchRef : null}
+          >
+            <JewelryCategoryCard
+              isBead={isBead}
+              isBeadNecklace={isBeadNecklace}
+              category={category}
+              product={product}
+              index={index}
+              selectedStones={selectedStones}
+            />
+          </GridCol>
+        ))}
       </Grid>
 
       {finalProducts?.length > 0 && (

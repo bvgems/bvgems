@@ -10,6 +10,7 @@ type Props = {
   jf: any;
   earringMetafields: any;
   value: any;
+  isFinishedNecklaces: any;
 };
 
 export const JeweleryDetailsTable = ({
@@ -18,6 +19,7 @@ export const JeweleryDetailsTable = ({
   jf,
   earringMetafields,
   value,
+  isFinishedNecklaces,
 }: Props) => {
   const selectedVariant = productData?.variants?.edges?.filter(
     (v: any) => v?.node?.title === gemstone,
@@ -50,6 +52,42 @@ export const JeweleryDetailsTable = ({
     </Table.Tr>
   );
 
+  if (isFinishedNecklaces) {
+    return (
+      <>
+        <div className="my-4">
+          <p className="text-sm">14K Yellow Gold Clasp</p>
+        </div>
+        <div className="space-y-3">
+          <Table
+            highlightOnHover
+            withRowBorders={false}
+            withColumnBorders={false}
+          >
+            <Table.Tbody>
+              {renderRow(
+                "Gemstone:",
+                gemstoneName
+                  ? gemstoneName
+                  : productData?.gemstone?.value || "-",
+              )}
+
+              {renderRow(
+                "Stone Type:",
+                productData?.stoneType?.value || "Natural",
+              )}
+
+              {productData?.dimension?.value &&
+                renderRow(
+                  "Dimension:",
+                  value ? value : `${productData?.dimension?.value} mm`,
+                )}
+            </Table.Tbody>
+          </Table>
+        </div>
+      </>
+    );
+  }
   return (
     <div className="space-y-3">
       <Table

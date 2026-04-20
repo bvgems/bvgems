@@ -353,3 +353,53 @@ export const getBeads = async () => {
     return [];
   }
 };
+
+export const getFinishedBeadNecklaces = async () => {
+  let allProducts: any[] = [];
+  let hasNextPage = true;
+  let endCursor = null;
+
+  try {
+    while (hasNextPage) {
+      const res: any = await fetch(
+        process.env.SHOPIFY_STOREFRONT_URL as string,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Shopify-Storefront-Access-Token":
+              "c64a5e6dbfa340f0bff88be9fde4b7a8",
+          },
+          body: JSON.stringify({
+            query: GetAllBeads,
+            variables: { first: 250, after: endCursor },
+          }),
+        },
+      );
+
+      const result = await res.json();
+      const products = result?.data?.products;
+
+      const edges = products?.edges || [];
+      allProducts.push(...edges);
+
+      console.log(
+        `Fetched ${edges.length} products, total so far: ${allProducts.length}`,
+      );
+
+      hasNextPage = products?.pageInfo?.hasNextPage;
+      endCursor = products?.pageInfo?.endCursor;
+    }
+
+    // Filter products by "Beads"
+    const beads = allProducts.filter((p: any) => {
+      return p?.node?.metafield?.value === '["finishedNecklace"]';
+    });
+
+    console.log(`✅ Total Finished beads Necklaces found: ${beads.length}`);
+    return beads;
+  } catch (error) {
+    console.error("❌ Error fetching beads:", error);
+    return [];
+  }
+};

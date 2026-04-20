@@ -1,10 +1,15 @@
-import { fetchBeads, getJewelryData } from "@/apis/api";
+import {
+  fetchBeads,
+  fetchFinishedBeadNecklace,
+  getJewelryData,
+} from "@/apis/api";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const useGridView = () => {
   const [allProducts, setAllProducts] = useState<any>([]);
   const [beads, setBeads] = useState<any>([]);
+  const [finishedBeadNeclace, setFinishedBeadNecklace] = useState<any>([]);
   const [activeTab, setActiveTab] = useState("alphabetical");
 
   const { category }: any = useParams();
@@ -13,6 +18,9 @@ export const useGridView = () => {
   useEffect(() => {
     if (path && path.includes("precious-beads")) {
       getBeads();
+    }
+    if (path && path.includes("finished-bead-necklaces")) {
+      getFinishedBeadNecklace();
     }
   }, [path]);
 
@@ -33,6 +41,10 @@ export const useGridView = () => {
     setBeads(response);
   };
 
+  const getFinishedBeadNecklace = async () => {
+    const response = await fetchFinishedBeadNecklace();
+    setFinishedBeadNecklace(response);
+  };
   return {
     category,
     activeTab,
@@ -40,5 +52,6 @@ export const useGridView = () => {
     allProducts,
     setAllProducts,
     beads,
+    finishedBeadNeclace,
   };
 };
