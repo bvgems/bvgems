@@ -19,7 +19,7 @@ export async function GET() {
       );
       email = user.rows[0]?.email;
     }
-
+    // if not email
     if (!email) continue;
 
     const items =
