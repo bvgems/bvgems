@@ -15,7 +15,7 @@ jobs:
       - name: Call Abandoned Cart API
         run: |
           response=$(curl -s -o /dev/null -w "%{http_code}" \
-            -X GET https://bvgems.vercel.app/api/cron/abandoned-cart \
+            -X GET https://bvgems.com/api/cron/abandoned-cart \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
 
           echo "Response code: $response"
