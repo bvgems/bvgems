@@ -1,7 +1,13 @@
 import { pool } from "@/lib/pool";
 import { sendEmail } from "@/utils/sendEmail";
 
-export async function GET() {
+export async function GET(request: Request) {
+  // 🔒 Auth check
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   const { rows } = await pool.query(`
     SELECT *
     FROM checkout_carts
@@ -19,7 +25,7 @@ export async function GET() {
       );
       email = user.rows[0]?.email;
     }
-    // if not email
+
     if (!email) continue;
 
     const items =
