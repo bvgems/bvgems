@@ -4,6 +4,7 @@ import { Card, Tooltip, Skeleton, NumberFormatter } from "@mantine/core";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { JewelryImageZoom } from "./JewelryImageZoom";
 
 export const JewelryCategoryCard = ({
   isBead,
@@ -162,19 +163,38 @@ export const JewelryCategoryCard = ({
       className="bg-transparent cursor-pointer select-none"
       onClick={redirectToProduct}
     >
-      <div className="relative w-full h-[160px] md:h-[220px] flex items-center justify-center overflow-hidden">
+      {/* <div className="relative w-full h-[160px] md:h-[220px] flex items-center justify-center overflow-hidden"> */}
+      <div
+        className={`relative w-full flex items-center justify-center overflow-hidden ${
+          category === "necklaces"
+            ? "aspect-[2/3]" // 👈 tall ratio for necklaces
+            : "aspect-square" // 👈 default for others
+        }`}
+      >
         <AnimatePresence mode="wait">
-          <motion.img
-            key={displayImage}
-            src={displayImage}
-            alt={seoTitle}
-            className="absolute object-contain"
-            style={{ width: "100%", height: "100%" }}
-            initial={{ opacity: 0, scale: 1.02 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          />
+          {category === "necklaces" ? (
+            <div className="absolute w-full h-full">
+              <JewelryImageZoom
+                src={displayImage}
+                alt={seoTitle}
+                zoom={2.2} // tweak if needed
+                width="100%"
+                height="100%"
+              />
+            </div>
+          ) : (
+            <motion.img
+              key={displayImage}
+              src={displayImage}
+              alt={seoTitle}
+              className="absolute object-contain"
+              style={{ width: "100%", height: "100%" }}
+              initial={{ opacity: 0, scale: 1.02 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.02 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            />
+          )}
         </AnimatePresence>
       </div>
 
