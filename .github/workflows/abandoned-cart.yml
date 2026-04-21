@@ -4,8 +4,8 @@ name: Abandoned Cart Cron
 
 on:
   schedule:
-    - cron: "0 * * * *" # runs every hour — adjust as needed
-  workflow_dispatch: # allows manual trigger from GitHub UI
+    - cron: "*/2 * * * *" # every 2 mins for testing
+  workflow_dispatch:
 
 jobs:
   abandoned-cart:
