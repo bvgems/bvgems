@@ -17,11 +17,11 @@ async function sendOrderReceipt(shopifyOrderId: string) {
           "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN!,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     const order = orderResponse.data.order;
-    console.log('ordeerr',order)
+    console.log("ordeerr", order);
 
     await axios.put(
       `${process.env.SHOPIFY_ADMIN_API_URL}/orders/${shopifyOrderId}.json`,
@@ -44,21 +44,20 @@ async function sendOrderReceipt(shopifyOrderId: string) {
           "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN!,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     console.log(`✅ Receipt sent for order ${shopifyOrderId}`);
   } catch (error: any) {
     console.error(
       "❌ Failed to send receipt:",
-      error?.response?.data || error.message
+      error?.response?.data || error.message,
     );
   }
 }
 
 export async function POST(req: NextRequest) {
-
-  console.log('*************WEBHOOK CALLEDDDDDD***************')
+  console.log("*************WEBHOOK CALLEDDDDDD***************");
   const rawBody = await req.text();
   const sig = req.headers.get("stripe-signature")!;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -78,14 +77,28 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session;
     const amount = session.amount_total! / 100;
 
-
     try {
       const cartId = session.metadata?.cart;
 
+      if (cartId) {
+        await pool.query(
+          `UPDATE checkout_carts
+     SET status = 'completed'
+     WHERE id = $1`,
+          [cartId],
+        );
+        console.log(`🟢 Cart ${cartId} marked as completed`);
+      }
+
       const { rows } = await pool.query(
         "SELECT * FROM checkout_carts WHERE id = $1",
-        [cartId]
+        [cartId],
       );
+
+      if (rows[0]?.status === "completed") {
+        console.log("⚠️ Cart already processed, skipping...");
+        return new NextResponse("Already processed", { status: 200 });
+      }
       const cartData = rows[0];
 
       let cartItems: any[] = [];
@@ -108,12 +121,12 @@ export async function POST(req: NextRequest) {
         JSON.parse(session.metadata?.selectedShippingAddress || "{}"),
         JSON.parse(session.metadata?.user || "{}"),
         JSON.parse(session.metadata?.guestUser || "{}"),
-        cartItems
+        cartItems,
       );
 
       console.log(
         "📝 Final Shopify Payload:",
-        JSON.stringify(orderPayload, null, 2)
+        JSON.stringify(orderPayload, null, 2),
       );
 
       const orderResponse = await axios.post(
@@ -124,7 +137,7 @@ export async function POST(req: NextRequest) {
             "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN!,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       const shopifyOrderId = orderResponse.data.order.id;
@@ -150,7 +163,7 @@ export async function POST(req: NextRequest) {
             "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN!,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       console.log(`✅ Transaction logged for order ${shopifyOrderId}`);
@@ -159,7 +172,7 @@ export async function POST(req: NextRequest) {
     } catch (err: any) {
       console.error(
         "❌ Failed creating Shopify order after Stripe payment:",
-        err?.response?.data || err.message
+        err?.response?.data || err.message,
       );
     }
   }
