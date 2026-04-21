@@ -4,7 +4,7 @@ name: Abandoned Cart Cron
 
 on:
   schedule:
-    - cron: "*/2 * * * *" # every 2 mins for testing
+    - cron: "0 * * * *" # every hour
   workflow_dispatch:
 
 jobs:
