@@ -9,13 +9,14 @@ export async function GET(request: Request) {
   }
 
   const { rows } = await pool.query(`
-    SELECT *
-    FROM checkout_carts
-    WHERE status = 'pending'
-    AND created_at < NOW() - INTERVAL '1 hour'
-  `);
+  SELECT *
+  FROM checkout_carts
+  WHERE status = 'pending'
+  AND created_at < NOW() - INTERVAL '1 minute'
+`);
 
   for (const cart of rows) {
+    console.log("******************cart*****************", cart);
     let email = cart.guest_email;
 
     if (!email && cart.user_id) {
