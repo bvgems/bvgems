@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   SELECT *
   FROM checkout_carts
   WHERE status = 'pending'
-  AND created_at < NOW() - INTERVAL '1 hour'
+  AND created_at < NOW() - INTERVAL '3 minutes'
 `);
 
   for (const cart of rows) {

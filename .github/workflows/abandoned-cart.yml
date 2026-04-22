@@ -4,7 +4,7 @@ name: Abandoned Cart Cron
 
 on:
   schedule:
-    - cron: "0 * * * *" # every hour
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -14,8 +14,8 @@ jobs:
     steps:
       - name: Call Abandoned Cart API
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" \
-            -X GET https://bvgems.com/api/cron/abandoned-cart \
+          response=$(curl -L -s -o /dev/null -w "%{http_code}" \
+            -X GET https://www.bvgems.com/api/cron/abandoned-cart \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
 
           echo "Response code: $response"
