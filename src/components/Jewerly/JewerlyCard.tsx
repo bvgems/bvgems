@@ -171,7 +171,14 @@ export const JewelryCategoryCard = ({
             : "aspect-square" // 👈 default for others
         }`}
       >
-        <AnimatePresence mode="wait">
+        <JewelryImageZoom
+          src={displayImage}
+          alt={seoTitle}
+          zoom={2.2} // tweak if needed
+          width="100%"
+          height="100%"
+        />
+        {/* <AnimatePresence mode="wait">
           {category === "necklaces" ? (
             <div className="absolute w-full h-full">
               <JewelryImageZoom
@@ -195,7 +202,7 @@ export const JewelryCategoryCard = ({
               transition={{ duration: 0.3, ease: "easeOut" }}
             />
           )}
-        </AnimatePresence>
+        </AnimatePresence> */}
       </div>
 
       {/* Normal jewelry variants */}
