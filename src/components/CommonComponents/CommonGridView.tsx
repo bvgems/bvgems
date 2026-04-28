@@ -46,6 +46,7 @@ export const CommonGridView = ({
 
   useEffect(() => {
     if (filteredJewelry === undefined) {
+      // No filters applied — show all products from the hook
       if (isBead) {
         setTotalDispalyedProducts(beads?.length);
         setFinalProducts(beads);
@@ -57,19 +58,17 @@ export const CommonGridView = ({
         setFinalProducts(allProducts);
       }
     } else {
-      const timer = setTimeout(() => {
-        if (isBead) {
-          setTotalDispalyedProducts(beads?.length);
-          setFinalProducts(filteredJewelry || beads);
-        } else if (isBeadNecklace) {
-          setTotalDispalyedProducts(finishedBeadNeclace?.length);
-          setFinalProducts(filteredJewelry || finishedBeadNeclace);
-        } else {
-          setTotalDispalyedProducts(filteredJewelry?.length);
-          setFinalProducts(filteredJewelry || allProducts);
-        }
-      }, 500);
-      return () => clearTimeout(timer);
+      // Filters applied — use filteredJewelry as the source of truth
+      if (isBead) {
+        setTotalDispalyedProducts(filteredJewelry?.length);
+        setFinalProducts(filteredJewelry ?? beads);
+      } else if (isBeadNecklace) {
+        setTotalDispalyedProducts(filteredJewelry?.length);
+        setFinalProducts(filteredJewelry ?? finishedBeadNeclace);
+      } else {
+        setTotalDispalyedProducts(filteredJewelry?.length);
+        setFinalProducts(filteredJewelry); // ← filteredJewelry wins, not allProducts
+      }
     }
   }, [filteredJewelry, isBead, beads, allProducts, finishedBeadNeclace]);
 

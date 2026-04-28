@@ -43,12 +43,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [drawerOpened, { open, close }] = useDisclosure(false);
   const didMount = useRef(false);
 
+  const hasFilters =
+    selectedStones.length > 0 ||
+    selectedTypes.length > 0 ||
+    selectedShapes.length > 0 ||
+    priceRange[0] !== defaultPriceRange[0] ||
+    priceRange[1] !== defaultPriceRange[1];
+
   const fetchFilteredData = async () => {
     setLoading(true);
     const filterOptions = {
       shape: selectedShapes,
       price: priceRange,
       types: selectedTypes,
+      collection_slug: selectedStones,
     };
     const response = await getFilteredJewelry(filterOptions, collectionSlug);
 
@@ -108,6 +116,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   // ✅ Refetch when filters change
   useEffect(() => {
     if (!didMount.current) return;
+
     fetchFilteredData();
   }, [
     selectedTypes,
@@ -169,7 +178,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           ) : (
             <CommonGridView
-              filteredJewelry={filteredJewelry}
+              filteredJewelry={hasFilters ? filteredJewelry : undefined}
               selectedStones={selectedStones}
             />
           )}

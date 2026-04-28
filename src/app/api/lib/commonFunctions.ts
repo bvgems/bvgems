@@ -154,6 +154,7 @@ export const getAllJeweleryProducts = async (category: any) => {
       process.env.SHOPIFY_STOREFRONT_URL as string,
       {
         method: "POST",
+        cache: "no-store",
         headers: {
           "Content-Type": "application/json",
           "X-Shopify-Storefront-Access-Token":

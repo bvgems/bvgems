@@ -818,6 +818,10 @@ export const EarringTypes = [
 
 export const JewelryGemstones = [
   {
+    label: "Alexandrite",
+    value: "Alexandrite",
+  },
+  {
     label: "Amethyst",
     value: "Amethyst",
   },
@@ -832,6 +836,10 @@ export const JewelryGemstones = [
   {
     label: "Emerald",
     value: "Emerald",
+  },
+  {
+    label: "Morganite",
+    value: "Morganite",
   },
   {
     label: "Multicolor Sapphire",
