@@ -35,7 +35,11 @@ export async function GET(request: Request) {
   <div style="font-family: 'Futura', sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
     <!-- Logo -->
     <div style="text-align: center; padding: 30px 0 10px;">
-      <img src="https://res.cloudinary.com/dabdvgxd4/image/upload/v1754420615/logo2_qhix5o.png" alt="B.V. Gems" style="height: 60px;" />
+<img 
+  src="https://res.cloudinary.com/dabdvgxd4/image/upload/v1754420615/logo2_qhix5o.png" 
+  alt="B.V. Gems" 
+  style="height: 90px; width: auto; max-width: 300px; display: block; margin: 0 auto;" 
+/>
     </div>
     <!-- Headline -->
     <div style="text-align: center; padding: 20px 30px;">

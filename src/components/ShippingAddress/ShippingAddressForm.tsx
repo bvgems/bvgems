@@ -15,12 +15,14 @@ export const ShippingAddressForm = ({
   onSuccess,
   isStepper,
   nextStep,
+  closeModal,
 }: {
   userId?: string;
   addressData?: any;
   onSuccess?: () => void;
   isStepper?: boolean;
   nextStep?: any;
+  closeModal?: any;
 }) => {
   const {
     shippingAddress,
@@ -124,7 +126,8 @@ export const ShippingAddressForm = ({
     // ✅ Always set in store for guest users
     if (!userId) {
       setShippingAddress(newAddress);
-      nextStep();
+      !isStepper ? closeModal() : nextStep();
+      // nextStep();
       return;
     }
 

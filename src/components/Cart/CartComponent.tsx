@@ -391,29 +391,29 @@ export function CartComponent() {
                           )}
 
                           {value?.product?.productType === "ringJewelry" && (
-                            <>
+                            <span className="capitalize">
                               Gold Color: {value?.product?.goldColor} | Size:{" "}
                               {value?.product?.size}
-                            </>
+                            </span>
                           )}
                           {value?.product?.productType === "necklaceJewelry" &&
                             value?.product?.length && (
-                              <>
+                              <span className="capitalize">
                                 Gold Color: {value?.product?.goldColor} |
                                 Length: {value?.product?.length}
                                 {value?.product?.size &&
                                   ` | Gemstone Size: ${value?.product?.size}`}
-                              </>
+                              </span>
                             )}
                           {value?.product?.productType === "braceletJewelry" &&
                             value?.product?.length && (
-                              <>
+                              <span className="capitalize">
                                 Gold Color: {value?.product?.goldColor} |
                                 Length: {value?.product?.length}
-                              </>
+                              </span>
                             )}
                           {value?.product?.productType === "earringJewelry" && (
-                            <>
+                            <span className="capitalize">
                               {value?.product?.goldColor && (
                                 <>Gold Color: {value.product.goldColor} </>
                               )}
@@ -426,7 +426,7 @@ export function CartComponent() {
                               {value?.product?.gemstone && (
                                 <>| Stone: {value.product.gemstone}</>
                               )}
-                            </>
+                            </span>
                           )}
                         </Text>
                       </div>

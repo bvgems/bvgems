@@ -148,7 +148,7 @@ export const JewelryProductDetails = ({
     notifications.show({
       icon: <IconCheck />,
       color: "teal",
-      message: "Jewelry product added to the cart!",
+      message: "Successfully added to the cart!",
       position: "top-right",
       autoClose: 4000,
     });

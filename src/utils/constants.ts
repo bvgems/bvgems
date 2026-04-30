@@ -816,6 +816,24 @@ export const EarringTypes = [
   },
 ];
 
+export const gemstoneColorMap = {
+  Amethyst: "purple",
+  Aquamarine: "aqua",
+  "Blue Sapphire": "blue",
+  Emerald: "green",
+  Morganite: "peach",
+  "Multicolor Sapphire": "multicolor",
+  "Pink Sapphire": "pink",
+  Ruby: "red",
+} as const;
+
+export const ColorOptions = Array.from(
+  new Set(Object.values(gemstoneColorMap)),
+).map((color) => ({
+  label: color,
+  value: color,
+}));
+
 export const JewelryGemstones = [
   {
     label: "Alexandrite",

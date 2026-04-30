@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ColorOptions,
   EarringTypes,
   JewelryGemstones,
   RingTypes,
@@ -34,6 +35,8 @@ export const JewelerySideBar = ({
   setSelectedTypes,
   priceRange,
   setPriceRange,
+  selectedColors,
+  setSelectedColors,
 }: any) => {
   const handleStoneChange = (stoneLabel: string, checked: boolean) => {
     if (checked) {
@@ -48,8 +51,15 @@ export const JewelerySideBar = ({
       setSelectedTypes((prev: any) => [...prev, typeLabel]);
     } else {
       setSelectedTypes((prev: any) =>
-        prev.filter((type: any) => type !== typeLabel)
+        prev.filter((type: any) => type !== typeLabel),
       );
+    }
+  };
+  const handleColorChange = (color: string, checked: boolean) => {
+    if (checked) {
+      setSelectedColors((prev: any) => [...prev, color]);
+    } else {
+      setSelectedColors((prev: any) => prev.filter((c: any) => c !== color));
     }
   };
 
@@ -85,6 +95,30 @@ export const JewelerySideBar = ({
             </AccordionPanel>
           </AccordionItem>
 
+          {/* Color */}
+          <AccordionItem className="mt-2" value="color">
+            <AccordionControl>Color</AccordionControl>
+            <AccordionPanel>
+              {ColorOptions?.map((item: { label: string }, index: number) => (
+                <div className="mt-2 ml-5 capitalize" key={index}>
+                  <Checkbox
+                    checked={selectedColors.includes(item.label)}
+                    onChange={(event) =>
+                      handleColorChange(item.label, event.currentTarget.checked)
+                    }
+                    color="#0b182d"
+                    size="16"
+                    className="mt-4"
+                    label={item.label}
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+              ))}
+            </AccordionPanel>
+          </AccordionItem>
+
           {/* Gemstone */}
           <AccordionItem className="mt-2" value="gemstone">
             <AccordionControl>Gemstone</AccordionControl>
@@ -97,7 +131,7 @@ export const JewelerySideBar = ({
                       onChange={(event) =>
                         handleStoneChange(
                           item.label,
-                          event.currentTarget.checked
+                          event.currentTarget.checked,
                         )
                       }
                       color="#0b182d"
@@ -109,13 +143,13 @@ export const JewelerySideBar = ({
                       }}
                     />
                   </div>
-                )
+                ),
               )}
             </AccordionPanel>
           </AccordionItem>
 
           {/* Ring Type (only for rings collection) */}
-          {collectionSlug === "rings" ? (
+          {/* {collectionSlug === "rings" ? (
             <AccordionItem className="mt-2" value="ring-type">
               <AccordionControl>Ring Type</AccordionControl>
               <AccordionPanel>
@@ -141,7 +175,7 @@ export const JewelerySideBar = ({
                 ))}
               </AccordionPanel>
             </AccordionItem>
-          ) : null}
+          ) : null} */}
 
           {collectionSlug === "earrings" ? (
             <AccordionItem className="mt-2" value="ring-type">
@@ -154,7 +188,7 @@ export const JewelerySideBar = ({
                       onChange={(event) =>
                         handleTypeChange(
                           item.label,
-                          event.currentTarget.checked
+                          event.currentTarget.checked,
                         )
                       }
                       color="#0b182d"
@@ -204,7 +238,7 @@ export const JewelerySideBar = ({
                         }}
                       />
                     </div>
-                  )
+                  ),
                 )}
               </CheckboxGroup>
             </AccordionPanel>

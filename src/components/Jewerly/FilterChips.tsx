@@ -1,5 +1,4 @@
 "use client";
-
 import { Badge, Button, Group } from "@mantine/core";
 
 interface FilterChipsProps {
@@ -9,6 +8,8 @@ interface FilterChipsProps {
   setSelectedShapes: (shapes: string[]) => void;
   selectedTypes: string[];
   setSelectedTypes: (types: string[]) => void;
+  selectedColors: string[];
+  setSelectedColors: (colors: string[]) => void;
   priceRange: [number, number];
   setPriceRange: (range: [number, number]) => void;
   defaultPriceRange: [number, number];
@@ -21,6 +22,8 @@ export const FilterChips = ({
   setSelectedShapes,
   selectedTypes,
   setSelectedTypes,
+  selectedColors,
+  setSelectedColors,
   priceRange,
   setPriceRange,
   defaultPriceRange,
@@ -29,24 +32,25 @@ export const FilterChips = ({
     selectedStones.length > 0 ||
     selectedShapes.length > 0 ||
     selectedTypes.length > 0 ||
+    selectedColors.length > 0 ||
     priceRange[0] !== defaultPriceRange[0] ||
     priceRange[1] !== defaultPriceRange[1];
 
   const removeStone = (stone: string) =>
     setSelectedStones(selectedStones.filter((s) => s !== stone));
-
   const removeShape = (shape: string) =>
     setSelectedShapes(selectedShapes.filter((s) => s !== shape));
-
   const removeType = (type: string) =>
     setSelectedTypes(selectedTypes.filter((t) => t !== type));
-
+  const removeColor = (color: string) =>
+    setSelectedColors(selectedColors.filter((c) => c !== color));
   const removePrice = () => setPriceRange(defaultPriceRange);
 
   const clearAll = () => {
     setSelectedStones([]);
     setSelectedShapes([]);
     setSelectedTypes([]);
+    setSelectedColors([]);
     setPriceRange(defaultPriceRange);
   };
 
@@ -66,7 +70,17 @@ export const FilterChips = ({
             Gemstone: {stone}
           </Badge>
         ))}
-
+        {selectedColors.map((color) => (
+          <Badge
+            key={color}
+            rightSection={<span onClick={() => removeColor(color)}>✕</span>}
+            variant="light"
+            color="dark"
+            radius="sm"
+          >
+            Color: {color}
+          </Badge>
+        ))}
         {selectedShapes.map((shape) => (
           <Badge
             key={shape}
@@ -78,7 +92,6 @@ export const FilterChips = ({
             Shape: {shape}
           </Badge>
         ))}
-
         {selectedTypes.map((type) => (
           <Badge
             key={type}
@@ -90,7 +103,6 @@ export const FilterChips = ({
             Ring Type: {type}
           </Badge>
         ))}
-
         {(priceRange[0] !== defaultPriceRange[0] ||
           priceRange[1] !== defaultPriceRange[1]) && (
           <Badge
@@ -102,7 +114,6 @@ export const FilterChips = ({
             Price: ${priceRange[0]} - ${priceRange[1]}
           </Badge>
         )}
-
         <Button variant="subtle" color="red" size="xs" onClick={clearAll}>
           Clear All
         </Button>

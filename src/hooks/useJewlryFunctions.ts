@@ -177,7 +177,7 @@ export function useJewelryFunctions(
       });
       return Array.from(sizeSet);
     } else {
-      return Array.from({ length: 15 }, (_, i) => (4 + i * 0.5).toFixed(2));
+      return Array.from({ length: 15 }, (_, i) => (3 + i * 0.5).toFixed(2));
     }
   };
 

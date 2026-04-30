@@ -38,7 +38,7 @@ export default function CheckoutSelectionPage() {
 
   const { shippingAddress } = useStpperStore();
   const [deliveryMethod, setDeliveryMethod] = useState();
-  const [paymentMethod, setPaymentMethod] = useState();
+  const paymentMethod = "online";
   const [opened, { open, close }] = useDisclosure(false);
 
   const stripePromise = loadStripe(
@@ -83,16 +83,18 @@ export default function CheckoutSelectionPage() {
     orderPayload.subtotal = cartTotal;
     orderPayload.shipping = shippingTotal;
     orderPayload.grandTotal = grandTotal;
-    console.log("order payload", orderPayload);
 
-    if (paymentMethod === "memo") {
-      await createShopifyOrder(orderPayload);
-      cartStore.getState().clearCart();
-      open();
-    } else {
-      await handlePayment();
-      cartStore.getState().clearCart();
-    }
+    // if (paymentMethod === "memo") {
+    //   await createShopifyOrder(orderPayload);
+    //   cartStore.getState().clearCart();
+    //   open();
+    // } else {
+    //   await handlePayment();
+    //   cartStore.getState().clearCart();
+    // }
+
+    await handlePayment();
+    cartStore.getState().clearCart();
   };
 
   const stoneItems = cart.filter(
@@ -119,7 +121,7 @@ export default function CheckoutSelectionPage() {
               selectedShippingAddress={selectedShippingAddress}
               setSelectedShippingAddress={setSelectedShippingAddress}
               paymentMethod={paymentMethod}
-              setPaymentMethod={setPaymentMethod}
+              // setPaymentMethod={setPaymentMethod}
               deliveryMethod={deliveryMethod}
               setDeliveryMethod={setDeliveryMethod}
             />
@@ -134,7 +136,7 @@ export default function CheckoutSelectionPage() {
                 color="#0b182d"
                 fullWidth
               >
-                PLACE ORDER
+                PROCEED TO PAYMENT
               </Button>
             </div>
           </GridCol>
@@ -265,7 +267,7 @@ export default function CheckoutSelectionPage() {
                                 : item?.product?.title}
                             </div>
                             {item?.product?.goldColor && (
-                              <div className="text-gray-600">
+                              <div className="text-gray-600 capitalize">
                                 Gold Color:{" "}
                                 <span className="font-medium">
                                   {item?.product?.goldColor}

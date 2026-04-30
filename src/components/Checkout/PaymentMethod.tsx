@@ -16,7 +16,7 @@ export const PaymentMethod = ({
 
   const cartStore = useMemo(
     () => getCartStore(user?.id || "guest"),
-    [user?.id]
+    [user?.id],
   );
   const cart = cartStore((state: any) => state.cart);
   const isDisabled = () => {
@@ -24,7 +24,7 @@ export const PaymentMethod = ({
 
     if (user.isMemoPurchaseApproved) {
       const hasJewelry = cart?.some(
-        (item: any) => item?.product?.productType !== "stone"
+        (item: any) => item?.product?.productType !== "stone",
       );
 
       return hasJewelry;
@@ -53,25 +53,6 @@ export const PaymentMethod = ({
                 />
                 <PaymentOptions size={25} />
               </div>
-
-              <Radio
-                disabled={isDisabled()}
-                value="memo"
-                description={
-                  <Button
-                    onClick={open}
-                    variant="transparent"
-                    size="compact-xs"
-                  >
-                    <span className="underline text-[#0b182d]">
-                      Request Memo Purchase
-                    </span>
-                  </Button>
-                }
-                label="PURCHASE ON MEMO"
-                size="md"
-                color="#0b182d"
-              />
             </div>
           </Group>
         </Radio.Group>

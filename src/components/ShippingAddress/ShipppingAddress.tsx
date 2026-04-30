@@ -135,31 +135,64 @@ export const ShippingAddress = ({
                     <IconMapPin size={16} />
                     <Text fw={500}>{shippingAddress.fullName}</Text>
                   </Group>
+
                   <Text size="sm" c="dimmed">
                     {shippingAddress.addressLine1}
                   </Text>
+
                   {shippingAddress.addressLine2 && (
                     <Text size="sm" c="dimmed">
                       {shippingAddress.addressLine2}
                     </Text>
                   )}
+
                   <Text size="sm" c="dimmed">
                     {shippingAddress.city}, {shippingAddress.state}{" "}
                     {shippingAddress.zipCode}
                   </Text>
+
                   <Text size="sm" c="dimmed">
                     {shippingAddress.country}
                   </Text>
+
                   <Group gap={4}>
                     <IconPhone size={14} />
                     <Text size="sm">{shippingAddress.phoneNumber}</Text>
                   </Group>
+
                   <Group gap={4}>
                     <IconMail size={14} />
                     <Text size="sm">{shippingAddress.email}</Text>
                   </Group>
                 </Stack>
               </Group>
+
+              {/* ✅ ADD THIS */}
+              <Stack gap="xs" align="flex-end">
+                <Button
+                  variant="light"
+                  color="blue"
+                  size="xs"
+                  leftSection={<IconEdit size={14} />}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditingAddress({
+                      full_name: shippingAddress.fullName,
+                      address_line1: shippingAddress.addressLine1,
+                      address_line2: shippingAddress.addressLine2,
+                      city: shippingAddress.city,
+                      state: shippingAddress.state,
+                      zip_code: shippingAddress.zipCode,
+                      country: shippingAddress.country,
+                      phone_number: shippingAddress.phoneNumber,
+                      email: shippingAddress.email,
+                    });
+                    open();
+                  }}
+                >
+                  Edit
+                </Button>
+              </Stack>
             </Group>
           </Card>
         )
@@ -222,43 +255,41 @@ export const ShippingAddress = ({
                   </Stack>
                 </Group>
 
-                {!selectable && (
-                  <Stack gap="xs" align="flex-end">
-                    <Button
-                      variant="light"
-                      color="blue"
-                      size="xs"
-                      leftSection={<IconEdit size={14} />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingAddress(address);
-                        open();
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="light"
-                      color="red"
-                      size="xs"
-                      leftSection={<IconTrash size={14} />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setToDeleteId(address.id);
-                        setDeleteModalOpened(true);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </Stack>
-                )}
+                <Stack gap="xs" align="flex-end">
+                  <Button
+                    variant="light"
+                    color="blue"
+                    size="xs"
+                    leftSection={<IconEdit size={14} />}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingAddress(address);
+                      open();
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="light"
+                    color="red"
+                    size="xs"
+                    leftSection={<IconTrash size={14} />}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setToDeleteId(address.id);
+                      setDeleteModalOpened(true);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </Stack>
               </Group>
             </Card>
           );
         })
       )}
 
-      {addresses?.length > 0 && !selectable && (
+      {addresses?.length > 0 && (
         <Button
           mt="md"
           color="#0b182d"
@@ -285,6 +316,7 @@ export const ShippingAddress = ({
             fetchAddresses();
             close();
           }}
+          closeModal={close}
         />
       </Modal>
 

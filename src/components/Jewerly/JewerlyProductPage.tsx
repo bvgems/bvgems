@@ -242,6 +242,20 @@ export default function JewelryProductPage() {
                     }}
                   >
                     {images.map((thumb, idx) => (
+                      // <Card
+                      //   key={`${thumb.url}-${idx}`}
+                      //   radius="0"
+                      //   shadow="0"
+                      //   padding={0}
+                      //   withBorder
+                      //   style={{
+                      //     aspectRatio: "1 / 1",
+                      //     overflow: "hidden",
+                      //     display: "flex",
+                      //     alignItems: "center",
+                      //     justifyContent: "center",
+                      //   }}
+                      // >
                       <Card
                         key={`${thumb.url}-${idx}`}
                         radius="0"
@@ -254,8 +268,34 @@ export default function JewelryProductPage() {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          position: "relative",
+                          border:
+                            idx === 0
+                              ? "2px solid #1a1a1a"
+                              : "1px solid #e0e0e0",
+                          transition: "border 0.2s ease",
                         }}
                       >
+                        {idx === 0 &&
+                          (category === "rings" || category === "earrings") && (
+                            <div
+                              style={{
+                                position: "absolute",
+                                top: 10,
+                                left: 10,
+                                background: "#1a1a1a",
+                                color: "#fff",
+                                fontSize: 10,
+                                fontWeight: 600,
+                                letterSpacing: "0.08em",
+                                padding: "3px 8px",
+                                textTransform: "uppercase",
+                                zIndex: 10,
+                              }}
+                            >
+                              Selected variant
+                            </div>
+                          )}
                         {thumb?.type === "image" ? (
                           <JewelryImageZoom
                             src={thumb.url}

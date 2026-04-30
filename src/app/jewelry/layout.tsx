@@ -1,7 +1,7 @@
 "use client";
 
 import { getFilteredJewelry } from "@/apis/api";
-import { GridView } from "@/components/GridView/GridView";
+
 import {
   Divider,
   Grid,
@@ -17,6 +17,7 @@ import { IconFilter } from "@tabler/icons-react";
 import { CommonGridView } from "@/components/CommonComponents/CommonGridView";
 import { JewelerySideBar } from "../../components/Jewerly/JewelerySideBar";
 import { FilterChips } from "@/components/Jewerly/FilterChips";
+import { gemstoneColorMap } from "@/utils/constants";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
@@ -34,6 +35,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   );
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+
   const [priceRange, setPriceRange] = useState<[number, number]>([100, 15000]);
   const defaultPriceRange: [number, number] = [100, 15000];
 
@@ -47,39 +50,55 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     selectedStones.length > 0 ||
     selectedTypes.length > 0 ||
     selectedShapes.length > 0 ||
+    selectedColors.length > 0 ||
     priceRange[0] !== defaultPriceRange[0] ||
     priceRange[1] !== defaultPriceRange[1];
 
+  // 1. Add this import at the top (or paste the map inline)
+
+  // 2. Replace fetchFilteredData with this version
   const fetchFilteredData = async () => {
     setLoading(true);
+
+    // Build effective stone list: merge explicit stone selections with
+    // any gemstones that match a selected color.
+    const stonesFromColors: string[] = selectedColors.flatMap((color) =>
+      (Object.entries(gemstoneColorMap) as [string, string][])
+        .filter(([, gemColor]) => gemColor === color)
+        .map(([gemName]) => gemName),
+    );
+
+    // Union of manually selected stones + color-derived stones (deduped)
+    const effectiveStones = [
+      ...new Set([...selectedStones, ...stonesFromColors]),
+    ];
+
     const filterOptions = {
       shape: selectedShapes,
       price: priceRange,
       types: selectedTypes,
-      collection_slug: selectedStones,
+      collection_slug: effectiveStones, // ← was selectedStones
     };
-    const response = await getFilteredJewelry(filterOptions, collectionSlug);
 
+    const response = await getFilteredJewelry(filterOptions, collectionSlug);
     let products = response?.data || [];
 
-    if (selectedStones.length > 0) {
+    // The rest of your existing variant/image matching logic stays identical,
+    // but use effectiveStones instead of selectedStones for the gemstone checks:
+    if (effectiveStones.length > 0) {
       if (collectionSlug === "rings") {
         products = products.map((p: any) => {
-          const gemstoneMatch = selectedStones[0];
-
-          const matchedVariant = p?.node?.variants?.edges?.find((v: any) => {
-            return v?.node?.metafield
-              ? v?.node?.metafield?.value?.toLowerCase() ===
-                  gemstoneMatch.toLowerCase()
-              : false;
-          });
-
+          const gemstoneMatch = effectiveStones[0];
+          const matchedVariant = p?.node?.variants?.edges?.find(
+            (v: any) =>
+              v?.node?.metafield?.value?.toLowerCase() ===
+              gemstoneMatch.toLowerCase(),
+          );
           return {
             ...p,
             mainImage: matchedVariant
               ? matchedVariant?.node?.image?.url
               : p?.images?.edges?.[0]?.node?.url,
-
             matchedTitle: matchedVariant
               ? matchedVariant?.node?.metafield?.value
               : matchedVariant?.node?.title,
@@ -87,10 +106,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         });
       } else {
         products = products?.filter((p: any) => {
-          const gemstoneMatch = selectedStones[0];
           const matchedVariant = p?.node?.gemstone?.value;
-
-          return gemstoneMatch === matchedVariant;
+          return effectiveStones.includes(matchedVariant);
         });
       }
     } else {
@@ -99,6 +116,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         mainImage: p?.images?.edges?.[0]?.node?.url,
       }));
     }
+
     setFilteredJewelry(products);
     setLoading(false);
   };
@@ -123,6 +141,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     selectedStones,
     selectedShapes,
     priceRange,
+    selectedColors,
     collectionSlug,
   ]);
 
@@ -142,6 +161,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         setSelectedShapes={setSelectedShapes}
         selectedTypes={selectedTypes}
         setSelectedTypes={setSelectedTypes}
+        selectedColors={selectedColors} // ← add
+        setSelectedColors={setSelectedColors}
         priceRange={priceRange}
         setPriceRange={setPriceRange}
         defaultPriceRange={defaultPriceRange}
@@ -159,6 +180,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             setSelectedTypes={setSelectedTypes}
             priceRange={priceRange}
             setPriceRange={setPriceRange}
+            selectedColors={selectedColors}
+            setSelectedColors={setSelectedColors}
           />
           <Divider orientation="vertical" />
         </GridCol>
@@ -205,6 +228,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           setSelectedTypes={setSelectedTypes}
           priceRange={priceRange}
           setPriceRange={setPriceRange}
+          selectedColors={selectedColors}
+          setSelectedColors={setSelectedColors}
         />
       </Drawer>
     </div>
