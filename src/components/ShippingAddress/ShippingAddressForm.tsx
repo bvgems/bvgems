@@ -8,6 +8,7 @@ import { upsertShippingAddress } from "@/apis/api";
 import { PhoneNumberInput } from "../CommonComponents/PhoneInput";
 import { useStpperStore } from "@/store/useStepperStore";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { AddressAutocomplete } from "../CommonComponents/AddressAutocomplete";
 
 export const ShippingAddressForm = ({
   userId,
@@ -186,10 +187,26 @@ export const ShippingAddressForm = ({
             placeholder="John Doe"
             {...form.getInputProps("fullName")}
           />
-          <TextInput
+          {/* <TextInput
             label="Street Address"
             placeholder="123 Main St"
             {...form.getInputProps("addressLine1")}
+          /> */}
+
+          <AddressAutocomplete
+            value={form.values.addressLine1}
+            onChange={(val) => form.setFieldValue("addressLine1", val)}
+            error={form.errors.addressLine1}
+            onAddressSelect={(components) => {
+              form.setValues({
+                ...form.values,
+                addressLine1: components.addressLine1,
+                city: components.city,
+                state: components.state,
+                zipCode: components.zipCode,
+                country: components.country,
+              });
+            }}
           />
           <TextInput
             label="Apt, Suite, etc."

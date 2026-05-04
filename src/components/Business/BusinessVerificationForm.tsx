@@ -1,13 +1,12 @@
-import { Button, Select, TextInput } from "@mantine/core";
+import { Button, TextInput } from "@mantine/core";
 import Link from "next/link";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { IconArrowRight } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 import { useStpperStore } from "@/store/useStepperStore";
-import { COUNTRY_OPTIONS } from "@/utils/constants";
 import { useUserStore } from "@/store/useUserStore";
 import { getBusinessVerification } from "@/apis/api";
+import { AddressAutocomplete } from "../CommonComponents/AddressAutocomplete";
 
 export const BusinessVerificationForm = ({
   onClose,
@@ -147,21 +146,37 @@ export const BusinessVerificationForm = ({
             />
           </div>
 
-          <TextInput
+          {/* <TextInput
             label="Enter Your Company's Address"
             placeholder="your company address"
             disabled={isDisabled}
             {...form.getInputProps("companyAddress")}
+          /> */}
+          <AddressAutocomplete
+            value={form.values.companyAddress}
+            onChange={(val) => form.setFieldValue("companyAddress", val)}
+            error={form.errors.addressLine1}
+            onAddressSelect={(components) => {
+              form.setValues({
+                ...form.values,
+                companyAddress: components.addressLine1,
+                city: components.city,
+                state: components.state,
+                country: components.country,
+              });
+            }}
           />
 
-          <Select
+          {/* <Select
             label="Country"
             data={COUNTRY_OPTIONS}
             searchable
             placeholder="Select your country"
             disabled={isDisabled}
             {...form.getInputProps("country")}
-          />
+          /> */}
+
+          <TextInput label="Country" {...form.getInputProps("country")} />
 
           <div className="flex gap-3">
             <TextInput
