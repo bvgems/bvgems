@@ -81,21 +81,24 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   const [caratError, setCaratError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [caratWeight, setCaratWeight] = useState<number>(0);
-
+  const [allowPurchaseByCarat, setAllowPurchaseByCarat] = useState(true);
   const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
+  const SMALL_LAB_SIZES = new Set(["1.00 mm", "1.25 mm", "1.50 mm", "1.75 mm"]);
 
+  const isSmallLabGrown = (item: any) =>
+    isLabGrown(item) && SMALL_LAB_SIZES.has(item?.size);
   const isLabGrown = (item: any) =>
     LAB_LABELS.has(item?.type) || LAB_LABELS.has(item?.quality);
-
   const getPerCaratPrice = (item: any): number => {
     if (!item) return 0;
+    if (isSmallLabGrown(item)) return 0; // no per-carat for these
     if (isLabGrown(item)) return 50;
     if (!item?.ct_weight || !item?.price) return 0;
     return Number((item.price / item.ct_weight).toFixed(2));
   };
-
   const getPerStonePrice = (item: any): number => {
     if (!item) return 0;
+    if (isSmallLabGrown(item)) return Number(item.price); // flat $2.50 from DB
     if (!item?.ct_weight) return 0;
     if (isLabGrown(item)) return Number((50 * item.ct_weight).toFixed(2));
     return item?.price ? Number(item.price) : 0;
@@ -172,6 +175,26 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
       }&name=${product?.collection_slug?.toLowerCase()}`,
     );
   };
+
+  const isPurchaseByCarat = (product: any) => {
+    const size = product?.size;
+    if (product?.quality === "Lab Grown") {
+      if (
+        size === "1.00 mm" ||
+        size === "1.25 mm" ||
+        size === "1.50 mm" ||
+        size === "1.75 mm"
+      ) {
+        setAllowPurchaseByCarat(false);
+        return;
+      }
+    }
+    setAllowPurchaseByCarat(true);
+  };
+
+  useEffect(() => {
+    isPurchaseByCarat(product);
+  }, [product]);
 
   return (
     <Card
@@ -272,9 +295,11 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
               >
                 Per Stone: ${perStone.toFixed(2)}
               </Badge>
-              <Badge size="lg" radius="md" variant="light" color="dark">
-                Per Carat: ${perCarat.toFixed(2)}
-              </Badge>
+              {allowPurchaseByCarat && (
+                <Badge size="lg" radius="md" variant="light" color="dark">
+                  Per Carat: ${perCarat.toFixed(2)}
+                </Badge>
+              )}
             </Group>
 
             <Divider my="md" />
@@ -301,7 +326,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
             {/* Purchase mode + inputs */}
             <div className="mt-6">
-              {user && (
+              {user && allowPurchaseByCarat && (
                 <Switch
                   checked={purchaseByCarat}
                   onChange={(event) =>
