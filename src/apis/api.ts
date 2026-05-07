@@ -388,6 +388,7 @@ export const getFilteredJewelry = async (options: any, category: any) => {
 
 export const makeCheckout = async (data: any) => {
   try {
+    console.log("data", data);
     const response = await axios.post(`${baseUrl}/api/checkout`, {
       cartItems: data?.cartItems,
       email: data?.email,

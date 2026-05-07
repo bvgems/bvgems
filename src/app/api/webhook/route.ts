@@ -80,16 +80,6 @@ export async function POST(req: NextRequest) {
     try {
       const cartId = session.metadata?.cart;
 
-      if (cartId) {
-        await pool.query(
-          `UPDATE checkout_carts
-     SET status = 'completed'
-     WHERE id = $1`,
-          [cartId],
-        );
-        console.log(`🟢 Cart ${cartId} marked as completed`);
-      }
-
       const { rows } = await pool.query(
         "SELECT * FROM checkout_carts WHERE id = $1",
         [cartId],
@@ -99,8 +89,8 @@ export async function POST(req: NextRequest) {
         console.log("⚠️ Cart already processed, skipping...");
         return new NextResponse("Already processed", { status: 200 });
       }
-      const cartData = rows[0];
 
+      const cartData = rows[0];
       let cartItems: any[] = [];
 
       try {
@@ -141,8 +131,16 @@ export async function POST(req: NextRequest) {
       );
 
       const shopifyOrderId = orderResponse.data.order.id;
-
       console.log(`✅ Shopify order ${shopifyOrderId} created.`);
+
+      // ✅ 2. Mark as completed AFTER Shopify order is successfully created
+      if (cartId) {
+        await pool.query(
+          `UPDATE checkout_carts SET status = 'completed' WHERE id = $1`,
+          [cartId],
+        );
+        console.log(`🟢 Cart ${cartId} marked as completed`);
+      }
 
       await axios.post(
         `${process.env.SHOPIFY_ADMIN_API_URL}/orders/${shopifyOrderId}/transactions.json`,

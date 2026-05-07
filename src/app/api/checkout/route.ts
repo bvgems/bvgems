@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       paymentMethod,
     } = await req.json();
 
-    console.log("Delivery Method:", deliveryMethod);
+    console.log("Delivery Method:", deliveryMethod, paymentMethod);
 
     const userId = user?.id || null;
     const guestEmail = !user?.id ? guestUser?.email || email : null;
@@ -110,21 +110,21 @@ export async function POST(req: Request) {
 
     // 🚚 Apply conditional shipping: only if deliveryMethod === 'delivery'
     let shippingFee = 0;
-    if (deliveryMethod === "delivery" && subtotal < 200 && subtotal > 0) {
-      shippingFee = 15;
-      line_items.push({
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: "Shipping Fee",
-            description:
-              "Standard shipping within the US (applied for delivery orders under $200)",
-          },
-          unit_amount: shippingFee * 100, // $15 → 1500 cents
-        },
-        quantity: 1,
-      });
-    }
+    // if (deliveryMethod === "delivery" && subtotal < 200 && subtotal > 0) {
+    //   shippingFee = 15;
+    //   line_items.push({
+    //     price_data: {
+    //       currency: "usd",
+    //       product_data: {
+    //         name: "Shipping Fee",
+    //         description:
+    //           "Standard shipping within the US (applied for delivery orders under $200)",
+    //       },
+    //       unit_amount: shippingFee * 100, // $15 → 1500 cents
+    //     },
+    //     quantity: 1,
+    //   });
+    // }
 
     const grandTotal = subtotal + shippingFee;
 
