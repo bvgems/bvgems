@@ -204,7 +204,6 @@ export const getOrderPayload = (
         email: user ? user?.email : guestUser?.email || "guest@example.com",
         first_name: user ? user?.firstName : guestUser?.firstName || "Guest",
         last_name: user ? user?.lastName : guestUser?.lastName || "User",
-        phone: user ? user?.phoneNumber : guestUser?.phoneNumber || null,
         accepts_marketing: false,
         accepts_marketing_updated_at: new Date().toISOString(),
         marketing_opt_in_level: "single_opt_in",
