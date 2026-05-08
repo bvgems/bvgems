@@ -13,18 +13,15 @@ import {
   Paper,
   Group,
   Text,
-  Divider,
   Stack,
   Badge,
   Checkbox,
   NumberFormatter,
-  Title,
 } from "@mantine/core";
 import {
   IconArrowNarrowRight,
   IconCheck,
   IconGift,
-  IconInfoCircle,
   IconTrash,
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
@@ -32,7 +29,6 @@ import { notifications } from "@mantine/notifications";
 import { useMemo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { BillingSummary } from "../CommonComponents/BillingSummary";
-import { getStudsDetails } from "@/apis/api";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),

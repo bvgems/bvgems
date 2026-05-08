@@ -53,7 +53,36 @@ export async function GET(request: Request) {
   <div style="display: flex; align-items: center; padding: 16px 30px; border-top: 1px solid #eee;">
     <img src="${item?.product.image_url}" alt="${item?.product.title}" style="width: 120px; height: 120px; object-fit: cover; margin-right: 20px;" />
     <div>
-      <p style="font-size: 16px; font-weight: bold; margin: 0;">${item?.product.title}</p>
+      <p style="font-size: 16px; font-weight: bold; margin: 0;">
+      ${
+        item?.product?.collection_slug
+          ? item?.product?.collection_slug + " " + item?.product?.shape
+          : item?.product.title
+      }
+      </p>
+      <p>
+     ${
+       item?.product?.productType === "stone"
+         ? `<p style="font-size: 14px; color: #555; margin: 4px 0;">
+        Size: ${item?.product?.size} | Weight: ${item?.product?.ct_weight} | Quality: ${item?.product?.quality} | Color: ${item?.product?.color}
+        ${
+          item?.product?.collection_slug === "Emerald" && item?.product?.shade
+            ? ` | Shade: ${item?.product?.shade}`
+            : ""
+        }
+        ${
+          item?.product?.collection_slug === "Sapphire" &&
+          item?.product?.color === "Blue" &&
+          item?.product?.quality !== "Lab Grown" &&
+          item?.product?.shade
+            ? ` | Shade: ${item?.product?.shade}`
+            : ""
+        }
+      </p>`
+         : ""
+     }
+      </p>
+     
       <p style="font-size: 16px; font-weight: bold; margin: 4px 0;">
         ${item?.product.price == 0 ? "Free Gift 🎁" : `$${item?.product.price}`}
       </p>
