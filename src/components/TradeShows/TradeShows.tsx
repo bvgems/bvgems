@@ -32,24 +32,6 @@ export interface TradeShow {
 // ===== Data =====
 export const tradeShows: TradeShow[] = [
   {
-    name: "JIS Miami",
-    booth: "Booth #1339",
-    website: "https://www.jisshow.com/fall/en-us.html",
-    logo: "https://www.jisshow.com/content/dam/sitebuilder/rna/jis/2021/spring/JISFall.png/_jcr_content/renditions/original.image_file.592.300.file/367267082/JISFall.png",
-    location: "Miami Beach Convention Center | Miami Beach, FL",
-    start: "10-10-2025",
-    end: "10-13-2025",
-  },
-  {
-    name: "Tucson GJX",
-    booth: "Booth #1234",
-    website: "https://gjx.rocks",
-    logo: "https://gjx.rocks/wp-content/themes/gjx-2020/images/logo.png",
-    location: "198 S. Granada Tucson, AZ 85701",
-    start: "02-02-2026",
-    end: "02-07-2026",
-  },
-  {
     name: "Las Vegas AGTA",
     booth: "Booth #A-28057",
     website: "https://agta.org/trade-shows/agta-gemfair-las-vegas/",
@@ -57,6 +39,24 @@ export const tradeShows: TradeShow[] = [
     location: "Las Vegas, Nevada",
     start: "05-28-2026",
     end: "06-01-2026",
+  },
+  {
+    name: "JIS Miami",
+    booth: "Booth #1339",
+    website: "https://www.jisshow.com/fall/en-us.html",
+    logo: "https://www.jisshow.com/content/dam/sitebuilder/rna/jis/2021/spring/JISFall.png/_jcr_content/renditions/original.image_file.592.300.file/367267082/JISFall.png",
+    location: "Miami Beach Convention Center | Miami Beach, FL",
+    start: "10-10-2026",
+    end: "10-13-2026",
+  },
+  {
+    name: "Tucson GJX",
+    booth: "Booth #1234",
+    website: "https://gjx.rocks",
+    logo: "https://gjx.rocks/wp-content/themes/gjx-2020/images/logo.png",
+    location: "198 S. Granada Tucson, AZ 85701",
+    start: "02-02-2027",
+    end: "02-07-2027",
   },
 ];
 
@@ -133,11 +133,11 @@ function generateGoogleCalendarLink(show: TradeShow) {
   const endDate = buildZDate(show.end, show.endTime ?? "17:00");
 
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-    show.name
+    show.name,
   )}&dates=${startDate}/${endDate}&details=${encodeURIComponent(
-    details
+    details,
   )}&location=${encodeURIComponent(
-    show.location
+    show.location,
   )}&trp=false&sprop=name:B.V.%20Gems%20Inc`;
 }
 
