@@ -134,6 +134,12 @@ export const getOrderPayload = (
               value: item?.product?.length,
             });
           }
+          if (item?.product?.productType === "necklaceJewelry") {
+            properties.push({
+              name: "Necklace Length",
+              value: item?.product?.length,
+            });
+          }
 
           // if (item?.product?.length) {
           //   properties.push({ name: "Length", value: item?.product?.length });
