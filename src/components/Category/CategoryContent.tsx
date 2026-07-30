@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Button,
   Grid,
@@ -32,11 +32,24 @@ import Script from "next/script";
 import { EmeraldDetails } from "./EmeraldDetails";
 import { LabSapphire } from "./LabSapphire";
 
-// Utility: pick one representative image per quality
+// Utility: pick one representative image per quality, prioritizing items with videos
 const getRepresentativeImages = (items: any[]) => {
   const qualityMap: Record<string, any> = {};
+
   items.forEach((item) => {
-    if (!qualityMap[item.quality]) {
+    // Check if the current item has a valid video array
+    const hasVideo =
+      Array.isArray(item?.cloudinary_videos) &&
+      item.cloudinary_videos.length > 0;
+
+    // Save the item if we haven't found one for this quality yet,
+    // OR replace the saved item if the current one has a video and the saved one doesn't!
+    if (
+      !qualityMap[item.quality] ||
+      (hasVideo &&
+        (!Array.isArray(qualityMap[item.quality]?.cloudinary_videos) ||
+          qualityMap[item.quality].cloudinary_videos.length === 0))
+    ) {
       qualityMap[item.quality] = item;
     }
   });
@@ -90,6 +103,32 @@ export function CategoryContent({
   const [shaedImages, setShadeImages] = useState<any>([]);
   const [qualityImages, setQualityImages] = useState<any[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+
+  const [isVideoZoomed, setIsVideoZoomed] = useState(false);
+  const [videoZoomPos, setVideoZoomPos] = useState({ x: 0, y: 0 });
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+  const mainVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    // Keep standard logic here
+  }, []);
+
+  const handleVideoMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!videoContainerRef.current) return;
+
+    // 1. Get container dimensions and offset
+    const { left, top, width, height } =
+      videoContainerRef.current.getBoundingClientRect();
+
+    // 2. Calculate mouse position relative to container
+    // Adjust for page scroll and offset
+    const x = ((e.pageX - left - window.scrollX) / width) * 100;
+    const y = ((e.pageY - top - window.scrollY) / height) * 100;
+
+    // 3. Update position state
+    setVideoZoomPos({ x, y });
+  };
 
   const setEmeraldShaedImages = (data: any) => {
     if (!Array.isArray(data)) return;
@@ -216,7 +255,7 @@ export function CategoryContent({
     (item: any) => item?.is_available,
   );
 
-  const [selectedThumbnail, setSelectedThumbnail] = useState("A");
+  const selectedThumbnail = availableQualityImages[activeSlide]?.quality || "";
 
   const getItemQuality = (item: any) => {
     return item?.quality || "";
@@ -236,6 +275,24 @@ export function CategoryContent({
       {item.title}
     </Anchor>
   ));
+  // 1. Find the video specifically attached to the selected thumbnail grade
+  const selectedGradeItem = availableQualityImages.find(
+    (item: any) => item.quality === selectedThumbnail,
+  );
+
+  // Extract video array for selected grade
+  const selectedGradeVideos = Array.isArray(selectedGradeItem?.cloudinary_videos)
+    ? selectedGradeItem.cloudinary_videos
+    : [];
+
+  const currentVideoUrl = selectedGradeVideos[activeVideoIndex]?.video_url;
+
+  useEffect(() => {
+    if (mainVideoRef.current && currentVideoUrl) {
+      mainVideoRef.current.play().catch(e => console.warn("Autoplay prevented by browser:", e));
+    }
+  }, [currentVideoUrl]);
+
   return (
     <>
       <div className="mt-9 px-6">
@@ -252,44 +309,45 @@ export function CategoryContent({
               className="flex gap-4 items-start px-12"
             >
               <div className="w-full">
-                {qualityImages.length > 0 ? (
+                {availableQualityImages.length > 0 ? (
                   <div className="flex flex-col items-center">
-                    {/* Main Carousel */}
+                    {/* Main Carousel (Images Only) */}
                     <Carousel
                       withIndicators
                       height={400}
-                      onSlideChange={(index) => setActiveSlide(index)}
+                      onSlideChange={(index) => {
+                        setActiveSlide(index);
+                        setActiveVideoIndex(0);
+                      }}
                       className="w-full max-w-[420px]"
                       slideGap="md"
                       slideSize="100%"
                       initialSlide={activeSlide}
                     >
-                      {availableQualityImages.map(
-                        (item: any, index: number) => (
-                          <Carousel.Slide key={item.id}>
-                            <div className="flex flex-col items-center">
-                              <div className="h-[500px] w-[300px]">
-                                <ImageZoom src={item.image_url} />
-                              </div>
+                      {availableQualityImages.map((item: any) => (
+                        <Carousel.Slide key={item.id}>
+                          <div className="flex flex-col items-center">
+                            <div className="h-[500px] w-[300px] flex items-center justify-center bg-white">
+                              <ImageZoom src={item.image_url} />
                             </div>
-                          </Carousel.Slide>
-                        ),
-                      )}
+                          </div>
+                        </Carousel.Slide>
+                      ))}
                     </Carousel>
-                    {/* Thumbnails */}
+
+                    {/* Thumbnails (Images Only) */}
                     <div className="mt-4 flex gap-4 flex-wrap justify-center">
                       {availableQualityImages.map(
                         (item: any, index: number) => (
                           <div
                             key={item.id}
-                            className={`flex flex-col items-center cursor-pointer border rounded-lg p-2 transition-all ${
-                              activeSlide === index
+                            className={`flex flex-col items-center cursor-pointer border rounded-lg p-2 transition-all ${activeSlide === index
                                 ? "border-black shadow-md"
-                                : "border-gray-300"
-                            }`}
+                                : "border-gray-300 hover:border-gray-400"
+                              }`}
                             onClick={() => {
                               setActiveSlide(index);
-                              setSelectedThumbnail(item?.quality);
+                              setActiveVideoIndex(0);
                             }}
                           >
                             <Image
@@ -306,6 +364,72 @@ export function CategoryContent({
                         ),
                       )}
                     </div>
+
+                    {/* Conditional Video Block (Shows ONLY below thumbnails when a valid video exists for the selected grade) */}
+                    {selectedGradeVideos.length > 0 && currentVideoUrl && (
+                      <div className="mt-8 flex flex-col items-center w-full animate-fade-in">
+
+
+                        <div
+                          ref={videoContainerRef}
+                          className="h-[500px] w-[300px] flex items-center justify-center bg-white border border-gray-200 rounded shadow-sm overflow-hidden cursor-zoom-in relative"
+                          onMouseMove={handleVideoMouseMove}
+                          onMouseEnter={() => setIsVideoZoomed(true)}
+                          onMouseLeave={() => setIsVideoZoomed(false)}
+                        >
+                          <video
+                            ref={mainVideoRef}
+                            key={currentVideoUrl} // Remounts video when src changes
+                            src={currentVideoUrl}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className={`w-full h-full object-cover transition-transform duration-100 ease-linear ${isVideoZoomed ? "scale-[2]" : "scale-[1]"
+                              }`}
+                            style={{
+                              transformOrigin: `${videoZoomPos.x}% ${videoZoomPos.y}%`,
+                            }}
+                          />
+
+                          {isVideoZoomed && (
+                            <div className="absolute inset-0 border-[3px] border-black/30 rounded pointer-events-none" />
+                          )}
+                        </div>
+
+                        {/* Video Thumbnails Carousel (Only visible if > 1 video) */}
+                        {selectedGradeVideos.length > 1 && (
+                          <div className="mt-4 w-full max-w-[300px]">
+                            <Carousel
+                              slideSize="33.333333%"
+                              slideGap="sm"
+                              align="start"
+                              controlsOffset="xs"
+                              dragFree
+                            >
+                              {selectedGradeVideos.map((video: any, index: number) => (
+                                <Carousel.Slide key={video.public_id || index}>
+                                  <div
+                                    className={`cursor-pointer border-2 rounded p-1 transition-all ${activeVideoIndex === index
+                                        ? "border-black shadow-md"
+                                        : "border-transparent hover:border-gray-300"
+                                      }`}
+                                    onClick={() => setActiveVideoIndex(index)}
+                                  >
+                                    <video
+                                      src={video.video_url}
+                                      className="w-full h-16 object-cover rounded pointer-events-none"
+                                      muted
+                                      playsInline
+                                    />
+                                  </div>
+                                </Carousel.Slide>
+                              ))}
+                            </Carousel>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="h-[300px] w-[300px] bg-gray-100 rounded" />
@@ -386,7 +510,7 @@ export function CategoryContent({
 
             {isSapphire && selectedSapphireColor === "Blue" ? (
               typeFilter === "Lab Grown" ||
-              selectedThumbnail === "Lab Grown" ? (
+                selectedThumbnail === "Lab Grown" ? (
                 <div className="mt-10">
                   <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
                     Lab Blue Sapphire
@@ -543,9 +667,8 @@ export function CategoryContent({
                             h={50}
                             w={50}
                             fit="fill"
-                            className={`rounded border ${
-                              isSelected ? "border-black" : "border-gray-300"
-                            }`}
+                            className={`rounded border ${isSelected ? "border-black" : "border-gray-300"
+                              }`}
                           />
                         </Tooltip>
                       </div>
@@ -565,11 +688,10 @@ export function CategoryContent({
                               onClick={() =>
                                 setSelectedSapphireColor(item?.value)
                               }
-                              className={`p-2 border rounded cursor-pointer ${
-                                selectedSapphireColor === item?.value
+                              className={`p-2 border rounded cursor-pointer ${selectedSapphireColor === item?.value
                                   ? "border-black"
                                   : "border-gray-300"
-                              }`}
+                                }`}
                             >
                               {/* <IconDiamond color={item?.color} size={30} /> */}
                               <Image src={item?.image} h={40} w={40} />
@@ -594,9 +716,9 @@ export function CategoryContent({
                       data={allSizes[selectedShape]?.map((size: string) => {
                         const label = size.includes("x")
                           ? size
-                              .replace(/x/g, " x ")
-                              .replace(/\s+/g, " ")
-                              .trim()
+                            .replace(/x/g, " x ")
+                            .replace(/\s+/g, " ")
+                            .trim()
                           : parseFloat(size).toFixed(2);
                         return {
                           label,
@@ -785,11 +907,10 @@ export function CategoryContent({
                     className="flex flex-col items-center cursor-pointer group"
                   >
                     <div
-                      className={`p-3 rounded-xl border transition-all duration-200 ${
-                        isSelected
+                      className={`p-3 rounded-xl border transition-all duration-200 ${isSelected
                           ? "border-black shadow-md scale-105"
                           : "border-gray-300 hover:border-black"
-                      }`}
+                        }`}
                     >
                       <Image
                         src={shapeImageMap[shape]}
@@ -800,9 +921,8 @@ export function CategoryContent({
                     </div>
 
                     <span
-                      className={`text-xs mt-2 ${
-                        isSelected ? "text-black font-medium" : "text-gray-500"
-                      }`}
+                      className={`text-xs mt-2 ${isSelected ? "text-black font-medium" : "text-gray-500"
+                        }`}
                     >
                       {shape}
                     </span>
