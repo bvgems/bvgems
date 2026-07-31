@@ -289,9 +289,13 @@ export function CategoryContent({
   const getOptimizedVideoUrl = (url: string | undefined) => {
     if (!url || !url.includes("cloudinary.com")) return url;
     
-    // We already generated the MP4s in the background, so we just request them directly!
+    // We already generated the MP4s in the background with specific quality optimizations.
+    // The URL MUST match those exact optimizations (vc_auto,q_auto) so Cloudinary finds the pre-generated file!
     if (url.toLowerCase().endsWith('.mov')) {
-      return url.replace(/\.mov$/i, '.mp4');
+      // 1. Inject the optimizations we used in the background script
+      const optimizedUrl = url.replace("/upload/", "/upload/vc_auto,q_auto/");
+      // 2. Request the mp4 format
+      return optimizedUrl.replace(/\.mov$/i, '.mp4');
     }
     
     return url;
