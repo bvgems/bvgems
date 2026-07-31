@@ -285,23 +285,7 @@ export function CategoryContent({
     ? selectedGradeItem.cloudinary_videos
     : [];
 
-  // Helper to ensure Cloudinary automatically formats videos for cross-browser support (e.g., converting .mov for Windows)
-  const getOptimizedVideoUrl = (url: string | undefined) => {
-    if (!url || !url.includes("cloudinary.com")) return url;
-    
-    // We already generated the MP4s in the background with specific quality optimizations.
-    // The URL MUST match those exact optimizations (vc_auto,q_auto) so Cloudinary finds the pre-generated file!
-    if (url.toLowerCase().endsWith('.mov')) {
-      // 1. Inject the optimizations we used in the background script
-      const optimizedUrl = url.replace("/upload/", "/upload/vc_auto,q_auto/");
-      // 2. Request the mp4 format
-      return optimizedUrl.replace(/\.mov$/i, '.mp4');
-    }
-    
-    return url;
-  };
-
-  const currentVideoUrl = getOptimizedVideoUrl(selectedGradeVideos[activeVideoIndex]?.video_url);
+  const currentVideoUrl = selectedGradeVideos[activeVideoIndex]?.video_url;
 
   useEffect(() => {
     if (mainVideoRef.current && currentVideoUrl) {
@@ -431,7 +415,7 @@ export function CategoryContent({
                                     onClick={() => setActiveVideoIndex(index)}
                                   >
                                     <video
-                                      src={getOptimizedVideoUrl(video.video_url)}
+                                      src={video.video_url}
                                       className="w-full h-16 object-cover rounded pointer-events-none"
                                       muted
                                       playsInline
