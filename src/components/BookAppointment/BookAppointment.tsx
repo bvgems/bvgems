@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Container, Grid, GridCol, Image } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React from "react";

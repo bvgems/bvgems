@@ -1,3 +1,5 @@
+"use client";
+
 import { Container, Image, Grid, Card } from "@mantine/core";
 import { motion } from "framer-motion";
 import { AnimatedText } from "../CommonComponents/AnimatedText";

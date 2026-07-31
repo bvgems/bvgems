@@ -1,5 +1,3 @@
-"use client";
-import { useEffect, useState, useRef } from "react";
 import { getHeroData } from "@/apis/api";
 import { Hero } from "@/components/Hero/Hero";
 import ShopByColor from "@/components/ShopByColor/ShopByColor";
@@ -14,13 +12,8 @@ import TradeShows from "@/components/TradeShows/TradeShows";
 import { ShopCalibrated } from "@/components/ShopCalibrated/ShopCalibrated";
 import { ShopByShape } from "@/components/ShopByShape/ShopByShape";
 
-export default function Home() {
-  const jewelrySectionRef = useRef<HTMLDivElement>(null);
-  const [heroData, setHeroData] = useState<any>(null);
-
-  useEffect(() => {
-    getHeroData().then(setHeroData);
-  }, []);
+export default async function Home() {
+  const heroData = await getHeroData();
 
   return (
     <>
@@ -28,7 +21,7 @@ export default function Home() {
       <ShopCalibrated />
       <ShopByShape />
       <ShopByColor />
-      <JewelrySection ref={jewelrySectionRef} />
+      <JewelrySection />
       <BestSellingProductsComponents />
       <BirthStoneComponent />
       <Testimonials />
