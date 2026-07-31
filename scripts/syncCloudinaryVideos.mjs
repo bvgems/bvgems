@@ -71,6 +71,7 @@ async function syncVideos() {
     for (const video of allVideos) {
       const public_id = video.public_id;
       const url = video.secure_url;
+      
       // Cloudinary 'Dynamic Folders' stores path in asset_folder instead of public_id
       const folderPath = video.asset_folder || video.public_id;
       
