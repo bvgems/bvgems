@@ -26,7 +26,7 @@ You must place the video into an "Asset Folder" following this exact pattern:
 3. If the folder does not exist, simply click the "New Folder" icon in the UI and create it following the exact naming convention above.
 4. Drag and drop your video file into the folder. 
 *(Note: The actual file name of the video does not matter (e.g., `IMG_0101.mp4` is fine), only the folder it sits in matters).*
-
+3
 ---
 
 ## 2. Running the Synchronization Script

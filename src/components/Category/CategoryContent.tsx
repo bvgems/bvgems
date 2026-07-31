@@ -404,7 +404,6 @@ export function CategoryContent({
                               slideSize="33.333333%"
                               slideGap="sm"
                               controlsOffset="xs"
-                              dragFree
                             >
                               {selectedGradeVideos.map((video: any, index: number) => (
                                 <Carousel.Slide key={video.public_id || index}>
