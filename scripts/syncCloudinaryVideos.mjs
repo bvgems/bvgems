@@ -50,7 +50,7 @@ async function syncVideos() {
 
     do {
       const searchAPI = cloudinary.search
-        .expression('resource_type:video AND asset_folder:"Gemstone Videos/*"')
+        .expression('resource_type:video AND folder:"Gemstone Videos/*"')
         .max_results(500);
         
       if (nextCursor) {
@@ -72,8 +72,8 @@ async function syncVideos() {
       const public_id = video.public_id;
       const url = video.secure_url;
       
-      // Cloudinary 'Dynamic Folders' stores path in asset_folder instead of public_id
-      const folderPath = video.asset_folder || video.public_id;
+      // We rely on the physical Cloudinary folder path
+      const folderPath = video.folder || video.public_id;
       
       const parts = folderPath.split('/');
       if (parts.length < 4) continue;
