@@ -403,7 +403,6 @@ export function CategoryContent({
                             <Carousel
                               slideSize="33.333333%"
                               slideGap="sm"
-                              align="start"
                               controlsOffset="xs"
                               dragFree
                             >
