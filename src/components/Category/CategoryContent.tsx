@@ -288,8 +288,13 @@ export function CategoryContent({
   // Helper to ensure Cloudinary automatically formats videos for cross-browser support (e.g., converting .mov for Windows)
   const getOptimizedVideoUrl = (url: string | undefined) => {
     if (!url || !url.includes("cloudinary.com")) return url;
-    if (url.includes("/upload/f_auto")) return url; // Already optimized
-    return url.replace("/upload/", "/upload/f_auto,q_auto/");
+    
+    // We already generated the MP4s in the background, so we just request them directly!
+    if (url.toLowerCase().endsWith('.mov')) {
+      return url.replace(/\.mov$/i, '.mp4');
+    }
+    
+    return url;
   };
 
   const currentVideoUrl = getOptimizedVideoUrl(selectedGradeVideos[activeVideoIndex]?.video_url);
