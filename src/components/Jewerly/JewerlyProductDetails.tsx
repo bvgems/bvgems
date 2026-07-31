@@ -524,7 +524,7 @@ export const JewelryProductDetails = ({
                     }}
                   >
                     <div className="w-full flex justify-center">
-                      <Image
+                      <Image loading="lazy"
                         radius="md"
                         h={200}
                         fit="contain"
@@ -581,7 +581,7 @@ export const JewelryProductDetails = ({
                       }}
                     >
                       <div className="w-full flex justify-center">
-                        <Image
+                        <Image loading="lazy"
                           radius="md"
                           h={200}
                           fit="contain"

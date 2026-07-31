@@ -98,7 +98,7 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
           <>
             <div className="flex flex-col items-center" ref={contentRef}>
               <div className="flex justify-center flex-col items-center gap-3">
-                <Image
+                <Image loading="lazy"
                   h={160}
                   w={160}
                   className="object-cover"

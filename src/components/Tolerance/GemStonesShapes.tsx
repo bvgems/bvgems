@@ -17,19 +17,19 @@ export const GemStonesShapes = ({ activeSegment, setActiveSegment }: any) => {
               <div className="flex p-2 justify-center items-center">
                 <div className="flex flex-row gap-4">
                   <div className="flex flex-col items-center">
-                    <Image src="/assets/round.png" h={50} w={50} />
+                    <Image loading="lazy" src="/assets/round.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-violet-800">Round</span>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <Image src="/assets/princess-cut.jpeg" h={50} w={50} />
+                    <Image loading="lazy" src="/assets/princess-cut.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-center text-violet-800">
                       Princess
                     </span>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <Image src="/assets/cushion.png" h={50} w={50} />
+                    <Image loading="lazy" src="/assets/cushion.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-violet-800">
                       Cushion
                     </span>
@@ -44,12 +44,12 @@ export const GemStonesShapes = ({ activeSegment, setActiveSegment }: any) => {
               <div className="flex p-2 justify-center items-center">
                 <div className="flex flex-row gap-4">
                   <div className="flex flex-col items-center">
-                    <Image src="/assets/heart.png" h={50} w={50} />
+                    <Image loading="lazy" src="/assets/heart.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-violet-800">Heart</span>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <Image src="/assets/trillion.jpeg" h={50} w={50} />
+                    <Image loading="lazy" src="/assets/trillion.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-center text-violet-800">
                       Trillion
                     </span>
@@ -64,12 +64,12 @@ export const GemStonesShapes = ({ activeSegment, setActiveSegment }: any) => {
               <div className="flex p-2 justify-center items-center">
                 <div className="flex flex-row gap-4">
                   <div className="flex flex-col items-center">
-                    <Image src="/assets/oval.jpeg" h={50} w={50} />
+                    <Image loading="lazy" src="/assets/oval.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-violet-800">Oval</span>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <Image src="/assets/emerald.jpeg" h={50} w={50} />
+                    <Image loading="lazy" src="/assets/emerald.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-center text-violet-800">
                       Emerald
                     </span>
@@ -84,14 +84,14 @@ export const GemStonesShapes = ({ activeSegment, setActiveSegment }: any) => {
               <div className="flex p-2 justify-center items-center">
                 <div className="flex flex-row gap-4">
                   <div className="flex flex-col items-center">
-                    <Image src="/assets/marquise.jpeg" h={50} w={50} />
+                    <Image loading="lazy" src="/assets/marquise.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-violet-800">
                       Marquise
                     </span>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <Image src="/assets/straight-bugget.jpeg" h={50} w={50} />
+                    <Image loading="lazy" src="/assets/straight-bugget.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-center text-violet-800">
                       Baguette
                     </span>
@@ -106,7 +106,7 @@ export const GemStonesShapes = ({ activeSegment, setActiveSegment }: any) => {
               <div className="flex p-2 justify-center items-center">
                 <div className="flex flex-row gap-4">
                   <div className="flex flex-col items-center">
-                    <Image src="/assets/pear.jpeg" h={50} w={50} />
+                    <Image loading="lazy" src="/assets/pear.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-violet-800">Pear</span>
                   </div>
                 </div>

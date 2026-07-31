@@ -19,13 +19,14 @@ export function Hero({ jewelryRef, heroData }: any) {
           src={
             isMobile
               ? heroData?.heroData?.page?.metafields[0]?.references?.edges[1]
-                  ?.node?.image?.url || "/assets/hero-bg2.png"
+                  ?.node?.image?.url || "/assets/hero-bg2.webp"
               : heroData?.heroData?.page?.metafields[0]?.references?.edges[0]
-                  ?.node?.image?.url || "/assets/hero-bg2.png"
+                  ?.node?.image?.url || "/assets/hero-bg2.webp"
           }
           alt="Hero Image"
           fit="cover"
           className="w-full h-full"
+          fetchPriority="high"
         />
       </div>
 
@@ -94,9 +95,9 @@ export function Hero({ jewelryRef, heroData }: any) {
 //           src={
 //             isMobile
 //               ? heroData?.heroData?.page?.metafields[0]?.references?.edges[1]
-//                   ?.node?.image?.url || "/assets/hero-bg2.png"
+//                   ?.node?.image?.url || "/assets/hero-bg2.webp"
 //               : heroData?.heroData?.page?.metafields[0]?.references?.edges[0]
-//                   ?.node?.image?.url || "/assets/hero-bg2.png"
+//                   ?.node?.image?.url || "/assets/hero-bg2.webp"
 //           }
 //           alt="Hero Desktop"
 //           fit="cover"

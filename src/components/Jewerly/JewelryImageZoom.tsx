@@ -60,7 +60,7 @@ export const JewelryImageZoom: React.FC<JewelryImageZoomProps> = ({
     >
       {/* fallback image for non-zoom state */}
       {!isZoomed && (
-        <Image
+        <Image loading="lazy"
           src={src}
           alt={alt}
           fit="contain"

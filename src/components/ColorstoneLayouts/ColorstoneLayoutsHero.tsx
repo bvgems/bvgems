@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 export const ColorstoneLayoutsHero = () => {
   const router = useRouter();
   const slide = {
-    image: "/assets/colorstonelayouthero.png",
+    image: "/assets/colorstonelayouthero.webp",
     title: "EXPLORE OR DESIGN GEMSTONE LAYOUTS",
     description:
       "Browse our curated layouts of ombré and straight color combinations—or create your own by selecting stone, shape, and size to craft a truly personalized piece.",

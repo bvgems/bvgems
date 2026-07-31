@@ -41,16 +41,16 @@ export const RightSideLooseGemstones = () => {
             onMouseLeave={() => autoplay.current?.reset?.()}
           >
             <CarouselSlide>
-              <Image className="mt-6" h={350} src="/assets/pink.png" />
+              <Image loading="lazy" className="mt-6" h={350} src="/assets/pink.webp" />
             </CarouselSlide>
             <CarouselSlide>
-              <Image className="mt-6" h={350} src="/assets/blue.png" />
+              <Image loading="lazy" className="mt-6" h={350} src="/assets/blue.webp" />
             </CarouselSlide>
             <CarouselSlide>
-              <Image className="mt-6" h={350} src="/assets/green.png" />
+              <Image loading="lazy" className="mt-6" h={350} src="/assets/green.webp" />
             </CarouselSlide>
             <CarouselSlide>
-              <Image className="mt-6" h={350} src="/assets/purple.png" />
+              <Image loading="lazy" className="mt-6" h={350} src="/assets/purple.webp" />
             </CarouselSlide>
           </Carousel>
         </GridCol>

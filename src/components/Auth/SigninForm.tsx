@@ -105,9 +105,9 @@ export const SigninForm = ({
 
         {/* <div className="flex justify-center text-gray-400">Or</div> */}
         {/* <div className="flex gap-4 justify-center">
-          <Image src="/assets/google.png" h="44" w="40" />
-          <Image src="/assets/facebook.png" h="40" w="40" />
-          <Image src="/assets/apple.png" h="40" w="40" />
+          <Image loading="lazy" src="/assets/google.webp" h="44" w="40" />
+          <Image loading="lazy" src="/assets/facebook.webp" h="40" w="40" />
+          <Image loading="lazy" src="/assets/apple.webp" h="40" w="40" />
         </div> */}
       </div>
     </form>

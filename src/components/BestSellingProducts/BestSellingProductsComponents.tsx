@@ -62,7 +62,7 @@ export const BestSellingProductsComponents = () => {
                 className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer p-6 flex flex-col items-center justify-between h-[300px]"
               >
                 <div className="w-full flex justify-center">
-                  <Image
+                  <Image loading="lazy"
                     radius="md"
                     h={200}
                     fit="contain"

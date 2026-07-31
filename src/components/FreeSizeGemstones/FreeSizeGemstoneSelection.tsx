@@ -3,6 +3,7 @@
 import { getFreeSizeFilteredData } from "@/apis/api";
 import { FreeSizeGridView } from "@/components/FreeSizeGemtones/FreeSizeGridView";
 import { FreeSizeFilterSideBar } from "@/components/FreeSizeGemtones/FreeSizeFilterSideBar";
+import { sortBySizeDesc } from "@/utils/sortUtils";
 import { Divider, Grid, GridCol } from "@mantine/core";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -99,26 +100,7 @@ export default function FreeSizeGemstoneSelection() {
   }, [selectedShapes, selectedColors, weightRange, isInitialized, router]);
 
   const sortBySize = (data: any[]) => {
-    return [...data].sort((a, b) => {
-      const parseDims = (dimStr: string) => {
-        if (!dimStr) return 0;
-        const clean = dimStr.trim();
-        if (clean.includes("x")) {
-          const parts = clean.split("x").map((p) => parseFloat(p.trim()));
-          if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
-            return parts[0] * parts[1];
-          }
-        } else {
-          const val = parseFloat(clean);
-          if (!isNaN(val)) return val;
-        }
-        return 0;
-      };
-
-      const sizeA = parseDims(a.dimension || a.Dimension || "");
-      const sizeB = parseDims(b.dimension || b.Dimension || "");
-      return sizeB - sizeA;
-    });
+    return [...data].sort((a, b) => sortBySizeDesc(a, b, 'dimension'));
   };
 
   const fetchFilteredData = async () => {

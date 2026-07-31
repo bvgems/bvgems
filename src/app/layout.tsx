@@ -137,7 +137,7 @@ export default function RootLayout({
               name: "B.V. Gems",
               description:
                 "Wholesale dealer of calibrated gemstones and fine jewelry in NYC’s Diamond District.",
-              image: `https://www.bvgems.com/assets/logo2.png`,
+              image: `https://www.bvgems.com/assets/logo2.webp`,
               "@id": siteUrl,
               url: siteUrl,
               telephone: "+1-212-944-4382",

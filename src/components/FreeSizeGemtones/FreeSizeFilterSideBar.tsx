@@ -231,7 +231,7 @@ export const FreeSizeFilterSideBar = ({
                       color="#0b182d"
                       label={
                         <div className="flex items-center gap-2">
-                          <Image src={item.image} h={35} w={35} fit="contain" />
+                          <Image loading="lazy" src={item.image} h={35} w={35} fit="contain" />
                           <span className="text-md mb-2">{item.label}</span>
                         </div>
                       }

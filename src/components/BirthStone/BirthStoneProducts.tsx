@@ -28,7 +28,7 @@ export const BirthStoneProducts = ({ currentStone }: any) => {
             }}
             className="w-full flex justify-center"
           >
-            <Image
+            <Image loading="lazy"
               radius="md"
               h={220}
               fit="contain"

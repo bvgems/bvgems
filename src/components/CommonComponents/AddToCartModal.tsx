@@ -224,7 +224,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
             "
           >
             <div className="relative rounded-xl overflow-hidden ring-1 ring-gray-200 dark:ring-zinc-800">
-              <Image
+              <Image loading="lazy"
                 src={displayImage}
                 alt={name}
                 radius="md"

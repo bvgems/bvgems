@@ -30,7 +30,7 @@ export const BlueSapphireShade = ({
                   : "border-gray-200 hover:shadow-lg"
               }`}
             >
-              <Image src={shade.image} w={80} h={80} fit="contain" />
+              <Image loading="lazy" src={shade.image} w={80} h={80} fit="contain" />
 
               <span className="mt-2 text-xs font-semibold text-gray-900">
                 {shade.name}
@@ -75,7 +75,7 @@ export const BlueSapphireShade = ({
                 key={shade.name}
                 className="flex flex-col items-center p-5 bg-white rounded-xl shadow-md text-center"
               >
-                <Image src={shade.image} w={90} h={90} fit="contain" />
+                <Image loading="lazy" src={shade.image} w={90} h={90} fit="contain" />
 
                 <span className="mt-3 text-sm font-semibold text-gray-900">
                   {shade.name}

@@ -6,12 +6,12 @@ import { JewelryCard } from "./JewerlyCard";
 const jewelryItems = [
   {
     title: "Necklaces",
-    image: "/assets/ownnecklace.png",
+    image: "/assets/ownnecklace.webp",
     subtitle: "Make a statement with a personalized necklace.",
   },
   {
     title: "Bracelets",
-    image: "/assets/ownbracelet.png",
+    image: "/assets/ownbracelet.webp",
     subtitle: "Grace your wrist with unique charm.",
   },
 ];

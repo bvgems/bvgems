@@ -171,7 +171,7 @@ export default function LocationMap() {
               <div className="bg-white rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-start mb-3 lg:mb-4">
                   <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-100 rounded-lg lg:rounded-xl flex items-center justify-center mr-3 lg:mr-4 flex-shrink-0">
-                    <Image src={"/assets/emerald.png"} />
+                    <Image loading="lazy" src={"/assets/emerald.webp"} />
                   </div>
                   <div>
                     <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-1 lg:mb-2">
@@ -194,7 +194,7 @@ export default function LocationMap() {
               <div className="bg-white rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-start mb-3 lg:mb-4">
                   <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-100 rounded-lg lg:rounded-xl flex items-center justify-center mr-3 lg:mr-4 flex-shrink-0">
-                    <Image src={"/assets/ruby.png"} />
+                    <Image loading="lazy" src={"/assets/ruby.webp"} />
                   </div>
                   <div>
                     <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-1 lg:mb-2">
@@ -217,7 +217,7 @@ export default function LocationMap() {
               <div className="bg-white rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-start mb-3 lg:mb-4">
                   <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-100 rounded-lg lg:rounded-xl flex items-center justify-center mr-3 lg:mr-4 flex-shrink-0">
-                    <Image src={"/assets/sapphire.png"} />
+                    <Image loading="lazy" src={"/assets/sapphire.webp"} />
                   </div>
                   <div>
                     <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-1 lg:mb-2">

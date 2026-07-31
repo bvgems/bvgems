@@ -87,7 +87,7 @@ export const HeaderHoverCardForGemstones = ({
                     }
                     className="flex items-center gap-2 cursor-pointer hover:text-gray-500"
                   >
-                    <Image src={item.image} h={35} w={35} fit="contain" />
+                    <Image loading="lazy" src={item.image} h={35} w={35} fit="contain" />
                     <span className="text-md mb-2">{item.label}</span>
                   </div>
                 ))}
@@ -107,7 +107,7 @@ export const HeaderHoverCardForGemstones = ({
                     key={index}
                     className="flex items-center gap-2 hover:text-gray-500 cursor-pointer"
                   >
-                    <Image src={item?.image} h={35} w={35} fit="contain" />
+                    <Image loading="lazy" src={item?.image} h={35} w={35} fit="contain" />
                     <span className="text-md mb-2">{item.name}</span>
                   </div>
                 ))}
@@ -140,7 +140,7 @@ export const HeaderHoverCardForGemstones = ({
                     key={index}
                     className="flex items-center gap-3 cursor-pointer hover:text-gray-500"
                   >
-                    <Image src={item?.image} h={35} w={35} fit="contain" />
+                    <Image loading="lazy" src={item?.image} h={35} w={35} fit="contain" />
                     <span className="text-md mb-2">{item.label}</span>
                   </div>
                 ))}

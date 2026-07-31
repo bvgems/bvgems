@@ -207,7 +207,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
                   }}
                   onClick={() => setMainImage(img)}
                 >
-                  <Image
+                  <Image loading="lazy"
                     src={img}
                     alt={`thumbnail-${idx}`}
                     fit="contain"

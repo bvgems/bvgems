@@ -145,7 +145,7 @@ export const GemstonesByBirthMonths = [
   // {
   //   month: "October",
   //   gemstone: "Paraiba Tourmaline",
-  //   image_url: "/assets/pariba.png",
+  //   image_url: "/assets/pariba.webp",
   // },
   // {
   //   month: "November",
@@ -704,18 +704,18 @@ export const COUNTRY_OPTIONS = [
 export const categoryOptions = [
   {
     label: "Bracelets",
-    image: "/assets/bracelet-icon.png",
+    image: "/assets/bracelet-icon.webp",
   },
   {
     label: "Necklaces",
-    image: "/assets/necklace-icon.png",
+    image: "/assets/necklace-icon.webp",
   },
 ];
 
 export const shapeOptions = [
   {
     label: "Round",
-    image: "/assets/round-icon.png",
+    image: "/assets/round-icon.webp",
   },
 ];
 
@@ -876,78 +876,78 @@ export const gemstoneOptions = [
   {
     label: "Alexandrite",
     value: "Alexandrite",
-    image: "/assets/sapphire.png",
-    shopImage: "/assets/alexandrite-shop-cali.png",
+    image: "/assets/sapphire.webp",
+    shopImage: "/assets/alexandrite-shop-cali.webp",
     link: "/calibrated-faceted-gemstones/alexandrite",
   },
   {
     label: "Amethyst",
     value: "Amethyst",
-    image: "/assets/amethyst.png",
-    shopImage: "/assets/amethyst-shop-cali.png",
+    image: "/assets/amethyst.webp",
+    shopImage: "/assets/amethyst-shop-cali.webp",
     link: "/calibrated-faceted-gemstones/amethyst",
   },
   {
     label: "Aquamarine",
     value: "Aquamarine",
-    image: "/assets/aquamarine.png",
-    shopImage: "/assets/aquamarine-shop-cali.png",
+    image: "/assets/aquamarine.webp",
+    shopImage: "/assets/aquamarine-shop-cali.webp",
     link: "/calibrated-faceted-gemstones/aquamarine",
   },
   {
     label: "Citrine",
     value: "Citrine",
-    image: "/assets/citrine.png",
-    shopImage: "/assets/citrine-shop-cal.png",
+    image: "/assets/citrine.webp",
+    shopImage: "/assets/citrine-shop-cal.webp",
     link: "/calibrated-faceted-gemstones/citrine",
   },
   {
     label: "Emerald",
     value: "Emerald",
-    image: "/assets/emerald.png",
-    shopImage: "/assets/emerald-shop-cal.png",
+    image: "/assets/emerald.webp",
+    shopImage: "/assets/emerald-shop-cal.webp",
     link: "/calibrated-faceted-gemstones/emerald",
   },
   {
     label: "Morganite",
     value: "Morganite",
-    image: "/assets/morganite.png",
-    shopImage: "/assets/morganite-shop-cal.png",
+    image: "/assets/morganite.webp",
+    shopImage: "/assets/morganite-shop-cal.webp",
     link: "/calibrated-faceted-gemstones/morganite",
   },
   {
     label: "Paraiba Tourmaline",
     value: "Paraiba Tourmaline",
-    image: "/assets/paraiba-img.jpg",
-    shopImage: "/assets/paraiba-shop.jpg",
+    image: "/assets/paraiba-img.webp",
+    shopImage: "/assets/paraiba-shop.webp",
     link: "/calibrated-faceted-gemstones/paraiba-tourmaline",
   },
   {
     label: "Peridot",
     value: "Peridot",
-    image: "/assets/peridot.png",
-    shopImage: "/assets/peridot-shop-cal.png",
+    image: "/assets/peridot.webp",
+    shopImage: "/assets/peridot-shop-cal.webp",
     link: "/calibrated-faceted-gemstones/peridot",
   },
   {
     label: "Ruby",
     value: "Ruby",
-    image: "/assets/ruby.png",
-    shopImage: "/assets/ruby-shop-cali.png",
+    image: "/assets/ruby.webp",
+    shopImage: "/assets/ruby-shop-cali.webp",
     link: "/calibrated-faceted-gemstones/ruby",
   },
   {
     label: "Sapphire (All Colors)",
     value: "Sapphire",
-    image: "/assets/sapphire.png",
-    shopImage: "/assets/sapphire-shop-calibrated.png",
+    image: "/assets/sapphire.webp",
+    shopImage: "/assets/sapphire-shop-calibrated.webp",
     link: "/calibrated-faceted-gemstones/sapphire",
   },
   {
     label: "Tanzanite",
     value: "Tanzanite",
-    image: "/assets/tanzanite.png",
-    shopImage: "/assets/tanzanite-shop-cali1.png",
+    image: "/assets/tanzanite.webp",
+    shopImage: "/assets/tanzanite-shop-cali1.webp",
     link: "/calibrated-faceted-gemstones/tanzanite",
   },
 ];
@@ -955,91 +955,91 @@ export const gemstoneOptionsForCustomization = [
   {
     label: "Alexandrite",
     value: "Alexandrite",
-    image: "/assets/sapphire.png",
+    image: "/assets/sapphire.webp",
     link: "/calibrated-faceted-gemstones/alexandrite",
   },
   {
     label: "Amethyst",
     value: "Amethyst",
-    image: "/assets/amethyst.png",
+    image: "/assets/amethyst.webp",
     link: "/calibrated-faceted-gemstones/amethyst",
   },
   {
     label: "Aquamarine",
     value: "Aquamarine",
-    image: "/assets/aquamarine.png",
+    image: "/assets/aquamarine.webp",
     link: "/calibrated-faceted-gemstones/aquamarine",
   },
   {
     label: "Citrine",
     value: "Citrine",
-    image: "/assets/citrine.png",
+    image: "/assets/citrine.webp",
     link: "/calibrated-faceted-gemstones/citrine",
   },
   {
     label: "Emerald",
     value: "Emerald",
-    image: "/assets/emerald.png",
+    image: "/assets/emerald.webp",
     link: "/calibrated-faceted-gemstones/emerald",
   },
   {
     label: "Morganite",
     value: "Morganite",
-    image: "/assets/morganite.png",
+    image: "/assets/morganite.webp",
     link: "/calibrated-faceted-gemstones/morganite",
   },
   {
     label: "Peridot",
     value: "Peridot",
-    image: "/assets/peridot.png",
+    image: "/assets/peridot.webp",
     link: "/calibrated-faceted-gemstones/peridot",
   },
   {
     label: "Ruby",
     value: "Ruby",
-    image: "/assets/ruby.png",
+    image: "/assets/ruby.webp",
     link: "/calibrated-faceted-gemstones/ruby",
   },
   // {
   //   label: "Sapphire",
   //   value: "Sapphire",
-  //   image: "/assets/sapphire.png",
+  //   image: "/assets/sapphire.webp",
   //   link: "/calibrated-faceted-gemstones/sapphire",
   // },
   {
     label: "Blue Sapphire",
     value: "Blue Sapphire",
-    image: "/assets/blue2.png",
+    image: "/assets/blue2.webp",
     link: "/calibrated-faceted-gemstones/tanzanite",
   },
   {
     label: "Yellow Sapphire",
     value: "Yellow Sapphire",
-    image: "/assets/yellowcolor.png",
+    image: "/assets/yellowcolor.webp",
     link: "/calibrated-faceted-gemstones/tanzanite",
   },
   {
     label: "Pink Sapphire",
     value: "Pink Sapphire",
-    image: "/assets/pinkcolor.png",
+    image: "/assets/pinkcolor.webp",
     link: "/calibrated-faceted-gemstones/tanzanite",
   },
   {
     label: "Green Sapphire",
     value: "Green Sapphire",
-    image: "/assets/greencolor.png",
+    image: "/assets/greencolor.webp",
     link: "/calibrated-faceted-gemstones/tanzanite",
   },
   {
     label: "Orange Sapphire",
     value: "Orange Sapphire",
-    image: "/assets/orange2.png",
+    image: "/assets/orange2.webp",
     link: "/calibrated-faceted-gemstones/tanzanite",
   },
   {
     label: "Purple Sapphire",
     value: "Purple Sapphire",
-    image: "/assets/purplecolor.png",
+    image: "/assets/purplecolor.webp",
     link: "/calibrated-faceted-gemstones/tanzanite",
   },
   // { value: "Black", color: "#000000" },
@@ -1048,7 +1048,7 @@ export const gemstoneOptionsForCustomization = [
   {
     label: "Tanzanite",
     value: "Tanzanite",
-    image: "/assets/tanzanite.png",
+    image: "/assets/tanzanite.webp",
     link: "/calibrated-faceted-gemstones/tanzanite",
   },
 ];
@@ -1076,13 +1076,13 @@ export const patternOptions = [
     value: "straight-pattern",
     label: "Straight Pattern",
     description: "A clean, consistent line of one gemstone color throughout.",
-    image: "/assets/straight-img.png",
+    image: "/assets/straight-img.webp",
   },
   {
     value: "ombre-pattern",
     label: "Ombre Pattern",
     description: "A gradient-style blend from one gemstone color to another.",
-    image: "/assets/ombre-img.png",
+    image: "/assets/ombre-img.webp",
   },
   {
     value: "custom-details",
@@ -1094,26 +1094,26 @@ export const FreeSizeGemstonesList = [
   {
     label: "Blue Sapphire",
     value: "Blue Sapphire",
-    image: "/assets/freesizesapphire.png",
+    image: "/assets/freesizesapphire.webp",
     link: "/free-size-gemstones/sapphire",
   },
   {
     label: "Fancy Sapphire",
     value: "Fancy Sapphire",
-    image: "/assets/fancy-sapphire.png",
+    image: "/assets/fancy-sapphire.webp",
     link: "/free-size-gemstones/sapphire",
   },
   {
     label: "Ruby",
     value: "Ruby",
-    image: "/assets/freesizeruby.png",
+    image: "/assets/freesizeruby.webp",
     link: "/free-size-gemstones/ruby",
   },
 
   {
     label: "Emerald",
     value: "Emerald",
-    image: "/assets/freesizeemerald.png",
+    image: "/assets/freesizeemerald.webp",
     link: "/free-size-gemstones/emerald",
   },
 ];
@@ -1203,43 +1203,43 @@ export const quickNavigationData = [
 export const shopByColorOptions = [
   {
     name: "Red",
-    image: "/assets/red1.png",
+    image: "/assets/red1.webp",
     href: "/shop-by-color/red",
   },
   {
     name: "Pink",
 
-    image: "/assets/pinkcolor.png",
+    image: "/assets/pinkcolor.webp",
     href: "/shop-by-color/pink",
   },
   {
     name: "Blue",
 
-    image: "/assets/blue2.png",
+    image: "/assets/blue2.webp",
     href: "/shop-by-color/blue",
   },
   {
     name: "Purple",
 
-    image: "/assets/purplecolor.png",
+    image: "/assets/purplecolor.webp",
     href: "/shop-by-color/purple",
   },
   {
     name: "Green",
 
-    image: "/assets/greencolor.png",
+    image: "/assets/greencolor.webp",
     href: "/shop-by-color/green",
   },
   {
     name: "Yellow",
 
-    image: "/assets/yellowcolor.png",
+    image: "/assets/yellowcolor.webp",
     href: "/shop-by-color/yellow",
   },
   {
     name: "Orange",
 
-    image: "/assets/orange2.png",
+    image: "/assets/orange2.webp",
     href: "/shop-by-color/orange",
   },
 ];
@@ -1542,15 +1542,15 @@ export const GoldColorData = [
 ];
 
 export const SapphireLooseGemstoneColorOptions = [
-  { value: "Blue", color: "#1E40AF", image: "/assets/blue2.png" },
-  { value: "Yellow", color: "#FACC15", image: "/assets/yellowcolor.png" },
-  { value: "Pink", color: "#EC4899", image: "/assets/pinkcolor.png" },
-  { value: "Green", color: "#22C55E", image: "/assets/greencolor.png" },
-  { value: "Orange", color: "#F97316", image: "/assets/orange2.png" },
+  { value: "Blue", color: "#1E40AF", image: "/assets/blue2.webp" },
+  { value: "Yellow", color: "#FACC15", image: "/assets/yellowcolor.webp" },
+  { value: "Pink", color: "#EC4899", image: "/assets/pinkcolor.webp" },
+  { value: "Green", color: "#22C55E", image: "/assets/greencolor.webp" },
+  { value: "Orange", color: "#F97316", image: "/assets/orange2.webp" },
   // { value: "Black", color: "#000000" },
   // { value: "White", color: "#808080" },
   // { value: "Red", color: "#FF0000" },
-  { value: "Purple", color: "#800080", image: "/assets/purplecolor.png" },
+  { value: "Purple", color: "#800080", image: "/assets/purplecolor.webp" },
 ];
 
 export const FreeSizeOrigins: any = {
@@ -1561,19 +1561,19 @@ export const FreeSizeOrigins: any = {
 
 export const IndustryAffiliationOptions = [
   {
-    logo: "/assets/agta-logo.png",
+    logo: "/assets/agta-logo.webp",
     link: "https://agta.org/",
   },
   {
-    logo: "/assets/jbt-logo.png",
+    logo: "/assets/jbt-logo.webp",
     link: "https://www.jewelersboard.com/",
   },
   {
-    logo: "/assets/polygon-logo.png",
+    logo: "/assets/polygon-logo.webp",
     link: "https://www.polygon.net/jwl/public/colored-stones/buy-colored-stones-en.jsp",
   },
   {
-    logo: "/assets/idca-logo.png",
+    logo: "/assets/idca-logo.webp",
     link: "https://idcany.org/",
   },
 ];

@@ -15,7 +15,7 @@ export const LeftSideLooseGemstones = () => {
       animate={inView ? { y: 0, opacity: 1 } : {}}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <Image h={400} src="/assets/loose-gemstone.png" alt="Gemstone" />
+      <Image loading="lazy" h={400} src="/assets/loose-gemstone.webp" alt="Gemstone" />
     </motion.div>
   );
 };

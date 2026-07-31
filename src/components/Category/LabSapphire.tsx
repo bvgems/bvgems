@@ -22,8 +22,8 @@ export const LabSapphire = ({
 
           <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
             <div className="h-[160px] w-[160px] flex items-center justify-center">
-              <Image
-                src="/assets/lab-blue.png"
+              <Image loading="lazy"
+                src="/assets/lab-blue.webp"
                 fit="contain"
                 radius="md"
                 className="object-contain rounded-xl"
@@ -51,8 +51,8 @@ export const LabSapphire = ({
 
           <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
             <div className="h-[160px] w-[160px] flex items-center justify-center">
-              <Image
-                src="/assets/lab-pink.png"
+              <Image loading="lazy"
+                src="/assets/lab-pink.webp"
                 fit="contain"
                 radius="md"
                 className="object-contain rounded-xl"

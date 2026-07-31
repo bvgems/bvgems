@@ -92,7 +92,7 @@ export const BirthStoneComponent = () => {
                 {isCurrent && (
                   <div className="absolute inset-0 border border-[#0b182d] pointer-events-none"></div>
                 )}
-                <Image
+                <Image loading="lazy"
                   fit="contain"
                   src={item.image_url}
                   h={150}

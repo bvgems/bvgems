@@ -210,7 +210,7 @@ export default function TradeShows() {
                         marginBottom: "0.75rem",
                       }}
                     >
-                      <Image
+                      <Image loading="lazy"
                         src={show.logo}
                         alt={show.name}
                         fit="contain"

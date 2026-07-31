@@ -27,6 +27,7 @@ import { useRouter } from "next/navigation";
 import { AuthForm } from "../Auth/AuthForm";
 import { getCartStore } from "@/store/useCartStore";
 import React, { useMemo, useState, useEffect } from "react";
+import { sortBySizeDesc } from "@/utils/sortUtils";
 import { AddToCartModal } from "../CommonComponents/AddToCartModal";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
@@ -134,11 +135,16 @@ export const CategoryTable = ({
   const filteredAndSortedRows = useMemo(() => {
     let filtered = [...totalFilteredRows];
 
-    if (sortOrder === "lowToHigh") {
-      filtered.sort((a: any, b: any) => a.ct_weight - b.ct_weight);
-    } else if (sortOrder === "highToLow") {
-      filtered.sort((a: any, b: any) => b.ct_weight - a.ct_weight);
-    }
+    filtered.sort((a: any, b: any) => {
+      if (sortOrder === "lowToHigh") {
+        if (a.ct_weight !== b.ct_weight) return a.ct_weight - b.ct_weight;
+      } else if (sortOrder === "highToLow") {
+        if (a.ct_weight !== b.ct_weight) return b.ct_weight - a.ct_weight;
+      }
+      
+      // Fallback: Always sort by size largest to smallest if carat weight is equal (or if no sort order)
+      return sortBySizeDesc(a, b, "size");
+    });
 
     const startIndex = (currentPage - 1) * rowsPerPage;
     return filtered.slice(startIndex, startIndex + rowsPerPage);

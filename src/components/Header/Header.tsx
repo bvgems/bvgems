@@ -169,7 +169,7 @@ export function Header() {
       className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
     >
       <div className="flex-shrink-0">
-        <Image
+        <Image loading="lazy"
           h={50}
           w={50}
           fit="cover"
@@ -250,7 +250,7 @@ export function Header() {
         <Group wrap="nowrap" align="flex-start">
           {item.image && (
             <ThemeIcon size={34} variant="transparent">
-              <Image src={item.image} alt={item.label} w={20} h={20} />
+              <Image loading="lazy" src={item.image} alt={item.label} w={20} h={20} />
             </ThemeIcon>
           )}
           <div className="hover:text-gray-500">
@@ -453,10 +453,10 @@ export function Header() {
                 <Burger opened={opened} onClick={toggle} size="sm" />
 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
-                  <Image
+                  <Image loading="lazy"
                     className="cursor-pointer"
                     onClick={() => router.push("/")}
-                    src="/assets/logo2.png"
+                    src="/assets/logo2.webp"
                     alt="logo"
                     h={50}
                     w={100}
@@ -493,10 +493,10 @@ export function Header() {
                 span={{ base: 12, md: 2 }}
                 className="flex justify-start"
               >
-                <Image
+                <Image loading="lazy"
                   className="cursor-pointer"
                   onClick={() => router.push("/")}
-                  src="/assets/logo2.png"
+                  src="/assets/logo2.webp"
                   alt="logo"
                   h={50}
                   w={100}

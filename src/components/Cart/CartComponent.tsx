@@ -323,7 +323,7 @@ export function CartComponent() {
                     position: "relative",
                   }}
                 >
-                  <Image
+                  <Image loading="lazy"
                     src={
                       value?.jewelryProduct?.image_url ??
                       value?.product?.image_url

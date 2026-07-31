@@ -30,7 +30,7 @@ export const ShopCalibrated = () => {
               className="cursor-pointer flex flex-col items-center justify-center bg-transparent"
             >
               <div className="w-[160px] h-[160px] flex items-center justify-center">
-                <Image
+                <Image loading="lazy"
                   src={item?.shopImage}
                   alt={item?.label}
                   fit="contain"

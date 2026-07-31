@@ -140,7 +140,7 @@ export const CustomizeJewelryDrawer = ({
                         isSelected ? "border rounded-md p-2" : ""
                       }`}
                     >
-                      <Image src={item?.image} h={36} w={36} fit="contain" />
+                      <Image loading="lazy" src={item?.image} h={36} w={36} fit="contain" />
                       <span className="text-xs mt-1">{item?.label}</span>
                     </div>
                   );

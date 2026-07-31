@@ -54,7 +54,7 @@ export const JeweleryFilter = ({
         onMouseLeave={handleMouseLeave}
       >
         {option?.image ? (
-          <Image src={option.image} h={26} w={26} />
+          <Image loading="lazy" src={option.image} h={26} w={26} />
         ) : option?.color ? (
           <div
             style={{
@@ -145,7 +145,7 @@ export const JeweleryFilter = ({
                       >
                         <div className="flex items-center justify-center gap-2">
                           {item?.image ? (
-                            <Image
+                            <Image loading="lazy"
                               h={title === "Shape" ? 20 : 40}
                               w={title === "Shape" ? 20 : 40}
                               src={item.image}
@@ -194,7 +194,7 @@ export const JeweleryFilter = ({
             {hoveredPattern.label}
           </Text>
           {hoveredPattern.image && (
-            <Image
+            <Image loading="lazy"
               src={hoveredPattern.image}
               height={100}
               fit="contain"

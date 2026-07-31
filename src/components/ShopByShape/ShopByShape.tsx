@@ -35,7 +35,7 @@ export const ShopByShape = () => {
                 className="flex justify-center flex-col items-center cursor-pointer"
                 key={index}
               >
-                <Image
+                <Image loading="lazy"
                   src={shape.image}
                   alt={shape.label}
                   width={45}

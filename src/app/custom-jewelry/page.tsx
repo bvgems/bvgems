@@ -178,7 +178,7 @@ export default function CustomDesignForm() {
             renderOption={({ option }: any) => (
               <div className="flex items-center gap-2.5">
                 {option?.image && (
-                  <Image src={option.image} h={24} w={24} alt={option.label} />
+                  <Image loading="lazy" src={option.image} h={24} w={24} alt={option.label} />
                 )}
                 <Text size="sm">{option.label}</Text>
               </div>

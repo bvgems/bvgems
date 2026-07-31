@@ -157,7 +157,7 @@ export default function CheckoutSelectionPage() {
                         key={idx}
                         className="flex gap-4 border border-gray-200 rounded-lg p-3 bg-white shadow-sm hover:shadow-md transition"
                       >
-                        <Image
+                        <Image loading="lazy"
                           src={
                             item?.jewelryProduct?.image_url ??
                             item?.product?.image_url
@@ -248,7 +248,7 @@ export default function CheckoutSelectionPage() {
                         key={idx}
                         className="flex gap-4 border border-gray-200 rounded-lg p-3 bg-white shadow-sm hover:shadow-md transition"
                       >
-                        <Image
+                        <Image loading="lazy"
                           src={
                             item?.jewelryProduct?.image_url ??
                             item?.product?.image_url

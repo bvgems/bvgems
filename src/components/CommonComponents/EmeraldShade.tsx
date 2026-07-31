@@ -31,7 +31,7 @@ export const EmeraldShade = ({
                   setEmeraldShade(shade.name);
                 }}
               >
-                <Image
+                <Image loading="lazy"
                   src={shade.url}
                   alt={shade.name}
                   h={100}

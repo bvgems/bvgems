@@ -50,7 +50,7 @@ export default function ShopByColor() {
               onClick={() => handleShopByColor(item)}
             >
               <div className="flex items-center justify-center">
-                <Image
+                <Image loading="lazy"
                   h={130}
                   w={130}
                   fit="contain"

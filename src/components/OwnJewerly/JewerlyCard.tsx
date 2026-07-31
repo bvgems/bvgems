@@ -38,7 +38,7 @@ export const JewelryCard = ({
       animate={controls}
       className="relative h-[300px] overflow-hidden"
     >
-      <Image src={image} h={300} w={400} className="object-cover" />
+      <Image loading="lazy" src={image} h={300} w={400} className="object-cover" />
 
       <motion.div
         variants={{ rest: { x: 0 }, hover: { x: -40 } }}

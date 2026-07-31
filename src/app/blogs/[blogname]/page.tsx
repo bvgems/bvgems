@@ -61,7 +61,7 @@ export default async function BlogPostPage({
       {/* Hero Section */}
       {post.image?.url && (
         <div className="relative w-full h-[400px]">
-          <Image
+          <Image loading="lazy"
             src={post.image?.url}
             alt={post.image?.altText || post.title}
             className="w-full h-full object-cover"

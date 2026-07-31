@@ -8,7 +8,7 @@ export const BookAppointment = () => {
     <Container size={1350} className="py-6 bg-[#f9f9f9]">
       <Grid>
         <GridCol span={{ base: 12, md: 6 }}>
-          <Image h={500} src={"/assets/book-appointment.png"} />
+          <Image loading="lazy" h={500} src={"/assets/book-appointment.webp"} />
         </GridCol>
         <GridCol span={{ base: 12, md: 6 }}>
           <div className="p-16 flex flex-col gap-4 mt-6">

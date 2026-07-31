@@ -361,7 +361,7 @@ export default function JewelryProductPage() {
                             style={{ width: "100%", height: "auto" }}
                           />
                         ) : (
-                          <Image
+                          <Image loading="lazy"
                             src={images[currentIndex]?.url}
                             alt={`${productData?.title} - Main`}
                             fit="fill"
@@ -422,7 +422,7 @@ export default function JewelryProductPage() {
                           }}
                         >
                           {thumb?.type === "image" ? (
-                            <Image
+                            <Image loading="lazy"
                               src={thumb.url}
                               alt={`${productData?.title} - Thumb ${idx + 1}`}
                               fit="contain"

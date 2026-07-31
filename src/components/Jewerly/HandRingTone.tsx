@@ -8,7 +8,7 @@ export const HandRingTone = ({ ringImage }: any) => {
     <div className="relative w-full flex flex-col items-center mb-5">
       <div className="relative w-[450px] h-[450px]">
         <img
-          src="/assets/hand-base2.png"
+          src="/assets/hand-base2.webp"
           alt="Hand"
           className="w-full h-full object-contain transition-all duration-300"
           style={{
@@ -21,7 +21,7 @@ export const HandRingTone = ({ ringImage }: any) => {
         {/* Ring overlay */}
         {ringImage && (
           <img
-            src={"/assets/removed-ring-preview.png"}
+            src={"/assets/removed-ring-preview.webp"}
             alt="Ring Preview"
             className="absolute object-contain"
             style={{

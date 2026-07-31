@@ -82,8 +82,8 @@ export const EmailSubscribeModal = () => {
       className="z-[999]"
     >
       <Stack align="center">
-        <Image
-          src="/assets/banner.png"
+        <Image loading="lazy"
+          src="/assets/banner.webp"
           alt="Subscribe Banner"
           height={100}
           fit="cover"

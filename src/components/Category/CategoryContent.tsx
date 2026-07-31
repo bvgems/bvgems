@@ -31,6 +31,7 @@ import { Carousel } from "@mantine/carousel";
 import Script from "next/script";
 import { EmeraldDetails } from "./EmeraldDetails";
 import { LabSapphire } from "./LabSapphire";
+import { sortBySizeDesc } from "@/utils/sortUtils";
 
 // Utility: pick one representative image per quality, prioritizing items with videos
 const getRepresentativeImages = (items: any[]) => {
@@ -173,7 +174,7 @@ export function CategoryContent({
     const shape = selectedShape || "default";
     const uniqueSizes = Array.from(
       new Set(result?.data?.map((item: any) => item.size)),
-    ).sort((a: any, b: any) => parseFloat(a) - parseFloat(b));
+    ).sort(sortBySizeDesc);
 
     setAllSizes((prev: any) => ({
       ...prev,
@@ -350,7 +351,7 @@ export function CategoryContent({
                               setActiveVideoIndex(0);
                             }}
                           >
-                            <Image
+                            <Image loading="lazy"
                               src={item.image_url}
                               h={70}
                               w={70}
@@ -459,8 +460,8 @@ export function CategoryContent({
 
                 <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
                   <div className="h-[160px] w-[160px] flex items-center justify-center">
-                    <Image
-                      src="/assets/pariba-desc.jpg"
+                    <Image loading="lazy"
+                      src="/assets/pariba-desc.webp"
                       fit="contain"
                       radius="md"
                       className="object-contain rounded-xl"
@@ -487,8 +488,8 @@ export function CategoryContent({
 
                 <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
                   <div className="h-[160px] w-[160px] flex items-center justify-center">
-                    <Image
-                      src="/assets/alex-desc.png"
+                    <Image loading="lazy"
+                      src="/assets/alex-desc.webp"
                       fit="contain"
                       radius="md"
                       className="object-contain rounded-xl"
@@ -516,8 +517,8 @@ export function CategoryContent({
 
                   <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md max-w-xl mx-auto">
                     <div className="h-[160px] w-[160px] flex items-center justify-center">
-                      <Image
-                        src="/assets/lab-blue.png"
+                      <Image loading="lazy"
+                        src="/assets/lab-blue.webp"
                         fit="contain"
                         radius="md"
                         className="object-contain rounded-xl"
@@ -544,8 +545,8 @@ export function CategoryContent({
                     {/* Card 1 */}
                     <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
                       <div className="w-[140px] h-[140px] flex items-center justify-center">
-                        <Image
-                          src="/assets/royal-blue.png"
+                        <Image loading="lazy"
+                          src="/assets/royal-blue.webp"
                           w={140}
                           h={140}
                           fit="contain"
@@ -566,8 +567,8 @@ export function CategoryContent({
                     {/* Card 2 */}
                     <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
                       <div className="w-[140px] h-[140px] flex items-center justify-center">
-                        <Image
-                          src="/assets/medium-cornflower.png"
+                        <Image loading="lazy"
+                          src="/assets/medium-cornflower.webp"
                           w={140}
                           h={140}
                           fit="contain"
@@ -588,8 +589,8 @@ export function CategoryContent({
                     {/* Card 3 */}
                     <div className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition text-center">
                       <div className="w-[140px] h-[140px] flex items-center justify-center">
-                        <Image
-                          src="/assets/navy-blue.png"
+                        <Image loading="lazy"
+                          src="/assets/navy-blue.webp"
                           w={140}
                           h={140}
                           fit="contain"
@@ -660,7 +661,7 @@ export function CategoryContent({
                         onClick={() => setSelectedShape(shape)}
                       >
                         <Tooltip label={shape}>
-                          <Image
+                          <Image loading="lazy"
                             src={imageSrc}
                             h={50}
                             w={50}
@@ -692,7 +693,7 @@ export function CategoryContent({
                                 }`}
                             >
                               {/* <IconDiamond color={item?.color} size={30} /> */}
-                              <Image src={item?.image} h={40} w={40} />
+                              <Image loading="lazy" src={item?.image} h={40} w={40} />
                             </span>
                           </Tooltip>
                         ),
@@ -910,7 +911,7 @@ export function CategoryContent({
                           : "border-gray-300 hover:border-black"
                         }`}
                     >
-                      <Image
+                      <Image loading="lazy"
                         src={shapeImageMap[shape]}
                         h={40}
                         w={40}

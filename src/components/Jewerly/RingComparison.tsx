@@ -11,7 +11,7 @@ export const RingComparison = ({ productData }: any) => {
         >
           <Grid>
             <GridCol span={{ base: 12, md: 9 }}>
-              <Image
+              <Image loading="lazy"
                 src={productData?.images?.edges[4]?.node?.url}
                 h={300}
                 w={400}
@@ -59,7 +59,7 @@ export const RingComparison = ({ productData }: any) => {
                 {/* Dime image with bottom measurement arrow */}
                 <div className="relative">
                   <img
-                    src="/assets/dime.png"
+                    src="/assets/dime.webp"
                     alt="Dime for scale"
                     className="w-[84px] h-[84px] object-contain"
                   />

@@ -7,8 +7,8 @@ export const GemstonesEducationBanner = () => {
   const router = useRouter();
   return (
     <div className="relative h-[500px] w-full">
-      <Image
-        src="/assets/generated-image.png"
+      <Image loading="lazy"
+        src="/assets/generated-image.webp"
         alt="Gemstone Education"
         className="h-full w-full object-cover"
       />

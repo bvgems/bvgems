@@ -154,7 +154,7 @@ export const FilterSideBar = ({
                         className="mt-4"
                         label={
                           <div className="flex items-center gap-2">
-                            <Image
+                            <Image loading="lazy"
                               src={item.image}
                               h={35}
                               w={35}

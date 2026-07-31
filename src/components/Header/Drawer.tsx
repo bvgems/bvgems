@@ -46,7 +46,7 @@ export const DrawerComponent = ({
       <Drawer
         opened={opened}
         onClose={toggle}
-        title={<Image src="/assets/logo2.png" h={60} w={150} />}
+        title={<Image loading="lazy" src="/assets/logo2.webp" h={60} w={150} />}
         padding="md"
         size="xs"
         position="left"
@@ -91,7 +91,7 @@ export const DrawerComponent = ({
                           }}
                         >
                           {sublink.image && (
-                            <Image src={sublink.image} h={30} w={30} />
+                            <Image loading="lazy" src={sublink.image} h={30} w={30} />
                           )}
                           <h1 className="text-sm font-normal">
                             {sublink.label}

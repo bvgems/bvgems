@@ -9,9 +9,9 @@ export async function generateGemstoneImage(
   size: number
 ): Promise<string> {
   const gemstonePx = Math.round(size * MM_TO_PX); // 👈 Ensure it's an integer
-  const base = path.resolve("public/assets/coin.png");
+  const base = path.resolve("public/assets/coin.webp");
   const shapeImage = path.resolve(
-    `public/assets/round.png`
+    `public/assets/round.webp`
   );
   const outputName = `${shape.toLowerCase()}_${size}mm.png`;
   const outputPath = path.resolve("public/previews", outputName);

@@ -9,7 +9,7 @@ import Autoplay from "embla-carousel-autoplay";
 
 const reviews = [
   {
-    platform: "/assets/google.png",
+    platform: "/assets/google.webp",
     name: "Andrew Wasden",
     location: "NY, US",
     initials: "AW",
@@ -18,7 +18,7 @@ const reviews = [
       "I had been looking for a place to make a custom engagement ring, and I decided to go with B.V Gems after hearing they specialize in sapphires. The ring turned out gorgeous and exceeded expectations.",
   },
   {
-    platform: "/assets/google.png",
+    platform: "/assets/google.webp",
     name: "Samantha Jones",
     location: "CA, US",
     initials: "SJ",
@@ -27,7 +27,7 @@ const reviews = [
       "I was looking to create a unique sapphire pendant for my anniversary. Shrey helped me source the perfect stone and the final pendant is stunning!",
   },
   {
-    platform: "/assets/google.png",
+    platform: "/assets/google.webp",
     name: "Michael Lee",
     location: "IL, US",
     initials: "ML",
@@ -36,7 +36,7 @@ const reviews = [
       "I wanted a ruby ring for my wife. Shrey and the design team delivered exactly what I had envisioned. Professional and smooth process throughout.",
   },
   {
-    platform: "/assets/google.png",
+    platform: "/assets/google.webp",
     name: "Priya Patel",
     location: "TX, US",
     initials: "PP",
@@ -45,7 +45,7 @@ const reviews = [
       "For my mother's 60th, B.V Gems created a meaningful emerald ring. Incredible attention to detail and craftsmanship. Highly recommend!",
   },
   {
-    platform: "/assets/google.png",
+    platform: "/assets/google.webp",
     name: "David Kim",
     location: "NJ, US",
     initials: "DK",
@@ -105,7 +105,7 @@ export const Testimonials = () => {
                   </p>
                   <p className="text-xs text-gray-500">{review.location}</p>
                 </div>
-                <Image
+                <Image loading="lazy"
                   src={review.platform}
                   w={20}
                   h={20}

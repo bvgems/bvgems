@@ -24,7 +24,7 @@ export const EmeraldDetails = ({
             {/* Zambian */}
             <div className="flex flex-col items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
               <div className="h-[140px] w-[140px] flex items-center justify-center">
-                <Image
+                <Image loading="lazy"
                   src={shaedImages[0]}
                   fit="contain"
                   radius="md"
@@ -43,7 +43,7 @@ export const EmeraldDetails = ({
             {shaedImages[1] && (
               <div className="flex flex-col items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
                 <div className="h-[140px] w-[140px] flex items-center justify-center">
-                  <Image
+                  <Image loading="lazy"
                     src={shaedImages[1]}
                     fit="contain"
                     radius="md"
