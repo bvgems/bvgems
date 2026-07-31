@@ -285,7 +285,14 @@ export function CategoryContent({
     ? selectedGradeItem.cloudinary_videos
     : [];
 
-  const currentVideoUrl = selectedGradeVideos[activeVideoIndex]?.video_url;
+  // Helper to ensure Cloudinary automatically formats videos for cross-browser support (e.g., converting .mov for Windows)
+  const getOptimizedVideoUrl = (url: string | undefined) => {
+    if (!url || !url.includes("cloudinary.com")) return url;
+    if (url.includes("/upload/f_auto")) return url; // Already optimized
+    return url.replace("/upload/", "/upload/f_auto,q_auto/");
+  };
+
+  const currentVideoUrl = getOptimizedVideoUrl(selectedGradeVideos[activeVideoIndex]?.video_url);
 
   useEffect(() => {
     if (mainVideoRef.current && currentVideoUrl) {
@@ -415,7 +422,7 @@ export function CategoryContent({
                                     onClick={() => setActiveVideoIndex(index)}
                                   >
                                     <video
-                                      src={video.video_url}
+                                      src={getOptimizedVideoUrl(video.video_url)}
                                       className="w-full h-16 object-cover rounded pointer-events-none"
                                       muted
                                       playsInline
