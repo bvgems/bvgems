@@ -17,7 +17,9 @@ import {
   Text,
   useCombobox,
   Modal,
+  ScrollArea,
 } from "@mantine/core";
+import { sortBySizeAsc } from "@/utils/sortUtils";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCertificate } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
@@ -113,14 +115,14 @@ export const ProductSpecifications = ({
       ?.map((item: any) => item?.size)
       .filter((size: any) => size != null);
 
-    const uniqueSizes = Array.from(new Set(sizes));
+    const uniqueSizes = Array.from(new Set(sizes)).sort(sortBySizeAsc);
     const allSize = uniqueSizes.map((size: any) => {
       const match = size.match(/(\d+(\.\d+)?)\s*x\s*(\d+(\.\d+)?)/i);
       const formatted =
         match && match.length >= 4
           ? `${parseFloat(match[1]).toFixed(2)} x ${parseFloat(
-              match[3]
-            ).toFixed(2)}`
+            match[3]
+          ).toFixed(2)}`
           : size;
 
       return {
@@ -193,6 +195,8 @@ export const ProductSpecifications = ({
               store={combobox}
               resetSelectionOnOptionHover
               onOptionSubmit={handleSizeChange}
+              withinPortal={true}
+              zIndex={1000000}
             >
               <ComboboxTarget targetType="button">
                 <InputBase
@@ -211,16 +215,18 @@ export const ProductSpecifications = ({
                 </InputBase>
               </ComboboxTarget>
               <ComboboxDropdown>
-                <ComboboxOptions>
-                  {allSizes.map((item) => (
-                    <ComboboxOption value={item.value} key={item.value}>
-                      <Group gap="xs">
-                        {item.value === value && <CheckIcon size={12} />}
-                        <span>{item.label}</span>
-                      </Group>
-                    </ComboboxOption>
-                  ))}
-                </ComboboxOptions>
+                <ScrollArea.Autosize type="scroll" mah={350}>
+                  <ComboboxOptions>
+                    {allSizes.map((item) => (
+                      <ComboboxOption value={item.value} key={item.value}>
+                        <Group gap="xs">
+                          {item.value === value && <CheckIcon size={12} />}
+                          <span>{item.label}</span>
+                        </Group>
+                      </ComboboxOption>
+                    ))}
+                  </ComboboxOptions>
+                </ScrollArea.Autosize>
               </ComboboxDropdown>
             </Combobox>
           </div>
@@ -240,6 +246,8 @@ export const ProductSpecifications = ({
               store={qualityCombobox}
               resetSelectionOnOptionHover
               onOptionSubmit={handleQualityChange}
+              withinPortal={true}
+              zIndex={1000000}
             >
               <ComboboxTarget targetType="button">
                 <InputBase
@@ -253,23 +261,25 @@ export const ProductSpecifications = ({
                 >
                   {qualityOptions.find((item) => item.value === selectedQuality)
                     ?.label || (
-                    <InputPlaceholder>Select quality</InputPlaceholder>
-                  )}
+                      <InputPlaceholder>Select quality</InputPlaceholder>
+                    )}
                 </InputBase>
               </ComboboxTarget>
               <ComboboxDropdown>
-                <ComboboxOptions>
-                  {qualityOptions.map((item) => (
-                    <ComboboxOption value={item.value} key={item.value}>
-                      <Group gap="xs">
-                        {item.value === selectedQuality && (
-                          <CheckIcon size={12} />
-                        )}
-                        <span>{item.label}</span>
-                      </Group>
-                    </ComboboxOption>
-                  ))}
-                </ComboboxOptions>
+                <ScrollArea.Autosize type="scroll" mah={250}>
+                  <ComboboxOptions>
+                    {qualityOptions.map((item) => (
+                      <ComboboxOption value={item.value} key={item.value}>
+                        <Group gap="xs">
+                          {item.value === selectedQuality && (
+                            <CheckIcon size={12} />
+                          )}
+                          <span>{item.label}</span>
+                        </Group>
+                      </ComboboxOption>
+                    ))}
+                  </ComboboxOptions>
+                </ScrollArea.Autosize>
               </ComboboxDropdown>
             </Combobox>
           </div>

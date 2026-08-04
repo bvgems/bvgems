@@ -91,25 +91,26 @@ export function FreeSizeGridView({
 
   const handleSelect = (value: string) => {
     setSearchValue(value);
-    const selected = allItems.find((item: any) => item.lot_number === value);
-    if (selected) {
-      setDisplayItems([selected]);
-      setVisibleCount(1);
+    if (!value || value.trim() === "") {
+      setVisibleCount(ITEMS_PER_PAGE);
     } else {
-      setDisplayItems([]);
+      setVisibleCount(1);
     }
   };
 
   useEffect(() => {
     if (!allItems.length) return;
     let sorted = [...allItems];
+    if (searchValue && searchValue.trim() !== "") {
+      sorted = sorted.filter((item: any) => item.lot_number === searchValue);
+    }
     if (sortOrder === "lowToHigh") {
       sorted.sort((a, b) => parseFloat(a.ct_weight) - parseFloat(b.ct_weight));
     } else if (sortOrder === "highToLow") {
       sorted.sort((a, b) => parseFloat(b.ct_weight) - parseFloat(a.ct_weight));
     }
     setDisplayItems(sorted);
-  }, [sortOrder, allItems]);
+  }, [sortOrder, allItems, searchValue]);
 
   const SkeletonCard = () => (
     <Card

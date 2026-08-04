@@ -23,6 +23,7 @@ import {
   IconStarFilled,
   IconX,
 } from "@tabler/icons-react";
+import { sortBySizeAsc } from "@/utils/sortUtils";
 import { ImageZoom } from "../CommonComponents/ImageZoom";
 import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
 import { useAuth } from "@/hooks/useAuth";
@@ -128,9 +129,8 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
   };
 
   const getShapeSizes = () => {
-    return shapeSize?.map((item: any) => {
-      return item?.size;
-    });
+    const rawSizes = shapeSize?.map((item: any) => item?.size) || [];
+    return rawSizes.sort(sortBySizeAsc);
   };
 
   return (

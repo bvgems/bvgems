@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation";
 import { AuthForm } from "../Auth/AuthForm";
 import { getCartStore } from "@/store/useCartStore";
 import React, { useMemo, useState, useEffect } from "react";
-import { sortBySizeDesc } from "@/utils/sortUtils";
+import { sortBySizeAsc } from "@/utils/sortUtils";
 import { AddToCartModal } from "../CommonComponents/AddToCartModal";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
@@ -142,8 +142,8 @@ export const CategoryTable = ({
         if (a.ct_weight !== b.ct_weight) return b.ct_weight - a.ct_weight;
       }
       
-      // Fallback: Always sort by size largest to smallest if carat weight is equal (or if no sort order)
-      return sortBySizeDesc(a, b, "size");
+      // Fallback: Always sort by size smallest to largest if carat weight is equal (or if no sort order)
+      return sortBySizeAsc(a, b, "size");
     });
 
     const startIndex = (currentPage - 1) * rowsPerPage;

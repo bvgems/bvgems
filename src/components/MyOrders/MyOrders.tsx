@@ -11,7 +11,7 @@ import {
   TextInput,
   Container,
 } from "@mantine/core";
-import { IconPackage, IconCalendar, IconSearch } from "@tabler/icons-react";
+import { IconPackage, IconCalendar, IconSearch, IconTruck } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 import { getOrders } from "@/apis/api";
 import { useAuth } from "@/hooks/useAuth";
@@ -28,6 +28,12 @@ type Order = {
     name: string;
     quantity: number;
     price: string; // ✅ price per item
+  }[];
+  tracking_info?: {
+    tracking_number: string;
+    tracking_url: string;
+    tracking_company: string;
+    shipment_status: string | null;
   }[];
 };
 
@@ -115,7 +121,7 @@ export const MyOrders = () => {
               padding="lg"
             >
               {/* Header */}
-              <Group justify="space-between" align="flex-start">
+              <Group justify="space-between" align="stretch">
                 <Stack gap={4}>
                   <Text fw={600}>{order.name}</Text>
 
@@ -125,9 +131,32 @@ export const MyOrders = () => {
                       {new Date(order.created_at).toLocaleDateString()}
                     </Text>
                   </Group>
-                </Stack>
 
-                <Stack align="flex-end" gap={6}>
+                  {order.tracking_info && order.tracking_info.length > 0 && (
+                    <Stack gap={4} mt={6}>
+                      {order.tracking_info.map((track, idx) => (
+                        <Group key={idx} gap={6} align="center">
+                          <IconTruck size={14} className="text-gray-500" />
+                          <Text size="sm" c="dimmed">
+                            {track.tracking_company}:
+                          </Text>
+                          <Text
+                            size="sm"
+                            c="blue"
+                            td="underline"
+                            component="a"
+                            href={track.tracking_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {track.tracking_number}
+                          </Text>
+                        </Group>
+                      ))}
+                    </Stack>
+                  )}
+                </Stack>
+                <Stack align="flex-end" justify="space-between" gap={6}>
                   <Badge color="green" variant="light">
                     {order.financial_status.toUpperCase()}
                   </Badge>

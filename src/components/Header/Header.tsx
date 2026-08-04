@@ -66,9 +66,12 @@ export function Header() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeFilter, setActiveFilter] = useState<
-    "item" | "calibrated" | "freeSize" | "jewelry"
-  >("item");
+    "all" | "item" | "calibrated" | "freeSize" | "jewelry"
+  >("all");
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Simple rotating placeholder state
+  const [placeholderText, setPlaceholderText] = useState('Search for "Sapphire..."');
 
   // FIXED: Add ref to track the latest query being processed
   const latestQueryRef = useRef<string>("");
@@ -78,6 +81,24 @@ export function Header() {
       searchInputRef.current.focus();
     }
   }, [searchOpen]);
+
+  useEffect(() => {
+    const searchPhrases = [
+      'Search for "Sapphire..."',
+      'Search for "STR00008393 (Lot Number)"',
+      'Search for "8x6 Emerald..."',
+      'Search for "Diamond Ring..."',
+      'Search for "Ceylon Ruby..."',
+    ];
+
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % searchPhrases.length;
+      setPlaceholderText(searchPhrases[currentIndex]);
+    }, 1200); // Swap every 2.5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     // FIXED: Store the current query in the ref
@@ -102,11 +123,8 @@ export function Header() {
         if (latestQueryRef.current === searchQuery) {
           setSearchResults(
             data?.map((item: any) => {
-              const display = `${
-                item.collection_slug ?? item.gemstone_type ?? ""
-              } ${item.shape ?? ""}  ${item.size ?? item.dimension ?? ""} - ${
-                item.id
-              }`.trim();
+              const lotPrefix = item.lot_number ? `${item.lot_number} - ` : "";
+              const display = `${lotPrefix}${item.collection_slug ?? item.gemstone_type ?? ""} ${item.shape ?? ""} ${item.size ?? item.dimension ?? ""} - ${item.id}`.trim();
 
               return {
                 ...item,
@@ -146,8 +164,7 @@ export function Header() {
       );
     } else {
       router.push(
-        `/jewelry-details/${option?.productType?.toLowerCase()}/${
-          option?.handle
+        `/jewelry-details/${option?.productType?.toLowerCase()}/${option?.handle
         }`
       );
     }
@@ -161,82 +178,56 @@ export function Header() {
     latestQueryRef.current = "";
   };
 
-  const renderSearchOption = ({ option, ...props }: any) => (
-    <div
-      onClick={() => handleSearchRedirect(option)}
-      key={option.value}
-      {...props}
-      className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
-    >
-      <div className="flex-shrink-0">
-        <Image loading="lazy"
-          h={50}
-          w={50}
-          fit="cover"
-          src={option.images?.edges?.[0]?.node?.url ?? option?.image_url}
-          className="object-cover"
-          alt={option.label}
-        />
-      </div>
-      <div className="flex-grow">
-        <p className="text-sm font-medium text-gray-900 line-clamp-1">
-          {String(option?.id ?? "").startsWith("gid")
-            ? `${option?.title}`
-            : option?.collection_slug === "Sapphire"
-            ? `${option?.color} ${
-                option.collection_slug || option.gemstone_type
-              } ${option.shape} ${option.size || option.dimension}${
-                option.category === "Calibrated" && option.quality
-                  ? ` - ${option.quality} Quality`
-                  : ""
-              }`
-            : `${option.collection_slug || option.gemstone_type} ${
-                option.shape
-              } ${option.size || option.dimension}${
-                option.category === "Calibrated" && option.quality
-                  ? ` - ${option.quality} Quality`
-                  : ""
-              }`}
-        </p>
-        <span className="text-xs text-gray-500 capitalize mt-1 block">
-          {option.category}
-        </span>
-      </div>
-    </div>
-  );
+  const renderSearchOption = ({ option, ...props }: any) => {
+    const lotPrefix = option?.lot_number ? `${option.lot_number} - ` : "";
 
-  const FilterButtons = ({ className = "" }: { className?: string }) => (
-    <div className={`flex gap-2 ${className}`}>
-      {[
-        { key: "item", label: "Item #" },
-        { key: "calibrated", label: "Calibrated" },
-        { key: "freeSize", label: "Free Size" },
-        { key: "jewelry", label: "Jewelry" },
-      ].map((filter) => (
-        <button
-          key={filter.key}
-          onClick={() =>
-            setActiveFilter(
-              filter.key as "item" | "calibrated" | "freeSize" | "jewelry"
-            )
-          }
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-            activeFilter === filter.key
-              ? "bg-[#0b182d] text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-          }`}
-        >
-          {filter.label}
-        </button>
-      ))}
-    </div>
-  );
+    return (
+      <div
+        onClick={() => handleSearchRedirect(option)}
+        key={option.value}
+        {...props}
+        className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
+      >
+        <div className="flex-shrink-0">
+          <Image loading="lazy"
+            h={50}
+            w={50}
+            fit="cover"
+            src={option.images?.edges?.[0]?.node?.url ?? option?.image_url}
+            className="object-cover"
+            alt={option.label}
+          />
+        </div>
+        <div className="flex-grow">
+          <p className="text-sm font-medium text-gray-900 line-clamp-1">
+            {lotPrefix}
+            {String(option?.id ?? "").startsWith("gid")
+              ? `${option?.title}`
+              : option?.collection_slug === "Sapphire"
+                ? `${option?.color} ${option.collection_slug || option.gemstone_type
+                } ${option.shape} ${option.size || option.dimension}${option.category === "Calibrated" && option.quality
+                  ? ` - ${option.quality} Quality`
+                  : ""
+                }`
+                : `${option.collection_slug || option.gemstone_type} ${option.shape
+                } ${option.size || option.dimension}${option.category === "Calibrated" && option.quality
+                  ? ` - ${option.quality} Quality`
+                  : ""
+                }`}
+          </p>
+          <span className="text-xs text-gray-500 capitalize mt-1 block">
+            {option.category}
+          </span>
+        </div>
+      </div>
+    );
+  };
 
   const getPlaceholder = () => {
     if (activeFilter === "freeSize") {
       return "Search by gemstone name, lot number, size, weight etc.";
     }
-    return "Search for gemstones, jewelry, and more...";
+    return placeholderText || "Search...";
   };
 
   // Navbar items
@@ -256,9 +247,8 @@ export function Header() {
           <div className="hover:text-gray-500">
             <Text
               size="md"
-              className={`text-[17px] ${
-                pathname === item.link ? "text-gray-400" : "text-black"
-              }`}
+              className={`text-[17px] ${pathname === item.link ? "text-gray-400" : "text-black"
+                }`}
               pl={"lg"}
             >
               {item.label}
@@ -292,13 +282,11 @@ export function Header() {
             <div className="px-3 py-2 rounded-sm hover:text-gray-500 text-[15px] ">
               <Center>
                 <span
-                  className={`mr-1 ${
-                    smallerTextFlag ? "text-[12px]" : "text-[15px]"
-                  } ${
-                    link.links?.some((item) => pathname === item.link)
+                  className={`mr-1 ${smallerTextFlag ? "text-[12px]" : "text-[15px]"
+                    } ${link.links?.some((item) => pathname === item.link)
                       ? "text-gray-400"
                       : ""
-                  }`}
+                    }`}
                 >
                   {link?.label}
                 </span>
@@ -322,11 +310,9 @@ export function Header() {
       <Link
         key={link.label}
         href={link.link}
-        className={`px-3 py-2 rounded-sm ${
-          smallerTextFlag ? "text-[12px]" : "text-[15px]"
-        }  hover:text-gray-500 ${
-          pathname === link.link ? "text-gray-400" : "text-black"
-        }`}
+        className={`px-3 py-2 rounded-sm ${smallerTextFlag ? "text-[12px]" : "text-[15px]"
+          }  hover:text-gray-500 ${pathname === link.link ? "text-gray-400" : "text-black"
+          }`}
       >
         {link.label}
       </Link>
@@ -352,19 +338,16 @@ export function Header() {
         {searchOpen && !isMobile && (
           <div className="absolute top-0 left-0 right-0 bg-white shadow-lg border-b border-gray-200 z-50">
             <div className="container mx-auto px-6 py-4">
-              <div className="flex items-center gap-4 mb-4">
-                <FilterButtons />
-                <div className="ml-auto">
-                  <Button
-                    variant="subtle"
-                    size="sm"
-                    leftSection={<IconX size={16} />}
-                    onClick={handleCloseSearch}
-                    color="gray"
-                  >
-                    Close
-                  </Button>
-                </div>
+              <div className="flex justify-end mb-4">
+                <Button
+                  variant="subtle"
+                  size="sm"
+                  leftSection={<IconX size={16} />}
+                  onClick={handleCloseSearch}
+                  color="gray"
+                >
+                  Close
+                </Button>
               </div>
               <div className="relative">
                 <Autocomplete
@@ -376,6 +359,9 @@ export function Header() {
                   value={searchQuery}
                   onChange={setSearchQuery}
                   renderOption={renderSearchOption}
+                  filter={({ options }) => options}
+                  limit={50}
+                  maxDropdownHeight={500}
                   onOptionSubmit={(val) => {
                     const selectedItem = searchResults.find(
                       (item) => item.label.toLowerCase() === val.toLowerCase()
@@ -393,10 +379,10 @@ export function Header() {
                       border: "2px solid #e5e7eb",
                     },
                     dropdown: {
-                      maxHeight: "400px",
                       border: "1px solid #e5e7eb",
                       borderRadius: "8px",
                       marginTop: "4px",
+                      overflowY: "auto",
                     },
                   }}
                 />
@@ -415,7 +401,6 @@ export function Header() {
                     className="cursor-pointer"
                     onClick={handleCloseSearch}
                   />
-                  <FilterButtons className="flex-grow" />
                 </div>
                 <Autocomplete
                   size="md"
@@ -426,6 +411,9 @@ export function Header() {
                   value={searchQuery}
                   onChange={setSearchQuery}
                   renderOption={renderSearchOption}
+                  filter={({ options }) => options}
+                  limit={50}
+                  maxDropdownHeight={500}
                   onOptionSubmit={(val) => {
                     const selectedItem = searchResults.find(
                       (item) => item.value.toLowerCase() === val.toLowerCase()
@@ -441,9 +429,9 @@ export function Header() {
                       border: "1px solid #d1d5db",
                     },
                     dropdown: {
-                      maxHeight: "300px",
                       border: "1px solid #e5e7eb",
                       borderRadius: "8px",
+                      overflowY: "auto",
                     },
                   }}
                 />
@@ -508,9 +496,8 @@ export function Header() {
                 className="flex justify-center"
               >
                 <div
-                  className={`${
-                    smallerTextFlag ? "" : "uppercase"
-                  } flex justify-center items-center gap-2`}
+                  className={`${smallerTextFlag ? "" : "uppercase"
+                    } flex justify-center items-center gap-2`}
                 >
                   {items}
                 </div>

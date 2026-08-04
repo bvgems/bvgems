@@ -31,7 +31,7 @@ import { Carousel } from "@mantine/carousel";
 import Script from "next/script";
 import { EmeraldDetails } from "./EmeraldDetails";
 import { LabSapphire } from "./LabSapphire";
-import { sortBySizeDesc } from "@/utils/sortUtils";
+import { sortBySizeAsc } from "@/utils/sortUtils";
 
 // Utility: pick one representative image per quality, prioritizing items with videos
 const getRepresentativeImages = (items: any[]) => {
@@ -174,7 +174,7 @@ export function CategoryContent({
     const shape = selectedShape || "default";
     const uniqueSizes = Array.from(
       new Set(result?.data?.map((item: any) => item.size)),
-    ).sort(sortBySizeDesc);
+    ).sort(sortBySizeAsc);
 
     setAllSizes((prev: any) => ({
       ...prev,
@@ -711,6 +711,7 @@ export function CategoryContent({
                       className="w-[50%]"
                       searchable
                       clearable
+                      scrollAreaProps={{ type: "scroll" }}
                       placeholder="Choose size"
                       data={allSizes[selectedShape]?.map((size: string) => {
                         const label = size.includes("x")
@@ -738,6 +739,7 @@ export function CategoryContent({
                   </p>
                   <Select
                     placeholder="Select Type"
+                    scrollAreaProps={{ type: "scroll" }}
                     data={[
                       { label: "All", value: "" },
                       { label: "Natural", value: "Natural" },
@@ -940,6 +942,7 @@ export function CategoryContent({
               </span>
               <Select
                 placeholder="Select Size"
+                scrollAreaProps={{ type: "scroll" }}
                 data={allSizes[selectedShape || ""]?.map((size: string) => ({
                   label: size,
                   value: size,
@@ -958,6 +961,7 @@ export function CategoryContent({
               </span>
               <Select
                 placeholder="Select Type"
+                scrollAreaProps={{ type: "scroll" }}
                 data={[
                   { label: "All", value: "" },
                   { label: "Natural", value: "Natural" },
@@ -976,6 +980,7 @@ export function CategoryContent({
                   Color
                 </span>
                 <Select
+                  scrollAreaProps={{ type: "scroll" }}
                   data={SapphireLooseGemstoneColorOptions.map((c: any) => ({
                     label: c.value,
                     value: c.value,

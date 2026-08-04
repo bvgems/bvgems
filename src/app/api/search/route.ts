@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/pool";
 import { getAllJeweleryProducts, getBeads } from "../lib/commonFunctions";
 
+// Global cache for jewelry to prevent hitting Shopify on every keystroke
+let cachedJewelry: any[] | null = null;
+let jewelryCacheTime = 0;
+const CACHE_DURATION_MS = 15 * 60 * 1000; // 15 minutes
+
 function normalizeSizeQuery(q: string) {
   let norm = q.toLowerCase().replace(/\s+/g, " ").trim();
   norm = norm.replace(/(\d)\s*x\s*(\d)/g, "$1 x $2");
@@ -31,8 +36,8 @@ export async function GET(req: NextRequest) {
       // ===== Calibrated Gemstone ID Match =====
       const calibratedRes = await pool.query(
         `SELECT id, shape, collection_slug, size, color, image_url, quality
-         FROM gemstone_specs WHERE CAST(id AS TEXT) = $1 LIMIT 1`,
-        [query]
+         FROM gemstone_specs WHERE CAST(id AS TEXT) ILIKE $1 || '%' LIMIT $2`,
+        [query, limit]
       );
 
       if (calibratedRes.rows?.length > 0) {
@@ -48,8 +53,8 @@ export async function GET(req: NextRequest) {
       // ===== FREE SIZE: Lot Number Exact Match =====
       const freeSizeRes = await pool.query(
         `SELECT id, shape, gemstone_type, dimension, origin, image_url, lot_number
-         FROM free_size_gemstones WHERE CAST(lot_number AS TEXT) = $1 LIMIT 1`,
-        [query]
+         FROM free_size_gemstones WHERE CAST(lot_number AS TEXT) ILIKE $1 || '%' LIMIT $2`,
+        [query, limit]
       );
 
       if (freeSizeRes.rows?.length > 0) {
@@ -117,21 +122,23 @@ export async function GET(req: NextRequest) {
 
     // ===== Free Size Gemstones =====
     if (category === "all" || category === "freeSize") {
-      // FIXED: lot_number exact match - now checked FIRST, not nested
+      // FIXED: lot_number prefix match
       const lotRes = await pool.query(
         `SELECT id, shape, gemstone_type, dimension, origin, image_url, lot_number
          FROM free_size_gemstones
-         WHERE CAST(lot_number AS TEXT) = $1
-         LIMIT 1;`,
-        [query]
+         WHERE CAST(lot_number AS TEXT) ILIKE $1 || '%'
+         LIMIT $2;`,
+        [query, limit]
       );
 
       if (lotRes.rows.length > 0) {
-        results.push({
-          ...lotRes.rows[0],
-          value: `${lotRes.rows[0].shape} ${lotRes.rows[0].gemstone_type} ${lotRes.rows[0].dimension} - ${lotRes.rows[0].id}`,
-          category: "Free Size Gemstone (Lot Match)",
-        });
+        results.push(
+          ...lotRes.rows.map((item) => ({
+            ...item,
+            value: `${item.shape} ${item.gemstone_type} ${item.dimension} - ${item.id}`,
+            category: "Free Size Gemstone (Lot Match)",
+          }))
+        );
       }
       // Only search by other fields if no lot number match found
       else if (isAlpha && tokens.length === 1) {
@@ -183,22 +190,29 @@ export async function GET(req: NextRequest) {
 
     // ===== Jewelry =====
     if (category === "all" || category === "jewelry") {
-      const allRings = await getAllJeweleryProducts("rings");
-      const allNecklaces = await getAllJeweleryProducts("necklaces");
-      const allBracelets = await getAllJeweleryProducts("bracelets");
-      const allEarrings = await getAllJeweleryProducts("earrings");
-      const allBeads = await getBeads();
+      if (!cachedJewelry || Date.now() - jewelryCacheTime > CACHE_DURATION_MS) {
+        console.log("Fetching fresh jewelry data from Shopify for search cache...");
+        const [allRings, allNecklaces, allBracelets, allEarrings, allBeads] = await Promise.all([
+          getAllJeweleryProducts("rings"),
+          getAllJeweleryProducts("necklaces"),
+          getAllJeweleryProducts("bracelets"),
+          getAllJeweleryProducts("earrings"),
+          getBeads()
+        ]);
 
-      const jewelryEdges = [
-        ...(allRings?.edges || []),
-        ...(allNecklaces?.edges || []),
-        ...(allBracelets?.edges || []),
-        ...(allEarrings?.edges || []),
-        ...(allBeads || []),
-      ];
+        const jewelryEdges = [
+          ...(allRings?.edges || []),
+          ...(allNecklaces?.edges || []),
+          ...(allBracelets?.edges || []),
+          ...(allEarrings?.edges || []),
+          ...(allBeads || []),
+        ];
 
-      const filteredJewelry = jewelryEdges
-        .map((item: any) => item.node || item)
+        cachedJewelry = jewelryEdges.map((item: any) => item.node || item);
+        jewelryCacheTime = Date.now();
+      }
+
+      const filteredJewelry = cachedJewelry
         .filter((node: any) =>
           tokens.every((t) =>
             node.title?.toLowerCase().includes(t.toLowerCase())
