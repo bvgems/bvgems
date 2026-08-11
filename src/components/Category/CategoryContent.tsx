@@ -17,6 +17,7 @@ import {
   Anchor,
   Badge,
   Container,
+  Loader,
 } from "@mantine/core";
 import { motion } from "framer-motion";
 import { getShapesData } from "@/apis/api";
@@ -25,7 +26,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { SizeToleranceGuide } from "../Tolerance/SizeToleranceGuide";
 import { useRouter } from "next/navigation";
 import { ImageZoom } from "../CommonComponents/ImageZoom";
-import { IconDiamond } from "@tabler/icons-react";
+import { IconDiamond, IconShare } from "@tabler/icons-react";
 import { SapphireLooseGemstoneColorOptions } from "@/utils/constants";
 import { Carousel } from "@mantine/carousel";
 import Script from "next/script";
@@ -107,6 +108,7 @@ export function CategoryContent({
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
 
   const [isVideoZoomed, setIsVideoZoomed] = useState(false);
+  const [isSharingVideo, setIsSharingVideo] = useState(false);
   const [videoZoomPos, setVideoZoomPos] = useState({ x: 0, y: 0 });
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const mainVideoRef = useRef<HTMLVideoElement>(null);
@@ -114,6 +116,50 @@ export function CategoryContent({
   useEffect(() => {
     // Keep standard logic here
   }, []);
+
+  const handleShareVideo = async (e: React.MouseEvent, url: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsVideoZoomed(false); // Cleanly stop the zoom if it was active
+    
+    setIsSharingVideo(true);
+    try {
+      let shareUrl = url;
+      if (url.startsWith('/')) {
+        shareUrl = window.location.origin + url;
+      }
+
+      // Fetch the video file to share directly
+      const response = await fetch(shareUrl);
+      const blob = await response.blob();
+      const file = new File([blob], 'bvgems-video.mp4', { type: blob.type || 'video/mp4' });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: 'B.V. Gems Video',
+        });
+      } else {
+        // Fallback to sharing URL if files aren't supported on this browser/OS
+        if (navigator.share) {
+           await navigator.share({
+             title: 'B.V. Gems Video',
+             url: shareUrl,
+           });
+        } else {
+           await navigator.clipboard.writeText(shareUrl);
+           alert("Video link copied to clipboard!");
+        }
+      }
+    } catch (err) {
+      console.error("Error sharing video:", err);
+      if (err instanceof Error && err.name !== 'AbortError') {
+         alert("Sharing failed. You may need to use a different browser.");
+      }
+    } finally {
+      setIsSharingVideo(false);
+    }
+  };
 
   const handleVideoMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!videoContainerRef.current) return;
@@ -396,6 +442,16 @@ export function CategoryContent({
                           {isVideoZoomed && (
                             <div className="absolute inset-0 border-[3px] border-black/30 rounded pointer-events-none" />
                           )}
+
+                          <button
+                            onClick={(e) => handleShareVideo(e, currentVideoUrl)}
+                            disabled={isSharingVideo}
+                            className="absolute top-2 right-2 z-10 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-sm transition-all disabled:opacity-50"
+                            title="Share Video"
+                            aria-label="Share Video"
+                          >
+                            {isSharingVideo ? <Loader size={20} color="white" /> : <IconShare size={20} stroke={1.5} />}
+                          </button>
                         </div>
 
                         {/* Video Thumbnails Carousel (Only visible if > 1 video) */}
