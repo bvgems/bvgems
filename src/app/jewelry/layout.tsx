@@ -19,7 +19,9 @@ import { JewelerySideBar } from "../../components/Jewerly/JewelerySideBar";
 import { FilterChips } from "@/components/Jewerly/FilterChips";
 import { gemstoneColorMap } from "@/utils/constants";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+import { Suspense } from "react";
+
+function JewelryLayoutContent({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
@@ -233,5 +235,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         />
       </Drawer>
     </div>
+  );
+}
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<div className="p-10 text-center">Loading jewelry...</div>}>
+      <JewelryLayoutContent>{children}</JewelryLayoutContent>
+    </Suspense>
   );
 }

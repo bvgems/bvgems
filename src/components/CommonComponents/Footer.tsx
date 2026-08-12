@@ -235,9 +235,11 @@ export const Footer = () => {
               href="https://www.instagram.com/bvgemsinc/?igsh=aG93ank2anBkaG9p"
               target="_blank"
               rel="noopener noreferrer"
+              style={{ padding: "8px", display: "inline-block" }}
+              aria-label="Follow us on Instagram"
             >
-              <ActionIcon size="lg" color="gray" variant="subtle">
-                <IconBrandInstagramFilled color="#E1306C" stroke={1.5} />
+              <ActionIcon size="xl" color="gray" variant="subtle" aria-hidden="true">
+                <IconBrandInstagramFilled color="#E1306C" stroke={1.5} size={28} />
               </ActionIcon>
             </a>
           </div>

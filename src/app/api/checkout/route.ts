@@ -95,7 +95,12 @@ export async function POST(req: Request) {
       }
 
       if (product?.image_url && String(product.image_url).trim()) {
-        productData.images = [product.image_url];
+        let imageUrl = String(product.image_url).trim();
+        if (imageUrl.startsWith("/")) {
+          const baseUrl = process.env.BASE_URL || "https://bvgems.com";
+          imageUrl = `${baseUrl}${imageUrl}`;
+        }
+        productData.images = [imageUrl];
       }
 
       return {

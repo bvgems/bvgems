@@ -5,11 +5,11 @@ import {
   Container,
   Grid,
   GridCol,
-  Image,
   Text,
   Paper,
   SimpleGrid,
 } from "@mantine/core";
+import Image from "next/image";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { ShapeFilterList } from "@/utils/constants";
 import { useRouter } from "next/navigation";
@@ -35,15 +35,14 @@ export const ShopByShape = () => {
                 className="flex justify-center flex-col items-center cursor-pointer"
                 key={index}
               >
-                <Image loading="lazy"
-                  src={shape.image}
-                  alt={shape.label}
-                  width={45}
-                  height={45}
-                  fit="contain"
-                  className="mb-2 opacity-90"
-                  style={{ maxWidth: "60px" }}
-                />
+                <div className="relative w-[45px] h-[45px] mb-2" style={{ maxWidth: "60px" }}>
+                  <Image loading="lazy"
+                    src={shape.image}
+                    alt={shape.label}
+                    fill
+                    className="object-contain opacity-90"
+                  />
+                </div>
                 <Text
                   size="sm"
                   fw={500}

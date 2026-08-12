@@ -1,5 +1,6 @@
 "use client";
-import { Card, Container, Grid, GridCol, Image } from "@mantine/core";
+import { Card, Container, Grid, GridCol } from "@mantine/core";
+import Image from "next/image";
 import React, { forwardRef, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -104,8 +105,8 @@ export const JewelrySection = forwardRef<HTMLDivElement>((_, ref) => {
                   <Image loading="lazy"
                     src={item.image}
                     alt={item.alt}
-                    fit="contain"
-                    className="object-fill w-full h-full transform transition-transform duration-500 group-hover:scale-110"
+                    fill
+                    className="object-cover w-full h-full transform transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute bottom-0 left-0 w-full h-1/4 group-hover:h-full transition-all duration-500">
                     <div

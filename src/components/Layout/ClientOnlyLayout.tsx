@@ -24,9 +24,13 @@ export function ClientOnlyLayout({ children }: { children: React.ReactNode }) {
     return () => clearTimeout(timeout);
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center">
+  return (
+    <>
+      <div
+        className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white transition-opacity duration-500 ${
+          isLoading ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
         <div className="w-48 h-48">
           <Player
             autoplay
@@ -39,14 +43,10 @@ export function ClientOnlyLayout({ children }: { children: React.ReactNode }) {
           Polishing your experience...
         </p>
       </div>
-    );
-  }
 
-  return (
-    <>
       <Header />
       <InitGemstones />
-      {children}
+      <main>{children}</main>
       <WhatsAppButton />
       <Divider />
       <Footer />

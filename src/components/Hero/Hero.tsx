@@ -1,6 +1,6 @@
 "use client";
 
-import { Image } from "@mantine/core";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -24,9 +24,9 @@ export function Hero({ jewelryRef, heroData }: any) {
                   ?.node?.image?.url || "/assets/hero-bg2.webp"
           }
           alt="Hero Image"
-          fit="cover"
-          className="w-full h-full"
-          fetchPriority="high"
+          fill
+          priority
+          className="object-cover"
         />
       </div>
 

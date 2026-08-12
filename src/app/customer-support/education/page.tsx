@@ -9,7 +9,9 @@ import { Drawer } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLayoutSidebar } from "@tabler/icons-react";
 
-export default function EducationPage() {
+import React, { Suspense } from "react";
+
+function EducationContent() {
   const gemstones: any[] = (usestoneStore((state) => state.gemstones) || [])
     .slice()
     .sort((a: any, b: any) => a.title.localeCompare(b.title));
@@ -67,5 +69,13 @@ export default function EducationPage() {
         />
       </Drawer>
     </div>
+  );
+}
+
+export default function EducationPage() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading education resources...</div>}>
+      <EducationContent />
+    </Suspense>
   );
 }

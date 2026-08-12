@@ -10,6 +10,30 @@ const nextConfig: NextConfig = {
       }
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'agta.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.jisshow.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'gjx.rocks',
+      }
+    ],
+  },
 };
 
 export default nextConfig;

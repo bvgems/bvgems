@@ -370,6 +370,8 @@ export function CategoryContent({
                       slideGap="md"
                       slideSize="100%"
                       initialSlide={activeSlide}
+                      nextControlProps={{ "aria-label": "Next slide" }}
+                      previousControlProps={{ "aria-label": "Previous slide" }}
                     >
                       {availableQualityImages.map((item: any) => (
                         <Carousel.Slide key={item.id}>
@@ -461,6 +463,8 @@ export function CategoryContent({
                               slideSize="33.333333%"
                               slideGap="sm"
                               controlsOffset="xs"
+                              nextControlProps={{ "aria-label": "Next slide" }}
+                              previousControlProps={{ "aria-label": "Previous slide" }}
                             >
                               {selectedGradeVideos.map((video: any, index: number) => (
                                 <Carousel.Slide key={video.public_id || index}>

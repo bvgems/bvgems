@@ -1561,18 +1561,22 @@ export const FreeSizeOrigins: any = {
 
 export const IndustryAffiliationOptions = [
   {
+    name: "AGTA (American Gem Trade Association)",
     logo: "/assets/agta-logo.webp",
     link: "https://agta.org/",
   },
   {
+    name: "Jewelers Board of Trade",
     logo: "/assets/jbt-logo.webp",
     link: "https://www.jewelersboard.com/",
   },
   {
+    name: "Polygon",
     logo: "/assets/polygon-logo.webp",
     link: "https://www.polygon.net/jwl/public/colored-stones/buy-colored-stones-en.jsp",
   },
   {
+    name: "IDCA NY",
     logo: "/assets/idca-logo.webp",
     link: "https://idcany.org/",
   },
@@ -1602,7 +1606,7 @@ export const tradeShows: TradeShow[] = [
     name: "JIS Miami",
     booth: "Booth #1339 or 1245",
     website: "https://www.jisshow.com/fall/en-us.html",
-    logo: "https://www.jisshow.com/content/dam/sitebuilder/rna/jis/2021/spring/JISFall.png/_jcr_content/renditions/original.image_file.592.300.file/367267082/JISFall.png",
+    logo: "/assets/jis-logo.png",
     location: "Miami, Florida",
     start: "10-10-2025",
     end: "10-13-2025",
@@ -1611,7 +1615,7 @@ export const tradeShows: TradeShow[] = [
     name: "Tucson GJX",
     booth: "Booth #1234",
     website: "https://gjx.rocks",
-    logo: "https://gjx.rocks/wp-content/themes/gjx-2020/images/logo.png",
+    logo: "/assets/gjx-logo.png",
     location: "Tucson, Arizona",
     start: "02-02-2026",
     end: "02-07-2026",
@@ -1620,7 +1624,7 @@ export const tradeShows: TradeShow[] = [
     name: "Las Vegas AGTA",
     booth: "Booth #A-28057",
     website: "https://agta.org/trade-shows/agta-gemfair-las-vegas/",
-    logo: "https://agta.org/wp-content/uploads/2024/08/AGTA-Horiz-Logo.svg",
+    logo: "/assets/agta-horiz-logo.svg",
     location: "Las Vegas, Nevada",
     start: "05-28-2026",
     end: "06-01-2026",

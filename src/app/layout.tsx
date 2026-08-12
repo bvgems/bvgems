@@ -1,4 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+};
 
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
@@ -25,45 +29,6 @@ export const metadata: Metadata = {
   },
   description:
     "B.V. Gems — trusted wholesale dealer in calibrated & free-size gemstones. Explore sapphires, rubies, emeralds & fine jewelry from NYC’s Diamond District.",
-
-  keywords: [
-    "B.V. Gems",
-    "loose gemstones",
-    "wholesale gemstones NYC",
-    "diamond district gemstones",
-    "gemstone supplier New York",
-    "gemstone dealer NYC",
-    "gemstone wholesaler USA",
-    "calibrated sapphires",
-    "loose rubies",
-    "emerald gemstones",
-    "moonstone beads",
-    "tanzanite gemstones",
-    "chalcedony beads",
-    "peach moonstone",
-    "rainbow sapphire jewelry",
-    "fine jewelry NYC",
-    "engagement rings",
-    "gemstone tennis necklaces",
-    "emerald cut jewelry",
-    "custom gemstone jewelry",
-    "sapphire eternity bands",
-    "ruby tennis necklace",
-    "rainbow sapphire tennis necklace",
-    "certified gemstones",
-    "ethically sourced gemstones",
-    "gemstone certification",
-    "loose calibrated stones",
-    "wholesale beads NYC",
-    "precious stones supplier",
-    "semi-precious stones dealer",
-    "gemstones for jewelers",
-    "NYC diamond district jewelry",
-    "wholesale gemstones Manhattan",
-    "gemstone dealer Diamond District",
-    "New York gemstone supplier",
-    "gemstones 47th street NYC",
-  ],
 
   icons: {
     icon: "/favicon.ico",
@@ -103,7 +68,6 @@ export const metadata: Metadata = {
     },
   },
 
-  themeColor: "#ffffff",
 };
 
 export default function RootLayout({

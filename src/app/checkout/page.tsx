@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   Container,
   Grid,
@@ -46,7 +46,7 @@ export default function CheckoutSelectionPage() {
   );
 
   // Ensure totals are updated before checkout
-  useMemo(() => {
+  useEffect(() => {
     updateTotals();
   }, [cart, updateTotals]);
 
@@ -63,8 +63,14 @@ export default function CheckoutSelectionPage() {
       paymentMethod,
     });
 
+    if (!response || !response.id) {
+      alert("Checkout failed. Please check your connection and try again.");
+      return false;
+    }
+
     const sessionId = response.id;
     await stripe?.redirectToCheckout({ sessionId });
+    return true;
   };
 
   const handleOrderPlacing = async () => {
@@ -93,8 +99,14 @@ export default function CheckoutSelectionPage() {
     //   cartStore.getState().clearCart();
     // }
 
-    await handlePayment();
-    cartStore.getState().clearCart();
+    try {
+      const success = await handlePayment();
+      if (success) {
+        cartStore.getState().clearCart();
+      }
+    } catch (err) {
+      console.error("Payment failed", err);
+    }
   };
 
   const stoneItems = cart.filter(

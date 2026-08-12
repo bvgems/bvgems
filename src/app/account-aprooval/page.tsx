@@ -1,6 +1,10 @@
 import AccountApprovalComponent from "@/components/CommonComponents/AccountAproovalComponent";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function AccountAprooval() {
-  return <AccountApprovalComponent />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AccountApprovalComponent />
+    </Suspense>
+  );
 }

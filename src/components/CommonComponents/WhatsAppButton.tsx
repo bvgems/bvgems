@@ -21,20 +21,22 @@ export const WhatsAppButton = () => {
         target="_blank"
         rel="noopener noreferrer"
         className="relative"
+        aria-label="Chat with us on WhatsApp"
       >
         <div className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-all">
           <IconBrandWhatsapp size={32} />
         </div>
 
         <button
+          aria-label="Close WhatsApp chat button"
           onClick={(e) => {
             e.preventDefault();
             setVisible(false);
           }}
-          className="absolute -top-2 -right-2 bg-white border border-gray-300 text-black rounded-full p-[2px] hover:bg-gray-100 transition-all cursor-pointer"
-          style={{ width: "18px", height: "18px", fontSize: "12px" }}
+          className="absolute -top-2 -right-2 bg-white border border-gray-300 text-black rounded-full p-[2px] hover:bg-gray-100 transition-all cursor-pointer flex items-center justify-center"
+          style={{ width: "24px", height: "24px" }}
         >
-          <IconX size={12} />
+          <IconX size={16} />
         </button>
       </a>
     </div>

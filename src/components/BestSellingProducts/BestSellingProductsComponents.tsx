@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
-import { Container, Image } from "@mantine/core";
+import { Container } from "@mantine/core";
+import Image from "next/image";
 import { getBestSellingProducts } from "@/apis/api";
 import { motion } from "framer-motion";
 import { Carousel } from "@mantine/carousel";
@@ -43,6 +44,8 @@ export const BestSellingProductsComponents = () => {
         slideGap="md"
         emblaOptions={{ loop: true }}
         className="py-3"
+        nextControlProps={{ "aria-label": "Next slide" }}
+        previousControlProps={{ "aria-label": "Previous slide" }}
       >
         {bestSellingProducts?.map((item: any, idx: number) => {
           console.log("item node", item);
@@ -61,11 +64,9 @@ export const BestSellingProductsComponents = () => {
                 whileHover={{ scale: 1.05 }}
                 className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer p-6 flex flex-col items-center justify-between h-[300px]"
               >
-                <div className="w-full flex justify-center">
+                <div className="relative w-full h-[200px] flex justify-center">
                   <Image loading="lazy"
-                    radius="md"
-                    h={200}
-                    fit="contain"
+                    fill
                     src={item?.node?.images?.edges[0]?.node?.url}
                     alt={item?.node?.title || "Product image"}
                     className="object-contain transition-transform duration-300 hover:scale-105"

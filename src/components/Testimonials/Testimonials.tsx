@@ -1,6 +1,7 @@
 "use client";
 
-import { Avatar, Container, Image, Rating, Text } from "@mantine/core";
+import { Avatar, Container, Rating, Text } from "@mantine/core";
+import Image from "next/image";
 import { Carousel } from "@mantine/carousel";
 import React, { useRef } from "react";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
@@ -73,6 +74,8 @@ export const Testimonials = () => {
         plugins={[autoplay.current]}
         nextControlIcon={<IconChevronRight size={28} />}
         previousControlIcon={<IconChevronLeft size={28} />}
+        nextControlProps={{ "aria-label": "Next slide" }}
+        previousControlProps={{ "aria-label": "Previous slide" }}
         onMouseEnter={autoplay.current.stop}
         onMouseLeave={() => autoplay.current.play()}
         className="mt-10"
@@ -105,13 +108,14 @@ export const Testimonials = () => {
                   </p>
                   <p className="text-xs text-gray-500">{review.location}</p>
                 </div>
-                <Image loading="lazy"
-                  src={review.platform}
-                  w={20}
-                  h={20}
-                  className="ml-auto"
-                  alt="platform"
-                />
+                <div className="relative ml-auto w-[20px] h-[20px]">
+                  <Image loading="lazy"
+                    src={review.platform}
+                    fill
+                    className="object-contain"
+                    alt="platform"
+                  />
+                </div>
               </div>
             </div>
           </Carousel.Slide>

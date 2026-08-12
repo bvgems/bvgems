@@ -39,6 +39,8 @@ export const RightSideLooseGemstones = () => {
             plugins={[autoplay.current]}
             onMouseEnter={() => autoplay.current?.stop?.()}
             onMouseLeave={() => autoplay.current?.reset?.()}
+            nextControlProps={{ "aria-label": "Next slide" }}
+            previousControlProps={{ "aria-label": "Previous slide" }}
           >
             <CarouselSlide>
               <Image loading="lazy" className="mt-6" h={350} src="/assets/pink.webp" />

@@ -9,7 +9,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFilter } from "@tabler/icons-react";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+import { Suspense } from "react";
+
+function LooseGemstonesLayoutContent({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -218,5 +220,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         />
       </Drawer>
     </div>
+  );
+}
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<div className="p-10 text-center">Loading gemstones...</div>}>
+      <LooseGemstonesLayoutContent>{children}</LooseGemstonesLayoutContent>
+    </Suspense>
   );
 }

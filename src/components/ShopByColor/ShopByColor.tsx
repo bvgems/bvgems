@@ -1,6 +1,7 @@
 "use client";
 
-import { Container, Image, Grid, Card } from "@mantine/core";
+import { Container, Grid, Card } from "@mantine/core";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { shopByColorOptions } from "@/utils/constants";
@@ -51,14 +52,12 @@ export default function ShopByColor() {
               className="w-[150px] flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 hover:shadow-lg"
               onClick={() => handleShopByColor(item)}
             >
-              <div className="flex items-center justify-center">
+              <div className="relative w-[130px] h-[130px] flex items-center justify-center">
                 <Image loading="lazy"
-                  h={130}
-                  w={130}
-                  fit="contain"
+                  fill
                   src={item?.image}
                   alt={item?.name}
-                  // className="object-cover rounded-full"
+                  className="object-contain"
                 />
               </div>
               <span className=" text-[#0b182d] mt-3">{item?.name}</span>

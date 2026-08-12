@@ -135,9 +135,9 @@ export const JewelryCategoryCard = ({
           </AnimatePresence>
         </div>
 
-        <h3 className="text-sm sm:text-base font-medium text-gray-700 mt-3 line-clamp-2">
+        <h2 className="text-sm sm:text-base font-medium text-gray-700 mt-3 line-clamp-2">
           {seoTitle}
-        </h3>
+        </h2>
 
         {isEarringVariants ? (
           <div className="flex justify-center items-center gap-1 mt-2 text-gray-600 text-sm">
@@ -241,7 +241,7 @@ export const JewelryCategoryCard = ({
       )}
 
       <div className="mt-2">
-        <h3 className="text-md font-medium text-gray-500 mt-3">{seoTitle}</h3>
+        <h2 className="text-md font-medium text-gray-500 mt-3">{seoTitle}</h2>
       </div>
 
       {isEarringVariants ? (

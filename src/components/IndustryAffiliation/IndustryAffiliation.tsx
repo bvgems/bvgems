@@ -22,11 +22,12 @@ export const IndustryAffiliation = () => {
               target="_blank"
               href={item?.link}
               className="flex justify-center items-center"
+              aria-label={`Visit ${item?.name || "Industry Affiliation"}`}
             >
               <img
                 src={item?.logo}
                 className="h-[90px] w-[100px] md:h-[140px] md:w-[160px] object-contain"
-                alt=""
+                alt={item?.name || "Industry Affiliation Badge"}
               />
             </Link>
           );

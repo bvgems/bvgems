@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { Container, Image, Text } from "@mantine/core";
+import { Container, Text } from "@mantine/core";
+import Image from "next/image";
 import { Carousel } from "@mantine/carousel";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { GemstonesByBirthMonths } from "@/utils/constants";
@@ -80,6 +81,8 @@ export const BirthStoneComponent = () => {
         emblaOptions={{ loop: true }}
         onSlideChange={(index) => setActiveIndex(index)}
         initialSlide={initialIndex} // 🔹 ensures carousel highlights correct month initially
+        nextControlProps={{ "aria-label": "Next slide" }}
+        previousControlProps={{ "aria-label": "Previous slide" }}
       >
         {orderedGemstones.map((item: BirthstoneItem, index: number) => {
           const isCurrent = index === activeIndex;
@@ -92,13 +95,14 @@ export const BirthStoneComponent = () => {
                 {isCurrent && (
                   <div className="absolute inset-0 border border-[#0b182d] pointer-events-none"></div>
                 )}
-                <Image loading="lazy"
-                  fit="contain"
-                  src={item.image_url}
-                  h={150}
-                  w={150}
-                  alt={`${item.gemstone} birthstone for ${item.month}`}
-                />
+                <div className="relative w-[150px] h-[150px]">
+                  <Image loading="lazy"
+                    className="object-contain"
+                    src={item.image_url}
+                    fill
+                    alt={`${item.gemstone} birthstone for ${item.month}`}
+                  />
+                </div>
                 <Text
                   fw={700}
                   size="md"

@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Container, Grid, GridCol, Image } from "@mantine/core";
+import { Button, Container, Grid, GridCol } from "@mantine/core";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -10,7 +11,9 @@ export const BookAppointment = () => {
     <Container size={1350} className="py-6 bg-[#f9f9f9]">
       <Grid>
         <GridCol span={{ base: 12, md: 6 }}>
-          <Image loading="lazy" h={500} src={"/assets/book-appointment.webp"} />
+          <div className="relative w-full h-[500px]">
+            <Image loading="lazy" fill src={"/assets/book-appointment.webp"} alt="Meet our gemstone experts and book an appointment" className="object-cover" />
+          </div>
         </GridCol>
         <GridCol span={{ base: 12, md: 6 }}>
           <div className="p-16 flex flex-col gap-4 mt-6">

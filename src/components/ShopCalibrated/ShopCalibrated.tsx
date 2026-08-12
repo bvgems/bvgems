@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Container, Image, Grid } from "@mantine/core";
+import { Container, Grid } from "@mantine/core";
+import Image from "next/image";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { useRouter } from "next/navigation";
 import { gemstoneOptions } from "@/utils/constants";
@@ -29,11 +30,11 @@ export const ShopCalibrated = () => {
               }
               className="cursor-pointer flex flex-col items-center justify-center bg-transparent"
             >
-              <div className="w-[160px] h-[160px] flex items-center justify-center">
+              <div className="relative w-[160px] h-[160px] flex items-center justify-center">
                 <Image loading="lazy"
                   src={item?.shopImage}
                   alt={item?.label}
-                  fit="contain"
+                  fill
                   className="object-contain"
                 />
               </div>

@@ -14,7 +14,6 @@ import {
   Grid,
   GridCol,
   Group,
-  Image,
   Modal,
   UnstyledButton,
   Text,
@@ -27,6 +26,7 @@ import {
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { AuthForm } from "../Auth/AuthForm";
 import { useAuth } from "@/hooks/useAuth";
@@ -188,13 +188,11 @@ export function Header() {
         {...props}
         className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
       >
-        <div className="flex-shrink-0">
+        <div className="relative w-[50px] h-[50px] flex-shrink-0">
           <Image loading="lazy"
-            h={50}
-            w={50}
-            fit="cover"
+            fill
             src={option.images?.edges?.[0]?.node?.url ?? option?.image_url}
-            className="object-cover"
+            className="object-cover rounded"
             alt={option.label}
           />
         </div>
@@ -241,7 +239,9 @@ export function Header() {
         <Group wrap="nowrap" align="flex-start">
           {item.image && (
             <ThemeIcon size={34} variant="transparent">
-              <Image loading="lazy" src={item.image} alt={item.label} w={20} h={20} />
+              <div className="relative w-[20px] h-[20px]">
+                <Image loading="lazy" src={item.image} alt={item.label} fill className="object-contain" />
+              </div>
             </ThemeIcon>
           )}
           <div className="hover:text-gray-500">
@@ -438,17 +438,17 @@ export function Header() {
               </div>
             ) : (
               <div className="flex items-center justify-between h-full w-full px-6">
-                <Burger opened={opened} onClick={toggle} size="sm" />
+                <Burger opened={opened} onClick={toggle} size="sm" aria-label="Toggle navigation menu" />
 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
-                  <Image loading="lazy"
-                    className="cursor-pointer"
-                    onClick={() => router.push("/")}
-                    src="/assets/logo2.webp"
-                    alt="logo"
-                    h={50}
-                    w={100}
-                  />
+                  <div className="relative w-[100px] h-[50px] cursor-pointer" onClick={() => router.push("/")}>
+                    <Image loading="lazy"
+                      src="/assets/logo2.webp"
+                      alt="logo"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -481,14 +481,14 @@ export function Header() {
                 span={{ base: 12, md: 2 }}
                 className="flex justify-start"
               >
-                <Image loading="lazy"
-                  className="cursor-pointer"
-                  onClick={() => router.push("/")}
-                  src="/assets/logo2.webp"
-                  alt="logo"
-                  h={50}
-                  w={100}
-                />
+                <div className="relative w-[100px] h-[50px] cursor-pointer" onClick={() => router.push("/")}>
+                  <Image loading="lazy"
+                    src="/assets/logo2.webp"
+                    alt="logo"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
               </GridCol>
 
               <GridCol

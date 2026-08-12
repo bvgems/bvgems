@@ -1,13 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
-import { Icon } from "leaflet";
-import "leaflet/dist/leaflet.css";
-
-// Fix for default markers in Next.js
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
+// Fix for leaflet SSR crash: import dynamically inside useEffect
 import { GEM_LOCATIONS, GemLocation } from "@/utils/constants";
 import { Anchor, Breadcrumbs, Image } from "@mantine/core";
 
@@ -31,14 +25,14 @@ const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), {
 });
 
 // Custom markers for different gem types
-const createCustomIcon = (gem: BigThree) => {
+const createCustomIcon = (L: any, gem: BigThree) => {
   const colors = {
     sapphire: "#0066CC",
     emerald: "#00CC66",
     ruby: "#CC0000",
   };
 
-  return new Icon({
+  return new L.Icon({
     iconUrl: `data:image/svg+xml;base64,${btoa(`
       <svg width="25" height="21" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
         <path d="M12.5 0C5.6 0 0 5.6 0 12.5C0 19.9 12.5 41 12.5 41S25 19.9 25 12.5C25 5.6 19.4 0 12.5 0Z" fill="${colors[gem]}"/>
@@ -72,15 +66,27 @@ export default function LocationMap() {
     </Anchor>
   ));
 
+  const [L, setL] = useState<any>(null);
+
   useEffect(() => {
     setIsClient(true);
 
-    // Fix for default markers
-    delete (Icon.Default.prototype as any)._getIconUrl;
-    Icon.Default.mergeOptions({
-      iconRetinaUrl: markerIcon2x.src,
-      iconUrl: markerIcon.src,
-      shadowUrl: markerShadow.src,
+    import("leaflet").then((leaflet) => {
+      require("leaflet/dist/leaflet.css");
+      const L = leaflet.default || leaflet;
+      
+      const markerIcon2x = require("leaflet/dist/images/marker-icon-2x.png");
+      const markerIcon = require("leaflet/dist/images/marker-icon.png");
+      const markerShadow = require("leaflet/dist/images/marker-shadow.png");
+
+      delete (L.Icon.Default.prototype as any)._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: markerIcon2x.default?.src || markerIcon2x,
+        iconUrl: markerIcon.default?.src || markerIcon,
+        shadowUrl: markerShadow.default?.src || markerShadow,
+      });
+
+      setL(L);
     });
   }, []);
 
@@ -273,11 +279,11 @@ export default function LocationMap() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {GEM_LOCATIONS.map((location, index) => (
+            {L && GEM_LOCATIONS.map((location, index) => (
               <Marker
                 key={`${location.gem}-${location.locality}-${index}`}
                 position={location.coords}
-                icon={createCustomIcon(location.gem)}
+                icon={createCustomIcon(L, location.gem)}
                 eventHandlers={{
                   click: () => setSelected(location),
                 }}

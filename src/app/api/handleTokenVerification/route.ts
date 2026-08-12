@@ -9,7 +9,7 @@ export async function POST() {
   const token = cookieStore.get("token")?.value;
 
   if (!token) {
-    return NextResponse.json({ message: "Not logged in" }, { status: 401 });
+    return NextResponse.json({ user: null, message: "Not logged in" }, { status: 200 });
   }
 
   try {
@@ -28,6 +28,6 @@ export async function POST() {
     return response;
   } catch (error) {
     console.log("error", error);
-    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    return NextResponse.json({ user: null, message: "Invalid token" }, { status: 200 });
   }
 }
