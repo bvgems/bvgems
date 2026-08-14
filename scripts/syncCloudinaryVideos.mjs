@@ -73,7 +73,8 @@ async function syncVideos() {
       const url = video.secure_url;
       
       // We rely on the physical Cloudinary folder path
-      const folderPath = video.folder || video.public_id;
+      // IMPORTANT FIX: Cloudinary's new Media Library uses 'asset_folder' instead of 'folder'
+      const folderPath = video.asset_folder || video.folder || video.public_id;
       
       const parts = folderPath.split('/');
       if (parts.length < 4) continue;
