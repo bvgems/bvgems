@@ -107,7 +107,11 @@ export async function GET(request: Request) {
   </div>
 `;
 
-    await sendEmail(email, "Your cart is waiting 🛒", html);
+    try {
+      await sendEmail(email, "Your cart is waiting 🛒", html);
+    } catch (e) {
+      console.error(`Failed to send abandoned cart email to ${email}:`, e);
+    }
 
     await pool.query(
       `UPDATE checkout_carts SET status = 'abandoned' WHERE id = $1`,
