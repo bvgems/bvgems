@@ -15,50 +15,7 @@ import {
 import { IconCalendarPlus, IconExternalLink } from "@tabler/icons-react";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 
-// ===== Types =====
-export interface TradeShow {
-  name: string;
-  booth: string;
-  website: string;
-  logo: string;
-  location: string;
-  start: string; // supports "YYYY-MM-DD" or "MM-DD-YYYY"
-  end: string; // supports "YYYY-MM-DD" or "MM-DD-YYYY"
-  // optional: startTime/endTime like "09:00", "17:00" (24h)
-  startTime?: string;
-  endTime?: string;
-}
-
-// ===== Data =====
-export const tradeShows: TradeShow[] = [
-  {
-    name: "Las Vegas AGTA",
-    booth: "Booth #A-28057",
-    website: "https://agta.org/trade-shows/agta-gemfair-las-vegas/",
-    logo: "https://agta.org/wp-content/uploads/2024/08/AGTA-Horiz-Logo.svg",
-    location: "Las Vegas, Nevada",
-    start: "05-28-2026",
-    end: "06-01-2026",
-  },
-  {
-    name: "JIS Miami",
-    booth: "Booth #1339",
-    website: "https://www.jisshow.com/fall/en-us.html",
-    logo: "https://www.jisshow.com/content/dam/sitebuilder/rna/jis/2021/spring/JISFall.png/_jcr_content/renditions/original.image_file.592.300.file/367267082/JISFall.png",
-    location: "Miami Beach Convention Center | Miami Beach, FL",
-    start: "10-10-2026",
-    end: "10-13-2026",
-  },
-  {
-    name: "Tucson GJX",
-    booth: "Booth #1234",
-    website: "https://gjx.rocks",
-    logo: "https://gjx.rocks/wp-content/themes/gjx-2020/images/logo.png",
-    location: "198 S. Granada Tucson, AZ 85701",
-    start: "02-02-2027",
-    end: "02-07-2027",
-  },
-];
+import { tradeShows, TradeShow } from "@/utils/constants";
 
 // ===== Helpers =====
 

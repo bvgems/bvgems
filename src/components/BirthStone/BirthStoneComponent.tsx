@@ -75,7 +75,7 @@ export const BirthStoneComponent = () => {
       />
 
       <Carousel
-        height={320}
+        height={240}
         slideSize={isMobile ? "100%" : "23%"}
         slideGap="md"
         emblaOptions={{ loop: true }}

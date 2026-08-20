@@ -1,7 +1,7 @@
 "use client";
 
 import { IndustryAffiliationOptions } from "@/utils/constants";
-import { Image } from "@mantine/core";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -24,11 +24,15 @@ export const IndustryAffiliation = () => {
               className="flex justify-center items-center"
               aria-label={`Visit ${item?.name || "Industry Affiliation"}`}
             >
-              <img
-                src={item?.logo}
-                className="h-[90px] w-[100px] md:h-[140px] md:w-[160px] object-contain"
-                alt={item?.name || "Industry Affiliation Badge"}
-              />
+              <div className="relative h-[90px] w-[100px] md:h-[140px] md:w-[160px]">
+                <Image
+                  src={item?.logo}
+                  className="object-contain"
+                  alt={item?.name || "Industry Affiliation Badge"}
+                  fill
+                  sizes="(max-width: 768px) 100px, 160px"
+                />
+              </div>
             </Link>
           );
         })}

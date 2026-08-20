@@ -102,19 +102,34 @@ export default function RootLayout({
               description:
                 "Wholesale dealer of calibrated gemstones and fine jewelry in NYC’s Diamond District.",
               image: `https://www.bvgems.com/assets/logo2.webp`,
+              logo: `https://www.bvgems.com/assets/logo2.webp`,
               "@id": siteUrl,
               url: siteUrl,
               telephone: "+1-212-944-4382",
               address: {
                 "@type": "PostalAddress",
-                streetAddress: "66 W 47th St, Suite XXX",
+                streetAddress: "66 W 47th St, Booth 9 and 10",
                 addressLocality: "New York",
                 addressRegion: "NY",
                 postalCode: "10036",
                 addressCountry: "US",
               },
+              openingHoursSpecification: [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  dayOfWeek: [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday"
+                  ],
+                  opens: "09:00",
+                  closes: "19:00"
+                }
+              ],
               sameAs: ["https://www.instagram.com/bvgemsinc/"],
-              priceRange: "$$",
+              priceRange: "$$$",
               makesOffer: {
                 "@type": "OfferCatalog",
                 name: "Gemstone Collections",

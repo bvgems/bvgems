@@ -10,6 +10,19 @@
   height: 100%;
 }
 
+/* Fix for Carousel Arrows Visibility */
+.mantine-Carousel-control {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #0b182d !important;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+  border: 1px solid #e5e7eb !important;
+  opacity: 1 !important;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.mantine-Carousel-control:hover {
+  background-color: #ffffff !important;
+  transform: scale(1.05);
+}
 
 @theme inline {
   --color-background: var(--background);
