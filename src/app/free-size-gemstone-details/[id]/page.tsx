@@ -33,7 +33,7 @@ export async function generateMetadata({
       }, size ${product.dimension}, color ${
         product.color
       }. Shop now at B.V. Gems.`,
-      url: `https://bvgems.com/free-size-gemstone-details/${id}`,
+      url: `https://www.bvgems.com/free-size-gemstone-details/${id}`,
       siteName: "B.V. Gems",
       type: "website",
       images: [

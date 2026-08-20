@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${title} | B.V. Gems`,
       description: `Explore ${title} at B.V. Gems. Ethically sourced gemstones, precision craftsmanship, insured delivery.`,
       images: product?.images?.edges?.map((img: any) => img?.node?.url) || [],
-      url: `https://bvgems.com/jewelry/${category}/${productHandle}`,
+      url: `https://www.bvgems.com/jewelry/${category}/${productHandle}`,
       siteName: "B.V. Gems",
       type: "website",
     },

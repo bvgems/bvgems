@@ -17,7 +17,7 @@ import { EmailSubscribeModal } from "@/components/CommonComponents/EmailSubscrib
 import Script from "next/script";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
-const siteUrl = "https://bvgems.com";
+const siteUrl = "https://www.bvgems.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

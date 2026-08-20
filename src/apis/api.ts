@@ -1,7 +1,7 @@
 import axios from "axios";
 const baseUrl =
   typeof window === "undefined"
-    ? process.env.NEXT_PUBLIC_BASE_URL || "https://bvgems.com"
+    ? process.env.NEXT_PUBLIC_BASE_URL || "https://www.bvgems.com"
     : "";
 
 export const getStudsDetails = async () => {

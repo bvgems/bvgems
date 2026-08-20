@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `Fine Gemstone ${formattedCategory} – Shop Online | B.V. Gems`,
       description: `Explore exquisite ${formattedCategory.toLowerCase()} from B.V. Gems. Sapphire, emerald, ruby & diamond jewelry crafted with precision.`,
-      url: `https://bvgems.com/jewelry/${category}`,
+      url: `https://www.bvgems.com/jewelry/${category}`,
       siteName: "B.V. Gems",
       type: "website",
     },

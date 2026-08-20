@@ -191,7 +191,7 @@ export default function ColorStoneLayouts() {
               itemListElement: layouts.map((item: any, i: number) => ({
                 "@type": "ListItem",
                 position: i + 1,
-                url: `https://bvgems.com/color-stone-layouts/${item?.id || i}`,
+                url: `https://www.bvgems.com/color-stone-layouts/${item?.id || i}`,
                 name: item?.title || `Color Stone Layout ${i + 1}`,
               })),
             }),

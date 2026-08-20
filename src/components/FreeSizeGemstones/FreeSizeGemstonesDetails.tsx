@@ -348,7 +348,7 @@ export default function FreeSizeGemstoneDetails({
               brand: { "@type": "Brand", name: "B.V. Gems" },
               offers: {
                 "@type": "Offer",
-                url: `https://bvgems.com/free-size/${product?.id}`,
+                url: `https://www.bvgems.com/free-size/${product?.id}`,
                 priceCurrency: "USD",
                 price: product?.price,
                 availability: "http://schema.org/InStock",

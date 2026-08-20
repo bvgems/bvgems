@@ -58,7 +58,7 @@ export async function generateMetadata({
       type: "website",
       images:
         productData?.images?.edges?.map((img: any) => img?.node?.url) || [],
-      url: `https://bvgems.com/jewelry-details/${category}/${product}/${stone}`,
+      url: `https://www.bvgems.com/jewelry-details/${category}/${product}/${stone}`,
       siteName: "B.V. Gems",
     },
     twitter: {
@@ -70,7 +70,7 @@ export async function generateMetadata({
       ],
     },
     alternates: {
-      canonical: `https://bvgems.com/jewelry-details/${category}/${product}/${stone}`,
+      canonical: `https://www.bvgems.com/jewelry-details/${category}/${product}/${stone}`,
     },
   };
 }
@@ -500,7 +500,7 @@ export default function JewelryProductPage() {
                 },
                 offers: {
                   "@type": "Offer",
-                  url: `https://bvgems.com/jewelry-details/${category}/${product}/${stone}`,
+                  url: `https://www.bvgems.com/jewelry-details/${category}/${product}/${stone}`,
                   priceCurrency: "USD",
                   price:
                     productData?.priceRange?.minVariantPrice?.amount || "0",
@@ -522,8 +522,8 @@ export default function JewelryProductPage() {
                   position: idx + 1,
                   name: item.title,
                   item: item.href
-                    ? `https://bvgems.com${item.href}`
-                    : `https://bvgems.com${path}`,
+                    ? `https://www.bvgems.com${item.href}`
+                    : `https://www.bvgems.com${path}`,
                 })),
               }),
             }}

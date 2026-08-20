@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: "Loose Calibrated Faceted Gemstones – Shop Online | B.V. Gems",
     description:
       "Shop over 5,000 calibrated faceted gemstones at B.V. Gems. Ethically sourced natural & lab-grown sapphires, emeralds, rubies, citrine & more.",
-    url: "https://bvgems.com/loose-gemstones",
+    url: "https://www.bvgems.com/loose-gemstones",
     siteName: "B.V. Gems",
     type: "website",
   },

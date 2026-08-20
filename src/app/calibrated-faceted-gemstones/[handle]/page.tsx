@@ -25,13 +25,13 @@ export async function generateMetadata({
         "custom jewelry stones",
       ],
       alternates: {
-        canonical: `https://bvgems.com/${handle}`,
+        canonical: `https://www.bvgems.com/${handle}`,
       },
       openGraph: {
         title: "Gemstone Collection | B.V. Gems",
         description:
           "Shop ethically sourced gemstones for fine jewelry & custom designs. Calibrated stones available for wholesale in New York.",
-        url: `https://bvgems.com/${handle}`,
+        url: `https://www.bvgems.com/${handle}`,
         siteName: "B.V. Gems",
         type: "website",
         images: [
@@ -69,12 +69,12 @@ export async function generateMetadata({
       "diamond district gemstones",
     ],
     alternates: {
-      canonical: `https://bvgems.com/${handle}`,
+      canonical: `https://www.bvgems.com/${handle}`,
     },
     openGraph: {
       title: `${formattedName} – Natural & Wholesale Loose ${formattedName} Gemstones | B.V. Gems`,
       description: `Browse our ${formattedName.toLowerCase()} gemstone collection. Ethically sourced, calibrated stones in a variety of shapes & sizes for jewelers & designers.`,
-      url: `https://bvgems.com/${handle}`,
+      url: `https://www.bvgems.com/${handle}`,
       siteName: "B.V. Gems",
       type: "website",
       images: [

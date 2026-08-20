@@ -16,7 +16,7 @@ export function buildMemoApprovalSuccessEmail(user: any) {
       </p>
   
         <div style="margin: 20px 0; text-align: center;">
-          <a href="https://bvgems.com" 
+          <a href="https://www.bvgems.com" 
             style="display: inline-block; background-color: #0b182d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
            START SHOPPING ON MEMO
           </a>

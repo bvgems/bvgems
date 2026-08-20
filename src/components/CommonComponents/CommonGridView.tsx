@@ -179,7 +179,7 @@ export const CommonGridView = ({
               itemListElement: finalProducts.map((item: any, i: number) => ({
                 "@type": "ListItem",
                 position: i + 1,
-                url: `https://bvgems.com/${isBead ? "beads" : category}/${
+                url: `https://www.bvgems.com/${isBead ? "beads" : category}/${
                   item?.node?.handle || item?.id
                 }`,
                 name: item?.node?.title || item?.name || "Gemstone Jewelry",

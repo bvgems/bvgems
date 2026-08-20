@@ -1075,7 +1075,7 @@ export function CategoryContent({
             brand: { "@type": "Brand", name: "B.V. Gems" },
             offers: {
               "@type": "AggregateOffer",
-              url: `https://bvgems.com/loose-gemstones/${handle}`,
+              url: `https://www.bvgems.com/loose-gemstones/${handle}`,
               priceCurrency: "USD",
               lowPrice: fetchedResult?.[0]?.price || "100",
               highPrice:

@@ -10,7 +10,7 @@ export function buildWelcomeEmail(customerName: string) {
         <p>Thank you for choosing B.V. Gems. We look forward to building a strong and lasting relationship with you.</p>
         <p>If you have any questions or need assistance, please feel free to reach out to us at <a href="mailto:sales@bvgems.com">sales@bvgems.com</a>. Our team is always here to help!</p>
         <div style="text-align: center; margin-top: 20px;">
-          <a href="https://bvgems.com"
+          <a href="https://www.bvgems.com"
             style="display: inline-block; background-color: #0b182d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
             LOGIN TO YOUR ACCOUNT
           </a>

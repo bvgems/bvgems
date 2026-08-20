@@ -288,7 +288,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
               itemListElement: displayItems.map((item: any, i: number) => ({
                 "@type": "ListItem",
                 position: i + 1,
-                url: `https://bvgems.com/product-details?id=${item?.id}&name=${item?.collection_slug}`,
+                url: `https://www.bvgems.com/product-details?id=${item?.id}&name=${item?.collection_slug}`,
                 name: item?.title || `${item?.collection_slug} Gemstone`,
               })),
             }),

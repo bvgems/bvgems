@@ -670,7 +670,7 @@ export default function ProductDetailsPage() {
               brand: { "@type": "Brand", name: "B.V. Gems" },
               offers: {
                 "@type": "Offer",
-                url: `https://bvgems.com/product?id=${product?.id}&name=${product?.collection_slug}`,
+                url: `https://www.bvgems.com/product?id=${product?.id}&name=${product?.collection_slug}`,
                 priceCurrency: "USD",
                 price: getPerStonePrice(product) || getPerCaratPrice(product),
                 availability: "http://schema.org/InStock",
