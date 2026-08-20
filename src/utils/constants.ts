@@ -1599,6 +1599,8 @@ export interface TradeShow {
   location: string;
   start: string;
   end: string;
+  startTime?: string;
+  endTime?: string;
 }
 
 export const tradeShows: TradeShow[] = [
