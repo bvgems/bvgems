@@ -33,7 +33,7 @@ export const ShopCalibrated = () => {
               <div className="relative w-[160px] h-[160px] flex items-center justify-center">
                 <Image loading="lazy"
                   src={item?.shopImage}
-                  alt={item?.label}
+                  alt={`Calibrated ${item?.label} gemstones`}
                   fill
                   className="object-contain"
                 />

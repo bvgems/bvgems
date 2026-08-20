@@ -297,12 +297,11 @@ export const ProductSpecifications = ({
       ) : (
         /** ---------------- Free Size Vertical Table ---------------- */
         <Table
-          horizontalSpacing="lg"
+          horizontalSpacing="xl"
           verticalSpacing="md"
-          variant="vertical"
-          layout="fixed"
-          withTableBorder
+          className="border border-[#e2e8f0] w-full"
         >
+          <Table.Caption>Detailed specifications for {product?.gemstone_type}</Table.Caption>
           <Table.Tbody>
             <Table.Tr>
               <Table.Th>

@@ -56,7 +56,7 @@ export default function ShopByColor() {
                 <Image loading="lazy"
                   fill
                   src={item?.image}
-                  alt={item?.name}
+                  alt={`${item?.name} colored gemstones collection`}
                   className="object-contain"
                 />
               </div>

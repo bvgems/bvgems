@@ -154,11 +154,11 @@ export default function RootLayout({
           <Notifications />
           <ClientOnlyLayout>
             {/* <EmailSubscribeModal /> */}
-            {children}
+            <main>{children}</main>
           </ClientOnlyLayout>
         </MantineProvider>
       </body>
-      <GoogleAnalytics gaId="G-784DDN0WVP" />
+      <GoogleAnalytics gaId="G-VWBXHJNNS5" />
     </html>
   );
 }

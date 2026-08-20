@@ -272,6 +272,7 @@ export default function TradeShows() {
                       color="#0b182d"
                       className="hover:-translate-y-0.5 transition-transform"
                       aria-label={`Add ${show.name} to Google Calendar`}
+                      rel="nofollow noopener"
                     >
                       Google Calendar
                     </Button>
@@ -285,6 +286,7 @@ export default function TradeShows() {
                       leftSection={<IconCalendarPlus size={18} />}
                       className="hover:-translate-y-0.5 transition-transform"
                       aria-label={`Download iCal for ${show.name}`}
+                      rel="nofollow noopener"
                     >
                       iCal/Outlook
                     </Button>

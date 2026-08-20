@@ -20,8 +20,7 @@ const runFfmpeg = (inputPath, outputPath) => {
       '-c:v', 'libx264',
       '-crf', '18',
       '-preset', 'slow',
-      '-c:a', 'aac',
-      '-b:a', '192k',
+      '-an', // Strip audio track entirely (works even if already muted)
       '-movflags', '+faststart',
       '-pix_fmt', 'yuv420p',
       '-y', // Overwrite output files without asking

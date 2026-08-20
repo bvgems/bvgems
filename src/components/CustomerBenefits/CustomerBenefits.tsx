@@ -76,6 +76,9 @@ export const CustomerBenefits = () => {
         text="Why Shop With Us"
         className="text-center text-3xl sm:text-4xl text-[#0b182d] mb-12"
       />
+      <p className="text-center text-lg text-gray-600 mb-12 -mt-8 px-4 max-w-3xl mx-auto">
+        Backed by 6 generations and 75+ years of experience across 50+ countries. We manufacture in volume to bring you the finest quality at unparalleled value.
+      </p>
       <Grid gutter="xl" justify="center">
         {customerBenefits.map((item, index) => (
           <AnimatedGridCol key={index} index={index}>

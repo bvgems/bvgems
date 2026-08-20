@@ -238,8 +238,8 @@ export const Footer = () => {
               style={{ padding: "8px", display: "inline-block" }}
               aria-label="Follow us on Instagram"
             >
-              <ActionIcon size="xl" color="gray" variant="subtle" aria-hidden="true">
-                <IconBrandInstagramFilled color="#E1306C" stroke={1.5} size={28} />
+              <ActionIcon aria-label="Instagram profile" size="xl" p="sm" style={{ width: 48, height: 48 }} color="gray" variant="subtle" aria-hidden="true">
+                <IconBrandInstagramFilled color="#E1306C" stroke={1.5} size={32} />
               </ActionIcon>
             </a>
           </div>

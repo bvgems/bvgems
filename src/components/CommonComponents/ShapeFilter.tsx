@@ -44,7 +44,7 @@ export const ShapeFilter = ({
     <div className="w-full">
       <div className="flex items-center gap-4 w-full">
         {stone !== "Side" && (
-          <ActionIcon
+          <ActionIcon aria-label="Previous slide"
             variant="subtle"
             className="prev-btn flex-shrink-0"
             radius="xl"
@@ -122,7 +122,7 @@ export const ShapeFilter = ({
         </Swiper>
 
         {stone !== "Side" && (
-          <ActionIcon
+          <ActionIcon aria-label="Next slide"
             variant="subtle"
             className="next-btn flex-shrink-0"
             radius="xl"

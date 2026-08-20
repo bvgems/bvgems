@@ -26,7 +26,7 @@ export const ColorOptions = ({
       </Group>
 
       <div className="flex items-center gap-4 w-full">
-        <ActionIcon
+        <ActionIcon aria-label="Previous slide"
           variant="subtle"
           className="color-prev-btn flex-shrink-0"
           radius="xl"
@@ -87,7 +87,7 @@ export const ColorOptions = ({
           )}
         </Swiper>
 
-        <ActionIcon
+        <ActionIcon aria-label="Next slide"
           variant="subtle"
           className="color-next-btn flex-shrink-0"
           radius="xl"

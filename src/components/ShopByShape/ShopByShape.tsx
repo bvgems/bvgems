@@ -38,7 +38,7 @@ export const ShopByShape = () => {
                 <div className="relative w-[45px] h-[45px] mb-2" style={{ maxWidth: "60px" }}>
                   <Image loading="lazy"
                     src={shape.image}
-                    alt={shape.label}
+                    alt={`${shape.label} shaped gemstones`}
                     fill
                     className="object-contain opacity-90"
                   />

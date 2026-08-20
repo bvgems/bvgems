@@ -31,7 +31,7 @@ export const GemstoneFilter = ({ options, selected, setSelected }: any) => {
   return (
     <div className="w-full">
       <div className="flex items-center gap-4 w-full">
-        <ActionIcon
+        <ActionIcon aria-label="Previous slide"
           variant="subtle"
           className="previous-button flex-shrink-0"
           radius="xl"
@@ -95,7 +95,7 @@ export const GemstoneFilter = ({ options, selected, setSelected }: any) => {
           })}
         </Swiper>
 
-        <ActionIcon
+        <ActionIcon aria-label="Next slide"
           variant="subtle"
           className="next-button flex-shrink-0"
           radius="xl"

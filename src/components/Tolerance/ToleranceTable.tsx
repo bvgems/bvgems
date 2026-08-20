@@ -31,6 +31,7 @@ export const ToleranceTable = ({ toleranceContent }: any) => {
           </TableTr>
         </TableThead>
         <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Caption>Gemstone size and millimeter tolerance guidelines</Table.Caption>
       </Table>
     </div>
   );

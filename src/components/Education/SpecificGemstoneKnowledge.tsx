@@ -102,7 +102,7 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
                   h={160}
                   w={160}
                   className="object-cover"
-                  src={knowledge?.additionalImages?.reference?.image?.url}
+                  src={activeStone?.toLowerCase() === "paraiba tourmaline" ? "/assets/paraiba-img.webp" : knowledge?.additionalImages?.reference?.image?.url}
                 />
                 <span className="text-xl md:text-2xl font-semibold capitalize">
                   {activeStone}
@@ -120,12 +120,13 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
                 </h3>
 
                 <Table
-                  variant="vertical"
-                  layout="fixed"
-                  withTableBorder
                   striped
                   highlightOnHover
+                  withTableBorder
+                  withColumnBorders
+                  className="bg-white"
                 >
+                  <Table.Caption>Gemological properties and characteristics</Table.Caption>
                   <Table.Tbody>
                     {[
                       ["Hardness", knowledge?.hardness?.value],

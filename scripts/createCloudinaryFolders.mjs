@@ -37,7 +37,7 @@ const NON_SAPPHIRE_GEMSTONES = [
   "Citrine",
   "Peridot",
   "Tanzanite",
-  "ParaibaTourmaline"
+  "Paraiba Tourmaline"
 ];
 
 // All available shapes
@@ -93,7 +93,7 @@ async function createFolders() {
 
   // Cloudinary has rate limits for the Admin API.
   // We process them in sequence with a slight delay to be safe.
-  
+
   const remainingFolders = foldersToCreate;
   console.log(`Attempting to create or verify ${remainingFolders.length} folders...`);
 
@@ -101,7 +101,7 @@ async function createFolders() {
 
   for (let i = 0; i < remainingFolders.length; i++) {
     if (rateLimited) break;
-    
+
     const folder = remainingFolders[i];
     try {
       await cloudinary.api.create_folder(folder);
@@ -109,7 +109,7 @@ async function createFolders() {
     } catch (error) {
       const httpCode = error?.error?.http_code || error?.http_code;
       const message = error?.message || error?.error?.message || "";
-      
+
       // 409 means the folder already exists
       if (httpCode === 409 || message.includes("already exists")) {
         console.log(`[${i + 1}/${foldersToCreate.length}] ⏭️  Exists: ${folder}`);

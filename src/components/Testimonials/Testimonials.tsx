@@ -113,7 +113,7 @@ export const Testimonials = () => {
                     src={review.platform}
                     fill
                     className="object-contain"
-                    alt="platform"
+                    alt={`${review.platform} review platform logo`}
                   />
                 </div>
               </div>

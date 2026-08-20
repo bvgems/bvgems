@@ -38,7 +38,7 @@ export const StyleFilter = ({ selected, setSelected }: any) => {
     <div className="flex items-center gap-4 w-full">
       <div className="text-gray-700 font-medium text-base w-[70px]">Style</div>
 
-      <ActionIcon
+      <ActionIcon aria-label="Previous slide"
         variant="light"
         className="previous-button"
         radius="xl"
@@ -107,7 +107,7 @@ export const StyleFilter = ({ selected, setSelected }: any) => {
         })}
       </Swiper>
 
-      <ActionIcon variant="light" className="next-button" radius="xl" size="lg">
+      <ActionIcon aria-label="Next slide" variant="light" className="next-button" radius="xl" size="lg">
         <IconChevronRight />
       </ActionIcon>
     </div>

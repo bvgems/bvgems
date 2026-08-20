@@ -60,10 +60,11 @@ export const JeweleryDetailsTable = ({
         </div>
         <div className="space-y-3">
           <Table
-            highlightOnHover
-            withRowBorders={false}
-            withColumnBorders={false}
+            horizontalSpacing="xl"
+            verticalSpacing="md"
+            className="border border-[#e2e8f0] w-full"
           >
+            <Table.Caption>Detailed jewelry and setting specifications</Table.Caption>
             <Table.Tbody>
               {renderRow(
                 "Gemstone:",
