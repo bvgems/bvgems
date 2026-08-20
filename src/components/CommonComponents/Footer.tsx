@@ -82,7 +82,7 @@ export const Footer = () => {
       <Grid className="mx-12">
         <GridCol span={{ base: 12, md: 2 }}>
           <div className="flex flex-col gap-2">
-            <h1 className="text-lg mb-3 font-semibold">Calibrated Gemstones</h1>
+            <h3 className="text-lg mb-3 font-semibold">Calibrated Gemstones</h3>
             {allGemstones?.map((item: any, index: number) => {
               return (
                 <h3
@@ -100,7 +100,7 @@ export const Footer = () => {
         </GridCol>
         <GridCol span={{ base: 12, md: 2 }}>
           <div className="flex flex-col gap-2">
-            <h1 className="text-lg mb-3 font-semibold">Free Size Gemstones</h1>
+            <h3 className="text-lg mb-3 font-semibold">Free Size Gemstones</h3>
             {FreeSizeGemstonesList?.map((item: any, index: number) => {
               return (
                 <h3
@@ -119,7 +119,7 @@ export const Footer = () => {
 
         <GridCol span={{ base: 12, md: 2 }}>
           <div className="flex flex-col gap-2">
-            <h1 className="text-lg mb-3 font-semibold">Jewelry</h1>
+            <h3 className="text-lg mb-3 font-semibold">Jewelry</h3>
             {JewelryList?.map((item: any, index: number) => {
               return (
                 <h3
@@ -138,7 +138,7 @@ export const Footer = () => {
 
         <GridCol span={{ base: 12, md: 2 }}>
           <div className="flex flex-col gap-2">
-            <h1 className="text-lg mb-3 font-semibold">Customer Services</h1>
+            <h3 className="text-lg mb-3 font-semibold">Customer Services</h3>
             {flattenCustomerServices?.map((item: any, index: number) => {
               return (
                 <h3
@@ -168,7 +168,7 @@ export const Footer = () => {
           span={{ base: 12, md: 2 }}
           className="text-center sm:text-left"
         >
-          <h1 className="text-lg mb-3 font-semibold">Visit us</h1>
+          <h3 className="text-lg mb-3 font-semibold">Visit us</h3>
           <a
             href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
             className="hover:underline cursor-pointer text-sm"

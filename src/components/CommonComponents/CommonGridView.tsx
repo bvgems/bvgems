@@ -132,13 +132,13 @@ export const CommonGridView = ({
         </Breadcrumbs>
       )}
 
-      <h1 className="flex justify-center font-bold text-2xl mb-2">
+      <h2 className="flex justify-center font-bold text-2xl mb-2">
         {isBead
           ? "Precious Beads Collection"
           : isBeadNecklace
             ? "Finished Bead Necklaces"
             : `Gemstone ${capitalize(category)}`}
-      </h1>
+      </h2>
 
       <p className="mb-4 text-sm text-gray-600">
         Showing {totalDisplayedProducts} results

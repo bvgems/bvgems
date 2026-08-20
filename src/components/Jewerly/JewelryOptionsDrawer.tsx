@@ -14,9 +14,9 @@ export const JewelryOptionsDrawer = ({
 
   return (
     <div className="">
-      <h1 className="text-2xl px-6 pb-6 text-center">
+      <h2 className="text-2xl px-6 pb-6 text-center">
         More Options For This Design
-      </h1>
+      </h2>
 
       <div
         className="

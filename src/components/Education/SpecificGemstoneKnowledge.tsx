@@ -102,7 +102,7 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
                   h={160}
                   w={160}
                   className="object-cover"
-                  src={activeStone?.toLowerCase() === "paraiba tourmaline" ? "/assets/paraiba-img.webp" : knowledge?.additionalImages?.reference?.image?.url}
+                  src={activeStone?.toLowerCase() === "paraiba tourmaline" ? "/assets/pariba-desc.webp" : knowledge?.additionalImages?.reference?.image?.url}
                 />
                 <span className="text-xl md:text-2xl font-semibold capitalize">
                   {activeStone}

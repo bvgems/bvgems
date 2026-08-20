@@ -58,7 +58,7 @@ export const RightSideLooseGemstones = () => {
         </GridCol>
 
         <GridCol span={{ base: 12, md: 6 }} className="text-white">
-          <h1 className="text-2xl">Shop Our Top Loose Gemstones</h1>
+          <h2 className="text-2xl">Shop Our Top Loose Gemstones</h2>
           <p className="mt-3 italic">
             Discover a curated selection of precious and semi-precious color
             gemstones, available in both treated and untreated varieties—perfect

@@ -93,9 +93,9 @@ export const DrawerComponent = ({
                           {sublink.image && (
                             <Image loading="lazy" src={sublink.image} h={30} w={30} />
                           )}
-                          <h1 className="text-sm font-normal">
+                          <h2 className="text-sm font-normal">
                             {sublink.label}
-                          </h1>
+                          </h2>
                         </div>
                       ))}
 

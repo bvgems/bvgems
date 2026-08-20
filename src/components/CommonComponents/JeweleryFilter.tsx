@@ -78,7 +78,7 @@ export const JeweleryFilter = ({
       <Grid className="items-center">
         <GridCol span={{ base: 12, md: 2 }}>
           <div className="h-full flex items-center">
-            <h1 className="text-md">{title}</h1>
+            <h3 className="text-md">{title}</h3>
           </div>
         </GridCol>
 

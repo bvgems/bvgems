@@ -48,7 +48,7 @@ export const JewelryCard = ({
         initial="rest"
         animate="rest"
       >
-        <h1 className="text-2xl uppercase font-semibold">{title}</h1>
+        <h3 className="text-2xl uppercase font-semibold">{title}</h3>
         <p className="text-gray-600 text-sm">{subtitle}</p>
         <div className="mt-5 flex gap-4 justify-between">
           <motion.button

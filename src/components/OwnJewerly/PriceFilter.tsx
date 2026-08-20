@@ -17,7 +17,7 @@ export const PriceFilter = ({ range, setRange }: any) => {
 
   return (
     <div className="flex gap-4 items-center">
-      <h1>Price</h1>
+      <h3>Price</h3>
       <div className="flex flex-col md:flex-row items-center gap-4 w-full">
         <NumberInput
           className="w-full md:w-1/6"

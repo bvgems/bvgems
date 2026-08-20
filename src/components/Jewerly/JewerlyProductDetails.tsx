@@ -499,9 +499,9 @@ export const JewelryProductDetails = ({
         (!jf.isNecklaces ||
           (jf.isNecklaces && productData?.inHand?.value === "true")) ? (
           <>
-            <h1 className="text-md px-6 pb-6 text-center">
+            <h3 className="text-md px-6 pb-6 text-center">
               More Options For This Design
-            </h1>
+            </h3>
             <div className="grid grid-cols-2 gap-4">
               {productData?.variants?.edges?.map((item: any, idx: number) => {
                 const slug = item?.node?.title
@@ -551,9 +551,9 @@ export const JewelryProductDetails = ({
           </>
         ) : productData?.relatedProducts?.references?.edges ? (
           <>
-            <h1 className="text-md px-6 pb-6 text-center">
+            <h3 className="text-md px-6 pb-6 text-center">
               More Options For This Design
-            </h1>
+            </h3>
             <div className="grid grid-cols-2 gap-4">
               {productData?.relatedProducts?.references?.edges.map(
                 (item: any, idx: number) => {

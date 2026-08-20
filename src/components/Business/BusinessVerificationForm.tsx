@@ -120,7 +120,7 @@ export const BusinessVerificationForm = ({
   return (
     <>
       {isStepper ? (
-        <h1 className="text-center mt-5 text-2xl">Business Verification</h1>
+        <h2 className="text-center mt-5 text-2xl">Business Verification</h2>
       ) : null}
 
       <form onSubmit={form.onSubmit(handleSubmit)}>

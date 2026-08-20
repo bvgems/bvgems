@@ -162,7 +162,7 @@ export const ShippingAddressForm = ({
   return (
     <>
       {isStepper ? (
-        <h1 className="text-center mt-5 text-2xl">Shipping Address Details</h1>
+        <h2 className="text-center mt-5 text-2xl">Shipping Address Details</h2>
       ) : null}
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <div

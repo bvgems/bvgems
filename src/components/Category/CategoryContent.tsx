@@ -828,9 +828,9 @@ export function CategoryContent({
 
                 {/* Static Info Table */}
                 <div className="mt-3 max-w-[500px]">
-                  <h1 className="text-lg font-semibold mb-3">
+                  <h2 className="text-lg font-semibold mb-3">
                     Additional Information
-                  </h1>
+                  </h2>
                   <Table
                     className="mt-2.5 border rounded-lg shadow-sm"
                     verticalSpacing="sm"

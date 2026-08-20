@@ -16,9 +16,9 @@ export const ColorstoneLayoutsGridView = ({
 }: any) => {
   return (
     <>
-      <h1 className="text-2xl flex justify-center mt-12">
+      <h2 className="text-2xl flex justify-center mt-12">
         Color Stone Layouts Collection
-      </h1>
+      </h2>
       <Container size={1350} className="py-6">
         <Accordion defaultValue="description" variant="separated" radius="md">
           <Accordion.Item value="description">

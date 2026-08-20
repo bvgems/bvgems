@@ -26,9 +26,9 @@ export const OwnEngagementRing = () => {
 
       <div className="relative z-10 pb-12 flex items-end justify-center h-full bg-black/25 text-white">
         <div className="text-center pb-10 px-4 max-w-3xl">
-          <h1 className="text-4xl font-bold mb-2">
+          <h2 className="text-4xl font-bold mb-2">
             Create Your Own Engagement Ring
-          </h1>
+          </h2>
           <p className="text-xl">
             Craft a timeless symbol of love with your unique vision. Choose your
             gemstone, metal, and design — and let our expertise bring your dream

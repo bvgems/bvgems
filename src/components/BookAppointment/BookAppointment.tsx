@@ -17,9 +17,9 @@ export const BookAppointment = () => {
         </GridCol>
         <GridCol span={{ base: 12, md: 6 }}>
           <div className="p-16 flex flex-col gap-4 mt-6">
-            <h1 className="text-2xl font-semibold">
+            <h2 className="text-2xl font-semibold">
               Meet Our Gemstone Experts
-            </h1>
+            </h2>
             <p className="text-lg">
               Discover a more personal way to experience fine gemstones and
               jewelry. Work closely with our certified gemologists to design
