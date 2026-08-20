@@ -25,7 +25,7 @@ export async function generateMetadata({
         "custom jewelry stones",
       ],
       alternates: {
-        canonical: `https://www.bvgems.com/${handle}`,
+        canonical: `https://www.bvgems.com/calibrated-faceted-gemstones/${handle}`,
       },
       openGraph: {
         title: "Gemstone Collection | B.V. Gems",
@@ -69,7 +69,7 @@ export async function generateMetadata({
       "diamond district gemstones",
     ],
     alternates: {
-      canonical: `https://www.bvgems.com/${handle}`,
+      canonical: `https://www.bvgems.com/calibrated-faceted-gemstones/${handle}`,
     },
     openGraph: {
       title: `${formattedName} – Natural & Wholesale Loose ${formattedName} Gemstones | B.V. Gems`,

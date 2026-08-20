@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
   alternates: {
-    canonical: siteUrl,
+    // DO NOT SET CANONICAL HERE. It forces every child page to have the homepage as canonical.
   },
 
   openGraph: {
