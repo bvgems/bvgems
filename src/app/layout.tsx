@@ -2,6 +2,9 @@ import type { Metadata, Viewport } from "next";
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 import "@mantine/core/styles.css";
@@ -32,6 +35,7 @@ export const metadata: Metadata = {
 
   icons: {
     icon: "/favicon.ico",
+    apple: "/assets/logo2.webp",
   },
   alternates: {
     // DO NOT SET CANONICAL HERE. It forces every child page to have the homepage as canonical.
@@ -84,10 +88,6 @@ export default function RootLayout({
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin=""
-        />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
         />
 
         {/* 🔹 JSON-LD Schema.org (expanded with Organization + JewelryStore) */}
