@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import NextImage from "next/image";
 
 export const ImageZoom = ({ src, alt, className = "", h = "450px" }: any) => {
   const sourceRef: any = useRef(null);
@@ -53,16 +54,20 @@ export const ImageZoom = ({ src, alt, className = "", h = "450px" }: any) => {
       onMouseMove={handleMouseMove}
       style={{ borderRadius: "8px" }}
     >
-      <img
-        ref={sourceRef}
-        src={src}
-        alt={alt}
-        className={`w-full h-[300px] md:h-[${h}] block object-contain`}
-      />
+      <div className={`relative w-full h-[300px] md:h-[${h}]`}>
+        <NextImage
+          ref={sourceRef}
+          src={src}
+          alt={alt || "zoom-image"}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="block object-contain"
+        />
+      </div>
       <img
         ref={targetRef}
         src={src}
-        alt={alt}
+        alt={alt || "zoom-target"}
         className="absolute pointer-events-none"
         style={{
           left: `${offset.left}px`,
@@ -71,6 +76,9 @@ export const ImageZoom = ({ src, alt, className = "", h = "450px" }: any) => {
           transform: "scale(2)",
           transformOrigin: "top left",
           transition: "opacity 0.3s ease",
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
         }}
       />
     </div>

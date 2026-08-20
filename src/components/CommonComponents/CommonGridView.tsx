@@ -11,12 +11,13 @@ export const CommonGridView = ({
   isBead = false,
   isBeadNecklace = false,
   selectedStones,
+  initialData,
 }: any) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { category, allProducts, beads, finishedBeadNeclace } = useGridView();
+  const { category, allProducts, beads, finishedBeadNeclace } = useGridView(initialData);
   const isLoading =
     !allProducts?.length && !beads?.length && !finishedBeadNeclace?.length;
   const firstSwatchRef = useRef<HTMLDivElement | null>(null);

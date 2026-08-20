@@ -133,7 +133,7 @@ export function CartComponent() {
     variables.totalCaratWeight = "0.65";
     variables.stone = null;
     variables.image =
-      "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/1233_Y.png?v=1772054851";
+      "/assets/shopify/1233_Y.png";
     addToCart({
       product: {
         productType: "earringJewelry",
@@ -142,7 +142,7 @@ export function CartComponent() {
         handle: "natural-round-blue-sapphire-studs-earrings",
         title: "Natural Round Blue Sapphire Studs Earrings",
         image_url:
-          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/1233_Y.png?v=1772054851",
+          "/assets/shopify/1233_Y.png",
         price: 0,
         gemstone: variables?.stone,
         size: variables?.size || "",

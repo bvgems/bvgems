@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CommonGridView } from "@/components/CommonComponents/CommonGridView";
+import { getJewelryData } from "@/apis/api";
 
 type Props = {
   params: Promise<{ category: string }>;
@@ -24,6 +25,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function JewelryCategoryPage() {
-  return <CommonGridView />;
+export default async function JewelryCategoryPage({ params }: Props) {
+  const { category } = await params;
+  const response = await getJewelryData(category);
+  const products = response?.products || [];
+
+  return <CommonGridView initialData={{ allProducts: products }} />;
 }

@@ -1,5 +1,5 @@
 "use client";
-import { Image } from "@mantine/core";
+import NextImage from "next/image";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
@@ -38,7 +38,7 @@ export const JewelryCard = ({
       animate={controls}
       className="relative h-[300px] overflow-hidden"
     >
-      <Image loading="lazy" src={image} h={300} w={400} className="object-cover" />
+      <NextImage src={image} height={300} width={400} className="object-cover" alt={title} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" style={{ objectFit: 'cover', width: '400px', height: '300px' }} />
 
       <motion.div
         variants={{ rest: { x: 0 }, hover: { x: -40 } }}

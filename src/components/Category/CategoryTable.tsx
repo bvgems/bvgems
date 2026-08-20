@@ -1,4 +1,5 @@
 "use client";
+import NextImage from "next/image";
 
 import {
   Button,
@@ -508,9 +509,11 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                         </TableTd>
                         <TableTd>
                           <div className="w-14 h-14 flex items-center justify-center rounded overflow-hidden shadow-sm border border-gray-200">
-                            <img
+                            <NextImage
                               src={element.image_url}
                               alt="gem"
+                              width={56}
+                              height={56}
                               className="object-cover w-full h-full"
                             />
                           </div>
@@ -603,9 +606,11 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                             {/* Left: Image + details */}
                             <div className="flex items-center gap-3">
                               <div className="w-14 h-14 flex-shrink-0 rounded overflow-hidden shadow-sm border border-gray-200">
-                                <img
+                                <NextImage
                                   src={element.image_url}
                                   alt="gem"
+                                  width={56}
+                                  height={56}
                                   className="object-cover w-full h-full"
                                 />
                               </div>

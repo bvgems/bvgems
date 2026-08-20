@@ -4,24 +4,13 @@ import React, { useEffect, useState } from "react";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { Container } from "@mantine/core";
 import Image from "next/image";
-import { getBestSellingProducts } from "@/apis/api";
 import { motion } from "framer-motion";
 import { Carousel } from "@mantine/carousel";
 import { useRouter } from "next/navigation";
 import { IconChevronRight } from "@tabler/icons-react";
 
-export const BestSellingProductsComponents = () => {
-  const [bestSellingProducts, setBestSellingProducts] = useState<any[]>([]);
-
+export const BestSellingProductsComponents = ({ initialProducts = [] }: { initialProducts?: any[] }) => {
   const router = useRouter();
-  const fetchBestSellingProducts = async () => {
-    const response = await getBestSellingProducts();
-    setBestSellingProducts(response?.data || []);
-  };
-
-  useEffect(() => {
-    fetchBestSellingProducts();
-  }, []);
 
   return (
     <Container size={1350} className="mt-25">
@@ -47,7 +36,7 @@ export const BestSellingProductsComponents = () => {
         nextControlProps={{ "aria-label": "Next slide" }}
         previousControlProps={{ "aria-label": "Previous slide" }}
       >
-        {bestSellingProducts?.map((item: any, idx: number) => {
+        {initialProducts?.map((item: any, idx: number) => {
           console.log("item node", item);
           return (
             <Carousel.Slide key={idx}>

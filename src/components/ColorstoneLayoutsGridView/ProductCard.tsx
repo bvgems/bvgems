@@ -1,3 +1,4 @@
+import NextImage from "next/image";
 import { Card, GridCol, Modal, Slider, Tooltip } from "@mantine/core";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -157,9 +158,11 @@ export const ProductCard = ({
                       }`}
                       aria-label={`Variant ${variant.title || i + 1}`}
                     >
-                      <img
+                      <NextImage
                         src={variant.image}
                         alt={variant.title}
+                        width={30}
+                        height={30}
                         className="w-full h-full object-cover"
                       />
                     </button>

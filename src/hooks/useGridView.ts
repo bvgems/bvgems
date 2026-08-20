@@ -6,10 +6,14 @@ import {
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export const useGridView = () => {
-  const [allProducts, setAllProducts] = useState<any>([]);
-  const [beads, setBeads] = useState<any>([]);
-  const [finishedBeadNeclace, setFinishedBeadNecklace] = useState<any>([]);
+export const useGridView = (initialData?: {
+  allProducts?: any[];
+  beads?: any[];
+  finishedBeadNecklace?: any[];
+}) => {
+  const [allProducts, setAllProducts] = useState<any>(initialData?.allProducts || []);
+  const [beads, setBeads] = useState<any>(initialData?.beads || []);
+  const [finishedBeadNeclace, setFinishedBeadNecklace] = useState<any>(initialData?.finishedBeadNecklace || []);
   const [activeTab, setActiveTab] = useState("alphabetical");
 
   const { category }: any = useParams();
@@ -17,14 +21,17 @@ export const useGridView = () => {
 
   useEffect(() => {
     if (path && path.includes("precious-beads")) {
+      if (initialData?.beads) return;
       getBeads();
     }
     if (path && path.includes("finished-bead-necklaces")) {
+      if (initialData?.finishedBeadNecklace) return;
       getFinishedBeadNecklace();
     }
-  }, [path]);
+  }, [path, initialData]);
 
   useEffect(() => {
+    if (initialData?.allProducts) return;
     const fetchJewelryData = async () => {
       if (category) {
         const response = await getJewelryData(category);
@@ -34,7 +41,7 @@ export const useGridView = () => {
     };
 
     fetchJewelryData();
-  }, [category]);
+  }, [category, initialData]);
 
   const getBeads = async () => {
     const response = await fetchBeads();

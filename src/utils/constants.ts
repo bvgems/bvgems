@@ -42,19 +42,19 @@ export const GemstonesByBirthMonths = [
     products: [
       {
         image:
-          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_3fc1e418-4c8c-4f90-a898-6b0a640705c3.png?v=1755283409",
+          "/assets/shopify/raw_3fc1e418-4c8c-4f90-a898-6b0a640705c3.png",
         title: "Emerald Rings",
         link: "jewelry/rings?stone=emerald",
       },
       {
         image:
-          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_b75b25f6-c44b-4583-90e1-1a5ff66519e3.png?v=1755801060",
+          "/assets/shopify/raw_b75b25f6-c44b-4583-90e1-1a5ff66519e3.png",
         title: "Emerald Necklaces",
         link: "jewelry/necklaces?stone=emerald",
       },
       {
         image:
-          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/7ce09a_44524ec8cc1b4b5ca2e91179c3727ed6_mv2.webp?v=1753808342",
+          "/assets/shopify/7ce09a_44524ec8cc1b4b5ca2e91179c3727ed6_mv2.webp",
         title: "Emerald Earrings",
         link: "jewelry/earrings?stone=emerald",
       },
@@ -80,19 +80,19 @@ export const GemstonesByBirthMonths = [
     products: [
       {
         image:
-          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_5acd9d11-d4b6-439f-bf4f-25dc5f8a3034.png?v=1755266622",
+          "/assets/shopify/raw_5acd9d11-d4b6-439f-bf4f-25dc5f8a3034.png",
         title: "Ruby Rings",
         link: "jewelry/rings?stone=ruby",
       },
       {
         image:
-          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_18e3b9eb-f92d-4b56-9a42-d49d793e789a.png?v=1755801187",
+          "/assets/shopify/raw_18e3b9eb-f92d-4b56-9a42-d49d793e789a.png",
         title: "Ruby Necklaces",
         link: "jewelry/necklaces?stone=ruby",
       },
       {
         image:
-          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/7ce09a_81f8b76367114ed69b9b62e79d3604cb_mv2.webp?v=1753808472",
+          "/assets/shopify/7ce09a_81f8b76367114ed69b9b62e79d3604cb_mv2.webp",
         title: "Ruby Earrings",
         link: "jewelry/earrings?stone=ruby",
       },
@@ -118,19 +118,19 @@ export const GemstonesByBirthMonths = [
     products: [
       {
         image:
-          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_5b0afe2d-24fd-4837-9272-a3649b33c9f8.png?v=1755276530",
+          "/assets/shopify/raw_5b0afe2d-24fd-4837-9272-a3649b33c9f8.png",
         title: "Sapphire Rings",
         link: "jewelry/rings?stone=Blue Sapphire",
       },
       {
         image:
-          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/raw_13243bcb-54ea-48f8-8b75-413502f71169.png?v=1755802135",
+          "/assets/shopify/raw_13243bcb-54ea-48f8-8b75-413502f71169.png",
         title: "Sapphire Necklaces",
         link: "jewelry/necklaces?stone=Blue Sapphire",
       },
       {
         image:
-          "https://cdn.shopify.com/s/files/1/0677/4017/2341/files/7ce09a_c5beda9eb5684a3e925328c2385e3d6d_mv2.webp?v=1753808539",
+          "/assets/shopify/7ce09a_c5beda9eb5684a3e925328c2385e3d6d_mv2.webp",
         title: "Sapphire Earrings",
         link: "jewelry/earrings?stone=Blue Sapphire",
       },

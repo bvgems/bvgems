@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CommonGridView } from "@/components/CommonComponents/CommonGridView";
+import { fetchBeads } from "@/apis/api";
 
 export const metadata: Metadata = {
   title: "Precious Gemstone Beads – Moonstone, Emerald & More | B.V. Gems",
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PreciousBeads() {
-  return <CommonGridView isBead={true} />;
+export default async function PreciousBeads() {
+  const beads = await fetchBeads();
+  return <CommonGridView isBead={true} initialData={{ beads }} />;
 }
