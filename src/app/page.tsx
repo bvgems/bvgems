@@ -21,10 +21,31 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const [heroData, bestSellingProductsRes] = await Promise.all([
+  const [heroDataRaw, bestSellingProductsRes] = await Promise.all([
     getHeroData(),
     getBestSellingProducts()
   ]);
+
+  const heroData = {
+    heroData: {
+      page: {
+        metafields: [
+          {
+            references: {
+              edges: heroDataRaw?.heroData?.page?.metafields?.[0]?.references?.edges?.map((edge: any) => ({
+                node: {
+                  image: {
+                    url: edge?.node?.image?.url
+                  }
+                }
+              })) || []
+            }
+          }
+        ]
+      }
+    }
+  };
+
   const bestSellingProductsRaw = bestSellingProductsRes?.data || [];
   const bestSellingProducts = bestSellingProductsRaw.map((item: any) => ({
     node: {
