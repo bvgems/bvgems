@@ -87,7 +87,7 @@ export const JewelrySection = forwardRef<HTMLDivElement>((_, ref) => {
         className="text-center text-4xl text-[#0b182d] mb-4"
       />
       <p className="text-center text-sm text-gray-500 max-w-2xl mx-auto mb-8">
-        B.V. Gems is your trusted source for wholesale gemstones and fine jewelry in NYC. Explore our curated collections below.
+        B.V. Gems is your trusted source for bespoke wholesale gemstones and fine jewelry in NYC. Explore our curated collections below.
       </p>
       <div className="p-4">
         <Grid gutter="lg">

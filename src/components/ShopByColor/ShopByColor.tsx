@@ -49,6 +49,7 @@ export default function ShopByColor() {
             <Card
               component={Link}
               href={`/loose-gemstones?color=${item?.name?.toLowerCase()}`}
+              rel="nofollow"
               shadow="sm"
               radius="lg"
               withBorder

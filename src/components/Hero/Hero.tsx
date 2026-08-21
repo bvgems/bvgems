@@ -3,15 +3,16 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@mantine/hooks";
+import Link from "next/link";
 
 export function Hero({ jewelryRef, heroData }: any) {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 908px)");
 
   return (
-    <div
-      onClick={() => router.push("/jewelry/bracelets")}
-      className="relative w-full h-[550px] bg-white overflow-hidden cursor-pointer"
+    <Link
+      href="/jewelry/bracelets"
+      className="relative w-full h-[550px] bg-white overflow-hidden cursor-pointer block no-underline"
     >
       {/* Hero Image */}
       <div className="w-full h-full absolute top-0 left-0 z-10">
@@ -32,7 +33,7 @@ export function Hero({ jewelryRef, heroData }: any) {
 
       {/* Optional dark overlay for mobile */}
       <div className="absolute top-0 left-0 w-full h-full bg-black opacity-10 md:opacity-0 z-20 pointer-events-none" />
-    </div>
+    </Link>
   );
 }
 

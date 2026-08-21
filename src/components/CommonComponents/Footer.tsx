@@ -82,36 +82,32 @@ export const Footer = () => {
       <Grid className="mx-12">
         <GridCol span={{ base: 12, md: 2 }}>
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg mb-3 font-semibold">Calibrated Gemstones</h3>
+            <p className="text-lg mb-3 font-semibold">Calibrated Gemstones</p>
             {allGemstones?.map((item: any, index: number) => {
               return (
-                <h3
-                  className="text-md cursor-pointer hover:text-gray-500"
+                <Link
+                  href={item?.link}
+                  className="text-md cursor-pointer hover:text-gray-500 no-underline block"
                   key={index}
-                  onClick={() => {
-                    router.push(`${item?.link}`);
-                  }}
                 >
                   {item.label}
-                </h3>
+                </Link>
               );
             })}
           </div>
         </GridCol>
         <GridCol span={{ base: 12, md: 2 }}>
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg mb-3 font-semibold">Free Size Gemstones</h3>
+            <p className="text-lg mb-3 font-semibold">Free Size Gemstones</p>
             {FreeSizeGemstonesList?.map((item: any, index: number) => {
               return (
-                <h3
-                  className="text-md cursor-pointer hover:text-gray-500"
+                <Link
+                  href={item?.link}
+                  className="text-md cursor-pointer hover:text-gray-500 no-underline block"
                   key={index}
-                  onClick={() => {
-                    router.push(`${item?.link}`);
-                  }}
                 >
                   {item.label}
-                </h3>
+                </Link>
               );
             })}
           </div>
@@ -119,18 +115,16 @@ export const Footer = () => {
 
         <GridCol span={{ base: 12, md: 2 }}>
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg mb-3 font-semibold">Jewelry</h3>
+            <p className="text-lg mb-3 font-semibold">Jewelry</p>
             {JewelryList?.map((item: any, index: number) => {
               return (
-                <h3
+                <Link
+                  href={item?.link}
                   key={index}
-                  className="text-md cursor-pointer hover:text-gray-500"
-                  onClick={() => {
-                    router.push(`${item?.link}`);
-                  }}
+                  className="text-md cursor-pointer hover:text-gray-500 no-underline block"
                 >
                   {item.label}
-                </h3>
+                </Link>
               );
             })}
           </div>
@@ -138,28 +132,25 @@ export const Footer = () => {
 
         <GridCol span={{ base: 12, md: 2 }}>
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg mb-3 font-semibold">Customer Services</h3>
+            <p className="text-lg mb-3 font-semibold">Customer Services</p>
             {flattenCustomerServices?.map((item: any, index: number) => {
               return (
-                <h3
+                <Link
+                  href={item?.link}
                   key={index}
-                  className="text-md cursor-pointer hover:text-gray-500"
-                  onClick={() => {
-                    router.push(`${item?.link}`);
-                  }}
+                  className="text-md cursor-pointer hover:text-gray-500 no-underline block"
                 >
                   {item.label}
-                </h3>
+                </Link>
               );
             })}
             <a
               href="https://www.bvgems.com/sitemap-0.xml"
               target="_blank"
               rel="noopener noreferrer"
+              className="text-md cursor-pointer hover:text-gray-500 no-underline block"
             >
-              <h3 className="text-md cursor-pointer hover:text-gray-500">
-                Site Map
-              </h3>
+              Site Map
             </a>
           </div>
         </GridCol>
@@ -168,7 +159,7 @@ export const Footer = () => {
           span={{ base: 12, md: 2 }}
           className="text-center sm:text-left"
         >
-          <h3 className="text-lg mb-3 font-semibold">Visit us</h3>
+          <p className="text-lg mb-3 font-semibold">Visit us</p>
           <a
             href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
             className="hover:underline cursor-pointer text-sm"
@@ -178,7 +169,7 @@ export const Footer = () => {
             New York, NY 10036
           </a>
           <div className="mt-4">
-            <h2 className="text-md font-medium">Customer Service Hours</h2>
+            <p className="text-md font-medium">Customer Service Hours</p>
             <div className="flex flex-col justify-start mt-1.5 gap-1 text-sm mb-5">
               <span>Mon - Fri: 9:00 AM - 7:00 PM</span>
               <span>Sat: By Appointment Only</span>

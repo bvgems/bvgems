@@ -34,6 +34,7 @@ export const ShopByShape = () => {
               <Link
                 href={`/loose-gemstones?shape=${shape.label.toLowerCase()}`}
                 className="flex justify-center flex-col items-center cursor-pointer no-underline"
+                rel="nofollow"
                 key={index}
               >
                 <div className="relative w-[45px] h-[45px] mb-2" style={{ maxWidth: "60px" }}>
