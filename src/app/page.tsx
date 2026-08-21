@@ -14,12 +14,35 @@ const CustomerBenefits = dynamic(() => import("@/components/CustomerBenefits/Cus
 const TradeShows = dynamic(() => import("@/components/TradeShows/TradeShows"));
 const IndustryAffiliation = dynamic(() => import("@/components/IndustryAffiliation/IndustryAffiliation").then(mod => mod.IndustryAffiliation));
 
+export const metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
+
 export default async function Home() {
   const [heroData, bestSellingProductsRes] = await Promise.all([
     getHeroData(),
     getBestSellingProducts()
   ]);
-  const bestSellingProducts = bestSellingProductsRes?.data || [];
+  const bestSellingProductsRaw = bestSellingProductsRes?.data || [];
+  const bestSellingProducts = bestSellingProductsRaw.map((item: any) => ({
+    node: {
+      productType: item?.node?.productType,
+      handle: item?.node?.handle,
+      title: item?.node?.title,
+      variants: {
+        edges: item?.node?.variants?.edges?.length > 0 ? [
+          { node: { title: item.node.variants.edges[0].node.title } }
+        ] : []
+      },
+      images: {
+        edges: item?.node?.images?.edges?.length > 0 ? [
+          { node: { url: item.node.images.edges[0].node.url } }
+        ] : []
+      }
+    }
+  }));
 
   return (
     <>
