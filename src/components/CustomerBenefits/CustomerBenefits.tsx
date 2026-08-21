@@ -97,9 +97,9 @@ export const CustomerBenefits = () => {
               </div>
 
               {/* Title */}
-              <h2 className="text-lg sm:text-xl font-semibold text-[#0b182d] mb-3">
+              <p className="text-lg sm:text-xl font-semibold text-[#0b182d] mb-3">
                 {item.title}
-              </h2>
+              </p>
 
               {/* Description */}
               <p className="text-gray-600 leading-relaxed text-sm sm:text-base">

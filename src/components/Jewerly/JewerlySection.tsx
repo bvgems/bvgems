@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { forwardRef, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const jewelryItems = [
   { handle: "rings", image: "/assets/jcring.webp", alt: "Ring", title: "RINGS" },
@@ -79,27 +80,26 @@ const AnimatedGridCol = ({
 };
 
 export const JewelrySection = forwardRef<HTMLDivElement>((_, ref) => {
-  const router = useRouter();
-
-  const navigateToJewelry = (handle: any) => {
-    router.push(`/jewelry/${handle}`);
-  };
   return (
     <Container size={1350} ref={ref} className="mt-20">
       <AnimatedText
-        text="Jewelry Collection"
-        className="text-center text-4xl text-[#0b182d] mb-6"
+        text="Bespoke Fine Jewelry Collection"
+        className="text-center text-4xl text-[#0b182d] mb-4"
       />
+      <p className="text-center text-sm text-gray-500 max-w-2xl mx-auto mb-8">
+        B.V. Gems is your trusted source for wholesale gemstones and fine jewelry in NYC. Explore our curated collections below.
+      </p>
       <div className="p-4">
         <Grid gutter="lg">
           {jewelryItems.map((item, index) => (
             <AnimatedGridCol key={index} index={index}>
               <Card
-                className="overflow-hidden relative rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 group cursor-pointer"
+                component={Link}
+                href={`/jewelry/${item?.handle}`}
+                className="overflow-hidden relative rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 group cursor-pointer block"
                 padding={0}
                 radius="md"
                 style={{ height: "350px" }}
-                onClick={() => navigateToJewelry(item?.handle)}
               >
                 <div className="relative w-full h-full overflow-hidden">
                   <Image loading="lazy"

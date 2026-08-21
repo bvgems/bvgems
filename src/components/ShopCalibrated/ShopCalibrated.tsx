@@ -6,6 +6,7 @@ import Image from "next/image";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { useRouter } from "next/navigation";
 import { gemstoneOptions } from "@/utils/constants";
+import Link from "next/link";
 
 export const ShopCalibrated = () => {
   const router = useRouter();
@@ -24,11 +25,9 @@ export const ShopCalibrated = () => {
             span={{ base: 6, sm: 4, md: 3, lg: 2 }}
             className="flex justify-center"
           >
-            <div
-              onClick={() =>
-                router.push(`${item?.link}`)
-              }
-              className="cursor-pointer flex flex-col items-center justify-center bg-transparent"
+            <Link
+              href={item?.link}
+              className="cursor-pointer flex flex-col items-center justify-center bg-transparent no-underline"
             >
               <div className="relative w-[160px] h-[160px] flex items-center justify-center">
                 <Image loading="lazy"
@@ -41,7 +40,7 @@ export const ShopCalibrated = () => {
               <p className="text-sm text-[#0b182d] text-center mt-3 font-medium tracking-wide">
                 {item?.label}
               </p>
-            </div>
+            </Link>
           </Grid.Col>
         ))}
       </Grid>

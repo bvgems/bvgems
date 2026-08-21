@@ -55,7 +55,7 @@ export const HeaderHoverCardForGemstones = ({
         <Grid className="w-full pl-8">
           <GridCol span={3}>
             <div className="mt-4">
-              <h4 className="font-semibold mb-5">CALIBRATED GEMSTONES</h4>
+              <p className="font-semibold mb-5 text-sm uppercase">CALIBRATED GEMSTONES</p>
               <div className="flex flex-col gap-2">{menuItems}</div>
               <div className="flex justify-end pr-4">
                 <Button
@@ -77,7 +77,7 @@ export const HeaderHoverCardForGemstones = ({
 
           <GridCol span={3}>
             <div className="mt-4">
-              <h4 className="font-semibold mb-5">SHOP BY SHAPE</h4>
+              <p className="font-semibold mb-5 text-sm uppercase">SHOP BY SHAPE</p>
               <div className="flex flex-col gap-2">
                 {ShapeFilterList?.map((item, index) => (
                   <div
@@ -97,7 +97,7 @@ export const HeaderHoverCardForGemstones = ({
 
           <GridCol span={3}>
             <div className="mt-4">
-              <h4 className="font-semibold mb-5">SHOP BY COLOR</h4>
+              <p className="font-semibold mb-5 text-sm uppercase">SHOP BY COLOR</p>
               <div className="flex flex-col gap-2">
                 {shopByColorOptions?.map((item, index) => (
                   <div
@@ -113,7 +113,7 @@ export const HeaderHoverCardForGemstones = ({
                 ))}
               </div>
               <div>
-                <h4 className="font-semibold mt-10">SHOP BY TYPE</h4>
+                <p className="font-semibold mt-10 text-sm uppercase">SHOP BY TYPE</p>
                 <div className="flex flex-col gap-2 mt-4 text-blue-800 cursor-pointer">
                   <span onClick={() => handleNav(`type=Natural`)}>
                     Natural
@@ -128,7 +128,7 @@ export const HeaderHoverCardForGemstones = ({
 
           <GridCol className="bg-[#FAFAFA]" span={3}>
             <div className="p-6">
-              <h4 className="font-semibold mb-5">FREE SIZE GEMSTONES</h4>
+              <p className="font-semibold mb-5 text-sm uppercase">FREE SIZE GEMSTONES</p>
               <div className="flex flex-col gap-5">
                 {FreeSizeGemstonesList?.map((item, index) => (
                   <div

@@ -13,6 +13,7 @@ import Image from "next/image";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { ShapeFilterList } from "@/utils/constants";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export const ShopByShape = () => {
   const router = useRouter();
@@ -30,9 +31,9 @@ export const ShopByShape = () => {
         <GridCol span={{ base: 12 }}>
           <SimpleGrid cols={{ base: 2, sm: 3, md: 3, lg: 4 }} spacing="xl">
             {ShapeFilterList.map((shape, index) => (
-              <div
-                onClick={() => handleNav(`shape=${shape.label.toLowerCase()}`)}
-                className="flex justify-center flex-col items-center cursor-pointer"
+              <Link
+                href={`/loose-gemstones?shape=${shape.label.toLowerCase()}`}
+                className="flex justify-center flex-col items-center cursor-pointer no-underline"
                 key={index}
               >
                 <div className="relative w-[45px] h-[45px] mb-2" style={{ maxWidth: "60px" }}>
@@ -50,7 +51,7 @@ export const ShopByShape = () => {
                 >
                   {shape.label}
                 </Text>
-              </div>
+              </Link>
             ))}
           </SimpleGrid>
         </GridCol>

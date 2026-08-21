@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { shopByColorOptions } from "@/utils/constants";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const itemVariants = {
   hidden: { opacity: 0, x: 100 },
@@ -46,11 +47,12 @@ export default function ShopByColor() {
             // variants={itemVariants}
           >
             <Card
+              component={Link}
+              href={`/loose-gemstones?color=${item?.name?.toLowerCase()}`}
               shadow="sm"
               radius="lg"
               withBorder
-              className="w-[150px] flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 hover:shadow-lg"
-              onClick={() => handleShopByColor(item)}
+              className="w-[150px] flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 hover:shadow-lg block no-underline"
             >
               <div className="relative w-[130px] h-[130px] flex items-center justify-center">
                 <Image loading="lazy"
