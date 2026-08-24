@@ -39,24 +39,30 @@ const getRepresentativeImages = (items: any[]) => {
   const qualityMap: Record<string, any> = {};
 
   items.forEach((item) => {
-    // Check if the current item has a valid video array
     const hasVideo =
       Array.isArray(item?.cloudinary_videos) &&
       item.cloudinary_videos.length > 0;
+    const hasImage = !!item?.image_url;
 
-    // Save the item if we haven't found one for this quality yet,
-    // OR replace the saved item if the current one has a video and the saved one doesn't!
-    if (
-      !qualityMap[item.quality] ||
-      (hasVideo &&
-        (!Array.isArray(qualityMap[item.quality]?.cloudinary_videos) ||
-          qualityMap[item.quality].cloudinary_videos.length === 0))
-    ) {
+    const current = qualityMap[item.quality];
+
+    if (!current) {
       qualityMap[item.quality] = item;
+    } else {
+      const currentHasVideo =
+        Array.isArray(current?.cloudinary_videos) &&
+        current.cloudinary_videos.length > 0;
+      const currentHasImage = !!current?.image_url;
+
+      // Prioritize items with both image and video, then image, then video
+      if (!currentHasImage && hasImage) {
+        qualityMap[item.quality] = item;
+      } else if (currentHasImage === hasImage && !currentHasVideo && hasVideo) {
+        qualityMap[item.quality] = item;
+      }
     }
   });
 
-  // Enforce order B -> A -> AA -> Lab Grown
   const order = ["B", "A", "AA", "Lab Grown"];
   return order.map((q) => qualityMap[q]).filter((item) => item !== undefined);
 };
@@ -399,13 +405,19 @@ export function CategoryContent({
                               setActiveVideoIndex(0);
                             }}
                           >
-                            <Image loading="lazy"
-                              src={item.image_url}
-                              h={70}
-                              w={70}
-                              fit="contain"
-                              className="rounded"
-                            />
+                            {item.image_url ? (
+                              <Image loading="lazy"
+                                src={item.image_url}
+                                h={70}
+                                w={70}
+                                fit="contain"
+                                className="rounded"
+                              />
+                            ) : (
+                              <div className="h-[70px] w-[70px] flex items-center justify-center bg-gray-50 border border-gray-100 rounded">
+                                <span className="text-[10px] text-gray-400 text-center leading-tight">No<br/>Image</span>
+                              </div>
+                            )}
                             <span className="text-xs font-medium mt-1">
                               {item.quality}
                             </span>
@@ -491,7 +503,9 @@ export function CategoryContent({
                     )}
                   </div>
                 ) : (
-                  <div className="h-[300px] w-[300px] bg-gray-100 rounded" />
+                  <div className="h-[300px] md:h-[450px] w-full flex items-center justify-center bg-gray-50 border border-gray-100 rounded-lg">
+                    <span className="text-gray-400 font-medium tracking-wide text-sm">Image Not Available</span>
+                  </div>
                 )}
               </div>
             </motion.div>

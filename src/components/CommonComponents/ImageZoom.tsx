@@ -43,6 +43,16 @@ export const ImageZoom = ({ src, alt, className = "" }: any) => {
     });
   };
 
+  if (!src) {
+    return (
+      <div
+        className={`flex items-center justify-center bg-gray-50 w-full h-[300px] md:h-[450px] border border-gray-100 rounded-lg ${className}`}
+      >
+        <span className="text-gray-400 font-medium tracking-wide text-sm">Image Not Available</span>
+      </div>
+    );
+  }
+
   return (
     <div
       ref={containerRef}
