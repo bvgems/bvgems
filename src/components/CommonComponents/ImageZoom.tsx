@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
-import NextImage from "next/image";
 
-export const ImageZoom = ({ src, alt, className = "", h = "450px" }: any) => {
+export const ImageZoom = ({ src, alt, className = "" }: any) => {
   const sourceRef: any = useRef(null);
   const targetRef: any = useRef(null);
   const containerRef: any = useRef(null);
@@ -25,7 +24,10 @@ export const ImageZoom = ({ src, alt, className = "", h = "450px" }: any) => {
     const sourceRect = sourceRef.current.getBoundingClientRect();
     const containerRect = containerRef.current.getBoundingClientRect();
 
-    // Use mouse position relative to the source image
+    const xRatio = (targetRect.width - containerRect.width) / sourceRect.width;
+    const yRatio =
+      (targetRect.height - containerRect.height) / sourceRect.height;
+
     const left = Math.max(
       Math.min(e.clientX - sourceRect.left, sourceRect.width),
       0
@@ -34,10 +36,6 @@ export const ImageZoom = ({ src, alt, className = "", h = "450px" }: any) => {
       Math.min(e.clientY - sourceRect.top, sourceRect.height),
       0
     );
-
-    const xRatio = (targetRect.width - containerRect.width) / sourceRect.width;
-    const yRatio =
-      (targetRect.height - containerRect.height) / sourceRect.height;
 
     setOffset({
       left: left * -xRatio,
@@ -48,26 +46,22 @@ export const ImageZoom = ({ src, alt, className = "", h = "450px" }: any) => {
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden cursor-zoom-in ${className}`}
+      className={`relative overflow-hidden cursor-zoom-in h-[300px] md:h-[450px] ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
       style={{ borderRadius: "8px" }}
     >
-      <div className={`relative w-full h-[300px] md:h-[${h}]`}>
-        <NextImage
-          ref={sourceRef}
-          src={src}
-          alt={alt || "zoom-image"}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="block object-contain"
-        />
-      </div>
+      <img
+        ref={sourceRef}
+        src={src}
+        alt={alt}
+        className={`w-full h-[300px] md:h-[450px] block object-contain`}
+      />
       <img
         ref={targetRef}
         src={src}
-        alt={alt || "zoom-target"}
+        alt={alt}
         className="absolute pointer-events-none"
         style={{
           left: `${offset.left}px`,
@@ -76,9 +70,6 @@ export const ImageZoom = ({ src, alt, className = "", h = "450px" }: any) => {
           transform: "scale(2)",
           transformOrigin: "top left",
           transition: "opacity 0.3s ease",
-          width: "100%",
-          height: "100%",
-          objectFit: "contain",
         }}
       />
     </div>
