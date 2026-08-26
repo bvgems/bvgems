@@ -20,7 +20,7 @@ export const BirthStoneProducts = ({ currentStone }: any) => {
         <motion.div
           key={idx}
           whileHover={{ scale: 1.05 }}
-          className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer p-6 flex flex-col items-center justify-between"
+          className="bg-white rounded-2xl shadow-[0px_0px_10px_rgba(0,0,0,0.08)] hover:shadow-[0px_0px_20px_rgba(0,0,0,0.12)] transition-all duration-300 cursor-pointer p-6 flex flex-col items-center justify-between"
         >
           <div
             onClick={() => {

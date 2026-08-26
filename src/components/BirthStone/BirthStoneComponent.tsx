@@ -75,9 +75,10 @@ export const BirthStoneComponent = () => {
       />
 
       <Carousel
-        height={240}
+        height={270}
         slideSize={isMobile ? "100%" : "23%"}
         slideGap="md"
+        className="mb-12"
         emblaOptions={{ loop: true }}
         onSlideChange={(index) => setActiveIndex(index)}
         initialSlide={initialIndex} // 🔹 ensures carousel highlights correct month initially
@@ -90,7 +91,7 @@ export const BirthStoneComponent = () => {
             <Carousel.Slide key={`${item.month}-${index}`}>
               <motion.div
                 onClick={() => handleSetCurrent(item, index)}
-                className="flex flex-col items-center justify-center p-4 bg-white cursor-pointer relative shadow-md"
+                className="flex flex-col items-center justify-center p-4 bg-white cursor-pointer relative shadow-[0px_0px_10px_rgba(0,0,0,0.08)]"
               >
                 {isCurrent && (
                   <div className="absolute inset-0 border border-[#0b182d] pointer-events-none"></div>
