@@ -64,20 +64,20 @@ export function Hero({ jewelryRef, heroData }: any) {
       </div>
 
       {/* Trust Strip */}
-      <div className="w-full bg-[#0b182d] text-white py-6 px-4 flex justify-center">
-        <div className="max-w-5xl flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 text-center md:text-left text-sm md:text-base font-light tracking-wide">
-          <div className="flex items-center gap-3">
-            <span className="text-xl">📍</span>
+      <div className="w-full bg-[#0b182d] text-white py-8 px-4 flex justify-center">
+        <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 text-center md:text-left text-sm md:text-base font-light tracking-wide">
+          <div className="flex flex-1 flex-col md:flex-row items-center md:items-start gap-3 md:gap-4">
+            <span className="text-2xl md:text-xl flex-shrink-0 md:mt-0.5">📍</span>
             <span>Working with a wide range of wholesalers in the heart of NYC’s Diamond District</span>
           </div>
-          <div className="hidden md:block w-px h-6 bg-white/30" />
-          <div className="flex items-center gap-3">
-            <span className="text-xl">💎</span>
+          <div className="hidden md:block w-px h-12 bg-white/30" />
+          <div className="flex flex-1 flex-col md:flex-row items-center md:items-start gap-3 md:gap-4">
+            <span className="text-2xl md:text-xl flex-shrink-0 md:mt-0.5">💎</span>
             <span>Ethically sourced, precision-calibrated gemstones</span>
           </div>
-          <div className="hidden md:block w-px h-6 bg-white/30" />
-          <div className="flex items-center gap-3">
-            <span className="text-xl">🤝</span>
+          <div className="hidden md:block w-px h-12 bg-white/30" />
+          <div className="flex flex-1 flex-col md:flex-row items-center md:items-start gap-3 md:gap-4">
+            <span className="text-2xl md:text-xl flex-shrink-0 md:mt-0.5">🤝</span>
             <span>Trusted by jewelers nationwide for generations</span>
           </div>
         </div>

@@ -676,6 +676,7 @@ export default function SpecialPage() {
             ct_weight={selectedProduct.ct_weight}
             color={selectedProduct.color}
             product={selectedProduct}
+            hideShadeOptions={true}
           />
         )}
       </Modal>

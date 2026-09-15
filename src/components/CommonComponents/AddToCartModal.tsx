@@ -42,6 +42,7 @@ interface AddToCartModalProps {
   ct_weight?: string | number;
   color?: string;
   product: any;
+  hideShadeOptions?: boolean;
 }
 
 export const AddToCartModal: React.FC<AddToCartModalProps> = ({
@@ -55,6 +56,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   ct_weight,
   color,
   product,
+  hideShadeOptions = false,
 }) => {
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
@@ -303,7 +305,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
             </Group>
 
             <Divider my="md" />
-            {product?.collection_slug === "Emerald" &&
+            {!hideShadeOptions && product?.collection_slug === "Emerald" &&
             product?.quality === "Lab Grown" ? (
               <EmeraldShade
                 product={product}
@@ -313,7 +315,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
               />
             ) : null}
 
-            {product?.collection_slug === "Sapphire" &&
+            {!hideShadeOptions && product?.collection_slug === "Sapphire" &&
             product?.color === "Blue" &&
             product?.quality !== "Lab Grown" ? (
               <BlueSapphireShade

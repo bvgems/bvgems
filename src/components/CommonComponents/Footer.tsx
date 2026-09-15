@@ -162,9 +162,15 @@ export const Footer = () => {
           <p className="text-lg mb-3 font-semibold">Visit us</p>
           <a
             href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
-            className="hover:underline cursor-pointer text-sm"
+            className="hover:underline cursor-pointer text-sm block mb-2"
           >
             66 W 47th St, Booth #9 and #10, New York, NY 10036
+          </a>
+          <a
+            href="tel:+12129444382"
+            className="hover:underline cursor-pointer text-sm block"
+          >
+            +1 (212) 944-4382
           </a>
           <div className="mt-4">
             <p className="text-md font-medium">Customer Service Hours</p>
