@@ -1461,6 +1461,11 @@ export const links = [
     links: gemstoneOptions,
   },
   {
+    link: "/free-size-gemstones",
+    label: "Free Size",
+    links: FreeSizeGemstonesList,
+  },
+  {
     label: "Layouts & Beads",
     links: [
       {
@@ -1508,6 +1513,11 @@ export const mobileLinks = [
     link: "/trade/calibrated-stones",
     label: "Calibrated Stones",
     links: gemstoneOptions,
+  },
+  {
+    link: "/free-size-gemstones",
+    label: "Free Size",
+    links: FreeSizeGemstonesList,
   },
   {
     label: "Layouts & Beads",

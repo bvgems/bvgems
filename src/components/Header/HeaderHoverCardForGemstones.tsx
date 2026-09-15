@@ -54,7 +54,7 @@ export const HeaderHoverCardForGemstones = ({
         style={{ minHeight: "450px" }}
       >
         <Grid className="w-full pl-8">
-          <GridCol span={3}>
+          <GridCol span={4}>
             <div className="mt-4">
               <p className="font-semibold mb-5 text-sm uppercase text-black">
                 SHOP BY GEMSTONES
@@ -100,7 +100,7 @@ export const HeaderHoverCardForGemstones = ({
             </div>
           </GridCol>
 
-          <GridCol span={3}>
+          <GridCol span={4}>
             <div className="mt-4">
               <p className="font-semibold mb-5 text-sm uppercase text-black">SHOP BY SHAPE</p>
               <div className="flex flex-col gap-2 text-black">
@@ -120,7 +120,7 @@ export const HeaderHoverCardForGemstones = ({
             </div>
           </GridCol>
 
-          <GridCol span={3}>
+          <GridCol span={4}>
             <div className="mt-4">
               <p className="font-semibold mb-5 text-sm uppercase text-black">SHOP BY COLOR</p>
               <div className="flex flex-col gap-2 text-black">
@@ -148,52 +148,6 @@ export const HeaderHoverCardForGemstones = ({
                   </span>
                 </div>
               </div>
-            </div>
-          </GridCol>
-
-          <GridCol className="bg-[#FAFAFA]" span={3}>
-            <div className="p-6">
-              <p className="font-semibold mb-5 text-sm uppercase">FREE SIZE GEMSTONES</p>
-              <div className="flex flex-col gap-5">
-                {FreeSizeGemstonesList?.map((item, index) => (
-                  <div
-                    onClick={() => {
-                      router?.push(
-                        `/free-size-gemstones/${item?.label.toLowerCase()}`
-                      );
-                    }}
-                    key={index}
-                    className="flex items-center gap-3 cursor-pointer hover:text-gray-500"
-                  >
-                    <Image loading="lazy" src={item?.image} h={35} w={35} fit="contain" />
-                    <span className="text-md mb-2">{item.label}</span>
-                  </div>
-                ))}
-              </div>
-              <Button
-                onClick={() => {
-                  router?.push("/free-size-gemstones");
-                }}
-                className="mt-6"
-                fullWidth
-                variant="outline"
-                color="#0b182d"
-              >
-                VIEW ALL
-              </Button>
-                <Button
-                  onClick={() => {
-                    router?.push("/special-page");
-                  }}
-                  className="mt-4"
-                  fullWidth
-                  variant="outline"
-                  color="#0b182d"
-                  size="sm"
-                  styles={{ root: { padding: '0 8px' } }}
-                >
-                  <span className="text-[13px] tracking-tight">FIND YOUR PERFECT STONE</span>
-                </Button>
             </div>
           </GridCol>
         </Grid>
