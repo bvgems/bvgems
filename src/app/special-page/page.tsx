@@ -3,12 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { Center, Loader, Title, Table, TextInput, Select, Button, Grid, GridCol, ActionIcon, Pagination, Checkbox, Modal, Group, Text } from "@mantine/core";
-import { IconSearch, IconLayoutGrid, IconList, IconBrandWhatsapp, IconMail, IconFileExcel, IconPrinter } from "@tabler/icons-react";
+import { IconSearch, IconLayoutGrid, IconList, IconBrandWhatsapp, IconMail, IconFileExcel, IconPrinter, IconShoppingCart } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import axios from "axios";
 import { TopFilters } from "./TopFilters";
 import { CSVLink } from "react-csv";
 import { gemstoneOptions as importedGemstoneOptions, ShapeFilterList } from "@/utils/constants";
+import { AddToCartModal } from "@/components/CommonComponents/AddToCartModal";
 
 const SHAPE_MAP: Record<string, string> = {
   "RD": "Round", "RDS": "Round", "CUS": "Cushion", "E/C": "Emerald Cut", "EC": "Emerald Cut",
@@ -145,6 +146,9 @@ export default function SpecialPage() {
   const csvLinkRef = useRef<any>(null);
   const [emailModalOpened, { open: openEmail, close: closeEmail }] = useDisclosure(false);
   const [emailTo, setEmailTo] = useState("");
+
+  const [productModal, { open: openProductModal, close: closeProductModal }] = useDisclosure(false);
+  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -539,6 +543,7 @@ export default function SpecialPage() {
                      <Table.Th>Dimension</Table.Th>
                      <Table.Th>Carat Wt.</Table.Th>
                      <Table.Th>Stock Pc.</Table.Th>
+                     <Table.Th></Table.Th>
                    </Table.Tr>
                  </Table.Thead>
                  <Table.Tbody>
@@ -556,6 +561,34 @@ export default function SpecialPage() {
                          <Table.Td className="text-sm whitespace-nowrap">{row.Size || "-"}</Table.Td>
                          <Table.Td className="text-sm">{row["Stock Wt."] || "-"}</Table.Td>
                          <Table.Td className="text-sm">{row["Stock Pcs."] || "-"}</Table.Td>
+                         <Table.Td>
+                            <Button
+                              leftSection={<IconShoppingCart size={16} />}
+                              variant="outline"
+                              size="xs"
+                              color="#0b182d"
+                              onClick={() => {
+                                setSelectedProduct({
+                                  id: row.Item,
+                                  productId: row.Item,
+                                  productType: "stone",
+                                  collection_slug: row.normalizedGem,
+                                  shape: row.normalizedShape,
+                                  size: row.Size,
+                                  quality: row.type || "Natural",
+                                  ct_weight: row["Stock Wt."],
+                                  color: row.Color,
+                                  image_url: row.imageUrl,
+                                  price: row["Cp Std"] || 0,
+                                  type: row.type || "Natural",
+                                  cut: row.cut || "Standard",
+                                });
+                                openProductModal();
+                              }}
+                            >
+                              Add
+                            </Button>
+                         </Table.Td>
                        </Table.Tr>
                      ))
                    ) : (
@@ -576,6 +609,34 @@ export default function SpecialPage() {
                     <p className="text-xs text-gray-600 mt-1">{row.normalizedGem} • {row.normalizedShape}</p>
                     <p className="text-xs text-gray-600">{row.Size}</p>
                     <p className="text-xs font-semibold mt-2">{row["Stock Wt."]} ct</p>
+                    <Button
+                      fullWidth
+                      mt="md"
+                      size="xs"
+                      variant="outline"
+                      color="#0b182d"
+                      leftSection={<IconShoppingCart size={16} />}
+                      onClick={() => {
+                        setSelectedProduct({
+                          id: row.Item,
+                          productId: row.Item,
+                          productType: "stone",
+                          collection_slug: row.normalizedGem,
+                          shape: row.normalizedShape,
+                          size: row.Size,
+                          quality: row.type || "Natural",
+                          ct_weight: row["Stock Wt."],
+                          color: row.Color,
+                          image_url: row.imageUrl,
+                          price: row["Cp Std"] || 0,
+                          type: row.type || "Natural",
+                          cut: row.cut || "Standard",
+                        });
+                        openProductModal();
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
                   </div>
                 ))}
              </div>
@@ -592,6 +653,31 @@ export default function SpecialPage() {
       <Modal opened={emailModalOpened} onClose={closeEmail} title="Send Email">
          <TextInput label="Email Address" placeholder="Enter recipient email" value={emailTo} onChange={e => setEmailTo(e.currentTarget.value)} />
          <Button onClick={sendEmail} fullWidth mt="md" color="#0b182d">Send Email</Button>
+      </Modal>
+
+      <Modal
+        p={0}
+        size={1000}
+        opened={productModal}
+        onClose={closeProductModal}
+        overlayProps={{ style: { backdropFilter: "blur(4px)" } }}
+        transitionProps={{ transition: "slide-right" }}
+        centered
+      >
+        {selectedProduct && (
+          <AddToCartModal
+            opened={productModal}
+            onClose={closeProductModal}
+            price={selectedProduct.price}
+            image_url={selectedProduct.image_url}
+            name={`${selectedProduct.collection_slug} ${selectedProduct.shape}`}
+            size={selectedProduct.size}
+            quality={selectedProduct.quality}
+            ct_weight={selectedProduct.ct_weight}
+            color={selectedProduct.color}
+            product={selectedProduct}
+          />
+        )}
       </Modal>
     </div>
   );
