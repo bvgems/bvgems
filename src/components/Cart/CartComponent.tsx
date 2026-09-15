@@ -201,7 +201,7 @@ export function CartComponent() {
     } else if (value?.product?.productType === "freeSizeStone") {
       router.push(`/free-size-gemstone-details/${value?.product?.id}`);
     } else if (value?.product?.productType === "layouts") {
-      router.push(`colorstone-layouts/${value?.product?.handle}`);
+      router.push(`/trade/layouts/${value?.product?.handle}`);
     } else {
       const category = getCategory(value?.product);
       router.push(`/jewelry/${category}/${value?.product?.handle}`);

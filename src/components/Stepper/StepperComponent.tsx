@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
 import {
   IconCircleCheck,
@@ -5,19 +6,26 @@ import {
   IconBrandAuth0,
   IconTruck,
   IconUserShare,
-  IconBellDollar,
   IconArrowLeft,
 } from "@tabler/icons-react";
-import { Button, Container, Stepper } from "@mantine/core";
-import { SignupForm } from "../Auth/SignupForm";
-import { BusinessVerification } from "../Business/BusinessVerification";
+import { Button, Container, Stepper, Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { ShippingAddressForm } from "../ShippingAddress/ShippingAddressForm";
-import { BusinessReferenceForm } from "../Business/BusinessReferenceForm";
-import { AMLInfo } from "../AML/AMLInfo";
+import { SignupForm } from "../Auth/SignupForm";
+import { useAuth } from "@/hooks/useAuth";
+import { CombinedBusinessVerificationForm } from "../Business/CombinedBusinessVerificationForm";
 
 export const StepperComponent = () => {
-  const [active, setActive] = useState(1);
+  const { user, loading } = useAuth();
+  const [active, setActive] = useState(0);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !isReady) {
+      setActive(user ? 1 : 0);
+      setIsReady(true);
+    }
+  }, [user, loading, isReady]);
+
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
   const nextStep = () =>
@@ -48,24 +56,33 @@ export const StepperComponent = () => {
     {
       icon: <IconBrandAuth0 />,
       label: "Business Verification",
-      content: <BusinessVerification isStepper={true} nextStep={nextStep} />,
-    },
-    {
-      icon: <IconTruck />,
-      label: "Shipping Address",
-      content: <ShippingAddressForm isStepper={true} nextStep={nextStep} />,
-    },
-    {
-      icon: <IconUserShare />,
-      label: "Business References",
-      content: <BusinessReferenceForm isStepper={true} nextStep={nextStep} />,
-    },
-    {
-      icon: <IconBellDollar />,
-      label: "AML Information",
-      content: <AMLInfo isStepper={true} />,
+      content: <CombinedBusinessVerificationForm nextStep={nextStep} />,
     },
   ];
+
+  if (!isReady) {
+    return (
+      <Container size="xl" className="mt-6 flex justify-center py-20">
+        <Loader color="#0b182d" />
+      </Container>
+    );
+  }
+
+  if (user) {
+    return (
+      <Container size="xl" className="mt-6 text-center py-20">
+        <h2 className="text-2xl font-semibold mb-4 text-[#0b182d]">
+          Application Already Submitted
+        </h2>
+        <p className="text-gray-600 mb-6">
+          You are already logged in and your wholesale account is active. You do not need to submit another trade application.
+        </p>
+        <Button onClick={() => window.location.href = "/"} color="#0b182d">
+          Return Home
+        </Button>
+      </Container>
+    );
+  }
 
   return (
     <Container size={"xl"} className="mt-6">

@@ -16,6 +16,7 @@ interface AddressAutocompleteProps {
     country: string;
   }) => void;
   onClear?: () => void; // optional callback to clear other fields too
+  withAsterisk?: boolean;
 }
 
 const loadGoogleMapsScript = (apiKey: string): Promise<void> => {
@@ -50,6 +51,7 @@ export const AddressAutocomplete = ({
   error,
   onAddressSelect,
   onClear,
+  withAsterisk,
 }: AddressAutocompleteProps) => {
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -188,6 +190,7 @@ export const AddressAutocomplete = ({
         onChange={handleInputChange}
         onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
         error={error}
+        withAsterisk={withAsterisk}
         autoComplete="off"
         // Show X button only when there's a value
         rightSection={

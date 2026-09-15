@@ -16,7 +16,7 @@ const reviews = [
     initials: "AW",
     rating: 5,
     review:
-      "I had been looking for a place to make a custom engagement ring, and I decided to go with B.V Gems after hearing they specialize in sapphires. The ring turned out gorgeous and exceeded expectations.",
+      "I had been looking for a reliable supplier for calibrated sapphires, and I decided to go with B.V Gems. The consistency in color and cut turned out gorgeous and exceeded expectations.",
   },
   {
     platform: "/assets/google.webp",
@@ -25,7 +25,7 @@ const reviews = [
     initials: "SJ",
     rating: 5,
     review:
-      "I was looking to create a unique sapphire pendant for my anniversary. Shrey helped me source the perfect stone and the final pendant is stunning!",
+      "I was looking for the perfect matched pair of sapphires. The team at BV Gems helped me source precision-calibrated stones, and the quality is simply breathtaking!",
   },
   {
     platform: "/assets/google.webp",
@@ -34,7 +34,7 @@ const reviews = [
     initials: "ML",
     rating: 5,
     review:
-      "I wanted a ruby ring for my wife. Shrey and the design team delivered exactly what I had envisioned. Professional and smooth process throughout.",
+      "I needed a vibrant ruby layout for a custom piece. BV Gems delivered exactly what I had envisioned. The process of selecting loose stones was completely transparent, professional, and smooth from start to finish.",
   },
   {
     platform: "/assets/google.webp",
@@ -43,7 +43,7 @@ const reviews = [
     initials: "PP",
     rating: 5,
     review:
-      "For my mother's 60th, B.V Gems created a meaningful emerald ring. Incredible attention to detail and craftsmanship. Highly recommend!",
+      "For my high-end clientele, B.V Gems provided a flawless set of matched emeralds. Incredible attention to detail and precision grading. Highly recommend!",
   },
   {
     platform: "/assets/google.webp",
@@ -52,7 +52,7 @@ const reviews = [
     initials: "DK",
     rating: 5,
     review:
-      "Referred by a friend for a custom engagement ring. Shrey guided me through every step and the final piece was perfect. Excellent service!",
+      "Referred by a colleague for a set of calibrated emeralds. The BV Gems experts guided me through every step, ensuring absolute consistency in cut and color. The final matched layout exceeded all expectations. Exceptional service!",
   },
 ];
 
@@ -60,7 +60,7 @@ export const Testimonials = () => {
   const autoplay = useRef(Autoplay({ delay: 3500, stopOnInteraction: true }));
 
   return (
-    <Container size={1350} className="mt-20 pb-20">
+    <Container size={1350} className="mt-20">
       <AnimatedText
         text="What Our Customer Say About Us"
         className="text-center text-3xl sm:text-4xl text-[#0b182d]"

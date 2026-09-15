@@ -16,7 +16,41 @@ module.exports = {
     "/reset-password",
     "/api/*",
     "/admin/*",
+    "/jewelry",
+    "/jewelry/*",
+    "/custom-jewelry",
+    "/custom-jewelry/*",
+    "/design-your-jewelry",
+    "/design-your-jewelry/*",
+    "/jewelry-details",
+    "/jewelry-details/*",
+    "/apply-account", // Deprecated, using /trade/apply instead
   ],
+
+  robotsTxtOptions: {
+    policies: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: [
+          "/checkout",
+          "/cart",
+          "/payment-success",
+          "/payment-cancelled",
+          "/profile",
+          "/apply-account",
+          "/my-orders",
+          "/reset-password",
+          "/api/*",
+          "/admin/*",
+          "/jewelry",
+          "/custom-jewelry",
+          "/design-your-jewelry",
+          "/jewelry-details",
+        ],
+      },
+    ],
+  },
 
   transform: async (config, path) => {
     // Default values
@@ -29,13 +63,16 @@ module.exports = {
       changefreq = "daily";
     }
 
+    // Trade hub & application
     if (
       [
-        "/jewelry/rings",
-        "/jewelry/earrings",
-        "/jewelry/necklaces",
-        "/jewelry/bracelets",
-      ].includes(path)
+        "/trade",
+        "/trade/apply",
+        "/trade/memo-program",
+        "/trade/calibrated-stones",
+        "/trade/layouts",
+        "/trade/beads",
+      ].includes(path) || path.startsWith("/trade/")
     ) {
       priority = 0.9;
       changefreq = "daily";
@@ -48,23 +85,6 @@ module.exports = {
         "/free-size-gemstones",
         "/precious-beads",
         "/colorstone-layouts",
-        "/custom-jewelry",
-        "/gemstone-collection",
-      ].includes(path)
-    ) {
-      priority = 0.8;
-      changefreq = "weekly";
-    }
-
-    // Collections / Categories
-    if (
-      [
-        "/loose-gemstones",
-        "/free-size-gemstones",
-        "/precious-beads",
-        "/colorstone-layouts",
-        "/custom-jewelry",
-        "/gemstone-collection",
       ].includes(path)
     ) {
       priority = 0.8;
@@ -83,6 +103,9 @@ module.exports = {
         "/customer-support/about-us",
         "/customer-support/contact-us",
         "/customer-support/education",
+        "/customer-support/faqs",
+        "/customer-support/store-policy",
+        "/customer-support/gemstones-by-locations",
       ].includes(path)
     ) {
       priority = 0.5;
@@ -104,11 +127,20 @@ module.exports = {
     await config.transform(config, "/calibrated-faceted-gemstones/sapphire"),
     await config.transform(config, "/free-size-gemstones"),
     await config.transform(config, "/precious-beads"),
+    await config.transform(config, "/finished-bead-necklaces"),
     await config.transform(config, "/colorstone-layouts"),
-    await config.transform(config, "/custom-jewelry"),
-    await config.transform(config, "/gemstone-collection"),
+    await config.transform(config, "/trade"),
+    await config.transform(config, "/trade/apply"),
+    await config.transform(config, "/trade/memo-program"),
+    await config.transform(config, "/trade/calibrated-stones"),
+    await config.transform(config, "/trade/layouts"),
+    await config.transform(config, "/trade/beads"),
+    await config.transform(config, "/trade-shows"),
     await config.transform(config, "/customer-support/about-us"),
     await config.transform(config, "/customer-support/contact-us"),
     await config.transform(config, "/customer-support/education"),
+    await config.transform(config, "/customer-support/faqs"),
+    await config.transform(config, "/customer-support/store-policy"),
+    await config.transform(config, "/customer-support/gemstones-by-locations"),
   ],
 };

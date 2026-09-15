@@ -1,6 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
+import "leaflet/dist/leaflet.css";
 // Fix for leaflet SSR crash: import dynamically inside useEffect
 import { GEM_LOCATIONS, GemLocation } from "@/utils/constants";
 import { Anchor, Breadcrumbs, Image } from "@mantine/core";
@@ -72,7 +73,7 @@ export default function LocationMap() {
     setIsClient(true);
 
     import("leaflet").then((leaflet) => {
-      require("leaflet/dist/leaflet.css");
+
       const L = leaflet.default || leaflet;
       
       const markerIcon2x = require("leaflet/dist/images/marker-icon-2x.png");

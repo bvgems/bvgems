@@ -100,7 +100,7 @@ export async function GET(request: Request) {
     </div>
     <!-- Footer -->
     <div style="background-color: #111; color: #fff; text-align: center; padding: 20px; font-size: 12px;">
-      <p style="margin: 0;">B.V Gems Inc • 66 West 47th Street, New York NY 10036, United States</p>
+      <p style="margin: 0;">B.V Gems Inc • 66 W 47th St, Booth #9 and #10, New York, NY 10036</p>
       <p style="margin: 8px 0 0;">No longer want to receive these emails? <a href="#" style="color: #aaa;">Unsubscribe</a></p>
       <p style="margin: 4px 0 0;">© 2026 B.V. Gems</p>
     </div>

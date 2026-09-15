@@ -265,7 +265,9 @@ export const JewelryProductDetails = ({
         />
       </Drawer>
       <h1 className="capitalize text-[1.25rem] leading-snug tracking-wide mb-2">
-        {jf.isBead ? productData?.title : selectedShape || productData?.title}
+        {jf.isBead
+          ? productData?.title
+          : `${selectedShape || productData?.gemstone?.value || ''} ${productData?.title} in ${productData?.goldType?.value || '14K Gold'}`.trim()}
       </h1>
 
       <Group gap="xs" mb="sm">
@@ -494,6 +496,17 @@ export const JewelryProductDetails = ({
             )}
           </GridCol>
         </Grid>
+
+        {productData?.stoneType?.value === "Natural" && (
+          <div className="text-xs text-gray-500 text-center mt-2">
+            Natural gemstones are routinely enhanced to improve color and clarity.
+          </div>
+        )}
+        {(productData?.stoneType?.value === "Lab Grown" || productData?.stoneType?.value === "Lab-Grown") && (
+          <div className="text-xs text-gray-500 text-center mt-2">
+            Lab-Grown gemstones share the exact chemical and optical properties as their natural counterparts.
+          </div>
+        )}
 
         {productData?.showshapeoptions?.value === "true" &&
         (!jf.isNecklaces ||

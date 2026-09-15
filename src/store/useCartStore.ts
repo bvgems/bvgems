@@ -146,7 +146,24 @@ export const getCartStore = (userKey: string) => {
           getTotalPrice: () => {
             const cart = get().cart;
             return cart.reduce((total, item) => {
-              let productTotal = item.product.price * item.quantity;
+              let productTotal = 0;
+
+              if (
+                item.product.productType === "stone" ||
+                item.product.productType === "freeSizeStone"
+              ) {
+                if (item.product.purchaseByCarat) {
+                  const caratPrice = item.product.productType === "stone" 
+                    ? Number(item.product.price) * Number(item.caratWeight)
+                    : Number(item.product.price) * Number(item.product.ct_weight);
+                  productTotal = caratPrice;
+                } else {
+                  productTotal = Number(item.product.price) * item.quantity;
+                }
+              } else {
+                productTotal = Number(item.product.price) * item.quantity;
+              }
+
               if (item.product.needCertification) {
                 productTotal += 75 * item.quantity;
               }

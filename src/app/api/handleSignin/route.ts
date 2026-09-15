@@ -54,6 +54,7 @@ export async function POST(request: NextRequest) {
       companyName: user.company_name,
       phoneNumber: user.phone_number,
       isMemoPurchaseApproved: user.is_memo_purchase_approved,
+      isMemoRequested: user.is_memo_requested,
     };
 
     const token = jwt.sign(payload, JWT_SECRET, {

@@ -126,7 +126,7 @@ function generateICSDataURI(show: TradeShow) {
 // ===== UI =====
 export default function TradeShows() {
   return (
-    <div className="py-16">
+    <div className="py-1">
       <div className="max-w-7xl mx-auto px-6">
         <AnimatedText
           text="Upcoming Trade Shows"

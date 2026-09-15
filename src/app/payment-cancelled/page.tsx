@@ -20,7 +20,7 @@ const PaymentFailedPage = () => {
           />
         </div>
         <h1 className="text-center text-red-600 text-2xl">
-          Payment Successful
+          Payment Cancelled
         </h1>
         <Text mt="md" color="dimmed">
           We couldn’t complete your payment. Please check your payment details

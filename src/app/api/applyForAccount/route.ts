@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { pool } from "@/lib/pool";
 import { sendEmail } from "@/utils/sendEmail";
 import { createUser } from "../helperFunctions/createUser";
 import { createBusinessVerification } from "../helperFunctions/createBusinessVerification";
@@ -12,16 +13,36 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    const {
+    let {
       stepperUser,
       businessVerification,
       shippingAddress,
       businessReference,
       amlInfo,
+      userId,
     } = body;
-    const userCreationResponse = await createUser(stepperUser);
-    console.log('use creatonn',userCreationResponse)
-    const userId = userCreationResponse?.id;
+
+    if (userId) {
+      // User is already logged in, fetch their existing details
+      const userResult = await pool.query(
+        `SELECT id, first_name, last_name, email, phone_number, company_name FROM app_users WHERE id = $1`,
+        [userId]
+      );
+      if (userResult.rows.length > 0) {
+        const u = userResult.rows[0];
+        stepperUser = {
+          firstName: u.first_name,
+          lastName: u.last_name,
+          email: u.email,
+          phoneNumber: u.phone_number,
+          companyName: u.company_name,
+        };
+      }
+    } else {
+      const userCreationResponse = await createUser(stepperUser);
+      console.log('use creatonn', userCreationResponse);
+      userId = userCreationResponse?.id;
+    }
 
     businessVerification.companyName = stepperUser?.companyName;
     await createBusinessVerification(businessVerification, userId);

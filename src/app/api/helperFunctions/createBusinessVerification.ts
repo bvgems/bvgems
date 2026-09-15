@@ -12,12 +12,15 @@ export async function createBusinessVerification(
       country,
       state,
       city,
+      zipCode,
+      aptSuite,
       companyWebsite,
+      einNumber,
     } = businessVerification;
 
     const insertQuery = `
-      INSERT INTO business_verification (user_id,company_name,owner_name,company_address,country,state,city,company_website)
-      VALUES ($1, $2, $3, $4,$5,$6,$7,$8)
+      INSERT INTO business_verification (user_id,company_name,owner_name,company_address,country,state,city,zip_code,apt_suite,company_website,ein_number)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING id;
     `;
 
@@ -29,7 +32,10 @@ export async function createBusinessVerification(
       country,
       state,
       city,
+      zipCode,
+      aptSuite,
       companyWebsite,
+      einNumber,
     ];
     const result = await pool.query(insertQuery, values);
 

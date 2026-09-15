@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button, Modal, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
+import { useUserStore } from "@/store/useUserStore";
 
 interface MemoTermsModalProps {
   cartItems: any[];
@@ -20,6 +21,9 @@ export const MemoTermsModal = ({
   const sendMemoRequest = async () => {
     const response = await sendMemoRequestEmail(user, cartItems);
     if (response?.flag) {
+      if (user) {
+        useUserStore.getState().setUser({ ...user, isMemoRequested: true });
+      }
       notifications.show({
         icon: <IconCheck />,
         color: "teal",

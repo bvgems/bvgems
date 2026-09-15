@@ -42,12 +42,10 @@ export async function generateMetadata({
   }
 
   const gemstone = stone ? stone.replace(/-/g, " ") : "";
-  const title = `${productData.title} in ${gemstone} | B.V. Gems`;
-  const description = `Shop the ${
-    productData.title
-  } with ${gemstone} gemstones at B.V. Gems. Crafted in ${
-    productData?.goldType?.value || "14K Gold"
-  }, ethically sourced and shipped free in the U.S.`;
+  const metal = productData?.goldType?.value || "14K Gold";
+  const cleanTitle = gemstone ? `${gemstone} ${productData.title} in ${metal}` : `${productData.title} in ${metal}`;
+  const title = `${cleanTitle} | B.V. Gems`;
+  const description = `Shop the ${cleanTitle} at B.V. Gems. Ethically sourced and shipped free in the U.S.`;
 
   return {
     title,
@@ -102,6 +100,12 @@ export default function JewelryProductPage() {
   const isFreeGift =
     searchParams.get("freeGift") === "true" &&
     cartStore((state: any) => state.freeGiftSession);
+
+  const gemstoneStr = stone ? stone.replace(/-/g, " ") : "";
+  const metalStr = productData?.goldType?.value || "14K Gold";
+  const cleanTitle = gemstoneStr
+    ? `${gemstoneStr} ${productData?.title || ""} in ${metalStr}`
+    : `${productData?.title || ""} in ${metalStr}`;
 
   const breadcrumbItems = [
     { title: "Home", href: "/" },
@@ -299,7 +303,7 @@ export default function JewelryProductPage() {
                         {thumb?.type === "image" ? (
                           <JewelryImageZoom
                             src={thumb.url}
-                            alt={`${productData?.title} - ${
+                            alt={`${cleanTitle} - ${
                               thumb.title || `Image ${idx + 1}`
                             }`}
                             zoom={2.5}
@@ -363,7 +367,7 @@ export default function JewelryProductPage() {
                         ) : (
                           <Image loading="lazy"
                             src={images[currentIndex]?.url}
-                            alt={`${productData?.title} - Main`}
+                            alt={`${cleanTitle} - Main`}
                             fit="fill"
                             width="100%"
                             height="100%"
@@ -424,7 +428,7 @@ export default function JewelryProductPage() {
                           {thumb?.type === "image" ? (
                             <Image loading="lazy"
                               src={thumb.url}
-                              alt={`${productData?.title} - Thumb ${idx + 1}`}
+                              alt={`${cleanTitle} - Thumb ${idx + 1}`}
                               fit="contain"
                               width="100%"
                               height="100%"

@@ -10,7 +10,57 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/sapphire",
-        destination: "/calibrated-faceted-gemstones/sapphire", 
+        destination: "/trade/calibrated-stones/sapphire", 
+        permanent: true,
+      },
+      {
+        source: "/gemstone-collection",
+        destination: "/trade/calibrated-stones",
+        permanent: true,
+      },
+      {
+        source: "/account-aprooval",
+        destination: "/trade/apply",
+        permanent: true,
+      },
+      {
+        source: "/account-approval",
+        destination: "/trade/apply",
+        permanent: true,
+      },
+      {
+        source: "/calibrated-faceted-gemstones",
+        destination: "/trade/calibrated-stones",
+        permanent: true,
+      },
+      {
+        source: "/calibrated-faceted-gemstones/:stone",
+        destination: "/trade/calibrated-stones/:stone",
+        permanent: true,
+      },
+      {
+        source: "/colorstone-layouts",
+        destination: "/trade/layouts",
+        permanent: true,
+      },
+      {
+        source: "/colorstone-layouts/:handle",
+        destination: "/trade/layouts/:handle",
+        permanent: true,
+      },
+      {
+        source: "/precious-beads",
+        destination: "/trade/beads",
+        permanent: true,
+      },
+      {
+        source: "/finished-bead-necklaces",
+        destination: "/trade/finished-bead-necklaces",
+        permanent: true,
+      },
+      {
+        source: "/trade",
+        destination: "/",
         permanent: true,
       }
     ];

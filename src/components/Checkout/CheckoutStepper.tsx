@@ -99,19 +99,19 @@ export const CheckoutStepper = ({
       });
     }
 
-    // result.push({
-    //   label: "Choose Payment Method",
-    //   content: (
-    //     <PaymentMethod
-    //       deliveryMethod={deliveryMethod}
-    //       paymentMethod={paymentMethod}
-    //       setPaymentMethod={setPaymentMethod}
-    //     />
-    //   ),
-    // });
+    result.push({
+      label: "Choose Payment Method",
+      content: (
+        <PaymentMethod
+          deliveryMethod={deliveryMethod}
+          paymentMethod={paymentMethod}
+          setPaymentMethod={setPaymentMethod}
+        />
+      ),
+    });
 
     return result;
-  }, [deliveryMethod, user]);
+  }, [deliveryMethod, user, paymentMethod, selectedShippingAddress]);
 
   const handleNext = (index: number) => {
     if (index === 1) {

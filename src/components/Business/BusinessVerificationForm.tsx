@@ -1,3 +1,4 @@
+"use client";
 import { Button, TextInput } from "@mantine/core";
 import Link from "next/link";
 import { useForm } from "@mantine/form";
@@ -37,6 +38,7 @@ export const BusinessVerificationForm = ({
       state: "",
       city: "",
       website: "",
+      einNumber: "",
     },
     validateInputOnChange: true,
     validate: {
@@ -45,6 +47,7 @@ export const BusinessVerificationForm = ({
       country: (v) => (v ? null : "Country is required"),
       state: (v) => (v.trim() ? null : "State is required"),
       city: (v) => (v.trim() ? null : "City is required"),
+      einNumber: (v) => (v.trim() ? null : "EIN/Tax ID is required for verification"),
     },
   });
 
@@ -66,6 +69,7 @@ export const BusinessVerificationForm = ({
         state: fetched.state || "",
         city: fetched.city || "",
         website: fetched.company_website || "",
+        einNumber: fetched.ein_number || "",
       });
     }
   };
@@ -87,6 +91,7 @@ export const BusinessVerificationForm = ({
           state: businessVerification.state || "",
           city: businessVerification.city || "",
           website: businessVerification.companyWebsite || "",
+          einNumber: businessVerification.einNumber || "",
         });
       }
     }
@@ -108,6 +113,7 @@ export const BusinessVerificationForm = ({
         state: values.state,
         city: values.city,
         companyWebsite: values.website,
+        einNumber: values.einNumber,
       });
     }
 
@@ -131,7 +137,7 @@ export const BusinessVerificationForm = ({
         >
           <div className="flex gap-3">
             <TextInput
-              disabled
+              disabled={!!stepperUser?.companyName || isDisabled}
               label="Your Company Name"
               placeholder="your company name"
               className="w-full"
@@ -195,12 +201,23 @@ export const BusinessVerificationForm = ({
             />
           </div>
 
-          <TextInput
-            label="Enter Company Website"
-            placeholder="your company website"
-            disabled={isDisabled}
-            {...form.getInputProps("website")}
-          />
+          <div className="flex gap-3">
+            <TextInput
+              label="Enter Company Website"
+              placeholder="your company website"
+              className="w-full"
+              disabled={isDisabled}
+              {...form.getInputProps("website")}
+            />
+            <TextInput
+              label="EIN / Tax ID"
+              placeholder="e.g. 12-3456789"
+              className="w-full"
+              disabled={isDisabled}
+              withAsterisk
+              {...form.getInputProps("einNumber")}
+            />
+          </div>
 
           {isStepper ? (
             <>

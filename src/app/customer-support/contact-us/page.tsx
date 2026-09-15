@@ -297,6 +297,7 @@ export default function ContactUsPage() {
                 type="default"
                 value={selectedDate}
                 onChange={(value) => setSelectedDate(value)}
+                defaultDate={new Date()}
                 weekendDays={[0]}
                 minDate={new Date()}
                 className="mb-4"

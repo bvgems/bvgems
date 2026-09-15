@@ -36,6 +36,7 @@ import Script from "next/script";
 
 import jsPDF from "jspdf";
 import { BlueSapphireShade } from "../CommonComponents/BlueSapphireShade";
+import { QuoteRequestModal } from "@/components/CommonComponents/QuoteRequestModal";
 
 /** ---------- Helpers ---------- */
 const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
@@ -62,6 +63,7 @@ export default function ProductDetailsPage() {
   const id = searchParams.get("id");
   const name = searchParams.get("name");
   const [modalOpened, { open, close }] = useDisclosure(false);
+  const [quoteModalOpened, { open: openQuote, close: closeQuote }] = useDisclosure(false);
 
   const [product, setProduct] = useState<any>();
   const [displayImage, setDisplayImage] = useState<any>();
@@ -452,6 +454,12 @@ export default function ProductDetailsPage() {
         <AuthForm onClose={close} />
       </Modal>
 
+      <QuoteRequestModal 
+        opened={quoteModalOpened} 
+        onClose={closeQuote} 
+        product={product} 
+      />
+
       {/* Left: Image and specs */}
       <div className="w-full md:w-2/3 pr-2">
         <Breadcrumbs separator="›" className="mb-4">
@@ -577,6 +585,12 @@ export default function ProductDetailsPage() {
               </Alert>
             )}
 
+            {!user && (
+              <Button color="#0b182d" variant="outline" onClick={openQuote} fullWidth className="mt-2">
+                REQUEST WHOLESALE QUOTE
+              </Button>
+            )}
+
             {/* Switch for mode selection */}
             {user && allowPurchaseByCarat && (
               <Switch
@@ -646,10 +660,34 @@ export default function ProductDetailsPage() {
               />
             )}
             {user && (
-              <Button color="#0b182d" onClick={addProductToCart} fullWidth>
-                ADD TO CART
-              </Button>
+              <div className="flex gap-2">
+                <Button color="#0b182d" onClick={addProductToCart} className="flex-1">
+                  ADD TO CART
+                </Button>
+                <Button color="#0b182d" variant="outline" onClick={openQuote} className="flex-1">
+                  REQUEST QUOTE
+                </Button>
+              </div>
             )}
+            
+            {product?.type === "Natural" && (
+              <div className="text-xs text-gray-500 text-center mt-2">
+                Natural gemstones are routinely enhanced to improve color and clarity.
+              </div>
+            )}
+            {isLabGrown(product) && (
+              <div className="text-xs text-gray-500 text-center mt-2">
+                Lab-Grown gemstones share the exact chemical and optical properties as their natural counterparts.
+              </div>
+            )}
+            
+            <div className="mt-4 p-4 bg-gray-50 border border-gray-100 rounded text-center">
+              <div className="text-sm font-semibold text-[#0b182d] mb-1 uppercase tracking-wider">Certifications</div>
+              <p className="text-xs text-gray-600">
+                Independent lab certifications (including GIA) are available upon request for select stones.
+              </p>
+            </div>
+
             <QuestionAndDeliveryAccordian description={description} />
           </div>
         </div>

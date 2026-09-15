@@ -13,9 +13,22 @@ export async function POST() {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded: any = jwt.verify(token, JWT_SECRET);
 
-    const response = NextResponse.json({ user: decoded }, { status: 200 });
+    // Fetch latest permissions from DB to prevent stale JWT issues
+    const { pool } = require("@/lib/pool");
+    const dbResult = await pool.query(
+      `SELECT is_memo_requested, is_memo_purchase_approved FROM app_users WHERE id = $1`,
+      [decoded.id]
+    );
+
+    let updatedUser = { ...decoded };
+    if (dbResult.rows.length > 0) {
+      updatedUser.isMemoRequested = dbResult.rows[0].is_memo_requested;
+      updatedUser.isMemoPurchaseApproved = dbResult.rows[0].is_memo_purchase_approved;
+    }
+
+    const response = NextResponse.json({ user: updatedUser }, { status: 200 });
 
     response.headers.set(
       "Cache-Control",

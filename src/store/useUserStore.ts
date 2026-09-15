@@ -10,6 +10,7 @@ type User = {
   phoneNumber: string;
   isAddressStored?: boolean;
   isMemoPurchaseApproved: boolean;
+  isMemoRequested?: boolean;
 };
 
 type UserStore = {

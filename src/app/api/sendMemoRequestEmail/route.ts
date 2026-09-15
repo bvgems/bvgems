@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { sendEmail } from "@/utils/sendEmail";
 import { getBusinessReferences } from "../lib/commonFunctions";
 import { buildMemoApprovalEmail } from "../helperFunctions/buildMemoPurchaseRequestEmail";
+import { pool } from "@/lib/pool";
 import jwt from "jsonwebtoken";
 
 export async function POST(request: NextRequest) {
@@ -9,6 +10,33 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     const { user, cartItems } = body;
+
+    // Check if they already requested memo
+    const checkResult = await pool.query(
+      `SELECT is_memo_requested, is_memo_purchase_approved FROM app_users WHERE id = $1`,
+      [user?.id]
+    );
+
+    if (checkResult.rows.length > 0) {
+      if (checkResult.rows[0].is_memo_purchase_approved) {
+        return new Response(
+          JSON.stringify({
+            flag: false,
+            error: "Your account is already approved for memo purchases.",
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
+      if (checkResult.rows[0].is_memo_requested) {
+        return new Response(
+          JSON.stringify({
+            flag: false,
+            error: "You have already submitted a memo request. Please wait for approval.",
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    }
 
     const references: any = await getBusinessReferences(user?.id);
 
@@ -28,6 +56,12 @@ export async function POST(request: NextRequest) {
       "sales@bvgems.com",
       "New Memo Purchase Request Received",
       emailHtml
+    );
+
+    // Update DB to mark that they have requested memo
+    await pool.query(
+      `UPDATE app_users SET is_memo_requested = true WHERE id = $1`,
+      [user?.id]
     );
 
     return new Response(

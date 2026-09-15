@@ -41,16 +41,21 @@ export const JeweleryDetailsTable = ({
     return sum > 0 ? sum.toFixed(2) : "-";
   }, [stoneWeight, diamondWeight]);
 
-  const renderRow = (label: string, val: any) => (
-    <Table.Tr>
-      <Table.Td width="35%">
-        <Text fw={600}>{label}</Text>
-      </Table.Td>
-      <Table.Td>
-        <Text>{val ?? "-"}</Text>
-      </Table.Td>
-    </Table.Tr>
-  );
+  const isValid = (val: any) => val && val !== "-" && String(val).trim() !== "";
+
+  const renderRow = (label: string, val: any) => {
+    if (!isValid(val)) return null;
+    return (
+      <Table.Tr>
+        <Table.Td width="35%">
+          <Text fw={600}>{label}</Text>
+        </Table.Td>
+        <Table.Td>
+          <Text>{val}</Text>
+        </Table.Td>
+      </Table.Tr>
+    );
+  };
 
   if (isFinishedNecklaces) {
     return (

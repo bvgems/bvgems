@@ -1,6 +1,20 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /checkout
+Disallow: /cart
+Disallow: /payment-success
+Disallow: /payment-cancelled
+Disallow: /profile
+Disallow: /apply-account
+Disallow: /my-orders
+Disallow: /reset-password
+Disallow: /api/*
+Disallow: /admin/*
+Disallow: /jewelry
+Disallow: /custom-jewelry
+Disallow: /design-your-jewelry
+Disallow: /jewelry-details
 
 # Host
 Host: https://www.bvgems.com

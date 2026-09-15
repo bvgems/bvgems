@@ -15,18 +15,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: "Jewelry Not Found – B.V. Gems",
       description: "This jewelry item is currently unavailable at B.V. Gems.",
+      robots: { index: false, follow: true },
     };
   }
 
   const baseTitle = product?.title || "Fine Jewelry";
   const gemstone = stone ? stone.replace(/-/g, " ") : "";
+  const metal = product?.goldType?.value || "14K Gold";
+  const cleanTitle = gemstone ? `${gemstone} ${baseTitle} in ${metal}` : `${baseTitle} in ${metal}`;
 
   return {
-    title: `${baseTitle} in ${gemstone} | B.V. Gems`,
-    description: `Shop the ${baseTitle} crafted with ${gemstone} and diamonds at B.V. Gems. Ethically sourced, free U.S. shipping on or above $200.`,
+    title: `${cleanTitle} | B.V. Gems`,
+    description: `Shop the ${cleanTitle} at B.V. Gems. Ethically sourced, free U.S. shipping on or above $200.`,
+    robots: { index: false, follow: true },
     openGraph: {
-      title: `${baseTitle} in ${gemstone} | B.V. Gems`,
-      description: `Explore ${gemstone} ${baseTitle} at B.V. Gems.`,
+      title: `${cleanTitle} | B.V. Gems`,
+      description: `Explore ${cleanTitle} at B.V. Gems.`,
       images: product?.images?.edges?.map((img: any) => img?.node?.url) || [],
       url: `https://www.bvgems.com/jewelry-details/${category}/${productHandle}/${stone}`,
       siteName: "B.V. Gems",

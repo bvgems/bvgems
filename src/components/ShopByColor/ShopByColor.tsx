@@ -31,7 +31,7 @@ export default function ShopByColor() {
   return (
     <Container size={1350} className="mt-20">
       <AnimatedText
-        text="Shop Gemstone By Color"
+        text="Shop Sapphire By Color"
         className="text-center text-4xl text-[#0b182d] mb-8"
       />
 
@@ -44,7 +44,7 @@ export default function ShopByColor() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            // variants={itemVariants}
+          // variants={itemVariants}
           >
             <Card
               component={Link}
@@ -60,7 +60,7 @@ export default function ShopByColor() {
                   fill
                   src={item?.image}
                   alt={`${item?.name} colored gemstones collection`}
-                  className="object-contain"
+                  className={`object-contain ${item?.name?.toLowerCase() === 'white' ? 'scale-[0.7]' : item?.name?.toLowerCase() === 'peach' ? 'scale-[0.75]' : item?.name?.toLowerCase() === 'brown' ? 'scale-[0.8]' : 'scale-100'}`}
                 />
               </div>
               <span className=" text-[#0b182d] mt-3">{item?.name}</span>

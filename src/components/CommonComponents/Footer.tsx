@@ -164,9 +164,7 @@ export const Footer = () => {
             href="https://www.google.com/maps/search/?api=1&query=66+West+47th+Street,+NYC,+NY+10036"
             className="hover:underline cursor-pointer text-sm"
           >
-            66 W 47th St, Booth #9 and #10
-            <br />
-            New York, NY 10036
+            66 W 47th St, Booth #9 and #10, New York, NY 10036
           </a>
           <div className="mt-4">
             <p className="text-md font-medium">Customer Service Hours</p>

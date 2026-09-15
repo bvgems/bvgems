@@ -229,9 +229,11 @@ export function Header() {
   };
 
   // Navbar items
-  const items = links.map((link, index) => {
+  const baseLinks = [...links];
+
+  const items = baseLinks.map((link, index) => {
     const menuItems = link.links?.map((item: any) => (
-      <UnstyledButton
+      <Menu.Item
         key={item.link}
         className="w-full px-4 py-2 rounded-md hover:bg-gray-100"
         onClick={() => router.push(item.link)}
@@ -255,10 +257,10 @@ export function Header() {
             </Text>
           </div>
         </Group>
-      </UnstyledButton>
+      </Menu.Item>
     ));
 
-    if (link.label === "Gemstones") {
+    if (link.label === "Calibrated Stones") {
       return (
         <HeaderHoverCardForGemstones
           key={index}
@@ -266,6 +268,7 @@ export function Header() {
           smallerTextFlag={smallerTextFlag}
           pathname={pathname}
           menuItems={menuItems}
+          user={user}
         />
       );
     }
@@ -282,7 +285,7 @@ export function Header() {
             <div className="px-3 py-2 rounded-sm hover:text-gray-500 text-[15px] ">
               <Center>
                 <span
-                  className={`mr-1 ${smallerTextFlag ? "text-[12px]" : "text-[15px]"
+                  className={`mr-1 text-black ${smallerTextFlag ? "text-[12px]" : "text-[15px]"
                     } ${link.links?.some((item) => pathname === item.link)
                       ? "text-gray-400"
                       : ""
@@ -368,6 +371,12 @@ export function Header() {
                     );
                     if (selectedItem) handleSearchRedirect(selectedItem);
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && searchQuery.trim()) {
+                      setSearchOpen(false);
+                      router.push(`/trade/search?q=${encodeURIComponent(searchQuery.trim())}`);
+                    }
+                  }}
                   placeholder={getPlaceholder()}
                   className="w-full"
                   dropdownOpened={searchResults.length > 0 || loading}
@@ -419,6 +428,12 @@ export function Header() {
                       (item) => item.value.toLowerCase() === val.toLowerCase()
                     );
                     if (selectedItem) handleSearchRedirect(selectedItem);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && searchQuery.trim()) {
+                      setSearchOpen(false);
+                      router.push(`/trade/search?q=${encodeURIComponent(searchQuery.trim())}`);
+                    }
                   }}
                   placeholder={getPlaceholder()}
                   className="w-full"

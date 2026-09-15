@@ -60,9 +60,11 @@ export const DrawerComponent = ({
             control: { paddingLeft: 12, fontWeight: 500, fontSize: 16 },
           }}
         >
-          {mobileLinks.map((link: any) => {
-            const hasSublinks =
-              Array.isArray(link.links) && link.links.length > 0;
+          {(() => {
+            const baseMobileLinks = [...mobileLinks];
+            return baseMobileLinks.map((link: any) => {
+              const hasSublinks =
+                Array.isArray(link.links) && link.links.length > 0;
 
             return (
               <Accordion.Item key={link.label} value={link.label}>
@@ -120,7 +122,7 @@ export const DrawerComponent = ({
                 )}
               </Accordion.Item>
             );
-          })}
+          })})()}
         </Accordion>
         {user && (
           <div className="mt-4">

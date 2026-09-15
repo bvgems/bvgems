@@ -25,6 +25,8 @@ import { IconCertificate } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+const isValid = (val: any) => val && val !== "-" && String(val).trim() !== "";
+
 export const ProductSpecifications = ({
   getProduct,
   product,
@@ -179,120 +181,134 @@ export const ProductSpecifications = ({
       {!isFreeSize ? (
         /** ---------------- Non Free Size Layout ---------------- */
         <div className="text-md flex flex-col gap-12">
-          <div className="flex flex-row justify-between items-center">
-            <div className="font-semibold">Stone</div>
-            <Text>{product?.collection_slug}</Text>
-          </div>
+          {isValid(product?.collection_slug) && (
+            <div className="flex flex-row justify-between items-center">
+              <div className="font-semibold">Stone</div>
+              <Text>{product?.collection_slug}</Text>
+            </div>
+          )}
 
-          <div className="flex flex-row justify-between items-center">
-            <div className="font-semibold">Shape</div>
-            <Text>{product?.shape}</Text>
-          </div>
+          {isValid(product?.shape) && (
+            <div className="flex flex-row justify-between items-center">
+              <div className="font-semibold">Shape</div>
+              <Text>{product?.shape}</Text>
+            </div>
+          )}
 
-          <div className="flex flex-row justify-between items-center">
-            <div className="font-semibold">Size</div>
-            <Combobox
-              store={combobox}
-              resetSelectionOnOptionHover
-              onOptionSubmit={handleSizeChange}
-              withinPortal={true}
-              zIndex={1000000}
-            >
-              <ComboboxTarget targetType="button">
-                <InputBase
-                  onChange={handleSizeChange}
-                  component="button"
-                  type="button"
-                  pointer
-                  rightSection={<ComboboxChevron />}
-                  rightSectionPointerEvents="none"
-                  onClick={() => combobox.toggleDropdown()}
-                  className="w-40"
-                >
-                  {allSizes.find((item) => item.value === value)?.label || (
-                    <InputPlaceholder>Select size</InputPlaceholder>
-                  )}
-                </InputBase>
-              </ComboboxTarget>
-              <ComboboxDropdown>
-                <ScrollArea.Autosize type="scroll" mah={350}>
-                  <ComboboxOptions>
-                    {allSizes.map((item) => (
-                      <ComboboxOption value={item.value} key={item.value}>
-                        <Group gap="xs">
-                          {item.value === value && <CheckIcon size={12} />}
-                          <span>{item.label}</span>
-                        </Group>
-                      </ComboboxOption>
-                    ))}
-                  </ComboboxOptions>
-                </ScrollArea.Autosize>
-              </ComboboxDropdown>
-            </Combobox>
-          </div>
-
-          <div className="flex flex-row justify-between items-center">
-            <div className="font-semibold">Color</div>
-            <Text className="font-bold">
-              {product?.collection_slug === "Tanzanite"
-                ? "Purplish Blue"
-                : product?.color}
-            </Text>
-          </div>
-
-          <div className="flex flex-row justify-between items-center">
-            <div className="font-semibold">Quality</div>
-            <Combobox
-              store={qualityCombobox}
-              resetSelectionOnOptionHover
-              onOptionSubmit={handleQualityChange}
-              withinPortal={true}
-              zIndex={1000000}
-            >
-              <ComboboxTarget targetType="button">
-                <InputBase
-                  component="button"
-                  className="w-40"
-                  type="button"
-                  pointer
-                  rightSection={<ComboboxChevron />}
-                  rightSectionPointerEvents="none"
-                  onClick={() => qualityCombobox.toggleDropdown()}
-                >
-                  {qualityOptions.find((item) => item.value === selectedQuality)
-                    ?.label || (
-                      <InputPlaceholder>Select quality</InputPlaceholder>
+          {isValid(product?.size) && (
+            <div className="flex flex-row justify-between items-center">
+              <div className="font-semibold">Size</div>
+              <Combobox
+                store={combobox}
+                resetSelectionOnOptionHover
+                onOptionSubmit={handleSizeChange}
+                withinPortal={true}
+                zIndex={1000000}
+              >
+                <ComboboxTarget targetType="button">
+                  <InputBase
+                    onChange={handleSizeChange}
+                    component="button"
+                    type="button"
+                    pointer
+                    rightSection={<ComboboxChevron />}
+                    rightSectionPointerEvents="none"
+                    onClick={() => combobox.toggleDropdown()}
+                    className="w-40"
+                  >
+                    {allSizes.find((item) => item.value === value)?.label || (
+                      <InputPlaceholder>Select size</InputPlaceholder>
                     )}
-                </InputBase>
-              </ComboboxTarget>
-              <ComboboxDropdown>
-                <ScrollArea.Autosize type="scroll" mah={250}>
-                  <ComboboxOptions>
-                    {qualityOptions.map((item) => (
-                      <ComboboxOption value={item.value} key={item.value}>
-                        <Group gap="xs">
-                          {item.value === selectedQuality && (
-                            <CheckIcon size={12} />
-                          )}
-                          <span>{item.label}</span>
-                        </Group>
-                      </ComboboxOption>
-                    ))}
-                  </ComboboxOptions>
-                </ScrollArea.Autosize>
-              </ComboboxDropdown>
-            </Combobox>
-          </div>
+                  </InputBase>
+                </ComboboxTarget>
+                <ComboboxDropdown>
+                  <ScrollArea.Autosize type="scroll" mah={350}>
+                    <ComboboxOptions>
+                      {allSizes.map((item) => (
+                        <ComboboxOption value={item.value} key={item.value}>
+                          <Group gap="xs">
+                            {item.value === value && <CheckIcon size={12} />}
+                            <span>{item.label}</span>
+                          </Group>
+                        </ComboboxOption>
+                      ))}
+                    </ComboboxOptions>
+                  </ScrollArea.Autosize>
+                </ComboboxDropdown>
+              </Combobox>
+            </div>
+          )}
 
-          <div className="flex flex-row justify-between items-center">
-            <div className="font-semibold">CT. Weight</div>
-            <Text>{product?.ct_weight}</Text>
-          </div>
+          {isValid(product?.color) && (
+            <div className="flex flex-row justify-between items-center">
+              <div className="font-semibold">Color</div>
+              <Text className="font-bold">
+                {product?.collection_slug === "Tanzanite"
+                  ? "Purplish Blue"
+                  : product?.color}
+              </Text>
+            </div>
+          )}
 
-          <div className="flex flex-row justify-between items-center">
-            <div className="font-semibold">Cut</div>
-            <Text>{product?.cut}</Text>
-          </div>
+          {isValid(product?.quality) && (
+            <div className="flex flex-row justify-between items-center">
+              <div className="font-semibold">Quality</div>
+              <Combobox
+                store={qualityCombobox}
+                resetSelectionOnOptionHover
+                onOptionSubmit={handleQualityChange}
+                withinPortal={true}
+                zIndex={1000000}
+              >
+                <ComboboxTarget targetType="button">
+                  <InputBase
+                    component="button"
+                    className="w-40"
+                    type="button"
+                    pointer
+                    rightSection={<ComboboxChevron />}
+                    rightSectionPointerEvents="none"
+                    onClick={() => qualityCombobox.toggleDropdown()}
+                  >
+                    {qualityOptions.find((item) => item.value === selectedQuality)
+                      ?.label || (
+                        <InputPlaceholder>Select quality</InputPlaceholder>
+                      )}
+                  </InputBase>
+                </ComboboxTarget>
+                <ComboboxDropdown>
+                  <ScrollArea.Autosize type="scroll" mah={250}>
+                    <ComboboxOptions>
+                      {qualityOptions.map((item) => (
+                        <ComboboxOption value={item.value} key={item.value}>
+                          <Group gap="xs">
+                            {item.value === selectedQuality && (
+                              <CheckIcon size={12} />
+                            )}
+                            <span>{item.label}</span>
+                          </Group>
+                        </ComboboxOption>
+                      ))}
+                    </ComboboxOptions>
+                  </ScrollArea.Autosize>
+                </ComboboxDropdown>
+              </Combobox>
+            </div>
+          )}
+
+          {isValid(product?.ct_weight) && (
+            <div className="flex flex-row justify-between items-center">
+              <div className="font-semibold">CT. Weight</div>
+              <Text>{product?.ct_weight}</Text>
+            </div>
+          )}
+
+          {isValid(product?.cut) && (
+            <div className="flex flex-row justify-between items-center">
+              <div className="font-semibold">Cut</div>
+              <Text>{product?.cut}</Text>
+            </div>
+          )}
         </div>
       ) : (
         /** ---------------- Free Size Vertical Table ---------------- */
@@ -303,104 +319,124 @@ export const ProductSpecifications = ({
         >
           <Table.Caption>Detailed specifications for {product?.gemstone_type}</Table.Caption>
           <Table.Tbody>
-            <Table.Tr>
-              <Table.Th>
-                <span className="font-semibold">Stone</span>
-              </Table.Th>
-              <Table.Td>{product?.gemstone_type}</Table.Td>
-            </Table.Tr>
+            {isValid(product?.gemstone_type) && (
+              <Table.Tr>
+                <Table.Th>
+                  <span className="font-semibold">Stone</span>
+                </Table.Th>
+                <Table.Td>{product?.gemstone_type}</Table.Td>
+              </Table.Tr>
+            )}
 
-            <Table.Tr>
-              <Table.Th>
-                <span className="font-semibold">Shape</span>
-              </Table.Th>
-              <Table.Td>{product?.shape}</Table.Td>
-            </Table.Tr>
+            {isValid(product?.shape) && (
+              <Table.Tr>
+                <Table.Th>
+                  <span className="font-semibold">Shape</span>
+                </Table.Th>
+                <Table.Td>{product?.shape}</Table.Td>
+              </Table.Tr>
+            )}
 
-            <Table.Tr>
-              <Table.Th>
-                <span className="font-semibold">Size</span>
-              </Table.Th>
-              <Table.Td>{product?.dimension}</Table.Td>
-            </Table.Tr>
+            {isValid(product?.dimension) && (
+              <Table.Tr>
+                <Table.Th>
+                  <span className="font-semibold">Size</span>
+                </Table.Th>
+                <Table.Td>{product?.dimension}</Table.Td>
+              </Table.Tr>
+            )}
 
-            <Table.Tr>
-              <Table.Th>
-                <span className="font-semibold">Color</span>
-              </Table.Th>
-              <Table.Td>{product?.color}</Table.Td>
-            </Table.Tr>
+            {isValid(product?.color) && (
+              <Table.Tr>
+                <Table.Th>
+                  <span className="font-semibold">Color</span>
+                </Table.Th>
+                <Table.Td>{product?.color}</Table.Td>
+              </Table.Tr>
+            )}
 
-            <Table.Tr>
-              <Table.Th>
-                <span className="font-semibold">CT. Weight</span>
-              </Table.Th>
-              <Table.Td>{product?.ct_weight}</Table.Td>
-            </Table.Tr>
+            {isValid(product?.ct_weight) && (
+              <Table.Tr>
+                <Table.Th>
+                  <span className="font-semibold">CT. Weight</span>
+                </Table.Th>
+                <Table.Td>{product?.ct_weight}</Table.Td>
+              </Table.Tr>
+            )}
 
-            <Table.Tr>
-              <Table.Th>
-                <span className="font-semibold">Lot Number</span>
-              </Table.Th>
-              <Table.Td>{product?.lot_number}</Table.Td>
-            </Table.Tr>
+            {isValid(product?.lot_number) && (
+              <Table.Tr>
+                <Table.Th>
+                  <span className="font-semibold">Lot Number</span>
+                </Table.Th>
+                <Table.Td>{product?.lot_number}</Table.Td>
+              </Table.Tr>
+            )}
 
-            <Table.Tr>
-              <Table.Th>
-                <span className="font-semibold">Single / Matched</span>
-              </Table.Th>
-              <Table.Td>{product?.single_or_matched}</Table.Td>
-            </Table.Tr>
+            {isValid(product?.single_or_matched) && (
+              <Table.Tr>
+                <Table.Th>
+                  <span className="font-semibold">Single / Matched</span>
+                </Table.Th>
+                <Table.Td>{product?.single_or_matched}</Table.Td>
+              </Table.Tr>
+            )}
 
-            <Table.Tr>
-              <Table.Th>
-                <span className="font-semibold">Treatment</span>
-              </Table.Th>
-              <Table.Td>{product?.enhancement}</Table.Td>
-            </Table.Tr>
+            {isValid(product?.enhancement) && (
+              <Table.Tr>
+                <Table.Th>
+                  <span className="font-semibold">Treatment</span>
+                </Table.Th>
+                <Table.Td>{product?.enhancement}</Table.Td>
+              </Table.Tr>
+            )}
 
-            <Table.Tr>
-              <Table.Th>
-                <span className="font-semibold">Origin</span>
-              </Table.Th>
-              <Table.Td>{product?.origin}</Table.Td>
-            </Table.Tr>
+            {isValid(product?.origin) && (
+              <Table.Tr>
+                <Table.Th>
+                  <span className="font-semibold">Origin</span>
+                </Table.Th>
+                <Table.Td>{product?.origin}</Table.Td>
+              </Table.Tr>
+            )}
 
-            <Table.Tr>
-              <Table.Th>
-                <span className="font-semibold">Certified</span>
-              </Table.Th>
-              <Table.Td>
-                {product?.is_certified ? (
-                  <>
-                    <div
-                      onClick={open}
-                      className="flex items-center gap-2 text-blue-600 underline cursor-pointer hover:text-blue-800"
-                    >
-                      <IconCertificate size={18} />
-                      <span>View Certificate</span>
-                    </div>
+            {isValid(product?.is_certified) && (
+              <Table.Tr>
+                <Table.Th>
+                  <span className="font-semibold">Certified</span>
+                </Table.Th>
+                <Table.Td>
+                  {product?.is_certified ? (
+                    <>
+                      <div
+                        onClick={open}
+                        className="flex items-center gap-2 text-blue-600 underline cursor-pointer hover:text-blue-800"
+                      >
+                        <IconCertificate size={18} />
+                        <span>View Certificate</span>
+                      </div>
 
-                    <Modal
-                      opened={opened}
-                      onClose={close}
-                      title="Gemstone Certificate"
-                      size="80%"
-                      centered
-                    >
-                      <iframe
-                        src={product?.certification}
-                        width="100%"
-                        height="600px"
-                        style={{ border: "none" }}
-                      />
-                    </Modal>
-                  </>
-                ) : (
-                  "NO"
-                )}
-              </Table.Td>
-            </Table.Tr>
+                      <Modal
+                        opened={opened}
+                        onClose={close}
+                        title="Gemstone Certificate"
+                        size="80%"
+                        centered
+                      >
+                        <iframe
+                          src={product?.certification}
+                          width="100%"
+                          height="600px"
+                          style={{ border: "none" }}
+                        />
+                      </Modal>
+                    </>
+                  ) : (
+                    "NO"
+                  )}
+                </Table.Td>
+              </Table.Tr>
+            )}
           </Table.Tbody>
         </Table>
       )}

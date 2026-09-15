@@ -38,7 +38,7 @@ export default function CheckoutSelectionPage() {
 
   const { shippingAddress } = useStpperStore();
   const [deliveryMethod, setDeliveryMethod] = useState();
-  const paymentMethod = "online";
+  const [paymentMethod, setPaymentMethod] = useState("online");
   const [opened, { open, close }] = useDisclosure(false);
 
   const stripePromise = loadStripe(
@@ -90,22 +90,31 @@ export default function CheckoutSelectionPage() {
     orderPayload.shipping = shippingTotal;
     orderPayload.grandTotal = grandTotal;
 
-    // if (paymentMethod === "memo") {
-    //   await createShopifyOrder(orderPayload);
-    //   cartStore.getState().clearCart();
-    //   open();
-    // } else {
-    //   await handlePayment();
-    //   cartStore.getState().clearCart();
-    // }
-
-    try {
-      const success = await handlePayment();
-      if (success) {
-        cartStore.getState().clearCart();
+    if (paymentMethod === "memo") {
+      await createShopifyOrder({
+        cartItems: cart,
+        email: user ? user.email : guestUser?.email || "guest@example.com",
+        deliveryMethod,
+        shippingAddress,
+        selectedShippingAddress,
+        user,
+        guestUser,
+        paymentMethod,
+        subtotal: cartTotal,
+        shipping: shippingTotal,
+        grandTotal: grandTotal,
+      });
+      cartStore.getState().clearCart();
+      open();
+    } else {
+      try {
+        const success = await handlePayment();
+        if (success) {
+          cartStore.getState().clearCart();
+        }
+      } catch (err) {
+        console.error("Payment failed", err);
       }
-    } catch (err) {
-      console.error("Payment failed", err);
     }
   };
 
@@ -133,7 +142,7 @@ export default function CheckoutSelectionPage() {
               selectedShippingAddress={selectedShippingAddress}
               setSelectedShippingAddress={setSelectedShippingAddress}
               paymentMethod={paymentMethod}
-              // setPaymentMethod={setPaymentMethod}
+              setPaymentMethod={setPaymentMethod}
               deliveryMethod={deliveryMethod}
               setDeliveryMethod={setDeliveryMethod}
             />
@@ -235,12 +244,21 @@ export default function CheckoutSelectionPage() {
                               </Badge>
                             ) : (
                               <div className="text-gray-600">
-                                Qty::{" "}
+                                Qty:{" "}
                                 <span className="font-medium">
                                   {item?.quantity}
                                 </span>
                               </div>
                             )}
+                            <div className="font-semibold text-[#0b182d] mt-2">
+                              ${Number(
+                                item?.product?.purchaseByCarat
+                                  ? item?.product?.productType === "stone"
+                                    ? Number(item?.product?.price) * Number(item?.caratWeight)
+                                    : Number(item?.product?.price) * Number(item?.product?.ct_weight)
+                                  : Number(item?.product?.price) * (item?.quantity || 1)
+                              ).toFixed(2)}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -327,12 +345,19 @@ export default function CheckoutSelectionPage() {
                               </div>
                             )}
                             {item?.quantity && (
-                              <div className="text-gray-600">
-                                Qty::{" "}
-                                <span className="font-medium">
-                                  {item?.quantity}
-                                </span>
-                              </div>
+                              <>
+                                <div className="text-gray-600">
+                                  Qty:{" "}
+                                  <span className="font-medium">
+                                    {item?.quantity}
+                                  </span>
+                                </div>
+                                <div className="font-semibold text-[#0b182d] mt-2">
+                                  ${Number(
+                                    Number(item?.jewelryProduct?.price ?? item?.product?.price) * (item?.quantity || 1)
+                                  ).toFixed(2)}
+                                </div>
+                              </>
                             )}
                           </div>
                         </div>

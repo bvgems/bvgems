@@ -5,8 +5,11 @@ import {
   IconBasketDollar,
   IconHeartHandshake,
   IconTruckDelivery,
-  IconTruckReturn,
+  IconDiamond,
   IconCertificate,
+  IconGlobe,
+  IconBuildingBank,
+  IconScale
 } from "@tabler/icons-react";
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
@@ -39,46 +42,54 @@ const AnimatedGridCol = ({
 export const CustomerBenefits = () => {
   const customerBenefits = [
     {
-      title: "Free Shipping on Orders $200+",
+      title: "Generational Expertise",
       description:
-        "Enjoy complimentary worldwide shipping on every order—because exceptional service begins at your doorstep.",
-      icon: <IconTruckDelivery size={42} stroke={1.5} />,
+        "A fixture in NYC's Diamond District for over 75 years, supplying master jewelers and top brands across 50+ countries.",
+      icon: <IconBuildingBank size={42} stroke={1.5} />,
     },
     {
-      title: "Concierge-Level Support",
+      title: "Global Ethical Sourcing",
       description:
-        "Our expert care team is here to guide you every step of the way—personalized, attentive, and just a call or message away.",
+        "Direct relationships with mines worldwide to ensure every gemstone is conflict-free, responsible, and fully traceable.",
+      icon: <IconGlobe size={42} stroke={1.5} />,
+    },
+    {
+      title: "Precision Calibration",
+      description:
+        "Exact dimensions and uniform color grading for flawless setting. We manufacture in volume to guarantee consistency.",
+      icon: <IconDiamond size={42} stroke={1.5} />,
+    },
+    {
+      title: "Concierge Account Management",
+      description:
+        "Dedicated trade experts offering personalized memo programs, volume pricing, and priority sourcing for custom projects.",
       icon: <IconHeartHandshake size={42} stroke={1.5} />,
-    },
-    {
-      title: "Shop with Confidence",
-      description:
-        "We are happy to provide complimentary size adjustments as needed, though returns will not be accepted",
-      icon: <IconTruckReturn size={42} stroke={1.5} />,
     },
     {
       title: "Guaranteed Authenticity",
       description:
-        "Every gemstone and jewelry piece can be certified by an independent third-party lab upon request—ensuring complete transparency and confidence.",
+        "Every gemstone can be certified by independent third-party labs (GIA, IGI) upon request, ensuring complete transparency.",
       icon: <IconCertificate size={42} stroke={1.5} />,
     },
     {
-      title: "24/7 Support & Secure Checkout",
+      title: "Unparalleled Wholesale Value",
       description:
-        "Get instant help over WhatsApp, iMessage, or email. All transactions are 100% secure via PayPal, credit, or debit card.",
-      icon: <IconBasketDollar size={42} stroke={1.5} />,
+        "By cutting out the middlemen and manufacturing in-house, we pass on exceptional value directly to our trade partners.",
+      icon: <IconScale size={42} stroke={1.5} />,
     },
   ];
 
   return (
-    <Container size={1350} className="mt-20 pb-20">
-      <AnimatedText
-        text="Why Shop With Us"
-        className="text-center text-3xl sm:text-4xl text-[#0b182d] mb-12"
-      />
-      <p className="text-center text-lg text-gray-600 mb-12 -mt-8 px-4 max-w-3xl mx-auto">
-        Backed by 6 generations and 75+ years of experience across 50+ countries. We manufacture in volume to bring you the finest quality at unparalleled value.
-      </p>
+    <Container size={1350} className="mt-32 mb-20">
+      <div className="text-center mb-16">
+        <AnimatedText
+          text="The B.V. Gems Advantage"
+          className="text-4xl md:text-5xl uppercase tracking-widest text-[#0b182d] font-light mb-6"
+        />
+        <p className="text-lg text-gray-500 max-w-3xl mx-auto font-light leading-relaxed">
+          Backed by 6 generations of expertise, we are the trusted direct source for precision-calibrated gemstones and custom layouts for jewelers worldwide.
+        </p>
+      </div>
       <Grid gutter="xl" justify="center">
         {customerBenefits.map((item, index) => (
           <AnimatedGridCol key={index} index={index}>
@@ -89,22 +100,25 @@ export const CustomerBenefits = () => {
             >
               {/* Icon container */}
               <div
-                className="flex items-center justify-center w-16 h-16 mb-5 rounded-full 
-                bg-[#f5f2ed] text-[#926f34] group-hover:bg-[#926f34] 
-                group-hover:text-white transition-colors duration-300"
+                className="flex items-center justify-center w-16 h-16 mb-6 rounded-full 
+                bg-[#0b182d] text-white group-hover:bg-[#d4af37] group-hover:scale-110
+                transition-all duration-500 shadow-md"
               >
                 {item.icon}
               </div>
 
               {/* Title */}
-              <p className="text-lg sm:text-xl font-semibold text-[#0b182d] mb-3">
+              <p className="text-xl font-light tracking-wider uppercase text-[#0b182d] mb-4">
                 {item.title}
               </p>
 
               {/* Description */}
-              <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+              <p className="text-sm text-gray-600 leading-relaxed font-light">
                 {item.description}
               </p>
+              
+              {/* Decorative Accent */}
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-[#d4af37] group-hover:w-1/2 transition-all duration-500"></div>
             </div>
           </AnimatedGridCol>
         ))}

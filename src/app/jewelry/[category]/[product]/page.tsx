@@ -15,6 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: "Jewelry Not Found – B.V. Gems",
       description: "This jewelry item is currently unavailable at B.V. Gems.",
+      robots: { index: false, follow: true },
     };
   }
 
@@ -27,6 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: `Shop ${title}${
       gemstone ? ` with ${gemstone}` : ""
     } at B.V. Gems. Ethically sourced, crafted with precision, starting at $${price}. Free U.S. shipping on or above $200.`,
+    robots: { index: false, follow: true },
     openGraph: {
       title: `${title} | B.V. Gems`,
       description: `Explore ${title} at B.V. Gems. Ethically sourced gemstones, precision craftsmanship, insured delivery.`,

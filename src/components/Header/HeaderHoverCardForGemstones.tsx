@@ -6,17 +6,20 @@ import {
 import { Button, Center, Grid, GridCol, HoverCard, Image } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 export const HeaderHoverCardForGemstones = ({
   link,
   smallerTextFlag,
   pathname,
   menuItems,
+  user,
 }: any) => {
   const router = useRouter();
+  const [opened, setOpened] = useState(false);
 
   const handleNav = (query: string) => {
+    setOpened(false);
     router.push(`/loose-gemstones?${query}`);
   };
 
@@ -33,13 +36,11 @@ export const HeaderHoverCardForGemstones = ({
         <div className="px-3 py-2 rounded-sm hover:text-gray-500 text-[12px]">
           <Center>
             <span
-              className={`mr-1 ${
-                smallerTextFlag ? "text-[12px]" : "text-[15px]"
-              } ${
-                link.links?.some((item: any) => pathname === item.link)
+              className={`mr-1 ${smallerTextFlag ? "text-[12px]" : "text-[15px]"
+                } ${link.links?.some((item: any) => pathname === item.link)
                   ? "text-gray-400"
-                  : ""
-              }`}
+                  : "text-black"
+                }`}
             >
               {link.label}
             </span>
@@ -55,8 +56,32 @@ export const HeaderHoverCardForGemstones = ({
         <Grid className="w-full pl-8">
           <GridCol span={3}>
             <div className="mt-4">
-              <p className="font-semibold mb-5 text-sm uppercase">CALIBRATED GEMSTONES</p>
-              <div className="flex flex-col gap-2">{menuItems}</div>
+              <p className="font-semibold mb-5 text-sm uppercase text-black">
+                SHOP BY GEMSTONES
+              </p>
+              <div className="flex flex-col gap-2 text-black">
+                {link.links?.map((item: any) => (
+                  <div
+                    key={item.link}
+                    className="w-full px-4 py-2 rounded-md hover:bg-gray-100 cursor-pointer"
+                    onClick={() => {
+                        setOpened(false);
+                        router.push(item.link);
+                    }}
+                  >
+                    <div className="flex items-start gap-2">
+                      {item.image && (
+                        <div className="relative w-[20px] h-[20px] mt-1 shrink-0">
+                          <Image loading="lazy" src={item.image} fit="contain" h={20} w={20} />
+                        </div>
+                      )}
+                      <span className={`text-[17px] hover:text-gray-500 ${pathname === item.link ? "text-gray-400" : "text-black"}`}>
+                        {item.label}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
               <div className="flex justify-end pr-4">
                 <Button
                   variant="transparent"
@@ -77,8 +102,8 @@ export const HeaderHoverCardForGemstones = ({
 
           <GridCol span={3}>
             <div className="mt-4">
-              <p className="font-semibold mb-5 text-sm uppercase">SHOP BY SHAPE</p>
-              <div className="flex flex-col gap-2">
+              <p className="font-semibold mb-5 text-sm uppercase text-black">SHOP BY SHAPE</p>
+              <div className="flex flex-col gap-2 text-black">
                 {ShapeFilterList?.map((item, index) => (
                   <div
                     key={index}
@@ -97,8 +122,8 @@ export const HeaderHoverCardForGemstones = ({
 
           <GridCol span={3}>
             <div className="mt-4">
-              <p className="font-semibold mb-5 text-sm uppercase">SHOP BY COLOR</p>
-              <div className="flex flex-col gap-2">
+              <p className="font-semibold mb-5 text-sm uppercase text-black">SHOP BY COLOR</p>
+              <div className="flex flex-col gap-2 text-black">
                 {shopByColorOptions?.map((item, index) => (
                   <div
                     onClick={() =>
@@ -156,6 +181,19 @@ export const HeaderHoverCardForGemstones = ({
               >
                 VIEW ALL
               </Button>
+                <Button
+                  onClick={() => {
+                    router?.push("/special-page");
+                  }}
+                  className="mt-4"
+                  fullWidth
+                  variant="outline"
+                  color="#0b182d"
+                  size="sm"
+                  styles={{ root: { padding: '0 8px' } }}
+                >
+                  <span className="text-[13px] tracking-tight">FIND YOUR PERFECT STONE</span>
+                </Button>
             </div>
           </GridCol>
         </Grid>

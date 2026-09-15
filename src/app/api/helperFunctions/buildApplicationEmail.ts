@@ -41,12 +41,15 @@ export function buildApplicationEmail(
                 Company Address: ${
                   businessVerification.companyAddress || "N/A"
                 }<br/>
+                Apt, Suite: ${businessVerification.aptSuite || "N/A"}<br/>
                 Country: ${businessVerification.country || "N/A"}<br/>
                 State: ${businessVerification.state || "N/A"}<br/>
                 City: ${businessVerification.city || "N/A"}<br/>
+                ZIP Code: ${businessVerification.zipCode || "N/A"}<br/>
                 Company Website: ${
                   businessVerification.companyWebsite || "N/A"
-                }`
+                }<br/>
+                EIN / Tax ID: ${businessVerification.einNumber || "N/A"}`
                   : "N/A"
               }
             </td>

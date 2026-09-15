@@ -87,7 +87,7 @@ export const ProductCard = ({
 
   const redirectToProduct = () => {
     if (!node?.handle) return;
-    router.push(`/colorstone-layouts/${node.handle}`);
+    router.push(`/trade/layouts/${node.handle}`);
   };
 
   const displayImage = hoverPreviewImage || selectedImage || mainImage;

@@ -20,18 +20,18 @@ export const PaymentMethod = ({
   );
   const cart = cartStore((state: any) => state.cart);
   const isDisabled = () => {
+    console.log("Memo Debug: user object:", user);
+    console.log("Memo Debug: isMemoPurchaseApproved:", user?.isMemoPurchaseApproved);
     if (!user) return true;
 
     if (user.isMemoPurchaseApproved) {
-      const hasJewelry = cart?.some(
-        (item: any) => item?.product?.productType !== "stone",
-      );
-
-      return hasJewelry;
+      return false;
     }
 
     return true;
   };
+
+  console.log("Memo Debug: isDisabled() returned", isDisabled());
 
   return (
     <>
@@ -52,6 +52,24 @@ export const PaymentMethod = ({
                   color="#0b182d"
                 />
                 <PaymentOptions size={25} />
+              </div>
+              <div className="flex items-center gap-5">
+                <Radio
+                  value="memo"
+                  label="ON MEMO"
+                  size="md"
+                  color="#0b182d"
+                  disabled={isDisabled()}
+                />
+                <Button
+                  variant="subtle"
+                  color="blue"
+                  size="xs"
+                  onClick={open}
+                  className="ml-auto"
+                >
+                  View Terms
+                </Button>
               </div>
             </div>
           </Group>

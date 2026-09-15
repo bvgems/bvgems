@@ -22,7 +22,10 @@ type BusinessVerification = {
   country: string;
   state: string;
   city: string;
+  zipCode?: string;
+  aptSuite?: string;
   companyWebsite: string;
+  einNumber?: string;
 };
 
 type ShippingAddress = {

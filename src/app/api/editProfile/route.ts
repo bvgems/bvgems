@@ -1,10 +1,27 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/pool";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
+
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export async function POST(request: NextRequest) {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+
+    if (!token) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
+
     const body = await request.json();
     const { id, firstName, lastName, email, companyName, phoneNumber } = body;
+
+    if (decoded.id !== id) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+    }
 
     const updateQuery = `
       UPDATE app_users 
@@ -24,6 +41,8 @@ export async function POST(request: NextRequest) {
       email: user.email,
       companyName: user.company_name,
       phoneNumber: user.phone_number,
+      isMemoPurchaseApproved: user.is_memo_purchase_approved,
+      isMemoRequested: user.is_memo_requested,
     };
 
     return new Response(

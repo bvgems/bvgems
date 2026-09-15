@@ -262,11 +262,14 @@ export const sendMemoRequestEmail = async (user: any, cartItems: any) => {
     });
 
     return response?.data;
-  } catch (error) {
+  } catch (error: any) {
     console.log(
       "Something went wrong while fetching the orders from shopify",
       error,
     );
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
     return null;
   }
 };
@@ -500,6 +503,7 @@ export const applyForAccount = async (
   shippingAddress: any,
   businessReference: any,
   amlInfo: any,
+  userId?: string
 ) => {
   try {
     const response = await axios.post(`${baseUrl}/api/applyForAccount`, {
@@ -508,6 +512,7 @@ export const applyForAccount = async (
       shippingAddress,
       businessReference,
       amlInfo,
+      userId,
     });
 
     return response?.data;
@@ -812,5 +817,15 @@ export const getSearchResult = async (searchQuery: any, activeFilter: any) => {
     return response?.data?.data;
   } catch (error) {
     console.log("Something went wrong while storing the AML info");
+  }
+};
+
+export const getSpecialPageImages = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/getSpecialPageImages`);
+    return response?.data?.data;
+  } catch (error) {
+    console.log("Something went wrong while fetching special page images", error);
+    return [];
   }
 };

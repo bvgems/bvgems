@@ -1,6 +1,7 @@
 import { pool } from "@/lib/pool";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { verifyCartPrices } from "../lib/verifyCartPrices";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-08-27.basil",
@@ -24,12 +25,22 @@ export async function POST(req: Request) {
     const userId = user?.id || null;
     const guestEmail = !user?.id ? guestUser?.email || email : null;
 
+    // 🔒 VERIFY PRICES ON BACKEND BEFORE CHECKOUT
+    let verifiedCartItems = cartItems;
+    try {
+      verifiedCartItems = await verifyCartPrices(cartItems);
+      console.log("Cart prices successfully verified server-side");
+    } catch (err: any) {
+      console.error("Cart price verification failed:", err);
+      return NextResponse.json({ error: "Failed to verify cart prices" }, { status: 400 });
+    }
+
     // 🧾 Store cart in DB for reference
     const result = await pool.query(
       `INSERT INTO checkout_carts (cart, user_id, guest_email)
        VALUES ($1, $2, $3)
        RETURNING id`,
-      [JSON.stringify(cartItems), userId, guestEmail],
+      [JSON.stringify(verifiedCartItems), userId, guestEmail],
     );
     const cartId = result.rows[0].id;
 
@@ -42,7 +53,7 @@ export async function POST(req: Request) {
     let subtotal = 0;
 
     // 🧮 Build line items and compute subtotal
-    const line_items = cartItems.map((item: any) => {
+    const line_items = verifiedCartItems.map((item: any) => {
       let amount = 0;
       const product = item?.product ?? {};
       const isCalibrated = product?.productType === "stone";

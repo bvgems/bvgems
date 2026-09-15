@@ -9,6 +9,7 @@ import { applyForAccount, editAMLInfo, getAMLInfo } from "@/apis/api";
 import { AML_OPTIONS } from "@/utils/constants";
 import { useStpperStore } from "@/store/useStepperStore";
 import { useRouter } from "next/navigation";
+import { sendGAEvent } from "@next/third-parties/google";
 
 export const AMLInfo = ({ isStepper }: any) => {
   const router = useRouter();
@@ -71,7 +72,8 @@ export const AMLInfo = ({ isStepper }: any) => {
         businessVerification,
         shippingAddress,
         businessReference,
-        values
+        values,
+        user?.id
       );
 
       if (response?.flag) {
@@ -115,6 +117,7 @@ export const AMLInfo = ({ isStepper }: any) => {
         await new Promise((resolve) => setTimeout(resolve, 300));
         setAmlInfo(values);
         await applyAccount(values);
+        sendGAEvent("event", "trade_application_submitted", { user_id: user?.id });
         router?.push("/");
       } else if (user?.id) {
         const response = await editAMLInfo(user.id, values);
@@ -146,6 +149,7 @@ export const AMLInfo = ({ isStepper }: any) => {
     try {
       setIsLoading(true);
       await applyAccount(amlInfo);
+      sendGAEvent("event", "trade_application_submitted", { user_id: user?.id });
       router.push("/");
     } catch (error: any) {
       notifications.show({

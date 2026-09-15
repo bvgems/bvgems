@@ -7,33 +7,82 @@ import Link from "next/link";
 
 export function Hero({ jewelryRef, heroData }: any) {
   const router = useRouter();
-  const isMobile = useMediaQuery("(max-width: 908px)");
 
   return (
-    <Link
-      href="/jewelry/bracelets"
-      className="relative w-full h-[550px] bg-white overflow-hidden cursor-pointer block no-underline"
-    >
-      {/* Hero Image */}
-      <div className="w-full h-full absolute top-0 left-0 z-10">
-        <Image
-          src={
-            isMobile
-              ? heroData?.heroData?.page?.metafields[0]?.references?.edges[1]
-                  ?.node?.image?.url || "/assets/hero-bg2.webp"
-              : heroData?.heroData?.page?.metafields[0]?.references?.edges[0]
-                  ?.node?.image?.url || "/assets/hero-bg2.webp"
-          }
-          alt="Hero Image"
-          fill
-          priority
-          className="object-cover"
-        />
+    <div className="w-full flex flex-col">
+      {/* Two Doors Section */}
+      <div className="flex flex-col md:flex-row w-full h-[600px] md:h-[550px]">
+        {/* Door 1: Calibrated Stones */}
+        <Link
+          href="/special-page"
+          className="relative flex-1 group overflow-hidden border-b-2 md:border-b-0 md:border-r-2 border-white"
+        >
+          <Image loading="lazy"
+            src="/assets/shopify/raw_5b0afe2d-24fd-4837-9272-a3649b33c9f8.png" // Placeholder or use an actual appropriate image
+            alt="Calibrated & Free Size Stones"
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-black/40 transition-opacity duration-300 group-hover:bg-black/20" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 text-white">
+            <h2 className="text-4xl md:text-5xl font-light tracking-wider mb-4 uppercase drop-shadow-lg">
+              Calibrated & Free Size
+            </h2>
+            <p className="text-lg md:text-xl font-light mb-6 tracking-wide drop-shadow-md">
+              Experts in precision-cut stones and unique free size gems
+            </p>
+            <button className="px-8 py-3 bg-white text-black text-sm uppercase tracking-widest font-semibold hover:bg-gray-100 transition-colors">
+              Shop Stones
+            </button>
+          </div>
+        </Link>
+
+        {/* Door 2: Matching Pairs & Layouts */}
+        <Link
+          href="/trade/layouts"
+          className="relative flex-1 group overflow-hidden"
+        >
+          <Image loading="lazy"
+            src="/assets/hero-bg2.webp" // Existing jewelry background or layout background
+            alt="Matching Pairs and Layouts"
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-black/40 transition-opacity duration-300 group-hover:bg-black/20" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 text-white">
+            <h2 className="text-4xl md:text-5xl font-light tracking-wider mb-4 uppercase drop-shadow-lg">
+              Pairs & Layouts
+            </h2>
+            <p className="text-lg md:text-xl font-light mb-6 tracking-wide drop-shadow-md">
+              Expertly matched stone pairs and curated layouts
+            </p>
+            <button className="px-8 py-3 bg-white text-black text-sm uppercase tracking-widest font-semibold hover:bg-gray-100 transition-colors">
+              Explore Layouts
+            </button>
+          </div>
+        </Link>
       </div>
 
-      {/* Optional dark overlay for mobile */}
-      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-10 md:opacity-0 z-20 pointer-events-none" />
-    </Link>
+      {/* Trust Strip */}
+      <div className="w-full bg-[#0b182d] text-white py-6 px-4 flex justify-center">
+        <div className="max-w-5xl flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 text-center md:text-left text-sm md:text-base font-light tracking-wide">
+          <div className="flex items-center gap-3">
+            <span className="text-xl">📍</span>
+            <span>Working with a wide range of wholesalers in the heart of NYC’s Diamond District</span>
+          </div>
+          <div className="hidden md:block w-px h-6 bg-white/30" />
+          <div className="flex items-center gap-3">
+            <span className="text-xl">💎</span>
+            <span>Ethically sourced, precision-calibrated gemstones</span>
+          </div>
+          <div className="hidden md:block w-px h-6 bg-white/30" />
+          <div className="flex items-center gap-3">
+            <span className="text-xl">🤝</span>
+            <span>Trusted by jewelers nationwide for generations</span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -1,0 +1,1003 @@
+Unnamed: 0,Item,Shape,Color,Stock Pcs.,Stock Wt.,Description,Cp Std,Size,Origin,Gem Type
+1.0,BRD00001105,RD,Brown,1.0,1.05,Brown Sapphire Round 6.80,41.0,06.80,,Sapp
+1.0,ECU00001300,CUS,Green,1.0,3.0,Zambian emerald cushion 9.2 x 7.4,100.0,09.20 x 07.40,Zambia,Emld
+1.0,ECU00002266,CUS,Green,1.0,2.66,Zambian emerald cushion 10.0x7.4,100.0,10.00 x 07.40,Zambia,Emld
+1.0,ECU00003239,CUS,Green,1.0,2.39,Zambian emerald cushion 10.0x7.2,100.0,10.00 x 07.20,Zambia,Emld
+1.0,ECU00004218,CUS,Green,1.0,2.18,Zambian emerald cushion 8.4 X 7.3,100.0,08.40 x 07.30,Zambia,Emld
+1.0,ECU00005195,CUS,Green,1.0,1.95,Zambian emerald cushion 8.7 x 6.6,100.0,08.70 x 06.60,Zambia,Emld
+1.0,ECU00006192,CUS,Green,1.0,1.92,Zambian emerald cushion 9.4x7.1,100.0,09.40 x 07.10,Zambia,Emld
+1.0,ECU00007189,CUS,Green,1.0,1.89,Zambian emerald cushion 8.8 x 6.4,100.0,08.80 x 06.40,Zambia,Emld
+1.0,ECU00009592,CUS,Green,1.0,5.92,Zambian emerald cushion 12.07 x 10.0,45.0,12.07 x 10.00,Zambia,Emld
+1.0,ECU00011531,CUS,Green,1.0,5.31,"Zambian Emerald cushion 12.13 x 9.70 x 6.84 mm, 5.31 carats , F1, GIA Report Number: 5241031965",1500.0,12.13 x 09.70,Zambia,Emld
+1.0,EEC000011032,E/C,Green,1.0,10.32,Zambian emerald cut 16.8 x 12.7,100.0,16.80 x 12.70,Zambia,Emld
+1.0,EEC00001486,S.E/C,Green,1.0,4.86,Green Emerald S.E/C 11.5 x 8.2,280.0,11.50 x 08.20,,Emld
+1.0,EEC00002975,E/C,Green,1.0,9.75,Zambian emerald cut 13.9 x 12.0,280.0,13.90 x 12.00,Zambia,Emld
+1.0,EEC00003573,S.E/C,Green,1.0,5.73,Zambian square emerald cut 11 x 11,100.0,11.00 x 11.00,Zambia,Emld
+1.0,EEC00003975,E/C,Green,1.0,9.75,Zambian emerald cut 14.1 x 11.6,100.0,14.10 x 11.60,Zambia,Emld
+1.0,EEC00004828,E/C,Green,1.0,8.28,Green Emerald E/C 12.76 x 9.85MM,190.0,12.76 x 09.85,,Emld
+1.0,EEC00005431,SQ,Green,1.0,4.31,Emerald Square 9.7 x 9.6,100.0,09.70 x 09.60,,Emld
+1.0,EEC00005828,E/C,Green,1.0,8.28,Zambian emerald cut 14.3 x 9.9,130.0,14.30 x 09.90,Zambia,Emld
+1.0,EEC00006391,S.E/C,Green,1.0,3.91,Green Emerald S.E/C 10.17x10.17MM,230.0,10.17 x 10.17,,Emld
+1.0,EEC00006733,E/C,Green,1.0,7.33,"Green Emerald E/C 10.0x13.3MM                                                                                          GIA CERTIFIED ""F1"" STONE & REPOET NUMBER:-2231653894",230.0,13.30 x 10.00,,Emld
+1.0,EEC00007389,S.E/C,Green,1.0,3.89,Zambian square emerald cut 8.4 x 7.8,100.0,08.40 x 07.80,Zambia,Emld
+1.0,EEC00007610,E/C,Green,1.0,6.1,Zambian emerald cut 12.3 x 8.7,100.0,12.30 x 08.70,Zambia,Emld
+1.0,EEC00008306,S.E/C,Green,1.0,3.06,Zambian square emerald cut 8.6 x 7.7,100.0,08.60 x 07.70,Zambia,Emld
+1.0,EEC00008596,E/C,Green,1.0,5.96,Zambian emerald cut 12.1 x 9.2,100.0,12.10 x 09.20,Zambia,Emld
+1.0,EEC00009263,S.E/C,Green,1.0,2.63,Zambian square emerald cut 9.0 x 7.9,210.0,09.00 x 07.90,Zambia,Emld
+1.0,EEC00009544,E/C,Green,1.0,5.44,Zambian emerald cut 10.8 x 8.8,100.0,10.80 x 08.80,Zambia,Emld
+1.0,EEC00010235,S.E/C,Green,1.0,2.35,Zambian square emerald cut 8.00,100.0,08.00,Zambia,Emld
+1.0,EEC00010511,E/C,Green,1.0,5.11,Green Emerald E/C 13.5x8.0MM,230.0,13.50 x 08.00,,Emld
+1.0,EEC00011700,E/C,Green,1.0,7.0,Green Emerald E/C 10.95 x 10.7,230.0,10.95 x 10.70,,Emld
+1.0,EEC00012119,SQ,Green,1.0,1.19,Emerald square 6.2 x 6.2,10.0,06.20 x 06.20,,Emld
+1.0,EEC00012422,E/C,Green,1.0,4.22,Zambian emerald cut 12.8 x 9.0,100.0,12.80 x 09.00,Zambia,Emld
+1.0,EEC00013418,E/C,Green,1.0,4.18,Green Emerald E/C 12.3x9.0MM,230.0,12.30 x 09.00,,Emld
+1.0,EEC00013749,S.E/C,Green,2.0,7.49,Zambian Emerald Square E/C 9.5 x 8.5,100.0,09.50 x 08.50,Zambia,Emld
+1.0,EEC00014384,E/C,Green,1.0,3.84,Green Emerald E/C 10.5x7.5MM,230.0,10.50 x 07.50,,Emld
+1.0,EEC00015284,S.E/C,Green,1.0,2.84,Zambian Emerald S.E/C 8.3x7.5,100.0,08.30 x 07.50,Zambia,Emld
+1.0,EEC00015346,E/C,Green,1.0,3.46,Green Emerald E/C 9.8 x 8.4,230.0,09.80 x 08.40,,Emld
+1.0,EEC00015661,S.E/C,Green,1.0,3.54,Green Emerald E/C 9.08x8.02MM,230.0,09.08 x 08.02,,Emld
+1.0,EEC00017857,E/C,Green,2.0,8.57,Green Emerald E/C 11.1 x 8.8|10.9x8.9,230.0,11.10 x 08.80 | 10.90 x 08.90,,Emld
+1.0,EEC00018642,E/C,Green,2.0,6.42,Green Emerald E/C 10.4x7.7|9.4x7.4MM,230.0,10.40 x 07.70 | 09.40 x 07.40,,Emld
+1.0,EEC00019221,E/C,Green,1.0,2.21,Green Emerald E/C 10.3x6.2MM,275.0,10.30 x 06.20,,Emld
+1.0,EEC00023270,E/C,Green,1.0,2.99,Zambian emerald cut 12.0 X 7.1,230.0,12.00 x 07.10,Zambia,Emld
+1.0,EEC00026225,E/C,Green,1.0,2.25,Emerald  Cut 8.9x6.9,50.0,08.90 x 06.90,,Emld
+1.0,EEC00028167,E/C,Green,1.0,1.67,Zambian emerald cut 7.9x5.9,100.0,07.90 x 05.90,Zambia,Emld
+1.0,EEC00029326,E/C,Green,1.0,3.26,Zambian emerald cut 9.2 x 7.9,100.0,09.20 x 07.90,Zambia,Emld
+1.0,EEC00031292,E/C,Green,1.0,2.92,Zambian Emerald E/C 9.7x8.0,55.0,09.70 x 08.00,Zambia,Emld
+1.0,EEC00034273,E/C,Green,1.0,2.73,Emerald E/C 9.0 x 7.0,50.0,09.00 x 07.00,,Emld
+1.0,EEC00036261,E/C,Green,1.0,2.61,Zambian Emerald E/C 9.1 x 7,55.0,09.10 x 07.00,Zambia,Emld
+1.0,EEC00038255,E/C,Green,1.0,2.55,Zambian Emerald E/C 8.9x7.0,55.0,08.90 x 07.00,Zambia,Emld
+1.0,EEC00039249,E/C,Green,1.0,2.49,Emerald cut 8.6 x 6.8,90.0,08.60 x 06.80,,Emld
+1.0,EEC00040249,E/C,Green,1.0,2.49,Zambian Emerald E/C 9.0x6.9,55.0,09.00 x 06.90,Zambia,Emld
+1.0,EEC00041245,E/C,Green,1.0,2.45,Zambian emerald cut 8.7 x 6.8,100.0,08.70 x 06.80,Zambia,Emld
+1.0,EEC00042245,E/C,Green,1.0,2.45,Zambian Emerald E/C 8.8 x 6.8,55.0,08.80 x 06.80,Zambia,Emld
+1.0,EEC00044240,E/C,Green,1.0,2.4,Zambian Emerald E/C 9 x 7,55.0,09.00 x 07.00,Zambia,Emld
+1.0,EEC00045234,E/C,Green,1.0,2.34,Zambian elongated emerald cut 10.6 x 5.8,100.0,10.60 x 05.80,Zambia,Emld
+1.0,EEC00046233,E/C,Green,1.0,2.33,Zambian Emerald E/C 9.0x6.8,55.0,09.00 x 06.80,Zambia,Emld
+1.0,EEC00047209,E/C,Green,1.0,2.09,Zambian Emerald E/C 8.8 x 6.8,55.0,08.80 x 06.80,Zambia,Emld
+1.0,EEC00048194,E/C,Green,1.0,1.94,Zambian Emerald E/C 8.6 x 6.8,55.0,08.60 x 06.80,Zambia,Emld
+1.0,EEC00049187,E/C,Green,1.0,1.87,Zambian emerald cut 8.4 x 5.5,100.0,08.40 x 05.50,Zambia,Emld
+1.0,EEC00051154,E/C,Green,1.0,1.54,Zambian emerald cut 7.7 x 5.9,100.0,07.70 x 05.90,Zambia,Emld
+1.0,EEC00052158,E/C,Green,1.0,1.58,Emerald cut 8.0 x 6.0,70.0,08.00 x 06.00,,Emld
+1.0,EEC00053158,E/C,Green,1.0,1.58,Zambian emerald cut 8.9 x 5.6,100.0,08.90 x 05.60,Zambia,Emld
+1.0,EEC00054169,E/C,Green,1.0,1.69,Zambian emerald cut 7.7 x 6.0,100.0,07.70 x 06.00,Zambia,Emld
+1.0,EEC00056166,E/C,Green,2.0,1.66,Zambian Emerald E/C 6.3x4.5|7.6x4.7,80.0,06.30 x 04.50 | 07.60 x 04.70,Zambia,Emld
+1.0,EEC00057107,E/C,Green,1.0,1.07,Zambian Emerald E/C 7.4 x 5.9,80.0,07.40 x 05.90,Zambia,Emld
+1.0,EEC00058575,S.E/C,Green,1.0,5.75,Zambian square emerald cut 11.6 x 10.4,50.0,11.60 x 10.40,Zambia,Emld
+1.0,EEC00060171,S.E/C,Green,1.0,1.71,Zambian Emerald S.E/C 7.95x6.37,80.0,07.95 x 06.37,Zambia,Emld
+1.0,EEC00061146,S.E/C,Green,1.0,1.46,Zambian Emerald S.E/C 7.3x5.5,80.0,07.30 x 05.50,Zambia,Emld
+1.0,EEC00063468,E/C,Green,2.0,4.68,Zambian Emerald E/C 9.0x7.0,55.0,09.00 x 07.00,Zambia,Emld
+1.0,EEC00069176,S.E/C,Green,2.0,1.76,Zambian Emerald S.E/C 6.3x5.9 | 6x5,80.0,06.30 x 05.90 | 06.00 x 05.00,Zambia,Emld
+1.0,EEC00070186,S.E/C,Green,1.0,1.86,Zambian square emerald cut 6.90,100.0,06.90,Zambia,Emld
+1.0,EEC00071155,SQ,Green,1.0,1.55,Emerald square 6.8 x 6.5,30.0,06.80 x 06.50,,Emld
+1.0,EEC00072139,SQ,Green,2.0,1.39,Emerald square 5.9 X 5.2,60.0,05.90 x 05.20,,Emld
+1.0,EEC00075191,SQ,Green,1.0,1.9,Emerald square 6.90 x 6.80,30.0,06.90 x 06.80,,Emld
+1.0,EEC00076177,SQ,Green,2.0,1.77,Emerald cut 7.6 x 5.2,75.0,07.60 x 05.20,,Emld
+1.0,EEC00077177,E/C,Green,2.0,1.77,Emerald cut 6.7 x 4.9,30.0,06.70 x 04.90,,Emld
+1.0,EEC00078101,SQ,Green,1.0,1.01,Emerald Square 7.0 x 6.6,30.0,07.00 x 06.60,,Emld
+1.0,EEC00084121,SQ,Green,1.0,1.21,Emerald square 6.1 X 6.0,60.0,06.10 x 06.00,,Emld
+1.0,EEC00088156,S.E/C,Green,1.0,1.56,Square Emerald cut 8.15 X 5.30,30.0,08.15 x 05.30,,Emld
+1.0,EEC00089103,SQ,Green,1.0,1.03,Emerald square 7.80 X 4.90,30.0,07.80 x 04.90,,Emld
+1.0,EEC00096263,EC,Green,1.0,2.63,EMERALD E/C 8.9x7.1,45.0,08.90 x 07.10,,Emld
+1.0,EEC00097259,EC,Green,1.0,2.59,EMERALD E/C 8.8x6.9,45.0,08.80 x 06.90,,Emld
+1.0,EEC00098209,EC,Green,1.0,2.09,EMERALD E/C 8.7x6.8,45.0,08.70 x 06.80,,Emld
+1.0,EEC00099199,EC,Green,1.0,1.99,EMERALD E/C 8.9x6.9,45.0,08.90 x 06.90,,Emld
+1.0,EEC00100115,EC,Green,1.0,1.15,EMERALD E/C 8.0x5.8,45.0,08.00 x 05.80,,Emld
+1.0,EEC00101242,EC,Green,1.0,2.42,EMERALD E/C 9X7,45.0,09.00 x 07.00,,Emld
+1.0,EEC00102210,EC,Green,1.0,2.1,EMERALD E/C 9.0x6.9,45.0,09.00 x 06.90,,Emld
+1.0,EEC00103096,EC,Green,1.0,0.96,EMERALD E/C 8X5,45.0,08.00 x 05.00,,Emld
+1.0,EEC0010380,E/C,Green,1.0,3.8,Zambian E/C ,1250.0,08.60 x 08.60,Zambia,Emld
+1.0,EEC00104170,EC,Green,1.0,1.7,EMERALD E/C 8.4x6.6,45.0,08.40 x 06.60,,Emld
+1.0,EEC00105179,EC,Green,1.0,1.79,EMERALD E/C 10.2x5.3,45.0,10.20 x 05.30,,Emld
+1.0,EEC00106305,EC,Green,1.0,3.05,Emerald E/C 9.3x7.4,45.0,09.30 x 07.40,,Emld
+1.0,EEC00107321,EC,Green,2.0,3.21,EMERALD E/C 8.1x6.1,100.0,08.10 x 06.10,,Emld
+1.0,EEC00108326,EC,Green,2.0,3.26,EMERALD E/C 8.1x6.1|7.8x5.9,100.0,08.10 x 06.10 | 07.80 x 05.90,,Emld
+1.0,EEC00109308,EC,Green,2.0,3.08,EMERALD E/C 8.1x6.0,100.0,08.10 x 06.00,,Emld
+1.0,EEC00110320,EC,Green,2.0,3.2,EMERALD E/C 8.1x6.0|7.8x6.0,100.0,08.10 x 06.00 | 07.80 x 06.00,,Emld
+1.0,EEC00111248,EC,Green,1.0,2.48,EMERALD E/C 8.5x6.6,45.0,08.50 x 06.60,,Emld
+1.0,EEC00112243,EC,Green,1.0,2.43,EMERALD E/C 9.0 x 7.0,45.0,09.00 x 07.00,,Emld
+1.0,EEC00113225,EC,Green,1.0,2.25,EMERALD E/C 8.85x7.25,45.0,08.85 x 07.25,,Emld
+1.0,EEC00114208,EC,Green,1.0,2.08,EMERALD E/C 8.7 x 6.8,45.0,08.70 x 06.80,,Emld
+1.0,EEC00115183,EC,Green,1.0,1.83,EMERALD E/C 8.0 x 6.2,45.0,08.00 x 06.20,,Emld
+1.0,EEC00116179,EC,Green,1.0,1.79,EMERALD E/C 8.0 x 6.2,45.0,08.00 x 06.20,,Emld
+1.0,EEC0011715,E/C,Green,1.0,7.15,COLUMBIAN E/C,1850.0,13.20 x 09.50,Colombia,Emld
+1.0,EEC00117207,EC,Green,1.0,2.07,EMERALD E/C 10.3x6.2,45.0,10.30 x 06.20,,Emld
+1.0,EEC00118148,EC,Green,1.0,1.48,EMERALD E/C 7.8 x 6.0,45.0,07.80 x 06.00,,Emld
+1.0,EEC00119136,EC,Green,1.0,1.36,EMERALD E/C 8.0 x 6.0,45.0,08.00 x 06.00,,Emld
+1.0,EEC00120132,EC,Green,1.0,1.32,EMERALD E/C 7.6x5.6,45.0,07.60 x 05.60,,Emld
+1.0,EEC00121132,EC,Green,1.0,1.32,EMERALD E/C 8.0 x 6.0,45.0,08.00 x 06.00,,Emld
+1.0,EEC00122075,EC,Green,1.0,0.75,EMERALD E/C 7.0 x 5.0,45.0,07.00 x 05.00,,Emld
+1.0,EEC00123392,EC,Green,1.0,3.92,"EMERALD EMERALD CUT 10.85 x 8.94                                                                                      BELLEROPHON CERTIFIED WITH ""BRAZIL"" ORIGIN AND REPORT NO:-A13434",200.0,10.85 x 08.94,Brazil,Emld
+1.0,EEC00124361,AC,Green,0.0,,EMERALD ASSCHER CUT PAIR 7.9 x 7.5|8.0 x 7.2,300.0,07.90 x 07.50 | 08.00 x 07.20,,Emld
+1.0,EEC00125166,E/C,Green,1.0,1.66,Emerald cut 7.8 x 6.2,30.0,07.80 x 06.20,,Emld
+1.0,EEC00126145,E/C,Green,1.0,1.45,Emerald cut 7.8 x 6.0,30.0,07.80 x 06.00,,Emld
+1.0,EEC00128375,E/C,Green,1.0,3.75,Zambian Emerald E/C,55.0,09.60 x 07.60,Zambia,Emld
+1.0,EEC001291025,E/C,Green,0.0,10.25, Emerald E/C 4.0x3.0,210.0,04.00 x 03.00,,Emld
+1.0,EEC00130226,E/C,Green,1.0,2.26, Emerald E/C ,50.0,,,Emld
+1.0,EEC00131151,E/C,Green,1.0,1.51, Emerald E/C ,50.0,,,Emld
+1.0,EEC00132130,E/C,Green,1.0,1.3, Emerald E/C ,50.0,,,Emld
+1.0,EEC00133176,E/C,Green,1.0,1.76, Emerald E/C ,50.0,,,Emld
+1.0,EEC0013400,E/C,Green,1.0,4.0,Zambian Emerald Cut ,1250.0,10.20 x 08.80,Zambia,Emld
+1.0,EEC00134357,E/C,Green,2.0,3.57, Emerald E/C ,50.0,,,Emld
+1.0,EEC00141342,PS,Green,2.0,3.42,Columbian Emerald E/C 9 x 7 ,40.0,09.00 x 07.00,Colombia,Emld
+1.0,EEC00142653,EC,Green,2.0,6.53,Columbian Emerald Asscher 9 x 9  ,40.0,09.00 x 09.00,Colombia,Emld
+1.0,EEC00143265,EC,Green,1.0,2.65,Columbian Emerald Asscher 9 x 9  ,40.0,09.00 x 09.00,Colombia,Emld
+1.0,EEC0014350,E/C,Green,1.0,3.5,Zambian Emerald Cut ,1250.0,09.00 x 09.00,Zambia,Emld
+1.0,EEC00144225,EC,Green,1.0,2.25,Columbian Emerald Emerald Cut 8 x 6.5,40.0,08.00 x 06.50,Colombia,Emld
+1.0,EEC00145375,EC,Green,1.0,3.75,Columbian Emerald Emerald Cut 9 x 8 ,40.0,09.00 x 08.00,Colombia,Emld
+1.0,EEC00146443,EC,Green,1.0,4.43,Columbian Emerald Emerald Cut 10.6 x 9.3,40.0,10.60 x 09.30,Colombia,Emld
+1.0,EEC00147449,EC,Green,1.0,4.49,Columbian Emerald Emerald Cut 10.2 x 10.2,40.0,10.20 x 10.20,Colombia,Emld
+1.0,EEC00148256,EC,Green,1.0,2.56,Columbian Emerald Emerald Cut 9 x 7 ,40.0,09.00 x 07.00,Colombia,Emld
+1.0,EEC00149254,EC,Green,1.0,2.54,Emerald Emerald Cut 9.60 x 7.80,73.0,09.60 x 07.80,,Emld
+1.0,EEC00150337,EC,Green,1.0,3.37,Emerald Emerald Cut 11.40 x 8.30,73.0,11.40 x 08.30,,Emld
+1.0,EEC00151314,EC,Green,1.0,3.14,Emerald Emerald Cut 10.60 x 6.90,73.0,10.60 x 06.90,,Emld
+1.0,EEC00152325,EC,Green,1.0,3.25,Emerald Emerald Cut 10.00 x 8.40,73.0,10.00 x 08.40,,Emld
+1.0,EEC00153313,EC,Green,1.0,3.13,Emerald Emerald Cut 10.30 X 7.74,73.0,10.30 x 07.74,,Emld
+1.0,EEC00154243,EC,Green,1.0,2.43,Emerald Emerald Cut 8.00 X 7.80,73.0,08.00 x 07.80,,Emld
+1.0,EEC00155109,EC,Green,1.0,1.09,Emerald Emerald Cut 7.70 X 5.20,73.0,07.70 x 05.20,,Emld
+1.0,EEC00156115,EC,Green,1.0,1.15,Emerald Emerald Cut 7.40 X 6.00,73.0,07.40 x 06.00,,Emld
+1.0,EEC00157181,EC,Green,1.0,1.81,Emerald Emerald Cut 10.00 X 6.00,73.0,10.00 x 06.00,,Emld
+1.0,EEC00158193,EC,Green,1.0,1.93,Emerald Emerald Cut 9.80 X 6.75,73.0,09.80 x 06.75,,Emld
+1.0,EEC00159416,EC,Green,1.0,4.16,"Zambian Emerald Emerald Cut 10.96 x 8.81 x 5.89 mm, 4.16 carats. No Oil, GIA report number: 1242032065",3000.0,10.96 x 08.81,Zambia,Emld
+1.0,EEC00160525,EC,Green,1.0,5.25,"Zambian Emerald Emerald Cut 11.10 x 8.81 x 6.62 mm, 5.25 carats. F2, GIA report number: 2245032021",1000.0,11.10 x 08.81,Zambia,Emld
+1.0,EEC0016458,E/C,Green,1.0,4.58,Zambian Emerald Cut ,1250.0,13.50 x 09.70,Zambia,Emld
+1.0,EEC00165105,EC,Green,1.0,1.05,Emerald Emerald Cut 7.22 x 5.22,550.0,07.22 x 05.22,,Emld
+1.0,EEC00166129,EC,Green,1.0,1.29,Emerald Emerald Cut 8.55 x 4.89,550.0,08.55 x 04.89,,Emld
+1.0,EEC00167405,EC,Green,1.0,4.05,"Zambian Emerald Emerald Cut 11.19 x 9.36 x 5.62 mm, 4.05 carats. F2, GIA report number: 1246032040",900.0,11.19 x 09.36,Zambia,Emld
+1.0,EEC00168552,EC,Green,1.0,5.52,"Zambian Emerald Emerald Cut 12.07 x 9.21 x 5.85 mm, 5.52 carats. F2, GIA report number: 5242032088",600.0,12.07 x 09.21,Zambia,Emld
+1.0,EEC0027438,E/C,Green,1.0,4.38,Zambian emerald cut,150.0,10.30 x 08.90,Zambia,Emld
+1.0,EEC0028374,E/C,Green,1.0,3.74,Zambian emerald cut,120.0,09.40 x 07.90,Zambia,Emld
+1.0,EEC0049165,EC,Green,1.0,1.65,Emerald 9.0x7.0 MM,10.0,09.00 x 07.00,,Emld
+1.0,EHS00001477,TRI,Green,1.0,4.77,Zambian emerald trillion 11.5 x 10.3,100.0,11.50 x 10.30,Zambia,Emld
+1.0,EHS00004081,HS,Green,1.0,0.81,Zambian Emerald Heart Shape 6.1 x 5.8,100.0,06.10 x 05.80,Zambia,Emld
+1.0,EHS00007158,HS,Green,1.0,1.58,Colombian Emearald heart 8.7 x 8.1,60.0,08.70 x 08.10,,Emld
+1.0,EHS00008141,HS,Green,2.0,1.41,EMERALD HEART SHAPE 6.0MM,50.0,06.00,,Emld
+1.0,EHS00009227,HS,Green,1.0,2.27,"COLUMBIAN EMERALD HEART SHAPE 9.00MM                                                                        IGI CERTIFIED REPORT NUMBER:-""668443904",310.0,09.00,Colombia,Emld
+1.0,EHS00010195,HS,Green,2.0,1.95,EMERALD HEART SHAPE 7.35 X 6.70,70.0,07.35 x 06.70,,Emld
+1.0,EHS00011078,HS,Green,1.0,0.78,EMERALD HEART SHAPE 6.83 X 5.95,73.0,06.83 x 05.95,,Emld
+1.0,EMIX00001344,,,0.0,3.44,MIX SIZES,330.0,MIX SIZES,,Emld
+1.0,EMQ00001278,E/C,Green,1.0,2.78,Emerald cut 12.88 x 6.63,50.0,12.88 x 06.63,,Emld
+1.0,EMQ00008365,E/C,Green,2.0,3.65,Emerald cut 12.0 x 6.0,41.0,12.00 x 06.00,,Emld
+1.0,EMQ00009431,MQ,Green,1.0,4.31,"Zambian Emerald Marquise 17.29 x 7.90 x 5.32 mm, 4.31 carats. F2, GIA report number: 1246031938",600.0,17.29 x 07.90,Zambia,Emld
+1.0,EOV000021308,OV,Green,1.0,13.08,Zambian emerald Oval 18.0 x 13.9,150.0,18.00 x 13.90,Zambia,Emld
+1.0,EOV000031109,OV,Green,1.0,11.09,Emerald Oval 19.5 x 12.7,100.0,19.50 x 12.70,,Emld
+1.0,EOV00004978,OV,Green,1.0,9.78,Zambian emerald Oval 16.41 x 12.82,150.0,16.41 x 12.82,Zambia,Emld
+1.0,EOV00005888,OV,Green,1.0,8.88,Emerald Oval 17.3 x 12.6,100.0,17.30 x 12.60,,Emld
+1.0,EOV00007660,OV,Green,1.0,6.6,Emerald Oval 12.7 x 10.3,23.0,12.70 x 10.30,,Emld
+1.0,EOV00008636,OV,Green,1.0,6.36,Emerald Oval 13.5 x 10.6,27.0,13.50 x 10.60,,Emld
+1.0,EOV00009586,OV,Green,1.0,5.86,Zambian emerald Oval 13.8 x 11.4,150.0,13.80 x 11.40,Zambia,Emld
+1.0,EOV00011448,OV,Green,1.0,4.48,Emerald Oval 11.2x8.6 MM,10.0,11.20 x 08.60,,Emld
+1.0,EOV00012441,OV,Green,1.0,4.41,Emerald Oval 12.66 x 9.7,15.0,12.66 x 09.70,,Emld
+1.0,EOV00016406,OV,Green,1.0,4.06,Zambian emerald Oval 12.5 x 9.4,270.0,12.50 x 09.40,Zambia,Emld
+1.0,EOV00017396,OV,Green,1.0,3.96,Emerald Oval 11.2x9.3 MM,10.0,11.20 x 09.30,,Emld
+1.0,EOV00019383,OV,Green,1.0,3.83,Zambian emerald Oval 11.6 x 9.4,100.0,11.60 x 09.40,Zambia,Emld
+1.0,EOV00020175,OV,Green,1.0,1.75,Emerald Oval 9.0 x 7.17,10.0,09.00 x 07.17,,Emld
+1.0,EOV00021189,OV,Green,1.0,1.89,Emerald Oval 9.0 x 7.0,10.0,09.00 x 07.00,,Emld
+1.0,EOV00021375,OV,Green,1.0,3.75,Emerald Oval 13.1 x 9.7,18.0,13.10 x 09.70,,Emld
+1.0,EOV00022249,OV,Green,1.0,2.49,Emerald Oval 9.1 x 7.7,10.0,09.10 x 07.70,,Emld
+1.0,EOV00023205,OV,Green,1.0,2.05,Emerald Oval 9.90 x 7.8,10.0,09.90 x 07.80,,Emld
+1.0,EOV00024224,OV,Green,1.0,2.24,Emerald Oval 9.0 x 7.0,10.0,09.00 x 07.00,,Emld
+1.0,EOV00024365,OV,Green,1.0,3.65,Emerald Oval 10.6 x 10.9,12.0,10.90 x 10.60,,Emld
+1.0,EOV00025210,OV,Green,1.0,2.1,Emerald Oval 9.10 x 7.12,10.0,09.10 x 07.12,,Emld
+1.0,EOV00026199,OV,Green,1.0,1.99,Emerald Oval 9.0 x 7.0,10.0,09.00 x 07.00,,Emld
+1.0,EOV00027257,OV,Green,1.0,2.57,Emerald Oval 9.2 x 7.24,10.0,09.20 x 07.24,,Emld
+1.0,EOV00027360,OV,Green,1.0,3.6,Emerald Oval 11.7x 8.6 MM,10.0,11.70 x 08.60,,Emld
+1.0,EOV00028232,OV,Green,1.0,2.32,Emerald Oval 10.1 x 7.22,10.0,10.10 x 07.22,,Emld
+1.0,EOV00030208,OV,Green,1.0,2.08,Emerald Oval 9.16 x 7.1,10.0,09.16 x 07.10,,Emld
+1.0,EOV00030351,OV,Green,1.0,3.51,Emerald Oval 11.0 x 8.2,12.0,11.00 x 08.20,,Emld
+1.0,EOV00031163,OV,Green,1.0,1.63,Emerald Oval 8.72 X 6.84,10.0,08.72 x 06.84,,Emld
+1.0,EOV00032227,OV,Green,1.0,2.27,Emerald Oval 9.76 x 7.73,10.0,09.76 x 07.73,,Emld
+1.0,EOV00033211,OV,Green,1.0,2.11,Emerald Oval 9.20 x 7.19,10.0,09.20 x 07.19,,Emld
+1.0,EOV00033341,OV,Green,1.0,3.41,Zambian emerald Oval 10.1 x 8.6,180.0,10.10 x 08.60,Zambia,Emld
+1.0,EOV00034201,OV,Green,1.0,2.01,Emerald Oval 9.20 x 7.70,10.0,09.20 x 07.70,,Emld
+1.0,EOV00035190,OV,Green,1.0,1.9,Emerald Oval 9.16 x 7.15,10.0,09.16 x 07.15,,Emld
+1.0,EOV00035327,OV,Green,1.0,3.27,Zambian Emerald Oval 10.93 x 8.92,55.0,10.93 x 08.92,Zambia,Emld
+1.0,EOV00036190,OV,Green,1.0,1.9,Emerald Oval 9.30 x 7.20,10.0,09.30 x 07.20,,Emld
+1.0,EOV00036320,OV,Green,1.0,3.2,Emerald Oval 10.5 x 8.0,300.0,10.50 x 08.00,,Emld
+1.0,EOV00037196,OV,Green,0.0,0.01,Emerald Oval 9.0 x 7.0,10.0,09.00 x 07.00,,Emld
+1.0,EOV00037305,OV,Green,1.0,3.05,Emerald Oval 10.9x8.5 MM,10.0,10.90 x 08.50,,Emld
+1.0,EOV00038162,OV,Green,1.0,1.62,Emerald Oval 9.17 x 7.05,10.0,09.17 x 07.05,,Emld
+1.0,EOV00038304,OV,Green,1.0,3.04,Zambian Emerald Oval 11 x 9,55.0,11.00 x 09.00,Zambia,Emld
+1.0,EOV00039172,OV,Green,1.0,1.72,Emerald Oval 9.0 x 7.0,10.0,09.00 x 07.00,,Emld
+1.0,EOV00040167,OV,Green,1.0,1.67,Emerald Oval 9.0 x 7.0,10.0,09.00 x 07.00,,Emld
+1.0,EOV00041282,OV,Green,1.0,2.82,Emerald Oval 11.5x7.8 MM,10.0,11.50 x 07.80,,Emld
+1.0,EOV00043242,OV,Green,1.0,2.42,Zambian emerald Oval 10.1 x 7.9,190.0,10.10 x 07.90,Zambia,Emld
+1.0,EOV00045212,OV,Green,1.0,2.12,Zambian Emerald Oval 9.5 x 7.6,20.0,09.50 x 07.60,Zambia,Emld
+1.0,EOV00047175,OV,Green,1.0,1.75,Zambian emerald Oval 9.6 x 6.6,100.0,09.60 x 06.60,Zambia,Emld
+1.0,EOV00052093,OV,Green,1.0,0.93,Colombian Emerald Oval 6.9 x 5.4,30.0,06.90 x 05.40,,Emld
+1.0,EOV00053210,OV,Green,1.0,2.1,Colombian Emerald Oval 9.4 X 7.0,250.0,09.40 x 07.00,,Emld
+1.0,EOV00054163,OV,Green,1.0,1.63,Colombian Emerald Oval 8.7 x 6.7,250.0,08.70 x 06.70,,Emld
+1.0,EOV00055159,OV,Green,1.0,1.59,Colombian Emerald Oval 9.8 x 7.0,250.0,09.80 x 07.00,,Emld
+1.0,EOV00056191,OV,Green,1.0,1.91,Colombian Emerald Oval 9.3 x 7.5,250.0,09.30 x 07.50,,Emld
+1.0,EOV00057226,OV,Green,1.0,2.26,Colombian Emerald Oval 9.63 x 7.40,10.0,09.63 x 07.40,,Emld
+1.0,EOV00058193,OV,Green,1.0,1.93,Colombian Emerald Oval 9.00 x 7.02,10.0,09.00 x 07.02,,Emld
+1.0,EOV00059191,OV,Green,1.0,1.91,Colombian Emerald Oval 9.1 x 7.2,10.0,09.10 x 07.20,,Emld
+1.0,EOV00060117,OV,Green,1.0,1.17,Emerald Oval 8.0x6.0 MM,13.0,08.00 x 06.00,,Emld
+1.0,EOV00062469,OV,Green,2.0,4.69,Emerald Oval 10x7.9|10.4X8.0 MM,10.0,10.00 x 07.90 | 10.40 x 08.00,,Emld
+1.0,EOV00063220,OV,Green,1.0,2.2,Emerald Oval ,50.0,,,Emld
+1.0,EOV00064576,OV,Green,1.0,5.76,Columbian Oval 13.8 x 11,40.0,13.80 x 11.00,Colombia,Emld
+1.0,EOV00065250,OV,Green,1.0,2.5,Emerald Oval 9.55 x 8.08,73.0,09.55 x 08.08,,Emld
+1.0,EOV00066360,OV,Green,2.0,3.6,Emerald Oval 9.50 x 7.00 | 9.15 x 7.50,73.0,09.50 x 07.00 | 09.15 x 07.50,,Emld
+1.0,EOV00067126,OV,Green,1.0,1.26,Emerald Oval 8.50 x 6.65,73.0,08.50 x 06.65,,Emld
+1.0,EOV00068110,OV,Green,1.0,1.1,Emerald Oval 8.00 x 6.00,73.0,08.00 x 06.00,,Emld
+1.0,EOV00069156,OV,Green,2.0,1.56,Emerald Oval 7.60 X 5.40 | 7.20 X 5.30,73.0,07.60 x 05.40 | 07.20 x 05.30,,Emld
+1.0,EOV00070180,OV,Green,2.0,1.8,Emerald Oval 8.00 x 6.00 | 7.00 x 5.15,73.0,08.00 x 06.00 | 07.00 x 05.15,,Emld
+1.0,EOV00071149,OV,Green,1.0,1.49,Emerald Oval 8.70 x 6.79,550.0,08.70 x 06.79,,Emld
+1.0,EOV00072240,OV,Green,1.0,2.4,Emerald Oval 9.93 x 7.68,550.0,09.93 x 07.68,,Emld
+1.0,EOV00073208,OV,Green,1.0,2.08,Emerald Oval 9.52 x 7.23,550.0,09.52 x 07.23,,Emld
+1.0,EOV00074414,OV,Green,1.0,4.13,"Zambian Emerald Oval shape 11.39 x 9.32 x 6.66 mm, 4.14 carats. F1, GIA report number: 2243031952",800.0,11.39 x 09.32,Zambia,Emld
+1.0,EOV00075769,OV,Green,1.0,7.69,"Zambian Emerald Oval shape 14.78 x 11.37 x 7.38 mm, 7.69 carats. F2, GIA report number: 2245031883",400.0,14.78 x 11.37,Zambia,Emld
+1.0,EOV0032221,OV,Green,1.0,2.21,Zambian Emerald Oval,20.0,09.00 x 07.00,Zambia,Emld
+1.0,EOV0033174,OV,Green,1.0,1.74,Zambian Emerald Oval - 9.00 X 6.90,20.0,09.00 x 06.90,Zambia,Emld
+1.0,EOV0043191,OV,Green,1.0,1.91,Emerald Oval 9.0x7.2 MM,10.0,09.00 x 07.20,,Emld
+1.0,EOV0045193,OV,Green,1.0,1.93,Emerald Oval 9.2x7.0 MM,10.0,09.20 x 07.00,,Emld
+1.0,EPC00001215,PC,Green,1.0,2.15,Zambian Emerald Princess Cut 7.9x7.7,75.0,07.90 x 07.70,Zambia,Emld
+1.0,EPC00002195,PC,Green,1.0,1.95,Zambian Emerald Princess Cut 7 x 7,30.0,07.00 x 07.00,Zambia,Emld
+1.0,EPC00003134,PC,Green,1.0,1.34,Emerald princess cut 6.07x6.07,30.0,06.07 x 06.07,,Emld
+1.0,EPC00004258,PC,Green,2.0,2.58,Zambian Emerald Princess Cut 6.8x6.8 | 6.5x6.5,75.0,06.80 x 06.80 | 06.50 x 06.50,Zambia,Emld
+1.0,EPC00005154,PC,Green,2.0,1.54,Zambian Emerald Princess Shape 5.9x5.8 | 5.8x5.8,75.0,05.90 x 05.80 | 05.80 x 05.80,Zambia,Emld
+1.0,EPC00006383,SQ,Green,1.0,3.83,Emerald E/C 6.6x4.9|5.4x4.9,60.0,06.60 x 04.90 | 05.40 x 04.90,,Emld
+1.0,EPR00002515,PS,Green,1.0,5.15,Zambian Emerald Pear Shape 13.1 x 10.2,180.0,13.10 x 10.20,Zambia,Emld
+1.0,EPR00003423,PS,Green,1.0,2.31,Emerald pear 10 X 7.82,10.0,10.00 x 07.82,,Emld
+1.0,EPR00005300,PS,Green,1.0,3.0,Emerald Pear Shape 10 x 8MM,10.0,10.00 x 08.00,,Emld
+1.0,EPR00008271,PS,Green,1.0,2.71,Emerald Pear Shape 11.9 x 8.5,120.0,11.90 x 08.50,,Emld
+1.0,EPR00010235,PS,Green,1.0,2.35,Emerald Pear Shape 11.6x7.0MM,120.0,11.60 x 07.00,,Emld
+1.0,EPR00010326,PS,Green,1.0,3.26,Emerald Pear Shape 13.90 X 9.40 MM,150.0,13.90 x 09.40,,Emld
+1.0,EPR00011260,PS,Green,1.0,2.6,Zambian Emerald Pear Shape 11.5 x 7.35,180.0,11.50 x 07.35,Zambia,Emld
+1.0,EPR00011290,PS,Green,1.0,2.9,Emerald Pear Shape 11.90X8.40MM,150.0,11.90 x 08.40,,Emld
+1.0,EPR00015091,PS,Green,1.0,0.91,Emerald Pear Shape Mix 7.87 X 5.74,13.0,07.87 x 05.74,,Emld
+1.0,EPR00016086,PS,Green,1.0,0.86,Emerald Pear Shape Mix 7.20 X 5.71,23.0,07.20 x 05.71,,Emld
+1.0,EPR00017253,PS,Green,1.0,2.53,Emerald pear 11.3 x 7.9,30.0,11.30 x 07.90,,Emld
+1.0,EPR00018228,PS,Green,1.0,2.28,Colombian Emerald pear 11.9 x 8.3,30.0,11.90 x 08.30,,Emld
+1.0,EPR00019185,PS,Green,1.0,1.85,Colombian Emerald pear 10.9 x 7.2,30.0,10.90 x 07.20,,Emld
+1.0,EPR00020290,PS,Green,2.0,2.9,Colombian Emerald pear 8.8x7.0 | 9.5x7.0,30.0,08.80 x 07.00 | 09.50 x 07.00,,Emld
+1.0,EPR00027171,PS,Green,1.0,1.71,Colombian Emerald pear 10.15 x 8.01,21.0,10.15 x 08.01,,Emld
+1.0,EPR00028196,PS,Green,1.0,1.96,Colombian Emerald pear 10.10 x 7.98,21.0,10.10 x 07.98,,Emld
+1.0,EPR00029187,PS,Green,1.0,1.87,Colombian Emerald pear 10.11 x 7.86,21.0,10.11 x 07.86,,Emld
+1.0,EPR00030089,PS,Green,1.0,0.89,Emerald pear 8.91 x 6.03,21.0,08.91 x 06.03,,Emld
+1.0,EPR00031130,PS,Green,1.0,1.3,Emerald pear 9.0 x 5.91,45.0,09.00 x 05.91,,Emld
+1.0,EPR00032423,HS,Green,1.0,4.23,Emerald pear 13.42 x 9.54,60.0,13.42 x 09.54,,Emld
+1.0,EPR000341059,PS,Green,1.0,10.49,Columbian Emerald Pear Shape 18 x 13 ,40.0,18.00 x 13.00,Colombia,Emld
+1.0,EPR00035596,PS,Green,1.0,5.96,Columbian Emerald Pear Shape 15.2 x 10.8,40.0,15.20 x 10.80,Colombia,Emld
+1.0,EPR00037217,PS,Green,1.0,2.17,Columbian Emerald Pear Shape 12 x 8 ,40.0,12.00 x 08.00,Colombia,Emld
+1.0,EPR00038278,PS,Green,1.0,2.78,Columbian Emerald Pear Shape 12 x 8 ,40.0,12.00 x 08.00,Colombia,Emld
+1.0,EPR00039240,PS,Green,1.0,2.4,Columbian Emerald Pear Shape 10 x 8 ,40.0,10.00 x 08.00,Colombia,Emld
+1.0,EPR00041155,PS,Green,1.0,1.55,Emerald Pear Shape 10.30 x 7.30,73.0,10.30 x 07.30,,Emld
+1.0,EPR00042693,PS,Green,2.0,6.93,"Zambian Emerald Pear Shapes 12.91 x 8.25 x 5.46 mm and 12.82 x 8.28 x 6.46 mm, 3.69 carats and 3.24 carats, F2/F1, GIA Report: 6243033989",1500.0,12.91 x 08.25,Zambia,Emld
+1.0,EPR00043414,PS,Green,1.0,4.14,"Zambian Emerald Pear Shape 13.14 x 9.11 x 6.31 mm, F2, GIA Report:  5241032094",1000.0,13.14 x 09.11,Zambia,Emld
+1.0,EPR00044107,PS,Green,1.0,1.07,Emerald Pear Shape 9.15 x 6.55 mm,73.0,09.15 x 06.55,,Emld
+1.0,EPR00045424,PS,Green,1.0,4.24,"Zambian Emerald Pear shape 15.22 x 8.90 x 5.61 mm, 4.24 carats. F2, GIA report number: 1242031865",600.0,15.22 x 08.90,Zambia,Emld
+1.0,ERD00001453,RDS,Green,1.0,4.53,"Green Emerald Regular Round 10.0MM                                                                                   GIA CERTIFIED ""F2"" STONE & REPORT NUMBER:-6233653670",420.0,10.00,,Emld
+1.0,ERD00002308,RDS,Green,1.0,3.08,Green Emerald Regular Round 9.20MM,420.0,09.20,,Emld
+1.0,ERD00005572,RDS,Green,2.0,5.72,Green Emerald Regular Round 8.70MM,420.0,08.70,,Emld
+1.0,ERD00006245,RDS,Green,1.0,2.45,Green Emerald Regular Round 8.20MM,420.0,08.20,,Emld
+1.0,ERD00007209,RDS,Green,1.0,2.09,Green Emerald Regular Round 8.20MM,420.0,08.20,,Emld
+1.0,ERD00009226,RD,Green,1.0,2.26,Zambian Emerald Regular Round 8.40,110.0,08.40,Zambia,Emld
+1.0,ERD00010260,RD,Green,1.0,2.6,Zambian Emerald Regular Round 8.92,200.0,08.92,Zambia,Emld
+1.0,ERD00012108,D/C,Green,1.0,1.08,Zambian Emerald Round D/C 6.5,80.0,06.50,Zambia,Emld
+1.0,ERD00013079,D/C,Green,1.0,0.79,Zambian Emerald Round D/C 6.60,80.0,06.60,Zambia,Emld
+1.0,ERD00014084,D/C,Green,1.0,0.84,Zambian Emerald Round D/C 6.45,80.0,06.45,Zambia,Emld
+1.0,ERD00015321,D/C,Green,1.0,3.21,Zambian emerald Round D/C 9.00,50.0,09.00,Zambia,Emld
+1.0,ERD00016145,RD,Green,1.0,1.45,Zambian Emerald Regular Round 7.00,110.0,07.00,Zambia,Emld
+1.0,ERD00017110,RDS,Green,1.0,1.1,Green Emerald Regular Round 7.00MM,210.0,07.00,,Emld
+1.0,ERD00024358,RD,Green,2.0,3.58,Emerald Rounds D/C 7.8 MM,150.0,07.80,,Emld
+1.0,ERD00026138,RD,Green,1.0,1.38,Emerald Round  D/C 7.5MM,150.0,07.50,,Emld
+1.0,ERD00027450,RD,Green,2.0,4.5,Emerald Round  D/C 8.2MM,630.0,08.20,,Emld
+1.0,ERD00028392,RD,Green,2.0,3.92,Emerald Round  D/C 7.8MM,630.0,07.80,,Emld
+1.0,ERD00030159,RD,Green,1.0,1.59,Emerald Round  D/C 7.00MM,50.0,07.00,,Emld
+1.0,ERD00031130,RD,Green,1.0,1.3,Emerald Round  D/C 6.70MM,50.0,06.70,,Emld
+1.0,ERD00032152,RD,Green,2.0,1.52,Emerald Round  D/C 5.80MM,50.0,05.80,,Emld
+1.0,ERD00033159,RD,Green,2.0,1.59,Emerald Round  D/C 5.85MM,50.0,05.85,,Emld
+1.0,ERD00034150,RD,Green,2.0,1.5,Emerald Round  D/C 5.85|5.93,50.0,05.85 | 05.93,,Emld
+1.0,ERD00035169,RD,Green,2.0,1.69,Emerald Round  D/C 6.10MM,50.0,06.10,,Emld
+1.0,ERD00037180,D/C,Green,2.0,1.8,Emerald D/C Pair 6.09|6.15,110.0,06.09 | 06.15,,Emld
+1.0,ERD00038163,D/C,Green,2.0,1.63,Emerald D/C Pair 5.93 | 5.96,110.0,05.93 | 05.96,,Emld
+1.0,ERD00039137,D/C,Green,2.0,1.37,Emerald D/C Pair 5.86 | 5.84,110.0,05.86 | 05.84,,Emld
+1.0,ERD00040161,D/C,Green,2.0,1.61,Emerald D/C Pair 6.03 | 6.02,110.0,06.03 | 06.02,,Emld
+1.0,ERD00042150,D/C,Green,2.0,1.5,Emerald D/C Pair 6.22 |6.26,110.0,06.22 | 06.26,,Emld
+1.0,ERD00043175,D/C,Green,2.0,1.75,Emerald D/C Pair 5.85 | 5.87,110.0,05.85 | 05.87,,Emld
+1.0,ERD00044225,D/C,Green,2.0,2.25,Emerald D/C Pair 6.60,110.0,06.60,,Emld
+1.0,ERD00045202,D/C,Green,2.0,2.02,Emerald D/C Pair 6.20,110.0,06.20,,Emld
+1.0,ERD00046177,D/C,Green,2.0,1.77,Emerald D/C Pair 5.90|5.80,110.0,05.90 | 05.80,,Emld
+1.0,ERD00047176,D/C,Green,2.0,1.76,Emerald D/C Pair 6.22|6.10,110.0,06.22 | 06.10,,Emld
+1.0,ERD00048168,D/C,Green,2.0,1.68,Emerald D/C Pair 6.10,110.0,06.10,,Emld
+1.0,ERD00049198,D/C,Green,2.0,1.98,Emerald D/C Pair 5.90,110.0,05.90,,Emld
+1.0,ERD00050168,D/C,Green,2.0,1.68,Emerald D/C Pair 6.05|5.90,110.0,06.05 | 05.90,,Emld
+1.0,ERD00051123,D/C,Green,1.0,1.23,Emerald D/C 6.63MM,110.0,06.63,,Emld
+1.0,ERD00052178,D/C,Green,2.0,1.78,Emerald D/C Pair 6.00MM,110.0,06.00,,Emld
+1.0,ERD00054169,D/C,Green,2.0,1.69,Emerald D/C Pair 5.90,110.0,05.90,,Emld
+1.0,ERD00055172,D/C,Green,2.0,1.72,Emerald D/C Pair 6.00,110.0,06.00,,Emld
+1.0,ESEC0013365,S.E/C,Green,1.0,3.65,Zambian square emerald cut,100.0,09.20 x 08.10,Zambia,Emld
+1.0,ETR00001133,TRI,Green,1.0,1.33,Colombian Emerald trillion 7.7 x 7.5,23.0,07.70 x 07.50,,Emld
+1.0,GCU00001237,CUS,Green,1.0,2.08,Green Sapphire Cushion - 7 MM,145.0,07.00,,Sapp
+1.0,GEC00001306,E/C,Green,1.0,3.06,Green Sapphire E/C 9.12 x 7.01,25.0,09.12 x 07.01,,Sapp
+1.0,GEC00002317,E/C,Green,1.0,3.17,Green Sapphire E/C 10.09 x 7.00 Heated,250.0,10.09 x 07.00,,Sapp
+1.0,GPR00001516,PS,Green,2.0,5.16,Green Sapphire pear 10x7.82 | 10.17x7.73,25.0,10.00 x 07.82 | 10.17 x 07.73,,Sapp
+1.0,GSEC00001236,E/C,Green,2.0,2.36,Green Sapphire E/C 6.18 X 5.46,75.0,06.18 x 05.46,,Sapp
+1.0,GSOV00002411,OV,Green,1.0,4.11,Green Sapphire Oval 10.69x9.710 GIA Certified 1236884682,150.0,10.69 x 09.71,,Sapp
+1.0,GSPC00001112,PC,Green,1.0,1.12,Green Sapphire Princess Cut 5.81 X 5.44,75.0,05.81 x 05.44,,Sapp
+1.0,GSRD00001215,RDS,Green,1.0,2.15,Green Sapphire Round 7.68 No Heat,250.0,07.68,,Sapp
+1.0,GTEC0011066,EC,,2.0,10.66,GREEN TOURMALINE E/C 13.60 X 7.80,20.0,13.60 x 07.80,,Other
+1.0,GTRD00002111,RDS,Green,1.0,1.11,Green Teal Sapphire Round 6.0MM (UN),100.0,06.00,,Sapp
+1.0,GTRD00004250,RDS,Green,2.0,2.5,Green Teal Sapphire Round 6.0MM (UN),100.0,06.00,,Sapp
+1.0,GTRD00005211,RDS,Green,2.0,2.11,Green Teal Sapphire Round 6.0MM (UN),100.0,06.00,,Sapp
+1.0,GTRD00006191,RDS,Green,2.0,1.91,Green Teal Sapphire Round 5.9MM,80.0,05.90,,Sapp
+1.0,MBRD00001218,D/C,Blue,2.0,2.18,Australia Sapphire Round D/C 6.00,120.0,06.00,Australia,Sapp
+1.0,OSOV00001142,OV,Orange,1.0,1.42,Orange Sapphire Oval 7.00 x 5.95,45.0,07.00 x 05.95,,Sapp
+1.0,OSOV00002133,OV,Orange,1.0,1.33,Orange Sapphire Oval 6.91 X 6.24,50.0,06.91 x 06.24,,Sapp
+1.0,PCU00001264,CUS,Pink,2.0,2.64,Pink Sapphire Cushion - 7.5x5.9|6.2x5.2,100.0,07.50 x 05.90 | 06.20 x 05.20,,Sapp
+1.0,PCU00002127,OV,Purple,1.0,1.27,Purple Sapphire Madagascar Cushion 6.06 x 5.63,150.0,06.06 x 05.63,Madagascar,Sapp
+1.0,PCU00004161,CUS,Pink,1.0,1.61,Pink Sapphire Cushion - 7.9 x 5.8MM,300.0,07.90 x 05.80,,Sapp
+1.0,PCU00005182,CUS,PINK,1.0,1.82,PINK CUSHION 9.25 x 6.08,300.0,09.25 x 06.08,,Sapp
+1.0,PCU00006080,CUS,Purple,1.0,0.8,Purple Sapphire Cushion - 6.41x4.84MM,90.0,06.41 x 04.84,,Sapp
+1.0,PCU00007205,CUS,Pink,1.0,2.06,Pink Sapphire Cushion - 9.60 X 5.90,207.0,09.60 x 05.90,,Sapp
+1.0,PCU00008181,CUS,Pink,1.0,1.82,Pink Sapphire Cushion - 7.70 X 6.00,207.0,07.70 x 06.00,,Sapp
+1.0,PEC00002228,E/C,Peach,1.0,2.28,Padparadsha emerald cut 7.61 x 5.46,140.0,07.61 x 05.46,,Sapp
+1.0,PEC00005158,E/C,Pink,1.0,1.58,Padparadscha Sapphire E/C 6.95 x 5.84,125.0,06.95 x 05.84,,Sapp
+1.0,PEC00006154,E/C,Pink,1.0,1.54,Pink Sapphire E/C 6.45 x 6.10,125.0,06.45 x 06.10,,Sapp
+1.0,PEC00007137,EC,Pink,1.0,1.38,Pink Sapphire 8.70x5.60 MM,90.0,08.70 x 05.60,,Sapp
+1.0,PMQ00001106,MQ,Pink,1.0,1.06,Pink Sapphire MQ - 9.03 x 4.56 MM ,207.0,09.03 x 04.56,,Sapp
+1.0,POV00001218,OV,PINK,1.0,2.18,Madagascar Pink Sapphire Oval 9.11x7.00,150.0,09.11 x 07.00,Madagascar,Sapp
+1.0,POV00003191,OV,Purple,1.0,1.91,Purple Sapphire Oval - 8.78x7.04MM,180.0,08.78 x 07.04,,Sapp
+1.0,POV00004284,OV,Pink,2.0,2.84,Padparash Pink Sapphire Oval 7.64 x 6.20,140.0,07.64 x 06.20,,Sapp
+1.0,POV00005151,OV,Purple,1.0,1.51,Purple Sapphire Oval - 8.07x6.21MM,150.0,08.07 x 06.21,,Sapp
+1.0,POV00007424,OV,Pink,2.0,4.24,Madagascar Sapphire Oval 9.5x6.6 | 9.3x6.9,77.0,09.50 x 06.60 | 09.30 x 06.90,Madagascar,Sapp
+1.0,POV00008296,OV,Purple,2.0,2.96,Purple Sapphire Oval - 7.9x6.0|7.7x6.1MM,300.0,07.90 x 06.00 | 07.70 x 06.10,,Sapp
+1.0,POV00011098,OV,Purple,1.0,0.98,Purple Sapphire Oval - 7.84 X 5.84 MM,120.0,07.84 x 05.84,,Sapp
+1.0,POV00012168,OV,Purple,1.0,1.68,Purple Sapphire Oval - 8.75 X 5.95 MM,390.0,08.75 x 05.95,,Sapp
+1.0,PPR00001198,PR,Pink,1.0,1.98,Madagascar Pink Sapphire Pear 9.16 X 6.92,100.0,09.16 x 06.92,Madagascar,Sapp
+1.0,PPR00002153,PR,Peach,1.0,1.53,Madagascar Sapphire pear 8.70 x 5.67,140.0,08.70 x 05.67,Madagascar,Sapp
+1.0,PPR00003204,PR,Pink,1.0,2.04,Madagascar Pink Sapphire Pear 9.80 X 6.10,235.0,09.80 x 06.10,Madagascar,Sapp
+1.0,PPR00004203,PR,Pink,1.0,2.03,Madagascar Pink Sapphire Pear 8.90 X 6.50,235.0,08.90 x 06.50,Madagascar,Sapp
+1.0,PPR00005168,PR,Pink,1.0,1.68,Madagascar Pink Sapphire Pear 9.50 X 7.70,235.0,09.50 x 07.70,Madagascar,Sapp
+1.0,PPR00006091,PR,Pink,1.0,0.91,Madagascar Pink Sapphire Pear 7.80 X 5.91,120.0,07.80 x 05.91,Madagascar,Sapp
+1.0,PPR00007255,PR,Pink,1.0,2.55,Pink Sapphire Pear 10.50 x 7.40,800.0,10.50 x 07.40,,Sapp
+1.0,PRCU00004204,CUS,Purple,1.0,2.04,Sapphire Cushion - 8.93 x 6.50 MM,150.0,08.93 x 06.50,,Sapp
+1.0,PRCU00005154,OV,Purple,1.0,1.54,Sapphire Oval Cushion 6.56 X 5.70,75.0,06.56 x 05.70,,Sapp
+1.0,PRCU00006106,CUS,Purple,1.0,1.06,Blue Sapphire Cushion 5.75 X 5.0,45.0,05.75 x 05.00,,Sapp
+1.0,PRD00001233,D/C,Purple,2.0,2.33,Pink Sapphire D/C Pair  - 6.89|7.06 MM ,207.0,06.89 | 07.06,,Sapp
+1.0,PRD00003132,D/C,Purple,1.0,1.32,Pink Sapphire D/C 6.40MM,250.0,06.40,,Sapp
+1.0,PRD00005317,D/C,Purple,2.0,3.17,Madagascar Pink Sapphire Round D/C 6.72|7.08,150.0,06.72 | 07.08,Madagascar,Sapp
+1.0,PREC00001199,E/C,Purple,1.0,1.99,Purple Sapphire Emerald Cut 8.82 x 6.19,150.0,08.82 x 06.19,,Sapp
+1.0,PREC00003259,E/C,Purple,1.0,2.59,Madagascar Sapphire emerald  8.50 x 7.40,140.0,08.50 x 07.40,Madagascar,Sapp
+1.0,PRHS00001176,HS,Purple,2.0,1.76,Purple Sapphire Heart Shape 6.2x6.1 | 5.5x5.5,90.0,06.20 x 06.10 | 05.50 x 05.50,,Sapp
+1.0,PRMQ00001124,CUS,Purple,1.0,1.24,Purple Sapphire Marquise 10 x 5,45.0,10.00 x 05.00,,Sapp
+1.0,PROV00001296,OV,Purple,1.0,2.96,Purple Sapphire Oval - 9.57 x 7.82 MM,150.0,09.57 x 07.82,,Sapp
+1.0,PROV00002234,OV,Purple,1.0,2.34,Madagascar Purple Sapphire Oval 10.22x6.81,51.0,10.22 x 06.81,Madagascar,Sapp
+1.0,PROV00003229,OV,Purple,1.0,2.29,Madagascar Sapphire Oval 9.4 X 7.5,100.0,09.40 x 07.50,Madagascar,Sapp
+1.0,PROV00004201,OV,Purple,1.0,2.01,Purple Sapphire Oval 8.3 X 6.9,51.0,08.30 x 06.90,,Sapp
+1.0,PROV00006141,OV,Purple,1.0,1.41,Purple Sapphire Oval 7.17 x 5.78,30.0,07.17 x 05.78,,Sapp
+1.0,PROV00007141,OV,Purple,1.0,1.41,Purple Sapphire Oval 7.70x5.92,50.0,07.70 x 05.92,,Sapp
+1.0,PROV00009112,OV,Purple,1.0,1.12,Purple Sapphire Oval 6.61x5.67,75.0,06.61 x 05.67,,Sapp
+1.0,PROV00010107,OV,Purple,1.0,1.07,Purple Sapphire Oval 6.5x5.2,50.0,06.50 x 05.20,,Sapp
+1.0,PROV00011096,OV,Purple,1.0,0.96,Madagascar Purple Sapphire Oval 7.40x5.00,51.0,07.40 x 05.00,Madagascar,Sapp
+1.0,PROV00012255,OV,Purple,2.0,2.55,Madagascar Sapphire Oval 8.3x6.4|6.45X4.89,100.0,08.30 x 06.40 | 06.45 x 04.89,Madagascar,Sapp
+1.0,PROV00014321,OV,Purple,2.0,3.21,Multi Sapphire Oval 7.46 x 6.10 / 7.97 x 6.35,150.0,07.46 x 06.10 | 07.97 x 06.35,,Sapp
+1.0,PROV00015292,OV,Purple,2.0,2.92,Madagascar Purple Sapphire Oval 7.8x5.9| 8.2x6.3,150.0,07.80 x 05.90 | 08.20 x 06.30,Madagascar,Sapp
+1.0,PROV00019317,OV,Purple,2.0,2.73,Purple Sapphire Oval 6.9x5.4 | 7.6x6.6,50.0,06.90 x 05.40 | 07.60 x 06.60,,Sapp
+1.0,PROV00020263,OV,Purple,1.0,2.63,Purple Sapphire Oval 10.15 x 7.16,200.0,10.15 x 07.16,,Sapp
+1.0,PROV00021205,OV,Purple,1.0,2.05,Purple Sapphire Oval 8.73x6.75,200.0,08.73 x 06.75,,Sapp
+1.0,PRPS00001351,PS,Purple,2.0,3.51,Purple Sapphire Pear Shape - 8.18x6.35|8.89x6.35MM,150.0,08.18 x 06.35 | 08.89 x 06.35,,Sapp
+1.0,PRPS00002157,PS,Purple,1.0,1.57,Purple Sapphire Pear Shape - 8.05 x 6.13,100.0,08.05 x 06.13,,Sapp
+1.0,PRRD00001146,D/C,Purple,1.0,1.46,Purple Sapphire Round D/C 7.00,77.0,07.00,,Sapp
+1.0,PSCU00007345,CUS,Pink,2.0,3.45,Pink Sapphire Cushion - 7.5 x 6.3| 7.4 x 6.0,207.0,07.50 x 06.30 | 07.40 x 06.00,,Sapp
+1.0,PSHT00001194,HS,Pink,0.0,,Pink Sapphire Heart 8.4 x 8.3,140.0,08.40 x 08.30,,Sapp
+1.0,PSHT00002225,HS,Pink,2.0,2.25,Pink Sapphire Heart Pair 6.8 x 6.7|5.8 x 5.6,140.0,06.80 x 06.70 | 05.80 x 05.60,,Sapp
+1.0,RCU00001211,CUS,Ruby,1.0,2.11,Ruby Cushion 8.54 x 7.61,600.0,08.54 x 07.61,,Ruby
+1.0,RCU00002644,CUS,Ruby,1.0,6.44,Ruby Cushion 11.7 x 10.0,120.0,11.70 x 10.00,,Ruby
+1.0,RCU00003567,CUS,Ruby,2.0,5.67,Ruby Cushion Pair 10.5 x 7.5 ,120.0,10.50 x 07.50,,Ruby
+1.0,RCU00004410,CUS,Ruby,1.0,4.1,Ruby Cushion  10.4 x 8.5,120.0,10.40 x 08.50,,Ruby
+1.0,RCU00005384,CUS,Ruby,1.0,3.84,Ruby Cushion 9.2 x 8.0,120.0,09.20 x 08.00,,Ruby
+1.0,RCU00006384,CUS,Ruby,1.0,3.84,Ruby Cushion 8.24 x 8.29,120.0,08.29 x 08.24,,Ruby
+1.0,RCU00007270,CUS,Ruby,1.0,2.7,Ruby Cushion 9.51 x 6.71,120.0,09.51 x 06.71,,Ruby
+1.0,REC00001817,EC,Ruby,1.0,8.17,Ruby Emerald Cut 11.79x9.98,100.0,11.79 x 09.98,,Ruby
+1.0,REC00002697,EC,Ruby,1.0,6.97,Ruby Emerald Cut 14.3 x 11.3,120.0,14.30 x 11.30,,Ruby
+1.0,REC00007227,EC,Ruby,1.0,2.27,"Certified Ruby Emerald Cut 8.30X6.43X4.19, Certificate number: 2233884691",550.0,08.30 x 06.43,,Ruby
+1.0,ROV00001803,OV,Red,1.0,8.03,Ruby Oval 13.0 x 10.6 ,120.0,13.00 x 10.60,,Ruby
+1.0,ROV00002763,OV,Red,2.0,7.63,Ruby Oval Pair 10.45x8.23|10.35x8.16,120.0,10.45 x 08.23 | 10.35 x 08.16,,Ruby
+1.0,ROV00003560,OV,Red,2.0,5.6,Ruby Oval Pair 9.93x 7.42|9.68x7.41,120.0,09.93 x 07.42 | 09.68 x 07.41,,Ruby
+1.0,ROV00005334,OV,Red,1.0,3.34,Ruby Oval 9.4 x 7.8,120.0,09.40 x 07.80,,Ruby
+1.0,ROV00006290,OV,Red,1.0,2.9,Ruby Oval 10.0 x 7.15,120.0,10.00 x 07.15,,Ruby
+1.0,ROV00007253,OV,Red,1.0,2.53,Ruby Oval 10.5 x 7.5,120.0,10.50 x 07.50,,Ruby
+1.0,ROV00008470,OV,Red,1.0,4.7,Ruby Oval 11.4 x 8.6,36.0,11.40 x 08.60,,Ruby
+1.0,ROV00009390,OV,Red,1.0,3.9,Ruby Oval 10.9 x 9.1,36.0,10.90 x 09.10,,Ruby
+1.0,ROV00010412,OV,Red,1.0,4.12,Ruby Oval 10.3 x 8.3,36.0,10.30 x 08.30,,Ruby
+1.0,ROV00012365,OV,Red,0.0,0.01,Ruby Oval 10.2 x 8.2,36.0,10.20 x 08.20,,Ruby
+1.0,ROV00013350,OV,Red,1.0,3.5,Ruby Oval 10.9 x 7.7,36.0,10.90 x 07.70,,Ruby
+1.0,ROV00014379,OV,Red,1.0,3.79,Ruby Oval 9.96 x 7.30,36.0,09.96 x 07.30,,Ruby
+1.0,ROV0011267,OV,Red,1.0,12.67,Mozambique ruby Oval,1250.0,17.60 x 12.00,Mozambique,Ruby
+1.0,ROV0021072,OV,Red,1.0,10.72,Mozambique ruby Oval,1100.0,15.30 x 11.30,Mozambique,Ruby
+1.0,RPR00001399,PS,Red,1.0,3.99,Ruby pear shape 12.71 x 7.34                                                                                                     GIA CERTIFIED 7235237884,125.0,12.71 x 07.34,,Ruby
+1.0,RPR00002141,PS,Red,1.0,1.41,Ruby pear shape 7.68 x 6.39,300.0,07.68 x 06.39,,Ruby
+1.0,RPR00003116,PS,Red,1.0,1.16,Ruby pear shape 7.40 x 5.8,300.0,07.40 x 05.80,,Ruby
+1.0,RPR00004377,PS,Ruby,1.0,3.77,Ruby Pear 11.15 x 8.88 MM,36.0,11.15 x 08.88,,Ruby
+1.0,RR00001533,RD,Red,2.0,5.33,Ruby Regular Round Pair 8.50mm ,400.0,08.50,,Ruby
+1.0,RR00002294,RD,Red,2.0,2.94,Ruby Regular Round Pair 6.93|6.89,400.0,06.93 | 06.89,,Ruby
+1.0,RR00003278,RD,Red,0.0,,Ruby Regular Round Pair 6.45-6.40mm,120.0,06.45 x 06.40,,Ruby
+1.0,RRD00002215,RD,Red,1.0,2.15,Ruby Round Flower Cut 8.02mm,360.0,08.02,,Ruby
+1.0,SCU00001909,E/C,Blue,1.0,9.09,Ceylon Sapphire emerald cut 13.0 x 11.1,180.0,13.00 x 11.10,Ceylon,Sapp
+1.0,SCU00003512,CUS,Blue,1.0,5.12,Sapphire cushion 10.0 x 9.6,180.0,10.00 x 09.60,,Sapp
+1.0,SCU00004504,CUS,Blue,1.0,5.04,Ceylon Sapphire cushion 9.8 x 8.8,300.0,09.80 x 08.80,Ceylon,Sapp
+1.0,SCU00005459,CUS,Blue,1.0,4.59,Sapphire cushion 11.3 x 9.90,77.0,11.30 x 09.90,,Sapp
+1.0,SCU00006457,CUS,Blue,1.0,4.57,Ceylon Sapphire cushion 10.3 x 9.6,190.0,10.30 x 09.60,Ceylon,Sapp
+1.0,SCU00007429,CUS,Blue,1.0,4.29,Ceylon Sapphire cushion 10.2 x 7.3,500.0,10.20 x 07.30,Ceylon,Sapp
+1.0,SCU00008435,CUS,Blue,1.0,4.35,Ceylon Sapphire cushion 9.4 x 8.9,70.0,09.40 x 08.90,Ceylon,Sapp
+1.0,SCU00009405,CUS,Blue,1.0,4.05,Ceylon Sapphire cushion 9.0 x 7.5,300.0,09.00 x 07.50,Ceylon,Sapp
+1.0,SCU00010401,CUS,Blue,1.0,4.01,Sapphire cushion 10.0 x 8.0,190.0,10.00 x 08.00,,Sapp
+1.0,SCU00011388,CUS,Blue,1.0,3.88,Blue Sapphire Cushion 9.3 x 8.4,180.0,09.30 x 08.40,,Sapp
+1.0,SCU00012386,CUS,Blue,1.0,3.86,Ceylon Sapphire cushion 7.9 x 7.9,190.0,07.90 x 07.90,Ceylon,Sapp
+1.0,SCU00013375,CUS,Blue,1.0,3.75,Ceylon Sapphire cushion 10.3 x 7.5,63.0,10.30 x 07.50,Ceylon,Sapp
+1.0,SCU00014369,OV,Blue,1.0,3.69,Ceylon Sapphire Oval 9.1 x 7.5,100.0,09.10 x 07.50,Ceylon,Sapp
+1.0,SCU00015359,CUS,Blue,1.0,3.59,Sapphire cushion 9.6 x 7.1,150.0,09.60 x 07.10,,Sapp
+1.0,SCU00016356,CUS,Blue,1.0,3.56,Sapphire cushion 9.0 x 7.8,77.0,09.00 x 07.80,,Sapp
+1.0,SCU00017343,CUS,Blue,1.0,3.43,Ceylon Sapphire cushion 9.7 x 8.9,300.0,09.70 x 08.90,Ceylon,Sapp
+1.0,SCU00018331,CUS,Blue,1.0,3.31,Ceylon Sapphire cushion 9.4 x 6.9,70.0,09.40 x 06.90,Ceylon,Sapp
+1.0,SCU00019325,CUS,Blue,1.0,3.25,Sapphire cushion 8.9 x 7.7,77.0,08.90 x 07.70,,Sapp
+1.0,SCU00020320,CUS,Blue,1.0,3.2,Ceylon Sapphire cushion 9.7 x 7.7,300.0,09.70 x 07.70,Ceylon,Sapp
+1.0,SCU00021310,CUS,Blue,1.0,3.1,Sapphire cushion 7.79 x 7.05,77.0,07.79 x 07.05,,Sapp
+1.0,SCU00022309,CUS,Blue,1.0,3.09,Ceylon Sapphire cushion 8.65 x 6.56,190.0,08.65 x 06.56,Ceylon,Sapp
+1.0,SCU00023307,CUS,Blue,1.0,3.07,Ceylon Sapphire cushion 9.0 x 7.5,180.0,09.00 x 07.50,Ceylon,Sapp
+1.0,SCU00024307,CUS,Blue,1.0,3.07,Ceylon Sapphire cushion 9.6 x 7.7,900.0,09.60 x 07.70,Ceylon,Sapp
+1.0,SCU00025303,CUS,Blue,1.0,3.03,Ceylon Sapphire cushion 9.5 x 7.7,150.0,09.50 x 07.70,Ceylon,Sapp
+1.0,SCU00027292,CUS,Blue,1.0,2.92,Ceylon Sapphire cushion 9.3 x 8.1,180.0,09.30 x 08.10,Ceylon,Sapp
+1.0,SCU00028289,CUS,Blue,1.0,2.89,Ceylon Sapphire cushion 8.13 x 7.18,77.0,08.13 x 07.18,Ceylon,Sapp
+1.0,SCU00029285,CUS,Blue,1.0,2.85,Sapphire cushion 7.90,300.0,07.90,,Sapp
+1.0,SCU00030283,CUS,Blue,1.0,2.83,Ceylon Sapphire cushion 8.6 x 6.3,390.0,08.60 x 06.30,Ceylon,Sapp
+1.0,SCU00031270,OV,Blue,1.0,2.7,Sapphire Oval 9.2x7.0 MM,230.0,09.20 x 07.00,,Sapp
+1.0,SCU00032258,CUS,Blue,1.0,2.58,Ceylon Sapphire cushion 9.2 x 6.4,190.0,09.20 x 06.40,Ceylon,Sapp
+1.0,SCU00034256,CUS,Blue,1.0,2.56,Sapphire cushion 8.0 x 6.6,300.0,08.00 x 06.60,,Sapp
+1.0,SCU00035254,CUS,Blue,1.0,2.54,Ceylon Sapphire cushion 8.3 x 6.9,300.0,08.30 x 06.90,Ceylon,Sapp
+1.0,SCU00036248,CUS,Blue,1.0,2.48,Sapphire cushion 9.6 x 6.6,240.0,09.60 x 06.60,,Sapp
+1.0,SCU00037242,CUS,Blue,1.0,2.42,Ceylon Sapphire cushion 8.3 x 7.6,70.0,08.30 x 07.60,Ceylon,Sapp
+1.0,SCU00038230,CUS,Blue,1.0,2.32,Ceylon Sapphire cushion 8.9 x 6.7,390.0,08.90 x 06.70,Ceylon,Sapp
+1.0,SCU00040216,CUS,Blue,1.0,2.16,Ceylon Sapphire cushion 8.5 x 6.5,150.0,08.50 x 06.50,Ceylon,Sapp
+1.0,SCU00041209,RD,Blue,1.0,2.09,Sapphire cushion 7.0x7.0 MM,150.0,07.00 x 07.00,,Sapp
+1.0,SCU00042203,CUS,Blue,1.0,2.03,Ceylon Sapphirehire Cushion - 8.8x7.0MM,300.0,08.80 x 07.00,Ceylon,Sapp
+1.0,SCU00043205,CUS,Blue,1.0,2.05,Ceylon Sapphire Cushion 7.09x6.60,77.0,07.09 x 06.60,Ceylon,Sapp
+1.0,SCU00044201,CUS,Blue,1.0,2.01,Blue Sapphire Cushion 6.8x5.9,90.0,06.80 x 05.90,,Sapp
+1.0,SCU00045263,CUS,Blue,2.0,2.63,Sapphire cushoin 6.5 x 6.4,150.0,06.50 x 06.40,,Sapp
+1.0,SCU00046198,CUS,Blue,1.0,1.98,Ceylon Sapphire elongated cushion 8.5 x 6.2,300.0,08.50 x 06.20,Ceylon,Sapp
+1.0,SCU00049194,CUS,Blue,1.0,3.88,Sapphire cushion 8.0x7.2,150.0,08.00 x 07.20,,Sapp
+1.0,SCU00050184,CUS,Blue,1.0,1.84,Ceylon Sapphire cushion 8.06 x 6.23,77.0,08.06 x 06.23,Ceylon,Sapp
+1.0,SCU00051191,CUS,Blue,1.0,1.91,Ceylon Sapphire cushion 8.7 x 5.8,180.0,08.70 x 05.80,Ceylon,Sapp
+1.0,SCU00052185,CUS,Blue,1.0,1.85,Ceylon Sapphire cushion 7.5 x 6.8,77.0,07.50 x 06.80,Ceylon,Sapp
+1.0,SCU00053173,CUS,Blue,1.0,1.73,Ceylon Sapphire cushion 9.3 x 5.9,210.0,09.30 x 05.90,Ceylon,Sapp
+1.0,SCU00054171,CUS,Blue,1.0,1.71,Ceylon Sapphire cushion 7.3 x 6.0,150.0,07.30 x 06.00,Ceylon,Sapp
+1.0,SCU00055170,OV,Blue,1.0,1.7,Ceylon Sapphire Oval 7.38 x 6.12,77.0,07.38 x 06.12,Ceylon,Sapp
+1.0,SCU00056168,CUS,Blue,1.0,1.68,Sapphire cushion 6.4 x 6.1,150.0,06.40 x 06.10,,Sapp
+1.0,SCU00058164,CUS,Blue,1.0,1.64,Sapphire cushion 7.15x6.76,320.0,07.15 x 06.76,,Sapp
+1.0,SCU00060156,CUS,Blue,1.0,1.56,Ceylon Sapphire cushion 7.4 x 5.2,300.0,07.40 x 05.20,Ceylon,Sapp
+1.0,SCU00061158,CUS,Blue,1.0,1.58,Ceylon Sapphire square cushion 7.0 x 6.3,300.0,07.00 x 06.30,Ceylon,Sapp
+1.0,SCU00062153,CUS,Blue,1.0,1.53,Ceylon Sapphire ELONGATED cushion 7.1 x 5.2,320.0,07.10 x 05.20,Ceylon,Sapp
+1.0,SCU00063151,CUS,Blue,1.0,1.51,Sapphire cushion 7.8 x 5.4,77.0,07.80 x 05.40,,Sapp
+1.0,SCU00064149,CUS,Blue,1.0,1.49,Ceylon Sapphire cushion 7.6 x 5.1,150.0,07.60 x 05.10,Ceylon,Sapp
+1.0,SCU00065147,CUS,Blue,1.0,1.44,Sapphire cushion 8.5 x 5.7,300.0,08.50 x 05.70,,Sapp
+1.0,SCU00066144,CUS,Blue,1.0,1.44,Ceylon Sapphire cushion 7.2 x 5.8,150.0,07.20 x 05.80,Ceylon,Sapp
+1.0,SCU00067143,CUS,Blue,1.0,1.43,Ceylon Sapphire cushion 7.7 x 6.1,150.0,07.70 x 06.10,Ceylon,Sapp
+1.0,SCU00068142,CUS,Blue,1.0,1.42,Ceylon Sapphire cushion 7.15 x 5.46,120.0,07.15 x 05.46,Ceylon,Sapp
+1.0,SCU00070124,CUS,Blue,1.0,1.24,Sapphire cushion 6.9 x 5.8,150.0,06.90 x 05.80,,Sapp
+1.0,SCU00071120,CUS,Blue,1.0,1.2,Ceylon Sapphire cushion 7.2 x 5.6,150.0,07.20 x 05.60,Ceylon,Sapp
+1.0,SCU00072119,CUS,Blue,1.0,1.19,Ceylon Sapphire cushion 6.5 x 6.4,70.0,06.50 x 06.40,Ceylon,Sapp
+1.0,SCU00073113,CUS,Blue,1.0,1.13,Ceylon Sapphire square cushion 6.0 x 5.0,300.0,06.00 x 05.00,Ceylon,Sapp
+1.0,SCU00074201,CUS,Blue,1.0,2.01,Cushion Sapphire 7.9 X 5.7,190.0,07.90 x 05.70,,Sapp
+1.0,SCU00075102,CUS,Blue,1.0,1.02,Ceylon Sapphire cushion 5.6 x 4.9,230.0,05.60 x 04.90,Ceylon,Sapp
+1.0,SCU00076092,CUS,Blue,1.0,0.92,Ceylon Sapphire cushion 6.6 x 5.4,150.0,06.60 x 05.40,Ceylon,Sapp
+1.0,SCU00079368,CUS,Blue,2.0,3.68,Ceylon Sapphire square cushion 7.0 x 6.0,300.0,07.00 x 06.00,Ceylon,Sapp
+1.0,SCU00080365,OV,Blue,2.0,4.03,Sapphire Oval 8.0x6.4 |7.5,100.0,08.00 x 06.40 | 07.50,,Sapp
+1.0,SCU00081356,OV,Blue,2.0,3.56,Madagascar Sapphire Oval 7.6 x 5.5 ,320.0,07.60 x 05.50,Madagascar,Sapp
+1.0,SCU00082329,OV,Blue,2.0,3.29,Madagascar Sapphire Oval 8.0 x6.0,320.0,08.00 x 06.00,Madagascar,Sapp
+1.0,SCU00084295,CUS,Blue,2.0,2.99,Ceylon Sapphire square cushion 6.8x6.0 | 7.0x6.2,300.0,06.80 x 06.00 | 07.00 x 06.20,Ceylon,Sapp
+1.0,SCU00085283,CUS,Blue,2.0,2.83,Ceylon Sapphire cushion 7.1x4.9 | 8.5x5.2,300.0,07.10 x 04.90 | 08.50 x 05.20,Ceylon,Sapp
+1.0,SCU00086377,CUS,Blue,2.0,3.77,Ceylon Sapphire cushion 6.9 x 5.5,320.0,06.90 x 05.50,Ceylon,Sapp
+1.0,SCU00087249,CUS,Blue,2.0,2.49,Multi Sapphire 2 CUS / 1 Oval 7.49 X 5.54 | 6.96 X 4.36,45.0,07.49 x 05.54 | 06.96 x 04.36,,Sapp
+1.0,SCU00090190,CUS,Blue,2.0,1.9,Ceylon Sapphire cushion 7.7x5.0 | 7.2x4.6,150.0,07.70 x 05.00 | 07.20 x 04.60,Ceylon,Sapp
+1.0,SCU000911687,CUS,Blue,2.0,2.97,Ceylon Sapphire cushion 6.9 x 5.7,300.0,06.90 x 05.70,Ceylon,Sapp
+1.0,SCU000971892,CUS,Blue,2.0,4.48,Ceylon Sapphire cushion 8.8 x 7.2,150.0,08.80 x 07.20,Ceylon,Sapp
+1.0,SCU00099297,CUS,Blue,2.0,2.97,Ceylon Sapphire cushion 6.7 x 5.5,300.0,06.70 x 05.50,Ceylon,Sapp
+1.0,SCU00100163,CUS,Blue,1.0,1.63,Ceylon Sapphire Oval 7.83x6.27,370.0,07.83 x 06.27,Ceylon,Sapp
+1.0,SCU00101329,CUS,Blue,1.0,1.11,Ceylon Sapphire cushion 6.5 x 5.0,300.0,06.50 x 05.00,Ceylon,Sapp
+1.0,SCU00102220,CUS,Blue,2.0,2.2,Ceylon Sapphire Square Cushion - Matched Pair 6.4 x 5.7|6.3 x 5.5,320.0,06.40 x 05.70 | 06.30 x 05.50,Ceylon,Sapp
+1.0,SCU00105582,CUS,Blue,2.0,1.77,Cushion Sapphire 6.5 X 4.7,100.0,06.50 x 04.70,,Sapp
+1.0,SCU00110110,CUS,Blue,1.0,1.1,Sapphire Cushion 6.80x5.40,300.0,06.80 x 05.40,,Sapp
+1.0,SCU00112172,CUS,Blue,1.0,1.72,Ceylon Sapphire Cushion 7 x 6.4,100.0,07.00 x 06.40,Ceylon,Sapp
+1.0,SCU00115126,CUS,Blue,1.0,1.26,Ceylon Sapphire cushion 7.8 X 6.6,100.0,07.80 x 06.60,Ceylon,Sapp
+1.0,SCU00118257,CUS,Blue,2.0,2.57,Ceylon Sapphire square cushion,300.0,06.22 x 06.20 | 05.76 x 05.25,Ceylon,Sapp
+1.0,SCU00119407,CUS,Blue,2.0,4.07,Ceylon Sapphire cushion 7.9x6.9|8.0x7.2,77.0,07.90 x 06.90 | 08.00 x 07.20,Ceylon,Sapp
+1.0,SCU00120494,CUS,Blue,1.0,4.94,Ceylon Sapphire cushion 10.36 X 9.27,77.0,10.36 x 09.27,Ceylon,Sapp
+1.0,SCU00121409,CUS,Blue,1.0,4.09,Ceylon Sapphire cushion 8.67 X 8.21,77.0,08.67 x 08.21,Ceylon,Sapp
+1.0,SCU00122407,CUS,Blue,1.0,4.07,Ceylon Sapphire cushion 8.7 X 7.87,77.0,08.70 x 07.87,Ceylon,Sapp
+1.0,SCU00123334,CUS,Blue,1.0,3.34,Ceylon Sapphire cushion 9.76 X 8,77.0,09.76 x 08.00,Ceylon,Sapp
+1.0,SCU00124241,CUS,Blue,1.0,2.41,Sapphire cushion 8.4 x 7.8,150.0,08.40 x 07.80,,Sapp
+1.0,SCU00125245,CUS,Blue,1.0,2.45,Ceylon Sapphire cushion 7.7 x 7.5,300.0,07.70 x 07.50,Ceylon,Sapp
+1.0,SCU00126251,CUS,Blue,2.0,2.51,Blue Sapphire Cushion 6.5x5.4|6.5x5.7,300.0,06.50 x 05.40 | 06.50 x 05.70,,Sapp
+1.0,SCU00127267,CUS,Blue,1.0,2.67,Sapphire Cushion 9.0 X 7.2,150.0,09.00 x 07.20,,Sapp
+1.0,SCU00128198,CUS,Blue,1.0,1.98,Sapphire Cushion 8.40 x 6.56,150.0,08.40 x 06.56,,Sapp
+1.0,SCU00130445,CUS,Blue,1.0,4.45,Sapphire Cushion 9.96 x 9.07,320.0,09.96 x 09.07,,Sapp
+1.0,SCU00131401,CUS,Blue,1.0,4.01,Sapphire Cushion 10.0 x 8.60,320.0,10.00 x 08.60,,Sapp
+1.0,SCU00132411,CUS,Blue,1.0,4.11,Sapphire Cushion 8.90 x 8.80,320.0,08.90 x 08.80,,Sapp
+1.0,SCU00133386,CUS,Blue,1.0,3.86,Sapphire Cushion 9.10 x 8.46,320.0,09.10 x 08.46,,Sapp
+1.0,SCU00134255,CUS,Blue,1.0,2.55,Sapphire Elongated Cushion 10.50 x 6.40,320.0,10.50 x 06.40,,Sapp
+1.0,SCU00135221,CUS,Blue,1.0,2.21,Sapphire Square Cushion 7.20 x 6.80,320.0,07.20 x 06.80,,Sapp
+1.0,SCU00136274,CUS,Blue,1.0,2.74,Sapphire Cushion 8.00 x 7.40,320.0,08.00 x 07.40,,Sapp
+1.0,SCU00137245,CUS,Blue,1.0,2.45,Sapphire Cushion 8.70 x 6.80,320.0,08.70 x 06.80,,Sapp
+1.0,SCU00138205,CUS,Blue,1.0,2.05,Sapphire Cushion 8.40 x 6.20,320.0,08.40 x 06.20,,Sapp
+1.0,SCU00140241,CUS,Blue,1.0,2.41,Sapphire cushion 8.4 x 7.8,150.0,08.40 x 07.80,,Sapp
+1.0,SCU00141550,CUS,Blue,1.0,5.5,Sapphire cushion 10.3 x 9.2,90.0,10.30 x 09.20,,Sapp
+1.0,SCU0014299,CUS,Blue,1.0,2.99,Ceylon Sapphire square cushion 7.5 x 7.5,300.0,07.50 x 07.50,Ceylon,Sapp
+1.0,SCU00143255,CUS,Blue,2.0,2.55,Sapphire cushion Pair 6.0 x 5.8,150.0,06.00 x 05.80,,Sapp
+1.0,SCU00145151,CUS,Blue,2.0,1.51,Sapphire cushion Pair 5.15 x 5.15 | 5.08 X 5.07,150.0,05.15 x 05.15 | 05.08 x 05.07,,Sapp
+1.0,SCU00147254,CUS,Blue,1.0,2.54,Sapphire cushion Pair 8.68 x 6.54,80.0,08.68 x 06.54,,Sapp
+1.0,SCU00148352,CUS,Blue,1.0,3.52,Sapphire cushion Pair 9.23 x 6.91,80.0,09.23 x 06.91,,Sapp
+1.0,SCU00150154,CUS,Blue,1.0,1.54,Sapphire cushion 8.28x6.38,300.0,08.28 x 06.38,,Sapp
+1.0,SCU00153284,CUS,Blue,2.0,2.84,Sapphire cushion 7x6.7|6.6x6.3,300.0,07.00 x 06.70 | 06.60 x 06.30,,Sapp
+1.0,SCU00154263,CUS,Blue,2.0,2.63,Sapphire cushion 6.7x6.2|6.5x6.5,300.0,06.70 x 06.20 | 06.50 x 06.50,,Sapp
+1.0,SCU00155108,CUS,Blue,2.0,1.08,Sapphire cushion 6.6x5.8,300.0,06.60 x 05.80,,Sapp
+1.0,SCU00156214,CUS,Blue,2.0,2.14,Sapphire cushion 6.3x5.6|6.06x4.7,300.0,06.30 x 05.60 | 06.06 x 04.70,,Sapp
+1.0,SCU00159145,CUS,Blue,1.0,1.45,Sapphire cushion 8.07x6.09,300.0,08.07 x 06.09,,Sapp
+1.0,SCU00161202,CUS,Blue,1.0,2.02,Sapphire cushion 7.4x5.3,300.0,07.40 x 05.30,,Sapp
+1.0,SCU00162293,CUS,Blue,1.0,2.93,Sapphire cushion 9.08x6.63,300.0,09.08 x 06.63,,Sapp
+1.0,SCU00167326,CUS,Blue,1.0,3.26,Sapphire cushion 9.60x6.90,300.0,09.60 x 06.90,,Sapp
+1.0,SCU00168195,CUS,Blue,1.0,1.95,Sapphire cushion 7.56x6.56,300.0,07.56 x 06.56,,Sapp
+1.0,SCU00169183,CUS,Blue,1.0,1.83,Sapphire cushion 7.12x7.00,200.0,07.12 x 07.00,,Sapp
+1.0,SCU00170143,CUS,Blue,1.0,1.43,Sapphire cushion 7.12x6.81,100.0,07.12 x 06.81,,Sapp
+1.0,SCU00171182,CUS,Blue,1.0,1.82,Sapphire cushion 6.90x6.90,200.0,06.90 x 06.90,,Sapp
+1.0,SCU00172095,CUS,Blue,1.0,0.95,Sapphire cushion 6.17x5.32,150.0,06.17 x 05.32,,Sapp
+1.0,SCU00173095,CUS,Blue,1.0,0.95,Sapphire cushion 5.5x4.95,300.0,05.50 x 04.95,,Sapp
+1.0,SCU00174082,CUS,Blue,1.0,0.82,Sapphire cushion 5.75x4.95,300.0,05.75 x 04.95,,Sapp
+1.0,SCU00175188,CUS,Blue,1.0,1.88,Sapphire cushion 7.22x6.64,300.0,07.22 x 06.64,,Sapp
+1.0,SCU00176216,CUS,Blue,1.0,2.16,Sapphire cushion 8.22x6.61,100.0,08.22 x 06.61,,Sapp
+1.0,SCU00177413,CUS,Blue,1.0,4.13,Sapphire cushion 10.74x7.7,100.0,10.74 x 07.70,,Sapp
+1.0,SCU00178275,CUS,Blue,1.0,2.75,Sapphire cushion 9.08x7.25,100.0,09.08 x 07.25,,Sapp
+1.0,SCU00179217,CUS,Blue,1.0,2.17,Sapphire cushion 8.22x6.83,100.0,08.22 x 06.83,,Sapp
+1.0,SCU00180293,CUS,Blue,0.0,2.93,Sapphire cushion 8.65x7.31,100.0,08.65 x 07.31,,Sapp
+1.0,SCU0022159,CUS,Blue,1.0,1.59,Ceylon Sapphire cushion 7.9 x 6.2,50.0,07.90 x 06.20,Ceylon,Sapp
+1.0,SCU0023368,OV,Blue,2.0,3.68,Sapphire Cushion 8.17 X 6.18,150.0,08.17 x 06.18,,Sapp
+1.0,SCU0078378,CUS,Blue,2.0,3.78,Ceylon Sapphire Cushion 8.4x6.4 | 7.8x5.8,300.0,08.40 x 06.40 | 07.80 x 05.80,Ceylon,Sapp
+1.0,SCU0088226,CUS,Blue,2.0,2.26,Ceylon Sapphire cushion 7.0x6.1 | 6.7x5.6,150.0,07.00 x 06.10 | 06.70 x 05.60,Ceylon,Sapp
+1.0,SCU0089205,CUS,Blue,2.0,2.05,Ceylon Sapphire cushion 6.0 x 5.2 ,340.0,06.00 x 05.20,Ceylon,Sapp
+1.0,SEC000011185,S.E/C,Blue,1.0,11.85,Ceylon Sapphire square emerald cut 12.9 x 11.6,180.0,12.90 x 11.60,Ceylon,Sapp
+1.0,SEC00002941,S.E/C,Blue,1.0,9.41,Ceylon Sapphire square emerald cut 12.0 x 10.4,280.0,12.00 x 10.40,Ceylon,Sapp
+1.0,SEC00003914,E/C,Blue,1.0,9.14,Ceylon Sapphire elongated emerald cut 14.3 x 9.7,280.0,14.30 x 09.70,Ceylon,Sapp
+1.0,SEC00005837,E/C,Blue,1.0,8.37,Ceylon Sapphire emerald cut 12.7 x 9.3,280.0,12.70 x 09.30,Ceylon,Sapp
+1.0,SEC00006830,E/C,Blue,1.0,8.3,Ceylon Sapphire emerald cut 12.1 x 8.4,280.0,12.10 x 08.40,Ceylon,Sapp
+1.0,SEC00007711,E/C,Blue,1.0,7.11,Sapphire emerald cut 12.3 x 8.2,180.0,12.30 x 08.20,,Sapp
+1.0,SEC00008669,S.E/C,Blue,1.0,6.69,Ceylon Sapphire square emerald cut 11.0 x 10.2,180.0,11.00 x 10.20,Ceylon,Sapp
+1.0,SEC00009617,E/C,Blue,1.0,6.17,Ceylon Sapphire elongated emerald cut 12.3 x 8.2,180.0,12.30 x 08.20,Ceylon,Sapp
+1.0,SEC00010616,E/C,Blue,1.0,6.16,Ceylon Sapphire emerald cut 11.3 x 9.0,180.0,11.30 x 09.00,Ceylon,Sapp
+1.0,SEC00011612,S.E/C,Blue,1.0,6.12,Ceylon Sapphire square emerald cut 9.4 x 9.4,180.0,09.40 x 09.40,Ceylon,Sapp
+1.0,SEC00012601,E/C,Blue,1.0,6.01,Ceylon Sapphire emerald cut 12.8 x 9.2,180.0,12.80 x 09.20,Ceylon,Sapp
+1.0,SEC00013480,E/C,Blue,1.0,4.8,Ceylon Sapphire emerald cut 11.6 x 7.8,180.0,11.60 x 07.80,Ceylon,Sapp
+1.0,SEC00014448,S.E/C,Blue,1.0,4.48,Ceylon Sapphire square emerald cut 9.2 x 8.4,180.0,09.20 x 08.40,Ceylon,Sapp
+1.0,SEC00015318,E/C,Blue,1.0,3.18,Ceylon Sapphire emerald cut 9.4 x 7.4                                                                                        GIA CERTIFIED REPORT NUMBER:- 2231653700 ,180.0,09.40 x 07.40,Ceylon,Sapp
+1.0,SEC00016312,E/C,Blue,1.0,3.12,Ceylon Sapphire emerald cut 9.8 x 7.2,180.0,09.80 x 07.20,Ceylon,Sapp
+1.0,SEC00017302,E/C,Blue,1.0,3.02,Sapphire emerald cut 8.6x6.1,77.0,08.60 x 06.10,,Sapp
+1.0,SEC00019142,S.E/C,Blue,1.0,1.42,Ceylon Sapphire square emerald cut 6.9 x 5.7,77.0,06.90 x 05.70,Ceylon,Sapp
+1.0,SEC00020143,E/C,Blue,1.0,1.43,Ceylon Sapphire emerald cut 6.8 x 5.0,360.0,06.80 x 05.00,Ceylon,Sapp
+1.0,SEC00021330,E/C,Blue,1.0,3.3,Ceylon Sapphire emerald cut 9.5x7.2,180.0,09.50 x 07.20,Ceylon,Sapp
+1.0,SEC00022345,E/C,Blue,2.0,3.45,Sapphire E/C 8.7x6.6|8.7x6.5,25.0,08.70 x 06.60 | 08.70 x 06.50,,Sapp
+1.0,SEC00023293,E/C,Blue,2.0,2.93,Ceylon Sapphire emerald cut 7.4x5.8 | 6.3x5.2,150.0,07.40 x 05.80 | 06.30 x 05.20,Ceylon,Sapp
+1.0,SEC00024137,S.E/C,Blue,1.0,1.37,Ceylon Sapphire square emerald cut 6.2 x 5.8,72.0,06.20 x 05.80,Ceylon,Sapp
+1.0,SEC00031459,EC,Blue,1.0,4.58,Sapphire E/C 12.0 x 8.3,320.0,12.00 x 08.30,,Sapp
+1.0,SEC00032302,EC,Blue,1.0,3.02,Sapphire Emerald Cut 9.20 x 6.70,320.0,09.20 x 06.70,,Sapp
+1.0,SEC00033578,EC,Blue,2.0,5.78,Sapphire Emerald Cut 8.4x 6.8|8.4x8.2,320.0,08.40 x 06.80 | 08.40 x 08.20,,Sapp
+1.0,SEC00034232,EC,Blue,1.0,2.32,Sapphire Emerald Cut 8.08 x 6.63,320.0,08.08 x 06.63,,Sapp
+1.0,SEC00036268,EC,Blue,1.0,2.68,Sapphire Emerald Cut 7.80 x 6.50,320.0,07.80 x 06.50,,Sapp
+1.0,SEC00039736,E/C,Blue,1.0,7.36,Ceylon Sapphire emerald cut 11.97 x 8.47,80.0,11.97 x 08.47,Ceylon,Sapp
+1.0,SEC00040577,E/C,Blue,1.0,5.77,Ceylon Sapphire emerald cut 12.48 x 7.90,80.0,12.48 x 07.90,Ceylon,Sapp
+1.0,SEC00041155,E/C,Blue,1.0,1.55,Ceylon Sapphire emerald cut 7.86 x 6.03,72.0,07.86 x 06.03,Ceylon,Sapp
+1.0,SEC00042162,E/C,Blue,1.0,1.62,Ceylon Sapphire emerald cut 7.93 x 6.03,72.0,07.93 x 06.03,Ceylon,Sapp
+1.0,SEC00043176,E/C,Blue,1.0,1.76,Ceylon Sapphire emerald cut 8.05 x 6.01,72.0,08.05 x 06.01,Ceylon,Sapp
+1.0,SEC00044178,E/C,Blue,1.0,1.78,Ceylon Sapphire emerald cut 7.92 x 6.02,72.0,07.92 x 06.02,Ceylon,Sapp
+1.0,SEC00045167,E/C,Blue,1.0,1.67,Ceylon Sapphire emerald cut 8.10 x 6.17,72.0,08.10 x 06.17,Ceylon,Sapp
+1.0,SEC00046183,E/C,Blue,1.0,1.83,Ceylon Sapphire emerald cut 7.95 x 5.96,72.0,07.95 x 05.96,Ceylon,Sapp
+1.0,SEC00047190,S.E/C,Blue,1.0,1.9,Sapphire Square Emerald Cut 7.20 x 6.50,300.0,07.20 x 06.50,,Sapp
+1.0,SEC00048394,S.E/C,Blue,1.0,3.94,"Ceylon Sapphire Emerald Cut 10.00 x 7.17 x 5.52 mm, 3.94 carats, Heated, GIA report number: 2241018998",1000.0,10.00 x 07.17,Ceylon,Sapp
+1.0,SEC00049355,S.E/C,Blue,1.0,3.55,"Madagascar Sapphire Emerald Cut 9.70 x 6.82 x 5.55  mm, 3.55 carats, Heated, GIA report number: 1242019007",1000.0,09.70 x 06.82,Madagascar,Sapp
+1.0,SEC00050305,S.E/C,Blue,1.0,3.05,"Ceylon Sapphire Emerald Cut 9.81 x 7.11 x 4.93 mm, 3.05 carats, Heated, GIA report number: 6247018976",1000.0,09.81 x 07.11,Ceylon,Sapp
+1.0,SEC00051376,S.E/C,Blue,1.0,3.76,"Ceylon Sapphire Emerald Cut 9.01 x 6.57 x 6.03 mm, 3.76 carats, Heated, GIA report number: 2241018980",1000.0,09.01 x 06.57,Ceylon,Sapp
+1.0,SEC00052255,S.E/C,Blue,1.0,2.55,"Ceylon Sapphire Emerald Cut 7.62 x 6.62 x 5.00 mm, 2.55 carats, Heated, GIA report number: 2245018982",1000.0,07.62 x 06.62,Ceylon,Sapp
+1.0,SEC00053260,S.E/C,Blue,1.0,2.6,"Ceylon Sapphire Emerald Cut 8.07 x 6.85 x 4.88 mm, 2.60 carats, Heated, GIA report number: 2241018972",1000.0,08.07 x 06.85,Ceylon,Sapp
+1.0,SEC00054198,S.E/C,Blue,1.0,1.98,Sapphire Emerald Cut 7.15X6.44,100.0,07.15 x 06.44,,Sapp
+1.0,SEC00055691,S.E/C,Blue,1.0,6.91,Sapphire Emerald Cut 10.77X10.66,100.0,10.77 x 10.66,,Sapp
+1.0,SEC0016464,E/C,Blue,1.0,4.64,Sapphire elongated emerald cut 13.6 x 6.7,77.0,13.60 x 06.70,,Sapp
+1.0,SHT00001393,HS,Blue,1.0,3.93,Ceylon Sapphire heart 11.0 x 9.6,300.0,11.00 x 09.60,Ceylon,Sapp
+1.0,SHT00002152,HS,Blue,1.0,1.52,Ceylon Sapphire heart 6.06 x 6.58,150.0,06.58 x 06.06,Ceylon,Sapp
+1.0,SHT00003234,HS,Blue,1.0,2.34,Sapphire heart 7.8 x 7.4,230.0,07.80 x 07.40,,Sapp
+1.0,SHT00004182,HS,Blue,1.0,1.82,Sapphire heart 8.5x7.5,230.0,08.50 x 07.50,,Sapp
+1.0,SHT00005175,HS,Blue,1.0,1.75,Sapphire heart 6.8 x 6.4,230.0,06.80 x 06.40,,Sapp
+1.0,SHT00006128,HS,Blue,1.0,1.28,Sapphire heart 7.1 x 5.5,230.0,07.10 x 05.50,,Sapp
+1.0,SHT00007473,HS,Blue,1.0,4.73,Ceylon Sapphirehire Heart Shape 8.73 X 9.95,180.0,09.95 x 08.73,Ceylon,Sapp
+1.0,SHT00008212,HS,Blue,1.0,2.12,Ceylon Sapphirehire Heart Shape 7.70 X 8.70,230.0,08.70 x 07.70,Ceylon,Sapp
+1.0,SHT00009478,HS,Blue,2.0,3.3,Ceylon Sapphire Heart Shape 7.00 | 7.50,230.0,07.00 | 07.50,Ceylon,Sapp
+1.0,SHT00011593,HS,Blue,1.0,1.39,Ceylon Sapphire heart 7.2 x 6.5,230.0,07.20 x 06.50,Ceylon,Sapp
+1.0,SHT00014297,HS,Blue,1.0,2.97,Sapphire Heart Shape 9.10 x 8.50,320.0,09.10 x 08.50,,Sapp
+1.0,SHT00015259,HS,Blue,1.0,2.59,Sapphire Heart Shape 8.90 x 7.50,320.0,08.90 x 07.50,,Sapp
+1.0,SMQ00002302,MQ,Blue,1.0,3.02,Sapphire Blue Green Marquise 17.5 x 6.9,27.0,17.50 x 06.90,,Sapp
+1.0,SMQ00004063,MQ,Blue,1.0,0.63,Ceylon Sapphire marq 7.0 x 3.7,190.0,07.00 x 03.70,Ceylon,Sapp
+1.0,SMQ00009203,MQ,Blue,1.0,2.03,Sapphire Marq 12.0 x 6.0,145.0,12.00 x 06.00,,Sapp
+1.0,SMQ00010129,MQ,Blue,1.0,1.29,Sapphire Marq 11.62 x 5.40,27.0,11.62 x 05.40,,Sapp
+1.0,SMQ00011098,MQ,Blue,1.0,0.98,Sapphire Marq 10.92 x 4.93,27.0,10.92 x 04.93,,Sapp
+1.0,SOV000011379,OV,Blue,1.0,13.79,Ceylon Sapphire Oval 15.7 x 13.2,180.0,15.70 x 13.20,Ceylon,Sapp
+1.0,SOV000021028,OV,Blue,1.0,10.28,Ceylon Sapphire Oval 13.6 x 11.6,180.0,13.60 x 11.60,Ceylon,Sapp
+1.0,SOV00003972,OV,Blue,2.0,9.72,Madagascar Sapphire Oval 11.84x9.43|11.39x7.77,180.0,11.84 x 09.43 | 11.39 x 07.77,Madagascar,Sapp
+1.0,SOV00004907,OV,Blue,1.0,9.07,Ceylon Sapphire Oval 14.5 x 12.6,180.0,14.50 x 12.60,Ceylon,Sapp
+1.0,SOV00005892,OV,Blue,1.0,8.92,Ceylon Sapphire Oval 14.3 x 10.2,120.0,14.30 x 10.20,Ceylon,Sapp
+1.0,SOV00006652,OV,Blue,1.0,6.52, Ceylon Sapphire Oval 12.2 x 10.1,180.0,12.20 x 10.10,Ceylon,Sapp
+1.0,SOV00007618,OV,Blue,1.0,6.18,Ceylon Sapphire Oval 11.7 x 10.0,180.0,11.70 x 10.00,Ceylon,Sapp
+1.0,SOV00008598,OV,Blue,1.0,5.98,Sapphire Oval 12.5 x 9.7,180.0,12.50 x 09.70,,Sapp
+1.0,SOV00009572,OV,Blue,1.0,5.72,Ceylon Sapphire Oval 11.3 x 9.2,180.0,11.30 x 09.20,Ceylon,Sapp
+1.0,SOV00010545,OV,Blue,1.0,5.45,Ceylon Sapphire Oval 11.6 x 8.8,180.0,11.60 x 08.80,Ceylon,Sapp
+1.0,SOV00011526,OV,Blue,1.0,5.26,Ceylon Sapphire Oval 11.5 x 8.8,120.0,11.50 x 08.80,Ceylon,Sapp
+1.0,SOV00012485,OV,Blue,1.0,4.85,Sapphire Oval 11.4 x 8.2,77.0,11.40 x 08.20,,Sapp
+1.0,SOV00013456,OV,Blue,1.0,4.56,Ceylon Sapphire Oval 9.5 x 8.4,900.0,09.50 x 08.40,Ceylon,Sapp
+1.0,SOV00014452,OV,Blue,1.0,4.52,Sapphire Oval 10x8.6,77.0,10.00 x 08.60,,Sapp
+1.0,SOV00015402,OV,Blue,1.0,4.02,Ceylon Sapphire Oval 9.8 x 7.9,70.0,09.80 x 07.90,Ceylon,Sapp
+1.0,SOV00017765,OV,Blue,1.0,3.49,Ceylon Sapphire Oval 10.0 x 8.1,240.0,10.00 x 08.10,Ceylon,Sapp
+1.0,SOV00018826,OV,Blue,2.0,8.26,Sapphire Oval 11.0x8.0,390.0,11.00 x 08.00,,Sapp
+1.0,SOV00019719,OV,Blue,2.0,7.19,Ceylon Sapphire  Oval 10.0 x 8.4,100.0,10.00 x 08.40,Ceylon,Sapp
+1.0,SOV00020391,OV,Blue,1.0,3.91,Ceylon Sapphire Oval 10.8 x 7.9,70.0,10.80 x 07.90,Ceylon,Sapp
+1.0,SOV00022364,OV,Blue,1.0,3.64,Ceylon Sapphire Oval 10.7 x 8.7,300.0,10.70 x 08.70,Ceylon,Sapp
+1.0,SOV00024352,OV,Blue,1.0,3.52,Ceylon Sapphire Oval 8.8 x 8.1,70.0,08.80 x 08.10,Ceylon,Sapp
+1.0,SOV00025342,OV,Blue,1.0,3.42,Ceylon Sapphire Oval 9.7 x 8.1,150.0,09.70 x 08.10,Ceylon,Sapp
+1.0,SOV00026340,OV,Blue,1.0,3.4,Ceylon Sapphire Oval 10.1 x 7.5,70.0,10.10 x 07.50,Ceylon,Sapp
+1.0,SOV00028327,OV,Blue,1.0,3.27,Sapphire Oval 10.5 x 7.7,160.0,10.50 x 07.70,,Sapp
+1.0,SOV00029314,OV,Blue,1.0,3.14,Ceylon Sapphire Oval 10.7 x 7.5,70.0,10.70 x 07.50,Ceylon,Sapp
+1.0,SOV00030310,OV,Blue,1.0,3.1,Sapphire Oval 7.50 X 8.45,77.0,08.45 x 07.50,,Sapp
+1.0,SOV00031306,OV,Blue,1.0,3.06,Sapphire Oval 10.3x7.4,77.0,10.30 x 07.40,,Sapp
+1.0,SOV00031726,OV,Blue,2.0,7.26,Ceylon Sapphire Oval,300.0,11.00 x 08.00,Ceylon,Sapp
+1.0,SOV00032306,OV,Blue,1.0,3.06,Ceylon Sapphire Oval 9.8 x 7.1,300.0,09.80 x 07.10,Ceylon,Sapp
+1.0,SOV00033302,OV,Blue,1.0,3.02,Ceylon Sapphire Oval 11.1 x 8.1,50.0,11.10 x 08.10,Ceylon,Sapp
+1.0,SOV00034289,OV,Blue,1.0,2.89,Sapphire Oval 8.7x6.9,77.0,08.70 x 06.90,,Sapp
+1.0,SOV00035288,OV,Blue,1.0,2.88,Ceylon Sapphire Oval 10 x 8.1,300.0,10.00 x 08.10,Ceylon,Sapp
+1.0,SOV00036386,OV,Blue,1.0,2.86,Sapphire Oval 8.8x7.3,77.0,08.80 x 07.30,,Sapp
+1.0,SOV00037285,OV,Blue,1.0,2.85,Ceylon Sapphire Oval 10.3 x 7.0 ,70.0,10.30 x 07.00,Ceylon,Sapp
+1.0,SOV00038279,OV,Blue,1.0,2.79,Sapphire Oval 9.8x6.8,77.0,09.80 x 06.80,,Sapp
+1.0,SOV00039276,OV,Blue,1.0,2.76,Sapphire Oval 10x6.6,77.0,10.00 x 06.60,,Sapp
+1.0,SOV00040270,OV,Blue,1.0,2.7,Sapphire Oval 9.1 x 7.5,160.0,09.10 x 07.50,,Sapp
+1.0,SOV00041254,OV,Blue,1.0,2.54,Sapphire Oval 9.7 x 7.0,160.0,09.70 x 07.00,,Sapp
+1.0,SOV00042252,OV,Blue,1.0,2.52,Ceylon Sapphire Oval 8.8 x 7.5,300.0,08.80 x 07.50,Ceylon,Sapp
+1.0,SOV00044241,OV,Blue,1.0,2.41,Ceylon Sapphire Oval 8.5 x 6.4,300.0,08.50 x 06.40,Ceylon,Sapp
+1.0,SOV00047230,OV,Blue,1.0,2.3,Ceylon Sapphire Oval 8.0 X 6.4,300.0,08.00 x 06.40,Ceylon,Sapp
+1.0,SOV00048227,OV,Blue,1.0,2.27,Ceylon Sapphire Oval 9.0 X 6.4,360.0,09.00 x 06.40,Ceylon,Sapp
+1.0,SOV00049225,OV,Blue,1.0,2.25,Ceylon Sapphire Oval 8.3 X 6.0,300.0,08.30 x 06.00,Ceylon,Sapp
+1.0,SOV00050223,OV,Blue,1.0,2.23,Ceylon Sapphire Oval 8.3 x 5.7,390.0,08.30 x 05.70,Ceylon,Sapp
+1.0,SOV00052216,OV,Blue,1.0,2.16,Ceylon Sapphire Oval 8.4 x 7.1,360.0,08.40 x 07.10,Ceylon,Sapp
+1.0,SOV00054205,OV,Blue,1.0,2.05,Ceylon Sapphire Oval 7.86 x 6.78,70.0,07.86 x 06.78,Ceylon,Sapp
+1.0,SOV00055230,OV,Blue,1.0,2.3,Ceylon Sapphire Oval 8.8 x 6.31,100.0,08.80 x 06.31,Ceylon,Sapp
+1.0,SOV00058190,OV,Blue,1.0,1.9,Ceylon Sapphire Oval 8.6 X 6.2,300.0,08.60 x 06.20,Ceylon,Sapp
+1.0,SOV00060185,OV,Blue,1.0,1.85,Madagascar Sapphire Round D/C 6.5x6.0,77.0,06.50 x 06.00,Madagascar,Sapp
+1.0,SOV00061182,OV,Blue,1.0,1.82,Ceylon Sapphire Oval 8.6 x 6.3,300.0,08.60 x 06.30,Ceylon,Sapp
+1.0,SOV00062181,OV,Blue,1.0,1.81,Sapphire Oval 8.1 x 6.0,150.0,08.10 x 06.00,,Sapp
+1.0,SOV00063180,OV,Blue,1.0,1.8,Ceylon Sapphire Oval 7.3 x 5.4,300.0,07.30 x 05.40,Ceylon,Sapp
+1.0,SOV00064175,OV,Blue,1.0,1.75,Sapphire Oval 7.9 X 5.7 GIA CERTIFIED ,30.0,07.90 x 05.70,,Sapp
+1.0,SOV00065174,OV,Blue,1.0,1.74,Ceylon Sapphire Oval 7.9 X 6.1,70.0,07.90 x 06.10,Ceylon,Sapp
+1.0,SOV00066173,OV,Blue,1.0,1.73,Ceylon Sapphire Oval 7.4 x 6.1,70.0,07.40 x 06.10,Ceylon,Sapp
+1.0,SOV00067171,OV,Blue,1.0,1.71,Ceylon Sapphire Oval 7.9 x 5.8,320.0,07.90 x 05.80,Ceylon,Sapp
+1.0,SOV00068154,OV,Blue,1.0,1.54,Ceylon Sapphire Oval 7.5 x 5.4,300.0,07.50 x 05.40,Ceylon,Sapp
+1.0,SOV00069153,OV,Blue,1.0,1.53,Ceylon Sapphire Oval 7.6 x 5.0,320.0,07.60 x 05.00,Ceylon,Sapp
+1.0,SOV00070148,OV,Blue,1.0,1.48,Ceylon Sapphire Oval 7.60 X 6.00,210.0,07.60 x 06.00,Ceylon,Sapp
+1.0,SOV00072148,OV,Blue,1.0,1.48,Ceylon Sapphire Oval 8.3 x 5.7,300.0,08.30 x 05.70,Ceylon,Sapp
+1.0,SOV00075142,OV,Blue,1.0,1.42,Ceylon Sapphire Oval 7.13 x 6.10,120.0,07.13 x 06.10,Ceylon,Sapp
+1.0,SOV00076140,OV,Blue,1.0,1.4,Ceylon Sapphire Oval 7.19 x 5.76,100.0,07.19 x 05.76,Ceylon,Sapp
+1.0,SOV00077140,OV,Blue,1.0,1.4,Ceylon Sapphire Oval 7.5 x 5.2,302.0,07.50 x 05.20,Ceylon,Sapp
+1.0,SOV00078137,OV,Blue,1.0,1.37,Ceylon Sapphire Oval 7.7 x 6.2,300.0,07.70 x 06.20,Ceylon,Sapp
+1.0,SOV00079137,OV,Blue,1.0,1.37,Ceylon Sapphire Oval 7.3 x 5.7,300.0,07.30 x 05.70,Ceylon,Sapp
+1.0,SOV00080135,OV,Blue,1.0,1.35,Ceylon Sapphire Oval 7.4 x 5.2,300.0,07.40 x 05.20,Ceylon,Sapp
+1.0,SOV00081131,OV,Blue,1.0,1.31,Ceylon Sapphire Oval 7.4 x 5.2,300.0,07.40 x 05.20,Ceylon,Sapp
+1.0,SOV00082131,OV,Blue,1.0,1.31,Ceylon Sapphire Oval 8.6 x 5.2,300.0,08.60 x 05.20,Ceylon,Sapp
+1.0,SOV00085129,OV,Blue,1.0,1.29,Ceylon Sapphire Oval 7.8 x 5.6,360.0,07.80 x 05.60,Ceylon,Sapp
+1.0,SOV00086126,OV,Blue,1.0,1.26,Ceylon Sapphire Oval 7.6 X 5.5,300.0,07.60 x 05.50,Ceylon,Sapp
+1.0,SOV00087124,OV,Blue,1.0,1.24,Ceylon Sapphire Oval 7.8 x 6.2,150.0,07.80 x 06.20,Ceylon,Sapp
+1.0,SOV00088123,OV,Blue,1.0,1.23,Ceylon Sapphire Oval 8.6 x 6.6,100.0,08.60 x 06.60,Ceylon,Sapp
+1.0,SOV00089122,OV,Blue,1.0,1.22,Ceylon Sapphire Oval 7.2 X 5.1,90.0,07.20 x 05.10,Ceylon,Sapp
+1.0,SOV00090121,OV,Blue,1.0,1.21,Ceylon Sapphire Oval 8.00 x 5.75,100.0,08.00 x 05.75,Ceylon,Sapp
+1.0,SOV00091121,OV,Blue,1.0,1.21,Ceylon Sapphire Oval 7.00 x 5.00,120.0,07.00 x 05.00,Ceylon,Sapp
+1.0,SOV00092120,OV,Blue,1.0,1.2,Ceylon Sapphire Oval 7.3 x 5.5,300.0,07.30 x 05.50,Ceylon,Sapp
+1.0,SOV00093115,OV,Blue,1.0,1.15,Ceylon Sapphire Oval 7.8 x 5.7,300.0,07.80 x 05.70,Ceylon,Sapp
+1.0,SOV00094112,OV,Blue,1.0,1.12,Ceylon Sapphire Oval 7.9 x 5.8,360.0,07.90 x 05.80,Ceylon,Sapp
+1.0,SOV00095111,OV,Blue,1.0,1.11,Ceylon Sapphire Oval 7.8 x 6.0,150.0,07.80 x 06.00,Ceylon,Sapp
+1.0,SOV00096100,OV,Blue,1.0,1.0,Ceylon Sapphire Oval 6.1 x 4.9,180.0,06.10 x 04.90,Ceylon,Sapp
+1.0,SOV00097202,OV,,1.0,2.02,Ceylon Sapphire Oval 8.5 x 6 ,300.0,08.50 x 06.00,Ceylon,Sapp
+1.0,SOV00098202,OV,Blue,1.0,2.02,Blue Sapphire Oval 7.9 x 6.5,70.0,07.90 x 06.50,,Sapp
+1.0,SOV00099185,OV,Blue,1.0,1.85,Ceylons Sapphire Oval cushion 7.7 x 5.6,300.0,07.70 x 05.60,,Sapp
+1.0,SOV00100192,OV,Blue,1.0,1.92,Ceylon Sapphire Oval 8.4 X 6.2,360.0,08.40 x 06.20,Ceylon,Sapp
+1.0,SOV00101174,OV,Blue,1.0,1.74,Sapphire Oval 8.6 x 6.5,150.0,08.60 x 06.50,,Sapp
+1.0,SOV00102172,OV,Blue,1.0,1.72,Ceylon Sapphire Oval 8.0 x 6.0,150.0,08.00 x 06.00,Ceylon,Sapp
+1.0,SOV00103170,OV,Blue,1.0,1.7,Ceylon Sapphire Oval 7.8x5.7,300.0,07.80 x 05.70,Ceylon,Sapp
+1.0,SOV00104168,OV,Blue,1.0,1.68,Ceylon Sapphire Oval 7.2 x 6.2,300.0,07.20 x 06.20,Ceylon,Sapp
+1.0,SOV00105166,OV,Blue,1.0,1.66,Ceylon Sapphire Oval 7.9 x 5.5,360.0,07.90 x 05.50,Ceylon,Sapp
+1.0,SOV00106158,OV,Blue,1.0,1.58,Ceylon Sapphire Oval 7.3 x 5.7,300.0,07.30 x 05.70,Ceylon,Sapp
+1.0,SOV00107158,OV,Blue,1.0,1.58,Ceylon Sapphire Oval 7.3 x 5.7,300.0,07.30 x 05.70,Ceylon,Sapp
+1.0,SOV00108088,OV,Blue,1.0,0.88,Ceylon Sapphire Oval 7.0 x 5.6,100.0,07.00 x 05.60,Ceylon,Sapp
+1.0,SOV00109997,OV,Blue,1.0,4.92,Sapphire Oval 11.3 x 9.0,180.0,11.30 x 09.00,,Sapp
+1.0,SOV00110641,OV,Blue,2.0,6.41,Sapphire Oval 9.9 x 7.8,77.0,09.90 x 07.80,,Sapp
+1.0,SOV00111545,OV,Blue,2.0,5.45,Ceylon Sapphire Oval 10.0 x 8.0,150.0,10.00 x 08.00,Ceylon,Sapp
+1.0,SOV00114413,OV,Blue,2.0,4.13,Ceylon Sapphire Oval 9.3x6.6 | 8.5x6.7,300.0,09.30 x 06.60 | 08.50 x 06.70,Ceylon,Sapp
+1.0,SOV00115505,OV,Blue,2.0,5.05,Ceylon Sapphire Oval 9.0 x 6.0,300.0,09.00 x 06.00,Ceylon,Sapp
+1.0,SOV00116437,OV,Blue,2.0,4.37,Ceylon Sapphire Oval 9.5 x 7.0,77.0,09.50 x 07.00,Ceylon,Sapp
+1.0,SOV00117687,OV,Blue,2.0,6.87,Ceylon Sapphire Oval 9.6 x 8.3,230.0,09.60 x 08.30,Ceylon,Sapp
+1.0,SOV00119270,OV,Blue,2.0,2.7,Ceylon Sapphire Oval 8.0 x 6.0,75.0,08.00 x 06.00,Ceylon,Sapp
+1.0,SOV00125270,OV,Blue,1.0,2.7,Ceylon Sapphire Oval 8.6x6.5,210.0,08.60 x 06.50,Ceylon,Sapp
+1.0,SOV00144320,OV,Blue,2.0,3.2,Ceylon Sapphire Oval 6.9x5.5 | 6.9x5.4,300.0,06.90 x 05.50 | 06.90 x 05.40,Ceylon,Sapp
+1.0,SOV00145256,OV,Blue,2.0,2.56,Ceylon Sapphire Oval 6.8x5.3|6.4x5.3,300.0,06.80 x 05.30 | 06.40 x 05.30,Ceylon,Sapp
+1.0,SOV00146160,OV,Blue,1.0,1.6,Ceylon Sapphire Oval 7.3 x 5.3,300.0,07.30 x 05.30,Ceylon,Sapp
+1.0,SOV00150235,OV,Blue,2.0,2.35,Ceylon Sapphire Oval 6.5 x 5.5,70.0,06.50 x 05.50,Ceylon,Sapp
+1.0,SOV00159177,OV,Blue,2.0,1.77,Ceylon Sapphire Oval 6.35 X 5.15 | 5.70 X 5.09,50.0,06.35 x 05.15 | 05.70 x 05.09,Ceylon,Sapp
+1.0,SOV00160223,OV,Blue,2.0,2.23,Sapphire Oval 7.1 x 5.1,46.0,07.10 x 05.10,,Sapp
+1.0,SOV00163259,OV,Blue,1.0,2.38,Sapphire Oval 8.84 x 7,46.0,08.84 x 07.00,,Sapp
+1.0,SOV00164101,OV,Blue,1.0,1.01,Ceylon Sapphire 6.5 X 4.4,190.0,06.50 x 04.40,Ceylon,Sapp
+1.0,SOV00165718,,,2.0,7.18,Black Sapp 13.68 X 11.04,10.0,13.68 x 11.04,,Sapp
+1.0,SOV00166653,OV,Blue,2.0,6.53,Blue Sapp 10X8,45.0,10.00 x 08.00,,Sapp
+1.0,SOV00167630,OV,Blue,2.0,6.3,Blue Sapp 9.9 X 7.7,45.0,09.90 x 07.70,,Sapp
+1.0,SOV00168605,OV,Blue,2.0,6.05,Blue Sapp 10X8,45.0,10.00 x 08.00,,Sapp
+1.0,SOV00171372,OV,Blue,1.0,3.72,Blue Sapp 9.18 X 7.00,45.0,09.18 x 07.00,,Sapp
+1.0,SOV00172181,OV,Blue,2.0,1.81,Sapphire Oval 5.21 X 4.94 | 6 X 4,150.0,05.21 x 04.94 | 06.00 x 04.00,,Sapp
+1.0,SOV00173536,OV,Blue,1.0,5.36,Sapphire Oval 11.82 x 9.25                  (yoel),180.0,11.82 x 09.25,,Sapp
+1.0,SOV00174718,OV,Blue,1.0,7.18,Saphire Oval 13.08 x 10.01   (yoel),180.0,13.08 x 10.01,,Sapp
+1.0,SOV00178395,OV,Blue,1.0,3.95,Sapphire Oval 10.90 x 8.00,320.0,10.90 x 08.00,,Sapp
+1.0,SOV00180396,OV,Blue,1.0,3.96,Sapphire Oval 10.91 x 8.86,320.0,10.91 x 08.86,,Sapp
+1.0,SOV00181332,OV,Blue,1.0,3.32,Sapphire Oval 9.70 x 7.70                                                                                                  GIA CERTIFIED REPORT NUMBER:- 5231653688,320.0,09.70 x 07.70,,Sapp
+1.0,SOV00182355,OV,Blue,1.0,3.55,Sapphire Oval 9.70 x 7.60,320.0,09.70 x 07.60,,Sapp
+1.0,SOV00183351,OV,Blue,1.0,3.51,"Sapphire Oval 10.40 x 8.00                                                                                                 GIA CERTIFIED ""ROYAL BLUE"" STONE & REPORT NUMBER:-2231653680",320.0,10.40 x 08.00,,Sapp
+1.0,SOV00184327,OV,Blue,1.0,3.27,Sapphire Oval 10.30 x 7.80,320.0,10.30 x 07.80,,Sapp
+1.0,SOV00185321,OV,Blue,1.0,3.21,Sapphire Oval 9.20 x 7.50,320.0,09.20 x 07.50,,Sapp
+1.0,SOV00186290,OV,Blue,1.0,2.9,Sapphire Oval 8.45 x 7.10,320.0,08.45 x 07.10,,Sapp
+1.0,SOV00187279,OV,Blue,1.0,2.79,Sapphire Oval 8.80 x 6.90,320.0,08.80 x 06.90,,Sapp
+1.0,SOV00188232,OV,Blue,1.0,2.32,Sapphire Oval 8.20 x 6.80,320.0,08.20 x 06.80,,Sapp
+1.0,SOV00189297,OV,Blue,1.0,2.97,Sapphire Oval 8.96 x 7.30,320.0,08.96 x 07.30,,Sapp
+1.0,SOV00190245,OV,Blue,1.0,2.45,Sapphire Oval 9.10 x 6.90,320.0,09.10 x 06.90,,Sapp
+1.0,SOV00191241,OV,Blue,1.0,2.41,Sapphire Oval 9.00 x 7.10,320.0,09.00 x 07.10,,Sapp
+1.0,SOV00192229,OV,Blue,1.0,2.29,Sapphire Oval 8.80 x 7.20,320.0,08.80 x 07.20,,Sapp
+1.0,SOV0019382,OV,Blue,1.0,3.82,Ceylon Sapphire Oval 10.4 x 7.9,390.0,10.40 x 07.90,Ceylon,Sapp
+1.0,SOV00194393,OV,Blue,1.0,3.93,Ceylon Sapphire Oval 9.48 x 7.20,80.0,09.48 x 07.20,Ceylon,Sapp
+1.0,SOV00195784,OV,Blue,1.0,7.84,Ceylon Sapphire Oval 13.51 x 10.48,80.0,13.51 x 10.48,Ceylon,Sapp
+1.0,SOV00200544,OV,Blue,1.0,1.58,Ceylon Sapphire Oval 7.90 x 6.46,300.0,07.90 x 06.46,Ceylon,Sapp
+1.0,SOV00211238,OV,Blue,1.0,2.38,Sapphire Oval 8.52x6.81x4.88MM GIA CERTIFIED:-1232884680 ORIGIN:-SRILANKA,300.0,08.52 x 06.81,,Sapp
+1.0,SOV00213503,OV,Blue,1.0,5.03,Sapphire Oval 11.79x9.52,100.0,11.79 x 09.52,,Sapp
+1.0,SOV00214844,OV,Blue,1.0,8.44,Sapphire Oval 13.07x10.50,100.0,13.07 x 10.50,,Sapp
+1.0,SOV00215586,OV,Blue,1.0,5.86,Sapphire Oval 11.76X9.36,100.0,11.76 x 09.36,,Sapp
+1.0,SOV00216571,OV,Blue,1.0,5.71,Sapphire Oval 10.67X8.51,100.0,10.67 x 08.51,,Sapp
+1.0,SOV00217546,OV,Blue,1.0,5.46,Sapphire Oval 11.05X8.85,100.0,11.05 x 08.85,,Sapp
+1.0,SOV00218518,OV,Blue,1.0,5.18,Sapphire Oval 10.4X8.45,100.0,10.40 x 08.45,,Sapp
+1.0,SOV00219491,OV,Blue,1.0,4.91,Sapphire Oval 10.9X8.97,100.0,10.90 x 08.97,,Sapp
+1.0,SOV00220469,OV,Blue,1.0,4.69,Sapphire Oval 11.39X8.67,100.0,11.39 x 08.67,,Sapp
+1.0,SOV00221325,OV,Blue,1.0,3.25,Sapphire Oval 10.92X8.12,100.0,10.92 x 08.12,,Sapp
+1.0,SOV00222511,OV,Blue,1.0,5.11,Sapphire Oval 10.79X8.43,100.0,10.79 x 08.43,,Sapp
+1.0,SOV00223454,OV,Blue,0.0,4.54,Sapphire Oval 11.38X8.67,100.0,11.38 x 08.67,,Sapp
+1.0,SOV0028230,OV,Blue,1.0,2.3,Ceylon Sapphire Oval  8.0 x 6.4,300.0,08.00 x 06.40,Ceylon,Sapp
+1.0,SOV0029225,OV,Blue,1.0,2.25,Ceylon Sapphire Oval 8.3 x 6.0,300.0,08.30 x 06.00,Ceylon,Sapp
+1.0,SOV0030261,OV,Blue,1.0,2.61,GIA Certified Blue Sapphire Oval 8.39x6.77x5.63,400.0,08.39 x 06.77,,Sapp
+1.0,SPR00002518,PS,Blue,1.0,5.18,Ceylon Sapphire pear 14.7 x 8.8,180.0,14.70 x 08.80,Ceylon,Sapp
+1.0,SPR00003482,PS,Blue,1.0,4.82,Ceylon Sapphire pear 11.2 x 8.2,300.0,11.20 x 08.20,Ceylon,Sapp
+1.0,SPR00004432,PS,Blue,1.0,4.32,Sapphire pear 11.18x8.21,230.0,11.18 x 08.21,,Sapp
+1.0,SPR00005250,PS,Blue,1.0,2.5,Ceylon Sapphire pear 11.5 x 6.5,77.0,11.50 x 06.50,Ceylon,Sapp
+1.0,SPR00006225,PS,Blue,1.0,2.25,Ceylon Sapphire pear 10.1 x 6.4,410.0,10.10 x 06.40,Ceylon,Sapp
+1.0,SPR00007221,PS,Blue,1.0,2.21,Ceylon Sapphire pear 9.3 x 6.8,300.0,09.30 x 06.80,Ceylon,Sapp
+1.0,SPR00008221,PS,Blue,1.0,2.21,Sapphire pear 9.9 x 6.6,270.0,09.90 x 06.60,,Sapp
+1.0,SPR00009207,PS,Blue,1.0,2.07,Sapphire pear 9.9 x 6.1,270.0,09.90 x 06.10,,Sapp
+1.0,SPR00010200,PS,Blue,1.0,2.0,Sapphire pear 10.8 x 6.6,230.0,10.80 x 06.60,,Sapp
+1.0,SPR00011190,PS,Blue,1.0,1.9,Sapphire pear 8.4 x 7.0,230.0,08.40 x 07.00,,Sapp
+1.0,SPR00013154,PS,Blue,1.0,1.54,Sapphire pear 8.1 x 6.1,270.0,08.10 x 06.10,,Sapp
+1.0,SPR00014106,PS,Blue,1.0,1.06,Ceylon Sapphire pear 6.9 x 5.4,230.0,06.90 x 05.40,Ceylon,Sapp
+1.0,SPR00015857,PS,Blue,2.0,8.57,Certified Matched Pair - Madagascar Pear Shapes 10.7x8.2 | 10.7x8.3,1170.0,10.70 x 08.20 | 10.70 x 08.30,Madagascar,Sapp
+1.0,SPR00016373,PS,Blue,2.0,3.73,Ceylon Sapphire Pear Shape 8.5x7.5|7.7x6.6,410.0,08.50 x 07.50 | 07.70 x 06.60,Ceylon,Sapp
+1.0,SPR00017291,PS,Blue,2.0,2.91,Blue Sapphire Pear 9.0x7.0|10.0x8.0,14.0,09.00 x 07.00 | 10.00 x 08.00,,Sapp
+1.0,SPR00019370,PS,Blue,2.0,3.7,Ceylon Sapphire Pear 9.0 x 7.0,230.0,09.00 x 07.00,Ceylon,Sapp
+1.0,SPR00031500,PS,Blue,1.0,5.0,Sapphire Pear Shape 13.10 x 8.90,320.0,13.10 x 08.90,,Sapp
+1.0,SPR00032485,PS,Blue,1.0,4.85,Sapphire Pear Shape 12.50 x 7.90,320.0,12.50 x 07.90,,Sapp
+1.0,SPR00033402,PS,Blue,1.0,4.02,Sapphire Pear Shape 12.30 x 8.10,320.0,12.30 x 08.10,,Sapp
+1.0,SPR00034500,PS,Blue,1.0,5.0,Sapphire Pear Shape 14.90 x 9.20                                                                                              GIA CERTIFIED REPORT NUMBER :- 6237653935,320.0,14.90 x 09.20,,Sapp
+1.0,SPR00035363,PS,Blue,1.0,3.63,Sapphire Pear Shape 12.80 x 8.10,320.0,12.80 x 08.10,,Sapp
+1.0,SPR00037223,PS,Blue,1.0,2.23,Sapphire Pear Shape 10.50 x 6.20,320.0,10.50 x 06.20,,Sapp
+1.0,SPR00038335,PS,Blue,1.0,3.35,Sapphire Pear Shape 10.0 x 7.5,250.0,10.00 x 07.50,,Sapp
+1.0,SPR00039165,PS,Blue,1.0,1.65,Sapphire Pear Shape 9.14 x 6.71,40.0,09.14 x 06.71,,Sapp
+1.0,SPR00040175,PS,Blue,1.0,1.75,Sapphire Pear Shape 8.86 x 6.75,40.0,08.86 x 06.75,,Sapp
+1.0,SPR00043446,PS,Blue,1.0,4.46,Sapphire pear 11.13 X 8.39,100.0,11.13 x 08.39,,Sapp
+1.0,SRD00002919,D/C,Blue,1.0,9.19,Ceylon Sapphire Round D/C 12.80,400.0,12.80,Ceylon,Sapp
+1.0,SRD00003603,D/C,Blue,1.0,6.03,Ceylon Sapphire Round D/C 11.03,180.0,11.03,Ceylon,Sapp
+1.0,SRD00004464,D/C,Blue,1.0,4.64,Ceylon Sapphire Round D/C 9.79,700.0,09.79,Ceylon,Sapp
+1.0,SRD00006441,D/C,Blue,1.0,4.41,Ceylon Sapphire D/C 10.00,300.0,10.00,Ceylon,Sapp
+1.0,SRD00007426,D/C,Blue,1.0,4.26,Ceylon Sapphire Round D/C 9.40,180.0,09.40,Ceylon,Sapp
+1.0,SRD00008424,D/C,Blue,1.0,4.28,Ceylon Sapphire Round D/C 9.42,1200.0,09.42,Ceylon,Sapp
+1.0,SRD00010330,D/C,Blue,1.0,3.3,Ceylon Sapphire Round D/C 8.80,600.0,08.80,Ceylon,Sapp
+1.0,SRD00011423,D/C,Blue,1.0,4.23,Ceylon Sapphire Round D/C 9.09,77.0,09.09,Ceylon,Sapp
+1.0,SRD00013396,D/C,Blue,1.0,3.96,Ceylon Sapphire Round D/C 9.46,680.0,09.46,Ceylon,Sapp
+1.0,SRD00014363,RD,Blue,1.0,3.63,Sapphire Round 9.16,270.0,09.16,,Sapp
+1.0,SRD00015349,D/C,Blue,1.0,3.49,Ceylon Sapphire Rounds D/C 8.77,550.0,08.77,Ceylon,Sapp
+1.0,SRD00016335,D/C,Blue,1.0,3.35,Ceylon Sapphire Round D/C 9.00,500.0,09.00,Ceylon,Sapp
+1.0,SRD00017305,D/C,Blue,1.0,3.06,Ceylon Sapphire Round D/C 8.30,360.0,08.30,Ceylon,Sapp
+1.0,SRD00018339,D/C,Blue,1.0,3.39,Australia Sapphire Round D/C 8.20,100.0,08.20,Australia,Sapp
+1.0,SRD00019302,RD,Blue,1.0,3.02,Sapphire Round 8.17,150.0,08.17,,Sapp
+1.0,SRD00020284,D/C,Blue,1.0,2.84,Australia Sapphire Round D/C 8.00,100.0,08.00,Australia,Sapp
+1.0,SRD00021461,RD,Blue,2.0,4.61,Sapphire Round 7.80,210.0,07.80,,Sapp
+1.0,SRD00022263,D/C,Blue,1.0,2.63,Ceylon Sapphire Round D/C 8.75,770.0,08.75,Ceylon,Sapp
+1.0,SRD00023292,D/C,Blue,1.0,2.92,Ceylon Sapphire D/C 8.15,150.0,08.15,Ceylon,Sapp
+1.0,SRD00024264,D/C,Blue,0.0,,Ceylon Sapphire Round D/C 8.68,900.0,08.68,Ceylon,Sapp
+1.0,SRD00025271,D/C,Blue,1.0,2.71,Ceylon Sapphire Round D/C 8.06,150.0,08.06,Ceylon,Sapp
+1.0,SRD00026243,D/C,Blue,1.0,2.43,Ceylon Sapphire D/C 7.50,300.0,07.50,Ceylon,Sapp
+1.0,SRD00027240,RD,Blue,1.0,2.4,Sapphirehire Round 7.00,180.0,07.00,,Sapp
+1.0,SRD00028239,D/C,Blue,1.0,2.39,Ceylon Sapphire Round D/C 8.00,600.0,08.00,Ceylon,Sapp
+1.0,SRD00029235,D/C,Blue,1.0,2.35,Ceylon Sapphire Round D/C 8.47,77.0,08.47,Ceylon,Sapp
+1.0,SRD00030228,RD,Blue,1.0,2.28,Sapphire Round 7.50,120.0,07.50,,Sapp
+1.0,SRD00031233,D/C,Blue,1.0,2.33,Ceylon Sapphire Round D/C 8.24,1000.0,08.24,Ceylon,Sapp
+1.0,SRD00032233,D/C,Blue,1.0,2.33,Ceylon Sapphire Round D/C 8.13,230.0,08.13,Ceylon,Sapp
+1.0,SRD00033231,D/C,Blue,1.0,2.31,Ceylon Sapphire D/C 7.52 ,150.0,07.52,Ceylon,Sapp
+1.0,SRD00034230,D/C,Blue,1.0,2.3,Sapphire Round D/C 7.60,500.0,07.60,,Sapp
+1.0,SRD00035228,D/C,Blue,1.0,2.28,Ceylon Sapphire Round D/C 8.09,210.0,08.09,Ceylon,Sapp
+1.0,SRD00036228,RD,Blue,1.0,2.28,Sapphire Round 8.15,150.0,08.15,,Sapp
+1.0,SRD00037226,RD,Blue,1.0,2.26,Sapphire Round 8.08,77.0,08.08,,Sapp
+1.0,SRD00038223,D/C,Blue,1.0,2.23,Ceylon Sapphire Round D/C 8.12,150.0,08.12,Ceylon,Sapp
+1.0,SRD00039222,D/C,Blue,1.0,2.22,Ceylon Sapphire Round D/C 7.64,180.0,07.64,Ceylon,Sapp
+1.0,SRD00040220,D/C,Blue,1.0,2.2,Ceylon Sapphire D/C 7.80,280.0,07.80,Ceylon,Sapp
+1.0,SRD00041208,D/C,Blue,1.0,2.08,Ceylon Sapphire Round D/C 7.60,180.0,07.60,Ceylon,Sapp
+1.0,SRD00043207,D/C,Blue,1.0,2.07,Ceylon Sapphire Round D/C 7.86,230.0,07.86,Ceylon,Sapp
+1.0,SRD00045203,RD,Blue,1.0,2.03,Sapphire Round 7.64,210.0,07.64,,Sapp
+1.0,SRD00046201,D/C,Blue,1.0,2.01,Ceylon Sapphire Round D/C 8.00,280.0,08.00,Ceylon,Sapp
+1.0,SRD00047187,D/C,Blue,1.0,1.87,Ceylon Sapphire Round D/C 8.03,150.0,08.03,Ceylon,Sapp
+1.0,SRD00049165,D/C,Blue,1.0,1.65,Ceylon Sapphire D/C 6.55,300.0,06.55,Ceylon,Sapp
+1.0,SRD00050145,RD,Blue,1.0,1.45,Sapphire Round 7.00,100.0,07.00,,Sapp
+1.0,SRD00052116,RD,Blue,1.0,1.16,Sapphire Round 6.40,230.0,06.40,,Sapp
+1.0,SRD00053105,D/C,Blue,1.0,1.05,Ceylon Sapphire D/C 6.00,280.0,06.00,Ceylon,Sapp
+1.0,SRD00055207,RD,Blue,1.0,2.07,Sapphire Round 7.13,77.0,07.13,,Sapp
+1.0,SRD00058616,D/C,Blue,2.0,6.16,Ceylon Sapphire Round D/C 8.70 | 8.20,150.0,08.70 | 08.20,Ceylon,Sapp
+1.0,SRD00059561,D/C,Blue,2.0,5.61,Ceylon Sapphire Round D/C 8.35,210.0,08.35,Ceylon,Sapp
+1.0,SRD00060542,RD,Blue,2.0,5.42,Sapphire Round 8.23,150.0,08.23,,Sapp
+1.0,SRD00062223,D/C,Blue,1.0,2.23,Ceylon Sapphire Round D/C 7.52mm,150.0,07.52,Ceylon,Sapp
+1.0,SRD00063477,RD,Blue,2.0,4.77,Sapphire Round 8.00,77.0,08.00,,Sapp
+1.0,SRD00065401,RD,Blue,1.0,2.02,Sapphire Round 8.00,150.0,08.00,,Sapp
+1.0,SRD00067372,D/C,Blue,2.0,3.72,Ceylon Sapphire Round D/C 7.25,120.0,07.25,Ceylon,Sapp
+1.0,SRD00069372,D/C,Blue,2.0,3.71,Ceylon Sapphire D/C 7.1 &6.9,300.0,07.10,Ceylon,Sapp
+1.0,SRD00071368,D/C,Blue,2.0,3.68,Sapphire Round PAIR D/C 7.50MM                                                                                            GIA CERTIFIED REPORT NUMBER:- 6237653744,280.0,07.50,,Sapp
+1.0,SRD00072363,RD,Blue,2.0,3.63,Ceylon Sapphire Regular Round 7.60,180.0,07.60,Ceylon,Sapp
+1.0,SRD00075430,RD,Blue,2.0,4.3,Sapphire Round 7.5 | 7.7,110.0,07.50 | 07.70,,Sapp
+1.0,SRD00079306,D/C,Blue,2.0,3.06,Ceylon Sapphire Matched Pair Rounds 7.00MM ,180.0,07.00,Ceylon,Sapp
+1.0,SRD00082302,RD,Blue,2.0,3.02,Sapphire Round 6.50,600.0,06.50,,Sapp
+1.0,SRD00086226,D/C,Blue,2.0,2.16,Ceylon Sapphire D/C 6.00,300.0,06.00,Ceylon,Sapp
+1.0,SRD00088222,D/C,Blue,2.0,2.22,Ceylon Sapphire D/C 6.00,300.0,06.00,Ceylon,Sapp
+1.0,SRD00092134,D/C,Blue,1.0,1.34,Ceylon Sapphire Round D/C 6.50,150.0,06.50,Ceylon,Sapp
+1.0,SRD00098235,D/C,Blue,2.0,2.35,Ceylon Sapphire Round D/C 6.00,300.0,06.00,Ceylon,Sapp
+1.0,SRD00111142,D/C,Blue,2.0,1.42,Ceylon Sapphire D/C 5.40,300.0,05.40,Ceylon,Sapp
+1.0,SRD00114396,RD,Blue,2.0,2.49,Sapphire Round 7.65,180.0,07.65,,Sapp
+1.0,SRD00118837,RD,Blue,2.0,8.37,Sapphire Round 9.50,77.0,09.50,,Sapp
+1.0,SRD00119778,D/C,Blue,2.0,7.78,Australia Sapphire Round D/C 9.00,77.0,09.00,Australia,Sapp
+1.0,SRD00120679,D/C,Blue,2.0,6.79,Australia Sapphire Round D/C 8.50,77.0,08.50,Australia,Sapp
+1.0,SRD00121630,D/C,Blue,2.0,6.3,Australia Sapphire Round D/C 8.50,77.0,08.50,Australia,Sapp
+1.0,SRD00122494,D/C,Blue,2.0,4.94,Australia Sapphire Round D/C 8.30,77.0,08.30,Australia,Sapp
+1.0,SRD00123572,D/C,Blue,2.0,5.72,Australia Sapphire Round D/C 8.00,77.0,08.00,Australia,Sapp
+1.0,SRD00124595,D/C,Blue,2.0,5.95,Australia Sapphire Round D/C 8.00,77.0,08.00,Australia,Sapp
+1.0,SRD00125392,D/C,Blue,2.0,3.92,Australia Sapphire Round D/C 8.00,77.0,08.00,Australia,Sapp
+1.0,SRD00126450,D/C,Blue,2.0,4.5,Australia Sapphire Round D/C 8.00,77.0,08.00,Australia,Sapp
+1.0,SRD00127504,D/C,Blue,2.0,5.04,Australia Sapphire Round D/C 8.00,77.0,08.00,Australia,Sapp
+1.0,SRD00128522,D/C,Blue,2.0,5.22,Australia Sapphire Round D/C 8.00,120.0,08.00,Australia,Sapp
+1.0,SRD00129472,RD,Blue,2.0,4.72,Sapphire Round 8.00,77.0,08.00,,Sapp
+1.0,SRD00130528,D/C,Blue,2.0,5.28,Australia Sapphire rond D/C 8.00,77.0,08.00,Australia,Sapp
+1.0,SRD00131455,D/C,Blue,2.0,4.55,Australia Sapphire Round D/C 7.80,77.0,07.80,Australia,Sapp
+1.0,SRD00132462,D/C,Blue,2.0,4.62,Australia Sapphire Round D/C 7.75,77.0,07.75,Australia,Sapp
+1.0,SRD00133550,D/C,Blue,2.0,5.5,Australia Sapphire Round D/C 7.75,77.0,07.75,Australia,Sapp
+1.0,SRD00134406,D/C,Blue,2.0,4.06,Australia Sapphire Round D/C 7.60,77.0,07.60,Australia,Sapp
+1.0,SRD00135438,D/C,Blue,2.0,4.38,Australia Sapphire Round D/C 7.50,77.0,07.50,Australia,Sapp
+1.0,SRD00138391,D/C,Blue,2.0,3.91,Australia Sapphire Round D/C 7.30,77.0,07.30,Australia,Sapp
+1.0,SRD00139348,D/C,Blue,2.0,3.48,Australia Sapphire Round D/C 7.15,77.0,07.15,Australia,Sapp
+1.0,SRD00140305,D/C,Blue,2.0,3.05,Australia Sapphire Round D/C 7.10,77.0,07.10,Australia,Sapp
+1.0,SRD00141395,RD,Blue,2.0,3.95,Sapphire Round 7.00,77.0,07.00,,Sapp
+1.0,SRD00143148,D/C,Blue,1.0,1.48,Australia Sapphire Round D/C 6.80,77.0,06.80,Australia,Sapp
+1.0,SRD00144352,D/C,Blue,2.0,3.52,Australia Sapphire Round D/C 6.56,77.0,06.56,Australia,Sapp
+1.0,SRD00145146,D/C,Blue,1.0,1.46,Blue Sapp D/C 6.46,210.0,06.46,,Sapp
+1.0,SRD00146342,D/C,Blue,2.0,3.42,Australia Sapphire Round D/C 6.30,77.0,06.30,Australia,Sapp
+1.0,SRD00149226,D/C,Blue,2.0,2.26,Australia Sapphire Round D/C 6.00,77.0,06.00,Australia,Sapp
+1.0,SRD00151221,RD,Blue,2.0,2.21,Sapphire Round 6.00,77.0,06.00,,Sapp
+1.0,SRD00152424,D/C,Blue,2.0,4.24,Madagascar Sapphire Round D/C 7.5 | 7.1,180.0,07.50 | 07.10,Madagascar,Sapp
+1.0,SRD00153285,D/C,Blue,2.0,2.85,Australia Sapphire Round D/C 6.60 | 6.50,210.0,06.60 | 06.50,Australia,Sapp
+1.0,SRD00154148,D/C,Blue,1.0,1.48,Australia Sapphire Round D/C 6.60,150.0,06.60,Australia,Sapp
+1.0,SRD00155544,RD,Blue,1.0,5.44,Sapphire Round  10.9MM,320.0,10.90,,Sapp
+1.0,SRD00156477,RD,Blue,1.0,4.77,Sapphire Round 9.15MM,320.0,09.15,,Sapp
+1.0,SRD00157233,RD,Blue,1.0,2.33,Sapphire Round 8.10MM,320.0,08.10,,Sapp
+1.0,SRD00160331,RD,Blue,1.0,3.31,Sapphire Round 8.80MM,80.0,08.80,,Sapp
+1.0,SRD00161305,RD,Blue,2.0,3.05,Blue Sapphire Rounds 6.90 / 6.70,100.0,06.90 | 06.70,,Sapp
+1.0,SRD00163225,RD,Blue,1.0,2.25,Blue Sapphire Rounds 7.82,180.0,07.82,,Sapp
+1.0,SRD00164202,RD,Blue,2.0,2.02,Blue Sapphire Rounds pair 6.00,600.0,06.00,,Sapp
+1.0,SRD00165159,RD,Blue,1.0,1.59,Blue Sapphire Rounds 7.35,110.0,07.35,,Sapp
+1.0,SRD00176266,RD,Blue,2.0,2.66,Blue Sapphire Rounds 6.4|7.0,300.0,06.40 | 07.00,,Sapp
+1.0,SRD00177252,RD,Blue,2.0,2.52,Blue Sapphire Rounds 5.8|5.7,300.0,05.80 | 05.70,,Sapp
+1.0,SRD00178218,RD,Blue,2.0,2.18,Blue Sapphire Rounds 5.8|6.1,300.0,05.80 | 06.10,,Sapp
+1.0,SRD00179272,RD,Blue,2.0,2.72,Blue Sapphire Rounds 6.45MM,300.0,06.45,,Sapp
+1.0,SRD00182440,RD,Blue,1.0,4.4,Blue Sapphire Rounds 9.05,300.0,09.05,,Sapp
+1.0,SRD00183325,RD,Blue,1.0,3.25,Blue Sapphire Rounds 8.84,300.0,08.84,,Sapp
+1.0,SRD00184203,RD,Blue,2.0,2.03,Blue Sapphire Rounds 5.85|6.18,300.0,05.85 | 06.18,,Sapp
+1.0,SRD00190210,RD,Blue,1.0,2.1,Blue Sapphire Rounds 7.36,300.0,07.36,,Sapp
+1.0,SRD00191347,RD,Blue,2.0,3.47,Blue Sapphire Rounds 6.60,300.0,06.60,,Sapp
+1.0,SRD00192225,RD,Blue,1.0,2.25,Blue Sapphire Rounds 7.70,300.0,07.70,,Sapp
+1.0,SRD00194377,RD,Blue,1.0,3.77,Blue Sapphire Rounds 9.34,300.0,09.34,,Sapp
+1.0,SRD00195135,RD,Blue,1.0,1.35,Blue Sapphire Rounds 6.00,300.0,06.00,,Sapp
+1.0,SRD00196193,RD,Blue,2.0,1.93,Blue Sapphire Rounds 5.70|5.65,300.0,05.70 | 05.65,,Sapp
+1.0,SRD00199203,RD,Blue,2.0,2.03,Blue Sapphire Rounds 6.1|6.2,300.0,06.10 | 06.20,,Sapp
+1.0,SRD00200232,RD,Blue,2.0,2.32,Blue Sapphire Rounds 6.4|6.1,300.0,06.40 | 06.10,,Sapp
+1.0,SRD00201242,RD,Blue,2.0,2.42,Blue Sapphire Rounds 6.6|6.7,300.0,06.60 | 06.70,,Sapp
+1.0,SRD00202252,RD,Blue,2.0,2.52,Blue Sapphire Rounds 6.5|6.6,300.0,06.50 | 06.60,,Sapp
+1.0,SRD00204825,D/C,Blue,2.0,8.25,Blue Sapphire Round Pair 9.0mm,230.0,09.00,,Sapp
+1.0,SRD00205335,D/C,Blue,2.0,3.35,Blue Sapphire Round Pair 7.50mm,450.0,07.50,,Sapp
+1.0,SRD00206264,D/C,Blue,2.0,2.64,Blue Sapphire Round Pair 6.08mm,450.0,06.08,,Sapp
+1.0,SRD00207312,D/C,Blue,2.0,3.12,Blue Sapphire Round Pair 6.60mm,210.0,06.60,,Sapp
+1.0,SRD00208293,D/C,Blue,2.0,2.93,Blue Sapphire Round Pair 7.2|7.1,370.0,07.20 | 07.10,,Sapp
+1.0,SRD00209312,D/C,Blue,2.0,3.12,Blue Sapphire Round Pair 6.90mm,280.0,06.90,,Sapp
+1.0,SRD00210359,D/C,Blue,2.0,3.59,Blue Sapphire Round Pair 6.80 mm | 6.76 mm,450.0,06.80 | 06.76,,Sapp
+1.0,SRD00211264,D/C,Blue,2.0,2.64,Blue Sapphire Round Pair 6.50 mm,450.0,06.50,,Sapp
+1.0,SRD00212364,D/C,Blue,2.0,3.64,Blue Sapphire Round Pair 7.20 mm,450.0,07.20,,Sapp
+1.0,SRD00213323,D/C,Blue,2.0,3.23,Blue Sapphire Round Pair 7.00 mm,450.0,07.00,,Sapp
+1.0,SRD00214346,D/C,Blue,2.0,3.46,Blue Sapphire Round Pair 7.00 mm,450.0,07.00,,Sapp
+1.0,SRD00215224,D/C,Blue,2.0,2.24,Blue Sapphire Round Pair 6.45 mm,450.0,06.45,,Sapp
+1.0,SRD00216327,D/C,Blue,2.0,3.27,Blue Sapphire Round Pair 6.9&6.8mm,400.0,06.90,,Sapp
+1.0,SRD00217254,D/C,Blue,1.0,2.54,Blue Sapphire Round 7.90MM,200.0,07.90,,Sapp
+1.0,SRD00218358,D/C,Blue,2.0,3.58,Blue Sapphire Round Pair 6.90|7.30,150.0,06.90 | 07.30,,Sapp
+1.0,SRD00220153,D/C,Blue,1.0,1.53,Blue Sapphire Round 7.10,210.0,07.10,,Sapp
+1.0,SRD00221114,D/C,Blue,1.0,1.14,Blue Sapphire Round 6.16,210.0,06.16,,Sapp
+1.0,SRD00222175,D/C,Blue,2.0,1.75,Blue Sapphire Round 6.1|5.9,210.0,06.10 | 05.90,,Sapp
+1.0,SRD00223332,D/C,Blue,2.0,3.32,Blue Sapphire Round Pair 6.50,210.0,06.50,,Sapp
+1.0,SRD00224265,D/C,Blue,2.0,2.65,Blue Sapphire Round Pair 6.6|6.4,210.0,06.60 | 06.40,,Sapp
+1.0,SRD00225147,D/C,Blue,1.0,1.47,Blue Sapphire Round 6.40,210.0,06.40,,Sapp
+1.0,SRD0027197,D/C,Blue,1.0,1.97,Australia Sapphire Round D/C 7.00,60.0,07.00,Australia,Sapp
+1.0,SRD0041247,D/C,Blue,1.0,2.47,Ceylon Sapphire Round D/C 7.71,120.0,07.71,Ceylon,Sapp
+1.0,SRD0048162,RD,Blue,1.0,1.62,Blue Sapphire Round 6.80,100.0,06.80,,Sapp
+1.0,SRD0049175,RD,Blue,1.0,1.75,Blue Sapphire Round 6.50,150.0,06.50,,Sapp
+1.0,SRD0054218,RD,Blue,1.0,2.18,Blue Sapphire Round 7.64,150.0,07.64,,Sapp
+1.0,SRD0056115,RD,Blue,1.0,1.15,Blue Sapphire Round 6.32,210.0,06.32,,Sapp
+1.0,STR00001461,TRI,Blue,1.0,4.61,Ceylon Sapphirehire Trillion 10.00,180.0,10.00,Ceylon,Sapp
+1.0,STR00002204,TRI,Blue,1.0,2.04,Ceylon Sapphire trillion 7.80,300.0,07.80,Ceylon,Sapp
+1.0,STR00003232,TRI,Blue,1.0,2.32,Ceylon Sapphire trillion 10.73x7.03,230.0,10.73 x 07.03,Ceylon,Sapp
+1.0,STR00004222,TRI,Blue,2.0,2.22,Ceylon Sapphire trillion 6.5x6.3|6.7x6.5,230.0,06.50 x 06.30 | 06.70 x 06.50,Ceylon,Sapp
+1.0,STR00008393,TR,Blue,1.0,3.93,Sapphire Trillion 10.15 X 9.03,320.0,10.15 x 09.03,,Sapp
+1.0,STR00009383,TR,Blue,2.0,3.83,Sapphire Trillion 10.3x6.8,100.0,10.30 x 06.80,,Sapp
+1.0,STR00010293,TR,Blue,2.0,2.93,Sapphire Trillion 7.1x7.0x6.5,120.0,07.10 x 07.00,,Sapp
+1.0,STR00011287,TR,Blue,2.0,2.87,Sapphire Trillion 7.1x6.9x6.5,100.0,07.10 x 06.90,,Sapp
+1.0,STR00012164,TR,Blue,1.0,1.64,Sapphire Trillion 7.29x7.24x7.11,230.0,07.29 x 07.24,,Sapp
+1.0,STR00013185,TR,Blue,1.0,1.85,Sapphire Trillion 8.95 X 8.65,100.0,08.95 x 08.65,,Sapp
+1.0,TSCU00001208,CUS,Green,1.0,2.08,Green Teal Sapphire Cushion 8.5x5.2,160.0,08.50 x 05.20,,Sapp
+1.0,TSCU00002241,CUS,Green,1.0,2.41,Green Teal Sapphire Cushion 7.26x7.21,160.0,07.26 x 07.21,,Sapp
+1.0,TSCU00003215,CUS,Green,1.0,2.15,Green Teal Sapphire Cushion 7.27 x 7.11,160.0,07.27 x 07.11,,Sapp
+1.0,TSCU00004213,CUS,Green,1.0,2.13,Green Teal Sapphire Cushion 8.3 x 5.4,160.0,08.30 x 05.40,,Sapp
+1.0,TSOV00001230,OV,Green,1.0,2.3,Green Teal Sapphire Oval pair 8.3 x 6.8MM,160.0,08.30 x 06.80,,Sapp
+1.0,TSOV00003426,OV,Green,2.0,4.26,Green Teal Sapphire Oval Pair 7.7x6.6|7.6x6.2,160.0,07.70 x 06.60 | 07.60 x 06.20,,Sapp
+1.0,TSOV00004416,OV,Green,2.0,4.16,Green Teal Sapphire Oval Pair 7.83x6.35|7.8x6.25,160.0,07.83 x 06.35 | 07.80 x 06.25,,Sapp
+1.0,TSOV00006222,OV,Green,1.0,2.22,Green Teal Sapphire Oval 8.0 x 6.5MM,160.0,08.00 x 06.50,,Sapp
+1.0,TSOV00008432,OV,Green,2.0,4.3,Green Teal Sapphire Oval 8.0 x 6.0(MIX),160.0,08.00 x 06.00,,Sapp
+1.0,TSOV00009217,OV,Green,1.0,2.17,Green Teal Sapphire Oval 8.15 x 7.10,160.0,08.15 x 07.10,,Sapp
+1.0,TSRD00002077,RDS,Green,1.0,0.77,Green Teal Sapphire Round 6.11MM,80.0,06.11,,Sapp
+1.0,TSRD00004121,RDS,Green,1.0,1.21,Green Teal Sapphire Round 6.4 ,100.0,06.40,,Sapp
+1.0,TSRD00007317,RDS,Green,2.0,3.17,Green Teal Sapphire Round 6.50mm,160.0,06.50,,Sapp
+1.0,WSCU00001207,CUS,White,1.0,2.07,Padparadsha cushion 7.5 x 7.6,50.0,07.60 x 07.50,,Sapp
+1.0,WSCU00002257,CUS,White,1.0,2.57,White Sapphire cushion 9.5 x 6.8,45.0,09.50 x 06.80,,Sapp
+1.0,WSCU00003321,CUS,White,2.0,3.21,Sapphire cushion EC 8.9 x 5.8,50.0,08.90 x 05.80,,Sapp
+1.0,WSEC00001457,E/C,White,2.0,4.57,White Sapphire emerald cut 9.7 x 6.7,70.0,09.70 x 06.70,,Sapp
+1.0,WSEC00004223,E/C,White,1.0,2.23,Padparadscha emerald cut 8.1 x 7.0,50.0,08.10 x 07.00,,Sapp
+1.0,WSEC00005206,E/C,White,1.0,2.06,Padparadscha E/C 7.41 x 5.60,140.0,07.41 x 05.60,,Sapp
+1.0,WSOV00001176,OV,White,1.0,1.76,White Sapphire Oval 8.98 x 6.25,140.0,08.98 x 06.25,,Sapp
+1.0,WSOV00003535,OV,White,2.0,5.35,Sapphire Oval 9.30 X 7.5 | 8.47 x 7.13,100.0,09.30 x 07.50 | 08.47 x 07.13,,Sapp
+1.0,WSOV00004480,OV,White,2.0,4.8,Sapphire Oval 9.6x7.4|8.2x6.9,55.0,09.60 x 07.40 | 08.20 x 06.90,,Sapp
+1.0,WSOV00005345,OV,White,2.0,3.45,Sapphire Oval 8.26x6.8 | 7.60x6.00,50.0,08.26 x 06.80 | 07.60 x 06.00,,Sapp
+1.0,WSOV00007470,OV,White,2.0,4.7,Sapphire Oval 8x6 | 7.1x5.1,46.0,08.00 x 06.00 | 07.10 x 05.10,,Sapp
+1.0,YS0013224,CUS,Yellow,1.0,32.24,Yellow Sapphire Natural CUSHION                                                                                          GIA CERTIFIED 5234277311 ,150.0,19.50 x 14.50,,Sapp
+1.0,YSCU00001394,CUS,Yellow,1.0,3.94,Yellow Sapphire Cushion 9.40 x 9.00                                                                                              ,50.0,09.40 x 09.00,,Sapp
+1.0,YSCU00002156,CUS,Yellow,1.0,1.56,"Yellow Sapphire Cushion 6.4 x 6.2
+Pastel Color ",50.0,06.40 x 06.20,,Sapp
+1.0,YSEC00001170,E/C,Yellow,1.0,1.7,Yellow Sapphire E/C 7.9 x 6.1                                                                                              ,100.0,07.90 x 06.10,,Sapp
+1.0,YSEC00002560,E/C,Yellow,1.0,5.6,Yellow Sapphire E/C - 10 x 8.2,90.0,10.00 x 08.20,,Sapp
+1.0,YSEC00003375,E/C,Yellow,1.0,3.75,Yellow Sapphire E/C - 10.6 x 6.8,90.0,10.60 x 06.80,,Sapp
+1.0,YSEC00004405,E/C,Yellow,1.0,4.05,Yellow Sapphire E/C - 11.3 x 6.3,90.0,11.30 x 06.30,,Sapp
+1.0,YSEC00005322,E/C,Yellow,1.0,3.22,Yellow Sapphire E/C - 9.7 x 6,90.0,09.70 x 06.00,,Sapp
+1.0,YSEC00006365,E/C,Yellow,1.0,3.65,Yellow Sapphire E/C - 10.5 x 6.7,90.0,10.50 x 06.70,,Sapp
+1.0,YSEC00007253,E/C,Yellow,1.0,2.53,Yellow Sapphire E/C - 9.5 x 6.3,90.0,09.50 x 06.30,,Sapp
+1.0,YSEC00008395,E/C,Yellow,1.0,3.95,Yellow Sapphire E/C - 9.7 x 6.5,90.0,09.70 x 06.50,,Sapp
+1.0,YSEC00009378,E/C,Yellow,1.0,3.78,Yellow Sapphire E/C - 9.5 x 6.6,90.0,09.50 x 06.60,,Sapp
+1.0,YSOV00001199,OV,Yellow,1.0,1.99,Yellow Sapphire Oval 7.6 x 6.5                                                                                              ,50.0,07.60 x 06.50,,Sapp
+1.0,YSOV00002233,OV,Yellow,2.0,2.33,Yellow Sapphire Oval 7.0 x 5.0,50.0,07.00 x 05.00,,Sapp
+1.0,YSOV00003442,OV,Yellow,2.0,4.42,Yellow Sapphire Oval 8.5x6.7|9.1x6.5,50.0,08.50 x 06.70 | 09.10 x 06.50,,Sapp
+1.0,YSOV00004450,OV,Yellow,2.0,4.5,Yellow Sapphire Oval 8.2 x 6.8,46.0,08.20 x 06.80,,Sapp
+1.0,YSOV00006454,OV,Yellow,2.0,4.54,Yellow Sapphire Oval 8.9x7.3|8.8x6.6,70.0,08.90 x 07.30 | 08.80 x 06.60,,Sapp
+1.0,YSOV00007269,OV,Yellow,1.0,2.69,Yellow Sapphire Oval- 9.9 x 7.4,90.0,09.90 x 07.40,,Sapp
+1.0,YSOV00008347,OV,Yellow,1.0,3.47,Yellow Sapphire Oval- 9.6 x 7.2,90.0,09.60 x 07.20,,Sapp
+1.0,YSOV00009279,OV,Yellow,1.0,2.79,Yellow Sapphire Oval- 9.4 x 6.7,90.0,09.40 x 06.70,,Sapp
+1.0,YSRD00001235,D/C,Yellow,1.0,1.12,Yellow Sapphire Round D/C 7.00,100.0,07.00,,Sapp
+1.0,YSRD00002182,D/C,Yellow,1.0,1.82,Yellow Sapphire Round D/C 8.00                                                                                              ,100.0,08.00,,Sapp
+1.0,YSRD00003289,D/C,Yellow,2.0,2.89,Yellow Sapphire Round D/C 6.20                                                                                              ,50.0,06.20,,Sapp
+1.0,YSRD00005454,D/C,Yellow,2.0,3.27,Yellow Sapphire Round 7.50,100.0,07.50,,Sapp
+1.0,YSTR00001170,TR,Yellow,1.0,1.7,Yellow Sapphire Trillion 9.0 x 6.5                                                                                              ,70.0,09.00 x 06.50,,Sapp

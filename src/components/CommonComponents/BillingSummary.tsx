@@ -16,7 +16,8 @@ export const BillingSummary = ({
     [user?.id],
   );
 
-  const cart = cartStore((state: any) => state.cart);
+  const cartTotal = cartStore((state: any) => state.cartTotal);
+  const getTotalPrice = cartStore((state: any) => state.getTotalPrice);
 
   const [hasMounted, setHasMounted] = useState(false);
   const [subtotal, setSubtotal] = useState(0);
@@ -28,27 +29,8 @@ export const BillingSummary = ({
   useEffect(() => {
     if (!hasMounted) return;
 
-    let total = 0;
-
-    cart.forEach((item: any) => {
-      const price = parseFloat(item.product.price);
-      const weight = parseFloat(
-        item.caratWeight || item.product.ct_weight || "1",
-      );
-      const quantity = item.quantity || 1;
-
-      // 💎 Handle per-carat logic
-      if (item.product.purchaseByCarat) {
-        total += price * weight;
-      } else {
-        total += price * quantity;
-      }
-
-      // ✅ Add certification fee if selected
-      if (item.product.needCertification) total += 75 * quantity;
-    });
-
-    // Base subtotal
+    // Use getTotalPrice() to always get an up-to-date accurate total, preventing stale cartTotal issues.
+    const total = getTotalPrice() || 0;
     setSubtotal(total);
 
     // 🧭 Determine shipping method
@@ -60,11 +42,11 @@ export const BillingSummary = ({
       setGrandTotal(total);
     } else {
       // Normal delivery logic
-      const shippingCost = total >= 200 ? 0 : 15;
+      const shippingCost = total >= 200 || total === 0 ? 0 : 15;
       setShipping(shippingCost);
       setGrandTotal(total + shippingCost);
     }
-  }, [cart, deliveryMethod, hasMounted]);
+  }, [cartTotal, deliveryMethod, hasMounted, getTotalPrice]);
 
   if (!hasMounted) return null;
 

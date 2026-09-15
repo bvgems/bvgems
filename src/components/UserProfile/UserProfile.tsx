@@ -65,6 +65,21 @@ export const UserProfile = ({ isSmaller, user }: any) => {
         >
           My Orders
         </MenuItem>
+        {user?.email &&
+          [
+            "sales@bvgems.com",
+            "meet.vikartr@gmail.com",
+            "shrey@gmail.com",
+          ].includes(user.email) && (
+            <MenuItem
+              onClick={() => {
+                router.push("/admin/accounts");
+              }}
+              leftSection={<IconUser size={16} stroke={1.5} />}
+            >
+              Admin Accounts
+            </MenuItem>
+          )}
         <MenuItem
           onClick={handleLogout}
           leftSection={<IconLogout size={16} stroke={1.5} />}

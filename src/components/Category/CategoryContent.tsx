@@ -24,7 +24,7 @@ import { getShapesData } from "@/apis/api";
 import { CategoryTable } from "./CategoryTable";
 import { useDisclosure } from "@mantine/hooks";
 import { SizeToleranceGuide } from "../Tolerance/SizeToleranceGuide";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { ImageZoom } from "../CommonComponents/ImageZoom";
 import { IconDiamond, IconShare } from "@tabler/icons-react";
 import { SapphireLooseGemstoneColorOptions } from "@/utils/constants";
@@ -95,19 +95,28 @@ export function CategoryContent({
   const sortedShapes = [...(shapes || [])].sort(
     (a, b) => shapeOrder.indexOf(a) - shapeOrder.indexOf(b),
   );
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const urlShape = searchParams.get("shape");
+  const urlSizes = searchParams.getAll("size");
+  const urlType = searchParams.get("type");
+  const urlColor = searchParams.get("color");
+  const urlShade = searchParams.get("shade");
+
   const [selectedShape, setSelectedShape] = useState<string | null>(
-    shapes?.length ? shapes[0] : null,
+    urlShape || (shapes?.length ? shapes[0] : null)
   );
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-  const [typeFilter, setTypeFilter] = useState<string | null>(null);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>(urlSizes || []);
+  const [typeFilter, setTypeFilter] = useState<string | null>(urlType || null);
   const [selectedSapphireColor, setSelectedSapphireColor] = useState(
-    SapphireLooseGemstoneColorOptions[0]?.value,
+    urlColor || SapphireLooseGemstoneColorOptions[0]?.value
   );
-  const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
+  const [emeraldShade, setEmeraldShade] = useState<string | null>(urlShade || "Zambian");
   const [fetchedResult, setFetchedResult] = useState<any[]>([]);
   const [allSizes, setAllSizes] = useState<{ [shape: string]: string[] }>({});
   const [opened, { open, close }] = useDisclosure(false);
-  const router = useRouter();
   const [shaedImages, setShadeImages] = useState<any>([]);
   const [qualityImages, setQualityImages] = useState<any[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
@@ -120,8 +129,41 @@ export function CategoryContent({
   const mainVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    // Keep standard logic here
-  }, []);
+    const params = new URLSearchParams(searchParams.toString());
+    let hasChanges = false;
+
+    const setOrDelete = (key: string, value: string | null, defaultValue: string | null) => {
+      if (value && value !== defaultValue) {
+        if (params.get(key) !== value) {
+          params.set(key, value);
+          hasChanges = true;
+        }
+      } else {
+        if (params.has(key)) {
+          params.delete(key);
+          hasChanges = true;
+        }
+      }
+    };
+
+    setOrDelete("shape", selectedShape, shapes?.length ? shapes[0] : null);
+    setOrDelete("color", selectedSapphireColor, SapphireLooseGemstoneColorOptions[0]?.value);
+    setOrDelete("type", typeFilter, null);
+    setOrDelete("shade", emeraldShade, "Zambian");
+
+    const currentSizes = params.getAll("size");
+    if (JSON.stringify(currentSizes.sort()) !== JSON.stringify([...selectedSizes].sort())) {
+      params.delete("size");
+      selectedSizes.forEach(size => params.append("size", size));
+      hasChanges = true;
+    }
+
+    if (hasChanges) {
+      const queryString = params.toString();
+      const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+      router.replace(newUrl, { scroll: false });
+    }
+  }, [selectedShape, selectedSapphireColor, typeFilter, emeraldShade, selectedSizes, pathname, router, searchParams]);
 
   const handleShareVideo = async (e: React.MouseEvent, url: string) => {
     e.preventDefault();

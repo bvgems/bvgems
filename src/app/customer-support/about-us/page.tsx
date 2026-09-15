@@ -46,8 +46,10 @@ const fadeUp = {
 
 // ---------- Increment Counter ----------
 const useCounter = (end: number, duration = 1500) => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(end); // Initial SSR is the real number
+
   useEffect(() => {
+    setCount(0);
     let start = 0;
     const increment = end / (duration / 30);
     const interval = setInterval(() => {

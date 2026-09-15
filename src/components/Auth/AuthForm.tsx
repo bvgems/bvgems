@@ -1,9 +1,9 @@
 import { Tabs, TabsList, TabsPanel, TabsTab } from "@mantine/core";
 import { IconLogin, IconUsersPlus } from "@tabler/icons-react";
 import { SigninForm } from "./SigninForm";
-import { SignupForm } from "./SignupForm";
 import { useState } from "react";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
+import { Button } from "@mantine/core";
 
 export const AuthForm = ({ onClose }: { onClose: () => void }) => {
   const [activeTab, setActiveTab] = useState<string | null>("signIn");
@@ -39,11 +39,29 @@ export const AuthForm = ({ onClose }: { onClose: () => void }) => {
 
         {/* Sign Up */}
         <TabsPanel value="signUp">
-          <SignupForm
-            onClose={onClose}
-            isStepper={false}
-            goToSignin={() => setActiveTab("signIn")}
-          />
+          <div className="flex flex-col items-center justify-center p-6 text-center mt-4">
+            <h3 className="text-lg font-semibold mb-2 text-[#0b182d]">Join B.V. Gems</h3>
+            <p className="text-gray-600 mb-6 text-sm">
+              Apply for a wholesale trade account to access exclusive pricing, calibrated layouts, and our memo program.
+            </p>
+            <Button
+              component="a"
+              href="/trade/apply"
+              color="#0b182d"
+              fullWidth
+            >
+              START APPLICATION
+            </Button>
+            <div className="mt-6 text-[#0b182d] text-sm">
+              Already have an account?{" "}
+              <span
+                onClick={() => setActiveTab("signIn")}
+                className="uppercase underline hover:text-gray-500 font-semibold cursor-pointer"
+              >
+                SIGN IN
+              </span>
+            </div>
+          </div>
         </TabsPanel>
 
         {/* Forgot Password (hidden in TabsList) */}

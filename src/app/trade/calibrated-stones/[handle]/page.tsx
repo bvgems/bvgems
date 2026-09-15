@@ -2,14 +2,29 @@ import { getCategoryData } from "@/apis/api";
 import { CategoryContent } from "@/components/Category/CategoryContent";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 type PageProps = {
   params: Promise<{ handle: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: PageProps): Promise<Metadata> {
   const { handle } = await params;
+  const searchParamsResolved = await searchParams;
+  const shape = searchParamsResolved?.shape as string | undefined;
+  const color = searchParamsResolved?.color as string | undefined;
+  
+  let prefix = "";
+  if (shape) {
+    prefix += `${shape} `;
+  }
+  if (color && handle === "sapphire") {
+    prefix += `${color} `;
+  }
   const data: any = await getCategoryData(handle);
 
   if (!data) {
@@ -55,7 +70,12 @@ export async function generateMetadata({
 
   const gemstoneName = data?.name || handle;
   const formattedName =
-    gemstoneName.charAt(0).toUpperCase() + gemstoneName.slice(1);
+    prefix + (gemstoneName.charAt(0).toUpperCase() + gemstoneName.slice(1));
+  const urlParams = new URLSearchParams();
+  if (shape) urlParams.set("shape", shape);
+  if (color && handle === "sapphire") urlParams.set("color", color);
+  const paramString = urlParams.toString();
+  const canonicalUrl = `https://www.bvgems.com/trade/calibrated-stones/${handle}${paramString ? '?' + paramString : ''}`;
 
   return {
     title: `${formattedName} – Natural & Wholesale Loose ${formattedName} Gemstones | B.V. Gems NYC`,
@@ -69,7 +89,7 @@ export async function generateMetadata({
       "diamond district gemstones",
     ],
     alternates: {
-      canonical: `https://www.bvgems.com/calibrated-faceted-gemstones/${handle}`,
+      canonical: canonicalUrl,
     },
     openGraph: {
       title: `${formattedName} – Natural & Wholesale Loose ${formattedName} Gemstones | B.V. Gems`,

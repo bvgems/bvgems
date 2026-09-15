@@ -26,37 +26,34 @@ export const ShopByShape = () => {
         text="Shop Gemstones By Shape"
         className="text-center text-4xl text-[#0b182d] mb-14"
       />
-
-      <Grid gutter="xl" align="center">
-        <GridCol span={{ base: 12 }}>
-          <SimpleGrid cols={{ base: 2, sm: 3, md: 3, lg: 4 }} spacing="xl">
-            {ShapeFilterList.map((shape, index) => (
-              <Link
-                href={`/loose-gemstones?shape=${shape.label.toLowerCase()}`}
-                className="flex justify-center flex-col items-center cursor-pointer no-underline"
-                rel="nofollow"
-                key={index}
+      <div className="max-w-5xl mx-auto">
+        <SimpleGrid cols={{ base: 2, sm: 3, md: 5, lg: 5 }} spacing="xl" verticalSpacing="xl">
+          {ShapeFilterList.map((shape, index) => (
+            <Link
+              href={`/loose-gemstones?shape=${shape.label.toLowerCase()}`}
+              className="flex justify-center flex-col items-center cursor-pointer no-underline hover:opacity-75 transition-opacity"
+              rel="nofollow"
+              key={index}
+            >
+              <div className="relative w-[55px] h-[55px] mb-3" style={{ maxWidth: "70px" }}>
+                <Image loading="lazy"
+                  src={shape.image}
+                  alt={`${shape.label} shaped gemstones`}
+                  fill
+                  className="object-contain opacity-90"
+                />
+              </div>
+              <Text
+                size="sm"
+                fw={500}
+                className="text-[#0b182d] leading-tight"
               >
-                <div className="relative w-[45px] h-[45px] mb-2" style={{ maxWidth: "60px" }}>
-                  <Image loading="lazy"
-                    src={shape.image}
-                    alt={`${shape.label} shaped gemstones`}
-                    fill
-                    className="object-contain opacity-90"
-                  />
-                </div>
-                <Text
-                  size="sm"
-                  fw={500}
-                  className="text-[#0b182d] leading-tight"
-                >
-                  {shape.label}
-                </Text>
-              </Link>
-            ))}
-          </SimpleGrid>
-        </GridCol>
-      </Grid>
+                {shape.label}
+              </Text>
+            </Link>
+          ))}
+        </SimpleGrid>
+      </div>
     </div>
   );
 };

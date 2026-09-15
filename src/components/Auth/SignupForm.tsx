@@ -1,3 +1,4 @@
+"use client";
 import { Button, Loader, PasswordInput, TextInput } from "@mantine/core";
 import Link from "next/link";
 import { useForm } from "@mantine/form";
@@ -156,12 +157,14 @@ export const SignupForm = ({
                 placeholder="your first name"
                 {...form.getInputProps("firstName")}
                 className="w-full"
+                withAsterisk
               />
               <TextInput
                 label="Enter Last Name"
                 placeholder="your last name"
                 {...form.getInputProps("lastName")}
                 className="w-full"
+                withAsterisk
               />
             </div>
             <TextInput
@@ -180,12 +183,14 @@ export const SignupForm = ({
               }
               placeholder="your email address"
               {...form.getInputProps("email")}
+              withAsterisk
             />
 
             <TextInput
               label="Enter Your Company Name"
               placeholder="your company name"
               {...form.getInputProps("companyName")}
+              withAsterisk
             />
             <PhoneNumberInput form={form} />
             <div className="flex justify-between gap-3">
@@ -194,12 +199,14 @@ export const SignupForm = ({
                 placeholder="your password"
                 {...form.getInputProps("password")}
                 className="w-full"
+                withAsterisk
               />
               <PasswordInput
                 label="Confirm Your Password"
                 placeholder="confirm password"
                 {...form.getInputProps("confirmPassword")}
                 className="w-full"
+                withAsterisk
               />
             </div>
             <div className="flex flex-col gap-2">
