@@ -69,10 +69,10 @@ export const HeaderHoverCardForGemstones = ({
                         router.push(item.link);
                     }}
                   >
-                    <div className="flex items-start gap-2">
+                    <div className="flex items-center gap-2">
                       {item.image && (
-                        <div className="relative w-[20px] h-[20px] mt-1 shrink-0">
-                          <Image loading="lazy" src={item.image} fit="contain" h={20} w={20} />
+                        <div className="relative w-[28px] h-[28px] shrink-0">
+                          <Image loading="lazy" src={item.image} fit="contain" h={28} w={28} />
                         </div>
                       )}
                       <span className={`text-[17px] hover:text-gray-500 ${pathname === item.link ? "text-gray-400" : "text-black"}`}>

@@ -238,20 +238,18 @@ export function Header() {
         className="w-full px-4 py-2 rounded-md hover:bg-gray-100"
         onClick={() => router.push(item.link)}
       >
-        <Group wrap="nowrap" align="flex-start">
+        <Group wrap="nowrap" align="center">
           {item.image && (
-            <ThemeIcon size={34} variant="transparent">
-              <div className="relative w-[20px] h-[20px]">
-                <Image loading="lazy" src={item.image} alt={item.label} fill className="object-contain" />
-              </div>
-            </ThemeIcon>
+            <div className="relative w-[35px] h-[35px] shrink-0">
+              <Image loading="lazy" src={item.image} alt={item.label} fill className="object-contain" />
+            </div>
           )}
           <div className="hover:text-gray-500">
             <Text
               size="md"
               className={`text-[17px] ${pathname === item.link ? "text-gray-400" : "text-black"
                 }`}
-              pl={"lg"}
+              pl={item.image ? "sm" : "lg"}
             >
               {item.label}
             </Text>
@@ -456,7 +454,7 @@ export function Header() {
                 <Burger opened={opened} onClick={toggle} size="sm" aria-label="Toggle navigation menu" />
 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
-                  <div className="relative w-[100px] h-[50px] cursor-pointer" onClick={() => router.push("/")}>
+                  <div className="relative w-[140px] h-[70px] cursor-pointer" onClick={() => router.push("/")}>
                     <Image loading="lazy"
                       src="/assets/logo2.webp"
                       alt="logo"
@@ -496,7 +494,7 @@ export function Header() {
                 span={{ base: 12, md: 2 }}
                 className="flex justify-start"
               >
-                <div className="relative w-[100px] h-[50px] cursor-pointer" onClick={() => router.push("/")}>
+                <div className="relative w-[140px] h-[70px] cursor-pointer" onClick={() => router.push("/")}>
                   <Image loading="lazy"
                     src="/assets/logo2.webp"
                     alt="logo"

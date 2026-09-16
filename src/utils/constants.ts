@@ -1466,12 +1466,12 @@ export const links = [
     links: FreeSizeGemstonesList,
   },
   {
-    label: "Layouts & Beads",
+    link: "/trade/layouts",
+    label: "Layouts",
+  },
+  {
+    label: "Beads",
     links: [
-      {
-        link: "/trade/layouts",
-        label: "Colorstone Layouts",
-      },
       {
         link: "/trade/beads",
         label: "Precious Beads",
@@ -1520,12 +1520,12 @@ export const mobileLinks = [
     links: FreeSizeGemstonesList,
   },
   {
-    label: "Layouts & Beads",
+    link: "/trade/layouts",
+    label: "Layouts",
+  },
+  {
+    label: "Beads",
     links: [
-      {
-        link: "/trade/layouts",
-        label: "Colorstone Layouts",
-      },
       {
         link: "/trade/beads",
         label: "Precious Beads",
