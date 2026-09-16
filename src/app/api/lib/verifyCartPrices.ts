@@ -8,9 +8,57 @@ export const verifyCartPrices = async (cartItems: any[]) => {
     const { productType, id, productId, quality, size, handle } = item.product || {};
 
     if (productType === "stone") {
-      const dbRes = await pool.query("SELECT price FROM gemstone_specs WHERE id = $1", [productId || id]);
+      const dbRes = await pool.query(
+        "SELECT price, ct_weight, collection_slug, type, quality, size FROM gemstone_specs WHERE id = $1", 
+        [productId || id]
+      );
       if (dbRes.rows.length > 0) {
-        verifiedItem.product.price = Number(dbRes.rows[0].price);
+        const dbProduct = dbRes.rows[0];
+        const dbPrice = Number(dbProduct.price);
+        const dbCtWeight = Number(dbProduct.ct_weight);
+        
+        const isLabGrown = dbProduct.type === 'Lab Grown' || dbProduct.quality === 'Lab Grown' || dbProduct.type === 'Lab-Grown' || dbProduct.quality === 'Lab-Grown';
+        const isAlexOrParaiba = dbProduct.collection_slug === "Alexandrite" || dbProduct.collection_slug === "Paraiba Tourmaline";
+        
+        let allowPurchaseByCarat = true;
+        if (isLabGrown) {
+           const size = dbProduct.size;
+           if (size === "1.00 mm" || size === "1.25 mm" || size === "1.50 mm" || size === "1.75 mm") {
+              allowPurchaseByCarat = false;
+           }
+        }
+
+        if (verifiedItem.product.purchaseByCarat) {
+           // Emulate getPerCaratPrice
+           if (isLabGrown && isAlexOrParaiba) {
+              verifiedItem.product.price = 85;
+           } else {
+              if (dbCtWeight) {
+                 verifiedItem.product.price = Number((dbPrice / dbCtWeight).toFixed(2));
+              } else {
+                 verifiedItem.product.price = dbPrice;
+              }
+           }
+        } else {
+           // Emulate getPerStonePrice
+           if (isLabGrown) {
+              if (isAlexOrParaiba) {
+                 if (!allowPurchaseByCarat) {
+                    verifiedItem.product.price = dbPrice;
+                 } else {
+                    verifiedItem.product.price = Number((85 * dbCtWeight).toFixed(2));
+                 }
+              } else {
+                 if (!allowPurchaseByCarat) {
+                    verifiedItem.product.price = dbPrice;
+                 } else {
+                    verifiedItem.product.price = Number((50 * dbCtWeight).toFixed(2));
+                 }
+              }
+           } else {
+              verifiedItem.product.price = dbPrice;
+           }
+        }
       } else {
         throw new Error(`Product not found: ${id}`);
       }
