@@ -22,7 +22,8 @@ import {
 import { sortBySizeAsc } from "@/utils/sortUtils";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCertificate } from "@tabler/icons-react";
-import React, { useEffect, useState } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { generateCalibratedStoneUrl } from "@/utils/seoUrlHelpers";
 import { useRouter } from "next/navigation";
 
 const isValid = (val: any) => val && val !== "-" && String(val).trim() !== "";
@@ -100,7 +101,8 @@ export const ProductSpecifications = ({
 
     if (newProduct?.id) {
       getProduct(newProduct.id);
-      router.push(`/product-details?id=${newProduct.id}`);
+      const stoneHandle = newProduct?.collection_slug?.toLowerCase() || "unknown-stone";
+      router.push(generateCalibratedStoneUrl(newProduct, stoneHandle));
     }
 
     setIsSizeChangedByUser(false);

@@ -18,9 +18,15 @@ import {
 } from "@mantine/core";
 import {
   IconCheck,
-  IconInfoCircle,
+  IconDiamond,
+  IconFileCertificate,
+  IconScale,
+  IconShape,
+  IconMaximize,
   IconShoppingCart,
+  IconInfoCircle
 } from "@tabler/icons-react";
+import { generateCalibratedStoneUrl } from "@/utils/seoUrlHelpers";
 import React, { useEffect, useMemo, useState } from "react";
 import { GemstonesInputSection } from "./GemstonesInputSection";
 import { useAuth } from "@/hooks/useAuth";
@@ -171,11 +177,8 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   };
 
   const handleRedirect = () => {
-    router?.push(
-      `/product-details?id=${
-        product?.id
-      }&name=${product?.collection_slug?.toLowerCase()}`,
-    );
+    const stoneHandle = product?.collection_slug?.toLowerCase() || "unknown-stone";
+    router?.push(generateCalibratedStoneUrl(product, stoneHandle));
   };
 
   const isPurchaseByCarat = (product: any) => {

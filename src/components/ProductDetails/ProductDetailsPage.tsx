@@ -14,7 +14,7 @@ import {
   Textarea,
 } from "@mantine/core";
 import { useEffect, useState, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import {
   getCategoryData,
   getParticularProductsData,
@@ -59,9 +59,10 @@ const getPerCaratPrice = (item: any): number => {
 };
 
 export default function ProductDetailsPage() {
+  const params = useParams();
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  const name = searchParams.get("name");
+  const id = params?.slug ? (params.slug as string).split("-").pop() : searchParams.get("id");
+  const name = params?.stone ? (params.stone as string) : searchParams.get("name");
   const [modalOpened, { open, close }] = useDisclosure(false);
   const [quoteModalOpened, { open: openQuote, close: closeQuote }] = useDisclosure(false);
 

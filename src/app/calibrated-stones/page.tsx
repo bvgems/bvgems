@@ -4,9 +4,12 @@ import { LooseGemstones } from "@/components/LooseGemstones/LooseGemstones";
 export const metadata = {
   title: "Calibrated Gemstones - Wholesale | B.V. Gems",
   description: "Shop precision-calibrated wholesale gemstones for your custom jewelry designs.",
+  alternates: {
+    canonical: `https://www.bvgems.com/calibrated-stones`,
+  },
 };
 
-export default function TradeCalibratedStonesPage() {
+export default function CalibratedStonesPage() {
   return (
     <div className="w-full">
       <div className="bg-[#0b182d] text-white py-12 px-6 text-center">

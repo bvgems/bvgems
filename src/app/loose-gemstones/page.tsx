@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { GridView } from "@/components/GridView/GridView";
 
 export const metadata: Metadata = {
@@ -16,5 +17,9 @@ export const metadata: Metadata = {
 };
 
 export default function LooseGemStonesPage() {
-  return <GridView />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <GridView />
+    </Suspense>
+  );
 }

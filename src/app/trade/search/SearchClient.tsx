@@ -6,6 +6,7 @@ import { getSearchResult } from "@/apis/api";
 import { Container, Grid, Title, Text, Loader, Badge, Card } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import Image from "next/image";
+import { generateCalibratedStoneUrl, generateFreeSizeStoneUrl } from "@/utils/seoUrlHelpers";
 
 export function SearchClient() {
   const searchParams = useSearchParams();
@@ -39,9 +40,11 @@ export function SearchClient() {
 
   const handleCardClick = (item: any) => {
     if (item?.gemstone_type) {
-      router.push(`/free-size-gemstone-details/${item?.id}`);
+      const stoneHandle = item?.gemstone_type?.toLowerCase() || "unknown-stone";
+      router.push(generateFreeSizeStoneUrl(item, stoneHandle));
     } else if (item?.collection_slug) {
-      router.push(`/product-details?id=${item?.id}&name=${item?.collection_slug}`);
+      const stoneHandle = item?.collection_slug?.toLowerCase() || "unknown-stone";
+      router.push(generateCalibratedStoneUrl(item, stoneHandle));
     }
   };
 

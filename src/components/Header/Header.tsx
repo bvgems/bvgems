@@ -24,6 +24,7 @@ import {
   Loader,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { generateCalibratedStoneUrl, generateFreeSizeStoneUrl } from "@/utils/seoUrlHelpers";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -157,15 +158,14 @@ export function Header() {
     setSearchQuery("");
 
     if (option?.gemstone_type) {
-      router?.push(`/free-size-gemstone-details/${option?.id}`);
+      const stoneHandle = option?.gemstone_type?.toLowerCase() || "unknown-stone";
+      router?.push(generateFreeSizeStoneUrl(option, stoneHandle));
     } else if (option?.collection_slug) {
-      router.push(
-        `/product-details?id=${option?.id}&name=${option?.collection_slug}`
-      );
+      const stoneHandle = option?.collection_slug?.toLowerCase() || "unknown-stone";
+      router.push(generateCalibratedStoneUrl(option, stoneHandle));
     } else {
       router.push(
-        `/jewelry-details/${option?.productType?.toLowerCase()}/${option?.handle
-        }`
+        `/jewelry/${option?.productType?.toLowerCase()}/${option?.handle}`
       );
     }
   };
@@ -300,6 +300,29 @@ export function Header() {
             className="flex flex-col gap-5 text-xl"
           >
             {menuItems}
+            {link.label === "Free Size" && (
+              <div className="px-4 flex flex-col gap-3 mt-2">
+                <Button
+                  onClick={() => router.push("/free-size-gemstones")}
+                  fullWidth
+                  variant="outline"
+                  color="#0b182d"
+                  size="sm"
+                >
+                  VIEW ALL
+                </Button>
+                <Button
+                  onClick={() => router.push("/special-page")}
+                  fullWidth
+                  variant="outline"
+                  color="#0b182d"
+                  size="sm"
+                  styles={{ root: { padding: '0 8px' } }}
+                >
+                  <span className="text-[13px] tracking-tight">FIND YOUR PERFECT STONE</span>
+                </Button>
+              </div>
+            )}
           </Menu.Dropdown>
         </Menu>
       );

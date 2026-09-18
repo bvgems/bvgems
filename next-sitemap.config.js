@@ -16,14 +16,14 @@ module.exports = {
     "/reset-password",
     "/api/*",
     "/admin/*",
-    "/jewelry",
-    "/jewelry/*",
     "/custom-jewelry",
     "/custom-jewelry/*",
     "/design-your-jewelry",
     "/design-your-jewelry/*",
     "/jewelry-details",
     "/jewelry-details/*",
+    "/product-details",
+    "/free-size-gemstone-details/*",
     "/apply-account", // Deprecated, using /trade/apply instead
   ],
 
@@ -43,10 +43,11 @@ module.exports = {
           "/reset-password",
           "/api/*",
           "/admin/*",
-          "/jewelry",
           "/custom-jewelry",
           "/design-your-jewelry",
-          "/jewelry-details",
+          "/jewelry-details/*",
+          "/product-details*",
+          "/free-size-gemstone-details/*"
         ],
       },
     ],
@@ -58,7 +59,7 @@ module.exports = {
     let changefreq = "weekly";
 
     // Homepage
-    if (path === "/" || path === "/calibrated-faceted-gemstones/sapphire") {
+    if (path === "/") {
       priority = 1.0;
       changefreq = "daily";
     }
@@ -69,7 +70,6 @@ module.exports = {
         "/trade",
         "/trade/apply",
         "/trade/memo-program",
-        "/trade/calibrated-stones",
         "/trade/layouts",
         "/trade/beads",
       ].includes(path) || path.startsWith("/trade/")
@@ -81,10 +81,11 @@ module.exports = {
     // Collections / Categories
     if (
       [
-        "/loose-gemstones",
+        "/calibrated-stones",
         "/free-size-gemstones",
         "/precious-beads",
         "/colorstone-layouts",
+        "/jewelry"
       ].includes(path)
     ) {
       priority = 0.8;
@@ -123,16 +124,15 @@ module.exports = {
   // Add important paths explicitly
   additionalPaths: async (config) => [
     await config.transform(config, "/"),
-    await config.transform(config, "/loose-gemstones"),
-    await config.transform(config, "/calibrated-faceted-gemstones/sapphire"),
+    await config.transform(config, "/calibrated-stones"),
     await config.transform(config, "/free-size-gemstones"),
     await config.transform(config, "/precious-beads"),
     await config.transform(config, "/finished-bead-necklaces"),
     await config.transform(config, "/colorstone-layouts"),
+    await config.transform(config, "/jewelry"),
     await config.transform(config, "/trade"),
     await config.transform(config, "/trade/apply"),
     await config.transform(config, "/trade/memo-program"),
-    await config.transform(config, "/trade/calibrated-stones"),
     await config.transform(config, "/trade/layouts"),
     await config.transform(config, "/trade/beads"),
     await config.transform(config, "/trade-shows"),

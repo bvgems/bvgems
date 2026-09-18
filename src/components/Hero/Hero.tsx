@@ -10,15 +10,15 @@ export function Hero({ jewelryRef, heroData }: any) {
 
   return (
     <div className="w-full flex flex-col">
-      {/* Two Doors Section */}
+      {/* OLD TWO DOORS SECTION - COMMENTED OUT AS REQUESTED */}
+      {/* 
       <div className="flex flex-col md:flex-row w-full h-[600px] md:h-[550px]">
-        {/* Door 1: Calibrated Stones */}
         <Link
           href="/special-page"
           className="relative flex-1 group overflow-hidden border-b-2 md:border-b-0 md:border-r-2 border-white"
         >
           <Image loading="lazy"
-            src="/assets/shopify/raw_5b0afe2d-24fd-4837-9272-a3649b33c9f8.png" // Placeholder or use an actual appropriate image
+            src="/assets/shopify/raw_5b0afe2d-24fd-4837-9272-a3649b33c9f8.png" 
             alt="Calibrated & Free Size Stones"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -37,13 +37,12 @@ export function Hero({ jewelryRef, heroData }: any) {
           </div>
         </Link>
 
-        {/* Door 2: Matching Pairs & Layouts */}
         <Link
           href="/trade/layouts"
           className="relative flex-1 group overflow-hidden"
         >
           <Image loading="lazy"
-            src="/assets/hero-bg2.webp" // Existing jewelry background or layout background
+            src="/assets/hero-bg2.webp"
             alt="Matching Pairs and Layouts"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -59,6 +58,98 @@ export function Hero({ jewelryRef, heroData }: any) {
             <button className="px-8 py-3 bg-white text-black text-sm uppercase tracking-widest font-semibold hover:bg-gray-100 transition-colors">
               Explore Layouts
             </button>
+          </div>
+        </Link>
+      </div> 
+      */}
+
+      {/* NEW 2x2 GRID SECTION */}
+      <div className="grid grid-cols-1 md:grid-cols-2 w-full min-h-[600px] bg-white gap-1 p-1">
+        {/* Tile 1: Calibrated Stones */}
+        <Link
+          href="/loose-gemstones"
+          className="relative flex flex-col items-center justify-center text-center p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group"
+        >
+          {/* Expanding Radial Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#F0EBE1]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:duration-300 ease-out z-0" />
+          {/* Sweeping Shine Effect */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-[150%] skew-x-[-25deg] group-hover:translate-x-[150%] transition-transform duration-1000 group-hover:duration-700 ease-in-out" />
+          
+          <h2 className="text-4xl md:text-5xl font-light tracking-widest mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Calibrated Stones
+          </h2>
+          <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Precision-cut perfection for your jewelry designs
+          </p>
+          <div className="flex items-center gap-2 text-base uppercase tracking-widest font-medium text-stone-900 group-hover:text-blue-600 transition-colors z-10">
+            <span>Shop Calibrated</span>
+            <span className="transform transition-transform duration-500 group-hover:duration-200 group-hover:translate-x-2">→</span>
+          </div>
+        </Link>
+
+        {/* Tile 2: Free Size Gemstones */}
+        <Link
+          href="/free-size-gemstones"
+          className="relative flex flex-col items-center justify-center text-center p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group"
+        >
+          {/* Expanding Radial Background */}
+          <div className="absolute inset-0 bg-gradient-to-bl from-[#F0EBE1]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:duration-300 ease-out z-0" />
+          {/* Sweeping Shine Effect */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-[150%] skew-x-[-25deg] group-hover:translate-x-[150%] transition-transform duration-1000 group-hover:duration-700 ease-in-out delay-75" />
+          
+          <h2 className="text-4xl md:text-5xl font-light tracking-widest mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Free Size Gems
+          </h2>
+          <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Unique, one-of-a-kind stones for custom creations
+          </p>
+          <div className="flex items-center gap-2 text-base uppercase tracking-widest font-medium text-stone-900 group-hover:text-blue-600 transition-colors z-10">
+            <span>Shop Free Size</span>
+            <span className="transform transition-transform duration-500 group-hover:duration-200 group-hover:translate-x-2">→</span>
+          </div>
+        </Link>
+
+        {/* Tile 3: Layouts */}
+        <Link
+          href="/trade/layouts"
+          className="relative flex flex-col items-center justify-center text-center p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group"
+        >
+          {/* Expanding Radial Background */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#F0EBE1]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:duration-300 ease-out z-0" />
+          {/* Sweeping Shine Effect */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-[150%] skew-x-[-25deg] group-hover:translate-x-[150%] transition-transform duration-1000 group-hover:duration-700 ease-in-out delay-150" />
+          
+          <h2 className="text-4xl md:text-5xl font-light tracking-widest mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Layouts
+          </h2>
+          <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Curated assortments matched to perfection
+          </p>
+          <div className="flex items-center gap-2 text-base uppercase tracking-widest font-medium text-stone-900 group-hover:text-blue-600 transition-colors z-10">
+            <span>Explore Layouts</span>
+            <span className="transform transition-transform duration-500 group-hover:duration-200 group-hover:translate-x-2">→</span>
+          </div>
+        </Link>
+
+        {/* Tile 4: Pairs */}
+        <Link
+          href="/special-page"
+          className="relative flex flex-col items-center justify-center text-center p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group"
+        >
+          {/* Expanding Radial Background */}
+          <div className="absolute inset-0 bg-gradient-to-tl from-[#F0EBE1]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:duration-300 ease-out z-0" />
+          {/* Sweeping Shine Effect */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-[150%] skew-x-[-25deg] group-hover:translate-x-[150%] transition-transform duration-1000 group-hover:duration-700 ease-in-out delay-[225ms]" />
+          
+          <h2 className="text-4xl md:text-5xl font-light tracking-widest mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Matching Pairs
+          </h2>
+          <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Expertly paired stones for flawless symmetry
+          </p>
+          <div className="flex items-center gap-2 text-base uppercase tracking-widest font-medium text-stone-900 group-hover:text-blue-600 transition-colors z-10">
+            <span>Explore Pairs</span>
+            <span className="transform transition-transform duration-500 group-hover:duration-200 group-hover:translate-x-2">→</span>
           </div>
         </Link>
       </div>

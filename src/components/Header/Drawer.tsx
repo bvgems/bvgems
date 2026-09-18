@@ -101,11 +101,11 @@ export const DrawerComponent = ({
                         </div>
                       ))}
 
-                      {link.label === "Calibrated Gemstones" && (
+                      {link.label === "Calibrated Stones" && (
                         <div
                           onClick={() => {
                             toggle();
-                            router.push("/loose-gemstones");
+                            router.push("/trade/calibrated-stones");
                           }}
                           className="text-[#0b182d] underline gap-1 hover:text-blue-800 flex items-center"
                         >
@@ -115,6 +115,36 @@ export const DrawerComponent = ({
                             size={16}
                             stroke={2}
                           />
+                        </div>
+                      )}
+
+                      {link.label === "Free Size" && (
+                        <div className="flex flex-col gap-3 mt-2 border-t pt-4 border-gray-100">
+                          <Button
+                            onClick={() => {
+                              toggle();
+                              router.push("/free-size-gemstones");
+                            }}
+                            fullWidth
+                            variant="outline"
+                            color="#0b182d"
+                            size="sm"
+                          >
+                            VIEW ALL
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              toggle();
+                              router.push("/special-page");
+                            }}
+                            fullWidth
+                            variant="outline"
+                            color="#0b182d"
+                            size="sm"
+                            styles={{ root: { padding: '0 8px' } }}
+                          >
+                            <span className="text-[13px] tracking-tight">FIND YOUR PERFECT STONE</span>
+                          </Button>
                         </div>
                       )}
                     </div>

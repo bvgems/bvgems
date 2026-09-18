@@ -11,10 +11,11 @@ Disallow: /my-orders
 Disallow: /reset-password
 Disallow: /api/*
 Disallow: /admin/*
-Disallow: /jewelry
 Disallow: /custom-jewelry
 Disallow: /design-your-jewelry
-Disallow: /jewelry-details
+Disallow: /jewelry-details/*
+Disallow: /product-details*
+Disallow: /free-size-gemstone-details/*
 
 # Host
 Host: https://www.bvgems.com

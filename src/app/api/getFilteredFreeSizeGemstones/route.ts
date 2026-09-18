@@ -36,11 +36,11 @@ export async function POST(req: NextRequest) {
       const gemTypes = options.gemstone_type.map((g: string) =>
         g.toLowerCase()
       );
-      const hasBlueSapphire = gemTypes.includes("blue%20sapphire");
-      const hasFancySapphire = gemTypes.includes("fancy%20sapphire");
+      const hasBlueSapphire = gemTypes.includes("blue sapphire");
+      const hasFancySapphire = gemTypes.includes("fancy sapphire");
 
       const simpleTypes = gemTypes.filter(
-        (g: any) => !["blue%20sapphire", "fancy%20sapphire"].includes(g)
+        (g: any) => !["blue sapphire", "fancy sapphire"].includes(g)
       );
 
       // Handle Ruby / Emerald normally

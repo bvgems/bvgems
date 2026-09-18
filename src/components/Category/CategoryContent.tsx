@@ -73,12 +73,18 @@ export function CategoryContent({
   data,
   shapes,
   handle,
+  routeStone,
+  routeShape,
+  routeSize,
 }: {
   isSapphire: boolean;
   isEmerald: boolean;
   data: any;
   shapes: string[];
   handle: any;
+  routeStone?: string;
+  routeShape?: string;
+  routeSize?: string;
 }) {
   const shapeOrder = [
     "Round",
@@ -106,9 +112,9 @@ export function CategoryContent({
   const urlShade = searchParams.get("shade");
 
   const [selectedShape, setSelectedShape] = useState<string | null>(
-    urlShape || (shapes?.length ? shapes[0] : null)
+    routeShape || urlShape || (shapes?.length ? shapes[0] : null)
   );
-  const [selectedSizes, setSelectedSizes] = useState<string[]>(urlSizes || []);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>(routeSize ? [routeSize] : (urlSizes || []));
   const [typeFilter, setTypeFilter] = useState<string | null>(urlType || null);
   const [selectedSapphireColor, setSelectedSapphireColor] = useState(
     urlColor || SapphireLooseGemstoneColorOptions[0]?.value
@@ -127,6 +133,27 @@ export function CategoryContent({
   const [videoZoomPos, setVideoZoomPos] = useState({ x: 0, y: 0 });
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const mainVideoRef = useRef<HTMLVideoElement>(null);
+
+  // Sync state with URL parameters on soft navigation
+  useEffect(() => {
+    const urlShape = searchParams.get("shape");
+    const urlColor = searchParams.get("color");
+    const urlType = searchParams.get("type");
+    const urlShade = searchParams.get("shade");
+    
+    if (urlShape && urlShape !== selectedShape) {
+      setSelectedShape(urlShape);
+    }
+    if (urlColor && urlColor !== selectedSapphireColor) {
+      setSelectedSapphireColor(urlColor);
+    }
+    if (urlType && urlType !== typeFilter) {
+      setTypeFilter(urlType);
+    }
+    if (urlShade && urlShade !== emeraldShade) {
+      setEmeraldShade(urlShade);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());

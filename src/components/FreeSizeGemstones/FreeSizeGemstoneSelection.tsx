@@ -108,9 +108,16 @@ export default function FreeSizeGemstoneSelection() {
     let gemstoneTypeFilter: string[] = [];
 
     if (gemstoneType) {
-      const formattedType =
-        gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1);
-      gemstoneTypeFilter = [formattedType];
+      const lowerType = gemstoneType.toLowerCase();
+      if (lowerType === "sapphire") {
+        gemstoneTypeFilter = ["Blue sapphire"];
+      } else if (lowerType === "fancy-sapphire") {
+        gemstoneTypeFilter = ["Fancy sapphire"];
+      } else {
+        const formattedType =
+          gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1);
+        gemstoneTypeFilter = [formattedType];
+      }
     }
 
     const filterOptions: any = {

@@ -8,6 +8,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useDisclosure } from "@mantine/hooks";
 import { AuthForm } from "../Auth/AuthForm";
 
+import { generateCalibratedStoneUrl, generateFreeSizeStoneUrl } from "@/utils/seoUrlHelpers";
+
 interface AnimatedCardProps {
   item: any;
   index: number;
@@ -39,13 +41,12 @@ export const AnimatedCard = ({
   }, [controls, inView]);
 
   const redirectToStonePage = () => {
-    !isFreeSize
-      ? router.push(
-          `/product-details?id=${
-            item?.id
-          }&name=${item?.collection_slug?.toLowerCase()}`
-        )
-      : router.push(`/free-size-gemstone-details/${item?.id}`);
+    const stoneHandle = item?.collection_slug?.toLowerCase() || "unknown";
+    if (!isFreeSize) {
+      router.push(generateCalibratedStoneUrl(item, stoneHandle));
+    } else {
+      router.push(generateFreeSizeStoneUrl(item, stoneHandle));
+    }
   };
 
   return (

@@ -63,7 +63,13 @@ export const CategoryTable = ({
   const addToCart = cartStore((state: any) => state.addToCart);
 
   const goToCartPage = (item: any) => {
-    router.push(`/product-details?id=${item?.id}&name=${name}`);
+    // Generate hierarchical URL for Calibrated Stones
+    const shape = item?.shape?.toLowerCase().replace(/\s+/g, "-") || "unknown-shape";
+    const size = item?.size ? encodeURIComponent(item.size.replace(/\s+/g, "-")) : "unknown-size";
+    const type = item?.type?.toLowerCase().replace(/\s+/g, "-") || "natural";
+    const slug = `${type}-${name}-${item.id}`;
+    const url = `/calibrated-stones/${name}/${shape}/${size}/${slug}`;
+    router.push(url);
   };
 
   const formattedSelectedSize = selectedSizes[0];

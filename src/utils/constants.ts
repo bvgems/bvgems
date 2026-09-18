@@ -62,7 +62,7 @@ export const GemstonesByBirthMonths = [
         image:
           "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756317899/RD_Z_emh9yw.jpg",
         title: "Loose Gemstones",
-        link: "/trade/calibrated-stones/emerald",
+        link: "/calibrated-stones/emerald",
       },
     ],
   },
@@ -100,7 +100,7 @@ export const GemstonesByBirthMonths = [
         image:
           "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756410867/IMG_2626-3_pju0li.png",
         title: "Loose Gemstones",
-        link: "/trade/calibrated-stones/ruby",
+        link: "/calibrated-stones/ruby",
       },
     ],
   },
@@ -138,7 +138,7 @@ export const GemstonesByBirthMonths = [
         image:
           "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755880908/RD_AA_SRD00042208_p8ijmh.jpg",
         title: "Loose Gemstones",
-        link: "/trade/calibrated-stones/sapphire",
+        link: "/calibrated-stones/sapphire",
       },
     ],
   },
@@ -878,77 +878,77 @@ export const gemstoneOptions = [
     value: "Alexandrite",
     image: "/assets/sapphire.webp",
     shopImage: "/assets/alexandrite-shop-cali.webp",
-    link: "/trade/calibrated-stones/alexandrite",
+    link: "/calibrated-stones/alexandrite",
   },
   {
     label: "Amethyst",
     value: "Amethyst",
     image: "/assets/amethyst.webp",
     shopImage: "/assets/amethyst-shop-cali.webp",
-    link: "/trade/calibrated-stones/amethyst",
+    link: "/calibrated-stones/amethyst",
   },
   {
     label: "Aquamarine",
     value: "Aquamarine",
     image: "/assets/aquamarine.webp",
     shopImage: "/assets/aquamarine-shop-cali.webp",
-    link: "/trade/calibrated-stones/aquamarine",
+    link: "/calibrated-stones/aquamarine",
   },
   {
     label: "Citrine",
     value: "Citrine",
     image: "/assets/citrine.webp",
     shopImage: "/assets/citrine-shop-cal.webp",
-    link: "/trade/calibrated-stones/citrine",
+    link: "/calibrated-stones/citrine",
   },
   {
     label: "Emerald",
     value: "Emerald",
     image: "/assets/emerald.webp",
     shopImage: "/assets/emerald-shop-cal.webp",
-    link: "/trade/calibrated-stones/emerald",
+    link: "/calibrated-stones/emerald",
   },
   {
     label: "Morganite",
     value: "Morganite",
     image: "/assets/morganite.webp",
     shopImage: "/assets/morganite-shop-cal.webp",
-    link: "/trade/calibrated-stones/morganite",
+    link: "/calibrated-stones/morganite",
   },
   {
     label: "Paraiba Tourmaline",
     value: "Paraiba Tourmaline",
     image: "/assets/paraiba-img.webp",
     shopImage: "/assets/paraiba-shop.webp",
-    link: "/trade/calibrated-stones/paraiba-tourmaline",
+    link: "/calibrated-stones/paraiba-tourmaline",
   },
   {
     label: "Peridot",
     value: "Peridot",
     image: "/assets/peridot.webp",
     shopImage: "/assets/peridot-shop-cal.webp",
-    link: "/trade/calibrated-stones/peridot",
+    link: "/calibrated-stones/peridot",
   },
   {
     label: "Ruby",
     value: "Ruby",
     image: "/assets/ruby.webp",
     shopImage: "/assets/ruby-shop-cali.webp",
-    link: "/trade/calibrated-stones/ruby",
+    link: "/calibrated-stones/ruby",
   },
   {
     label: "Sapphire (All Colors)",
     value: "Sapphire",
     image: "/assets/sapphire.webp",
     shopImage: "/assets/sapphire-shop-calibrated.webp",
-    link: "/trade/calibrated-stones/sapphire",
+    link: "/calibrated-stones/sapphire",
   },
   {
     label: "Tanzanite",
     value: "Tanzanite",
     image: "/assets/tanzanite.webp",
     shopImage: "/assets/tanzanite-shop-cali1.webp",
-    link: "/trade/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/tanzanite",
   },
 ];
 export const gemstoneOptionsForCustomization = [
@@ -956,91 +956,91 @@ export const gemstoneOptionsForCustomization = [
     label: "Alexandrite",
     value: "Alexandrite",
     image: "/assets/sapphire.webp",
-    link: "/trade/calibrated-stones/alexandrite",
+    link: "/calibrated-stones/alexandrite",
   },
   {
     label: "Amethyst",
     value: "Amethyst",
     image: "/assets/amethyst.webp",
-    link: "/trade/calibrated-stones/amethyst",
+    link: "/calibrated-stones/amethyst",
   },
   {
     label: "Aquamarine",
     value: "Aquamarine",
     image: "/assets/aquamarine.webp",
-    link: "/trade/calibrated-stones/aquamarine",
+    link: "/calibrated-stones/aquamarine",
   },
   {
     label: "Citrine",
     value: "Citrine",
     image: "/assets/citrine.webp",
-    link: "/trade/calibrated-stones/citrine",
+    link: "/calibrated-stones/citrine",
   },
   {
     label: "Emerald",
     value: "Emerald",
     image: "/assets/emerald.webp",
-    link: "/trade/calibrated-stones/emerald",
+    link: "/calibrated-stones/emerald",
   },
   {
     label: "Morganite",
     value: "Morganite",
     image: "/assets/morganite.webp",
-    link: "/trade/calibrated-stones/morganite",
+    link: "/calibrated-stones/morganite",
   },
   {
     label: "Peridot",
     value: "Peridot",
     image: "/assets/peridot.webp",
-    link: "/trade/calibrated-stones/peridot",
+    link: "/calibrated-stones/peridot",
   },
   {
     label: "Ruby",
     value: "Ruby",
     image: "/assets/ruby.webp",
-    link: "/trade/calibrated-stones/ruby",
+    link: "/calibrated-stones/ruby",
   },
   // {
   //   label: "Sapphire",
   //   value: "Sapphire",
   //   image: "/assets/sapphire.webp",
-  //   link: "/trade/calibrated-stones/sapphire",
+  //   link: "/calibrated-stones/sapphire",
   // },
   {
     label: "Blue Sapphire",
     value: "Blue Sapphire",
     image: "/assets/blue2.webp",
-    link: "/trade/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/tanzanite",
   },
   {
     label: "Yellow Sapphire",
     value: "Yellow Sapphire",
     image: "/assets/yellowcolor.webp",
-    link: "/trade/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/tanzanite",
   },
   {
     label: "Pink Sapphire",
     value: "Pink Sapphire",
     image: "/assets/pinkcolor.webp",
-    link: "/trade/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/tanzanite",
   },
   {
     label: "Green Sapphire",
     value: "Green Sapphire",
     image: "/assets/greencolor.webp",
-    link: "/trade/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/tanzanite",
   },
   {
     label: "Orange Sapphire",
     value: "Orange Sapphire",
     image: "/assets/orange2.webp",
-    link: "/trade/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/tanzanite",
   },
   {
     label: "Purple Sapphire",
     value: "Purple Sapphire",
     image: "/assets/purplecolor.webp",
-    link: "/trade/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/tanzanite",
   },
   // { value: "Black", color: "#000000" },
   // { value: "White", color: "#808080" },
@@ -1049,7 +1049,7 @@ export const gemstoneOptionsForCustomization = [
     label: "Tanzanite",
     value: "Tanzanite",
     image: "/assets/tanzanite.webp",
-    link: "/trade/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/tanzanite",
   },
 ];
 
@@ -1101,7 +1101,7 @@ export const FreeSizeGemstonesList = [
     label: "Fancy Sapphire",
     value: "Fancy Sapphire",
     image: "/assets/fancy-sapphire.webp",
-    link: "/free-size-gemstones/sapphire",
+    link: "/free-size-gemstones/fancy-sapphire",
   },
   {
     label: "Ruby",
@@ -1256,6 +1256,11 @@ export const shopByColorOptions = [
     name: "Peach",
     image: "/assets/peach-saphh.png",
     href: "/shop-by-color/peach",
+  },
+  {
+    name: "Black",
+    image: "/assets/black-sapp.png",
+    href: "/shop-by-color/black",
   },
 ];
 
@@ -1456,7 +1461,7 @@ export const JewelryList = [
 
 export const links = [
   {
-    link: "/trade/calibrated-stones",
+    link: "/calibrated-stones",
     label: "Calibrated Stones",
     links: gemstoneOptions,
   },
@@ -1484,15 +1489,12 @@ export const links = [
   },
   { link: "/trade/memo-program", label: "Memo Program" },
   { link: "/trade-shows", label: "Trade Shows" },
-  { link: "/customer-support/about-us", label: "About" },
-  { link: "/customer-support/contact-us", label: "Contact" },
+  { link: "/custom-jewelry", label: "Build Custom Jewelry" },
   {
     label: "More",
     links: [
-      {
-        link: "/custom-jewelry",
-        label: "Build Custom Jewelry",
-      },
+      { link: "/customer-support/about-us", label: "About" },
+      { link: "/customer-support/contact-us", label: "Contact" },
       {
         link: "/customer-support/education?activeStone=alexandrite",
         label: "Gemstones Education",
@@ -1510,7 +1512,7 @@ export const links = [
 
 export const mobileLinks = [
   {
-    link: "/trade/calibrated-stones",
+    link: "/calibrated-stones",
     label: "Calibrated Stones",
     links: gemstoneOptions,
   },
@@ -1538,15 +1540,12 @@ export const mobileLinks = [
   },
   { link: "/trade/memo-program", label: "Memo Program" },
   { link: "/trade-shows", label: "Trade Shows" },
-  { link: "/customer-support/about-us", label: "About" },
-  { link: "/customer-support/contact-us", label: "Contact" },
+  { link: "/custom-jewelry", label: "Build Custom Jewelry" },
   {
     label: "More",
     links: [
-      {
-        link: "/custom-jewelry",
-        label: "Build Custom Jewelry",
-      },
+      { link: "/customer-support/about-us", label: "About" },
+      { link: "/customer-support/contact-us", label: "Contact" },
       {
         link: "/customer-support/education?activeStone=alexandrite",
         label: "Gemstones Education",

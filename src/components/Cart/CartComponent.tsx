@@ -19,11 +19,16 @@ import {
   NumberFormatter,
 } from "@mantine/core";
 import {
-  IconArrowNarrowRight,
   IconCheck,
+  IconClock,
+  IconLetterX,
+  IconMinus,
+  IconPlus,
+  IconArrowNarrowRight,
   IconGift,
-  IconTrash,
+  IconTrash
 } from "@tabler/icons-react";
+import { generateCalibratedStoneUrl, generateFreeSizeStoneUrl } from "@/utils/seoUrlHelpers";
 import dynamic from "next/dynamic";
 import { notifications } from "@mantine/notifications";
 import { useMemo, useEffect, useState } from "react";
@@ -195,15 +200,16 @@ export function CartComponent() {
 
   const redirectToProduct = (value: any) => {
     if (value?.product?.productType === "stone") {
-      router.push(
-        `/product-details?id=${value?.product?.id}&name=${value?.product?.handle}`,
-      );
+      const stoneHandle = value?.product?.handle || "unknown-stone";
+      router.push(generateCalibratedStoneUrl(value?.product, stoneHandle));
     } else if (value?.product?.productType === "freeSizeStone") {
-      router.push(`/free-size-gemstone-details/${value?.product?.id}`);
+      const stoneHandle = value?.product?.handle || value?.product?.collection_slug || "unknown-stone";
+      router.push(generateFreeSizeStoneUrl(value?.product, stoneHandle));
     } else if (value?.product?.productType === "layouts") {
       router.push(`/trade/layouts/${value?.product?.handle}`);
     } else {
       const category = getCategory(value?.product);
+      // Ensure we redirect to the correct jewelry path (now `/jewelry/...` instead of `/jewelry-details/...` if it had stone in old logic, but here it's just /jewelry/category/handle)
       router.push(`/jewelry/${category}/${value?.product?.handle}`);
     }
   };
@@ -240,7 +246,7 @@ export function CartComponent() {
   const handleCustomization = (value: any) => {
     cartStore.getState().setFreeGiftSession(true);
     router.push(
-      `/jewelry-details/earrings/${value?.product?.handle}/${value?.product?.handle}?freeGift=true&fromCart=true`,
+      `/jewelry/earrings/${value?.product?.handle}/${value?.product?.handle}?freeGift=true&fromCart=true`,
     );
   };
 
