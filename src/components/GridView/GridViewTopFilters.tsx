@@ -206,7 +206,7 @@ export const GridViewTopFilters = ({
                     >
                       {imgUrl ? (
                          <div className={`w-12 h-12 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
-                           <img src={imgUrl} alt={color} className={`w-full h-full object-cover object-center ${color.toLowerCase() === 'white' ? 'scale-[1.05]' : color.toLowerCase() === 'peach' ? 'scale-[1.15]' : color.toLowerCase() === 'brown' ? 'scale-[1.2]' : 'scale-[1.5]'}`} />
+                           <img src={imgUrl} alt={color} className={`w-full h-full object-cover object-center ${color.toLowerCase() === 'white' ? 'scale-[1.05]' : color.toLowerCase() === 'peach' ? 'scale-[1.15]' : color.toLowerCase() === 'brown' ? 'scale-[1.2]' : color.toLowerCase() === 'black' ? 'scale-[1.15]' : 'scale-[1.5]'}`} />
                          </div>
                       ) : (
                          <div className={`w-12 h-12 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>

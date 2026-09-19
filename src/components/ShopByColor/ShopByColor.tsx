@@ -56,11 +56,11 @@ export default function ShopByColor() {
               className="w-[150px] flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 hover:shadow-lg block no-underline"
             >
               <div className="relative w-[130px] h-[130px] flex items-center justify-center">
-                <Image loading="lazy"
+                  <Image loading="lazy"
                   fill
                   src={item?.image}
                   alt={`${item?.name} colored gemstones collection`}
-                  className={`object-contain ${item?.name?.toLowerCase() === 'white' ? 'scale-[0.7]' : item?.name?.toLowerCase() === 'peach' ? 'scale-[0.75]' : item?.name?.toLowerCase() === 'brown' ? 'scale-[0.8]' : 'scale-100'}`}
+                  className={`object-contain ${item?.name?.toLowerCase() === 'white' ? 'scale-[0.7]' : item?.name?.toLowerCase() === 'peach' ? 'scale-[0.75]' : item?.name?.toLowerCase() === 'brown' ? 'scale-[0.8]' : item?.name?.toLowerCase() === 'black' ? 'scale-[0.75]' : 'scale-100'}`}
                 />
               </div>
               <span className=" text-[#0b182d] mt-3">{item?.name}</span>
