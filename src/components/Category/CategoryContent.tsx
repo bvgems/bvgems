@@ -209,16 +209,19 @@ export function CategoryContent({
       const blob = await response.blob();
       const file = new File([blob], 'bvgems-video.mp4', { type: blob.type || 'video/mp4' });
 
+      const formattedHandle = handle ? (typeof handle === 'string' ? handle.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : String(handle)) : "Gemstones";
+      const shareTitle = `B.V. Gems - ${formattedHandle}`;
+
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
           files: [file],
-          title: 'B.V. Gems Video',
+          title: shareTitle,
         });
       } else {
         // Fallback to sharing URL if files aren't supported on this browser/OS
         if (navigator.share) {
            await navigator.share({
-             title: 'B.V. Gems Video',
+             title: shareTitle,
              url: shareUrl,
            });
         } else {
