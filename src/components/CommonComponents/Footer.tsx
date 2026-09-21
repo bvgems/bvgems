@@ -50,7 +50,7 @@ export const Footer = () => {
       const formattedGemstones = response
         ?.map((item: any) => ({
           label: item?.title,
-          link: `/calibrated-faceted-gemstones/${item?.handle}`,
+          link: `/calibrated-stones/${item?.handle}`,
         }))
         .sort((a: any, b: any) => a.label.localeCompare(b.label));
       setAllGemstoenes(formattedGemstones);

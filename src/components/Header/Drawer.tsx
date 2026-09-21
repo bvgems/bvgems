@@ -105,7 +105,7 @@ export const DrawerComponent = ({
                         <div
                           onClick={() => {
                             toggle();
-                            router.push("/trade/calibrated-stones");
+                            router.push("/loose-gemstones");
                           }}
                           className="text-[#0b182d] underline gap-1 hover:text-blue-800 flex items-center"
                         >
