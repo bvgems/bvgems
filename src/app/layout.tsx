@@ -35,7 +35,6 @@ export const metadata: Metadata = {
 
   icons: {
     icon: "/favicon.ico",
-    apple: "/assets/logo2.webp",
   },
   alternates: {
     // DO NOT SET CANONICAL HERE. It forces every child page to have the homepage as canonical.
@@ -51,7 +50,7 @@ export const metadata: Metadata = {
       "Discover sapphires, rubies, emeralds & custom jewelry from NYC’s Diamond District. Trusted wholesale gemstone dealer with six generations of expertise.",
     images: [
       {
-        url: `https://res.cloudinary.com/dabdvgxd4/image/upload/v1755204867/hv55w43ddxqmlpjkb2tc.png`,
+        url: `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1755204867/hv55w43ddxqmlpjkb2tc.png`,
         width: 1200,
         height: 630,
         alt: "B.V. Gems - Fine Gemstones & Jewelry",

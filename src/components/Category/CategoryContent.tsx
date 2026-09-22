@@ -214,14 +214,12 @@ export function CategoryContent({
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
-          files: [file],
-          title: shareTitle,
+          files: [file]
         });
       } else {
         // Fallback to sharing URL if files aren't supported on this browser/OS
         if (navigator.share) {
            await navigator.share({
-             title: shareTitle,
              url: shareUrl,
            });
         } else {
@@ -1158,16 +1156,7 @@ export function CategoryContent({
             name: `${data?.title} Gemstones`,
             image: qualityImages.map((item: any) => item.image_url),
             description: `Natural & lab-grown ${data?.title} gemstones in calibrated sizes from B.V. Gems, NYC Diamond District.`,
-            brand: { "@type": "Brand", name: "B.V. Gems" },
-            offers: {
-              "@type": "AggregateOffer",
-              url: `https://www.bvgems.com/loose-gemstones/${handle}`,
-              priceCurrency: "USD",
-              lowPrice: fetchedResult?.[0]?.price || "100",
-              highPrice:
-                fetchedResult?.[fetchedResult.length - 1]?.price || "5000",
-              offerCount: fetchedResult?.length || 0,
-            },
+            brand: { "@type": "Brand", name: "B.V. Gems" }
           }),
         }}
       />
