@@ -312,7 +312,7 @@ export function Header() {
                   VIEW ALL
                 </Button>
                 <Button
-                  onClick={() => router.push("/free-size-gemstones")}
+                  onClick={() => router.push("/special-page")}
                   fullWidth
                   variant="outline"
                   color="#0b182d"
