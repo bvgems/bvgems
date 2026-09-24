@@ -135,7 +135,7 @@ export const DrawerComponent = ({
                           <Button
                             onClick={() => {
                               toggle();
-                              router.push("/free-size-gemstones?shape=pair");
+                              router.push("/free-size-gemstones");
                             }}
                             fullWidth
                             variant="outline"

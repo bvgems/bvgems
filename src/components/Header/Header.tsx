@@ -312,7 +312,7 @@ export function Header() {
                   VIEW ALL
                 </Button>
                 <Button
-                  onClick={() => router.push("/free-size-gemstones?shape=pair")}
+                  onClick={() => router.push("/free-size-gemstones")}
                   fullWidth
                   variant="outline"
                   color="#0b182d"
