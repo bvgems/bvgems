@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/pool";
+import { withPriceGating } from "@/lib/priceGating";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
     let id = url.searchParams.get("id");
@@ -16,8 +17,10 @@ export async function GET(req: Request) {
       `SELECT * FROM free_size_gemstones WHERE id=$1`,
       [id]
     );
+    
+    const securedData = await withPriceGating(req, result?.rows);
 
-    return new Response(JSON.stringify(result?.rows), {
+    return new Response(JSON.stringify(securedData), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

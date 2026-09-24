@@ -2,6 +2,7 @@ import { pool } from "@/lib/pool";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { verifyCartPrices } from "../lib/verifyCartPrices";
+import { isUserAuthenticated } from "@/lib/priceGating";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-08-27.basil",
@@ -9,6 +10,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: Request) {
   try {
+    const isAuthenticated = await isUserAuthenticated(req);
+    if (!isAuthenticated) {
+      return NextResponse.json(
+        { error: "Wholesale checkout requires an approved account." },
+        { status: 403 }
+      );
+    }
+
     const {
       cartItems,
       email,

@@ -1,8 +1,17 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+import { isUserAuthenticated } from "@/lib/priceGating";
 
 export async function POST(request: NextRequest) {
   try {
+    const isAuthenticated = await isUserAuthenticated(request);
+    if (!isAuthenticated) {
+      return NextResponse.json(
+        { error: "Wholesale checkout requires an approved account." },
+        { status: 403 }
+      );
+    }
+
     const { cart, guestUser, shippingAddress } = await request.json();
 
     const lineItems = [];

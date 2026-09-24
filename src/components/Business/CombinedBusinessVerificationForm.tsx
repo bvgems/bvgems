@@ -1,5 +1,5 @@
 "use client";
-import { Button, Group, TextInput, Textarea, Checkbox } from "@mantine/core";
+import { Button, Group, TextInput, Textarea, Checkbox, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { IconArrowRight, IconCheck, IconX } from "@tabler/icons-react";
@@ -7,6 +7,7 @@ import { useStpperStore } from "@/store/useStepperStore";
 import { useUserStore } from "@/store/useUserStore";
 import { getBusinessVerification, applyForAccount } from "@/apis/api";
 import { AddressAutocomplete } from "../CommonComponents/AddressAutocomplete";
+import { useCountries } from "@/hooks/useCountries";
 import { PhoneNumberInput } from "../CommonComponents/PhoneInput";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { notifications } from "@mantine/notifications";
@@ -21,6 +22,7 @@ export const CombinedBusinessVerificationForm = ({
   const [loading, setLoading] = useState(false);
   const [verification, setVerification] = useState<any>(null);
   const [sameAsBusiness, setSameAsBusiness] = useState(false);
+  const { countries } = useCountries();
 
   const { user }: any = useUserStore();
   const {
@@ -39,6 +41,7 @@ export const CombinedBusinessVerificationForm = ({
       // Business Verification
       companyName: "",
       ownerName: "",
+      businessType: "",
       companyAddress: "",
       aptSuite: "",
       country: "",
@@ -70,22 +73,24 @@ export const CombinedBusinessVerificationForm = ({
     validate: {
       // Business Verification Validation
       ownerName: (v) => (v.trim() ? null : "Owner name is required"),
+      businessType: (v) => (v ? null : "Business type is required"),
       companyAddress: (v) => (v.trim() ? null : "Company address is required"),
-      country: (v) => (v ? null : "Country is required"),
-      state: (v) => (v.trim() ? null : "State is required"),
-      city: (v) => (v.trim() ? null : "City is required"),
+      country: (v) => (!v.trim() ? "Country is required" : null),
+      state: (v) => (!v.trim() ? "State is required" : !/^[a-zA-Z\s.,'-]+$/.test(v) ? "Invalid state name" : null),
+      city: (v) => (!v.trim() ? "City is required" : !/^[a-zA-Z\s.,'-]+$/.test(v) ? "Invalid city name" : null),
       zipCode: (value) => {
         if (!value || value.trim().length < 3) return "Postal code is too short";
         if (value.length > 10) return "Postal code is too long";
         return null;
       },
-      einNumber: (v) => (v.trim() ? null : "EIN/Tax ID is required for verification"),
+      einNumber: (v, values) => ((values.country?.includes("United States") || values.country === "US") && !v.trim() ? "EIN / Tax ID is required for US businesses" : null),
 
       // Shipping Address Validation
       shipFullName: (v) => (v.trim() ? null : "Required"),
       shipAddressLine1: (v) => (v.trim() ? null : "Required"),
-      shipCity: (v) => (v.trim() ? null : "Required"),
-      shipState: (v) => (v.trim() ? null : "Required"),
+      shipCity: (v) => (!v.trim() ? "Required" : !/^[a-zA-Z\s.,'-]+$/.test(v) ? "Invalid city name" : null),
+      shipState: (v) => (!v.trim() ? "Required" : !/^[a-zA-Z\s.,'-]+$/.test(v) ? "Invalid state name" : null),
+      shipCountry: (v) => (!v.trim() ? "Required" : null),
       shipZipCode: (value) => {
         if (!value || value.trim().length < 3) return "Postal code is too short";
         if (value.length > 10) return "Postal code is too long";
@@ -121,6 +126,7 @@ export const CombinedBusinessVerificationForm = ({
         form.setValues({
           companyName: fetched.company_name || "",
           ownerName: fetched.owner_name || "",
+          businessType: fetched.business_type || "",
           companyAddress: fetched.company_address || "",
           aptSuite: fetched.apt_suite || "",
           country: fetched.country || "",
@@ -149,6 +155,7 @@ export const CombinedBusinessVerificationForm = ({
       if (businessVerification) {
         valuesToSet.companyName = stepperUser?.companyName || "";
         valuesToSet.ownerName = businessVerification.ownerName || "";
+        valuesToSet.businessType = businessVerification.businessType || "";
         valuesToSet.companyAddress = businessVerification.companyAddress || "";
         valuesToSet.aptSuite = businessVerification.aptSuite || "";
         valuesToSet.country = businessVerification.country || "";
@@ -239,6 +246,7 @@ export const CombinedBusinessVerificationForm = ({
     if (form.isValid()) {
       const newBusinessVerification = {
         ownerName: values.ownerName,
+        businessType: values.businessType,
         companyAddress: values.companyAddress,
         aptSuite: values.aptSuite,
         country: values.country,
@@ -351,6 +359,16 @@ export const CombinedBusinessVerificationForm = ({
               />
             </div>
 
+            <Select
+              label="Business Type"
+              placeholder="Select business type"
+              data={['Retailer', 'Designer', 'Manufacturer', 'Wholesaler', 'Other']}
+              disabled={isDisabled}
+              {...form.getInputProps("businessType")}
+              withAsterisk
+              className="w-full"
+            />
+
             <AddressAutocomplete
               value={form.values.companyAddress}
               onChange={(val) => form.setFieldValue("companyAddress", val)}
@@ -375,7 +393,16 @@ export const CombinedBusinessVerificationForm = ({
               {...form.getInputProps("aptSuite")}
             />
 
-            <TextInput label="Country" {...form.getInputProps("country")} disabled={isDisabled} withAsterisk />
+            <Select
+              label="Country"
+              placeholder="Select your country"
+              className="w-full"
+              data={countries}
+              searchable
+              disabled={isDisabled}
+              withAsterisk
+              {...form.getInputProps("country")}
+            />
 
             <div className="flex gap-3">
               <TextInput
@@ -408,16 +435,18 @@ export const CombinedBusinessVerificationForm = ({
               <TextInput
                 label="Enter Company Website"
                 placeholder="your company website"
+                description="If none, provide a link to your active business social media or JBT listing"
                 className="w-full"
                 disabled={isDisabled}
                 {...form.getInputProps("website")}
               />
               <TextInput
-                label="EIN / Tax ID"
-                placeholder="e.g. 12-3456789"
+                label={form.values.country?.includes("United States") || form.values.country === "US" ? "EIN / Tax ID" : "Business Registration / Tax ID (if applicable)"}
+                description={'\u00A0'}
+                placeholder={form.values.country?.includes("United States") || form.values.country === "US" ? "e.g. 12-3456789" : "e.g. 12345678"}
                 className="w-full"
                 disabled={isDisabled}
-                withAsterisk
+                withAsterisk={form.values.country?.includes("United States") || form.values.country === "US"}
                 {...form.getInputProps("einNumber")}
               />
             </div>
@@ -503,7 +532,16 @@ export const CombinedBusinessVerificationForm = ({
               {...form.getInputProps("shipZipCode")}
               withAsterisk
             />
-            <TextInput label="Country" disabled={isDisabled} {...form.getInputProps("shipCountry")} />
+            <Select
+              label="Country"
+              placeholder="Select your country"
+              className="w-full"
+              data={countries}
+              searchable
+              disabled={isDisabled}
+              withAsterisk
+              {...form.getInputProps("shipCountry")}
+            />
             
             <PhoneNumberInput 
               form={{

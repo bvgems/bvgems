@@ -18,6 +18,7 @@ type StepperUser = {
 
 type BusinessVerification = {
   ownerName: string;
+  businessType: string;
   companyAddress: string;
   country: string;
   state: string;
@@ -116,6 +117,12 @@ export const useStpperStore = create<UserStore>()(
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
+      partialize: (state) => ({
+        ...state,
+        stepperUser: state.stepperUser
+          ? { ...state.stepperUser, password: "" }
+          : null,
+      }),
     }
   )
 );

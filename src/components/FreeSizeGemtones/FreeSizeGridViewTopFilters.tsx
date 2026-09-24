@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { NumberInput, Select, Button, ActionIcon, Collapse, Switch } from "@mantine/core";
+import { NumberInput, Select, Button, ActionIcon, Collapse, Switch, TextInput, MultiSelect } from "@mantine/core";
 import Image from "next/image";
-import { IconX, IconChevronUp, IconChevronDown, IconFilter } from "@tabler/icons-react";
+import { IconX, IconChevronUp, IconChevronDown, IconFilter, IconSearch } from "@tabler/icons-react";
 import { shopByColorOptions } from "@/utils/constants";
 
 type RangeValue = { min: number | ""; max: number | "" };
@@ -36,6 +36,21 @@ type TopFiltersProps = {
   sapphireColors: string[];
   selectedSapphireColors: string[];
   setSelectedSapphireColors: (val: string[]) => void;
+
+  lotSearch: string;
+  setLotSearch: (val: string) => void;
+
+  selectedOrigins: string[];
+  setSelectedOrigins: (val: string[]) => void;
+
+  singleOrMatched: string[];
+  setSingleOrMatched: (val: string[]) => void;
+
+  enhancement: string[];
+  setEnhancement: (val: string[]) => void;
+
+  certified: boolean | null;
+  setCertified: (val: boolean | null) => void;
 
   resetAll: () => void;
 };
@@ -81,7 +96,7 @@ const RangeFilter = ({
   );
 };
 
-export const GridViewTopFilters = ({
+export const FreeSizeGridViewTopFilters = ({
   gemstoneOptions,
   shapeOptions,
   selectedGems,
@@ -102,6 +117,16 @@ export const GridViewTopFilters = ({
   sapphireColors,
   selectedSapphireColors,
   setSelectedSapphireColors,
+  lotSearch,
+  setLotSearch,
+  selectedOrigins,
+  setSelectedOrigins,
+  singleOrMatched,
+  setSingleOrMatched,
+  enhancement,
+  setEnhancement,
+  certified,
+  setCertified,
   resetAll
 }: TopFiltersProps) => {
 
@@ -131,7 +156,7 @@ export const GridViewTopFilters = ({
 
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
 
-  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weightRange.min !== "" || weightRange.max !== "" || lengthRange.min !== "" || lengthRange.max !== "" || widthRange.min !== "" || widthRange.max !== "" || selectedSapphireColors.length > 0;
+  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weightRange.min !== "" || weightRange.max !== "" || lengthRange.min !== "" || lengthRange.max !== "" || widthRange.min !== "" || widthRange.max !== "" || selectedSapphireColors.length > 0 || lotSearch !== "" || selectedOrigins.length > 0 || singleOrMatched.length > 0 || enhancement.length > 0 || certified !== null;
 
   return (
     <div className="w-full bg-white shadow-sm border border-gray-100 rounded-lg mb-10 relative z-10">
@@ -216,6 +241,61 @@ export const GridViewTopFilters = ({
               );
             })}
           </div>
+        </div>
+      </div>
+
+      <div className="w-full h-[1px] bg-gray-200 my-8" />
+
+      {/* ADDITIONAL FREE SIZE FILTERS */}
+      <div className="flex flex-col lg:flex-row gap-6 items-end mb-8 flex-wrap">
+        <TextInput
+          label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Lot Number</span>}
+          placeholder="Search lot..."
+          value={lotSearch}
+          onChange={(e) => setLotSearch(e.currentTarget.value)}
+          leftSection={<IconSearch size={16} />}
+          className="w-full max-w-[200px]"
+        />
+        
+        <MultiSelect
+          label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Origin</span>}
+          placeholder="Select origins"
+          data={["Ceylon", "Madagascar", "Burma", "Thailand", "Africa", "Zambia", "Colombia", "Brazil", "Mozambique", "Tanzania"]}
+          value={selectedOrigins}
+          onChange={setSelectedOrigins}
+          clearable
+          searchable
+          className="w-full max-w-[200px]"
+        />
+
+        <MultiSelect
+          label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Type</span>}
+          placeholder="Single/Matched"
+          data={["Single", "Matched Pair", "Matched Set"]}
+          value={singleOrMatched}
+          onChange={setSingleOrMatched}
+          clearable
+          className="w-full max-w-[200px]"
+        />
+
+        <MultiSelect
+          label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Enhancement</span>}
+          placeholder="Select enhancement"
+          data={["Heated", "Unheated", "Treated", "Minor", "Moderate", "Significant"]}
+          value={enhancement}
+          onChange={setEnhancement}
+          clearable
+          className="w-full max-w-[200px]"
+        />
+
+        <div className="pb-1 px-2">
+          <Switch
+            checked={certified === true}
+            onChange={(e) => setCertified(e.currentTarget.checked ? true : null)}
+            label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Certified</span>}
+            color="violet"
+            size="md"
+          />
         </div>
       </div>
 

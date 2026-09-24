@@ -71,9 +71,26 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ data: [] });
     }
 
-    // ===== Loose Gemstones =====
+    // ===== Loose Gemstones (Calibrated) =====
     if (category === "all" || category === "calibrated") {
-      if (isAlpha && tokens.length === 1) {
+      // Check ID match first
+      const calIdRes = await pool.query(
+        `SELECT id, shape, collection_slug, size, color, image_url, quality
+         FROM gemstone_specs
+         WHERE CAST(id AS TEXT) ILIKE $1 || '%'
+         LIMIT $2;`,
+        [query, limit]
+      );
+
+      if (calIdRes.rows.length > 0) {
+        results.push(
+          ...calIdRes.rows.map((item) => ({
+            ...item,
+            value: `${item.shape} ${item.collection_slug} ${item.size} - ${item.id}`,
+            category: "Calibrated (ID Match)",
+          }))
+        );
+      } else if (isAlpha && tokens.length === 1) {
         const looseRes = await pool.query(
           `SELECT id, shape, collection_slug, size, color, image_url, quality,
                   ts_rank(search_vector, to_tsquery('english', $1 || ':*')) AS rank

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAllJeweleryProducts } from "../lib/commonFunctions";
+import { withPriceGating } from "@/lib/priceGating";
 
 const METAFIELD_MAP: Record<
   string,
@@ -151,7 +152,8 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ data: result });
+    const securedData = await withPriceGating(req, result);
+    return NextResponse.json({ data: securedData });
   } catch (error) {
     console.error("POST error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

@@ -1,6 +1,7 @@
 import { pool } from "@/lib/pool";
 import { NextRequest, NextResponse } from "next/server";
 import { getAllLooseGemstones } from "../lib/commonFunctions";
+import { withPriceGating } from "@/lib/priceGating";
 
 export async function GET(req: NextRequest) {
   try {
@@ -29,9 +30,13 @@ export async function GET(req: NextRequest) {
     if (result.rows.length === 0 || allGemstones?.length === 0) {
       return NextResponse.json({ error: "No data found" }, { status: 404 });
     }
+    
+    // Apply price gating based on user session
+    const securedFormattedData = await withPriceGating(req, formattedData);
+    const securedAllGemstones = await withPriceGating(req, allGemstones);
 
     return NextResponse.json(
-      { data: formattedData, allGemstones },
+      { data: securedFormattedData, allGemstones: securedAllGemstones },
       { status: 200 }
     );
   } catch (error) {

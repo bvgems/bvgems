@@ -386,8 +386,8 @@ export function CategoryContent({
 
   const breadcrumbItems = [
     { title: "Home", href: "/" },
-    { title: "Calibrated Faceted Gemstones", href: "/loose-gemstones" },
-    { title: data?.title || handle, href: `/loose-gemstones/${handle}` },
+    { title: "Calibrated Faceted Gemstones", href: "/calibrated-stones" },
+    { title: data?.title || handle, href: `/calibrated-stones/${handle}` },
   ].map((item, index) => (
     <Anchor
       size="sm"

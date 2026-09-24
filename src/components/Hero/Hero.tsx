@@ -133,7 +133,7 @@ export function Hero({ jewelryRef, heroData }: any) {
 
         {/* Tile 4: Pairs */}
         <Link
-          href="/special-page"
+          href="/free-size-gemstones?shape=pair"
           className="relative flex flex-col items-center justify-center text-center p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group"
         >
           {/* Expanding Radial Background */}

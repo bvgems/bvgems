@@ -2,10 +2,11 @@
 
 import { getFreeSizeFilteredData } from "@/apis/api";
 import { FreeSizeGridView } from "@/components/FreeSizeGemtones/FreeSizeGridView";
-import { FreeSizeFilterSideBar } from "@/components/FreeSizeGemtones/FreeSizeFilterSideBar";
+import { FreeSizeGridViewTopFilters } from "@/components/FreeSizeGemtones/FreeSizeGridViewTopFilters";
 import { sortBySizeAsc } from "@/utils/sortUtils";
-import { Divider, Grid, GridCol } from "@mantine/core";
+import { Divider, Grid, GridCol, Skeleton, Card } from "@mantine/core";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { gemstoneOptions, ShapeFilterList, SapphireLooseGemstoneColorOptions } from "@/utils/constants";
 import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -56,6 +57,7 @@ export default function FreeSizeGemstoneSelection() {
   const [certified, setCertified] = useState<boolean | null>(null);
   const [length, setLength] = useState<any>({ min: "", max: "" });
   const [width, setWidth] = useState<any>({ min: "", max: "" });
+  const [toleranceEnabled, setToleranceEnabled] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -128,16 +130,22 @@ export default function FreeSizeGemstoneSelection() {
       origin: selectedOrigins,
 
       // only include weight if user provided min and/or max
-      weight:
-        weightRange[0] != null || weightRange[1] != null
-          ? weightRange
-          : undefined,
+      weight: (weightRange[0] != null || weightRange[1] != null) ? [
+        weightRange[0] != null ? weightRange[0] - (toleranceEnabled ? 0.5 : 0) : null,
+        weightRange[1] != null ? weightRange[1] + (toleranceEnabled ? 0.5 : 0) : null
+      ] : undefined,
 
       single_or_matched: singleOrMatched,
       enhancement,
       is_certified: certified,
-      length,
-      width,
+      length: {
+        min: length.min !== "" ? Number(length.min) - (toleranceEnabled ? 0.5 : 0) : undefined,
+        max: length.max !== "" ? Number(length.max) + (toleranceEnabled ? 0.5 : 0) : undefined,
+      },
+      width: {
+        min: width.min !== "" ? Number(width.min) - (toleranceEnabled ? 0.5 : 0) : undefined,
+        max: width.max !== "" ? Number(width.max) + (toleranceEnabled ? 0.5 : 0) : undefined,
+      },
     };
 
     // Clean up undefined keys so the API only receives applied filters
@@ -175,78 +183,84 @@ export default function FreeSizeGemstoneSelection() {
     length,
     width,
     gemstoneType,
+    toleranceEnabled
   ]);
 
+  const resetAll = () => {
+    setSelectedStones([]);
+    setSelectedColors([]);
+    setSelectedShapes([]);
+    setSelectedOrigins([]);
+    setLotSearch("");
+    setSingleOrMatched([]);
+    setEnhancement([]);
+    setCertified(null);
+    setWeightRange([null, null]);
+    setLength({ min: "", max: "" });
+    setWidth({ min: "", max: "" });
+    setToleranceEnabled(false);
+  };
+
   return (
-    <div className="px-3 lg:px-0">
+    <div className="mt-16 px-4 md:px-8 py-8 max-w-[1600px] mx-auto w-full">
+      <div className="flex justify-center mb-10">
+        <h1 className="text-4xl text-violet-800 text-center uppercase tracking-widest font-light">
+          {isFancySapphire
+            ? "Fancy Sapphires"
+            : gemstoneType
+            ? gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1)
+            : "Free Size Gemstones"}
+        </h1>
+      </div>
+
+      <FreeSizeGridViewTopFilters
+        gemstoneOptions={gemstoneOptions}
+        shapeOptions={ShapeFilterList}
+        selectedGems={selectedStones}
+        setSelectedGems={setSelectedStones}
+        selectedShapes={selectedShapes}
+        setSelectedShapes={setSelectedShapes}
+        weightRange={{ min: weightRange[0] ?? "", max: weightRange[1] ?? "" }}
+        setWeightRange={(val) => setWeightRange([val.min === "" ? null : Number(val.min), val.max === "" ? null : Number(val.max)])}
+        weightBounds={{ min: 0, max: 100 }}
+        lengthRange={length}
+        setLengthRange={setLength}
+        lengthBounds={{ min: 0, max: 30 }}
+        widthRange={width}
+        setWidthRange={setWidth}
+        widthBounds={{ min: 0, max: 30 }}
+        sapphireColors={SapphireLooseGemstoneColorOptions.map((o: any) => o.value)}
+        selectedSapphireColors={selectedColors}
+        setSelectedSapphireColors={setSelectedColors}
+        lotSearch={lotSearch}
+        setLotSearch={setLotSearch}
+        selectedOrigins={selectedOrigins}
+        setSelectedOrigins={setSelectedOrigins}
+        singleOrMatched={singleOrMatched}
+        setSingleOrMatched={setSingleOrMatched}
+        enhancement={enhancement}
+        setEnhancement={setEnhancement}
+        certified={certified}
+        setCertified={setCertified}
+        toleranceEnabled={toleranceEnabled}
+        setToleranceEnabled={setToleranceEnabled}
+        resetAll={resetAll}
+      />
+
       <Grid gutter="lg">
-        {/* Desktop Sidebar */}
-        <GridCol span={{ base: 12, md: 3 }} className="hidden lg:flex">
-          <FreeSizeFilterSideBar
-            isFancySapphire={isFancySapphire}
-            lotSearch={lotSearch}
-            setLotSearch={setLotSearch}
-            selectedStones={selectedStones}
-            setSelectedStones={setSelectedStones}
-            selectedColors={selectedColors}
-            setSelectedColors={setSelectedColors}
-            selectedShapes={selectedShapes}
-            setSelectedShapes={setSelectedShapes}
-            selectedOrigins={selectedOrigins}
-            setSelectedOrigins={setSelectedOrigins}
-            weightRange={weightRange}
-            setWeightRange={setWeightRange}
-            singleOrMatched={singleOrMatched}
-            setSingleOrMatched={setSingleOrMatched}
-            enhancement={enhancement}
-            setEnhancement={setEnhancement}
-            certified={certified}
-            setCertified={setCertified}
-            length={length}
-            setLength={setLength}
-            width={width}
-            setWidth={setWidth}
-          />
-          <Divider orientation="vertical" />
-        </GridCol>
-
-        {/* Main Content (Grid + Filters on Mobile) */}
-        <GridCol span={{ base: 12, md: 9 }}>
-          {isMobile && (
-            <div className="mb-4">
-              <FreeSizeFilterSideBar
-                isFancySapphire={isFancySapphire}
-                lotSearch={lotSearch}
-                setLotSearch={setLotSearch}
-                selectedStones={selectedStones}
-                setSelectedStones={setSelectedStones}
-                selectedColors={selectedColors}
-                setSelectedColors={setSelectedColors}
-                selectedShapes={selectedShapes}
-                setSelectedShapes={setSelectedShapes}
-                selectedOrigins={selectedOrigins}
-                setSelectedOrigins={setSelectedOrigins}
-                weightRange={weightRange}
-                setWeightRange={setWeightRange}
-                singleOrMatched={singleOrMatched}
-                setSingleOrMatched={setSingleOrMatched}
-                enhancement={enhancement}
-                setEnhancement={setEnhancement}
-                certified={certified}
-                setCertified={setCertified}
-                length={length}
-                setLength={setLength}
-                width={width}
-                setWidth={setWidth}
-              />
-              <Divider className="mt-3"/>
-            </div>
-          )}
-
+        <GridCol span={12}>
           {loading ? (
-            <div className="px-5 py-10 text-center text-gray-500">
-              Loading gemstones...
-            </div>
+            <Grid gutter="xl" className="mt-8">
+              {Array.from({ length: 16 }).map((_, i) => (
+                <GridCol span={{ base: 12, sm: 6, md: 4, lg: 3 }} key={i}>
+                  <Card className="flex flex-col justify-start bg-white h-[250]" padding="lg" withBorder shadow="md">
+                    <Skeleton height={200} mb="sm" />
+                    <Skeleton height={24} width="60%" radius="sm" />
+                    <Skeleton height={16} mt="xs" width="40%" radius="sm" />
+                  </Card>
+                </GridCol>
+              ))}
+            </Grid>
           ) : (
             <FreeSizeGridView
               isViewAll={isViewAll}

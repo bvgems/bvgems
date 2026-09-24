@@ -706,14 +706,7 @@ export default function ProductDetailsPage() {
               image: product?.image_url,
               description: `${product?.quality} quality ${product?.collection_slug} gemstone, calibrated and ethically sourced from B.V. Gems, NYC Diamond District.`,
               sku: product?.id,
-              brand: { "@type": "Brand", name: "B.V. Gems" },
-              offers: {
-                "@type": "Offer",
-                url: `https://www.bvgems.com/product?id=${product?.id}&name=${product?.collection_slug}`,
-                priceCurrency: "USD",
-                price: getPerStonePrice(product) || getPerCaratPrice(product),
-                availability: "http://schema.org/InStock",
-              },
+              brand: { "@type": "Brand", name: "B.V. Gems" }
             }),
           }}
         />

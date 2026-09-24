@@ -9,6 +9,8 @@ import { PhoneNumberInput } from "../CommonComponents/PhoneInput";
 import { useStpperStore } from "@/store/useStepperStore";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { AddressAutocomplete } from "../CommonComponents/AddressAutocomplete";
+import { useCountries } from "@/hooks/useCountries";
+import { Select } from "@mantine/core";
 
 export const ShippingAddressForm = ({
   userId,
@@ -33,6 +35,7 @@ export const ShippingAddressForm = ({
     stepperUser,
   } = useStpperStore();
   const isEdit = Boolean(addressData?.id);
+  const { countries } = useCountries();
 
   const form = useForm({
     initialValues: {
@@ -53,8 +56,9 @@ export const ShippingAddressForm = ({
     validate: {
       fullName: (v) => (v.trim() ? null : "Required"),
       addressLine1: (v) => (v.trim() ? null : "Required"),
-      city: (v) => (v.trim() ? null : "Required"),
-      state: (v) => (v.trim() ? null : "Required"),
+      city: (v) => (!v.trim() ? "Required" : !/^[a-zA-Z\s.,'-]+$/.test(v) ? "Invalid city name" : null),
+      state: (v) => (!v.trim() ? "Required" : !/^[a-zA-Z\s.,'-]+$/.test(v) ? "Invalid state name" : null),
+      country: (v) => (!v.trim() ? "Required" : null),
       zipCode: (value) => {
         if (!value || value.trim().length < 3) {
           return "Postal code is too short";
@@ -227,12 +231,24 @@ export const ShippingAddressForm = ({
               {...form.getInputProps("state")}
             />
           </div>
-          <TextInput
-            label="ZIP Code"
-            placeholder="10001"
-            {...form.getInputProps("zipCode")}
-          />
-          <TextInput label="Country" {...form.getInputProps("country")} />
+          <div className="flex gap-4">
+            <TextInput
+              className="w-full"
+              label="ZIP Code"
+              withAsterisk
+              placeholder="10001"
+              {...form.getInputProps("zipCode")}
+            />
+            <Select
+              label="Country"
+              placeholder="Select your country"
+              className="w-full"
+              data={countries}
+              searchable
+              withAsterisk
+              {...form.getInputProps("country")}
+            />
+          </div>
           <PhoneNumberInput form={form} />
           <TextInput
             label="Email"

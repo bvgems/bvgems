@@ -1,5 +1,6 @@
 import { pool } from "@/lib/pool";
 import { NextRequest, NextResponse } from "next/server";
+import { withPriceGating } from "@/lib/priceGating";
 
 const getCleanedOptions = (options: any) => {
   const cleanedOptions: any = {};
@@ -99,8 +100,9 @@ export async function POST(req: NextRequest) {
             value: formattedValue,
           };
         });
-
-        return NextResponse.json({ data: formattedData }, { status: 200 });
+        
+        const securedData = await withPriceGating(req, formattedData);
+        return NextResponse.json({ data: securedData }, { status: 200 });
       }
 
       const defaultWheres: string[] = [];
@@ -126,9 +128,10 @@ export async function POST(req: NextRequest) {
             value: formattedValue,
           };
         });
-
+        
+        const securedFallbackData = await withPriceGating(req, formattedFallbackData);
         return NextResponse.json(
-          { data: formattedFallbackData },
+          { data: securedFallbackData },
           { status: 200 }
         );
       } else {

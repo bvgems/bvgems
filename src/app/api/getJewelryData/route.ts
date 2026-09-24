@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { getAllJeweleryProducts } from "../lib/commonFunctions";
+import { withPriceGating } from "@/lib/priceGating";
 
 function mulberry32(seed: number) {
   return function () {
@@ -101,8 +102,10 @@ export async function GET(request: NextRequest) {
     } else {
       products = result?.edges;
     }
+    
+    const securedProducts = await withPriceGating(request, products);
 
-    return NextResponse.json({ products }, { status: 200 });
+    return NextResponse.json({ products: securedProducts }, { status: 200 });
   } catch (error) {
     console.error("GET error:", error);
     return new Response(JSON.stringify({ flag: false }), { status: 500 });

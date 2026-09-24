@@ -112,7 +112,10 @@ export const AnimatedCard = ({
                     to view gemstone prices.
                   </p>
                 ) : (
-                  <p>Per Carat Price: {item?.price}</p>
+                  <p>
+                    Per Carat Price:{" "}
+                    {item?.price ? `$${item.price}` : "Price upon request"}
+                  </p>
                 )}
               </div>
             )}

@@ -27,6 +27,11 @@ function JewelryLayoutContent({ children }: { children: React.ReactNode }) {
   const segments = pathname.split("/").filter(Boolean);
   const collectionSlug = segments[1];
 
+  // If we are on a product details page (length > 2), just render children
+  if (segments.length > 2) {
+    return <>{children}</>;
+  }
+
   // ✅ Initialize from URL query
   const initialStone = searchParams.get("stone")
     ? decodeURIComponent(searchParams.get("stone") as string)

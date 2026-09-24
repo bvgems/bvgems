@@ -1,8 +1,9 @@
 import { getGemstoneByHandle } from "@/app/Graphql/queries";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/pool";
+import { withPriceGating } from "@/lib/priceGating";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
     let gemstone = url.searchParams.get("gemstone");
@@ -21,8 +22,10 @@ export async function GET(req: Request) {
       `SELECT * FROM free_size_gemstones WHERE gemstone_type=$1`,
       [gemstone]
     );
+    
+    const securedData = await withPriceGating(req, result?.rows);
 
-    return new Response(JSON.stringify(result?.rows), {
+    return new Response(JSON.stringify(securedData), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

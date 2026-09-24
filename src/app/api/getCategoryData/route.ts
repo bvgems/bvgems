@@ -1,6 +1,8 @@
 import { getGemstoneByHandle } from "@/app/Graphql/queries";
+import { NextRequest } from "next/server";
+import { withPriceGating } from "@/lib/priceGating";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
     const handle = url.searchParams.get("handle");
@@ -24,9 +26,10 @@ export async function GET(req: Request) {
     );
 
     const data = await shopifyRes.json();
+    
+    const securedData = await withPriceGating(req, data?.data?.productByHandle);
 
-
-    return new Response(JSON.stringify(data?.data?.productByHandle), {
+    return new Response(JSON.stringify(securedData), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

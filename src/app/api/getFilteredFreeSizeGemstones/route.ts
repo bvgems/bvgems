@@ -1,5 +1,6 @@
 import { pool } from "@/lib/pool";
 import { NextRequest, NextResponse } from "next/server";
+import { withPriceGating } from "@/lib/priceGating";
 
 const cleanOptions = (options: any) => {
   const cleaned: any = {};
@@ -137,8 +138,10 @@ export async function POST(req: NextRequest) {
 
     const query = `SELECT * FROM free_size_gemstones ${whereQuery} ORDER BY created_at DESC`;
     const result = await pool.query(query, values);
+    
+    const securedData = await withPriceGating(req, result.rows);
 
-    return NextResponse.json({ data: result.rows }, { status: 200 });
+    return NextResponse.json({ data: securedData }, { status: 200 });
   } catch (error) {
     console.error("Error filtering free size gemstones:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

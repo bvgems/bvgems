@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import {
+  Alert,
   Badge,
   Button,
   Drawer,
@@ -279,30 +280,36 @@ export const JewelryProductDetails = ({
         </Text>
       </Group>
 
-      <Group gap="md" align="center">
-        <Text fw={700} fz="xl">
-          <NumberFormatter
-            thousandSeparator
-            prefix="$"
-            value={jf.displayPrice}
-            suffix=" USD"
-          />
-        </Text>
-        {jf.numericPrice ? (
-          <>
-            <Text c="dimmed" td="line-through">
-              <NumberFormatter
-                prefix="$ "
-                value={(jf.numericPrice * 1.1).toFixed(2)}
-                suffix=" USD"
-              />
-            </Text>
-            <Badge color="green" radius="sm">
-              10% OFF
-            </Badge>
-          </>
-        ) : null}
-      </Group>
+      {(!user && (jf.isBead || jf.isFinishedNecklaces)) ? (
+        <Alert className="uppercase" color="gray" variant="light">
+          Please <span className="underline text-blue-600 cursor-pointer">SIGN IN</span> to view bead prices.
+        </Alert>
+      ) : (
+        <Group gap="md" align="center">
+          <Text fw={700} fz="xl">
+            <NumberFormatter
+              thousandSeparator
+              prefix="$"
+              value={jf.displayPrice}
+              suffix=" USD"
+            />
+          </Text>
+          {jf.numericPrice ? (
+            <>
+              <Text c="dimmed" td="line-through">
+                <NumberFormatter
+                  prefix="$ "
+                  value={(jf.numericPrice * 1.1).toFixed(2)}
+                  suffix=" USD"
+                />
+              </Text>
+              <Badge color="green" radius="sm">
+                10% OFF
+              </Badge>
+            </>
+          ) : null}
+        </Group>
+      )}
 
       {!jf.isFinishedNecklaces && (
         <div className="mt-2">

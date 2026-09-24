@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { pool } from "@/lib/pool";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -16,7 +17,6 @@ export async function POST() {
     const decoded: any = jwt.verify(token, JWT_SECRET);
 
     // Fetch latest permissions from DB to prevent stale JWT issues
-    const { pool } = require("@/lib/pool");
     const dbResult = await pool.query(
       `SELECT is_memo_requested, is_memo_purchase_approved FROM app_users WHERE id = $1`,
       [decoded.id]

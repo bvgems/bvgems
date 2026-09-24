@@ -68,7 +68,7 @@ export async function GET(request: Request) {
 
         <!-- Logo -->
         <div style="text-align: center; padding: 30px 0 10px;">
-          <img src="https://res.cloudinary.com/dabdvgxd4/image/upload/v1754420615/logo2_qhix5o.png" alt="B.V. Gems" style="height: 60px;" />
+          <img src="https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1754420615/logo2_qhix5o.png" alt="B.V. Gems" style="height: 60px;" />
         </div>
 
         <!-- Headline -->

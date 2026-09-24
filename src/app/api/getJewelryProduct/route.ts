@@ -1,5 +1,6 @@
 import { GetProductByHandle } from "@/app/Graphql/queries";
 import { NextRequest, NextResponse } from "next/server";
+import { withPriceGating } from "@/lib/priceGating";
 
 export async function GET(request: NextRequest) {
   try {
@@ -28,9 +29,11 @@ export async function GET(request: NextRequest) {
 
     const result = await shopifyRes.json();
     // console.log("product", result.data.productByHandle);
+    
+    const securedProduct = await withPriceGating(request, result.data.productByHandle);
 
     return NextResponse.json(
-      { product: result.data.productByHandle },
+      { product: securedProduct },
       { status: 200 },
     );
   } catch (error) {

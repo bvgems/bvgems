@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getLayouts } from "../lib/commonFunctions";
+import { withPriceGating } from "@/lib/priceGating";
 
 // Map option keys to the node metafield keys
 const METAFIELD_MAP: Record<
@@ -161,7 +162,9 @@ export async function POST(req: NextRequest) {
 
     console.log("filteredd", filtered[0]?.node?.size);
     console.log("Filtered count:", filtered?.length || 0);
-    return NextResponse.json({ data: filtered });
+    
+    const securedFiltered = await withPriceGating(req, filtered);
+    return NextResponse.json({ data: securedFiltered });
   } catch (error) {
     console.error("POST error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

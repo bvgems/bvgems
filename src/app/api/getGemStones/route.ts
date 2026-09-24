@@ -1,5 +1,6 @@
 import { getAllProductsQuery } from "@/app/Graphql/queries";
 import { NextRequest } from "next/server";
+import { withPriceGating } from "@/lib/priceGating";
 
 export async function GET(req: NextRequest) {
   const gemstoneProducts: any[] = [];
@@ -36,8 +37,11 @@ export async function GET(req: NextRequest) {
 
       gemstoneProducts.push(...gemstoneFiltered);
     }
+    
+    // Apply price gating based on user session
+    const securedProducts = await withPriceGating(req, gemstoneProducts);
 
-    return new Response(JSON.stringify({ products: gemstoneProducts }), {
+    return new Response(JSON.stringify({ products: securedProducts }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

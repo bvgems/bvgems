@@ -1,10 +1,15 @@
 import { getLayouts } from "../lib/commonFunctions";
+import { withPriceGating } from "@/lib/priceGating";
+import { NextRequest } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const result = await getLayouts();
+    
+    // Apply price gating based on user session
+    const securedResult = await withPriceGating(req, result);
 
-    return new Response(JSON.stringify(result), {
+    return new Response(JSON.stringify(securedResult), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

@@ -65,6 +65,9 @@ export const verifyCartPrices = async (cartItems: any[]) => {
     } else if (productType === "freeSizeStone") {
       const dbRes = await pool.query("SELECT price FROM free_size_gemstones WHERE id = $1", [id]);
       if (dbRes.rows.length > 0) {
+        if (dbRes.rows[0].price == null) {
+          throw new Error(`Price not available for product: ${id}`);
+        }
         verifiedItem.product.price = Number(dbRes.rows[0].price);
       } else {
         throw new Error(`Product not found: ${id}`);

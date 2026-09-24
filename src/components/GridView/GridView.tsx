@@ -40,6 +40,8 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
   const [lengthRange, setLengthRange] = useState<RangeValue>({ min: "", max: "" });
   const [widthRange, setWidthRange] = useState<RangeValue>({ min: "", max: "" });
 
+  const [toleranceEnabled, setToleranceEnabled] = useState(false);
+
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -178,8 +180,11 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     if (weightRange.min !== "" || weightRange.max !== "") {
       filtered = filtered.filter(item => {
         const wt = parseFloat(item.ct_weight) || 0;
-        const meetsMin = weightRange.min === "" || wt >= Number(weightRange.min);
-        const meetsMax = weightRange.max === "" || wt <= Number(weightRange.max);
+        const effectiveMin = weightRange.min === "" ? null : Number(weightRange.min) - (toleranceEnabled ? 0.5 : 0);
+        const effectiveMax = weightRange.max === "" ? null : Number(weightRange.max) + (toleranceEnabled ? 0.5 : 0);
+        
+        const meetsMin = effectiveMin === null || wt >= effectiveMin;
+        const meetsMax = effectiveMax === null || wt <= effectiveMax;
         return meetsMin && meetsMax;
       });
     }
@@ -191,10 +196,18 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
         if (!dims) return false;
         
         let valid = true;
-        if (lengthRange.min !== "") valid = valid && dims[0] >= Number(lengthRange.min);
-        if (lengthRange.max !== "") valid = valid && dims[0] <= Number(lengthRange.max);
-        if (widthRange.min !== "") valid = valid && dims[1] >= Number(widthRange.min);
-        if (widthRange.max !== "") valid = valid && dims[1] <= Number(widthRange.max);
+        if (lengthRange.min !== "") {
+          valid = valid && dims[0] >= Number(lengthRange.min) - (toleranceEnabled ? 0.5 : 0);
+        }
+        if (lengthRange.max !== "") {
+          valid = valid && dims[0] <= Number(lengthRange.max) + (toleranceEnabled ? 0.5 : 0);
+        }
+        if (widthRange.min !== "") {
+          valid = valid && dims[1] >= Number(widthRange.min) - (toleranceEnabled ? 0.5 : 0);
+        }
+        if (widthRange.max !== "") {
+          valid = valid && dims[1] <= Number(widthRange.max) + (toleranceEnabled ? 0.5 : 0);
+        }
         
         return valid;
       });
@@ -210,7 +223,8 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     selectedTypes, 
     weightRange, 
     lengthRange, 
-    widthRange
+    widthRange,
+    toleranceEnabled
   ]);
 
   const resetAll = () => {
@@ -221,6 +235,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     setWeightRange({ min: "", max: "" });
     setLengthRange({ min: "", max: "" });
     setWidthRange({ min: "", max: "" });
+    setToleranceEnabled(false);
     router.replace("/loose-gemstones");
   };
 
@@ -268,6 +283,9 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
           setWidthRange={setWidthRange}
           widthBounds={widthBounds}
           
+          toleranceEnabled={toleranceEnabled}
+          setToleranceEnabled={setToleranceEnabled}
+
           sapphireColors={availableSapphireColors}
           selectedSapphireColors={selectedSapphireColors}
           setSelectedSapphireColors={setSelectedSapphireColors}

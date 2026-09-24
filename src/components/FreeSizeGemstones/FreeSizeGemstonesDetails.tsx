@@ -296,12 +296,12 @@ export default function FreeSizeGemstoneDetails({
               <div className="mt-2">
                 <div className="text-md font-medium flex flex-col gap-2">
                   <span>
-                    Per Carat Price: <strong>${product?.price}</strong>
+                    Per Carat Price: <strong>{product?.price ? `$${product.price}` : "Price upon request"}</strong>
                   </span>
                   <span>
                     Total Price:{" "}
                     <strong>
-                      ${(product?.price * product?.ct_weight).toFixed(2)}
+                      {product?.price ? `$${(product.price * product?.ct_weight).toFixed(2)}` : "Price upon request"}
                     </strong>
                   </span>
                 </div>
@@ -345,14 +345,7 @@ export default function FreeSizeGemstoneDetails({
               image: product?.image_url,
               description: `Loose ${product?.gemstone_type} gemstone (${product?.shape}, ${product?.dimension}, ${product?.ct_weight} carats). Free size stone ideal for custom jewelry.`,
               sku: product?.lot_number,
-              brand: { "@type": "Brand", name: "B.V. Gems" },
-              offers: {
-                "@type": "Offer",
-                url: `https://www.bvgems.com/free-size/${product?.id}`,
-                priceCurrency: "USD",
-                price: product?.price,
-                availability: "http://schema.org/InStock",
-              },
+              brand: { "@type": "Brand", name: "B.V. Gems" }
             }),
           }}
         />

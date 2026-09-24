@@ -37,6 +37,7 @@
     "canvas": "^3.1.0",
     "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
+    "country-list": "^2.4.1",
     "dayjs": "^1.11.13",
     "dom-to-image": "^2.6.0",
     "embla-carousel": "^8.5.2",
@@ -80,6 +81,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/bcrypt": "^5.0.2",
+    "@types/country-list": "^2.1.4",
     "@types/file-saver": "^2.0.7",
     "@types/google.maps": "^3.64.0",
     "@types/jsonwebtoken": "^9.0.9",

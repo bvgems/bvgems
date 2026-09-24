@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/pool";
+import { withPriceGating } from "@/lib/priceGating";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const id = await req.json();
 
@@ -30,7 +31,9 @@ export async function POST(req: Request) {
       [id]
     );
 
-    return new Response(JSON.stringify(result?.rows || {}), {
+    const securedResult = await withPriceGating(req, result?.rows || {});
+
+    return new Response(JSON.stringify(securedResult), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

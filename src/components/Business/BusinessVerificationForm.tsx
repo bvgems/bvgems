@@ -1,5 +1,5 @@
 "use client";
-import { Button, TextInput } from "@mantine/core";
+import { Button, TextInput, Select } from "@mantine/core";
 import Link from "next/link";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import { useStpperStore } from "@/store/useStepperStore";
 import { useUserStore } from "@/store/useUserStore";
 import { getBusinessVerification } from "@/apis/api";
 import { AddressAutocomplete } from "../CommonComponents/AddressAutocomplete";
+import { useCountries } from "@/hooks/useCountries";
 
 export const BusinessVerificationForm = ({
   onClose,
@@ -20,6 +21,7 @@ export const BusinessVerificationForm = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [verification, setVerification] = useState<any>(null);
+  const { countries } = useCountries();
 
   const { user }: any = useUserStore();
   const {
@@ -33,6 +35,7 @@ export const BusinessVerificationForm = ({
     initialValues: {
       companyName: "",
       ownerName: "",
+      businessType: "",
       companyAddress: "",
       country: "",
       state: "",
@@ -43,11 +46,12 @@ export const BusinessVerificationForm = ({
     validateInputOnChange: true,
     validate: {
       ownerName: (v) => (v.trim() ? null : "Owner name is required"),
+      businessType: (v) => (v ? null : "Business type is required"),
       companyAddress: (v) => (v.trim() ? null : "Company address is required"),
-      country: (v) => (v ? null : "Country is required"),
-      state: (v) => (v.trim() ? null : "State is required"),
-      city: (v) => (v.trim() ? null : "City is required"),
-      einNumber: (v) => (v.trim() ? null : "EIN/Tax ID is required for verification"),
+      country: (v) => (!v.trim() ? "Country is required" : null),
+      state: (v) => (!v.trim() ? "State is required" : !/^[a-zA-Z\s.,'-]+$/.test(v) ? "Invalid state name" : null),
+      city: (v) => (!v.trim() ? "City is required" : !/^[a-zA-Z\s.,'-]+$/.test(v) ? "Invalid city name" : null),
+      einNumber: (v, values) => ((values.country?.includes("United States") || values.country === "US") && !v.trim() ? "EIN / Tax ID is required for US businesses" : null),
     },
   });
 
@@ -64,6 +68,7 @@ export const BusinessVerificationForm = ({
       form.setValues({
         companyName: fetched.company_name || "",
         ownerName: fetched.owner_name || "",
+        businessType: fetched.business_type || "",
         companyAddress: fetched.company_address || "",
         country: fetched.country || "",
         state: fetched.state || "",
@@ -86,6 +91,7 @@ export const BusinessVerificationForm = ({
         form.setValues({
           companyName: stepperUser?.companyName || "",
           ownerName: businessVerification.ownerName || "",
+          businessType: businessVerification.businessType || "",
           companyAddress: businessVerification.companyAddress || "",
           country: businessVerification.country || "",
           state: businessVerification.state || "",
@@ -108,6 +114,7 @@ export const BusinessVerificationForm = ({
     if (form.isValid()) {
       setBusinessVerification({
         ownerName: values.ownerName,
+        businessType: values.businessType,
         companyAddress: values.companyAddress,
         country: values.country,
         state: values.state,
@@ -149,15 +156,20 @@ export const BusinessVerificationForm = ({
               className="w-full"
               disabled={isDisabled}
               {...form.getInputProps("ownerName")}
+              withAsterisk
             />
           </div>
 
-          {/* <TextInput
-            label="Enter Your Company's Address"
-            placeholder="your company address"
+          <Select
+            label="Business Type"
+            placeholder="Select business type"
+            data={['Retailer', 'Designer', 'Manufacturer', 'Wholesaler', 'Other']}
             disabled={isDisabled}
-            {...form.getInputProps("companyAddress")}
-          /> */}
+            {...form.getInputProps("businessType")}
+            withAsterisk
+            className="w-full"
+          />
+
           <AddressAutocomplete
             value={form.values.companyAddress}
             onChange={(val) => form.setFieldValue("companyAddress", val)}
@@ -182,7 +194,16 @@ export const BusinessVerificationForm = ({
             {...form.getInputProps("country")}
           /> */}
 
-          <TextInput label="Country" {...form.getInputProps("country")} />
+          <Select
+            label="Country"
+            placeholder="Select your country"
+            className="w-full"
+            data={countries}
+            searchable
+            disabled={isDisabled}
+            withAsterisk
+            {...form.getInputProps("country")}
+          />
 
           <div className="flex gap-3">
             <TextInput
@@ -205,16 +226,18 @@ export const BusinessVerificationForm = ({
             <TextInput
               label="Enter Company Website"
               placeholder="your company website"
+              description="If none, provide a link to your active business social media or JBT listing"
               className="w-full"
               disabled={isDisabled}
               {...form.getInputProps("website")}
             />
             <TextInput
-              label="EIN / Tax ID"
-              placeholder="e.g. 12-3456789"
+              label={form.values.country?.includes("United States") || form.values.country === "US" ? "EIN / Tax ID" : "Business Registration / Tax ID (if applicable)"}
+              description={'\u00A0'}
+              placeholder={form.values.country?.includes("United States") || form.values.country === "US" ? "e.g. 12-3456789" : "e.g. 12345678"}
               className="w-full"
               disabled={isDisabled}
-              withAsterisk
+              withAsterisk={form.values.country?.includes("United States") || form.values.country === "US"}
               {...form.getInputProps("einNumber")}
             />
           </div>

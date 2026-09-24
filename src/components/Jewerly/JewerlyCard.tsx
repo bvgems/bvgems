@@ -4,6 +4,7 @@ import { Card, Tooltip, Skeleton, NumberFormatter } from "@mantine/core";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 import { JewelryImageZoom } from "./JewelryImageZoom";
 
 export const JewelryCategoryCard = ({
@@ -13,6 +14,7 @@ export const JewelryCategoryCard = ({
   product,
 }: any) => {
   const router = useRouter();
+  const { user } = useAuth();
 
   const isLoading = !product?.node;
   if (isLoading) {
@@ -91,9 +93,9 @@ export const JewelryCategoryCard = ({
         : category;
     if (!handle) return;
     if (stoneSlug) {
-      router.push(`/jewelry-details/${finalCategory}/${handle}/${stoneSlug}`);
+      router.push(`/jewelry/${finalCategory}/${handle}/${stoneSlug}`);
     } else {
-      router.push(`/jewelry-details/${finalCategory}/${handle}`);
+      router.push(`/jewelry/${finalCategory}/${handle}`);
     }
   };
 
@@ -139,7 +141,9 @@ export const JewelryCategoryCard = ({
           {seoTitle}
         </h2>
 
-        {isEarringVariants ? (
+        {!user ? (
+          <p className="text-blue-600 text-xs mt-2 underline">Sign in for price</p>
+        ) : isEarringVariants ? (
           <div className="flex justify-center items-center gap-1 mt-2 text-gray-600 text-sm">
             <NumberFormatter prefix="$" value={minPrice} thousandSeparator /> –{" "}
             <NumberFormatter prefix="$" value={maxPrice} thousandSeparator />

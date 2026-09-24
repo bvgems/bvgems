@@ -501,15 +501,7 @@ export default function JewelryProductPage() {
                 brand: {
                   "@type": "Brand",
                   name: "B.V. Gems",
-                },
-                offers: {
-                  "@type": "Offer",
-                  url: `https://www.bvgems.com/jewelry-details/${category}/${product}/${stone}`,
-                  priceCurrency: "USD",
-                  price:
-                    productData?.priceRange?.minVariantPrice?.amount || "0",
-                  availability: "https://schema.org/InStock",
-                },
+                }
               }),
             }}
           />

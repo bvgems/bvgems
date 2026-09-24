@@ -86,6 +86,12 @@ export const StepperComponent = () => {
 
   return (
     <Container size={"xl"} className="mt-6">
+      <div className="mb-8 text-center max-w-2xl mx-auto">
+        <h2 className="text-2xl font-semibold mb-2 text-[#0b182d]">Apply for Wholesale Access</h2>
+        <p className="text-gray-600 text-sm">
+          Wholesale access is available for jewelry retailers, designers, manufacturers, and other approved trade businesses. Please have your business registration or resale credentials ready.
+        </p>
+      </div>
       <Stepper
         allowNextStepsSelect={false}
         color="#0b182d"

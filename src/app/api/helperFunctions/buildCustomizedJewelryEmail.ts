@@ -108,7 +108,7 @@ export function buildCustomizedJewelryEmail(
           <div class="container">
             <!-- Header -->
             <div class="header">
-              <img src="https://res.cloudinary.com/dabdvgxd4/image/upload/v1754420615/logo2_qhix5o.png" alt="BV Gems Logo" />
+              <img src="https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1754420615/logo2_qhix5o.png" alt="BV Gems Logo" />
               <h2>New Customized Jewelry Request</h2>
             </div>
   

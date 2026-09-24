@@ -2,21 +2,21 @@ export const shades = [
   {
     name: "Vivid Royal Blue",
     image:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1776363412/royal-blue_miap0z.png",
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1776363412/royal-blue_miap0z.png`,
     description:
       "Darker, rich, and saturated royal blue hue. Known for its depth and intensity.",
   },
   {
     name: "Medium Light Cornflower Blue",
     image:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1776363428/medium-cornflower_fewy1r.png",
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1776363428/medium-cornflower_fewy1r.png`,
     description:
       "Lighter and brighter blue hue with vibrant brilliance and sparkle.",
   },
   {
     name: "Medium Navy Blue",
     image:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1776363440/navy-blue_gqxfn3.png",
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1776363440/navy-blue_gqxfn3.png`,
     description: "Deep navy tone with elegant brilliance and rich saturation.",
   },
 ];
@@ -26,19 +26,19 @@ export const GemstonesByBirthMonths = [
   //   month: "February",
   //   gemstone: "Amethyst",
   //   image_url:
-  //     "https://res.cloudinary.com/dabdvgxd4/image/upload/v1753367228/144070001_wgwjpa.jpg",
+  //     `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1753367228/144070001_wgwjpa.jpg`,
   // },
   // {
   //   month: "March",
   //   gemstone: "Aquamarine",
   //   image_url:
-  //     "https://res.cloudinary.com/dabdvgxd4/image/upload/v1753371670/2136532_rc3p0k.jpg",
+  //     `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1753371670/2136532_rc3p0k.jpg`,
   // },
   {
     month: "May",
     gemstone: "Emerald",
     image_url:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756317899/RD_Z_emh9yw.jpg",
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1756317899/RD_Z_emh9yw.jpg`,
     products: [
       {
         image:
@@ -60,7 +60,7 @@ export const GemstonesByBirthMonths = [
       },
       {
         image:
-          "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756317899/RD_Z_emh9yw.jpg",
+          `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1756317899/RD_Z_emh9yw.jpg`,
         title: "Loose Gemstones",
         link: "/calibrated-stones/emerald",
       },
@@ -70,13 +70,13 @@ export const GemstonesByBirthMonths = [
     month: "June",
     gemstone: "Alexandrite",
     image_url:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755717221/IMG_2131_zgoi6w.png",
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1755717221/IMG_2131_zgoi6w.png`,
   },
   {
     month: "July",
     gemstone: "Ruby",
     image_url:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756410867/IMG_2626-3_pju0li.png",
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1756410867/IMG_2626-3_pju0li.png`,
     products: [
       {
         image:
@@ -98,7 +98,7 @@ export const GemstonesByBirthMonths = [
       },
       {
         image:
-          "https://res.cloudinary.com/dabdvgxd4/image/upload/v1756410867/IMG_2626-3_pju0li.png",
+          `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1756410867/IMG_2626-3_pju0li.png`,
         title: "Loose Gemstones",
         link: "/calibrated-stones/ruby",
       },
@@ -108,13 +108,13 @@ export const GemstonesByBirthMonths = [
   //   month: "August",
   //   gemstone: "Peridot",
   //   image_url:
-  //     "https://res.cloudinary.com/dabdvgxd4/image/upload/v1753369202/107490995_mojuuq.jpg",
+  //     `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1753369202/107490995_mojuuq.jpg`,
   // },
   {
     month: "September",
     gemstone: "Sapphire",
     image_url:
-      "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755880908/RD_AA_SRD00042208_p8ijmh.jpg",
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1755880908/RD_AA_SRD00042208_p8ijmh.jpg`,
     products: [
       {
         image:
@@ -136,7 +136,7 @@ export const GemstonesByBirthMonths = [
       },
       {
         image:
-          "https://res.cloudinary.com/dabdvgxd4/image/upload/v1755880908/RD_AA_SRD00042208_p8ijmh.jpg",
+          `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1755880908/RD_AA_SRD00042208_p8ijmh.jpg`,
         title: "Loose Gemstones",
         link: "/calibrated-stones/sapphire",
       },
@@ -151,13 +151,13 @@ export const GemstonesByBirthMonths = [
   //   month: "November",
   //   gemstone: "Citrine",
   //   image_url:
-  //     "https://res.cloudinary.com/dabdvgxd4/image/upload/v1753304168/2136541_z7ryya.jpg",
+  //     `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1753304168/2136541_z7ryya.jpg`,
   // },
   // {
   //   month: "December",
   //   gemstone: "Tanzanite",
   //   image_url:
-  //     "https://res.cloudinary.com/dabdvgxd4/image/upload/v1753297250/2136778_ngahyp.jpg",
+  //     `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1753297250/2136778_ngahyp.jpg`,
   // },
 ];
 
