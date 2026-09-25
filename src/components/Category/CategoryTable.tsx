@@ -148,7 +148,7 @@ export const CategoryTable = ({
       } else if (sortOrder === "highToLow") {
         if (a.ct_weight !== b.ct_weight) return b.ct_weight - a.ct_weight;
       }
-      
+
       // Fallback: Always sort by size smallest to largest if carat weight is equal (or if no sort order)
       return sortBySizeAsc(a, b, "size");
     });
@@ -396,11 +396,13 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
             </p>
           )}
 
-          <div className="flex justify-between items-center mb-4">
-            <p className="text-sm text-gray-600">
-              Showing {totalFilteredRows.length} result
-              {totalFilteredRows.length !== 1 ? "s" : ""}
-            </p>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3 md:gap-0">
+            <h2 className="text-[1.5rem] font-bold tracking-wide text-black flex flex-wrap items-center gap-x-3 gap-y-1">
+              Available {data?.title ? `${data.title} Calibrated Stones` : "Products"}
+              <span className="text-sm text-gray-500 font-normal tracking-normal pt-1">
+                Showing {totalFilteredRows.length} result{totalFilteredRows.length !== 1 ? "s" : ""}
+              </span>
+            </h2>
             <Select
               placeholder="Sort by Carat Weight"
               value={sortOrder}

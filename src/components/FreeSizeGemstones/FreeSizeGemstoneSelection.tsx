@@ -202,14 +202,14 @@ export default function FreeSizeGemstoneSelection() {
   };
 
   return (
-    <div className="mt-16 px-4 md:px-8 py-8 max-w-[1600px] mx-auto w-full">
+    <div className="px-4 md:px-8 py-10 max-w-[1600px] mx-auto w-full">
       <div className="flex justify-center mb-10">
         <h1 className="text-4xl text-violet-800 text-center uppercase tracking-widest font-light">
           {isFancySapphire
             ? "Fancy Sapphires"
             : gemstoneType
-            ? gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1)
-            : "Free Size Gemstones"}
+              ? gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1)
+              : "Free Size Gemstones"}
         </h1>
       </div>
 
