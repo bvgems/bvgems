@@ -853,15 +853,15 @@ export function CategoryContent({
                               onClick={() => setSelectedSapphireColor(item?.value)}
                               style={{ display: "inline-block" }}
                             >
-                              <span
-                              className={`p-2 border rounded cursor-pointer ${selectedSapphireColor === item?.value
-                                ? "border-black"
-                                : "border-gray-300"
+                              <div
+                              className={`p-2 border rounded-lg cursor-pointer flex items-center justify-center transition-all ${selectedSapphireColor === item?.value
+                                ? "border-black bg-gray-50 shadow-sm"
+                                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                                 }`}
                             >
                               {/* <IconDiamond color={item?.color} size={30} /> */}
                               <Image loading="lazy" src={item?.image} h={40} w={40} />
-                            </span>
+                            </div>
                             </Link>
                           </Tooltip>
                         ),
