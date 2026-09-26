@@ -196,7 +196,7 @@ export const GridViewTopFilters = ({
                           {colorOption?.image ? (
                             <img src={colorOption.image} alt={option.label} className="w-6 h-6 object-contain mix-blend-multiply" />
                           ) : (
-                            <div className="w-5 h-5 rounded-full border border-gray-200" style={{ backgroundColor: colorOption?.color || '#ccc' }} />
+                            <div className="w-5 h-5 rounded-full border border-gray-200" style={{ backgroundColor: (colorOption as any)?.color || '#ccc' }} />
                           )}
                           <span>{option.label}</span>
                         </div>
