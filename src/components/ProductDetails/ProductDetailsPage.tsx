@@ -78,7 +78,7 @@ export default function ProductDetailsPage() {
   const [caratWeight, setCaratWeight] = useState<number>(0);
   const breadcrumbItems = [
     { title: "Home", href: "/" },
-    { title: "Calibrated Faceted Gemstones", href: "/loose-gemstones" },
+    { title: "Calibrated Faceted Gemstones", href: "/calibrated-stones" },
     {
       title: product?.collection_slug,
       href: `/calibrated-faceted-gemstones/${name}`,

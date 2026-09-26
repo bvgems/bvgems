@@ -18,7 +18,7 @@ import Link from "next/link";
 export const ShopByShape = () => {
   const router = useRouter();
   const handleNav = (query: string) => {
-    router.push(`/loose-gemstones?${query}`);
+    router.push(`/calibrated-stones?${query}`);
   };
   return (
     <div className="mt-20 mb-20 bg-gray-100 px-20 py-10">
@@ -30,7 +30,7 @@ export const ShopByShape = () => {
         <SimpleGrid cols={{ base: 2, sm: 3, md: 5, lg: 5 }} spacing="xl" verticalSpacing="xl">
           {ShapeFilterList.map((shape, index) => (
             <Link
-              href={`/loose-gemstones?shape=${shape.label.toLowerCase()}`}
+              href={`/calibrated-stones?shape=${shape.label.toLowerCase()}`}
               className="flex justify-center flex-col items-center cursor-pointer no-underline hover:opacity-75 transition-opacity"
               rel="nofollow"
               key={index}

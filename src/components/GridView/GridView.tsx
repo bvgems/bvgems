@@ -236,7 +236,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     setLengthRange({ min: "", max: "" });
     setWidthRange({ min: "", max: "" });
     setToleranceEnabled(false);
-    router.replace("/loose-gemstones");
+    router.replace("/calibrated-stones");
   };
 
   const SkeletonCard = () => (

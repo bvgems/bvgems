@@ -15,7 +15,7 @@ export const RightSideLooseGemstones = () => {
   const router = useRouter();
 
   const redirectToLooseGemstones = () => {
-    router?.push("/loose-gemstones");
+    router?.push("/calibrated-stones");
   };
 
   return (

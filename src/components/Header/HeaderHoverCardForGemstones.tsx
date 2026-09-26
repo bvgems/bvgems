@@ -20,7 +20,7 @@ export const HeaderHoverCardForGemstones = ({
 
   const handleNav = (query: string) => {
     setOpened(false);
-    router.push(`/loose-gemstones?${query}`);
+    router.push(`/calibrated-stones?${query}`);
   };
 
   return (

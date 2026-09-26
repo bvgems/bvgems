@@ -1,26 +1,25 @@
-import React from "react";
-import { LooseGemstones } from "@/components/LooseGemstones/LooseGemstones";
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { GridView } from "@/components/GridView/GridView";
 
-export const metadata = {
-  title: "Calibrated Gemstones - Wholesale | B.V. Gems",
-  description: "Shop precision-calibrated wholesale gemstones for your custom jewelry designs.",
-  alternates: {
-    canonical: `https://www.bvgems.com/calibrated-stones`,
+export const metadata: Metadata = {
+  title: "Loose Calibrated Faceted Gemstones – Shop Online | B.V. Gems",
+  description:
+    "Discover over 5,000 calibrated faceted gemstones at B.V. Gems. Shop natural & lab-grown sapphires, emeralds, rubies, citrine & more. Free U.S. shipping on or above $200.",
+  openGraph: {
+    title: "Loose Calibrated Faceted Gemstones – Shop Online | B.V. Gems",
+    description:
+      "Shop over 5,000 calibrated faceted gemstones at B.V. Gems. Ethically sourced natural & lab-grown sapphires, emeralds, rubies, citrine & more.",
+    url: "https://www.bvgems.com/calibrated-stones",
+    siteName: "B.V. Gems",
+    type: "website",
   },
 };
 
-export default function CalibratedStonesPage() {
+export default function LooseGemStonesPage() {
   return (
-    <div className="w-full">
-      <div className="bg-[#0b182d] text-white py-12 px-6 text-center">
-        <h1 className="text-3xl md:text-4xl uppercase tracking-widest font-light mb-4">
-          Calibrated Stones
-        </h1>
-        <p className="text-gray-300 font-light max-w-2xl mx-auto">
-          Precision-cut wholesale gemstones, strictly graded for consistent color and quality.
-        </p>
-      </div>
-      <LooseGemstones />
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <GridView />
+    </Suspense>
   );
 }

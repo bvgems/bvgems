@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/loose-gemstones",
+        destination: "/calibrated-stones",
+        permanent: true,
+      },
+      {
         source: "/bracelets",
         destination: "/jewelry/bracelets", 
         permanent: true,

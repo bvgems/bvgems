@@ -263,7 +263,7 @@ export function CartComponent() {
           Your cart is empty
         </p>
         <Button
-          onClick={() => router.push("/loose-gemstones")}
+          onClick={() => router.push("/calibrated-stones")}
           color="gray"
           rightSection={<IconArrowNarrowRight />}
         >

@@ -105,7 +105,7 @@ export default async function Home() {
         <FadeInUpBox delay={0.2}>
           <section className="bg-gray-50 py-16 px-6">
             <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-8">
-              <Link href="/loose-gemstones" className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] group block relative h-80 overflow-hidden bg-white shadow-sm border border-gray-100 p-8 flex flex-col justify-center items-center text-center transition-shadow hover:shadow-md">
+              <Link href="/calibrated-stones" className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] group block relative h-80 overflow-hidden bg-white shadow-sm border border-gray-100 p-8 flex flex-col justify-center items-center text-center transition-shadow hover:shadow-md">
                 <h3 className="text-2xl font-light uppercase tracking-widest mb-4">Calibrated Gemstones</h3>
                 <p className="text-gray-600 mb-6 text-sm leading-relaxed">Precision-cut stones in standard millimeter sizes for perfect setting.</p>
                 <span className="inline-block border-b border-black pb-1 uppercase tracking-wider text-xs font-semibold group-hover:text-blue-900 transition-colors">Shop Calibrated</span>

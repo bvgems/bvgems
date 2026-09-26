@@ -67,7 +67,7 @@ const RangeFilter = ({
   bounds: { min: number; max: number };
 }) => {
   return (
-    <div className="flex flex-col gap-2 w-full max-w-[250px]">
+    <div className="flex flex-col gap-2 w-full max-w-[250px] items-center lg:items-start">
       <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">
         {label}
       </label>
@@ -167,9 +167,9 @@ export const FreeSizeGridViewTopFilters = ({
             <div className="flex flex-col lg:flex-row gap-10">
         
         {/* GEM TYPE */}
-        <div className="flex flex-col gap-4">
-          <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Gem Type</label>
-          <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col items-center lg:items-start gap-4">
+          <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Gem Type</label>
+          <div className="flex flex-wrap justify-center lg:justify-start gap-4">
             {gemstoneOptions.map((gem, i) => {
               const isSelected = selectedGems.includes(gem.value);
               return (
@@ -189,9 +189,9 @@ export const FreeSizeGridViewTopFilters = ({
 
           {/* SAPPHIRE COLORS SUB-FILTER */}
           {selectedGems.includes("Sapphire") && sapphireColors.length > 0 && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
-              <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block">Sapphire Colors</label>
-              <div className="flex flex-wrap gap-4">
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center lg:items-start">
+              <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block text-center lg:text-left">Sapphire Colors</label>
+              <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                 {sapphireColors.map((color, idx) => {
                   const isSelected = selectedSapphireColors.includes(color);
                   const colorOption = shopByColorOptions.find(o => o.name.toLowerCase() === color.toLowerCase());
@@ -222,9 +222,9 @@ export const FreeSizeGridViewTopFilters = ({
         </div>
 
         {/* SHAPE */}
-        <div className="flex flex-col gap-4">
-          <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Shape</label>
-          <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col items-center lg:items-start gap-4">
+          <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Shape</label>
+          <div className="flex flex-wrap justify-center lg:justify-start gap-4">
             {shapeOptions.map((shape, i) => {
               const isSelected = selectedShapes.includes(shape.value);
               return (
@@ -247,7 +247,7 @@ export const FreeSizeGridViewTopFilters = ({
       <div className="w-full h-[1px] bg-gray-200 my-8" />
 
       {/* ADDITIONAL FREE SIZE FILTERS */}
-      <div className="flex flex-col lg:flex-row gap-6 items-end mb-8 flex-wrap">
+      <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-end mb-8 flex-wrap justify-center lg:justify-start w-full">
         <TextInput
           label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Lot Number</span>}
           placeholder="Search lot..."
@@ -301,12 +301,12 @@ export const FreeSizeGridViewTopFilters = ({
 
       <div className="w-full h-[1px] bg-gray-200 my-8" />
 
-      <div className="flex flex-col lg:flex-row gap-10 items-start">
+      <div className="flex flex-col lg:flex-row gap-10 items-center lg:items-start w-full">
         <RangeFilter label={`Weight (CT)${toleranceEnabled ? " (±0.5)" : ""}`} value={weightRange} onChange={setWeightRange} bounds={weightBounds} />
         <RangeFilter label={`Length (MM)${toleranceEnabled ? " (±0.5)" : ""}`} value={lengthRange} onChange={setLengthRange} bounds={lengthBounds} />
         <RangeFilter label={`Width (MM)${toleranceEnabled ? " (±0.5)" : ""}`} value={widthRange} onChange={setWidthRange} bounds={widthBounds} />
         
-        <div className="flex flex-col justify-center h-full pt-4">
+        <div className="flex flex-col justify-center items-center lg:items-start h-full pt-4">
           <Switch
             checked={toleranceEnabled}
             onChange={(event) => setToleranceEnabled(event.currentTarget.checked)}

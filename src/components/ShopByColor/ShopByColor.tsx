@@ -25,7 +25,7 @@ export default function ShopByColor() {
   const router = useRouter();
 
   const handleShopByColor = (item: any) => {
-    router?.push(`/loose-gemstones?color=${item?.name?.toLowerCase()}`);
+    router?.push(`/calibrated-stones?color=${item?.name?.toLowerCase()}`);
   };
 
   return (
@@ -48,7 +48,7 @@ export default function ShopByColor() {
           >
             <Card
               component={Link}
-              href={`/loose-gemstones?color=${item?.name?.toLowerCase()}`}
+              href={`/calibrated-stones?color=${item?.name?.toLowerCase()}`}
               rel="nofollow"
               shadow="sm"
               radius="lg"

@@ -67,7 +67,7 @@ export function Hero({ jewelryRef, heroData }: any) {
       <div className="grid grid-cols-1 md:grid-cols-2 w-full min-h-[600px] bg-white gap-1 p-1">
         {/* Tile 1: Calibrated Stones */}
         <Link
-          href="/loose-gemstones"
+          href="/calibrated-stones"
           className="relative flex flex-col items-center justify-center text-center p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group"
         >
           {/* Expanding Radial Background */}

@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 import { useEffect, useState, useRef } from "react";
 import {
@@ -104,6 +105,33 @@ export function CategoryContent({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+
+  const generateSeoUrl = (newShape: string | null, newColor: string | null, newSize: string | null = null) => {
+    const shapeToUse = newShape || selectedShape || (shapes?.length ? shapes[0] : "round");
+    const shapeSlug = shapeToUse.toLowerCase().replace(/\s+/g, "-");
+    const params = new URLSearchParams();
+    
+    const colorToUse = newColor || (isSapphire ? selectedSapphireColor : null);
+    if (colorToUse && isSapphire) {
+      params.set("color", colorToUse);
+    }
+    if (typeFilter) {
+      params.set("type", typeFilter);
+    }
+    if (emeraldShade && isEmerald) {
+      params.set("shade", emeraldShade);
+    }
+    
+    const queryStr = params.toString();
+    
+    let sizeSlug = "";
+    if (newSize) {
+      sizeSlug = "/" + newSize.replace(/\s+/g, "");
+    }
+    
+    return `/calibrated-stones/${handle}/${shapeSlug}${sizeSlug}${queryStr ? '?' + queryStr : ''}`;
+  };
+
 
   const urlShape = searchParams.get("shape");
   const urlSizes = searchParams.getAll("size");
@@ -446,7 +474,7 @@ export function CategoryContent({
                         value: c.value,
                       }))}
                       value={selectedSapphireColor}
-                      onChange={(val) => setSelectedSapphireColor(val!)}
+                      onChange={(val) => { setSelectedSapphireColor(val!); if(val) router.push(generateSeoUrl(null, val), { scroll: false }); }}
                       renderOption={({ option }) => {
                         const colorOption = SapphireLooseGemstoneColorOptions.find(c => c.value === option.value);
                         return (
@@ -492,7 +520,7 @@ export function CategoryContent({
                       value: shape,
                     }))}
                     value={selectedShape || null}
-                    onChange={(val) => setSelectedShape(val)}
+                    onChange={(val) => { setSelectedShape(val); if(val) router.push(generateSeoUrl(val, null), { scroll: false }); }}
                     renderOption={({ option }) => {
                       const shapeImageMap: Record<string, string> = {
                         Round: "/assets/round.svg",
@@ -557,7 +585,7 @@ export function CategoryContent({
                       value: size,
                     })) || []}
                     value={selectedSizes[0] || null}
-                    onChange={(val) => setSelectedSizes(val ? [val] : [])}
+                    onChange={(val) => { setSelectedSizes(val ? [val] : []); if(val) router.push(generateSeoUrl(null, null, val), { scroll: false }); }}
                     searchable
                     clearable
                     className="w-full"
@@ -613,7 +641,7 @@ export function CategoryContent({
                     {/* Main Carousel (Images Only) */}
                     <Carousel
                       withIndicators
-                      height={400}
+                      height={350}
                       onSlideChange={(index) => {
                         setActiveSlide(index);
                         setActiveVideoIndex(0);
@@ -628,7 +656,7 @@ export function CategoryContent({
                       {availableQualityImages.map((item: any) => (
                         <Carousel.Slide key={item.id}>
                           <div className="flex flex-col items-center">
-                            <div className="h-[500px] w-[300px] flex items-center justify-center bg-white">
+                            <div className="h-[350px] w-full max-w-[350px] flex items-start justify-center bg-white pt-2">
                               <ImageZoom src={item.image_url} />
                             </div>
                           </div>
@@ -672,160 +700,6 @@ export function CategoryContent({
                       )}
                     </div>
 
-
-                  </div>
-                ) : (
-                  <div className="h-[300px] md:h-[450px] w-full flex items-center justify-center bg-gray-50 border border-gray-100 rounded-lg">
-                    <span className="text-gray-400 font-medium tracking-wide text-sm">Image Not Available</span>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </GridCol>
-
-          {/* Right: Heading + Badges + Inline Filters + Video */}
-          <GridCol span={{ base: 12, md: 6 }}>
-            <motion.div
-              initial={{ opacity: 0, y: 80 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
-              className="px-4 flex flex-col gap-4"
-            >
-
-
-              
-              <div className="hidden md:block">
-                <div className="flex flex-wrap gap-3 mt-4">
-                  {sortedShapes?.map((shape: string, index: number) => {
-                    const isSelected = shape === selectedShape;
-                    const shapeImageMap: Record<string, string> = {
-                      Round: "/assets/round.svg",
-                      Oval: "/assets/oval.svg",
-                      "Emerald Cut": "/assets/emerald.svg",
-                      Pear: "/assets/pear.svg",
-                      "Princess Cut": "/assets/princesscut.svg",
-                      Marquise: "/assets/marquise.svg",
-                      Heart: "/assets/heart.svg",
-                      "Straight Baguette": "/assets/baguette.svg",
-                      Cushion: "/assets/cushion.svg",
-                      Trillion: "/assets/trillion.svg",
-                    };
-
-                    const imageSrc = shapeImageMap[shape];
-
-                    return (
-                      <div
-                        key={index}
-                        className="flex flex-col items-center cursor-pointer"
-                        onClick={() => setSelectedShape(shape)}
-                      >
-                        <Tooltip label={shape}>
-                          <Image loading="lazy"
-                            src={imageSrc}
-                            h={50}
-                            w={50}
-                            fit="fill"
-                            className={`rounded border ${isSelected ? "border-black" : "border-gray-300"
-                              }`}
-                          />
-                        </Tooltip>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Sapphire color filter */}
-                {isSapphire && (
-                  <div className="mt-3 py-4">
-                    <div className="flex flex-row flex-wrap gap-8 mt-3 items-center">
-                      <span className="text-lg">Color:</span>
-                      {SapphireLooseGemstoneColorOptions?.map(
-                        (item: any, index: number) => (
-                          <Tooltip label={item?.value} key={index}>
-                            <span
-                              onClick={() =>
-                                setSelectedSapphireColor(item?.value)
-                              }
-                              className={`p-2 border rounded cursor-pointer ${selectedSapphireColor === item?.value
-                                ? "border-black"
-                                : "border-gray-300"
-                                }`}
-                            >
-                              {/* <IconDiamond color={item?.color} size={30} /> */}
-                              <Image loading="lazy" src={item?.image} h={40} w={40} />
-                            </span>
-                          </Tooltip>
-                        ),
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {selectedShape && (
-                  <div className="mt-3">
-                    <p className="font-medium mb-2 text-gray-700">
-                      Select Size for {selectedShape}:
-                    </p>
-                    <Select
-                      className="w-[50%]"
-                      searchable
-                      clearable
-                      scrollAreaProps={{ type: "scroll" }}
-                      placeholder="Choose size"
-                      data={allSizes[selectedShape]?.map((size: string) => {
-                        const label = size.includes("x")
-                          ? size
-                            .replace(/x/g, " x ")
-                            .replace(/\s+/g, " ")
-                            .trim()
-                          : parseFloat(size).toFixed(2);
-                        return {
-                          label,
-                          value: size,
-                        };
-                      })}
-                      value={selectedSizes[0] || null}
-                      onChange={(value) =>
-                        setSelectedSizes(value ? [value] : [])
-                      }
-                    />
-                  </div>
-                )}
-
-                <div className="mt-4">
-                  <p className="font-medium mb-2 text-gray-700">
-                    Natural / Lab:
-                  </p>
-                  <Select
-                    placeholder="Select Type"
-                    scrollAreaProps={{ type: "scroll" }}
-                    data={[
-                      { label: "All", value: "" },
-                      { label: "Natural", value: "Natural" },
-                      { label: "Lab Grown", value: "Lab Grown" },
-                    ]}
-                    value={typeFilter || ""}
-                    onChange={(val) => {
-                      setTypeFilter(val);
-                      if (val !== "Lab Grown") {
-                        setEmeraldShade(null);
-                      }
-                    }}
-                    className="w-[50%]"
-                    clearable
-                  />
-                </div>
-
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 80 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
-              className="flex gap-4 items-start px-4 mt-6"
-            >
-              <div className="w-full">
                     {/* Conditional Video Block (Shows ONLY below thumbnails when a valid video exists for the selected grade) */}
                     {selectedGradeVideos.length > 0 && currentVideoUrl && (
                       <div className="mt-8 flex flex-col items-center w-full animate-fade-in">
@@ -833,7 +707,7 @@ export function CategoryContent({
 
                         <div
                           ref={videoContainerRef}
-                          className="h-[500px] w-[300px] flex items-center justify-center bg-white border border-gray-200 rounded shadow-sm overflow-hidden cursor-zoom-in relative"
+                          className="h-[350px] w-[300px] flex items-center justify-center bg-white border border-gray-200 rounded shadow-sm overflow-hidden cursor-zoom-in relative"
                           onMouseMove={handleVideoMouseMove}
                           onMouseEnter={() => setIsVideoZoomed(true)}
                           onMouseLeave={() => setIsVideoZoomed(false)}
@@ -902,8 +776,160 @@ export function CategoryContent({
                       </div>
                     )}
 
+                  </div>
+                ) : (
+                  <div className="h-[300px] md:h-[450px] w-full flex items-center justify-center bg-gray-50 border border-gray-100 rounded-lg">
+                    <span className="text-gray-400 font-medium tracking-wide text-sm">Image Not Available</span>
+                  </div>
+                )}
               </div>
             </motion.div>
+          </GridCol>
+
+          {/* Right: Heading + Badges + Inline Filters + Video */}
+          <GridCol span={{ base: 12, md: 6 }}>
+            <motion.div
+              initial={{ opacity: 0, y: 80 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+              className="px-4 flex flex-col gap-4 sticky top-24 z-10"
+            >
+
+
+              
+              <div className="hidden md:block">
+                <div className="flex flex-wrap gap-3 mt-4">
+                  {sortedShapes?.map((shape: string, index: number) => {
+                    const isSelected = shape === selectedShape;
+                    const shapeImageMap: Record<string, string> = {
+                      Round: "/assets/round.svg",
+                      Oval: "/assets/oval.svg",
+                      "Emerald Cut": "/assets/emerald.svg",
+                      Pear: "/assets/pear.svg",
+                      "Princess Cut": "/assets/princesscut.svg",
+                      Marquise: "/assets/marquise.svg",
+                      Heart: "/assets/heart.svg",
+                      "Straight Baguette": "/assets/baguette.svg",
+                      Cushion: "/assets/cushion.svg",
+                      Trillion: "/assets/trillion.svg",
+                    };
+
+                    const imageSrc = shapeImageMap[shape];
+
+                    return (
+                      <Link
+                        href={generateSeoUrl(shape, null)}
+                        key={index}
+                        className="flex flex-col items-center cursor-pointer"
+                        scroll={false}
+                        onClick={() => setSelectedShape(shape)}
+                      >
+                        <Tooltip label={shape}>
+                          <Image loading="lazy"
+                            src={imageSrc}
+                            h={50}
+                            w={50}
+                            fit="fill"
+                            className={`rounded border ${isSelected ? "border-black" : "border-gray-300"
+                              }`}
+                          />
+                        </Tooltip>
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                {/* Sapphire color filter */}
+                {isSapphire && (
+                  <div className="mt-3 py-4">
+                    <div className="flex flex-row flex-wrap gap-8 mt-3 items-center">
+                      <span className="text-lg">Color:</span>
+                      {SapphireLooseGemstoneColorOptions?.map(
+                        (item: any, index: number) => (
+                          <Tooltip label={item?.value} key={index}>
+                            <Link
+                              href={generateSeoUrl(null, item?.value)}
+                              scroll={false}
+                              onClick={() => setSelectedSapphireColor(item?.value)}
+                              style={{ display: "inline-block" }}
+                            >
+                              <span
+                              className={`p-2 border rounded cursor-pointer ${selectedSapphireColor === item?.value
+                                ? "border-black"
+                                : "border-gray-300"
+                                }`}
+                            >
+                              {/* <IconDiamond color={item?.color} size={30} /> */}
+                              <Image loading="lazy" src={item?.image} h={40} w={40} />
+                            </span>
+                            </Link>
+                          </Tooltip>
+                        ),
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {selectedShape && (
+                  <div className="mt-3">
+                    <p className="font-medium mb-2 text-gray-700">
+                      Select Size for {selectedShape}:
+                    </p>
+                    <Select
+                      className="w-[50%]"
+                      searchable
+                      clearable
+                      scrollAreaProps={{ type: "scroll" }}
+                      placeholder="Choose size"
+                      data={allSizes[selectedShape]?.map((size: string) => {
+                        const label = size.includes("x")
+                          ? size
+                            .replace(/x/g, " x ")
+                            .replace(/\s+/g, " ")
+                            .trim()
+                          : parseFloat(size).toFixed(2);
+                        return {
+                          label,
+                          value: size,
+                        };
+                      })}
+                      value={selectedSizes[0] || null}
+                      onChange={(value) => {
+                        setSelectedSizes(value ? [value] : []);
+                        if(value) router.push(generateSeoUrl(null, null, value), { scroll: false });
+                      }}
+                    />
+                  </div>
+                )}
+
+                <div className="mt-4">
+                  <p className="font-medium mb-2 text-gray-700">
+                    Natural / Lab:
+                  </p>
+                  <Select
+                    placeholder="Select Type"
+                    scrollAreaProps={{ type: "scroll" }}
+                    data={[
+                      { label: "All", value: "" },
+                      { label: "Natural", value: "Natural" },
+                      { label: "Lab Grown", value: "Lab Grown" },
+                    ]}
+                    value={typeFilter || ""}
+                    onChange={(val) => {
+                      setTypeFilter(val);
+                      if (val !== "Lab Grown") {
+                        setEmeraldShade(null);
+                      }
+                    }}
+                    className="w-[50%]"
+                    clearable
+                  />
+                </div>
+
+              </div>
+            </motion.div>
+
+
           </GridCol>
         </Grid>
       </div>
@@ -918,8 +944,8 @@ export function CategoryContent({
 
 
       {/* BELOW PRODUCT LISTING */}
-      <div className="px-6 md:px-12 pb-10 max-w-[1200px] mx-auto w-full mt-10">
-                <p className="text-gray-700 leading-relaxed mt-4">
+      <div className="px-6 md:px-12 pb-10 max-w-[1200px] mx-auto w-full mt-10 flex flex-col items-center">
+                <p className="text-gray-700 leading-relaxed mt-4 text-center max-w-[800px]">
                   {data?.title} gemstones are prized for their rarity,
                   brilliance, and versatility. At B.V. Gems in New York’s
                   Diamond District, we offer {getQuality()}
@@ -930,8 +956,8 @@ export function CategoryContent({
                 </p>
 
                 {/* Static Info Table */}
-                <div className="mt-3 max-w-[500px]">
-                  <h2 className="text-lg font-semibold mb-3">
+                <div className="mt-8 max-w-[600px] w-full flex flex-col items-center">
+                  <h2 className="text-xl font-semibold mb-3 text-center">
                     Additional Information
                   </h2>
                   <Table
@@ -966,8 +992,8 @@ export function CategoryContent({
                     </TableTbody>
                   </Table>
 
-                  <div className="mt-6">
-                    <h2 className="text-base font-semibold text-gray-800 mb-3">
+                  <div className="mt-10 w-full flex flex-col items-center">
+                    <h2 className="text-xl font-semibold text-gray-800 mb-3 text-center">
                       Quality Grades
                     </h2>
                     <Table
@@ -1010,7 +1036,7 @@ export function CategoryContent({
                   </div>
                 </div>
 
-                <div>
+                <div className="mt-6 flex flex-wrap justify-center gap-4">
                   <Button
                     onClick={open}
                     variant="transparent"
