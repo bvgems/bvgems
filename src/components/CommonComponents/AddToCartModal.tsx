@@ -100,7 +100,10 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   const getPerCaratPrice = (item: any): number => {
     if (!item) return 0;
     if (isSmallLabGrown(item)) return 0; // no per-carat for these
-    if (isLabGrown(item)) return 50;
+    if (isLabGrown(item)) {
+       if (!item?.price) return 0;
+       return 50;
+    }
     if (!item?.ct_weight || !item?.price) return 0;
     return Number((item.price / item.ct_weight).toFixed(2));
   };
@@ -108,7 +111,10 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
     if (!item) return 0;
     if (isSmallLabGrown(item)) return Number(item.price); // flat $2.50 from DB
     if (!item?.ct_weight) return 0;
-    if (isLabGrown(item)) return Number((50 * item.ct_weight).toFixed(2));
+    if (isLabGrown(item)) {
+       if (!item?.price) return 0;
+       return Number((50 * item.ct_weight).toFixed(2));
+    }
     return item?.price ? Number(item.price) : 0;
   };
 
@@ -298,11 +304,11 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                 color="dark"
                 className="!bg-[#0b182d]"
               >
-                Per Stone: ${perStone.toFixed(2)}
+                {perStone === 0 ? "Price upon request" : `Per Stone: $${perStone.toFixed(2)}`}
               </Badge>
               {allowPurchaseByCarat && (
                 <Badge size="lg" radius="md" variant="light" color="dark">
-                  Per Carat: ${perCarat.toFixed(2)}
+                  {perCarat === 0 ? "Price upon request" : `Per Carat: $${perCarat.toFixed(2)}`}
                 </Badge>
               )}
             </Group>

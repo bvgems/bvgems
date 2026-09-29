@@ -457,14 +457,18 @@ export function CartComponent() {
                     </Group>
                     <Group mt="sm" align="center" justify="space-between">
                       <Text fw={500} size="lg">
-                        <NumberFormatter
-                          thousandSeparator
-                          prefix="$"
-                          value={
-                            value?.jewelryProduct?.price ??
-                            value?.product?.price
-                          }
-                        />{" "}
+                        {(value?.jewelryProduct?.price ?? value?.product?.price) === 0 ? (
+                          "Price upon request"
+                        ) : (
+                          <NumberFormatter
+                            thousandSeparator
+                            prefix="$"
+                            value={
+                              value?.jewelryProduct?.price ??
+                              value?.product?.price
+                            }
+                          />
+                        )}
                       </Text>
                       {isGift ? (
                         <Badge color="gray" variant="light">
@@ -495,11 +499,15 @@ export function CartComponent() {
                         />
                       )}
                       <Text fw={600} size="lg">
-                        <NumberFormatter
-                          thousandSeparator
-                          prefix="$"
-                          value={total.toFixed(2)}
-                        />{" "}
+                        {total === 0 ? (
+                          "Price upon request"
+                        ) : (
+                          <NumberFormatter
+                            thousandSeparator
+                            prefix="$"
+                            value={total.toFixed(2)}
+                          />
+                        )}
                       </Text>
                     </Group>
 

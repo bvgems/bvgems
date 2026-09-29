@@ -96,6 +96,7 @@ export default function ProductDetailsPage() {
     if (!item) return 0;
     if (!item?.ct_weight) return 0;
     if (isLabGrown(item)) {
+      if (!item?.price) return 0; // Respect DB if price is set to null (Price upon request)
       if (
         item?.collection_slug === "Alexandrite" ||
         item?.collection_slug === "Paraiba Tourmaline"
@@ -544,7 +545,7 @@ export default function ProductDetailsPage() {
                     Per Stone Price:{" "}
                     <strong>
                       {getPerStonePrice(product) === 0
-                        ? "-"
+                        ? "Price upon request"
                         : `$${getPerStonePrice(product).toFixed(2)}`}
                     </strong>
                   </span>
@@ -553,7 +554,7 @@ export default function ProductDetailsPage() {
                       Per Carat Price:{" "}
                       <strong>
                         {getPerCaratPrice(product) === 0
-                          ? "-"
+                          ? "Price upon request"
                           : `$${getPerCaratPrice(product).toFixed(2)}`}
                       </strong>
                     </span>

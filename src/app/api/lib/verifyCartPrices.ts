@@ -33,7 +33,9 @@ export const verifyCartPrices = async (cartItems: any[]) => {
            if (isLabGrown && isAlexOrParaiba) {
               verifiedItem.product.price = 85;
            } else {
-              if (dbCtWeight) {
+              if (isLabGrown && (!dbProduct.price || dbPrice === 0)) {
+                 verifiedItem.product.price = 0;
+              } else if (dbCtWeight) {
                  verifiedItem.product.price = Number((dbPrice / dbCtWeight).toFixed(2));
               } else {
                  verifiedItem.product.price = dbPrice;
@@ -42,7 +44,9 @@ export const verifyCartPrices = async (cartItems: any[]) => {
         } else {
            // Emulate getPerStonePrice
            if (isLabGrown) {
-              if (isAlexOrParaiba) {
+              if (!dbProduct.price || dbPrice === 0) {
+                 verifiedItem.product.price = 0;
+              } else if (isAlexOrParaiba) {
                  if (!allowPurchaseByCarat) {
                     verifiedItem.product.price = dbPrice;
                  } else {
