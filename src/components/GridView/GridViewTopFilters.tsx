@@ -18,17 +18,13 @@ type TopFiltersProps = {
   selectedShapes: string[];
   setSelectedShapes: (val: string[]) => void;
 
-  weightRange: RangeValue;
-  setWeightRange: (val: RangeValue) => void;
+  weight: string;
+  setWeight: (val: string) => void;
   weightBounds: { min: number; max: number };
 
-  lengthRange: RangeValue;
-  setLengthRange: (val: RangeValue) => void;
-  lengthBounds: { min: number; max: number };
-
-  widthRange: RangeValue;
-  setWidthRange: (val: RangeValue) => void;
-  widthBounds: { min: number; max: number };
+  dimension: string;
+  setDimension: (val: string) => void;
+  availableDimensions: string[];
 
   toleranceEnabled: boolean;
   setToleranceEnabled: (val: boolean) => void;
@@ -40,114 +36,79 @@ type TopFiltersProps = {
   resetAll: () => void;
 };
 
-const RangeFilter = ({
+const SingleNumberFilter = ({
   label,
   value,
   onChange,
   bounds,
 }: {
   label: string;
-  value: RangeValue;
-  onChange: (val: RangeValue) => void;
+  value: string;
+  onChange: (val: string) => void;
   bounds: { min: number; max: number };
 }) => {
   return (
-    <div className="flex flex-col gap-2 w-full max-w-[250px] items-center lg:items-start mx-auto lg:mx-0">
-      <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">
+    <div className="flex flex-col gap-1 w-full max-w-[250px] items-center lg:items-start mx-auto lg:mx-0">
+      <label className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
         {label}
       </label>
-      <div className="flex gap-2 mt-2">
-        <NumberInput
-          value={value.min}
-          onChange={(val) => onChange({ ...value, min: val === "" ? "" : Number(val) })}
-          placeholder="Min"
-          min={0}
-          max={value.max === "" ? undefined : Number(value.max)}
-          leftSection={<span className="text-xs text-gray-500 ml-2">Min</span>}
-          styles={{ input: { paddingLeft: 40, fontSize: '13px' } }}
-          hideControls
-        />
-        <NumberInput
-          value={value.max}
-          onChange={(val) => onChange({ ...value, max: val === "" ? "" : Number(val) })}
-          placeholder="Max"
-          min={value.min === "" ? 0 : Number(value.min)}
-          leftSection={<span className="text-xs text-gray-500 ml-2">Max</span>}
-          styles={{ input: { paddingLeft: 40, fontSize: '13px' } }}
-          hideControls
-        />
-      </div>
+      <NumberInput
+        value={value === "" ? "" : Number(value)}
+        onChange={(val) => onChange(val === "" ? "" : val.toString())}
+        placeholder="Enter weight"
+        min={0}
+        max={bounds.max}
+        styles={{ input: { fontSize: '13px' } }}
+        hideControls
+        className="w-full"
+      />
     </div>
   );
 };
 
 
-const MobileDropdownRangeFilter = ({
+const SingleDropdownFilter = ({
   label,
   value,
   onChange,
-  bounds,
+  optionsList,
 }: {
   label: string;
-  value: RangeValue;
-  onChange: (val: RangeValue) => void;
-  bounds: { min: number; max: number };
+  value: string;
+  onChange: (val: string) => void;
+  optionsList: string[];
 }) => {
-  const options = [];
-  const minBound = Math.floor(bounds.min || 0);
-  const maxBound = Math.ceil(bounds.max || 50);
-  for (let i = minBound; i <= maxBound; i += 0.5) {
-    options.push({ value: i.toString(), label: i.toString() });
-  }
+  const options = optionsList.map(opt => ({ value: opt, label: opt }));
 
   return (
-    <div className="flex flex-col gap-2 w-full max-w-[250px] items-center lg:items-start mx-auto lg:mx-0">
-      <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left w-full">
+    <div className="flex flex-col gap-1 w-full max-w-[250px] items-center lg:items-start mx-auto lg:mx-0">
+      <label className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider text-center lg:text-left w-full">
         {label}
       </label>
-      
+
       {/* Mobile view: Dropdowns */}
-      <div className="flex lg:hidden gap-2 mt-2 w-full">
+      <div className="flex lg:hidden flex-col gap-1 w-full">
         <Select
-          placeholder="Min"
+          placeholder="Select"
           data={options}
-          value={value.min === "" ? null : value.min.toString()}
-          onChange={(val) => onChange({ ...value, min: val === null ? "" : Number(val) })}
+          value={value === "" ? null : value}
+          onChange={(val) => onChange(val === null ? "" : val)}
           searchable
           clearable
-          className="w-1/2"
-        />
-        <Select
-          placeholder="Max"
-          data={options}
-          value={value.max === "" ? null : value.max.toString()}
-          onChange={(val) => onChange({ ...value, max: val === null ? "" : Number(val) })}
-          searchable
-          clearable
-          className="w-1/2"
+          className="w-full"
         />
       </div>
 
-      {/* Desktop view: NumberInputs */}
-      <div className="hidden lg:flex gap-2 mt-2">
-        <NumberInput
-          value={value.min}
-          onChange={(val) => onChange({ ...value, min: val === "" ? "" : Number(val) })}
-          placeholder="Min"
-          min={0}
-          max={value.max === "" ? undefined : Number(value.max)}
-          leftSection={<span className="text-xs text-gray-500 ml-2">Min</span>}
-          styles={{ input: { paddingLeft: 40, fontSize: '13px' } }}
-          hideControls
-        />
-        <NumberInput
-          value={value.max}
-          onChange={(val) => onChange({ ...value, max: val === "" ? "" : Number(val) })}
-          placeholder="Max"
-          min={value.min === "" ? 0 : Number(value.min)}
-          leftSection={<span className="text-xs text-gray-500 ml-2">Max</span>}
-          styles={{ input: { paddingLeft: 40, fontSize: '13px' } }}
-          hideControls
+      {/* Desktop view: Dropdowns */}
+      <div className="hidden lg:flex gap-2 w-full">
+        <Select
+          placeholder="Select"
+          data={options}
+          value={value === "" ? null : value}
+          onChange={(val) => onChange(val === null ? "" : val)}
+          searchable
+          clearable
+          className="w-full"
         />
       </div>
     </div>
@@ -161,15 +122,12 @@ export const GridViewTopFilters = ({
   setSelectedGems,
   selectedShapes,
   setSelectedShapes,
-  weightRange,
-  setWeightRange,
+  weight,
+  setWeight,
   weightBounds,
-  lengthRange,
-  setLengthRange,
-  lengthBounds,
-  widthRange,
-  setWidthRange,
-  widthBounds,
+  dimension,
+  setDimension,
+  availableDimensions,
   toleranceEnabled,
   setToleranceEnabled,
   sapphireColors,
@@ -184,7 +142,7 @@ export const GridViewTopFilters = ({
       newSelected = newSelected.filter(g => g !== val);
       // If unselecting Sapphire, clear sapphire colors
       if (val === "Sapphire") {
-         setSelectedSapphireColors([]);
+        setSelectedSapphireColors([]);
       }
     } else {
       newSelected.push(val);
@@ -204,7 +162,7 @@ export const GridViewTopFilters = ({
 
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
 
-  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weightRange.min !== "" || weightRange.max !== "" || lengthRange.min !== "" || lengthRange.max !== "" || widthRange.min !== "" || widthRange.max !== "" || selectedSapphireColors.length > 0;
+  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || dimension !== "" || selectedSapphireColors.length > 0;
 
   return (
     <div className="w-full bg-white shadow-sm border border-gray-100 rounded-lg mb-10 relative z-10">
@@ -212,7 +170,7 @@ export const GridViewTopFilters = ({
       <div className={`grid transition-all duration-300 ease-in-out ${isFiltersVisible ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
         <div className="overflow-hidden">
           <div className="p-6">
-            
+
             {/* MOBILE FILTERS (Selects) */}
             <div className="flex lg:hidden flex-wrap gap-4 justify-center w-full mb-6">
               {/* Gem Type Dropdown */}
@@ -229,7 +187,12 @@ export const GridViewTopFilters = ({
                     value: gem.value,
                   }))}
                   value={selectedGems}
-                  onChange={setSelectedGems}
+                  onChange={(val) => {
+                    setSelectedGems(val);
+                    if (document.activeElement instanceof HTMLElement) {
+                      document.activeElement.blur();
+                    }
+                  }}
                   clearable
                   className="w-full"
                   renderOption={({ option }) => {
@@ -259,7 +222,12 @@ export const GridViewTopFilters = ({
                       value: c,
                     }))}
                     value={selectedSapphireColors}
-                    onChange={setSelectedSapphireColors}
+                    onChange={(val) => {
+                      setSelectedSapphireColors(val);
+                      if (document.activeElement instanceof HTMLElement) {
+                        document.activeElement.blur();
+                      }
+                    }}
                     clearable
                     className="w-full"
                     renderOption={({ option }) => {
@@ -293,7 +261,12 @@ export const GridViewTopFilters = ({
                     value: s.value,
                   }))}
                   value={selectedShapes}
-                  onChange={setSelectedShapes}
+                  onChange={(val) => {
+                    setSelectedShapes(val);
+                    if (document.activeElement instanceof HTMLElement) {
+                      document.activeElement.blur();
+                    }
+                  }}
                   clearable
                   className="w-full"
                   renderOption={({ option }) => {
@@ -312,162 +285,166 @@ export const GridViewTopFilters = ({
             {/* DESKTOP FILTERS (Icons) */}
             <div className="hidden lg:flex flex-col lg:flex-row gap-10">
 
-        
-        {/* GEM TYPE */}
-        <div className="flex flex-col items-center lg:items-start gap-4">
-          <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Gem Type</label>
-          <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-            {gemstoneOptions.map((gem, i) => {
-              const isSelected = selectedGems.includes(gem.value);
-              return (
-                <div 
-                  key={i} 
-                  onClick={() => toggleGem(gem.value)}
-                  className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-                >
-                  <div className={`w-14 h-14 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
-                    <img src={gem.image} alt={gem.label} className="w-full h-full object-cover object-top scale-[1.5]" />
-                  </div>
-                  <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{gem.label}</span>
+
+              {/* GEM TYPE */}
+              <div className="flex flex-col items-center lg:items-start gap-4">
+                <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Gem Type</label>
+                <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                  {gemstoneOptions.map((gem, i) => {
+                    const isSelected = selectedGems.includes(gem.value);
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => toggleGem(gem.value)}
+                        className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                      >
+                        <div className={`w-14 h-14 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
+                          <img src={gem.image} alt={gem.label} className="w-full h-full object-cover object-top scale-[1.5]" />
+                        </div>
+                        <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{gem.label}</span>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
 
-          {/* SAPPHIRE COLORS SUB-FILTER */}
-          {selectedGems.includes("Sapphire") && sapphireColors.length > 0 && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center lg:items-start">
-              <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block text-center lg:text-left">Sapphire Colors</label>
-              <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                {sapphireColors.map((color, idx) => {
-                  const isSelected = selectedSapphireColors.includes(color);
-                  const colorOption = shopByColorOptions.find(o => o.name.toLowerCase() === color.toLowerCase());
-                  const imgUrl = colorOption ? colorOption.image : null;
+                {/* SAPPHIRE COLORS SUB-FILTER */}
+                {selectedGems.includes("Sapphire") && sapphireColors.length > 0 && (
+                  <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center lg:items-start">
+                    <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block text-center lg:text-left">Sapphire Colors</label>
+                    <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                      {sapphireColors.map((color, idx) => {
+                        const isSelected = selectedSapphireColors.includes(color);
+                        const colorOption = shopByColorOptions.find(o => o.name.toLowerCase() === color.toLowerCase());
+                        const imgUrl = colorOption ? colorOption.image : null;
 
-                  return (
-                    <div
-                      key={idx}
-                      onClick={() => toggleSapphireColor(color)}
-                      className={`w-14 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-                    >
-                      {imgUrl ? (
-                         <div className={`w-12 h-12 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
-                           <img src={imgUrl} alt={color} className={`w-full h-full object-cover object-center ${color.toLowerCase() === 'white' ? 'scale-[1.05]' : color.toLowerCase() === 'peach' ? 'scale-[1.15]' : color.toLowerCase() === 'brown' ? 'scale-[1.2]' : color.toLowerCase() === 'black' ? 'scale-[1.15]' : 'scale-[1.5]'}`} />
-                         </div>
-                      ) : (
-                         <div className={`w-12 h-12 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
-                           <span className="text-[10px] font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
-                         </div>
-                      )}
-                      <span className={`text-[10px] text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{color}</span>
+                        return (
+                          <div
+                            key={idx}
+                            onClick={() => toggleSapphireColor(color)}
+                            className={`w-14 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                          >
+                            {imgUrl ? (
+                              <div className={`w-12 h-12 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
+                                <img src={imgUrl} alt={color} className={`w-full h-full object-cover object-center ${color.toLowerCase() === 'white' ? 'scale-[0.95]' : color.toLowerCase() === 'peach' ? 'scale-[1.15]' : color.toLowerCase() === 'brown' ? 'scale-[1.2]' : color.toLowerCase() === 'black' ? 'scale-[1.05]' : 'scale-[1.5]'}`} />
+                              </div>
+                            ) : (
+                              <div className={`w-12 h-12 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
+                                <span className="text-[10px] font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
+                              </div>
+                            )}
+                            <span className={`text-[10px] text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{color}</span>
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
+                  </div>
+                )}
+              </div>
+
+              {/* SHAPE */}
+              <div className="flex flex-col items-center lg:items-start gap-4">
+                <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Shape</label>
+                <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                  {shapeOptions.map((shape, i) => {
+                    const isSelected = selectedShapes.includes(shape.value);
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => toggleShape(shape.value)}
+                        className={`flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100 text-[#0b182d]' : 'opacity-30 hover:opacity-60 text-gray-500'}`}
+                      >
+                        <div className={`w-16 h-16 flex items-center justify-center`}>
+                          <img src={shape.image} alt={shape.label} className="w-full h-full object-contain" style={{ filter: isSelected ? 'brightness(0) drop-shadow(0px 2px 2px rgba(0,0,0,0.3))' : 'grayscale(100%)' }} />
+                        </div>
+                        <span className={`text-xs ${isSelected ? 'font-bold' : 'font-medium'}`}>{shape.label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          )}
-        </div>
 
-        {/* SHAPE */}
-        <div className="flex flex-col items-center lg:items-start gap-4">
-          <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Shape</label>
-          <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-            {shapeOptions.map((shape, i) => {
-              const isSelected = selectedShapes.includes(shape.value);
-              return (
-                <div 
-                  key={i} 
-                  onClick={() => toggleShape(shape.value)}
-                  className={`flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100 text-[#0b182d]' : 'opacity-30 hover:opacity-60 text-gray-500'}`}
-                >
-                  <div className={`w-16 h-16 flex items-center justify-center`}>
-                    <img src={shape.image} alt={shape.label} className="w-full h-full object-contain" style={{ filter: isSelected ? 'brightness(0) drop-shadow(0px 2px 2px rgba(0,0,0,0.3))' : 'grayscale(100%)' }} />
-                  </div>
-                  <span className={`text-xs ${isSelected ? 'font-bold' : 'font-medium'}`}>{shape.label}</span>
+            <div className="w-full h-[1px] bg-gray-200 my-8" />
+
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-center lg:items-start w-full">
+              <SingleNumberFilter label={`Weight (CT)${toleranceEnabled ? " (±5)" : ""}`} value={weight} onChange={setWeight} bounds={weightBounds} />
+
+              <div className="flex flex-row gap-2 w-full lg:w-auto justify-center lg:justify-start">
+                <div className="flex-1 lg:flex-none max-w-[200px] lg:max-w-none">
+                  <SingleDropdownFilter label={`Dimensions (MM)${toleranceEnabled ? " (±5)" : ""}`} value={dimension} onChange={setDimension} optionsList={availableDimensions} />
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+              </div>
 
-      <div className="w-full h-[1px] bg-gray-200 my-8" />
+              <div className="flex flex-col justify-center items-center lg:items-start h-full pt-0 lg:pt-[1.125rem]">
+                <Switch
+                  checked={toleranceEnabled}
+                  onChange={(event) => setToleranceEnabled(event.currentTarget.checked)}
+                  label={<span className="text-xs font-bold text-[#0b182d]">Apply ±5 Tolerance</span>}
+                  color="violet"
+                  size="sm"
+                />
+              </div>
+            </div>
 
-      <div className="flex flex-col lg:flex-row gap-10 items-center lg:items-start w-full">
-        <RangeFilter label={`Weight (CT)${toleranceEnabled ? " (±0.5)" : ""}`} value={weightRange} onChange={setWeightRange} bounds={weightBounds} />
-        <MobileDropdownRangeFilter label={`Length (MM)${toleranceEnabled ? " (±0.5)" : ""}`} value={lengthRange} onChange={setLengthRange} bounds={lengthBounds} />
-        <MobileDropdownRangeFilter label={`Width (MM)${toleranceEnabled ? " (±0.5)" : ""}`} value={widthRange} onChange={setWidthRange} bounds={widthBounds} />
-        
-        <div className="flex flex-col justify-center items-center lg:items-start h-full pt-4">
-          <Switch
-            checked={toleranceEnabled}
-            onChange={(event) => setToleranceEnabled(event.currentTarget.checked)}
-            label={<span className="text-sm font-bold text-[#0b182d]">Apply ±0.5 Tolerance</span>}
-            color="violet"
-            size="md"
-          />
-        </div>
-      </div>
+            {/* Unified Custom Size Note */}
+            <div className="mt-6 flex justify-center lg:justify-start w-full">
+              <div className="text-[10px] text-gray-500 text-center lg:text-left italic w-full max-w-3xl">
+                If your desired size isn’t listed, add the closest option to your cart and mention your required size in the order note. We’ll be happy to provide your exact size.
+              </div>
+            </div>
 
-      {hasActiveFilters && (
-        <div className="mt-8 flex items-center gap-4 flex-wrap">
-          <span className="text-sm font-bold text-gray-500">Selected</span>
-          
-          {selectedGems.map(gem => (
-             <div key={gem} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
-               {gem}
-               <IconX size={14} className="cursor-pointer" onClick={() => toggleGem(gem)} />
-             </div>
-          ))}
+            {hasActiveFilters && (
+              <div className="mt-8 flex items-center gap-4 flex-wrap">
+                <span className="text-sm font-bold text-gray-500">Selected</span>
 
-          {selectedSapphireColors.map(color => (
-             <div key={`color-${color}`} className="flex items-center gap-2 bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
-               {color} Sapphire
-               <IconX size={14} className="cursor-pointer" onClick={() => toggleSapphireColor(color)} />
-             </div>
-          ))}
+                {selectedGems.map(gem => (
+                  <div key={gem} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
+                    {gem}
+                    <IconX size={14} className="cursor-pointer" onClick={() => toggleGem(gem)} />
+                  </div>
+                ))}
 
-          {selectedShapes.map(shape => (
-             <div key={shape} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
-               {shape}
-               <IconX size={14} className="cursor-pointer" onClick={() => toggleShape(shape)} />
-             </div>
-          ))}
+                {selectedSapphireColors.map(color => (
+                  <div key={`color-${color}`} className="flex items-center gap-2 bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
+                    {color} Sapphire
+                    <IconX size={14} className="cursor-pointer" onClick={() => toggleSapphireColor(color)} />
+                  </div>
+                ))}
 
-          {(weightRange.min !== "" || weightRange.max !== "") && (
-             <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
-               Weight: {weightRange.min || "0"} - {weightRange.max || "Any"} ct
-               <IconX size={14} className="cursor-pointer" onClick={() => setWeightRange({min: "", max: ""})} />
-             </div>
-          )}
+                {selectedShapes.map(shape => (
+                  <div key={shape} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
+                    {shape}
+                    <IconX size={14} className="cursor-pointer" onClick={() => toggleShape(shape)} />
+                  </div>
+                ))}
 
-          {(lengthRange.min !== "" || lengthRange.max !== "") && (
-             <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
-               Length: {lengthRange.min || "0"} - {lengthRange.max || "Any"} mm
-               <IconX size={14} className="cursor-pointer" onClick={() => setLengthRange({min: "", max: ""})} />
-             </div>
-          )}
+                {weight !== "" && (
+                  <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
+                    Weight: {weight} ct
+                    <IconX size={14} className="cursor-pointer" onClick={() => setWeight("")} />
+                  </div>
+                )}
 
-          {(widthRange.min !== "" || widthRange.max !== "") && (
-             <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
-               Width: {widthRange.min || "0"} - {widthRange.max || "Any"} mm
-               <IconX size={14} className="cursor-pointer" onClick={() => setWidthRange({min: "", max: ""})} />
-             </div>
-          )}
+                {dimension !== "" && (
+                  <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
+                    Dimension: {dimension} mm
+                    <IconX size={14} className="cursor-pointer" onClick={() => setDimension("")} />
+                  </div>
+                )}
 
 
 
-          <button onClick={resetAll} className="text-red-600 text-sm font-bold hover:underline ml-4">
-            Reset Filters x
-          </button>
-        </div>
-      )}
+                <button onClick={resetAll} className="text-red-600 text-sm font-bold hover:underline">
+                  Reset Filters x
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* TOGGLE TAB */}
-      <div 
+      <div
         className="absolute left-1/2 -translate-x-1/2 top-full bg-white border border-gray-100 border-t-0 rounded-b-xl w-12 h-6 flex items-center justify-center cursor-pointer hover:bg-gray-50 text-gray-500 hover:text-[#0b182d] transition-colors z-20"
         style={{ marginTop: '-1px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}
         onClick={() => setIsFiltersVisible(!isFiltersVisible)}

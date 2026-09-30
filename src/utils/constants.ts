@@ -1118,6 +1118,29 @@ export const FreeSizeGemstonesList = [
   },
 ];
 
+export const freeSizeFilterOptions = [
+  {
+    label: "Blue Sapphire",
+    value: "Blue Sapphire",
+    image: "/assets/freesizesapphire.webp",
+  },
+  {
+    label: "Fancy Sapphire",
+    value: "Fancy Sapphire",
+    image: "/assets/fancy-sapphire.webp",
+  },
+  {
+    label: "Ruby",
+    value: "Ruby",
+    image: "/assets/freesizeruby.webp",
+  },
+  {
+    label: "Emerald",
+    value: "Emerald",
+    image: "/assets/freesizeemerald.webp",
+  },
+];
+
 export const quickNavigationData = [
   {
     value: "education",
@@ -1262,6 +1285,11 @@ export const shopByColorOptions = [
     image: "/assets/black-sapp.png",
     href: "/shop-by-color/black",
   },
+  {
+    name: "Teal",
+    image: "/assets/teal.png",
+    href: "/shop-by-color/teal",
+  },
 ];
 
 export const GOLD_COLORS = [
@@ -1322,6 +1350,10 @@ export const ShapeFilterList = [
     value: "Straight Baguette",
   },
 ];
+
+export const FreeSizeShapeFilterList = ShapeFilterList.filter(
+  (s) => s.value !== "Straight Baguette"
+);
 
 export const LayoutQuality = [
   {
@@ -1573,10 +1605,9 @@ export const SapphireLooseGemstoneColorOptions = [
   { value: "Pink", color: "#EC4899", image: "/assets/pinkcolor.webp" },
   { value: "Green", color: "#22C55E", image: "/assets/greencolor.webp" },
   { value: "Orange", color: "#F97316", image: "/assets/orange2.webp" },
-  // { value: "Black", color: "#000000" },
-  // { value: "White", color: "#808080" },
-  // { value: "Red", color: "#FF0000" },
   { value: "Purple", color: "#800080", image: "/assets/purplecolor.webp" },
+  { value: "White", color: "#FFFFFF", image: "/assets/white_sapphire.png" },
+  { value: "Teal", color: "#008080", image: "/assets/teal.png" },
 ];
 
 export const FreeSizeOrigins: any = {

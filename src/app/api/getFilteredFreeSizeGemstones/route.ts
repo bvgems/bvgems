@@ -32,49 +32,68 @@ export async function POST(req: NextRequest) {
       values.push(`%${options.lot_number}%`);
     }
 
-    // --- GEMSTONE TYPE ---
-    if (options.gemstone_type && Array.isArray(options.gemstone_type)) {
-      const gemTypes = options.gemstone_type.map((g: string) =>
-        g.toLowerCase()
-      );
-      const hasBlueSapphire = gemTypes.includes("blue sapphire");
+    // --- GEMSTONE TYPE & COLOR ---
+    if (options.gemstone_type && Array.isArray(options.gemstone_type) && options.gemstone_type.length > 0) {
+      const gemTypes = options.gemstone_type.map((g: string) => {
+        const lower = g.toLowerCase();
+        if (lower === 'fancy-sapphire' || lower === 'fancy sapphire') return 'fancy sapphire';
+        return lower;
+      });
+      
       const hasFancySapphire = gemTypes.includes("fancy sapphire");
+      const hasBlueSapphire = gemTypes.includes("blue sapphire");
+      const nonSapphireTypes = gemTypes.filter((g: string) => g !== "fancy sapphire" && g !== "blue sapphire");
 
-      const simpleTypes = gemTypes.filter(
-        (g: any) => !["blue sapphire", "fancy sapphire"].includes(g)
-      );
+      const typeConditions: string[] = [];
 
-      // Handle Ruby / Emerald normally
-      if (simpleTypes.length > 0) {
-        whereClauses.push(
-          `LOWER(gemstone_type) = ANY($${paramIndex++}::text[])`
-        );
-        values.push(simpleTypes);
+      if (nonSapphireTypes.length > 0) {
+        typeConditions.push(`LOWER(gemstone_type) = ANY($${paramIndex++}::text[])`);
+        values.push(nonSapphireTypes);
       }
 
-      // Handle Blue Sapphire
+      const hasColorFilter = options.color && options.color.length > 0;
+      let colorIdx = -1;
+
       if (hasBlueSapphire) {
-        whereClauses.push(`LOWER(gemstone_type) = 'sapphire'`);
-        whereClauses.push(`LOWER(color) = 'blue'`);
+        typeConditions.push(`(LOWER(gemstone_type) = 'sapphire' AND LOWER(color) = 'blue')`);
       }
 
-      // Handle Fancy Sapphire
       if (hasFancySapphire) {
-        whereClauses.push(`LOWER(gemstone_type) = 'sapphire'`);
-        whereClauses.push(`LOWER(color) != 'blue'`);
+        if (hasColorFilter) {
+          if (colorIdx === -1) {
+            colorIdx = paramIndex++;
+            values.push(options.color);
+          }
+          typeConditions.push(`(LOWER(gemstone_type) = 'sapphire' AND LOWER(color) != 'blue' AND color = ANY($${colorIdx}::text[]))`);
+        } else {
+          // If Fancy Sapphire is selected but no colors are chosen, return nothing for this gem type.
+          typeConditions.push(`(1=0)`);
+        }
       }
-    }
 
-    // --- COLOR ---
-    if (options.color) {
+      if (typeConditions.length > 0) {
+        whereClauses.push(`(${typeConditions.join(" OR ")})`);
+      }
+    } else if (options.color && options.color.length > 0) {
+      // If no gem types selected but color is somehow selected, apply globally
       whereClauses.push(`color = ANY($${paramIndex++}::text[])`);
       values.push(options.color);
     }
 
     // --- SHAPE ---
-    if (options.shape) {
+    if (options.shape && Array.isArray(options.shape) && options.shape.length > 0) {
+      const finalShapes: string[] = [];
+      options.shape.forEach((s: string) => {
+        finalShapes.push(s);
+        if (s.toLowerCase() === "cushion") {
+          finalShapes.push("Elongated Cushion", "Emerald Cushion Cut");
+        }
+        if (s.toLowerCase() === "heart") {
+          finalShapes.push("Emerald Heart ");
+        }
+      });
       whereClauses.push(`shape = ANY($${paramIndex++}::text[])`);
-      values.push(options.shape);
+      values.push(finalShapes);
     }
 
     // --- ORIGIN ---
@@ -84,12 +103,18 @@ export async function POST(req: NextRequest) {
     }
 
     // --- WEIGHT RANGE ---
-    if (options.weight) {
-      whereClauses.push(
-        `ct_weight BETWEEN $${paramIndex} AND $${paramIndex + 1}`
-      );
-      values.push(options.weight[0], options.weight[1]);
-      paramIndex += 2;
+    if (options.weight && Array.isArray(options.weight)) {
+      if (options.weight[0] !== null && options.weight[1] !== null) {
+        whereClauses.push(`ct_weight BETWEEN $${paramIndex} AND $${paramIndex + 1}`);
+        values.push(options.weight[0], options.weight[1]);
+        paramIndex += 2;
+      } else if (options.weight[0] !== null) {
+        whereClauses.push(`ct_weight >= $${paramIndex++}`);
+        values.push(options.weight[0]);
+      } else if (options.weight[1] !== null) {
+        whereClauses.push(`ct_weight <= $${paramIndex++}`);
+        values.push(options.weight[1]);
+      }
     }
 
     // --- SINGLE OR MATCHED ---
@@ -115,21 +140,17 @@ export async function POST(req: NextRequest) {
     }
 
     // --- LENGTH ---
-    if (options.length && (options.length.min || options.length.max)) {
-      const min = options.length.min || 0;
-      const max = options.length.max || 9999;
-      whereClauses.push(`
-        CAST(SPLIT_PART(dimension, 'x', 1) AS NUMERIC) BETWEEN ${min} AND ${max}
-      `);
+    if (options.length && (options.length.min !== undefined || options.length.max !== undefined)) {
+      const min = options.length.min !== undefined ? options.length.min : 0;
+      const max = options.length.max !== undefined ? options.length.max : 9999;
+      whereClauses.push(`CAST(SPLIT_PART(dimension, 'x', 1) AS NUMERIC) BETWEEN ${min} AND ${max}`);
     }
 
     // --- WIDTH ---
-    if (options.width && (options.width.min || options.width.max)) {
-      const min = options.width.min || 0;
-      const max = options.width.max || 9999;
-      whereClauses.push(`
-        CAST(SPLIT_PART(dimension, 'x', 2) AS NUMERIC) BETWEEN ${min} AND ${max}
-      `);
+    if (options.width && (options.width.min !== undefined || options.width.max !== undefined)) {
+      const min = options.width.min !== undefined ? options.width.min : 0;
+      const max = options.width.max !== undefined ? options.width.max : 9999;
+      whereClauses.push(`CAST(SPLIT_PART(dimension, 'x', 2) AS NUMERIC) BETWEEN ${min} AND ${max}`);
     }
 
     // --- FINAL QUERY ---

@@ -81,9 +81,9 @@ export function Hero({ jewelryRef, heroData }: any) {
           <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
             Precision-cut perfection for your jewelry designs
           </p>
-          <div className="flex items-center gap-2 text-base uppercase tracking-widest font-medium text-stone-900 group-hover:text-blue-600 transition-colors z-10">
+          <div className="flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-6 py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
             <span>Shop Calibrated</span>
-            <span className="transform transition-transform duration-500 group-hover:duration-200 group-hover:translate-x-2">→</span>
+            <span className="transform transition-transform duration-400 group-hover:translate-x-1">→</span>
           </div>
         </Link>
 
@@ -103,9 +103,9 @@ export function Hero({ jewelryRef, heroData }: any) {
           <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
             Unique, one-of-a-kind stones for custom creations
           </p>
-          <div className="flex items-center gap-2 text-base uppercase tracking-widest font-medium text-stone-900 group-hover:text-blue-600 transition-colors z-10">
+          <div className="flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-6 py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
             <span>Shop Free Size</span>
-            <span className="transform transition-transform duration-500 group-hover:duration-200 group-hover:translate-x-2">→</span>
+            <span className="transform transition-transform duration-400 group-hover:translate-x-1">→</span>
           </div>
         </Link>
 
@@ -125,9 +125,9 @@ export function Hero({ jewelryRef, heroData }: any) {
           <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
             Curated assortments matched to perfection
           </p>
-          <div className="flex items-center gap-2 text-base uppercase tracking-widest font-medium text-stone-900 group-hover:text-blue-600 transition-colors z-10">
+          <div className="flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-6 py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
             <span>Explore Layouts</span>
-            <span className="transform transition-transform duration-500 group-hover:duration-200 group-hover:translate-x-2">→</span>
+            <span className="transform transition-transform duration-400 group-hover:translate-x-1">→</span>
           </div>
         </Link>
 
@@ -147,9 +147,9 @@ export function Hero({ jewelryRef, heroData }: any) {
           <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
             Expertly paired stones for flawless symmetry
           </p>
-          <div className="flex items-center gap-2 text-base uppercase tracking-widest font-medium text-stone-900 group-hover:text-blue-600 transition-colors z-10">
+          <div className="flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-6 py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
             <span>Explore Pairs</span>
-            <span className="transform transition-transform duration-500 group-hover:duration-200 group-hover:translate-x-2">→</span>
+            <span className="transform transition-transform duration-400 group-hover:translate-x-1">→</span>
           </div>
         </Link>
       </div>

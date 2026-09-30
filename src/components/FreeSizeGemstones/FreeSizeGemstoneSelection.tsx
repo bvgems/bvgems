@@ -6,7 +6,7 @@ import { FreeSizeGridViewTopFilters } from "@/components/FreeSizeGemtones/FreeSi
 import { sortBySizeAsc } from "@/utils/sortUtils";
 import { Divider, Grid, GridCol, Skeleton, Card } from "@mantine/core";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { gemstoneOptions, ShapeFilterList, SapphireLooseGemstoneColorOptions } from "@/utils/constants";
+import { freeSizeFilterOptions, FreeSizeShapeFilterList, SapphireLooseGemstoneColorOptions } from "@/utils/constants";
 import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -40,10 +40,16 @@ export default function FreeSizeGemstoneSelection() {
   const [lotSearch, setLotSearch] = useState("");
   const [selectedStones, setSelectedStones] = useState<string[]>(
     gemstoneType
-      ? [gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1)]
+      ? [gemstoneType.toLowerCase() === "sapphire" ? "Blue Sapphire" : gemstoneType.toLowerCase() === "fancy-sapphire" ? "Fancy Sapphire" : gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1).replace("-", " ")]
       : []
   );
-  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  
+  // If we land on the base /sapphire URL, we want to auto-select "Blue" unless a color is already specified in the URL
+  const [selectedColors, setSelectedColors] = useState<string[]>(
+    gemstoneType && gemstoneType.toLowerCase() === "fancy-sapphire"
+      ? SapphireLooseGemstoneColorOptions.map((c: any) => c.value).filter((c: string) => c.toLowerCase() !== "blue")
+      : []
+  );
   const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
   const [selectedOrigins, setSelectedOrigins] = useState<string[]>([]);
 
@@ -62,13 +68,46 @@ export default function FreeSizeGemstoneSelection() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const [lastPath, setLastPath] = useState(path);
+
+  useEffect(() => {
+    // If the path changes (e.g. user clicked a Nav Bar link), reset the base states
+    if (isInitialized && path !== lastPath) {
+      setLastPath(path);
+      if (gemstoneType) {
+        let newStone = gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1).replace("-", " ");
+        if (gemstoneType.toLowerCase() === "sapphire") newStone = "Blue Sapphire";
+        if (gemstoneType.toLowerCase() === "fancy-sapphire") {
+          newStone = "Fancy Sapphire";
+          setSelectedColors(SapphireLooseGemstoneColorOptions.map((c: any) => c.value).filter((c: string) => c.toLowerCase() !== "blue"));
+        } else {
+          setSelectedColors([]);
+        }
+        setSelectedStones([newStone]);
+      } else {
+        setSelectedStones([]);
+        setSelectedColors([]);
+      }
+      setSelectedShapes([]);
+      setWeightRange([null, null]);
+      setLength({ min: "", max: "" });
+      setWidth({ min: "", max: "" });
+    }
+  }, [path, isInitialized, lastPath, gemstoneType]);
+
   useEffect(() => {
     const shape = searchParams.get("shape")?.split(",").filter(Boolean) || [];
     const color = searchParams.get("color")?.split(",").filter(Boolean) || [];
     const weightStr = searchParams.get("weight") || "";
 
     if (shape.length > 0) setSelectedShapes(shape);
-    if (color.length > 0) setSelectedColors(color);
+    
+    if (color.length > 0) {
+      setSelectedColors(color);
+    } else if (gemstoneType?.toLowerCase() === "sapphire") {
+      // Auto-select Blue if on the sapphire page and no colors are in URL
+      setSelectedColors(["Blue"]);
+    }
 
     // parse "weight=min-max" but allow blanks (e.g., "weight=1.2-" or "-5")
     if (weightStr) {
@@ -82,6 +121,7 @@ export default function FreeSizeGemstoneSelection() {
     }
 
     setIsInitialized(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -109,17 +149,14 @@ export default function FreeSizeGemstoneSelection() {
     setLoading(true);
     let gemstoneTypeFilter: string[] = [];
 
-    if (gemstoneType) {
-      const lowerType = gemstoneType.toLowerCase();
-      if (lowerType === "sapphire") {
-        gemstoneTypeFilter = ["Blue sapphire"];
-      } else if (lowerType === "fancy-sapphire") {
-        gemstoneTypeFilter = ["Fancy sapphire"];
-      } else {
-        const formattedType =
-          gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1);
-        gemstoneTypeFilter = [formattedType];
-      }
+    if (selectedStones.length > 0) {
+      gemstoneTypeFilter = selectedStones.filter((stone) => {
+        // If it's Sapphire but no specific color is selected, ignore it as a filter
+        if (stone === "Sapphire" && selectedColors.length === 0) {
+          return false;
+        }
+        return true;
+      });
     }
 
     const filterOptions: any = {
@@ -182,7 +219,7 @@ export default function FreeSizeGemstoneSelection() {
     certified,
     length,
     width,
-    gemstoneType,
+    selectedStones,
     toleranceEnabled
   ]);
 
@@ -214,8 +251,8 @@ export default function FreeSizeGemstoneSelection() {
       </div>
 
       <FreeSizeGridViewTopFilters
-        gemstoneOptions={gemstoneOptions}
-        shapeOptions={ShapeFilterList}
+        gemstoneOptions={freeSizeFilterOptions}
+        shapeOptions={FreeSizeShapeFilterList}
         selectedGems={selectedStones}
         setSelectedGems={setSelectedStones}
         selectedShapes={selectedShapes}

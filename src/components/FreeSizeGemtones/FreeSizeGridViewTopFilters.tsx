@@ -207,8 +207,7 @@ export const FreeSizeGridViewTopFilters = ({
     let newSelected = [...selectedGems];
     if (selectedGems.includes(val)) {
       newSelected = newSelected.filter(g => g !== val);
-      // If unselecting Sapphire, clear sapphire colors
-      if (val === "Sapphire") {
+      if (val === "Fancy Sapphire") {
          setSelectedSapphireColors([]);
       }
     } else {
@@ -245,14 +244,15 @@ export const FreeSizeGridViewTopFilters = ({
           <div className="flex flex-wrap justify-center lg:justify-start gap-4">
             {gemstoneOptions.map((gem, i) => {
               const isSelected = selectedGems.includes(gem.value);
+              const imgScale = gem.value === "Fancy Sapphire" ? "scale-[1.3]" : gem.value === "Emerald" ? "scale-[1.2]" : "";
               return (
                 <div 
                   key={i} 
                   onClick={() => toggleGem(gem.value)}
                   className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                 >
-                  <div className={`w-14 h-14 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
-                    <img src={gem.image} alt={gem.label} className="w-full h-full object-cover object-top scale-[1.5]" />
+                  <div className={`w-14 h-14 shrink-0 flex items-center justify-center`}>
+                    <img src={gem.image} alt={gem.label} className={`max-w-full max-h-full object-contain ${imgScale}`} />
                   </div>
                   <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{gem.label}</span>
                 </div>
@@ -261,11 +261,13 @@ export const FreeSizeGridViewTopFilters = ({
           </div>
 
           {/* SAPPHIRE COLORS SUB-FILTER */}
-          {selectedGems.includes("Sapphire") && sapphireColors.length > 0 && (
+          {selectedGems.includes("Fancy Sapphire") && sapphireColors.length > 0 && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center lg:items-start">
-              <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block text-center lg:text-left">Sapphire Colors</label>
+              <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block text-center lg:text-left">Fancy Sapphire Colors</label>
               <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                {sapphireColors.map((color, idx) => {
+                {sapphireColors
+                  .filter(c => c.toLowerCase() !== "blue")
+                  .map((color, idx) => {
                   const isSelected = selectedSapphireColors.includes(color);
                   const colorOption = shopByColorOptions.find(o => o.name.toLowerCase() === color.toLowerCase());
                   const imgUrl = colorOption ? colorOption.image : null;
@@ -278,7 +280,7 @@ export const FreeSizeGridViewTopFilters = ({
                     >
                       {imgUrl ? (
                          <div className={`w-12 h-12 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
-                           <img src={imgUrl} alt={color} className={`w-full h-full object-cover object-center ${color.toLowerCase() === 'white' ? 'scale-[1.05]' : color.toLowerCase() === 'peach' ? 'scale-[1.15]' : color.toLowerCase() === 'brown' ? 'scale-[1.2]' : color.toLowerCase() === 'black' ? 'scale-[1.15]' : 'scale-[1.5]'}`} />
+                           <img src={imgUrl} alt={color} className={`w-full h-full object-cover object-center ${color.toLowerCase() === 'white' ? 'scale-[0.95]' : color.toLowerCase() === 'teal' ? 'scale-[2.2]' : color.toLowerCase() === 'peach' ? 'scale-[1.15]' : color.toLowerCase() === 'brown' ? 'scale-[1.2]' : color.toLowerCase() === 'black' ? 'scale-[1.05]' : 'scale-[1.5]'}`} />
                          </div>
                       ) : (
                          <div className={`w-12 h-12 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
@@ -333,9 +335,14 @@ export const FreeSizeGridViewTopFilters = ({
         <MultiSelect
           label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Origin</span>}
           placeholder="Select origins"
-          data={["Ceylon", "Madagascar", "Burma", "Thailand", "Africa", "Zambia", "Colombia", "Brazil", "Mozambique", "Tanzania"]}
+          data={["Ceylon", "Kanchanaburi", "Madagascar", "Mozambique", "Zambia"]}
           value={selectedOrigins}
-          onChange={setSelectedOrigins}
+          onChange={(val) => {
+            setSelectedOrigins(val);
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur();
+            }
+          }}
           clearable
           searchable
           className="w-full max-w-[200px]"
@@ -344,9 +351,14 @@ export const FreeSizeGridViewTopFilters = ({
         <MultiSelect
           label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Type</span>}
           placeholder="Single/Matched"
-          data={["Single", "Matched Pair", "Matched Set"]}
+          data={["Single", "Matched"]}
           value={singleOrMatched}
-          onChange={setSingleOrMatched}
+          onChange={(val) => {
+            setSingleOrMatched(val);
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur();
+            }
+          }}
           clearable
           className="w-full max-w-[200px]"
         />
@@ -354,9 +366,14 @@ export const FreeSizeGridViewTopFilters = ({
         <MultiSelect
           label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Enhancement</span>}
           placeholder="Select enhancement"
-          data={["Heated", "Unheated", "Treated", "Minor", "Moderate", "Significant"]}
+          data={["Heated", "Oiled"]}
           value={enhancement}
-          onChange={setEnhancement}
+          onChange={(val) => {
+            setEnhancement(val);
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur();
+            }
+          }}
           clearable
           className="w-full max-w-[200px]"
         />
