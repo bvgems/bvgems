@@ -37,6 +37,7 @@ import { EmeraldShade } from "./EmeraldShade";
 import { BlueSapphireShade } from "./BlueSapphireShade";
 import { shades } from "@/utils/constants";
 import { getPerCaratPrice, getPerStonePrice, isLabGrown } from "@/utils/priceHelpers";
+import { QuoteRequestModal } from "./QuoteRequestModal";
 
 interface AddToCartModalProps {
   opened: boolean;
@@ -91,6 +92,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   const [quantity, setQuantity] = useState<number>(1);
   const [caratWeight, setCaratWeight] = useState<number>(0);
   const [allowPurchaseByCarat, setAllowPurchaseByCarat] = useState(true);
+  const [quoteProduct, setQuoteProduct] = useState<any | null>(null);
 
 
   useEffect(() => {
@@ -183,7 +185,8 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   }, [product]);
 
   return (
-    <Card
+    <>
+      <Card
       padding="lg"
       radius={0}
       className="
@@ -279,11 +282,25 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                 color="dark"
                 className="!bg-[#0b182d]"
               >
-                {perStone === 0 ? "Price upon request" : `Per Stone: $${perStone.toFixed(2)}`}
+                {perStone === 0 ? (
+                  <button
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(product); }}
+                    className="text-white underline bg-transparent border-none p-0 cursor-pointer"
+                  >
+                    Request Pricing
+                  </button>
+                ) : `Per Stone: $${perStone.toFixed(2)}`}
               </Badge>
               {allowPurchaseByCarat && (
                 <Badge size="lg" radius="md" variant="light" color="dark">
-                  {perCarat === 0 ? "Price upon request" : `Per Carat: $${perCarat.toFixed(2)}`}
+                  {perCarat === 0 ? (
+                    <button
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(product); }}
+                      className="text-dark underline bg-transparent border-none p-0 cursor-pointer"
+                    >
+                      Request Pricing
+                    </button>
+                  ) : `Per Carat: $${perCarat.toFixed(2)}`}
                 </Badge>
               )}
             </Group>
@@ -375,5 +392,12 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
         </GridCol>
       </Grid>
     </Card>
+
+    <QuoteRequestModal 
+      opened={!!quoteProduct} 
+      onClose={() => setQuoteProduct(null)} 
+      product={quoteProduct} 
+    />
+    </>
   );
 };

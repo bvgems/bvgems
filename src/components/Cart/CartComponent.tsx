@@ -34,6 +34,7 @@ import { notifications } from "@mantine/notifications";
 import { useMemo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { BillingSummary } from "../CommonComponents/BillingSummary";
+import { QuoteRequestModal } from "../CommonComponents/QuoteRequestModal";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
@@ -62,6 +63,7 @@ export function CartComponent() {
   const [grandTotal, setGrandTotal] = useState(0);
   const [isFreeStuds, setIsFreeStuds] = useState(false);
   const [studsDetails, setStudsDetails] = useState<any>({});
+  const [quoteProduct, setQuoteProduct] = useState<any | null>(null);
   useEffect(() => setHasMounted(true), []);
 
   useEffect(() => {
@@ -458,7 +460,12 @@ export function CartComponent() {
                     <Group mt="sm" align="center" justify="space-between">
                       <Text fw={500} size="lg">
                         {(value?.jewelryProduct?.price ?? value?.product?.price) === 0 ? (
-                          "Price upon request"
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(value?.product); }}
+                            className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer"
+                          >
+                            Request Pricing
+                          </button>
                         ) : (
                           <NumberFormatter
                             thousandSeparator
@@ -498,17 +505,15 @@ export function CartComponent() {
                           style={{ maxWidth: 90 }}
                         />
                       )}
-                      <Text fw={600} size="lg">
-                        {total === 0 ? (
-                          "Price upon request"
-                        ) : (
+                      {total > 0 && (
+                        <Text fw={600} size="lg">
                           <NumberFormatter
                             thousandSeparator
                             prefix="$"
                             value={total.toFixed(2)}
                           />
-                        )}
-                      </Text>
+                        </Text>
+                      )}
                     </Group>
 
                     {!isGift && (
@@ -554,6 +559,11 @@ export function CartComponent() {
           </Button>
         </GridCol>
       </Grid>
+      <QuoteRequestModal 
+        opened={!!quoteProduct} 
+        onClose={() => setQuoteProduct(null)} 
+        product={quoteProduct} 
+      />
     </Container>
   );
 }

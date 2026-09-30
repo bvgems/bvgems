@@ -30,6 +30,7 @@ import { getCartStore } from "@/store/useCartStore";
 import React, { useMemo, useState, useEffect } from "react";
 import { sortBySizeAsc } from "@/utils/sortUtils";
 import { AddToCartModal } from "../CommonComponents/AddToCartModal";
+import { QuoteRequestModal } from "../CommonComponents/QuoteRequestModal";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
@@ -49,6 +50,7 @@ export const CategoryTable = ({
   const [productModal, { open: openProductModal, close: closeProductModal }] =
     useDisclosure(false);
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+  const [quoteProduct, setQuoteProduct] = useState<any | null>(null);
   const [selectedRows, setSelectedRows] = useState<Record<string, boolean>>({});
   const [bulkAction, setBulkAction] = useState<string | null>(null);
   const [priceOptionModal, { open: openPriceModal, close: closePriceModal }] =
@@ -207,7 +209,7 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
   };
 
   const sendWhatsApp = (text: string) => {
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+    window.open(`https://wa.me/12129444382?text=${encodeURIComponent(text)}`, "_blank");
   };
   const sendEmail = (items: any[], options: PriceOptions) => {
     const text = generateText(items, options);
@@ -545,16 +547,12 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                               {element?.price ? (
                                 `$ ${Number(element.price).toFixed(2)}`
                               ) : (
-                                <a
-                                  href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                                    `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`,
-                                  )}&body=${encodeURIComponent(
-                                    `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`,
-                                  )}`}
-                                  className="underline text-blue-600"
+                                <button
+                                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}
+                                  className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer"
                                 >
                                   Request Pricing
-                                </a>
+                                </button>
                               )}
                             </TableTd>
                             <TableTd>
@@ -562,28 +560,20 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                                 getPerCaratPrice(element) !== 0 ? (
                                   `$ ${getPerCaratPrice(element)}`
                                 ) : (
-                                  <a
-                                    href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                                      `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`,
-                                    )}&body=${encodeURIComponent(
-                                      `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`,
-                                    )}`}
-                                    className="underline text-blue-600"
+                                  <button
+                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}
+                                    className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer"
                                   >
                                     Request Pricing
-                                  </a>
+                                  </button>
                                 )
                               ) : (
-                                <a
-                                  href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                                    `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`,
-                                  )}&body=${encodeURIComponent(
-                                    `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`,
-                                  )}`}
-                                  className="underline text-blue-600"
+                                <button
+                                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}
+                                  className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer"
                                 >
                                   Request Pricing
-                                </a>
+                                </button>
                               )}
                             </TableTd>
                             <TableTd>
@@ -663,16 +653,12 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                                     {element?.price ? (
                                       `$ ${element.price}`
                                     ) : (
-                                      <a
-                                        href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                                          `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`,
-                                        )}&body=${encodeURIComponent(
-                                          `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`,
-                                        )}`}
-                                        className="underline text-blue-600"
+                                      <button
+                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}
+                                        className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-left"
                                       >
                                         Request Pricing
-                                      </a>
+                                      </button>
                                     )}
                                   </div>
                                   <div>
@@ -680,16 +666,12 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                                     {getPerCaratPrice(element) !== 0 ? (
                                       `$ ${getPerCaratPrice(element)}`
                                     ) : (
-                                      <a
-                                        href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                                          `Price Request for ${element?.collection_slug} ${element?.shape} ${element?.size} ${element?.ct_weight}cts., ${element?.quality} Quality`,
-                                        )}&body=${encodeURIComponent(
-                                          `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${element?.collection_slug}\nShape: ${element?.shape}\nSize: ${element?.size}\nCarat Weight: ${element?.ct_weight} cts\nQuality: ${element?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`,
-                                        )}`}
-                                        className="underline text-blue-600"
+                                      <button
+                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}
+                                        className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-left"
                                       >
                                         Request Pricing
-                                      </a>
+                                      </button>
                                     )}
                                   </div>
                                 </>
@@ -728,6 +710,12 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
           )}
         </div>
       </div>
+
+      <QuoteRequestModal 
+        opened={!!quoteProduct} 
+        onClose={() => setQuoteProduct(null)} 
+        product={quoteProduct} 
+      />
     </>
   );
 };

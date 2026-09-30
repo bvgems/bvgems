@@ -22,9 +22,9 @@ type TopFiltersProps = {
   setWeight: (val: string) => void;
   weightBounds: { min: number; max: number };
 
-  dimension: string;
-  setDimension: (val: string) => void;
-  availableDimensions: string[];
+  selectedDimensions: Record<string, string[]>;
+  setSelectedDimensions: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+  availableDimensionsGrouped: Record<string, string[]>;
 
   toleranceEnabled: boolean;
   setToleranceEnabled: (val: boolean) => void;
@@ -32,6 +32,10 @@ type TopFiltersProps = {
   sapphireColors: string[];
   selectedSapphireColors: string[];
   setSelectedSapphireColors: (val: string[]) => void;
+
+  selectedTypes: string[];
+  setSelectedTypes: (val: string[]) => void;
+  availableTypes: string[];
 
   resetAll: () => void;
 };
@@ -94,7 +98,7 @@ const SingleDropdownFilter = ({
           value={value === "" ? null : value}
           onChange={(val) => onChange(val === null ? "" : val)}
           searchable
-          clearable
+          clearable={false}
           className="w-full"
         />
       </div>
@@ -107,7 +111,55 @@ const SingleDropdownFilter = ({
           value={value === "" ? null : value}
           onChange={(val) => onChange(val === null ? "" : val)}
           searchable
-          clearable
+          clearable={false}
+          className="w-full"
+        />
+      </div>
+    </div>
+  );
+};
+
+const MultiDropdownFilter = ({
+  label,
+  value,
+  onChange,
+  optionsList,
+}: {
+  label: string;
+  value: string[];
+  onChange: (val: string[]) => void;
+  optionsList: string[];
+}) => {
+  const options = optionsList.map(opt => ({ value: opt, label: opt }));
+
+  return (
+    <div className="flex flex-col gap-1 w-full max-w-[250px] items-center lg:items-start mx-auto lg:mx-0">
+      <label className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider text-center lg:text-left w-full">
+        {label}
+      </label>
+
+      {/* Mobile view */}
+      <div className="flex lg:hidden flex-col gap-1 w-full">
+        <MultiSelect
+          placeholder="Select"
+          data={options}
+          value={value}
+          onChange={onChange}
+          searchable
+          clearable={false}
+          className="w-full"
+        />
+      </div>
+
+      {/* Desktop view */}
+      <div className="hidden lg:flex gap-2 w-full">
+        <MultiSelect
+          placeholder="Select"
+          data={options}
+          value={value}
+          onChange={onChange}
+          searchable
+          clearable={false}
           className="w-full"
         />
       </div>
@@ -125,14 +177,17 @@ export const GridViewTopFilters = ({
   weight,
   setWeight,
   weightBounds,
-  dimension,
-  setDimension,
-  availableDimensions,
+  selectedDimensions,
+  setSelectedDimensions,
+  availableDimensionsGrouped,
   toleranceEnabled,
   setToleranceEnabled,
   sapphireColors,
   selectedSapphireColors,
   setSelectedSapphireColors,
+  selectedTypes,
+  setSelectedTypes,
+  availableTypes,
   resetAll
 }: TopFiltersProps) => {
 
@@ -156,13 +211,13 @@ export const GridViewTopFilters = ({
   };
 
   const toggleShape = (val: string) => {
-    if (selectedShapes.includes(val)) setSelectedShapes(selectedShapes.filter(s => s !== val));
-    else setSelectedShapes([...selectedShapes, val]);
+    if (selectedShapes.includes(val)) setSelectedShapes([]);
+    else setSelectedShapes([val]);
   };
 
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
 
-  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || dimension !== "" || selectedSapphireColors.length > 0;
+  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || Object.keys(selectedDimensions).some(k => selectedDimensions[k].length > 0) || selectedSapphireColors.length > 0 || selectedTypes.length > 0;
 
   return (
     <div className="w-full bg-white shadow-sm border border-gray-100 rounded-lg mb-10 relative z-10">
@@ -193,7 +248,7 @@ export const GridViewTopFilters = ({
                       document.activeElement.blur();
                     }
                   }}
-                  clearable
+                  clearable={false}
                   className="w-full"
                   renderOption={({ option }) => {
                     const gemOption = gemstoneOptions.find(g => g.value === option.value);
@@ -228,7 +283,7 @@ export const GridViewTopFilters = ({
                         document.activeElement.blur();
                       }
                     }}
-                    clearable
+                    clearable={false}
                     className="w-full"
                     renderOption={({ option }) => {
                       const colorOption = shopByColorOptions.find(o => o.name.toLowerCase() === option.value.toLowerCase());
@@ -247,12 +302,11 @@ export const GridViewTopFilters = ({
                 </div>
               )}
 
-              {/* Shape Dropdown */}
               <div className="flex flex-col flex-1 min-w-[150px] max-w-[250px]">
                 <span className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
                   Shape
                 </span>
-                <MultiSelect
+                <Select
                   placeholder="Any Shape"
                   size="md"
                   radius="md"
@@ -260,14 +314,14 @@ export const GridViewTopFilters = ({
                     label: s.label,
                     value: s.value,
                   }))}
-                  value={selectedShapes}
+                  value={selectedShapes.length > 0 ? selectedShapes[0] : null}
                   onChange={(val) => {
-                    setSelectedShapes(val);
+                    setSelectedShapes(val ? [val] : []);
                     if (document.activeElement instanceof HTMLElement) {
                       document.activeElement.blur();
                     }
                   }}
-                  clearable
+                  clearable={false}
                   className="w-full"
                   renderOption={({ option }) => {
                     const shapeOption = shapeOptions.find(s => s.value === option.value);
@@ -280,6 +334,7 @@ export const GridViewTopFilters = ({
                   }}
                 />
               </div>
+
             </div>
 
             {/* DESKTOP FILTERS (Icons) */}
@@ -362,28 +417,99 @@ export const GridViewTopFilters = ({
                   })}
                 </div>
               </div>
+
             </div>
 
             <div className="w-full h-[1px] bg-gray-200 my-8" />
 
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-center lg:items-start w-full">
-              <SingleNumberFilter label={`Weight (CT)${toleranceEnabled ? " (±5)" : ""}`} value={weight} onChange={setWeight} bounds={weightBounds} />
+              <SingleNumberFilter label="Weight (CT)" value={weight} onChange={setWeight} bounds={weightBounds} />
 
-              <div className="flex flex-row gap-2 w-full lg:w-auto justify-center lg:justify-start">
-                <div className="flex-1 lg:flex-none max-w-[200px] lg:max-w-none">
-                  <SingleDropdownFilter label={`Dimensions (MM)${toleranceEnabled ? " (±5)" : ""}`} value={dimension} onChange={setDimension} optionsList={availableDimensions} />
-                </div>
+              <div className="flex flex-col gap-4 w-full lg:w-auto mx-auto lg:mx-0">
+                {(() => {
+                if (selectedGems.length === 0) {
+                  // No specific gem selected, combine all dimensions into one dropdown
+                  const allDims = new Set<string>();
+                  Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
+                  const combinedDims = Array.from(allDims).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+                  const shapeStr = selectedShapes.length > 0 ? ` ${selectedShapes[0]}` : "";
+                  const label = `ANY GEM${shapeStr} DIMENSIONS`.toUpperCase();
+                  
+                  return (
+                    <MultiDropdownFilter 
+                      label={label} 
+                      value={selectedDimensions["Any"] || []} 
+                      onChange={(val) => {
+                        setSelectedDimensions(prev => ({ ...prev, "Any": val }));
+                      }} 
+                      optionsList={combinedDims} 
+                    />
+                  );
+                }
+
+                // If specific gems are selected, render their dropdowns
+                const entries = Object.entries(availableDimensionsGrouped).sort((a, b) => {
+                  const aGem = a[0].toLowerCase().startsWith("sapphire") ? "sapphire" : a[0].toLowerCase();
+                  const bGem = b[0].toLowerCase().startsWith("sapphire") ? "sapphire" : b[0].toLowerCase();
+                  
+                  const aGemIndex = selectedGems.findIndex(g => g.toLowerCase() === aGem);
+                  const bGemIndex = selectedGems.findIndex(g => g.toLowerCase() === bGem);
+                  
+                  if (aGemIndex !== bGemIndex && aGemIndex !== -1 && bGemIndex !== -1) {
+                    return aGemIndex - bGemIndex;
+                  }
+                  
+                  if (aGem === "sapphire" && bGem === "sapphire") {
+                    const aColor = a[0].split(" ").slice(1).join(" ").toLowerCase();
+                    const bColor = b[0].split(" ").slice(1).join(" ").toLowerCase();
+                    const aColIndex = selectedSapphireColors.findIndex(c => c.toLowerCase() === aColor);
+                    const bColIndex = selectedSapphireColors.findIndex(c => c.toLowerCase() === bColor);
+                    if (aColIndex !== -1 && bColIndex !== -1) return aColIndex - bColIndex;
+                  }
+                  
+                  return a[0].localeCompare(b[0]);
+                });
+                
+                return entries.map(([groupKey, dims]) => {
+                  const isSapphire = groupKey.toLowerCase().startsWith("sapphire");
+                  const baseGem = isSapphire ? "Sapphire" : groupKey;
+                  // Only render if the base gem is in selectedGems
+                  if (!selectedGems.some(g => baseGem.toLowerCase() === g.toLowerCase())) return null;
+
+                  // Additionally filter by selected sapphire colors if applicable
+                  if (baseGem.toLowerCase() === "sapphire") {
+                     if (selectedSapphireColors.length === 0) return null;
+                     const color = groupKey.split(" ").slice(1).join(" ");
+                     if (!selectedSapphireColors.some(c => c.toLowerCase() === color.toLowerCase())) return null;
+                  }
+
+                  const shapeStr = selectedShapes.length > 0 ? ` ${selectedShapes[0]}` : "";
+                  const label = `${groupKey}${shapeStr} DIMENSIONS`.toUpperCase();
+                  return (
+                    <MultiDropdownFilter 
+                      key={groupKey}
+                      label={label} 
+                      value={selectedDimensions[groupKey] || []} 
+                      onChange={(val) => {
+                        setSelectedDimensions(prev => ({ ...prev, [groupKey]: val }));
+                      }} 
+                      optionsList={dims} 
+                    />
+                  );
+                });
+                })()}
+
+
               </div>
 
-              <div className="flex flex-col justify-center items-center lg:items-start h-full pt-0 lg:pt-[1.125rem]">
-                <Switch
-                  checked={toleranceEnabled}
-                  onChange={(event) => setToleranceEnabled(event.currentTarget.checked)}
-                  label={<span className="text-xs font-bold text-[#0b182d]">Apply ±5 Tolerance</span>}
-                  color="violet"
-                  size="sm"
+              {availableTypes.length > 0 && (
+                <SingleDropdownFilter 
+                  label="Type" 
+                  value={selectedTypes.length > 0 ? selectedTypes[0] : ""} 
+                  onChange={(val) => setSelectedTypes(val ? [val] : [])} 
+                  optionsList={availableTypes} 
                 />
-              </div>
+              )}
             </div>
 
             {/* Unified Custom Size Note */}
@@ -418,6 +544,13 @@ export const GridViewTopFilters = ({
                   </div>
                 ))}
 
+                {selectedTypes.map(type => (
+                  <div key={type} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
+                    {type}
+                    <IconX size={14} className="cursor-pointer" onClick={() => setSelectedTypes(selectedTypes.filter(t => t !== type))} />
+                  </div>
+                ))}
+
                 {weight !== "" && (
                   <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
                     Weight: {weight} ct
@@ -425,11 +558,13 @@ export const GridViewTopFilters = ({
                   </div>
                 )}
 
-                {dimension !== "" && (
-                  <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
-                    Dimension: {dimension} mm
-                    <IconX size={14} className="cursor-pointer" onClick={() => setDimension("")} />
-                  </div>
+                {Object.entries(selectedDimensions).map(([groupKey, dims]) => 
+                  dims.map((d, i) => (
+                    <div key={`${groupKey}-${i}`} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
+                      {groupKey}: {d}
+                      <IconX size={14} className="cursor-pointer" onClick={() => setSelectedDimensions(prev => ({ ...prev, [groupKey]: prev[groupKey].filter(v => v !== d) }))} />
+                    </div>
+                  ))
                 )}
 
 

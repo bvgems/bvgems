@@ -201,15 +201,19 @@ export function CategoryContent({
       }
     };
 
-    setOrDelete("shape", selectedShape, shapes?.length ? shapes[0] : null);
+    // Shape is managed via path segments, so ensure it is not in query params
+    if (params.has("shape")) {
+      params.delete("shape");
+      hasChanges = true;
+    }
+
     setOrDelete("color", selectedSapphireColor, SapphireLooseGemstoneColorOptions[0]?.value);
     setOrDelete("type", typeFilter, null);
     setOrDelete("shade", emeraldShade, "Zambian");
 
-    const currentSizes = params.getAll("size");
-    if (JSON.stringify(currentSizes.sort()) !== JSON.stringify([...selectedSizes].sort())) {
+    // Size is managed via path segments, so ensure it is not in query params
+    if (params.has("size")) {
       params.delete("size");
-      selectedSizes.forEach(size => params.append("size", size));
       hasChanges = true;
     }
 

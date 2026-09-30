@@ -18,6 +18,7 @@ interface AnimatedCardProps {
   baseDelay?: number;
   isFreeSize?: boolean;
   onAddToCart?: () => void;
+  onOpenQuote?: (item: any) => void;
 }
 
 export const AnimatedCard = ({
@@ -26,6 +27,7 @@ export const AnimatedCard = ({
   baseDelay = 0,
   isFreeSize = false,
   onAddToCart,
+  onOpenQuote,
 }: AnimatedCardProps) => {
   const controls = useAnimation();
   const { user } = useAuth();
@@ -90,7 +92,11 @@ export const AnimatedCard = ({
         <Card
           padding={0}
           className="flex flex-col justify-start bg-white cursor-pointer h-full border border-gray-200/80 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-400 ease-out rounded-2xl overflow-hidden p-0"
-          onClick={redirectToStonePage}
+          onClick={(e) => {
+            const target = e.target as HTMLElement;
+            if (target.closest('button')) return;
+            redirectToStonePage();
+          }}
         >
           <div className="flex items-center justify-center bg-white h-[140px] sm:h-[160px] md:h-[200px] lg:h-[240px]">
             <motion.img
@@ -127,14 +133,23 @@ export const AnimatedCard = ({
                    {user ? (
                      <div className="flex items-end justify-between gap-2">
                        <div className="flex flex-col">
-                         <span className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-0.5">Total Price</span>
+                         <span className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-0.5">Per Stone</span>
                          <div className="flex items-baseline gap-1.5">
                            <span className="font-bold text-[#0b182d] text-lg sm:text-xl tracking-tight leading-none">
-                             {item?.price ? `$${getPerStonePrice(item)}` : "Req"}
+                             {item?.price ? (
+                               `$${getPerStonePrice(item)}`
+                             ) : (
+                               <button 
+                                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onOpenQuote && onOpenQuote(item); }} 
+                                 className={`text-blue-600 underline bg-transparent border-none p-0 cursor-pointer font-bold ${getTitleSizeClass(item?.collection_slug)} tracking-tight leading-tight whitespace-nowrap hover:text-blue-800 transition-colors`}
+                               >
+                                 Request Pricing
+                               </button>
+                             )}
                            </span>
                            {item?.price && (
                              <span className="font-medium text-gray-400 text-[10px] sm:text-xs">
-                               / ${(getPerCaratPrice(item) || 0).toFixed(2)} ct
+                               ${(getPerCaratPrice(item) || 0).toFixed(2)}/ct
                              </span>
                            )}
                          </div>
@@ -180,24 +195,33 @@ export const AnimatedCard = ({
                 <p>Carat Weight: {item?.ct_weight}</p>
 
                 {!user ? (
-                  <p className="text-gray-700 text-sm font-medium mt-2">
-                    Please{" "}
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        open();
-                      }}
-                      className="underline text-blue-600 hover:text-blue-800"
+                  <div className="flex items-center justify-between gap-2 mt-4">
+                    <div 
+                      onClick={(e) => { e.stopPropagation(); open(); }}
+                      className="flex flex-col group cursor-pointer w-full"
                     >
-                      sign in
-                    </button>{" "}
-                    to view gemstone prices.
-                  </p>
+                      <span className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-1">Pricing</span>
+                      <div className="flex items-center justify-between bg-blue-50/50 hover:bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100/60 transition-colors">
+                        <div className="flex items-center gap-1.5 text-blue-600">
+                          <IconLock size={14} stroke={2.5} />
+                          <span className="text-xs font-bold tracking-wide">Sign in to view prices</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 ) : (
-                  <p>
+                  <p className="mt-2 text-sm font-semibold">
                     Per Carat Price:{" "}
-                    {item?.price ? `$${item.price}` : "Price upon request"}
+                    {item?.price ? (
+                      `$${item.price}`
+                    ) : (
+                      <button 
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onOpenQuote && onOpenQuote(item); }} 
+                        className={`text-blue-600 underline bg-transparent border-none p-0 cursor-pointer font-bold ${getTitleSizeClass(item?.collection_slug)} tracking-tight leading-tight whitespace-nowrap hover:text-blue-800 transition-colors ml-1`}
+                      >
+                        Request Pricing
+                      </button>
+                    )}
                   </p>
                 )}
               </div>

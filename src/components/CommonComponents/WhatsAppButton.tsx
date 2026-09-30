@@ -6,7 +6,7 @@ import { useState } from "react";
 export const WhatsAppButton = () => {
   const [visible, setVisible] = useState(true);
 
-  const phone = "2129444382";
+  const phone = "12129444382";
   const message =
     "Hello! I came across your website and I'm interested in learning more about your gemstones. Could you please assist me?";
   const encodedMessage = encodeURIComponent(message);

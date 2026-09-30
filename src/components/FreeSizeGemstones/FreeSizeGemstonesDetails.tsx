@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import Script from "next/script";
 import React, { useEffect, useState } from "react";
 import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
+import { QuoteRequestModal } from "@/components/CommonComponents/QuoteRequestModal";
 
 // 📦 PDF imports
 import jsPDF from "jspdf";
@@ -38,6 +39,7 @@ export default function FreeSizeGemstoneDetails({
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
   const [modalOpened, { open, close }] = useDisclosure(false);
+  const [quoteModalOpened, { open: openQuote, close: closeQuote }] = useDisclosure(false);
   const router = useRouter();
 
   const addProductToCart = () => {
@@ -235,6 +237,12 @@ export default function FreeSizeGemstoneDetails({
         <AuthForm onClose={close} />
       </Modal>
 
+      <QuoteRequestModal 
+        opened={quoteModalOpened} 
+        onClose={closeQuote} 
+        product={product} 
+      />
+
       {/* Left */}
       <div className="w-full md:w-2/3 pr-2">
         <div className="p-4">
@@ -296,12 +304,26 @@ export default function FreeSizeGemstoneDetails({
               <div className="mt-2">
                 <div className="text-md font-medium flex flex-col gap-2">
                   <span>
-                    Per Carat Price: <strong>{product?.price ? `$${product.price}` : "Price upon request"}</strong>
+                    Per Carat Price: <strong>{product?.price ? `$${product.price}` : (
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); openQuote(); }} 
+                        className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer hover:text-blue-800 transition-colors"
+                      >
+                        Request Pricing
+                      </button>
+                    )}</strong>
                   </span>
                   <span>
                     Total Price:{" "}
                     <strong>
-                      {product?.price ? `$${(product.price * product?.ct_weight).toFixed(2)}` : "Price upon request"}
+                      {product?.price ? `$${(product.price * product?.ct_weight).toFixed(2)}` : (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); openQuote(); }} 
+                          className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer hover:text-blue-800 transition-colors"
+                        >
+                          Request Pricing
+                        </button>
+                      )}
                     </strong>
                   </span>
                 </div>

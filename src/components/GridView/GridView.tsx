@@ -14,6 +14,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { GridViewTopFilters } from "./GridViewTopFilters";
 import { IconList, IconLayoutGrid, IconShoppingCart } from "@tabler/icons-react";
 import { AddToCartModal } from "@/components/CommonComponents/AddToCartModal";
+import { QuoteRequestModal } from "@/components/CommonComponents/QuoteRequestModal";
 import { Table, ActionIcon, Modal, Pagination } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { gemstoneOptions, ShapeFilterList, shopByColorOptions } from "@/utils/constants";
@@ -44,16 +45,17 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]); // "Natural" or "Lab Grown"
   
   const [weight, setWeight] = useState<string>("");
-  const [dimension, setDimension] = useState<string>("");
+  const [selectedDimensions, setSelectedDimensions] = useState<Record<string, string[]>>({});
 
   const [toleranceEnabled, setToleranceEnabled] = useState(false);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   const { user } = useAuth();
   const [authModalOpened, { open: openAuthModal, close: closeAuthModal }] = useDisclosure(false);
 
   const [productModal, { open: openProductModal, close: closeProductModal }] = useDisclosure(false);
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+  const [quoteProduct, setQuoteProduct] = useState<any>(null);
 
 
   const searchParams = useSearchParams();
@@ -121,7 +123,41 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     };
   }, [searchItems]);
 
-  const availableDimensions = useMemo(() => {
+  const availableDimensionsGrouped = useMemo(() => {
+    let preFiltered = [...searchItems];
+
+    if (selectedShapes.length > 0) {
+      preFiltered = preFiltered.filter(item => {
+        const shape = String(item.shape || "").toLowerCase();
+        return selectedShapes.some(s => shape.includes(s.toLowerCase()));
+      });
+    }
+
+    if (selectedTypes.length > 0) {
+      preFiltered = preFiltered.filter(item => {
+        const type = String(item.type || "").toLowerCase();
+        return selectedTypes.some(t => type === t.toLowerCase());
+      });
+    }
+
+    const groups: Record<string, Set<string>> = {};
+    preFiltered.forEach(item => {
+      let key = item.collection_slug || "";
+      if (key.toLowerCase() === "sapphire" && item.color) {
+        key = `Sapphire ${item.color}`;
+      }
+      if (!groups[key]) groups[key] = new Set<string>();
+      if (item.size) groups[key].add(item.size);
+    });
+
+    const result: Record<string, string[]> = {};
+    for (const k in groups) {
+      result[k] = Array.from(groups[k]).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    }
+    return result;
+  }, [searchItems, selectedShapes, selectedTypes]);
+
+  const availableTypes = useMemo(() => {
     let preFiltered = [...searchItems];
 
     if (selectedGems.length > 0) {
@@ -130,40 +166,32 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
         return selectedGems.some(g => slug.includes(g.toLowerCase()));
       });
     }
+
     if (selectedShapes.length > 0) {
       preFiltered = preFiltered.filter(item => {
         const shape = String(item.shape || "").toLowerCase();
         return selectedShapes.some(s => shape.includes(s.toLowerCase()));
       });
     }
-    if (selectedSapphireColors.length > 0) {
-      preFiltered = preFiltered.filter(item => {
-        const color = String(item.color || "").toLowerCase();
-        return selectedSapphireColors.some(c => color.includes(c.toLowerCase()));
-      });
-    }
-    if (selectedTypes.length > 0) {
-      preFiltered = preFiltered.filter(item => {
-        const type = String(item.type || "").toLowerCase();
-        return selectedTypes.some(t => type === t.toLowerCase());
-      });
-    }
 
-    const dimsSet = new Set<string>();
+    const typesSet = new Set<string>();
     preFiltered.forEach(item => {
-      const dims = parseSize(item.size);
-      if (dims) {
-         dimsSet.add(`${dims[0]}x${dims[1]}`);
-      }
+      // Default to "Natural" if no type is explicitly set
+      const type = item.type || "Natural";
+      typesSet.add(type);
     });
 
-    return Array.from(dimsSet).sort((a, b) => {
-       const [la, wa] = a.split('x').map(Number);
-       const [lb, wb] = b.split('x').map(Number);
-       if (la !== lb) return la - lb; // Ascending by length
-       return wa - wb; // Ascending by width
-    });
-  }, [searchItems, selectedGems, selectedShapes, selectedSapphireColors, selectedTypes]);
+    return Array.from(typesSet);
+  }, [searchItems, selectedGems, selectedShapes]);
+
+  useEffect(() => {
+    if (availableTypes.length > 0 && selectedTypes.length > 0) {
+      const valid = selectedTypes.filter(t => availableTypes.includes(t));
+      if (valid.length !== selectedTypes.length) {
+        setSelectedTypes(valid);
+      }
+    }
+  }, [availableTypes, selectedTypes]);
 
   // Apply Search Params whenever URL changes (once data is loaded)
   useEffect(() => {
@@ -195,7 +223,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       // Reset other local filters so it acts as a fresh page load
       setSelectedGems([]);
       setWeight("");
-      setDimension("");
+      setSelectedDimensions({});
     }
   }, [searchItems, searchParams]);
 
@@ -246,23 +274,32 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     }
 
     // Filter by Dimensions
-    if (dimension !== "") {
+    if (Object.keys(selectedDimensions).length > 0) {
       filtered = filtered.filter(item => {
-        const dims = parseSize(item.size);
-        if (!dims) return false;
-        
-        const targetDims = dimension.split('x').map(Number);
-        if (targetDims.length !== 2) return false;
-        const [targetL, targetW] = targetDims;
-        const tol = toleranceEnabled ? 5 : 0;
+        if (selectedDimensions["Any"] && selectedDimensions["Any"].length > 0) {
+           return selectedDimensions["Any"].includes(item.size);
+        }
 
-        let valid = true;
-        valid = valid && Math.abs(dims[0] - targetL) <= tol;
-        valid = valid && Math.abs(dims[1] - targetW) <= tol;
+        let groupKey = item.collection_slug || "";
+        if (groupKey.toLowerCase() === "sapphire" && item.color) {
+          groupKey = `Sapphire ${item.color}`;
+        }
         
-        return valid;
+        const selectedForGroup = selectedDimensions[groupKey];
+        if (!selectedForGroup || selectedForGroup.length === 0) {
+           return true;
+        }
+
+        return selectedForGroup.includes(item.size);
       });
     }
+
+    // Sort all filtered items by size ascending
+    filtered.sort((a, b) => {
+      const sizeA = String(a.size || "");
+      const sizeB = String(b.size || "");
+      return sizeA.localeCompare(sizeB, undefined, { numeric: true });
+    });
 
     setDisplayItems(filtered);
     setVisibleCount(ITEMS_PER_PAGE);
@@ -273,7 +310,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     selectedSapphireColors,
     selectedTypes, 
     weight, 
-    dimension,
+    selectedDimensions,
     toleranceEnabled
   ]);
 
@@ -283,7 +320,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     setSelectedSapphireColors([]);
     setSelectedTypes([]);
     setWeight("");
-    setDimension("");
+    setSelectedDimensions({});
     setToleranceEnabled(false);
     router.replace("/calibrated-stones");
   };
@@ -338,9 +375,13 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
           setWeight={setWeight}
           weightBounds={weightBounds}
           
-          dimension={dimension}
-          setDimension={setDimension}
-          availableDimensions={availableDimensions}
+          selectedTypes={selectedTypes}
+          setSelectedTypes={setSelectedTypes}
+          availableTypes={availableTypes}
+          
+          selectedDimensions={selectedDimensions}
+          setSelectedDimensions={setSelectedDimensions}
+          availableDimensionsGrouped={availableDimensionsGrouped}
           
           toleranceEnabled={toleranceEnabled}
           setToleranceEnabled={setToleranceEnabled}
@@ -385,8 +426,8 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                      <Table.Th className="w-[15%] md:w-[10%]">Ct.</Table.Th>
                      <Table.Th className="hidden md:table-cell md:w-[12%]">Quality</Table.Th>
                      <Table.Th className="hidden md:table-cell md:w-[12%]">Make</Table.Th>
-                     <Table.Th className="w-[25%] md:w-[12%]">Price/Ct</Table.Th>
-                     <Table.Th className="hidden md:table-cell md:w-[12%]">Price/St</Table.Th>
+                     <Table.Th className="hidden md:table-cell md:w-[12%]">Price/Ct</Table.Th>
+                     <Table.Th className="w-[25%] md:w-[12%]">Price/St</Table.Th>
                      <Table.Th className="w-[50px] md:w-[140px] pr-3 md:pr-4"></Table.Th>
                    </Table.Tr>
                  </Table.Thead>
@@ -406,18 +447,42 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                          <Table.Td className="text-xs md:text-sm whitespace-nowrap p-1 md:p-2">{row.ct_weight || "-"}</Table.Td>
                          <Table.Td className="hidden md:table-cell text-xs md:text-sm p-1 md:p-2">{row.quality || "-"}</Table.Td>
                          <Table.Td className="hidden md:table-cell text-xs md:text-sm p-1 md:p-2">{row.type || "-"}</Table.Td>
-                         <Table.Td className="text-xs md:text-sm p-1 md:p-2">
+                         <Table.Td className="hidden md:table-cell text-xs md:text-sm p-1 md:p-2">
                            {user ? (
-                             <span className="font-semibold text-gray-900">{row.price ? `$${getPerCaratPrice(row)}` : "Req"}</span>
+                             <span className="font-semibold text-gray-900">
+                               {row.price ? (
+                                 `$${getPerCaratPrice(row)}`
+                               ) : (
+                                 <button 
+                                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(row); }} 
+                                   className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-xs md:text-sm flex flex-col md:inline-block text-left leading-tight"
+                                 >
+                                   <span className="md:hidden">Request<br/>Pricing</span>
+                                   <span className="hidden md:inline whitespace-nowrap">Request Pricing</span>
+                                 </button>
+                               )}
+                             </span>
                            ) : (
                              <button onClick={() => openAuthModal()} className="underline text-blue-600 hover:text-blue-800 bg-transparent border-none p-0 cursor-pointer text-left">
                                Sign in
                              </button>
                            )}
                          </Table.Td>
-                         <Table.Td className="hidden md:table-cell text-xs md:text-sm p-1 md:p-2">
+                         <Table.Td className="text-xs md:text-sm p-1 md:p-2">
                            {user ? (
-                             <span className="font-semibold text-gray-900">{row.price ? `$${getPerStonePrice(row)}` : "Req"}</span>
+                             <span className="font-semibold text-gray-900">
+                               {row.price ? (
+                                 `$${getPerStonePrice(row)}`
+                               ) : (
+                                 <button 
+                                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(row); }} 
+                                   className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-xs md:text-sm flex flex-col md:inline-block text-left leading-tight"
+                                 >
+                                   <span className="md:hidden">Request<br/>Pricing</span>
+                                   <span className="hidden md:inline whitespace-nowrap">Request Pricing</span>
+                                 </button>
+                               )}
+                             </span>
                            ) : (
                              <button onClick={() => openAuthModal()} className="underline text-blue-600 hover:text-blue-800 bg-transparent border-none p-0 cursor-pointer text-left">
                                Sign in
@@ -482,6 +547,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                         setSelectedProduct(item);
                         openProductModal();
                       }}
+                      onOpenQuote={(item) => setQuoteProduct(item)}
                     />
                   </Grid.Col>
                 ))}
@@ -551,6 +617,12 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       >
         <AuthForm onClose={closeAuthModal} />
       </Modal>
+
+      <QuoteRequestModal 
+        opened={!!quoteProduct} 
+        onClose={() => setQuoteProduct(null)} 
+        product={quoteProduct} 
+      />
 
     </div>
   );

@@ -222,8 +222,8 @@ export const FreeSizeGridViewTopFilters = ({
   };
 
   const toggleShape = (val: string) => {
-    if (selectedShapes.includes(val)) setSelectedShapes(selectedShapes.filter(s => s !== val));
-    else setSelectedShapes([...selectedShapes, val]);
+    if (selectedShapes.includes(val)) setSelectedShapes([]);
+    else setSelectedShapes([val]);
   };
 
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);

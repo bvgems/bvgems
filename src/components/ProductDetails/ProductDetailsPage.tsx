@@ -192,21 +192,21 @@ export default function ProductDetailsPage() {
         cut: product.cut,
         shade:
           product?.collection_slug === "Emerald" &&
-          product?.quality === "Lab Grown"
+            product?.quality === "Lab Grown"
             ? emeraldShade
             : product?.collection_slug === "Sapphire" &&
-                product?.color === "Blue" &&
-                product?.quality !== "Lab Grown"
+              product?.color === "Blue" &&
+              product?.quality !== "Lab Grown"
               ? sapphireShade
               : "",
         image_url:
           product?.collection_slug === "Emerald" &&
-          product?.quality === "Lab Grown"
+            product?.quality === "Lab Grown"
             ? displayImage
             : product?.collection_slug === "Sapphire" &&
-                product?.color === "Blue" &&
-                product?.quality !== "Lab Grown" &&
-                product?.shape === "Round"
+              product?.color === "Blue" &&
+              product?.quality !== "Lab Grown" &&
+              product?.shape === "Round"
               ? displayImage
               : product?.image_url,
         price: purchaseByCarat ? perCarat : perStone,
@@ -456,10 +456,10 @@ export default function ProductDetailsPage() {
         <AuthForm onClose={close} />
       </Modal>
 
-      <QuoteRequestModal 
-        opened={quoteModalOpened} 
-        onClose={closeQuote} 
-        product={product} 
+      <QuoteRequestModal
+        opened={quoteModalOpened}
+        onClose={closeQuote}
+        product={product}
       />
 
       {/* Left: Image and specs */}
@@ -545,7 +545,14 @@ export default function ProductDetailsPage() {
                     Per Stone Price:{" "}
                     <strong>
                       {getPerStonePrice(product) === 0
-                        ? "Price upon request"
+                        ? (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); openQuote(); }}
+                            className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer hover:text-blue-800 transition-colors"
+                          >
+                            Request Pricing
+                          </button>
+                        )
                         : `$${getPerStonePrice(product).toFixed(2)}`}
                     </strong>
                   </span>
@@ -554,14 +561,21 @@ export default function ProductDetailsPage() {
                       Per Carat Price:{" "}
                       <strong>
                         {getPerCaratPrice(product) === 0
-                          ? "Price upon request"
+                          ? (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); openQuote(); }}
+                              className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer hover:text-blue-800 transition-colors"
+                            >
+                              Request Pricing
+                            </button>
+                          )
                           : `$${getPerCaratPrice(product).toFixed(2)}`}
                       </strong>
                     </span>
                   )}
                 </div>
 
-                {!hasPricing && (
+                {/* {!hasPricing && (
                   <a
                     href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
                       `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${product?.ct_weight}cts., ${product?.quality} Quality`,
@@ -572,7 +586,7 @@ export default function ProductDetailsPage() {
                   >
                     Request Pricing
                   </a>
-                )}
+                )} */}
               </div>
             ) : (
               <Alert className="uppercase" color="gray" variant="light">
@@ -671,7 +685,7 @@ export default function ProductDetailsPage() {
                 </Button>
               </div>
             )}
-            
+
             {product?.type === "Natural" && (
               <div className="text-xs text-gray-500 text-center mt-2">
                 Natural gemstones are routinely enhanced to improve color and clarity.
@@ -682,7 +696,7 @@ export default function ProductDetailsPage() {
                 Lab-Grown gemstones share the exact chemical and optical properties as their natural counterparts.
               </div>
             )}
-            
+
             <div className="mt-4 p-4 bg-gray-50 border border-gray-100 rounded text-center">
               <div className="text-sm font-semibold text-[#0b182d] mb-1 uppercase tracking-wider">Certifications</div>
               <p className="text-xs text-gray-600">

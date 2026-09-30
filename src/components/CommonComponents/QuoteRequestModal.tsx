@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Modal, TextInput, Textarea, Button, Text, Group, NumberInput, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { sendGAEvent } from "@next/third-parties/google";
+import { useAuth } from "@/hooks/useAuth";
+import { IconBrandWhatsapp, IconMail } from "@tabler/icons-react";
 
 interface QuoteRequestModalProps {
   opened: boolean;
@@ -12,20 +14,15 @@ interface QuoteRequestModalProps {
 export const QuoteRequestModal = ({ opened, onClose, product }: QuoteRequestModalProps) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const { user } = useAuth();
 
   const form = useForm({
     initialValues: {
-      name: "",
-      companyName: "",
-      email: "",
-      phone: "",
       notes: "",
       quantity: 1,
       unit: "Pieces",
     },
     validate: {
-      name: (v) => (v.trim().length > 0 ? null : "Name is required"),
-      email: (v) => (/^\S+@\S+$/.test(v) ? null : "Invalid email"),
       quantity: (v) => (v > 0 ? null : "Quantity must be greater than 0"),
     },
   });
@@ -45,10 +42,10 @@ export const QuoteRequestModal = ({ opened, onClose, product }: QuoteRequestModa
           sku: computedSku,
           quantity: values.quantity,
           unit: values.unit,
-          name: values.name,
-          companyName: values.companyName,
-          email: values.email,
-          phone: values.phone,
+          name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Unknown User",
+          companyName: user?.companyName || "N/A",
+          email: user?.email || "Unknown Email",
+          phone: user?.phoneNumber || "N/A",
           notes: values.notes,
         }),
       });
@@ -69,6 +66,16 @@ export const QuoteRequestModal = ({ opened, onClose, product }: QuoteRequestModa
     }
 
     setLoading(false);
+  };
+
+  const handleWhatsAppSubmit = () => {
+    form.validate();
+    if (!form.isValid()) return;
+
+    const values = form.values;
+    const computedName = `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Unknown User";
+    const text = `Hello,\n\nI would like to request a wholesale quote for the following product:\n\n*Product*: ${computedTitle}\n*SKU*: ${computedSku}\n*Quantity*: ${values.quantity} ${values.unit}\n*Name*: ${computedName}\n*Company*: ${user?.companyName || "N/A"}\n\n*Notes*: ${values.notes || "None"}\n\nPlease let me know the pricing and availability.`;
+    window.open(`https://wa.me/12129444382?text=${encodeURIComponent(text)}`, "_blank");
   };
 
   return (
@@ -96,42 +103,10 @@ export const QuoteRequestModal = ({ opened, onClose, product }: QuoteRequestModa
             />
             <Select
               label="Unit"
-              data={["Pieces", "Carats", "Parcels"]}
+              data={["Pieces", "Carats"]}
               withAsterisk
               className="flex-1"
               {...form.getInputProps("unit")}
-            />
-          </div>
-
-          <div className="flex gap-4">
-            <TextInput
-              label="Full Name"
-              placeholder="Your Name"
-              withAsterisk
-              className="flex-1"
-              {...form.getInputProps("name")}
-            />
-            <TextInput
-              label="Company Name"
-              placeholder="Your Business Name"
-              className="flex-1"
-              {...form.getInputProps("companyName")}
-            />
-          </div>
-
-          <div className="flex gap-4">
-            <TextInput
-              label="Email Address"
-              placeholder="you@company.com"
-              withAsterisk
-              className="flex-1"
-              {...form.getInputProps("email")}
-            />
-            <TextInput
-              label="Phone Number"
-              placeholder="Your Phone Number"
-              className="flex-1"
-              {...form.getInputProps("phone")}
             />
           </div>
 
@@ -142,9 +117,29 @@ export const QuoteRequestModal = ({ opened, onClose, product }: QuoteRequestModa
             {...form.getInputProps("notes")}
           />
 
-          <Button type="submit" color="#0b182d" className="mt-4 h-12 uppercase tracking-widest text-xs" loading={loading}>
-            Submit Quote Request
-          </Button>
+          <div className="flex gap-2 mt-4">
+            <Button
+              color="green"
+              className="h-12 flex-1 uppercase tracking-widest text-xs"
+              leftSection={<IconBrandWhatsapp size={18} />}
+              onClick={(e) => {
+                e.preventDefault();
+                handleWhatsAppSubmit();
+              }}
+              title="Send Request by WhatsApp"
+            >
+              Send request by WhatsApp
+            </Button>
+            <Button 
+              type="submit" 
+              color="#0b182d" 
+              className="h-12 flex-1 uppercase tracking-widest text-xs" 
+              leftSection={<IconMail size={18} />}
+              loading={loading}
+            >
+              Send request by Email
+            </Button>
+          </div>
           <Text size="xs" color="dimmed" className="text-center mt-2">
             We typically respond within 1 business day.
           </Text>
