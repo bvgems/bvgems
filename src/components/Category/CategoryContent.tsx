@@ -437,7 +437,15 @@ export function CategoryContent({
 
   // Extract video array for selected grade
   const selectedGradeVideos = Array.isArray(selectedGradeItem?.cloudinary_videos)
-    ? selectedGradeItem.cloudinary_videos
+    ? [...selectedGradeItem.cloudinary_videos].sort((a: any, b: any) => {
+        const labelA = (a.emerald_type || a.label || "").toLowerCase();
+        const labelB = (b.emerald_type || b.label || "").toLowerCase();
+        if (labelA === "colombian" && labelB !== "colombian") return -1;
+        if (labelB === "colombian" && labelA !== "colombian") return 1;
+        if (labelA === "zambian" && labelB !== "zambian") return -1;
+        if (labelB === "zambian" && labelA !== "zambian") return 1;
+        return 0;
+      })
     : [];
 
   const currentVideoUrl = selectedGradeVideos[activeVideoIndex]?.video_url;
@@ -735,6 +743,12 @@ export function CategoryContent({
                             <div className="absolute inset-0 border-[3px] border-black/30 rounded pointer-events-none" />
                           )}
 
+                          {(selectedGradeVideos[activeVideoIndex]?.emerald_type || selectedGradeVideos[activeVideoIndex]?.label) && (
+                            <div className="absolute bottom-3 left-3 bg-black/30 backdrop-blur-md border border-white/20 text-white text-xs px-3 py-1 rounded-full shadow-lg font-semibold uppercase tracking-widest pointer-events-none z-10">
+                              {selectedGradeVideos[activeVideoIndex]?.emerald_type || selectedGradeVideos[activeVideoIndex]?.label}
+                            </div>
+                          )}
+
                           <button
                             onClick={(e) => handleShareVideo(e, currentVideoUrl)}
                             disabled={isSharingVideo}
@@ -744,6 +758,12 @@ export function CategoryContent({
                           >
                             {isSharingVideo ? <Loader size={20} color="white" /> : <IconShare size={20} stroke={1.5} />}
                           </button>
+                          
+                          {(selectedGradeVideos[activeVideoIndex]?.emerald_type || selectedGradeVideos[activeVideoIndex]?.label) && (
+                            <div className="absolute bottom-3 left-3 z-10 bg-black/20 backdrop-blur-[8px] border border-white/20 text-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] px-3.5 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-[0.15em] pointer-events-none">
+                              {selectedGradeVideos[activeVideoIndex]?.emerald_type || selectedGradeVideos[activeVideoIndex]?.label}
+                            </div>
+                          )}
                         </div>
 
                         {/* Video Thumbnails Carousel (Only visible if > 1 video) */}
@@ -759,7 +779,7 @@ export function CategoryContent({
                               {selectedGradeVideos.map((video: any, index: number) => (
                                 <Carousel.Slide key={video.public_id || index}>
                                   <div
-                                    className={`cursor-pointer border-2 rounded p-1 transition-all ${activeVideoIndex === index
+                                    className={`relative cursor-pointer border-2 rounded p-1 transition-all ${activeVideoIndex === index
                                       ? "border-black shadow-md"
                                       : "border-transparent hover:border-gray-300"
                                       }`}
@@ -771,6 +791,11 @@ export function CategoryContent({
                                       muted
                                       playsInline
                                     />
+                                    {(video.emerald_type || video.label) && (
+                                      <div className="absolute bottom-1 left-1 bg-black/20 backdrop-blur-[6px] border border-white/20 text-white text-[8px] px-2 py-0.5 rounded-full shadow-sm font-semibold uppercase tracking-widest pointer-events-none">
+                                        {video.emerald_type || video.label}
+                                      </div>
+                                    )}
                                   </div>
                                 </Carousel.Slide>
                               ))}
