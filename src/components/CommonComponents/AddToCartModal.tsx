@@ -36,7 +36,7 @@ import { useRouter } from "next/navigation";
 import { EmeraldShade } from "./EmeraldShade";
 import { BlueSapphireShade } from "./BlueSapphireShade";
 import { shades } from "@/utils/constants";
-import { getPerCaratPrice, getPerStonePrice } from "@/utils/priceHelpers";
+import { getPerCaratPrice, getPerStonePrice, isLabGrown } from "@/utils/priceHelpers";
 
 interface AddToCartModalProps {
   opened: boolean;
