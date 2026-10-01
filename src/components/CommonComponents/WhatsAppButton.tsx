@@ -18,7 +18,7 @@ export const WhatsAppButton = () => {
     <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2">
       <a
         href={url}
-        target="_blank"
+        target="_self"
         rel="noopener noreferrer"
         className="relative"
         aria-label="Chat with us on WhatsApp"

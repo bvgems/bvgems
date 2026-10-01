@@ -209,7 +209,7 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
   };
 
   const sendWhatsApp = (text: string) => {
-    window.open(`https://wa.me/12129444382?text=${encodeURIComponent(text)}`, "_blank");
+    window.location.href = `https://wa.me/12129444382?text=${encodeURIComponent(text)}`;
   };
   const sendEmail = (items: any[], options: PriceOptions) => {
     const text = generateText(items, options);
@@ -508,7 +508,6 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                       {/* Desktop Row */}
                       <TableTr
                         className="cursor-pointer hidden md:table-row"
-                        onClick={() => goToCartPage(element)}
                       >
                         <TableTd onClick={(e) => e.stopPropagation()}>
                           <Checkbox
@@ -517,7 +516,7 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                             color="#0b182d"
                           />
                         </TableTd>
-                        <TableTd>
+                        <TableTd onClick={() => goToCartPage(element)}>
                           <div className="w-14 h-14 flex items-center justify-center rounded overflow-hidden shadow-sm border border-gray-200">
                             <NextImage
                               src={element.image_url}
@@ -528,19 +527,19 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                             />
                           </div>
                         </TableTd>
-                        <TableTd>{element.type}</TableTd>
-                        <TableTd className="capitalize">
+                        <TableTd onClick={() => goToCartPage(element)}>{element.type}</TableTd>
+                        <TableTd className="capitalize" onClick={() => goToCartPage(element)}>
                           {element.collection_slug}
                         </TableTd>
-                        <TableTd>
+                        <TableTd onClick={() => goToCartPage(element)}>
                           {element.collection_slug === "Tanzanite"
                             ? "Purplish Blue"
                             : element.color}
                         </TableTd>
-                        <TableTd>{element.size}</TableTd>
-                        <TableTd>{element.ct_weight}</TableTd>
-                        <TableTd>{element.quality}</TableTd>
-                        <TableTd>{element.cut}</TableTd>
+                        <TableTd onClick={() => goToCartPage(element)}>{element.size}</TableTd>
+                        <TableTd onClick={() => goToCartPage(element)}>{element.ct_weight}</TableTd>
+                        <TableTd onClick={() => goToCartPage(element)}>{element.quality}</TableTd>
+                        <TableTd onClick={() => goToCartPage(element)}>{element.cut}</TableTd>
                         {user && (
                           <>
                             <TableTd>
@@ -555,7 +554,7 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                                 </button>
                               )}
                             </TableTd>
-                            <TableTd>
+                            <TableTd onClick={(e) => e.stopPropagation()}>
                               {isPurchaseByCarat(element) ? (
                                 getPerCaratPrice(element) !== 0 ? (
                                   `$ ${getPerCaratPrice(element)}`
@@ -576,11 +575,12 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                                 </button>
                               )}
                             </TableTd>
-                            <TableTd>
+                            <TableTd onClick={(e) => e.stopPropagation()}>
                               <Button
                                 leftSection={<IconShoppingCart />}
                                 variant="outline"
                                 onClick={(e) => {
+                                  e.preventDefault();
                                   e.stopPropagation();
                                   setSelectedProduct(element); // ✅ store the clicked product
                                   openProductModal();
@@ -596,13 +596,12 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
 
                       {/* Mobile Row */}
                       <TableTr
-                        onClick={() => goToCartPage(element)}
                         className="md:hidden"
                       >
                         <TableTd colSpan={3} className="w-full">
                           <div className="flex items-center justify-between w-full">
                             {/* Left: Image + details */}
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3" onClick={() => goToCartPage(element)}>
                               <div className="w-14 h-14 flex-shrink-0 rounded overflow-hidden shadow-sm border border-gray-200">
                                 <NextImage
                                   src={element.image_url}
@@ -623,6 +622,7 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                               variant="light"
                               size="xs"
                               onClick={(e) => {
+                                e.preventDefault();
                                 e.stopPropagation();
                                 toggleRow(element.id);
                               }}

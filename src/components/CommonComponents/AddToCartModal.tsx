@@ -90,14 +90,14 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(false);
   const [caratError, setCaratError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
-  const [caratWeight, setCaratWeight] = useState<number>(0);
+  const [caratWeight, setCaratWeight] = useState<number>(1);
   const [allowPurchaseByCarat, setAllowPurchaseByCarat] = useState(true);
   const [quoteProduct, setQuoteProduct] = useState<any | null>(null);
 
 
   useEffect(() => {
     if (product?.ct_weight) {
-      setCaratWeight(product.ct_weight);
+      setCaratWeight(1);
     }
   }, [product]);
 

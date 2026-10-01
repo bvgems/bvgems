@@ -12,6 +12,9 @@ export const getPerCaratPrice = (item: any): number => {
   if (isSmallLabGrown(item)) return 0; // no per-carat for these
   if (isLabGrown(item)) {
      if (!item?.price) return 0;
+     if (item?.collection_slug === "Alexandrite" || item?.collection_slug === "Paraiba Tourmaline") {
+       return 85;
+     }
      return 50;
   }
   if (!item?.ct_weight || !item?.price) return 0;
@@ -24,7 +27,8 @@ export const getPerStonePrice = (item: any): number => {
   if (!item?.ct_weight) return 0;
   if (isLabGrown(item)) {
      if (!item?.price) return 0;
-     return Number((50 * item.ct_weight).toFixed(2));
+     const rate = (item?.collection_slug === "Alexandrite" || item?.collection_slug === "Paraiba Tourmaline") ? 85 : 50;
+     return Number((rate * item.ct_weight).toFixed(2));
   }
   return item?.price ? Number(item.price) : 0;
 };

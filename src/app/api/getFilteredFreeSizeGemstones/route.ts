@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
     if (options.width && (options.width.min !== undefined || options.width.max !== undefined)) {
       const min = options.width.min !== undefined ? options.width.min : 0;
       const max = options.width.max !== undefined ? options.width.max : 9999;
-      whereClauses.push(`CAST(SPLIT_PART(dimension, 'x', 2) AS NUMERIC) BETWEEN ${min} AND ${max}`);
+      whereClauses.push(`CAST(COALESCE(NULLIF(TRIM(SPLIT_PART(dimension, 'x', 2)), ''), TRIM(SPLIT_PART(dimension, 'x', 1))) AS NUMERIC) BETWEEN ${min} AND ${max}`);
     }
 
     // --- FINAL QUERY ---

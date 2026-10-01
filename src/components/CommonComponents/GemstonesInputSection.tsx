@@ -22,7 +22,7 @@ export const GemstonesInputSection = ({
   };
 
   const handleCaratWeightChanges = (value: number) => {
-    const minWeight = product?.ct_weight || 0.01;
+    const minWeight = 0.01;
     const ctw = Number(value) || minWeight;
 
     if (ctw < minWeight) {
@@ -41,7 +41,7 @@ export const GemstonesInputSection = ({
       <NumberInput
         value={caratWeight}
         onChange={(value: any) => handleCaratWeightChanges(value)}
-        min={product?.ct_weight || 0.01}
+        min={0.01}
         step={0.01}
         error={caratError}
       />

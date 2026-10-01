@@ -64,24 +64,24 @@ export function Hero({ jewelryRef, heroData }: any) {
       */}
 
       {/* NEW 2x2 GRID SECTION */}
-      <div className="grid grid-cols-1 md:grid-cols-2 w-full min-h-[600px] bg-white gap-1 p-1">
+      <div className="grid grid-cols-2 md:grid-cols-2 w-full md:min-h-[600px] bg-white gap-1 p-1">
         {/* Tile 1: Calibrated Stones */}
         <Link
           href="/calibrated-stones"
-          className="relative flex flex-col items-center justify-center text-center p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group"
+          className="relative flex flex-col items-center justify-center text-center p-2 sm:p-4 md:p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group aspect-square md:aspect-auto"
         >
           {/* Expanding Radial Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#F0EBE1]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:duration-300 ease-out z-0" />
           {/* Sweeping Shine Effect */}
           <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-[150%] skew-x-[-25deg] group-hover:translate-x-[150%] transition-transform duration-1000 group-hover:duration-700 ease-in-out" />
           
-          <h2 className="text-4xl md:text-5xl font-light tracking-widest mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
-            Calibrated Stones
+          <h2 className="text-[1.1rem] sm:text-2xl md:text-5xl font-light tracking-widest mb-1 md:mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Calibrated Gemstones
           </h2>
-          <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+          <p className="text-stone-500 text-[10px] sm:text-xs md:text-lg font-light mb-3 md:mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1 px-1">
             Precision-cut perfection for your jewelry designs
           </p>
-          <div className="flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-6 py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
+          <div className="flex items-center gap-1 md:gap-2 text-[9px] sm:text-[10px] md:text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-3 py-2 md:px-6 md:py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
             <span>Shop Calibrated</span>
             <span className="transform transition-transform duration-400 group-hover:translate-x-1">→</span>
           </div>
@@ -90,20 +90,20 @@ export function Hero({ jewelryRef, heroData }: any) {
         {/* Tile 2: Free Size Gemstones */}
         <Link
           href="/free-size-gemstones"
-          className="relative flex flex-col items-center justify-center text-center p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group"
+          className="relative flex flex-col items-center justify-center text-center p-2 sm:p-4 md:p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group aspect-square md:aspect-auto"
         >
           {/* Expanding Radial Background */}
           <div className="absolute inset-0 bg-gradient-to-bl from-[#F0EBE1]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:duration-300 ease-out z-0" />
           {/* Sweeping Shine Effect */}
           <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-[150%] skew-x-[-25deg] group-hover:translate-x-[150%] transition-transform duration-1000 group-hover:duration-700 ease-in-out delay-75" />
           
-          <h2 className="text-4xl md:text-5xl font-light tracking-widest mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
-            Free Size Gems
+          <h2 className="text-[1.1rem] sm:text-2xl md:text-5xl font-light tracking-widest mb-1 md:mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Free Size Gemstones
           </h2>
-          <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+          <p className="text-stone-500 text-[10px] sm:text-xs md:text-lg font-light mb-3 md:mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1 px-1">
             Unique, one-of-a-kind stones for custom creations
           </p>
-          <div className="flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-6 py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
+          <div className="flex items-center gap-1 md:gap-2 text-[9px] sm:text-[10px] md:text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-3 py-2 md:px-6 md:py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
             <span>Shop Free Size</span>
             <span className="transform transition-transform duration-400 group-hover:translate-x-1">→</span>
           </div>
@@ -112,20 +112,20 @@ export function Hero({ jewelryRef, heroData }: any) {
         {/* Tile 3: Layouts */}
         <Link
           href="/trade/layouts"
-          className="relative flex flex-col items-center justify-center text-center p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group"
+          className="relative flex flex-col items-center justify-center text-center p-2 sm:p-4 md:p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group aspect-square md:aspect-auto"
         >
           {/* Expanding Radial Background */}
           <div className="absolute inset-0 bg-gradient-to-tr from-[#F0EBE1]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:duration-300 ease-out z-0" />
           {/* Sweeping Shine Effect */}
           <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-[150%] skew-x-[-25deg] group-hover:translate-x-[150%] transition-transform duration-1000 group-hover:duration-700 ease-in-out delay-150" />
           
-          <h2 className="text-4xl md:text-5xl font-light tracking-widest mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
-            Layouts
+          <h2 className="text-[1.1rem] sm:text-2xl md:text-5xl font-light tracking-widest mb-1 md:mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Gemstone Layouts
           </h2>
-          <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+          <p className="text-stone-500 text-[10px] sm:text-xs md:text-lg font-light mb-3 md:mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1 px-1">
             Curated assortments matched to perfection
           </p>
-          <div className="flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-6 py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
+          <div className="flex items-center gap-1 md:gap-2 text-[9px] sm:text-[10px] md:text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-3 py-2 md:px-6 md:py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
             <span>Explore Layouts</span>
             <span className="transform transition-transform duration-400 group-hover:translate-x-1">→</span>
           </div>
@@ -134,20 +134,20 @@ export function Hero({ jewelryRef, heroData }: any) {
         {/* Tile 4: Pairs */}
         <Link
           href="/free-size-gemstones?shape=pair"
-          className="relative flex flex-col items-center justify-center text-center p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group"
+          className="relative flex flex-col items-center justify-center text-center p-2 sm:p-4 md:p-12 bg-[#F9F6F0] overflow-hidden transition-all duration-700 group-hover:duration-300 hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group aspect-square md:aspect-auto"
         >
           {/* Expanding Radial Background */}
           <div className="absolute inset-0 bg-gradient-to-tl from-[#F0EBE1]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:duration-300 ease-out z-0" />
           {/* Sweeping Shine Effect */}
           <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-[150%] skew-x-[-25deg] group-hover:translate-x-[150%] transition-transform duration-1000 group-hover:duration-700 ease-in-out delay-[225ms]" />
           
-          <h2 className="text-4xl md:text-5xl font-light tracking-widest mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
-            Matching Pairs
+          <h2 className="text-[1.1rem] sm:text-2xl md:text-5xl font-light tracking-widest mb-1 md:mb-4 uppercase text-stone-800 z-10 transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+            Matched Pairs
           </h2>
-          <p className="text-stone-500 text-lg font-light mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1">
+          <p className="text-stone-500 text-[10px] sm:text-xs md:text-lg font-light mb-3 md:mb-8 tracking-wide z-10 max-w-sm transition-transform duration-700 group-hover:duration-300 group-hover:-translate-y-1 px-1">
             Expertly paired stones for flawless symmetry
           </p>
-          <div className="flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-6 py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
+          <div className="flex items-center gap-1 md:gap-2 text-[9px] sm:text-[10px] md:text-sm uppercase tracking-widest font-medium text-stone-900 bg-white/50 backdrop-blur-md border border-white/60 px-3 py-2 md:px-6 md:py-3 rounded-full shadow-[0_2px_10px_rgb(0,0,0,0.05)] group-hover:bg-white/90 group-hover:shadow-[0_8px_20px_rgb(0,0,0,0.08)] group-hover:scale-105 active:scale-95 transition-all duration-400 ease-out z-10">
             <span>Explore Pairs</span>
             <span className="transform transition-transform duration-400 group-hover:translate-x-1">→</span>
           </div>

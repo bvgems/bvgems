@@ -75,7 +75,7 @@ export default function ProductDetailsPage() {
   const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
   const [description, setDescription] = useState("");
 
-  const [caratWeight, setCaratWeight] = useState<number>(0);
+  const [caratWeight, setCaratWeight] = useState<number>(1);
   const breadcrumbItems = [
     { title: "Home", href: "/" },
     { title: "Calibrated Faceted Gemstones", href: "/calibrated-stones" },
@@ -117,7 +117,7 @@ export default function ProductDetailsPage() {
 
   useEffect(() => {
     if (product?.ct_weight) {
-      setCaratWeight(product.ct_weight);
+      setCaratWeight(1);
     }
   }, [product]);
 

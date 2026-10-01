@@ -75,7 +75,7 @@ export const QuoteRequestModal = ({ opened, onClose, product }: QuoteRequestModa
     const values = form.values;
     const computedName = `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Unknown User";
     const text = `Hello,\n\nI would like to request a wholesale quote for the following product:\n\n*Product*: ${computedTitle}\n*SKU*: ${computedSku}\n*Quantity*: ${values.quantity} ${values.unit}\n*Name*: ${computedName}\n*Company*: ${user?.companyName || "N/A"}\n\n*Notes*: ${values.notes || "None"}\n\nPlease let me know the pricing and availability.`;
-    window.open(`https://wa.me/12129444382?text=${encodeURIComponent(text)}`, "_blank");
+    window.location.href = `https://wa.me/12129444382?text=${encodeURIComponent(text)}`;
   };
 
   return (

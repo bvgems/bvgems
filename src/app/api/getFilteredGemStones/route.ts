@@ -80,8 +80,8 @@ export async function POST(req: NextRequest) {
           (
             CAST(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 1) AS NUMERIC) >= ${lenMin} 
             AND CAST(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 1) AS NUMERIC) <= ${lenMax}
-            AND CAST(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 2) AS NUMERIC) >= ${widMin}
-            AND CAST(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 2) AS NUMERIC) <= ${widMax}
+            AND CAST(COALESCE(NULLIF(TRIM(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 2)), ''), TRIM(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 1))) AS NUMERIC) >= ${widMin}
+            AND CAST(COALESCE(NULLIF(TRIM(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 2)), ''), TRIM(SPLIT_PART(REPLACE(size, ' mm', ''), 'x', 1))) AS NUMERIC) <= ${widMax}
           )
         `);
       }

@@ -204,16 +204,18 @@ export const FreeSizeGridViewTopFilters = ({
 }: TopFiltersProps) => {
 
   const toggleGem = (val: string) => {
-    let newSelected = [...selectedGems];
     if (selectedGems.includes(val)) {
-      newSelected = newSelected.filter(g => g !== val);
+      setSelectedGems([]);
       if (val === "Fancy Sapphire") {
          setSelectedSapphireColors([]);
       }
     } else {
-      newSelected.push(val);
+      // Clear sapphire colors if switching away from Fancy Sapphire
+      if (selectedGems.includes("Fancy Sapphire") && val !== "Fancy Sapphire") {
+        setSelectedSapphireColors([]);
+      }
+      setSelectedGems([val]);
     }
-    setSelectedGems(newSelected);
   };
 
   const toggleSapphireColor = (val: string) => {
@@ -323,15 +325,7 @@ export const FreeSizeGridViewTopFilters = ({
 
       {/* ADDITIONAL FREE SIZE FILTERS */}
       <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-end mb-8 flex-wrap justify-center lg:justify-start w-full">
-        <TextInput
-          label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Lot Number</span>}
-          placeholder="Search lot..."
-          value={lotSearch}
-          onChange={(e) => setLotSearch(e.currentTarget.value)}
-          leftSection={<IconSearch size={16} />}
-          className="w-full max-w-[200px]"
-        />
-        
+
         <MultiSelect
           label={<span className="text-sm font-bold text-[#0b182d] uppercase tracking-wide">Origin</span>}
           placeholder="Select origins"

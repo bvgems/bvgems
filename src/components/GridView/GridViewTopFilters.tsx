@@ -37,6 +37,10 @@ type TopFiltersProps = {
   setSelectedTypes: (val: string[]) => void;
   availableTypes: string[];
 
+  selectedGrades: string[];
+  setSelectedGrades: (val: string[]) => void;
+  availableGrades: string[];
+
   resetAll: () => void;
 };
 
@@ -188,21 +192,24 @@ export const GridViewTopFilters = ({
   selectedTypes,
   setSelectedTypes,
   availableTypes,
+  selectedGrades,
+  setSelectedGrades,
+  availableGrades,
   resetAll
 }: TopFiltersProps) => {
 
   const toggleGem = (val: string) => {
-    let newSelected = [...selectedGems];
     if (selectedGems.includes(val)) {
-      newSelected = newSelected.filter(g => g !== val);
-      // If unselecting Sapphire, clear sapphire colors
+      setSelectedGems([]);
       if (val === "Sapphire") {
         setSelectedSapphireColors([]);
       }
     } else {
-      newSelected.push(val);
+      if (selectedGems.includes("Sapphire") && val !== "Sapphire") {
+        setSelectedSapphireColors([]);
+      }
+      setSelectedGems([val]);
     }
-    setSelectedGems(newSelected);
   };
 
   const toggleSapphireColor = (val: string) => {
@@ -217,7 +224,7 @@ export const GridViewTopFilters = ({
 
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
 
-  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || Object.keys(selectedDimensions).some(k => selectedDimensions[k].length > 0) || selectedSapphireColors.length > 0 || selectedTypes.length > 0;
+  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || Object.keys(selectedDimensions).some(k => selectedDimensions[k].length > 0) || selectedSapphireColors.length > 0 || selectedTypes.length > 0 || selectedGrades.length > 0;
 
   return (
     <div className="w-full bg-white shadow-sm border border-gray-100 rounded-lg mb-10 relative z-10">
@@ -233,7 +240,7 @@ export const GridViewTopFilters = ({
                 <span className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
                   Gem Type
                 </span>
-                <MultiSelect
+                <Select
                   placeholder="Any Gem Type"
                   size="md"
                   radius="md"
@@ -241,9 +248,12 @@ export const GridViewTopFilters = ({
                     label: gem.label,
                     value: gem.value,
                   }))}
-                  value={selectedGems}
+                  value={selectedGems.length > 0 ? selectedGems[0] : null}
                   onChange={(val) => {
-                    setSelectedGems(val);
+                    setSelectedGems(val ? [val] : []);
+                    if (selectedGems.includes("Sapphire") && val !== "Sapphire") {
+                      setSelectedSapphireColors([]);
+                    }
                     if (document.activeElement instanceof HTMLElement) {
                       document.activeElement.blur();
                     }
@@ -420,20 +430,21 @@ export const GridViewTopFilters = ({
 
             </div>
 
-            <div className="w-full h-[1px] bg-gray-200 my-8" />
-
-            <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-center lg:items-start w-full">
+            {/* Remapped bottom container */}
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 w-full mt-6">
+              
+              {/* Left Side: Filters */}
+              <div className="flex-1 flex flex-wrap gap-8 items-start w-full">
               <SingleNumberFilter label="Weight (CT)" value={weight} onChange={setWeight} bounds={weightBounds} />
 
               <div className="flex flex-col gap-4 w-full lg:w-auto mx-auto lg:mx-0">
                 {(() => {
-                if (selectedGems.length === 0) {
-                  // No specific gem selected, combine all dimensions into one dropdown
                   const allDims = new Set<string>();
                   Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
                   const combinedDims = Array.from(allDims).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+                  const gemStr = selectedGems.length > 0 ? ` ${selectedGems[0]}` : " ANY GEM";
                   const shapeStr = selectedShapes.length > 0 ? ` ${selectedShapes[0]}` : "";
-                  const label = `ANY GEM${shapeStr} DIMENSIONS`.toUpperCase();
+                  const label = `${gemStr}${shapeStr} DIMENSIONS`.trim().toUpperCase();
                   
                   return (
                     <MultiDropdownFilter 
@@ -445,58 +456,6 @@ export const GridViewTopFilters = ({
                       optionsList={combinedDims} 
                     />
                   );
-                }
-
-                // If specific gems are selected, render their dropdowns
-                const entries = Object.entries(availableDimensionsGrouped).sort((a, b) => {
-                  const aGem = a[0].toLowerCase().startsWith("sapphire") ? "sapphire" : a[0].toLowerCase();
-                  const bGem = b[0].toLowerCase().startsWith("sapphire") ? "sapphire" : b[0].toLowerCase();
-                  
-                  const aGemIndex = selectedGems.findIndex(g => g.toLowerCase() === aGem);
-                  const bGemIndex = selectedGems.findIndex(g => g.toLowerCase() === bGem);
-                  
-                  if (aGemIndex !== bGemIndex && aGemIndex !== -1 && bGemIndex !== -1) {
-                    return aGemIndex - bGemIndex;
-                  }
-                  
-                  if (aGem === "sapphire" && bGem === "sapphire") {
-                    const aColor = a[0].split(" ").slice(1).join(" ").toLowerCase();
-                    const bColor = b[0].split(" ").slice(1).join(" ").toLowerCase();
-                    const aColIndex = selectedSapphireColors.findIndex(c => c.toLowerCase() === aColor);
-                    const bColIndex = selectedSapphireColors.findIndex(c => c.toLowerCase() === bColor);
-                    if (aColIndex !== -1 && bColIndex !== -1) return aColIndex - bColIndex;
-                  }
-                  
-                  return a[0].localeCompare(b[0]);
-                });
-                
-                return entries.map(([groupKey, dims]) => {
-                  const isSapphire = groupKey.toLowerCase().startsWith("sapphire");
-                  const baseGem = isSapphire ? "Sapphire" : groupKey;
-                  // Only render if the base gem is in selectedGems
-                  if (!selectedGems.some(g => baseGem.toLowerCase() === g.toLowerCase())) return null;
-
-                  // Additionally filter by selected sapphire colors if applicable
-                  if (baseGem.toLowerCase() === "sapphire") {
-                     if (selectedSapphireColors.length === 0) return null;
-                     const color = groupKey.split(" ").slice(1).join(" ");
-                     if (!selectedSapphireColors.some(c => c.toLowerCase() === color.toLowerCase())) return null;
-                  }
-
-                  const shapeStr = selectedShapes.length > 0 ? ` ${selectedShapes[0]}` : "";
-                  const label = `${groupKey}${shapeStr} DIMENSIONS`.toUpperCase();
-                  return (
-                    <MultiDropdownFilter 
-                      key={groupKey}
-                      label={label} 
-                      value={selectedDimensions[groupKey] || []} 
-                      onChange={(val) => {
-                        setSelectedDimensions(prev => ({ ...prev, [groupKey]: val }));
-                      }} 
-                      optionsList={dims} 
-                    />
-                  );
-                });
                 })()}
 
 
@@ -510,6 +469,52 @@ export const GridViewTopFilters = ({
                   optionsList={availableTypes} 
                 />
               )}
+
+              {selectedTypes.includes("Natural") && availableGrades.length > 0 && (
+                <SingleDropdownFilter 
+                  label="Grade" 
+                  value={selectedGrades.length > 0 ? selectedGrades[0] : ""} 
+                  onChange={(val) => setSelectedGrades(val ? [val] : [])} 
+                  optionsList={availableGrades} 
+                />
+              )}
+              </div>
+
+              {/* Right Side: Video Block */}
+              {(() => {
+                  const selGem = selectedGems.length > 0 ? selectedGems[0] : null;
+                  const selShape = selectedShapes.length > 0 ? selectedShapes[0] : null;
+                  
+                  let videoUrl = null;
+                  if (selGem && selShape) {
+                    videoUrl = `/assets/videos/${selGem.toLowerCase()}-${selShape.toLowerCase()}.mp4`;
+                  } else if (selGem && !selShape) {
+                    videoUrl = `/assets/videos/${selGem.toLowerCase()}-round.mp4`;
+                  }
+                  
+                  if (!videoUrl) return null;
+                  
+                  return (
+                    <div className="w-full lg:w-[280px] shrink-0 mt-8 lg:mt-0 flex justify-center items-start lg:ml-auto">
+                       <div className="w-[200px] h-[200px] lg:w-[240px] lg:h-[240px] rounded-[2rem] overflow-hidden bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 ring-1 ring-black/5 transition-opacity duration-300">
+                          <video 
+                             src={videoUrl} 
+                             autoPlay 
+                             loop 
+                             muted 
+                             playsInline 
+                             className="w-full h-full object-cover scale-[1.02]"
+                             onError={(e) => {
+                               const parent = e.currentTarget.parentElement;
+                               if (parent) {
+                                  parent.style.display = 'none';
+                               }
+                             }}
+                          />
+                       </div>
+                    </div>
+                  );
+              })()}
             </div>
 
             {/* Unified Custom Size Note */}
@@ -548,6 +553,13 @@ export const GridViewTopFilters = ({
                   <div key={type} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
                     {type}
                     <IconX size={14} className="cursor-pointer" onClick={() => setSelectedTypes(selectedTypes.filter(t => t !== type))} />
+                  </div>
+                ))}
+
+                {selectedGrades.map(grade => (
+                  <div key={grade} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
+                    Grade {grade}
+                    <IconX size={14} className="cursor-pointer" onClick={() => setSelectedGrades(selectedGrades.filter(g => g !== grade))} />
                   </div>
                 ))}
 

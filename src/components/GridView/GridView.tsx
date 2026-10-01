@@ -7,7 +7,7 @@ import {
   Button,
   Loader,
 } from "@mantine/core";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { AnimatedCard } from "./AnimatedCard";
 import { getGemstonesList } from "@/apis/api";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -22,6 +22,7 @@ import { parseSize } from "./parseSizeHelper";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthForm } from "../Auth/AuthForm";
 import { getPerCaratPrice, getPerStonePrice } from "@/utils/priceHelpers";
+import { generateCalibratedStoneUrl } from "@/utils/seoUrlHelpers";
 
 type RangeValue = { min: number | ""; max: number | "" };
 
@@ -43,6 +44,8 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
   const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
   const [selectedSapphireColors, setSelectedSapphireColors] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]); // "Natural" or "Lab Grown"
+  const [selectedGrades, setSelectedGrades] = useState<string[]>([]);
+  const autoSelectedTypeRef = useRef<string | null>(null);
   
   const [weight, setWeight] = useState<string>("");
   const [selectedDimensions, setSelectedDimensions] = useState<Record<string, string[]>>({});
@@ -184,18 +187,103 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     return Array.from(typesSet);
   }, [searchItems, selectedGems, selectedShapes]);
 
+  const availableGrades = useMemo(() => {
+    if (!selectedTypes.includes("Natural")) return [];
+    
+    let preFiltered = searchItems.filter((item: any) => {
+      const type = String(item.type || "").toLowerCase();
+      return type === "natural";
+    });
+
+    if (selectedGems.length > 0) {
+      preFiltered = preFiltered.filter((item: any) => {
+        const slug = String(item.collection_slug || "").toLowerCase();
+        return selectedGems.some(g => slug.includes(g.toLowerCase()));
+      });
+    }
+
+    if (selectedShapes.length > 0) {
+      preFiltered = preFiltered.filter((item: any) => {
+        const shape = String(item.shape || "").toLowerCase();
+        return selectedShapes.some(s => shape.includes(s.toLowerCase()));
+      });
+    }
+
+    const gradesSet = new Set<string>();
+    preFiltered.forEach((item: any) => {
+      if (item.quality) gradesSet.add(item.quality);
+    });
+
+    return Array.from(gradesSet).sort();
+  }, [searchItems, selectedGems, selectedShapes, selectedTypes]);
+
   useEffect(() => {
-    if (availableTypes.length > 0 && selectedTypes.length > 0) {
-      const valid = selectedTypes.filter(t => availableTypes.includes(t));
-      if (valid.length !== selectedTypes.length) {
-        setSelectedTypes(valid);
+    if (!selectedTypes.includes("Natural") && selectedGrades.length > 0) {
+      setSelectedGrades([]);
+    }
+  }, [selectedTypes, selectedGrades]);
+
+  useEffect(() => {
+    if (availableTypes.length === 1) {
+      if (selectedTypes.length !== 1 || selectedTypes[0] !== availableTypes[0]) {
+        autoSelectedTypeRef.current = availableTypes[0];
+        setSelectedTypes([availableTypes[0]]);
       }
+    } else if (availableTypes.length > 1) {
+      if (
+        autoSelectedTypeRef.current &&
+        selectedTypes.length === 1 &&
+        selectedTypes[0] === autoSelectedTypeRef.current
+      ) {
+        // If we expand from 1 available type to multiple, and the user hasn't
+        // manually changed the type from what we auto-selected, clear it.
+        setSelectedTypes([]);
+    setSelectedGrades([]);
+        autoSelectedTypeRef.current = null;
+      } else if (selectedTypes.length > 0) {
+        // Validate existing manual selections
+        const valid = selectedTypes.filter(t => availableTypes.includes(t));
+        if (valid.length !== selectedTypes.length) {
+          setSelectedTypes(valid);
+        }
+        autoSelectedTypeRef.current = null;
+      } else {
+        autoSelectedTypeRef.current = null;
+      }
+    } else {
+      autoSelectedTypeRef.current = null;
     }
   }, [availableTypes, selectedTypes]);
 
-  // Apply Search Params whenever URL changes (once data is loaded)
+  // --- URL State Sync Logic ---
+  const currentFiltersStr = searchParams.get("filters");
+  const isInitialized = useRef(false);
+
+  // 1. Sync URL -> State (runs on mount and when user clicks Back/Forward)
   useEffect(() => {
-    if (searchItems.length > 0) {
+    if (searchItems.length === 0) return;
+
+    if (currentFiltersStr) {
+      try {
+        const parsed = JSON.parse(decodeURIComponent(currentFiltersStr));
+        setSelectedGems(parsed.selectedGems || []);
+        setSelectedShapes(parsed.selectedShapes || []);
+        setSelectedSapphireColors(parsed.selectedSapphireColors || []);
+        setSelectedTypes(parsed.selectedTypes || []);
+        setSelectedGrades(parsed.selectedGrades || []);
+        setWeight(parsed.weight || "");
+        setSelectedDimensions(parsed.selectedDimensions || {});
+        setToleranceEnabled(parsed.toleranceEnabled || false);
+        if (parsed.viewMode) setViewMode(parsed.viewMode);
+        isInitialized.current = true;
+        return;
+      } catch (e) {
+        console.error("Failed to parse filters from URL");
+      }
+    }
+
+    // If no filters in URL (fresh load or navigating from Home)
+    if (!isInitialized.current) {
       const initShape = searchParams.get("shape");
       const initColor = searchParams.get("color");
       const initType = searchParams.get("type");
@@ -218,14 +306,60 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
         setSelectedTypes([initType]);
       } else {
         setSelectedTypes([]);
+    setSelectedGrades([]);
       }
-      
-      // Reset other local filters so it acts as a fresh page load
+
+      setSelectedGrades([]);
+
       setSelectedGems([]);
       setWeight("");
       setSelectedDimensions({});
+      isInitialized.current = true;
     }
-  }, [searchItems, searchParams]);
+  }, [searchItems, currentFiltersStr]); // Re-run if URL filters change (e.g. Back button)
+
+  // 2. Sync State -> URL (runs when user changes a filter)
+  useEffect(() => {
+    if (!isInitialized.current) return;
+
+    const state = {
+      selectedGems,
+      selectedShapes,
+      selectedSapphireColors,
+      selectedTypes,
+      selectedGrades,
+      weight,
+      selectedDimensions,
+      toleranceEnabled,
+      viewMode
+    };
+    
+    const newFiltersStr = encodeURIComponent(JSON.stringify(state));
+    
+    if (newFiltersStr !== currentFiltersStr) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("filters", newFiltersStr);
+      // Remove the old query params if we are transitioning to state-based URL
+      params.delete("shape");
+      params.delete("color");
+      params.delete("type");
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+  }, [
+    selectedGems,
+    selectedShapes,
+    selectedSapphireColors,
+    selectedTypes,
+    selectedGrades,
+    weight,
+    selectedDimensions,
+    toleranceEnabled,
+    viewMode,
+    currentFiltersStr,
+    router,
+    searchParams
+  ]);
+  // ----------------------------
 
   // Filtering Logic
   useEffect(() => {
@@ -260,6 +394,14 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       filtered = filtered.filter(item => {
         const type = String(item.type || "").toLowerCase();
         return selectedTypes.some(t => type === t.toLowerCase());
+      });
+    }
+
+    // Filter by Grade
+    if (selectedGrades.length > 0) {
+      filtered = filtered.filter(item => {
+        const grade = String(item.quality || "").toLowerCase();
+        return selectedGrades.some(g => grade === g.toLowerCase());
       });
     }
 
@@ -308,8 +450,9 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     selectedGems, 
     selectedShapes, 
     selectedSapphireColors,
-    selectedTypes, 
-    weight, 
+    selectedTypes,
+    selectedGrades,
+        weight, 
     selectedDimensions,
     toleranceEnabled
   ]);
@@ -319,6 +462,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     setSelectedShapes([]);
     setSelectedSapphireColors([]);
     setSelectedTypes([]);
+    setSelectedGrades([]);
     setWeight("");
     setSelectedDimensions({});
     setToleranceEnabled(false);
@@ -378,6 +522,9 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
           selectedTypes={selectedTypes}
           setSelectedTypes={setSelectedTypes}
           availableTypes={availableTypes}
+          selectedGrades={selectedGrades}
+          setSelectedGrades={setSelectedGrades}
+          availableGrades={availableGrades}
           
           selectedDimensions={selectedDimensions}
           setSelectedDimensions={setSelectedDimensions}
@@ -419,13 +566,14 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                <Table highlightOnHover highlightOnHoverColor="#f5f5f5" striped verticalSpacing="sm" horizontalSpacing="xs" style={{ tableLayout: "fixed", width: "100%" }}>
                  <Table.Thead>
                    <Table.Tr className="font-bold text-xs text-gray-700 uppercase">
-                     <Table.Th className="w-[45px] md:w-[60px] pl-3 md:pl-4">Pic</Table.Th>
-                     <Table.Th className="w-[28%] md:w-[12%]">Type</Table.Th>
-                     <Table.Th className="hidden md:table-cell md:w-[12%]">Shape</Table.Th>
-                     <Table.Th className="w-[32%] md:w-[18%]">Size</Table.Th>
-                     <Table.Th className="w-[15%] md:w-[10%]">Ct.</Table.Th>
-                     <Table.Th className="hidden md:table-cell md:w-[12%]">Quality</Table.Th>
-                     <Table.Th className="hidden md:table-cell md:w-[12%]">Make</Table.Th>
+                     <Table.Th className="w-[45px] md:w-[60px] pl-3 md:pl-4"></Table.Th>
+                     <Table.Th className="w-[28%] md:w-[12%]">Gem Type</Table.Th>
+                     <Table.Th className="hidden md:table-cell md:w-[10%]">Shape</Table.Th>
+                     <Table.Th className="hidden md:table-cell md:w-[10%]">Color</Table.Th>
+                     <Table.Th className="w-[32%] md:w-[14%]">Size</Table.Th>
+                     <Table.Th className="w-[15%] md:w-[8%]">Ct.</Table.Th>
+                     <Table.Th className="hidden md:table-cell md:w-[10%]">Quality</Table.Th>
+                     <Table.Th className="hidden md:table-cell md:w-[10%]">Type</Table.Th>
                      <Table.Th className="hidden md:table-cell md:w-[12%]">Price/Ct</Table.Th>
                      <Table.Th className="w-[25%] md:w-[12%]">Price/St</Table.Th>
                      <Table.Th className="w-[50px] md:w-[140px] pr-3 md:pr-4"></Table.Th>
@@ -434,12 +582,21 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                  <Table.Tbody>
                    {displayItems.slice(0, visibleCount).length > 0 ? (
                      displayItems.slice(0, visibleCount).map((row: any, idx: number) => (
-                       <Table.Tr key={row.id || idx}>
+                       <Table.Tr 
+                        key={row.id || idx}
+                        onClick={(e: any) => {
+                          if (e.target?.closest?.('button, input, [role="button"]')) return;
+                          const stoneHandle = row?.collection_slug?.toLowerCase() || "unknown";
+                          router.push(generateCalibratedStoneUrl(row, stoneHandle));
+                        }}
+                        className="cursor-pointer hover:bg-gray-50 transition-colors"
+                      >
                          <Table.Td className="p-1 md:p-2 pl-3 md:pl-4">
                            {row.image_url ? <img src={row.image_url} alt={row.collection_slug} className="w-8 h-8 md:w-10 md:h-10 rounded object-contain mix-blend-multiply" /> : <div className="w-8 h-8 md:w-10 md:h-10 bg-gray-200 rounded"></div>}
                          </Table.Td>
                          <Table.Td className="text-xs md:text-sm font-medium whitespace-normal p-1 md:p-2 leading-tight">{row.collection_slug || "-"}</Table.Td>
                          <Table.Td className="hidden md:table-cell text-xs md:text-sm p-1 md:p-2 capitalize">{row.shape || "-"}</Table.Td>
+                         <Table.Td className="hidden md:table-cell text-xs md:text-sm p-1 md:p-2 capitalize">{row.color || "-"}</Table.Td>
                          <Table.Td className="text-xs md:text-sm p-1 md:p-2">
                            <span className="md:hidden">{formatListSize(row.size)}</span>
                            <span className="hidden md:inline">{row.size || "-"}</span>
@@ -451,7 +608,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                            {user ? (
                              <span className="font-semibold text-gray-900">
                                {row.price ? (
-                                 `$${getPerCaratPrice(row)}`
+                                 getPerCaratPrice(row) > 0 ? `$${getPerCaratPrice(row)}` : "-"
                                ) : (
                                  <button 
                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(row); }} 
@@ -515,7 +672,9 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                                   size="xs"
                                   radius="md"
                                   leftSection={<IconShoppingCart size={16} />}
-                                  onClick={() => {
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
                                     setSelectedProduct(row);
                                     openProductModal();
                                   }}
