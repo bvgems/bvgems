@@ -410,7 +410,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       filtered = filtered.filter(item => {
         const wt = parseFloat(item.ct_weight) || 0;
         const targetWt = Number(weight);
-        const tol = toleranceEnabled ? 5 : 0;
+        const tol = 0.5; // +/- 0.5 carat tolerance
         return Math.abs(wt - targetWt) <= tol;
       });
     }

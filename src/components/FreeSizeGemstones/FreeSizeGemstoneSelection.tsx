@@ -55,8 +55,8 @@ export default function FreeSizeGemstoneSelection() {
 
   // ✨ Weight range now starts EMPTY and only filters when user enters a value
   const [weightRange, setWeightRange] = useState<
-    [number | null, number | null]
-  >([null, null]);
+    [string, string]
+  >(["", ""]);
 
   const [singleOrMatched, setSingleOrMatched] = useState<string[]>([]);
   const [enhancement, setEnhancement] = useState<string[]>([]);
@@ -89,7 +89,7 @@ export default function FreeSizeGemstoneSelection() {
         setSelectedColors([]);
       }
       setSelectedShapes([]);
-      setWeightRange([null, null]);
+      setWeightRange(["", ""]);
       setLength({ min: "", max: "" });
       setWidth({ min: "", max: "" });
     }
@@ -112,11 +112,9 @@ export default function FreeSizeGemstoneSelection() {
     // parse "weight=min-max" but allow blanks (e.g., "weight=1.2-" or "-5")
     if (weightStr) {
       const [minStr, maxStr] = weightStr.split("-");
-      const min = minStr?.trim() ? Number(minStr) : null;
-      const max = maxStr?.trim() ? Number(maxStr) : null;
       setWeightRange([
-        typeof min === "number" && !Number.isNaN(min) ? min : null,
-        typeof max === "number" && !Number.isNaN(max) ? max : null,
+        minStr?.trim() || "",
+        maxStr?.trim() || "",
       ]);
     }
 
@@ -132,8 +130,8 @@ export default function FreeSizeGemstoneSelection() {
     if (selectedColors.length) params.set("color", selectedColors.join(","));
 
     // only write weight to URL if at least one bound is provided
-    if (weightRange[0] != null || weightRange[1] != null) {
-      const weightStr = `${weightRange[0] ?? ""}-${weightRange[1] ?? ""}`;
+    if (weightRange[0] !== "" || weightRange[1] !== "") {
+      const weightStr = `${weightRange[0]}-${weightRange[1]}`;
       params.set("weight", weightStr);
     }
 
@@ -167,9 +165,9 @@ export default function FreeSizeGemstoneSelection() {
       origin: selectedOrigins,
 
       // only include weight if user provided min and/or max
-      weight: (weightRange[0] != null || weightRange[1] != null) ? [
-        weightRange[0] != null ? weightRange[0] - (toleranceEnabled ? 0.5 : 0) : null,
-        weightRange[1] != null ? weightRange[1] + (toleranceEnabled ? 0.5 : 0) : null
+      weight: (weightRange[0] !== "" || weightRange[1] !== "") ? [
+        weightRange[0] !== "" ? Number(weightRange[0]) - (toleranceEnabled ? 0.5 : 0) : null,
+        weightRange[1] !== "" ? Number(weightRange[1]) + (toleranceEnabled ? 0.5 : 0) : null
       ] : undefined,
 
       single_or_matched: singleOrMatched,
@@ -232,7 +230,7 @@ export default function FreeSizeGemstoneSelection() {
     setSingleOrMatched([]);
     setEnhancement([]);
     setCertified(null);
-    setWeightRange([null, null]);
+    setWeightRange(["", ""]);
     setLength({ min: "", max: "" });
     setWidth({ min: "", max: "" });
     setToleranceEnabled(false);
@@ -257,8 +255,8 @@ export default function FreeSizeGemstoneSelection() {
         setSelectedGems={setSelectedStones}
         selectedShapes={selectedShapes}
         setSelectedShapes={setSelectedShapes}
-        weightRange={{ min: weightRange[0] ?? "", max: weightRange[1] ?? "" }}
-        setWeightRange={(val) => setWeightRange([val.min === "" ? null : Number(val.min), val.max === "" ? null : Number(val.max)])}
+        weightRange={{ min: weightRange[0], max: weightRange[1] }}
+        setWeightRange={(val) => setWeightRange([val.min as string, val.max as string])}
         weightBounds={{ min: 0, max: 100 }}
         lengthRange={length}
         setLengthRange={setLength}

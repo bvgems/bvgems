@@ -6,7 +6,7 @@ import Image from "next/image";
 import { IconX, IconChevronUp, IconChevronDown, IconFilter, IconSearch } from "@tabler/icons-react";
 import { shopByColorOptions } from "@/utils/constants";
 
-type RangeValue = { min: number | ""; max: number | "" };
+type RangeValue = { min: number | string; max: number | string };
 
 type TopFiltersProps = {
   gemstoneOptions: { label: string; image: string; value: string }[];
@@ -74,7 +74,7 @@ const RangeFilter = ({
       <div className="flex gap-2 mt-2">
         <NumberInput
           value={value.min}
-          onChange={(val) => onChange({ ...value, min: val === "" ? "" : Number(val) })}
+          onChange={(val) => onChange({ ...value, min: val })}
           placeholder="Min"
           min={0}
           max={value.max === "" ? undefined : Number(value.max)}
@@ -84,7 +84,7 @@ const RangeFilter = ({
         />
         <NumberInput
           value={value.max}
-          onChange={(val) => onChange({ ...value, max: val === "" ? "" : Number(val) })}
+          onChange={(val) => onChange({ ...value, max: val })}
           placeholder="Max"
           min={value.min === "" ? 0 : Number(value.min)}
           leftSection={<span className="text-xs text-gray-500 ml-2">Max</span>}
