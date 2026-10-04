@@ -648,40 +648,44 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                          </Table.Td>
                          <Table.Td className="p-1 md:p-2 pr-3 md:pr-4">
                            <div className="flex justify-end">
-                              {/* Mobile Cart Icon */}
-                              <div className="md:hidden">
-                                <ActionIcon
-                                  variant="outline"
-                                  color="#0b182d"
-                                  size="md"
-                                  radius="md"
-                                  onClick={() => {
-                                    setSelectedProduct(row);
-                                    openProductModal();
-                                  }}
-                                >
-                                  <IconShoppingCart size={16} />
-                                </ActionIcon>
-                              </div>
-                              
-                              {/* Desktop Cart Button */}
-                              <div className="hidden md:block">
-                                <Button
-                                  variant="outline"
-                                  color="#0b182d"
-                                  size="xs"
-                                  radius="md"
-                                  leftSection={<IconShoppingCart size={16} />}
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    setSelectedProduct(row);
-                                    openProductModal();
-                                  }}
-                                >
-                                  ADD TO CART
-                                </Button>
-                              </div>
+                            {row.price && (
+                              <>
+                                {/* Mobile Cart Icon */}
+                                <div className="md:hidden">
+                                  <ActionIcon
+                                    variant="outline"
+                                    color="#0b182d"
+                                    size="md"
+                                    radius="md"
+                                    onClick={() => {
+                                      setSelectedProduct(row);
+                                      openProductModal();
+                                    }}
+                                  >
+                                    <IconShoppingCart size={16} />
+                                  </ActionIcon>
+                                </div>
+                                
+                                {/* Desktop Cart Button */}
+                                <div className="hidden md:block">
+                                  <Button
+                                    variant="outline"
+                                    color="#0b182d"
+                                    size="xs"
+                                    radius="md"
+                                    leftSection={<IconShoppingCart size={16} />}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setSelectedProduct(row);
+                                      openProductModal();
+                                    }}
+                                  >
+                                    ADD TO CART
+                                  </Button>
+                                </div>
+                              </>
+                            )}
                            </div>
                          </Table.Td>
                        </Table.Tr>

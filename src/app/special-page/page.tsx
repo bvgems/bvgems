@@ -562,32 +562,34 @@ export default function SpecialPage() {
                          <Table.Td className="text-sm">{row["Stock Wt."] || "-"}</Table.Td>
                          <Table.Td className="text-sm">{row["Stock Pcs."] || "-"}</Table.Td>
                          <Table.Td>
-                            <Button
-                              leftSection={<IconShoppingCart size={16} />}
-                              variant="outline"
-                              size="xs"
-                              color="#0b182d"
-                              onClick={() => {
-                                setSelectedProduct({
-                                  id: row.Item,
-                                  productId: row.Item,
-                                  productType: "stone",
-                                  collection_slug: row.normalizedGem,
-                                  shape: row.normalizedShape,
-                                  size: row.Size,
-                                  quality: row.type || "Natural",
-                                  ct_weight: row["Stock Wt."],
-                                  color: row.Color,
-                                  image_url: row.imageUrl,
-                                  price: row["Cp Std"] || 0,
-                                  type: row.type || "Natural",
-                                  cut: row.cut || "Standard",
-                                });
-                                openProductModal();
-                              }}
-                            >
-                              Add
-                            </Button>
+                            {row["Cp Std"] && Number(row["Cp Std"]) > 0 && (
+                              <Button
+                                leftSection={<IconShoppingCart size={16} />}
+                                variant="outline"
+                                size="xs"
+                                color="#0b182d"
+                                onClick={() => {
+                                  setSelectedProduct({
+                                    id: row.Item,
+                                    productId: row.Item,
+                                    productType: "stone",
+                                    collection_slug: row.normalizedGem,
+                                    shape: row.normalizedShape,
+                                    size: row.Size,
+                                    quality: row.type || "Natural",
+                                    ct_weight: row["Stock Wt."],
+                                    color: row.Color,
+                                    image_url: row.imageUrl,
+                                    price: row["Cp Std"] || 0,
+                                    type: row.type || "Natural",
+                                    cut: row.cut || "Standard",
+                                  });
+                                  openProductModal();
+                                }}
+                              >
+                                Add
+                              </Button>
+                            )}
                          </Table.Td>
                        </Table.Tr>
                      ))
@@ -609,34 +611,36 @@ export default function SpecialPage() {
                     <p className="text-xs text-gray-600 mt-1">{row.normalizedGem} • {row.normalizedShape}</p>
                     <p className="text-xs text-gray-600">{row.Size}</p>
                     <p className="text-xs font-semibold mt-2">{row["Stock Wt."]} ct</p>
-                    <Button
-                      fullWidth
-                      mt="md"
-                      size="xs"
-                      variant="outline"
-                      color="#0b182d"
-                      leftSection={<IconShoppingCart size={16} />}
-                      onClick={() => {
-                        setSelectedProduct({
-                          id: row.Item,
-                          productId: row.Item,
-                          productType: "stone",
-                          collection_slug: row.normalizedGem,
-                          shape: row.normalizedShape,
-                          size: row.Size,
-                          quality: row.type || "Natural",
-                          ct_weight: row["Stock Wt."],
-                          color: row.Color,
-                          image_url: row.imageUrl,
-                          price: row["Cp Std"] || 0,
-                          type: row.type || "Natural",
-                          cut: row.cut || "Standard",
-                        });
-                        openProductModal();
-                      }}
-                    >
-                      Add to Cart
-                    </Button>
+                    {row["Cp Std"] && Number(row["Cp Std"]) > 0 && (
+                      <Button
+                        fullWidth
+                        mt="md"
+                        size="xs"
+                        variant="outline"
+                        color="#0b182d"
+                        leftSection={<IconShoppingCart size={16} />}
+                        onClick={() => {
+                          setSelectedProduct({
+                            id: row.Item,
+                            productId: row.Item,
+                            productType: "stone",
+                            collection_slug: row.normalizedGem,
+                            shape: row.normalizedShape,
+                            size: row.Size,
+                            quality: row.type || "Natural",
+                            ct_weight: row["Stock Wt."],
+                            color: row.Color,
+                            image_url: row.imageUrl,
+                            price: row["Cp Std"] || 0,
+                            type: row.type || "Natural",
+                            cut: row.cut || "Standard",
+                          });
+                          openProductModal();
+                        }}
+                      >
+                        Add to Cart
+                      </Button>
+                    )}
                   </div>
                 ))}
              </div>

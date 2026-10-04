@@ -677,9 +677,11 @@ export default function ProductDetailsPage() {
             )}
             {user && (
               <div className="flex gap-2">
-                <Button color="#0b182d" onClick={addProductToCart} className="flex-1">
-                  ADD TO CART
-                </Button>
+                {hasPricing && (
+                  <Button color="#0b182d" onClick={addProductToCart} className="flex-1">
+                    ADD TO CART
+                  </Button>
+                )}
                 <Button color="#0b182d" variant="outline" onClick={openQuote} className="flex-1">
                   REQUEST QUOTE
                 </Button>

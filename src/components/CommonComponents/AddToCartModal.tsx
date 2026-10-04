@@ -106,6 +106,9 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   const handleAddToCart = () => {
     if (!product) return;
+    
+    const finalPrice = purchaseByCarat ? perCarat : perStone;
+    if (finalPrice <= 0) return;
 
     addToCart({
       product: {
@@ -384,6 +387,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                 radius="md"
                 leftSection={<IconShoppingCart size={18} />}
                 className="!bg-[#0b182d] hover:opacity-95 transition-opacity"
+                disabled={(purchaseByCarat ? perCarat : perStone) <= 0}
               >
                 Add to cart
               </Button>

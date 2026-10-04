@@ -155,7 +155,7 @@ export const AnimatedCard = ({
                          </div>
                        </div>
                        
-                       {onAddToCart && (
+                       {onAddToCart && item?.price && (
                          <ActionIcon 
                            variant="filled" 
                            color="#0b182d" 
@@ -238,7 +238,7 @@ export const AnimatedCard = ({
                          </div>
                        </div>
                        
-                       {onAddToCart && (
+                       {onAddToCart && item?.price && (
                          <ActionIcon 
                            variant="filled" 
                            color="#0b182d" 

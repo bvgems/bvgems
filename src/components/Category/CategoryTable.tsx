@@ -576,19 +576,21 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                               )}
                             </TableTd>
                             <TableTd onClick={(e) => e.stopPropagation()}>
-                              <Button
-                                leftSection={<IconShoppingCart />}
-                                variant="outline"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  setSelectedProduct(element); // ✅ store the clicked product
-                                  openProductModal();
-                                }}
-                                color="#0b182d"
-                              >
-                                ADD TO CART
-                              </Button>
+                              {element.price && (
+                                <Button
+                                  leftSection={<IconShoppingCart />}
+                                  variant="outline"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setSelectedProduct(element); // ✅ store the clicked product
+                                    openProductModal();
+                                  }}
+                                  color="#0b182d"
+                                >
+                                  ADD TO CART
+                                </Button>
+                              )}
                             </TableTd>
                           </>
                         )}
