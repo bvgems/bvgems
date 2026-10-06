@@ -386,9 +386,9 @@ export const FreeSizeGridViewTopFilters = ({
       <div className="w-full h-[1px] bg-gray-200 my-8" />
 
       <div className="flex flex-col lg:flex-row gap-10 items-center lg:items-start w-full">
-        <RangeFilter label={`Weight (CT)${toleranceEnabled ? " (±0.5)" : ""}`} value={weightRange} onChange={setWeightRange} bounds={weightBounds} />
-        <MobileDropdownRangeFilter label={`Length (MM)${toleranceEnabled ? " (±0.5)" : ""}`} value={lengthRange} onChange={setLengthRange} bounds={lengthBounds} />
-        <MobileDropdownRangeFilter label={`Width (MM)${toleranceEnabled ? " (±0.5)" : ""}`} value={widthRange} onChange={setWidthRange} bounds={widthBounds} />
+        <RangeFilter label={`Weight (CT)${toleranceEnabled ? " (±0.2)" : ""}`} value={weightRange} onChange={setWeightRange} bounds={weightBounds} />
+        <MobileDropdownRangeFilter label={`Length (MM)${toleranceEnabled ? " (±0.2)" : ""}`} value={lengthRange} onChange={setLengthRange} bounds={lengthBounds} />
+        <MobileDropdownRangeFilter label={`Width (MM)${toleranceEnabled ? " (±0.2)" : ""}`} value={widthRange} onChange={setWidthRange} bounds={widthBounds} />
         
         <div className="flex flex-col justify-center items-center lg:items-start h-full pt-4">
           <Switch

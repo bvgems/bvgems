@@ -166,20 +166,20 @@ export default function FreeSizeGemstoneSelection() {
 
       // only include weight if user provided min and/or max
       weight: (weightRange[0] !== "" || weightRange[1] !== "") ? [
-        weightRange[0] !== "" ? Number(weightRange[0]) - (toleranceEnabled ? 0.5 : 0) : null,
-        weightRange[1] !== "" ? Number(weightRange[1]) + (toleranceEnabled ? 0.5 : 0) : null
+        weightRange[0] !== "" ? Number(weightRange[0]) - (toleranceEnabled ? 0.2 : 0) : null,
+        weightRange[1] !== "" ? Number(weightRange[1]) + (toleranceEnabled ? 0.2 : 0) : null
       ] : undefined,
 
       single_or_matched: singleOrMatched,
       enhancement,
       is_certified: certified,
       length: {
-        min: length.min !== "" ? Number(length.min) - (toleranceEnabled ? 0.5 : 0) : undefined,
-        max: length.max !== "" ? Number(length.max) + (toleranceEnabled ? 0.5 : 0) : undefined,
+        min: length.min !== "" ? Number(length.min) - (toleranceEnabled ? 0.2 : 0) : undefined,
+        max: length.max !== "" ? Number(length.max) + (toleranceEnabled ? 0.2 : 0) : undefined,
       },
       width: {
-        min: width.min !== "" ? Number(width.min) - (toleranceEnabled ? 0.5 : 0) : undefined,
-        max: width.max !== "" ? Number(width.max) + (toleranceEnabled ? 0.5 : 0) : undefined,
+        min: width.min !== "" ? Number(width.min) - (toleranceEnabled ? 0.2 : 0) : undefined,
+        max: width.max !== "" ? Number(width.max) + (toleranceEnabled ? 0.2 : 0) : undefined,
       },
     };
 

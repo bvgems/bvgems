@@ -59,6 +59,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
   const [productModal, { open: openProductModal, close: closeProductModal }] = useDisclosure(false);
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [quoteProduct, setQuoteProduct] = useState<any>(null);
+  const [loadingCartId, setLoadingCartId] = useState<string | null>(null);
 
 
   const searchParams = useSearchParams();
@@ -352,16 +353,34 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       viewMode
     };
     
-    const newFiltersStr = encodeURIComponent(JSON.stringify(state));
+    const isEmpty = selectedGems.length === 0 &&
+                    selectedShapes.length === 0 &&
+                    selectedSapphireColors.length === 0 &&
+                    selectedTypes.length === 0 &&
+                    selectedGrades.length === 0 &&
+                    weight === "" &&
+                    Object.keys(selectedDimensions).length === 0 &&
+                    !toleranceEnabled &&
+                    viewMode === "list";
+                    
+    const newFiltersStr = isEmpty ? null : encodeURIComponent(JSON.stringify(state));
     
     if (newFiltersStr !== currentFiltersStr) {
       const params = new URLSearchParams(searchParams.toString());
-      params.set("filters", newFiltersStr);
+      if (newFiltersStr) {
+        params.set("filters", newFiltersStr);
+      } else {
+        params.delete("filters");
+      }
+      
       // Remove the old query params if we are transitioning to state-based URL
       params.delete("shape");
       params.delete("color");
       params.delete("type");
-      router.replace(`?${params.toString()}`, { scroll: false });
+      
+      const paramString = params.toString();
+      const newUrl = paramString ? `?${paramString}` : window.location.pathname;
+      router.replace(newUrl, { scroll: false });
     }
   }, [
     selectedGems,
@@ -428,7 +447,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       filtered = filtered.filter(item => {
         const wt = parseFloat(item.ct_weight) || 0;
         const targetWt = Number(weight);
-        const tol = 0.5; // +/- 0.5 carat tolerance
+        const tol = 0.2; // +/- 0.2 carat tolerance
         return Math.abs(wt - targetWt) <= tol;
       });
     }
@@ -675,9 +694,29 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                                     color="#0b182d"
                                     size="md"
                                     radius="md"
-                                    onClick={() => {
-                                      setSelectedProduct(row);
-                                      openProductModal();
+                                    loading={loadingCartId === row.id}
+                                    onClick={async (e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setLoadingCartId(row.id);
+                                      try {
+                                        const res = await fetch("/api/getProduct", {
+                                          method: "POST",
+                                          headers: { "Content-Type": "application/json" },
+                                          body: JSON.stringify(row.id),
+                                        });
+                                        if (res.ok) {
+                                          const data = await res.json();
+                                          setSelectedProduct(data && data.length > 0 ? data[0] : row);
+                                        } else {
+                                          setSelectedProduct(row);
+                                        }
+                                      } catch (err) {
+                                        setSelectedProduct(row);
+                                      } finally {
+                                        setLoadingCartId(null);
+                                        openProductModal();
+                                      }
                                     }}
                                   >
                                     <IconShoppingCart size={16} />
@@ -692,11 +731,29 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                                     size="xs"
                                     radius="md"
                                     leftSection={<IconShoppingCart size={16} />}
-                                    onClick={(e) => {
+                                    loading={loadingCartId === row.id}
+                                    onClick={async (e) => {
                                       e.preventDefault();
                                       e.stopPropagation();
-                                      setSelectedProduct(row);
-                                      openProductModal();
+                                      setLoadingCartId(row.id);
+                                      try {
+                                        const res = await fetch("/api/getProduct", {
+                                          method: "POST",
+                                          headers: { "Content-Type": "application/json" },
+                                          body: JSON.stringify(row.id),
+                                        });
+                                        if (res.ok) {
+                                          const data = await res.json();
+                                          setSelectedProduct(data && data.length > 0 ? data[0] : row);
+                                        } else {
+                                          setSelectedProduct(row);
+                                        }
+                                      } catch (err) {
+                                        setSelectedProduct(row);
+                                      } finally {
+                                        setLoadingCartId(null);
+                                        openProductModal();
+                                      }
                                     }}
                                   >
                                     ADD TO CART
@@ -724,9 +781,26 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                       item={item} 
                       index={index} 
                       baseDelay={0.1} 
-                      onAddToCart={() => {
-                        setSelectedProduct(item);
-                        openProductModal();
+                      onAddToCart={async () => {
+                        setLoadingCartId(item.id);
+                        try {
+                          const res = await fetch("/api/getProduct", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(item.id),
+                          });
+                          if (res.ok) {
+                            const data = await res.json();
+                            setSelectedProduct(data && data.length > 0 ? data[0] : item);
+                          } else {
+                            setSelectedProduct(item);
+                          }
+                        } catch (err) {
+                          setSelectedProduct(item);
+                        } finally {
+                          setLoadingCartId(null);
+                          openProductModal();
+                        }
                       }}
                       onOpenQuote={(item) => setQuoteProduct(item)}
                     />
@@ -785,7 +859,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
             ct_weight={selectedProduct.ct_weight}
             color={selectedProduct.color}
             product={selectedProduct}
-            hideShadeOptions={true}
+
           />
         )}
       </Modal>
