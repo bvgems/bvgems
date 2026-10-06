@@ -309,7 +309,7 @@ export const GridViewTopFilters = ({
 }: TopFiltersProps) => {
 
   const toggleGem = (val: string) => {
-    if (selectedGems.includes(val)) {
+    if (selectedGems.length === 1 && selectedGems[0] === val) {
       setSelectedGems([]);
       if (val === "Sapphire") {
         setSelectedSapphireColors([]);
@@ -319,6 +319,14 @@ export const GridViewTopFilters = ({
         setSelectedSapphireColors([]);
       }
       setSelectedGems([val]);
+    }
+  };
+
+  const removeGem = (val: string) => {
+    const newGems = selectedGems.filter(g => g !== val);
+    setSelectedGems(newGems);
+    if (val === "Sapphire") {
+      setSelectedSapphireColors([]);
     }
   };
 
@@ -466,7 +474,7 @@ export const GridViewTopFilters = ({
                 <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Gem Type</label>
                 <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                   {gemstoneOptions.map((gem, i) => {
-                    const isSelected = selectedGems.includes(gem.value);
+                    const isSelected = selectedGems.length === 1 && selectedGems.includes(gem.value);
                     return (
                       <div
                         key={i}
@@ -483,7 +491,7 @@ export const GridViewTopFilters = ({
                 </div>
 
                 {/* SAPPHIRE COLORS SUB-FILTER */}
-                {selectedGems.includes("Sapphire") && sapphireColors.length > 0 && (
+                {selectedGems.length === 1 && selectedGems.includes("Sapphire") && sapphireColors.length > 0 && (
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center lg:items-start">
                     <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block text-center lg:text-left">Sapphire Colors</label>
                     <div className="flex flex-wrap justify-center lg:justify-start gap-4">
@@ -614,13 +622,13 @@ export const GridViewTopFilters = ({
                 {selectedGems.map(gem => (
                   <div key={gem} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
                     {gem}
-                    <IconX size={14} className="cursor-pointer" onClick={() => toggleGem(gem)} />
+                    <IconX size={14} className="cursor-pointer" onClick={() => removeGem(gem)} />
                   </div>
                 ))}
 
                 {selectedSapphireColors.map(color => (
                   <div key={`color-${color}`} className="flex items-center gap-2 bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
-                    {color} Sapphire
+                    {color}
                     <IconX size={14} className="cursor-pointer" onClick={() => toggleSapphireColor(color)} />
                   </div>
                 ))}

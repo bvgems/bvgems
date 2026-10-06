@@ -266,7 +266,17 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     if (currentFiltersStr) {
       try {
         const parsed = JSON.parse(decodeURIComponent(currentFiltersStr));
-        setSelectedGems(parsed.selectedGems || []);
+        let initGems = parsed.selectedGems || [];
+        if (initGems.length === 0 && parsed.selectedSapphireColors?.length > 0) {
+          const matchingGems = new Set<string>();
+          searchItems.forEach((item: any) => {
+            if (item.collection_slug && item.color && item.color.toLowerCase().includes(parsed.selectedSapphireColors[0].toLowerCase())) {
+              matchingGems.add(item.collection_slug);
+            }
+          });
+          initGems = Array.from(matchingGems);
+        }
+        setSelectedGems(initGems);
         setSelectedShapes(parsed.selectedShapes || []);
         setSelectedSapphireColors(parsed.selectedSapphireColors || []);
         setSelectedTypes(parsed.selectedTypes || []);
@@ -298,6 +308,14 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       if (initColor) {
         const colorTitle = initColor.charAt(0).toUpperCase() + initColor.slice(1).toLowerCase();
         setSelectedSapphireColors([colorTitle]);
+        
+        const matchingGems = new Set<string>();
+        searchItems.forEach(item => {
+          if (item.collection_slug && item.color && item.color.toLowerCase().includes(colorTitle.toLowerCase())) {
+            matchingGems.add(item.collection_slug);
+          }
+        });
+        setSelectedGems(Array.from(matchingGems));
       } else {
         setSelectedSapphireColors([]);
       }
