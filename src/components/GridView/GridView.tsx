@@ -426,7 +426,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       
       const filtered = prev["Any"].filter(d => validDims.includes(d));
       if (filtered.length !== prev["Any"].length) {
-        const newSelectedDims = { ...prev, "Any": filtered };
+        const newSelectedDims: Record<string, string[]> = { ...prev, "Any": filtered };
         if (newSelectedDims["Any"].length === 0) {
           delete newSelectedDims["Any"];
         }
