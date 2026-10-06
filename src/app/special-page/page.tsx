@@ -1,5 +1,6 @@
 "use client";
 
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { Center, Loader, Title, Table, TextInput, Select, Button, Grid, GridCol, ActionIcon, Pagination, Checkbox, Modal, Group, Text } from "@mantine/core";
@@ -462,6 +463,11 @@ export default function SpecialPage() {
   }
 
   return (
+    <div className="w-full">
+      <PageHeader 
+        title="Special Selection" 
+        subtitle="Exclusive gemstones curated for our special collection." 
+      />
     <div className="bg-[#fcfbf9] min-h-screen">
       <div className="px-4 md:px-8 mt-5 mb-20 max-w-[1600px] mx-auto">
         <TopFilters 
@@ -684,6 +690,7 @@ export default function SpecialPage() {
           />
         )}
       </Modal>
+    </div>
     </div>
   );
 }

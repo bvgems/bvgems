@@ -173,7 +173,8 @@ const MultiDropdownFilter = ({
 };
 
 
-import { getCategoryData } from "@/apis/api";
+import { getShapesData } from "@/apis/api";
+
 
 
 const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireColors }: any) => {
@@ -190,20 +191,37 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
       return;
     }
 
-    getCategoryData(gem.toLowerCase()).then((data) => {
+    
+    const shapeToUse = shape || "Round";
+    const isSapphire = gem.toLowerCase() === "sapphire";
+    const colorMatch = (isSapphire && selectedSapphireColors && selectedSapphireColors.length > 0) ? selectedSapphireColors[0] : null;
+    
+    getShapesData(shapeToUse, gem, isSapphire, colorMatch || undefined).then((res: any) => {
+
       if (!active) return;
       
-      const images = data?.availableQualityImages;
-      if (!images || images.length === 0) {
+      const items = res?.data || [];
+      if (!items || items.length === 0) {
         setVideoUrl(null);
         return;
       }
       
-      const shapeToUse = shape || "Round";
-      const isSapphire = gem.toLowerCase() === "sapphire";
-      const colorMatch = (isSapphire && selectedSapphireColors && selectedSapphireColors.length > 0) ? selectedSapphireColors[0] : null;
-      
-      // Determine grade priorities based on selected types
+      // Group by quality to get representative items (like CategoryContent does)
+      const qualityMap: Record<string, any> = {};
+      items.forEach((item: any) => {
+        const hasVideo = Array.isArray(item?.cloudinary_videos) && item.cloudinary_videos.length > 0;
+        const current = qualityMap[item.quality];
+        if (!current) {
+          qualityMap[item.quality] = item;
+        } else {
+          const currentHasVideo = Array.isArray(current?.cloudinary_videos) && current.cloudinary_videos.length > 0;
+          if (!currentHasVideo && hasVideo) {
+            qualityMap[item.quality] = item;
+          }
+        }
+      });
+      const images = Object.values(qualityMap);
+
       let gradePriorities = ["AA", "A", "B", "Lab Grown"];
       if (selectedTypes.includes("Lab Grown") && !selectedTypes.includes("Natural")) {
          gradePriorities = ["Lab Grown"];
@@ -218,20 +236,29 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
           const gradeItem = images.find((item: any) => item.quality === grade);
           if (gradeItem?.cloudinary_videos && Array.isArray(gradeItem.cloudinary_videos) && gradeItem.cloudinary_videos.length > 0) {
                
-               // First try to find shape AND color match
-               const bestMatch = gradeItem.cloudinary_videos.find((v: any) => {
+               const sortedVideos = [...gradeItem.cloudinary_videos].sort((a: any, b: any) => {
+                  const labelA = (a.emerald_type || a.label || "").toLowerCase();
+                  const labelB = (b.emerald_type || b.label || "").toLowerCase();
+                  if (labelA === "colombian" && labelB !== "colombian") return -1;
+                  if (labelB === "colombian" && labelA !== "colombian") return 1;
+                  if (labelA === "zambian" && labelB !== "zambian") return -1;
+                  if (labelB === "zambian" && labelA !== "zambian") return 1;
+                  return 0;
+               });
+
+               
+               const bestMatch = sortedVideos.find((v: any) => {
                   const lbl = (v.label || v.emerald_type || "").toLowerCase();
                   const matchesShape = lbl.includes(shapeToUse.toLowerCase());
                   const matchesColor = colorMatch ? lbl.includes(colorMatch.toLowerCase()) : true;
                   return matchesShape && matchesColor;
                });
                
-               // Fallback to shape only
-               const shapeMatch = bestMatch || gradeItem.cloudinary_videos.find((v: any) => 
+               const shapeMatch = bestMatch || sortedVideos.find((v: any) => 
                   (v.label || v.emerald_type || "").toLowerCase().includes(shapeToUse.toLowerCase())
                );
                
-               const videoItem = shapeMatch || gradeItem.cloudinary_videos[0]; // fallback
+               const videoItem = shapeMatch; // Exact shape required
                
                if (videoItem?.video_url) {
                    foundVideo = videoItem.video_url;
@@ -240,7 +267,6 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
                }
           }
       }
-      
       setVideoUrl(foundVideo);
       setLabel(foundLabel);
     }).catch(() => {
@@ -253,11 +279,9 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
   if (!videoUrl) return null;
 
   return (
-    <div 
-      className={`w-full lg:w-[280px] shrink-0 mt-8 lg:mt-0 flex justify-center items-start lg:ml-auto transition-opacity duration-500 ease-out ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-      style={{ display: isLoaded ? 'flex' : 'none' }}
-    >
-       <div className="relative w-[200px] h-[200px] lg:w-[240px] lg:h-[240px] rounded-[2rem] overflow-hidden bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 ring-1 ring-black/5">
+    <div className={`w-full mt-10 mb-2 flex justify-center items-center transition-all duration-700 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ display: isLoaded ? 'flex' : 'none' }}>
+      <div className="relative group overflow-hidden bg-white/50 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] border border-black/[0.03] p-2 ring-1 ring-black/[0.02]">
+        <div className="relative w-full max-w-sm aspect-square md:w-[400px] md:h-[400px] rounded-[2rem] overflow-hidden bg-[#fbfbfd]">
           <video 
              key={videoUrl}
              src={videoUrl} 
@@ -265,16 +289,25 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
              loop 
              muted 
              playsInline 
-             className="w-full h-full object-cover scale-[1.02]"
+             className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
              onCanPlay={() => setIsLoaded(true)}
              onError={() => setIsLoaded(false)}
           />
+          {/* Subtle elegant gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60" />
+          
+          {/* Elegant frosted label */}
           {label && (
-             <div className="absolute bottom-3 left-3 bg-black/20 backdrop-blur-[6px] border border-white/20 text-white text-[9px] px-2.5 py-1 rounded-full shadow-sm font-semibold uppercase tracking-widest pointer-events-none z-10">
-                {label}
+             <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center">
+               <div className="bg-white/30 backdrop-blur-xl border border-white/40 text-gray-900 px-4 py-1.5 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+                 <span className="text-[11px] font-medium tracking-[0.15em] uppercase drop-shadow-sm mix-blend-color-burn">
+                   {label}
+                 </span>
+               </div>
              </div>
           )}
-       </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -547,6 +580,15 @@ export const GridViewTopFilters = ({
               </div>
 
             </div>
+            
+            {/* Elegant Gem Video Presentation */}
+            <GemVideo 
+              gem={selectedGems.length > 0 ? selectedGems[0] : null} 
+              shape={selectedShapes.length > 0 ? selectedShapes[0] : null} 
+              selectedTypes={selectedTypes}
+              selectedGrades={selectedGrades}
+              selectedSapphireColors={selectedSapphireColors}
+            />
 
             {/* Remapped bottom container */}
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 w-full mt-6">
@@ -598,14 +640,7 @@ export const GridViewTopFilters = ({
               )}
               </div>
 
-              {/* Right Side: Smart Video Block */}
-              <GemVideo 
-                gem={selectedGems.length > 0 ? selectedGems[0] : null} 
-                shape={selectedShapes.length > 0 ? selectedShapes[0] : null} 
-                selectedTypes={selectedTypes}
-                selectedGrades={selectedGrades}
-                selectedSapphireColors={selectedSapphireColors}
-              />
+
             </div>
 
             {/* Unified Custom Size Note */}

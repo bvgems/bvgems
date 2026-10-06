@@ -280,9 +280,7 @@ export function CartComponent() {
       <Grid gutter="xl">
         <GridCol span={{ base: 12, md: 8 }}>
           <div className="flex items-center justify-between">
-            <Text size="xl" fw={600} mb="md">
-              Shopping Cart
-            </Text>
+            <div />
             <Button
               color="#0b182d"
               size="compact-sm"

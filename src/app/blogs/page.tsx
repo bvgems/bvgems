@@ -1,6 +1,7 @@
 "use client";
 
 import { getBlogPosts } from "@/apis/api";
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { IconArrowRight } from "@tabler/icons-react";
@@ -27,7 +28,12 @@ export default function BlogPage() {
   }, []);
 
   return (
-    <div className="container mx-auto py-16 px-4">
+    <div className="w-full">
+      <PageHeader 
+        title="Our Blog" 
+        subtitle="Insights, updates, and deep dives into the world of colored gemstones." 
+      />
+      <div className="container mx-auto py-16 px-4">
       {/* Blog Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {loading
@@ -98,6 +104,7 @@ export default function BlogPage() {
               </div>
             ))}
       </div>
+    </div>
     </div>
   );
 }

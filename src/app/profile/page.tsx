@@ -1,5 +1,6 @@
 "use client";
 
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { UnAuthorized } from "@/components/CommonComponents/UnAuthorized";
@@ -21,7 +22,12 @@ export default function ProfilePage() {
   if (!user) return <UnAuthorized />;
 
   return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden">
+    <div className="w-full flex flex-col h-screen">
+      <PageHeader 
+        title="My Profile" 
+        subtitle="Manage your personal information, addresses, and settings." 
+      />
+      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
       {/* Sidebar on desktop */}
       <div className="hidden md:block w-[300px] border-r border-gray-200">
         <SettingsSidebar
@@ -68,6 +74,7 @@ export default function ProfilePage() {
           selectedSubSection={selectedSubSection}
         />
       </Drawer>
+    </div>
     </div>
   );
 }

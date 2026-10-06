@@ -1,4 +1,6 @@
 "use client";
+import { formatDisplayWeight } from "@/utils/formatters";
+import { formatDisplayPrice } from "@/utils/priceHelpers";
 
 import { fetchFreeSizeGemstonesById } from "@/apis/api";
 import { AuthForm } from "@/components/Auth/AuthForm";
@@ -184,7 +186,7 @@ export default function FreeSizeGemstoneDetails({
       pdf.text(`Per Carat Price: $${product?.price}`, rightX, rightY);
       rightY += 6;
       pdf.text(
-        `Total Price: $${(product?.price * product?.ct_weight).toFixed(2)}`,
+        `Total Price: $${formatDisplayPrice(product?.price * product?.ct_weight)}`,
         rightX,
         rightY
       );
@@ -286,7 +288,7 @@ export default function FreeSizeGemstoneDetails({
             <div>
               <h1 className="text-xl font-semibold">
                 Loose {product?.gemstone_type} {product?.shape}{" "}
-                {product?.dimension} mm – {product?.ct_weight} Carat Free Size
+                {product?.dimension} mm – {formatDisplayWeight(product?.ct_weight)} Carat Free Size
                 Gemstone
               </h1>
               <div className="flex justify-between items-center mt-2">
@@ -316,7 +318,7 @@ export default function FreeSizeGemstoneDetails({
                   <span>
                     Total Price:{" "}
                     <strong>
-                      {product?.price ? `$${(product.price * product?.ct_weight).toFixed(2)}` : (
+                      {product?.price ? `$${formatDisplayPrice(product.price * product?.ct_weight)}` : (
                         <button 
                           onClick={(e) => { e.stopPropagation(); openQuote(); }} 
                           className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer hover:text-blue-800 transition-colors"
@@ -342,7 +344,7 @@ export default function FreeSizeGemstoneDetails({
               description={`This ${product?.gemstone_type?.toLowerCase()} free size gemstone is cut and polished to showcase its brilliance. Measuring ${
                 product?.dimension
               } and weighing ${
-                product?.ct_weight
+                formatDisplayWeight(product?.ct_weight)
               } carats, it is ideal for custom jewelry designs.`}
             />
 

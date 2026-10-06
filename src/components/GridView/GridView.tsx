@@ -9,7 +9,7 @@ import {
 } from "@mantine/core";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { AnimatedCard } from "./AnimatedCard";
-import { getGemstonesList } from "@/apis/api";
+import { getGemstonesList, globalGemstonesListCache } from "@/apis/api";
 import { useRouter, useSearchParams } from "next/navigation";
 import { GridViewTopFilters } from "./GridViewTopFilters";
 import { IconList, IconLayoutGrid, IconShoppingCart } from "@tabler/icons-react";
@@ -33,10 +33,17 @@ interface GridViewProps {
 }
 
 export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(() => {
+    if (gemstones !== undefined || color) return false;
+    return !globalGemstonesListCache;
+  });
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   
-  const [searchItems, setSearchItems] = useState<any>([]); // allGemstones
+  const [searchItems, setSearchItems] = useState<any[]>(() => {
+    if (gemstones) return gemstones;
+    if (globalGemstonesListCache) return globalGemstonesListCache.allGemstones || globalGemstonesListCache.data || [];
+    return [];
+  }); // allGemstones
   const [displayItems, setDisplayItems] = useState<any>([]);
 
   // Filter States
@@ -66,14 +73,39 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
   const router = useRouter();
 
   // Load more state
-  const [visibleCount, setVisibleCount] = useState(16);
   const ITEMS_PER_PAGE = 16;
+  const [visibleCount, setVisibleCount] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = sessionStorage.getItem("gridViewVisibleCount");
+      if (stored) return parseInt(stored, 10);
+    }
+    return ITEMS_PER_PAGE;
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("gridViewVisibleCount", visibleCount.toString());
+    }
+  }, [visibleCount]);
+
+  const isFirstMount = useRef(true);
 
   // Initialize data
   useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      if (searchItems.length > 0) return; // Already initialized from cache or props
+    }
+
     if (gemstones === undefined && !color) {
-      setLoading(true);
-      fetchGemstones();
+      if (!globalGemstonesListCache) {
+        setLoading(true);
+        fetchGemstones();
+      } else {
+        const allData = globalGemstonesListCache.allGemstones || globalGemstonesListCache.data || [];
+        setSearchItems(allData);
+        setLoading(false);
+      }
     } else {
       setLoading(true);
       const timer = setTimeout(() => {

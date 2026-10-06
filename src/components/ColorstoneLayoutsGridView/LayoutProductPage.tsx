@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { formatDisplayPrice } from "@/utils/priceHelpers";
+
 import {
   Container,
   Grid,
@@ -268,7 +270,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
                   <Text c="dimmed" td="line-through">
                     <NumberFormatter
                       prefix="$ "
-                      value={(selectedSizePrice * 1.1).toFixed(2)}
+                      value={formatDisplayPrice(selectedSizePrice * 1.1)}
                       suffix=" USD"
                     />
                   </Text>

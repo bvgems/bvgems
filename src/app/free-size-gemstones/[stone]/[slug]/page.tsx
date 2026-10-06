@@ -1,5 +1,6 @@
 import { fetchFreeSizeGemstonesById } from "@/apis/api";
 import { Metadata } from "next";
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 import FreeSizeGemstoneDetails from "@/components/FreeSizeGemstones/FreeSizeGemstonesDetails";
 
 type PageProps = {
@@ -59,7 +60,15 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: PageProps) {
-  const { slug } = await params;
+  const { stone, slug } = await params;
   const id = extractIdFromSlug(slug);
-  return <FreeSizeGemstoneDetails id={id} />;
+  return (
+    <div className="w-full">
+      <PageHeader 
+        title={`${stone.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase())} Detail`} 
+        subtitle="Review the specifications and high-resolution media for this unique gemstone." 
+      />
+      <FreeSizeGemstoneDetails id={id} />
+    </div>
+  );
 }

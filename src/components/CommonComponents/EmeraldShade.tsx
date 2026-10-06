@@ -15,7 +15,7 @@ export const EmeraldShade = ({
         {product?.extra_images?.length > 0 ? (
           product?.extra_images
             ?.map((url: string, index: number) => ({
-              name: index === 0 ? "Zambian" : "Colombian",
+              name: index === 0 ? "Colombian" : "Zambian",
               url,
             }))
             .map((shade: any, index: any) => (
@@ -45,7 +45,7 @@ export const EmeraldShade = ({
         ) : (
           <div>
             <div className="flex gap-4">
-              {["Zambian", "Colombian"].map((shade) => (
+              {["Colombian", "Zambian"].map((shade) => (
                 <button
                   key={shade}
                   onClick={() => setEmeraldShade(shade)}
@@ -68,10 +68,10 @@ export const EmeraldShade = ({
         <p className="font-medium mb-1">Shade Commentary:</p>
         <ul className="list-disc pl-5 space-y-1">
           <li>
-            <strong>Zambian:</strong> Darker and saturated forest green hue
+            <strong>Colombian:</strong> Lighter and brighter green hue
           </li>
           <li>
-            <strong>Colombian:</strong> Lighter and brighter green hue
+            <strong>Zambian:</strong> Darker and saturated forest green hue
           </li>
         </ul>
       </div>

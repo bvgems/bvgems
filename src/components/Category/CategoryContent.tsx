@@ -1,4 +1,5 @@
 "use client";
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 import Link from "next/link";
 
 import { useEffect, useState, useRef } from "react";
@@ -133,6 +134,7 @@ export function CategoryContent({
   };
 
 
+  const formattedHandle = handle ? (typeof handle === 'string' ? handle.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : String(handle)) : "Gemstones";
   const urlShape = searchParams.get("shape");
   const urlSizes = searchParams.getAll("size");
   const urlType = searchParams.get("type");
@@ -458,6 +460,10 @@ export function CategoryContent({
 
   return (
     <>
+      <PageHeader 
+        title={`${formattedHandle} Collection`}
+        subtitle={`Discover our exquisite collection of ${formattedHandle} gemstones.`}
+      />
       <div className="mt-9 px-6">
         <Breadcrumbs separator="›" className="mb-6">
           {breadcrumbItems}

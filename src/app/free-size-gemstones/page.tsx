@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { FreeSizeGemstonesCard } from "@/components/FreeSizeGemtones/FreeSizeGemstonesCard";
 import FreeSizeGemstoneSelection from "@/components/FreeSizeGemstones/FreeSizeGemstoneSelection";
 import { Suspense } from "react";
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 
 export const metadata: Metadata = {
   title: "Free Size Gemstones – Sapphire, Ruby & Emerald | B.V. Gems",
@@ -19,9 +20,15 @@ export const metadata: Metadata = {
 
 export default function FreeSizeGemstonePage() {
   return (
-    <Suspense fallback={<div className="p-10 text-center">Loading gemstone selection...</div>}>
-      <FreeSizeGemstoneSelection />
-    </Suspense>
+    <div className="w-full">
+      <PageHeader 
+        title="Free Size Gemstones" 
+        subtitle="Explore our exclusive free size gemstone collection. Perfect for unique jewelry designs." 
+      />
+      <Suspense fallback={<div className="p-10 text-center">Loading gemstone selection...</div>}>
+        <FreeSizeGemstoneSelection />
+      </Suspense>
+    </div>
   );
   // <>
   //   {/* <div className="flex justify-center gap-6 py-10 bg-[#E5E7EB]">

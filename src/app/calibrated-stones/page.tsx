@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { GridView } from "@/components/GridView/GridView";
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 
 export const metadata: Metadata = {
   title: "Loose Calibrated Faceted Gemstones – Shop Online | B.V. Gems",
@@ -18,8 +19,14 @@ export const metadata: Metadata = {
 
 export default function LooseGemStonesPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <GridView />
-    </Suspense>
+    <div className="w-full">
+      <PageHeader 
+        title="Calibrated Gemstones" 
+        subtitle="Shop over 5,000 calibrated faceted gemstones at B.V. Gems." 
+      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <GridView />
+      </Suspense>
+    </div>
   );
 }

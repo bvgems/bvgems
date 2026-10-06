@@ -1,4 +1,5 @@
 "use client";
+import { formatDisplayPrice, formatDisplayWeight } from "@/utils/priceHelpers";
 
 import {
   Alert,
@@ -72,7 +73,7 @@ export default function ProductDetailsPage() {
   const [allProducts, setAllProducts] = useState<any>();
   const [quantity, setQuantity] = useState<number>(1);
   const [caratError, setCaratError] = useState<string | null>(null);
-  const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
+  const [emeraldShade, setEmeraldShade] = useState<string | null>("Colombian");
   const [description, setDescription] = useState("");
 
   const [caratWeight, setCaratWeight] = useState<number>(1);
@@ -122,7 +123,7 @@ export default function ProductDetailsPage() {
   }, [product]);
 
   const [price, setPrice] = useState<number>(0);
-  const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(false);
+  const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(true);
   const [allowPurchaseByCarat, setAllowPurchaseByCarat] = useState(true);
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
@@ -330,13 +331,13 @@ export default function ProductDetailsPage() {
 
       pdf.setFont("helvetica", "normal");
       pdf.text(
-        `Per Stone Price: $${getPerStonePrice(product).toFixed(2)}`,
+        `Per Stone Price: $${formatDisplayPrice(getPerStonePrice(product))}`,
         rightX,
         rightY,
       );
       rightY += 6;
       pdf.text(
-        `Per Carat Price: $${getPerCaratPrice(product).toFixed(2)}`,
+        `Per Carat Price: $${formatDisplayPrice(getPerCaratPrice(product))}`,
         rightX,
         rightY,
       );
@@ -521,7 +522,7 @@ export default function ProductDetailsPage() {
             <div>
               <h1 className="text-xl font-semibold">
                 Loose {product?.collection_slug} {product?.shape}{" "}
-                {product?.size} – {product?.ct_weight} Carat {product?.quality}{" "}
+                {product?.size} – {formatDisplayWeight(product?.ct_weight)} Carat {product?.quality}{" "}
                 Quality Calibrated Gemstone
               </h1>
               <div className="flex justify-between items-center mt-2">
@@ -553,7 +554,7 @@ export default function ProductDetailsPage() {
                             Request Pricing
                           </button>
                         )
-                        : `$${getPerStonePrice(product).toFixed(2)}`}
+                        : `$${formatDisplayPrice(getPerStonePrice(product))}`}
                     </strong>
                   </span>
                   {allowPurchaseByCarat && (
@@ -569,7 +570,7 @@ export default function ProductDetailsPage() {
                               Request Pricing
                             </button>
                           )
-                          : `$${getPerCaratPrice(product).toFixed(2)}`}
+                          : `$${formatDisplayPrice(getPerCaratPrice(product))}`}
                       </strong>
                     </span>
                   )}

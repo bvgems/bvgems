@@ -1,5 +1,6 @@
 // app/free-size-gemstones/page.tsx
 import type { Metadata } from "next";
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 import FreeSizeGemstoneSelection from "@/components/FreeSizeGemstones/FreeSizeGemstoneSelection";
 
 export const metadata: Metadata = {
@@ -16,6 +17,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function FreeSizeGemstonePage() {
-  return <FreeSizeGemstoneSelection />;
+export default async function FreeSizeGemstonePage({ params }: { params: Promise<{ stone: string }> }) {
+  const { stone } = await params;
+  const formattedStone = stone.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+
+  return (
+    <div className="w-full">
+      <PageHeader 
+        title={`${formattedStone} Free Size`} 
+        subtitle={`Explore our exclusive collection of ${formattedStone} free size gemstones.`} 
+      />
+      <FreeSizeGemstoneSelection />
+    </div>
+  );
 }

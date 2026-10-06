@@ -1,3 +1,4 @@
+import { formatDisplayPrice } from "@/utils/priceHelpers";
 import NextImage from "next/image";
 import { Card, GridCol, Modal, Slider, Tooltip } from "@mantine/core";
 import { AnimatePresence } from "framer-motion";
@@ -67,8 +68,8 @@ export const ProductCard = ({
       const max = Math.max(...amounts);
 
       return min === max
-        ? `$${min.toFixed(2)} USD`
-        : `$${min.toFixed(2)} - $${max.toFixed(2)} USD`;
+        ? `$${formatDisplayPrice(min)} USD`
+        : `$${formatDisplayPrice(min)} - $${formatDisplayPrice(max)} USD`;
     } catch (err) {
       return "Price on Request";
     }

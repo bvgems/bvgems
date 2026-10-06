@@ -36,7 +36,7 @@ import { useRouter } from "next/navigation";
 import { EmeraldShade } from "./EmeraldShade";
 import { BlueSapphireShade } from "./BlueSapphireShade";
 import { shades } from "@/utils/constants";
-import { getPerCaratPrice, getPerStonePrice, isLabGrown } from "@/utils/priceHelpers";
+import { getPerCaratPrice, getPerStonePrice, isLabGrown, formatDisplayPrice } from "@/utils/priceHelpers";
 import { QuoteRequestModal } from "./QuoteRequestModal";
 
 interface AddToCartModalProps {
@@ -73,7 +73,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   const addToCart = cartStore((state: any) => state.addToCart);
 
   const [additionalComments, setAdditionalComments] = useState("");
-  const [emeraldShade, setEmeraldShade] = useState<string | null>("Zambian");
+  const [emeraldShade, setEmeraldShade] = useState<string | null>("Colombian");
   const [sapphireShade, setSapphireShade] = useState<string | null>(
     "Vivid Royal Blue",
   );
@@ -87,7 +87,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
         ? product?.extra_images[0]
         : image_url,
   );
-  const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(false);
+  const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(true);
   const [caratError, setCaratError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [caratWeight, setCaratWeight] = useState<number>(1);
@@ -303,7 +303,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                   >
                     Request Pricing
                   </button>
-                ) : `Per Stone: $${perStone.toFixed(2)}`}
+                ) : `Per Stone: $${formatDisplayPrice(perStone)}`}
               </Badge>
               {allowPurchaseByCarat && (
                 <Badge size="lg" radius="md" variant="light" color="dark">
@@ -314,7 +314,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                     >
                       Request Pricing
                     </button>
-                  ) : `Per Carat: $${perCarat.toFixed(2)}`}
+                  ) : `Per Carat: $${formatDisplayPrice(perCarat)}`}
                 </Badge>
               )}
             </Group>

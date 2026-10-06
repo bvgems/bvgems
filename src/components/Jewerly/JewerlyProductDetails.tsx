@@ -1,4 +1,5 @@
 "use client";
+import { formatDisplayPrice } from "@/utils/priceHelpers";
 
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -299,7 +300,7 @@ export const JewelryProductDetails = ({
               <Text c="dimmed" td="line-through">
                 <NumberFormatter
                   prefix="$ "
-                  value={(jf.numericPrice * 1.1).toFixed(2)}
+                  value={formatDisplayPrice(jf.numericPrice * 1.1)}
                   suffix=" USD"
                 />
               </Text>

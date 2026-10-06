@@ -13,7 +13,6 @@ import {
   Group,
 } from "@mantine/core";
 import { IconCalendarPlus, IconExternalLink } from "@tabler/icons-react";
-import { AnimatedText } from "../CommonComponents/AnimatedText";
 
 import { tradeShows, TradeShow } from "@/utils/constants";
 
@@ -128,10 +127,7 @@ export default function TradeShows() {
   return (
     <div className="py-1">
       <div className="max-w-7xl mx-auto px-6">
-        <AnimatedText
-          text="Upcoming Trade Shows"
-          className="text-center text-3xl sm:text-4xl text-[#0b182d] mb-12"
-        />
+        
 
         <Grid gutter="xl">
           {tradeShows.map((show, idx) => {

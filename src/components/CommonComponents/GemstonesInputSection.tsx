@@ -1,4 +1,4 @@
-import { Button, NumberInput, NumberInputHandlers } from "@mantine/core";
+import { Button, NumberInput, NumberInputHandlers, Select, Text } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import React, { useRef } from "react";
 
@@ -18,33 +18,33 @@ export const GemstonesInputSection = ({
   const handleQuantityChanges = (value: number) => {
     const qty = Math.max(1, Number(value) || 1);
     setQuantity(qty);
-    // recalcTotal(product, qty, caratWeight);
   };
 
-  const handleCaratWeightChanges = (value: number) => {
-    const minWeight = 0.01;
-    const ctw = Number(value) || minWeight;
-
-    if (ctw < minWeight) {
-      setCaratError(`Minimum carat weight is ${minWeight} ct`);
-      setCaratWeight(minWeight);
-    } else {
+  const handleCaratWeightChanges = (value: string | null) => {
+    if (value) {
+      setCaratWeight(Number(value));
       setCaratError(null);
-      setCaratWeight(ctw);
     }
-
-    // recalcTotal(product, quantity, Math.max(minWeight, ctw));
   };
+
+  const caratOptions = Array.from({ length: 100 }, (_, i) => String(i + 1));
+
   return purchaseByCarat ? (
-    <div className="flex items-center justify-between gap-2 mt-3">
-      <div>Carat Weight:</div>
-      <NumberInput
-        value={caratWeight}
-        onChange={(value: any) => handleCaratWeightChanges(value)}
-        min={0.01}
-        step={0.01}
-        error={caratError}
-      />
+    <div className="flex flex-col gap-2 mt-3">
+      <div className="flex items-center justify-between gap-2">
+        <div>Carat Weight:</div>
+        <Select
+          data={caratOptions}
+          value={String(caratWeight)}
+          onChange={handleCaratWeightChanges}
+          searchable
+          allowDeselect={false}
+          className="w-32"
+        />
+      </div>
+      <Text size="xs" color="dimmed" mt={4}>
+        We will deliver the order by using the closest number of stones possible for selected weight. For any other request feel free to contact us.
+      </Text>
     </div>
   ) : (
     <div className="flex items-center justify-between gap-2 mt-3">

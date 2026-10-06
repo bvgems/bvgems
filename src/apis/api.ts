@@ -124,16 +124,31 @@ export const getBestSellingProducts = async () => {
   }
 };
 
+export const globalFreeSizeCache = new Map<string, any>();
+export const globalFreeSizePromises = new Map<string, Promise<any>>();
+export let lastFreeSizeData: any[] | null = null;
+
 export const getFreeSizeFilteredData = async (options: any) => {
+  const cacheKey = JSON.stringify(options);
+  if (globalFreeSizeCache.has(cacheKey)) {
+    lastFreeSizeData = globalFreeSizeCache.get(cacheKey);
+    return lastFreeSizeData;
+  }
+  if (globalFreeSizePromises.has(cacheKey)) return await globalFreeSizePromises.get(cacheKey);
+
   try {
-    const response = await axios.post(
+    const promise = axios.post(
       `${baseUrl}/api/getFilteredFreeSizeGemstones`,
-      {
-        options,
-      },
-    );
-    return response?.data;
+      { options },
+    ).then(res => {
+      globalFreeSizeCache.set(cacheKey, res?.data);
+      lastFreeSizeData = res?.data;
+      return res?.data;
+    });
+    globalFreeSizePromises.set(cacheKey, promise);
+    return await promise;
   } catch (error) {
+    globalFreeSizePromises.delete(cacheKey);
     console.error("Error fetching free size gemstones", error);
     return null;
   }
@@ -643,11 +658,21 @@ export const getAllGemstones = async () => {
   }
 };
 
+export let globalGemstonesListCache: any = null;
+export let globalGemstonesListPromise: Promise<any> | null = null;
+
 export const getGemstonesList = async () => {
+  if (globalGemstonesListCache) return globalGemstonesListCache;
+  if (globalGemstonesListPromise) return await globalGemstonesListPromise;
+
   try {
-    const response = await axios.get(`${baseUrl}/api/getAllGemStones`);
-    return response?.data;
+    globalGemstonesListPromise = axios.get(`${baseUrl}/api/getAllGemStones`).then(res => {
+      globalGemstonesListCache = res?.data;
+      return res?.data;
+    });
+    return await globalGemstonesListPromise;
   } catch (error) {
+    globalGemstonesListPromise = null;
     console.log("Something went wrong while fetching gemstones");
   }
 };
@@ -664,21 +689,38 @@ export const getCategoryData = async (handle: string) => {
   }
 };
 
+export const globalShapesDataCache = new Map<string, any>();
+export const globalShapesDataPromises = new Map<string, Promise<any>>();
+export let lastShapesData: any = null;
+
 export const getShapesData = async (
   shape: string | null,
   collection?: string,
   isSapphire?: boolean,
   sapphireColor?: string,
 ) => {
+  const cacheKey = JSON.stringify({ shape, collection, isSapphire, sapphireColor });
+  if (globalShapesDataCache.has(cacheKey)) {
+    lastShapesData = globalShapesDataCache.get(cacheKey);
+    return lastShapesData;
+  }
+  if (globalShapesDataPromises.has(cacheKey)) return await globalShapesDataPromises.get(cacheKey);
+
   try {
-    const response = await axios.post(`${baseUrl}/api/getShapesData`, {
+    const promise = axios.post(`${baseUrl}/api/getShapesData`, {
       shape,
       collection,
       isSapphire,
       sapphireColor,
+    }).then(res => {
+      globalShapesDataCache.set(cacheKey, res);
+      lastShapesData = res;
+      return res;
     });
-    return response;
+    globalShapesDataPromises.set(cacheKey, promise);
+    return await promise;
   } catch (error) {
+    globalShapesDataPromises.delete(cacheKey);
     console.log("Something went wrong while fetching category data");
   }
 };

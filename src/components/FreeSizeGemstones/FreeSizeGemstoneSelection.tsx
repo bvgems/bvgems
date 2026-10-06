@@ -1,6 +1,6 @@
 "use client";
 
-import { getFreeSizeFilteredData } from "@/apis/api";
+import { getFreeSizeFilteredData, globalFreeSizeCache, lastFreeSizeData } from "@/apis/api";
 import { FreeSizeGridView } from "@/components/FreeSizeGemtones/FreeSizeGridView";
 import { FreeSizeGridViewTopFilters } from "@/components/FreeSizeGemtones/FreeSizeGridViewTopFilters";
 import { sortBySizeAsc } from "@/utils/sortUtils";
@@ -32,9 +32,12 @@ export default function FreeSizeGemstoneSelection() {
     }
   }, [segments]);
 
-  const [filteredGemstones, setFilteredGemstones] = useState<any[]>([]);
+  const [filteredGemstones, setFilteredGemstones] = useState<any[]>(() => {
+    if (!lastFreeSizeData) return [];
+    return [...lastFreeSizeData].sort((a, b) => sortBySizeAsc(a, b, 'dimension'));
+  });
   const [filterTrigger, setFilterTrigger] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !lastFreeSizeData);
   const [isInitialized, setIsInitialized] = useState(false);
 
   const [lotSearch, setLotSearch] = useState("");
@@ -144,7 +147,6 @@ export default function FreeSizeGemstoneSelection() {
   };
 
   const fetchFilteredData = async () => {
-    setLoading(true);
     let gemstoneTypeFilter: string[] = [];
 
     if (selectedStones.length > 0) {
@@ -192,6 +194,13 @@ export default function FreeSizeGemstoneSelection() {
         delete filterOptions[k];
       }
     });
+
+    const cacheKey = JSON.stringify(filterOptions);
+    const isCached = globalFreeSizeCache.has(cacheKey);
+
+    if (!isCached) {
+      setLoading(true);
+    }
 
     const response = await getFreeSizeFilteredData(filterOptions);
     const sorted = sortBySize(response?.data || []);

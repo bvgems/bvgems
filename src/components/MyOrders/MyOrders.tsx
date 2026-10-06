@@ -95,9 +95,6 @@ export const MyOrders = () => {
   return (
     <Container my="xl" size="xl">
       <div className="flex flex-col gap-6">
-        <Title mt="xl" order={2}>
-          My Orders
-        </Title>
 
         {/* 🔍 Search bar */}
         <TextInput

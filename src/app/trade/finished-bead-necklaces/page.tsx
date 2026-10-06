@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CommonGridView } from "@/components/CommonComponents/CommonGridView";
 import { fetchFinishedBeadNecklace } from "@/apis/api";
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 
 export const metadata: Metadata = {
   title: "Precious Gemstone Beads – Moonstone, Emerald & More | B.V. Gems",
@@ -18,5 +19,13 @@ export const metadata: Metadata = {
 
 export default async function FinishedBeadNecklaces() {
   const finishedBeadNecklace = await fetchFinishedBeadNecklace();
-  return <CommonGridView isBeadNecklace={true} initialData={{ finishedBeadNecklace }} />;
+  return (
+    <div className="w-full">
+      <PageHeader 
+        title="Finished Bead Necklaces" 
+        subtitle="Explore our exquisite collection of precious gemstone bead necklaces." 
+      />
+      <CommonGridView isBeadNecklace={true} initialData={{ finishedBeadNecklace }} />
+    </div>
+  );
 }

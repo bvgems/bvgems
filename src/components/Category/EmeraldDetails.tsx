@@ -21,7 +21,7 @@ export const EmeraldDetails = ({
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
-            {/* Zambian */}
+            {/* Colombian */}
             <div className="flex flex-col items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
               <div className="h-[140px] w-[140px] flex items-center justify-center">
                 <Image loading="lazy"
@@ -32,11 +32,10 @@ export const EmeraldDetails = ({
                 />
               </div>
               <span className="mt-4 text-lg font-semibold text-gray-900">
-                Zambian
+                Colombian
               </span>
               <p className="mt-2 text-sm text-gray-600 leading-relaxed text-center">
-                Darker, rich, and saturated forest green hue. Known for its
-                depth and intensity.
+                Lighter and brighter green hue with vibrant brilliance and sparkle.
               </p>
             </div>
 
@@ -51,11 +50,10 @@ export const EmeraldDetails = ({
                   />
                 </div>
                 <span className="mt-4 text-lg font-semibold text-gray-900">
-                  Colombian
+                  Zambian
                 </span>
                 <p className="mt-2 text-sm text-gray-600 leading-relaxed text-center">
-                  Lighter and brighter green hue with vibrant brilliance and
-                  sparkle.
+                  Darker, rich, and saturated forest green hue. Known for its depth and intensity.
                 </p>
               </div>
             )}

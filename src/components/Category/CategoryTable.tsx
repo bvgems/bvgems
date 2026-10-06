@@ -1,4 +1,5 @@
 "use client";
+import { formatDisplayPrice, formatDisplayWeight } from "@/utils/priceHelpers";
 import NextImage from "next/image";
 
 import {
@@ -60,7 +61,20 @@ export const CategoryTable = ({
 
   const [sortOrder, setSortOrder] = useState<string | null>("lowToHigh");
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = sessionStorage.getItem("categoryTableCurrentPage");
+      if (stored) return parseInt(stored, 10);
+    }
+    return 1;
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("categoryTableCurrentPage", currentPage.toString());
+    }
+  }, [currentPage]);
+
   const rowsPerPage = 25;
 
   const cartStore = getCartStore(userKey);
@@ -196,10 +210,10 @@ Gemstone: ${item.collection_slug}
 Shape: ${item.shape}
 Image: ${item.image_url}
 Size: ${item.size}
-CT: ${item.ct_weight}
+CT: ${formatDisplayWeight(item.ct_weight)}
 Quality: ${item.quality}
-${options.showPiece && item.price ? `Price Per Piece: $${item.price}` : ""}
-${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
+${options.showPiece && item.price ? `Price Per Piece: $${formatDisplayPrice(item.price)}` : ""}
+${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(item))}` : ""}
 -------------------------`;
       })
       .join("\n");
@@ -230,10 +244,10 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
         <td>${item.collection_slug}</td>
         <td>${item.shape}</td>
         <td>${item.size}</td>
-        <td>${item.ct_weight}</td>
+        <td>${formatDisplayWeight(item.ct_weight)}</td>
         <td>${item.quality}</td>
         ${options.showPiece ? `<td>$${item.price ?? "-"}</td>` : ""}
-        ${options.showCarat ? `<td>$${getPerCaratPrice(item)}</td>` : ""}
+        ${options.showCarat ? `<td>$${formatDisplayPrice(getPerCaratPrice(item))}</td>` : ""}
       </tr>
     `,
       )
@@ -539,7 +553,7 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                             : element.color}
                         </TableTd>
                         <TableTd onClick={() => goToCartPage(element)}>{element.size}</TableTd>
-                        <TableTd onClick={() => goToCartPage(element)}>{element.ct_weight}</TableTd>
+                        <TableTd onClick={() => goToCartPage(element)}>{formatDisplayWeight(element.ct_weight)}</TableTd>
                         <TableTd onClick={() => goToCartPage(element)}>{element.quality}</TableTd>
                         <TableTd onClick={() => goToCartPage(element)}>{element.cut}</TableTd>
                         {user && (
@@ -670,14 +684,14 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                                 </span>
                               </div>
                               <div>
-                                <strong>CT Weight:</strong> {element.ct_weight}
+                                <strong>CT Weight:</strong> {formatDisplayWeight(element.ct_weight)}
                               </div>
                               {user && (
                                 <>
                                   <div>
                                     <strong>Est. Price Per Stone:</strong>{" "}
                                     {element?.price ? (
-                                      `$ ${element.price}`
+                                      `$ ${formatDisplayPrice(element.price)}`
                                     ) : (
                                       <button
                                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}

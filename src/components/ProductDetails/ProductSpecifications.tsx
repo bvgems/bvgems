@@ -1,4 +1,5 @@
 "use client";
+import { formatDisplayWeight } from "@/utils/formatters";
 
 import {
   Anchor,
@@ -301,7 +302,7 @@ export const ProductSpecifications = ({
           {isValid(product?.ct_weight) && (
             <div className="flex flex-row justify-between items-center">
               <div className="font-semibold">CT. Weight</div>
-              <Text>{product?.ct_weight}</Text>
+              <Text>{formatDisplayWeight(product?.ct_weight)}</Text>
             </div>
           )}
 
@@ -362,7 +363,7 @@ export const ProductSpecifications = ({
                 <Table.Th>
                   <span className="font-semibold">CT. Weight</span>
                 </Table.Th>
-                <Table.Td>{product?.ct_weight}</Table.Td>
+                <Table.Td>{formatDisplayWeight(product?.ct_weight)}</Table.Td>
               </Table.Tr>
             )}
 

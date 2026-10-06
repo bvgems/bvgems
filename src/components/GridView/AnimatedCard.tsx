@@ -1,4 +1,5 @@
 "use client";
+import { formatDisplayPrice, formatDisplayWeight } from "@/utils/priceHelpers";
 import { motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -36,7 +37,7 @@ export const AnimatedCard = ({
   const router = useRouter();
 
   const getProductName = (item: any) => {
-    const ctWeightPart = item?.ct_weight ? `${item.ct_weight} cttw. ` : "";
+    const ctWeightPart = item?.ct_weight ? `${formatDisplayWeight(item.ct_weight)} cttw. ` : "";
     return `${ctWeightPart}${item?.color} ${item?.shape} ${item?.collection_slug}, ${item?.quality} Quality - ${item?.size}`;
   };
 
@@ -126,7 +127,7 @@ export const AnimatedCard = ({
                    <span className="text-gray-300 text-[10px]">•</span>
                    <span>{item?.quality || "Natural"}</span>
                    <span className="text-gray-300 text-[10px]">•</span>
-                   <span className="text-gray-400">{item?.ct_weight} ct</span>
+                   <span className="text-gray-400">{formatDisplayWeight(item?.ct_weight)} ct</span>
                  </p>
 
                  <div className="mt-auto flex flex-col pt-4 border-t border-gray-50 mt-4">
@@ -137,7 +138,7 @@ export const AnimatedCard = ({
                          <div className="flex items-baseline gap-1.5">
                            <span className="font-bold text-[#0b182d] text-lg sm:text-xl tracking-tight leading-none">
                              {item?.price ? (
-                               `$${getPerStonePrice(item)}`
+                               `$${formatDisplayPrice(getPerStonePrice(item))}`
                              ) : (
                                <button 
                                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onOpenQuote && onOpenQuote(item); }} 
@@ -209,7 +210,7 @@ export const AnimatedCard = ({
                    )}
                    <span>{item?.type || item?.quality || "Natural"}</span>
                   <span className="text-gray-300 text-[10px]">•</span>
-                   <span className="text-gray-400">{item?.ct_weight} ct</span>
+                   <span className="text-gray-400">{formatDisplayWeight(item?.ct_weight)} ct</span>
                  </p>
 
                  <div className="mt-auto flex flex-col pt-4 border-t border-gray-50 mt-4">
@@ -220,7 +221,7 @@ export const AnimatedCard = ({
                          <div className="flex items-baseline gap-1.5">
                            <span className="font-bold text-[#0b182d] text-lg sm:text-xl tracking-tight leading-none">
                              {item?.price ? (
-                               `$${getPerStonePrice(item)}`
+                               `$${formatDisplayPrice(getPerStonePrice(item))}`
                              ) : (
                                <button 
                                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onOpenQuote && onOpenQuote(item); }} 

@@ -1,4 +1,5 @@
 "use client";
+import { formatDisplayPrice, formatDisplayWeight } from "@/utils/priceHelpers";
 
 import { IconList, IconLayoutGrid, IconShoppingCart } from "@tabler/icons-react";
 import { Table, ActionIcon } from "@mantine/core";
@@ -43,14 +44,32 @@ export function FreeSizeGridView({
   gemstones,
   loadingTrigger,
 }: GridViewProps) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(gemstones === undefined);
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [selectedGem, setSelectedGem] = useState<string | null>(null);
-  const [searchItems, setSearchItems] = useState<string[]>([]);
-  const [allItems, setAllItems] = useState<any>([]);
-  const [displayItems, setDisplayItems] = useState<any>([]);
-  const [visibleCount, setVisibleCount] = useState(18);
+  const [allItems, setAllItems] = useState<any[]>(() => gemstones || []);
+  const [displayItems, setDisplayItems] = useState<any[]>(() => gemstones || []);
+  const [searchItems, setSearchItems] = useState<string[]>(() => {
+    return (gemstones || [])
+      .map((g: any) => g.lot_number)
+      .filter((lot: any) => lot != null && lot !== "");
+  });
+  const ITEMS_PER_PAGE = 18;
+  const [visibleCount, setVisibleCount] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = sessionStorage.getItem("freeSizeGridViewVisibleCount");
+      if (stored) return parseInt(stored, 10);
+    }
+    return ITEMS_PER_PAGE;
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("freeSizeGridViewVisibleCount", visibleCount.toString());
+    }
+  }, [visibleCount]);
+
   const [sortOrder, setSortOrder] = useState<any>("lowToHigh");
 
   
@@ -61,7 +80,7 @@ export function FreeSizeGridView({
   const [productModal, { open: openProductModal, close: closeProductModal }] = useDisclosure(false);
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
-const ITEMS_PER_PAGE = 18;
+
   const router = useRouter();
 
     const isMobile = useMediaQuery("(max-width: 1024px)");
@@ -134,7 +153,14 @@ const ITEMS_PER_PAGE = 18;
     searchParams
   ]);
 
+  const isFirstMount = useRef(true);
+
   useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      if (allItems.length > 0) return; // Already initialized
+    }
+
     if (gemstones === undefined) {
       setLoading(true);
       fetchGemstones();
@@ -143,7 +169,6 @@ const ITEMS_PER_PAGE = 18;
       const timer = setTimeout(() => {
         setAllItems(gemstones || []);
         setDisplayItems(gemstones || []);
-        // FIX: Filter out null/undefined lot_numbers
         setSearchItems(
           (gemstones || [])
             .map((g: any) => g.lot_number)
@@ -368,12 +393,12 @@ const ITEMS_PER_PAGE = 18;
                            <span className="md:hidden">{row.dimension?.replace(/mm/gi, '').trim() || "-"}</span>
                            <span className="hidden md:inline">{row.dimension || "-"}</span>
                          </Table.Td>
-                         <Table.Td className="text-xs md:text-sm whitespace-nowrap p-1 md:p-2">{row.ct_weight || "-"}</Table.Td>
+                         <Table.Td className="text-xs md:text-sm whitespace-nowrap p-1 md:p-2">{row.ct_weight ? formatDisplayWeight(row.ct_weight) : "-"}</Table.Td>
                          <Table.Td className="hidden md:table-cell text-xs md:text-sm p-1 md:p-2">
                            {user ? (
                              <span className="font-semibold text-gray-900">
                                {row.price ? (
-                                 getPerCaratPrice(row) > 0 ? `$${getPerCaratPrice(row).toFixed(2)}` : "-"
+                                 getPerCaratPrice(row) > 0 ? `$${formatDisplayPrice(getPerCaratPrice(row))}` : "-"
                                ) : (
                                  <button 
                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(row); }} 
@@ -392,7 +417,7 @@ const ITEMS_PER_PAGE = 18;
                            {user ? (
                              <span className="font-semibold text-gray-900">
                                {row.price ? (
-                                 `$${getPerStonePrice(row)}`
+                                 `$${formatDisplayPrice(getPerStonePrice(row))}`
                                ) : (
                                  <button 
                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(row); }} 

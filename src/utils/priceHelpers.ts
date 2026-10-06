@@ -32,3 +32,31 @@ export const getPerStonePrice = (item: any): number => {
   }
   return item?.price ? Number(item.price) : 0;
 };
+
+export const formatDisplayPrice = (price: number | string | undefined | null): string => {
+  if (price === undefined || price === null || price === "") return "0";
+  const num = Number(price);
+  if (isNaN(num)) return "0";
+  return Math.round(num).toString();
+};
+
+export const formatCartPrice = (price: number | string | undefined | null): string => {
+  if (price === undefined || price === null || price === "") return "0.00";
+  const num = Number(price);
+  if (isNaN(num)) return "0.00";
+  return num.toFixed(2);
+};
+
+export const formatDisplayWeight = (weight: number | string | undefined | null): string => {
+  if (weight === undefined || weight === null || weight === "") return "0";
+  const num = Number(weight);
+  if (isNaN(num)) return weight.toString();
+  return num.toFixed(2);
+};
+
+export const formatCartWeight = (weight: number | string | undefined | null): string => {
+  if (weight === undefined || weight === null || weight === "") return "0";
+  const num = Number(weight);
+  if (isNaN(num)) return weight.toString();
+  return num.toString();
+};

@@ -26,6 +26,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 import React, { useState } from "react";
 import { DatePicker } from "@mantine/dates";
 import { bookAppointment } from "@/apis/api";
@@ -167,30 +168,17 @@ export default function ContactUsPage() {
   };
 
   return (
-    <Container size="xl">
+    <div className="w-full">
+      <PageHeader 
+        title="Contact Us" 
+        subtitle="If you have any questions or need help, please feel free to reach out to us! You can contact us by phone, email, or visit us at either of our two locations." 
+      />
+      <Container size="xl">
       <Breadcrumbs separator="›" className="mb-6">
         {breadcrumbItems}
       </Breadcrumbs>
 
-      <div className="flex flex-col justify-center items-center gap-2">
-        <div className="flex flex-row items-center gap-2">
-          <ThemeIcon
-            variant="gradient"
-            size="md"
-            gradient={{ from: "black", to: "#0b182d" }}
-          >
-            <IconPhoneDone size="1.5rem" />
-          </ThemeIcon>
-          <Title order={1} className="text-center" mb="xs">
-            <span className="text-[1.7rem] text-[#0b182d]">Contact Us</span>
-          </Title>
-        </div>
-        <div className="flex justify-center items-center text-center">
-          If you have any questions or need help, please feel free to reach out
-          to us! You can contact us by phone, email, or visit us at either of
-          our two locations.
-        </div>
-      </div>
+      
 
       <Card className="mt-5" radius="md" withBorder p="xl">
         {/* Contact Options */}
@@ -386,5 +374,6 @@ export default function ContactUsPage() {
         </Grid>
       </Card>
     </Container>
+    </div>
   );
 }

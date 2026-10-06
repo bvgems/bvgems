@@ -1,4 +1,5 @@
 import { GetProductByHandle } from "@/app/Graphql/queries";
+import { PageHeader } from "@/components/CommonComponents/PageHeader";
 import LayoutProductPage from "@/components/ColorstoneLayoutsGridView/LayoutProductPage";
 
 async function getLayoutDataByHandle(layout: string) {
@@ -28,5 +29,13 @@ export default async function LayoutPage({
 
   const layoutData = await getLayoutDataByHandle(handle);
 
-  return <LayoutProductPage product={layoutData} />;
+  return (
+    <div className="w-full">
+      <PageHeader 
+        title={layoutData?.title || "Color Stone Layout"} 
+        subtitle="Explore the details of this beautifully matched color stone layout." 
+      />
+      <LayoutProductPage product={layoutData} />
+    </div>
+  );
 }

@@ -20,7 +20,7 @@ export const QuoteRequestModal = ({ opened, onClose, product }: QuoteRequestModa
     initialValues: {
       notes: "",
       quantity: 1,
-      unit: "Pieces",
+      unit: "Carats",
     },
     validate: {
       quantity: (v) => (v > 0 ? null : "Quantity must be greater than 0"),
@@ -93,21 +93,41 @@ export const QuoteRequestModal = ({ opened, onClose, product }: QuoteRequestModa
             {computedTitle} (SKU: {computedSku})
           </div>
           
-          <div className="flex gap-4">
-            <NumberInput
-              label="Quantity"
-              min={1}
-              withAsterisk
-              className="flex-1"
-              {...form.getInputProps("quantity")}
-            />
-            <Select
-              label="Unit"
-              data={["Pieces", "Carats"]}
-              withAsterisk
-              className="flex-1"
-              {...form.getInputProps("unit")}
-            />
+          <div className="flex flex-col gap-1">
+            <div className="flex gap-4">
+              {form.values.unit === "Carats" ? (
+                <Select
+                  label="Carat Weight"
+                  data={Array.from({ length: 100 }, (_, i) => String(i + 1))}
+                  searchable
+                  withAsterisk
+                  className="flex-1"
+                  allowDeselect={false}
+                  value={String(form.values.quantity)}
+                  onChange={(val) => form.setFieldValue("quantity", Number(val) || 1)}
+                />
+              ) : (
+                <NumberInput
+                  label="Quantity"
+                  min={1}
+                  withAsterisk
+                  className="flex-1"
+                  {...form.getInputProps("quantity")}
+                />
+              )}
+              <Select
+                label="Unit"
+                data={["Pieces", "Carats"]}
+                withAsterisk
+                className="flex-1"
+                {...form.getInputProps("unit")}
+              />
+            </div>
+            {form.values.unit === "Carats" && (
+              <Text size="xs" color="dimmed" mt={4}>
+                We will deliver the order by using the closest number of stones possible for selected weight. For any other request feel free to contact us.
+              </Text>
+            )}
           </div>
 
           <Textarea
