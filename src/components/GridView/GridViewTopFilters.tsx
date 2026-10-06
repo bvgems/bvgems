@@ -628,7 +628,7 @@ export const GridViewTopFilters = ({
 
                 {selectedSapphireColors.map(color => (
                   <div key={`color-${color}`} className="flex items-center gap-2 bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
-                    {color}
+                    {color} Sapphire
                     <IconX size={14} className="cursor-pointer" onClick={() => toggleSapphireColor(color)} />
                   </div>
                 ))}
