@@ -32,7 +32,7 @@ export async function POST(req: Request) {
           [shape, collection, sapphireColor]
         );
       } else {
-        if (collection === "Emerald") {
+        if (collection.toLowerCase() === "emerald") {
           result = await pool.query(
             `SELECT gs.*,
                     COALESCE(

@@ -93,7 +93,7 @@ export function CartComponent() {
     const giftItem = cart.find((item: any) => item.product.isGift);
 
     if (!eligible && giftItem) {
-      removeProduct(giftItem.product.productId);
+      removeProduct(giftItem.product.productId, giftItem.product.shade);
     }
   };
 
@@ -165,7 +165,7 @@ export function CartComponent() {
   };
 
   const handleRemoveProduct = (id: any, product: any) => {
-    removeProduct(product?.productId);
+    removeProduct(product?.productId, product?.shade);
     notifications.show({
       icon: <IconCheck />,
       color: "teal",
@@ -498,6 +498,7 @@ export function CartComponent() {
                             updateQuantity(
                               value.product.productId,
                               safeQuantity,
+                              value.product.shade
                             );
                           }}
                           allowNegative={false}
@@ -531,6 +532,7 @@ export function CartComponent() {
                           toggleCertification(
                             value.product.productId,
                             e.currentTarget.checked,
+                            value.product.shade
                           )
                         }
                       />

@@ -40,9 +40,9 @@ interface CartStore {
   shippingTotal: number;
   grandTotal: number;
   addToCart: (item: CartItem) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  toggleCertification: (productId: string, checked: boolean) => void;
+  removeFromCart: (productId: string, shade?: string) => void;
+  updateQuantity: (productId: string, quantity: number, shade?: string) => void;
+  toggleCertification: (productId: string, checked: boolean, shade?: string) => void;
   clearCart: () => void;
   getTotalPrice: () => number;
   updateTotals: () => void;
@@ -81,13 +81,15 @@ export const getCartStore = (userKey: string) => {
               const existingItem = state.cart.find(
                 (item) =>
                   item.product.productId === newItem.product.productId &&
+                  item.product.shade === newItem.product.shade &&
                   !item.product.isGift,
               );
 
               if (existingItem) {
                 return {
                   cart: state.cart.map((item) =>
-                    item.product.productId === newItem.product.productId
+                    item.product.productId === newItem.product.productId &&
+                    item.product.shade === newItem.product.shade
                       ? { ...item, quantity: item.quantity + newItem.quantity }
                       : item,
                   ),
@@ -112,26 +114,26 @@ export const getCartStore = (userKey: string) => {
               ),
             })),
 
-          removeFromCart: (productId) =>
+          removeFromCart: (productId, shade) =>
             set((state) => ({
               cart: state.cart.filter(
-                (item) => item.product.productId !== productId,
+                (item) => !(item.product.productId === productId && item.product.shade === shade),
               ),
             })),
 
-          updateQuantity: (productId, quantity) =>
+          updateQuantity: (productId, quantity, shade) =>
             set((state) => ({
               cart: state.cart.map((item) =>
-                item.product.productId === productId
+                item.product.productId === productId && item.product.shade === shade
                   ? { ...item, quantity }
                   : item,
               ),
             })),
 
-          toggleCertification: (productId, checked) =>
+          toggleCertification: (productId, checked, shade) =>
             set((state) => ({
               cart: state.cart.map((item) =>
-                item.product.productId === productId
+                item.product.productId === productId && item.product.shade === shade
                   ? {
                       ...item,
                       product: { ...item.product, needCertification: checked },

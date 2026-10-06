@@ -101,7 +101,18 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
     }
   }, [product]);
 
+
+  console.log("AddToCartModal Render Debug:", {
+    hideShadeOptions,
+    collection_slug: product?.collection_slug,
+    isLabGrown: isLabGrown(product),
+    type: product?.type,
+    quality: product?.quality,
+    extra_images: product?.extra_images
+  });
+
   const perCarat = useMemo(() => getPerCaratPrice(product), [product]);
+
   const perStone = useMemo(() => getPerStonePrice(product), [product]);
 
   const handleAddToCart = () => {
@@ -122,17 +133,17 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
         ct_weight: product.ct_weight,
         cut: product.cut,
         shade:
-          product?.collection_slug === "Emerald" &&
-          product?.quality === "Lab Grown"
+          product?.collection_slug?.toLowerCase() === "emerald" &&
+          isLabGrown(product)
             ? emeraldShade
             : product?.collection_slug === "Sapphire" &&
                 product?.color === "Blue" &&
-                product?.quality !== "Lab Grown"
+                !isLabGrown(product)
               ? sapphireShade
               : "",
         image_url:
-          product?.collection_slug === "Emerald" &&
-          product?.quality === "Lab Grown"
+          product?.collection_slug?.toLowerCase() === "emerald" &&
+          isLabGrown(product)
             ? displayImage
             : product?.collection_slug === "Sapphire" &&
                 product?.color === "Blue" &&
@@ -169,7 +180,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   const isPurchaseByCarat = (product: any) => {
     const size = product?.size;
-    if (product?.quality === "Lab Grown") {
+    if (isLabGrown(product)) {
       if (
         size === "1.00 mm" ||
         size === "1.25 mm" ||
@@ -309,8 +320,8 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
             </Group>
 
             <Divider my="md" />
-            {!hideShadeOptions && product?.collection_slug === "Emerald" &&
-            product?.quality === "Lab Grown" ? (
+            {!hideShadeOptions && product?.collection_slug?.toLowerCase() === "emerald" &&
+            isLabGrown(product) ? (
               <EmeraldShade
                 product={product}
                 emeraldShade={emeraldShade}

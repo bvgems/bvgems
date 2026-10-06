@@ -130,6 +130,20 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
   const availableDimensionsGrouped = useMemo(() => {
     let preFiltered = [...searchItems];
 
+    if (selectedGems.length > 0) {
+      preFiltered = preFiltered.filter(item => {
+        const slug = String(item.collection_slug || "").toLowerCase();
+        return selectedGems.some(g => slug.includes(g.toLowerCase()));
+      });
+    }
+
+    if (selectedSapphireColors.length > 0) {
+      preFiltered = preFiltered.filter(item => {
+        const color = String(item.color || "").toLowerCase();
+        return selectedSapphireColors.some(c => color.includes(c.toLowerCase()));
+      });
+    }
+
     if (selectedShapes.length > 0) {
       preFiltered = preFiltered.filter(item => {
         const shape = String(item.shape || "").toLowerCase();
@@ -159,7 +173,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       result[k] = Array.from(groups[k]).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
     }
     return result;
-  }, [searchItems, selectedShapes, selectedTypes]);
+  }, [searchItems, selectedShapes, selectedTypes, selectedGems, selectedSapphireColors]);
 
   const availableTypes = useMemo(() => {
     let preFiltered = [...searchItems];
@@ -311,7 +325,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
         setSelectedSapphireColors([colorTitle]);
         
         const matchingGems = new Set<string>();
-        searchItems.forEach(item => {
+        searchItems.forEach((item: any) => {
           if (item.collection_slug && item.color && item.color.toLowerCase().includes(colorTitle.toLowerCase())) {
             matchingGems.add(item.collection_slug);
           }
@@ -397,6 +411,30 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     searchParams
   ]);
   // ----------------------------
+
+  // Cleanup invalid filters
+  useEffect(() => {
+    if (!isInitialized.current) return;
+    
+    // Cleanup invalid dimensions
+    const allDims = new Set<string>();
+    Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
+    const validDims = Array.from(allDims);
+    
+    setSelectedDimensions(prev => {
+      if (!prev["Any"]) return prev;
+      
+      const filtered = prev["Any"].filter(d => validDims.includes(d));
+      if (filtered.length !== prev["Any"].length) {
+        const newSelectedDims = { ...prev, "Any": filtered };
+        if (newSelectedDims["Any"].length === 0) {
+          delete newSelectedDims["Any"];
+        }
+        return newSelectedDims;
+      }
+      return prev;
+    });
+  }, [availableDimensionsGrouped]);
 
   // Filtering Logic
   useEffect(() => {

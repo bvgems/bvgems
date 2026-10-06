@@ -1,0 +1,7 @@
+--- src/components/GridView/GridView.tsx
++++ src/components/GridView/GridView.tsx
+@@ -47,7 +47,7 @@
+   const [weight, setWeight] = useState<string>("");
+-  const [dimension, setDimension] = useState<string>("");
++  const [selectedDimensions, setSelectedDimensions] = useState<Record<string, string[]>>({});
+   const [toleranceEnabled, setToleranceEnabled] = useState(false);

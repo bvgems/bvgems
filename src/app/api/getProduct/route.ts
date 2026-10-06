@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       `
       SELECT gs.*,
              CASE 
-               WHEN gs.collection_slug = 'Emerald' 
+               WHEN LOWER(gs.collection_slug) = 'emerald' 
                THEN COALESCE(
                  json_agg(gi.image_url) FILTER (WHERE gi.image_url IS NOT NULL),
                  '[]'
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       FROM gemstone_specs gs
       LEFT JOIN gemstone_images gi 
         ON gs.id = gi.gemstone_id 
-       AND gs.collection_slug = 'Emerald'
+       AND LOWER(gs.collection_slug) = 'emerald'
       WHERE gs.id = $1
       GROUP BY gs.id;
       `,

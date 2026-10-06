@@ -191,21 +191,21 @@ export default function ProductDetailsPage() {
         ct_weight: product.ct_weight,
         cut: product.cut,
         shade:
-          product?.collection_slug === "Emerald" &&
-            product?.quality === "Lab Grown"
+          product?.collection_slug?.toLowerCase() === "emerald" &&
+            isLabGrown(product)
             ? emeraldShade
             : product?.collection_slug === "Sapphire" &&
               product?.color === "Blue" &&
-              product?.quality !== "Lab Grown"
+              !isLabGrown(product)
               ? sapphireShade
               : "",
         image_url:
-          product?.collection_slug === "Emerald" &&
-            product?.quality === "Lab Grown"
+          product?.collection_slug?.toLowerCase() === "emerald" &&
+            isLabGrown(product)
             ? displayImage
             : product?.collection_slug === "Sapphire" &&
               product?.color === "Blue" &&
-              product?.quality !== "Lab Grown" &&
+              !isLabGrown(product) &&
               product?.shape === "Round"
               ? displayImage
               : product?.image_url,
@@ -406,7 +406,7 @@ export default function ProductDetailsPage() {
 
   const isPurchaseByCarat = (product: any) => {
     const size = product?.size;
-    if (product?.quality === "Lab Grown") {
+    if (isLabGrown(product)) {
       if (
         size === "1.00 mm" ||
         size === "1.25 mm" ||
@@ -638,7 +638,7 @@ export default function ProductDetailsPage() {
 
             {/* ✅ Emerald Lab shade buttons */}
             {user &&
-              product?.collection_slug === "Emerald" &&
+              product?.collection_slug?.toLowerCase() === "emerald" &&
               isLabGrown(product) && (
                 <EmeraldShade
                   product={product}

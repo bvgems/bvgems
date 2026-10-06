@@ -117,30 +117,38 @@ export const QuoteRequestModal = ({ opened, onClose, product }: QuoteRequestModa
             {...form.getInputProps("notes")}
           />
 
-          <div className="flex gap-2 mt-4">
+          <div className="flex flex-col sm:flex-row gap-3 mt-5">
             <Button
-              color="green"
-              className="h-12 flex-1 uppercase tracking-widest text-xs"
-              leftSection={<IconBrandWhatsapp size={18} />}
+              color="#25D366"
+              radius="md"
+              h={50}
+              fz={15}
+              fw={600}
+              className="flex-1"
+              leftSection={<IconBrandWhatsapp size={20} />}
               onClick={(e) => {
                 e.preventDefault();
                 handleWhatsAppSubmit();
               }}
-              title="Send Request by WhatsApp"
+              title="Send via WhatsApp"
             >
-              Send request by WhatsApp
+              Send via WhatsApp
             </Button>
             <Button 
               type="submit" 
               color="#0b182d" 
-              className="h-12 flex-1 uppercase tracking-widest text-xs" 
-              leftSection={<IconMail size={18} />}
+              radius="md"
+              h={50}
+              fz={15}
+              fw={600}
+              className="flex-1"
+              leftSection={<IconMail size={20} />}
               loading={loading}
             >
-              Send request by Email
+              Send via Email
             </Button>
           </div>
-          <Text size="xs" color="dimmed" className="text-center mt-2">
+          <Text size="sm" color="dimmed" className="text-center mt-3 mb-1">
             We typically respond within 1 business day.
           </Text>
         </form>

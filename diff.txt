@@ -1,0 +1,400 @@
+diff --git a/src/app/special-page/page.tsx b/src/app/special-page/page.tsx
+index a91e9e8..74ae6c4 100644
+--- a/src/app/special-page/page.tsx
++++ b/src/app/special-page/page.tsx
+@@ -562,32 +562,34 @@ export default function SpecialPage() {
+                          <Table.Td className="text-sm">{row["Stock Wt."] || "-"}</Table.Td>
+                          <Table.Td className="text-sm">{row["Stock Pcs."] || "-"}</Table.Td>
+                          <Table.Td>
+-                            <Button
+-                              leftSection={<IconShoppingCart size={16} />}
+-                              variant="outline"
+-                              size="xs"
+-                              color="#0b182d"
+-                              onClick={() => {
+-                                setSelectedProduct({
+-                                  id: row.Item,
+-                                  productId: row.Item,
+-                                  productType: "stone",
+-                                  collection_slug: row.normalizedGem,
+-                                  shape: row.normalizedShape,
+-                                  size: row.Size,
+-                                  quality: row.type || "Natural",
+-                                  ct_weight: row["Stock Wt."],
+-                                  color: row.Color,
+-                                  image_url: row.imageUrl,
+-                                  price: row["Cp Std"] || 0,
+-                                  type: row.type || "Natural",
+-                                  cut: row.cut || "Standard",
+-                                });
+-                                openProductModal();
+-                              }}
+-                            >
+-                              Add
+-                            </Button>
++                            {row["Cp Std"] && Number(row["Cp Std"]) > 0 && (
++                              <Button
++                                leftSection={<IconShoppingCart size={16} />}
++                                variant="outline"
++                                size="xs"
++                                color="#0b182d"
++                                onClick={() => {
++                                  setSelectedProduct({
++                                    id: row.Item,
++                                    productId: row.Item,
++                                    productType: "stone",
++                                    collection_slug: row.normalizedGem,
++                                    shape: row.normalizedShape,
++                                    size: row.Size,
++                                    quality: row.type || "Natural",
++                                    ct_weight: row["Stock Wt."],
++                                    color: row.Color,
++                                    image_url: row.imageUrl,
++                                    price: row["Cp Std"] || 0,
++                                    type: row.type || "Natural",
++                                    cut: row.cut || "Standard",
++                                  });
++                                  openProductModal();
++                                }}
++                              >
++                                Add
++                              </Button>
++                            )}
+                          </Table.Td>
+                        </Table.Tr>
+                      ))
+@@ -609,34 +611,36 @@ export default function SpecialPage() {
+                     <p className="text-xs text-gray-600 mt-1">{row.normalizedGem} • {row.normalizedShape}</p>
+                     <p className="text-xs text-gray-600">{row.Size}</p>
+                     <p className="text-xs font-semibold mt-2">{row["Stock Wt."]} ct</p>
+-                    <Button
+-                      fullWidth
+-                      mt="md"
+-                      size="xs"
+-                      variant="outline"
+-                      color="#0b182d"
+-                      leftSection={<IconShoppingCart size={16} />}
+-                      onClick={() => {
+-                        setSelectedProduct({
+-                          id: row.Item,
+-                          productId: row.Item,
+-                          productType: "stone",
+-                          collection_slug: row.normalizedGem,
+-                          shape: row.normalizedShape,
+-                          size: row.Size,
+-                          quality: row.type || "Natural",
+-                          ct_weight: row["Stock Wt."],
+-                          color: row.Color,
+-                          image_url: row.imageUrl,
+-                          price: row["Cp Std"] || 0,
+-                          type: row.type || "Natural",
+-                          cut: row.cut || "Standard",
+-                        });
+-                        openProductModal();
+-                      }}
+-                    >
+-                      Add to Cart
+-                    </Button>
++                    {row["Cp Std"] && Number(row["Cp Std"]) > 0 && (
++                      <Button
++                        fullWidth
++                        mt="md"
++                        size="xs"
++                        variant="outline"
++                        color="#0b182d"
++                        leftSection={<IconShoppingCart size={16} />}
++                        onClick={() => {
++                          setSelectedProduct({
++                            id: row.Item,
++                            productId: row.Item,
++                            productType: "stone",
++                            collection_slug: row.normalizedGem,
++                            shape: row.normalizedShape,
++                            size: row.Size,
++                            quality: row.type || "Natural",
++                            ct_weight: row["Stock Wt."],
++                            color: row.Color,
++                            image_url: row.imageUrl,
++                            price: row["Cp Std"] || 0,
++                            type: row.type || "Natural",
++                            cut: row.cut || "Standard",
++                          });
++                          openProductModal();
++                        }}
++                      >
++                        Add to Cart
++                      </Button>
++                    )}
+                   </div>
+                 ))}
+              </div>
+diff --git a/src/components/Category/CategoryTable.tsx b/src/components/Category/CategoryTable.tsx
+index 6ceec34..9ce0f8e 100644
+--- a/src/components/Category/CategoryTable.tsx
++++ b/src/components/Category/CategoryTable.tsx
+@@ -576,19 +576,21 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
+                               )}
+                             </TableTd>
+                             <TableTd onClick={(e) => e.stopPropagation()}>
+-                              <Button
+-                                leftSection={<IconShoppingCart />}
+-                                variant="outline"
+-                                onClick={(e) => {
+-                                  e.preventDefault();
+-                                  e.stopPropagation();
+-                                  setSelectedProduct(element); // ✅ store the clicked product
+-                                  openProductModal();
+-                                }}
+-                                color="#0b182d"
+-                              >
+-                                ADD TO CART
+-                              </Button>
++                              {element.price && (
++                                <Button
++                                  leftSection={<IconShoppingCart />}
++                                  variant="outline"
++                                  onClick={(e) => {
++                                    e.preventDefault();
++                                    e.stopPropagation();
++                                    setSelectedProduct(element); // ✅ store the clicked product
++                                    openProductModal();
++                                  }}
++                                  color="#0b182d"
++                                >
++                                  ADD TO CART
++                                </Button>
++                              )}
+                             </TableTd>
+                           </>
+                         )}
+diff --git a/src/components/CommonComponents/AddToCartModal.tsx b/src/components/CommonComponents/AddToCartModal.tsx
+index 1abd82f..540c1df 100644
+--- a/src/components/CommonComponents/AddToCartModal.tsx
++++ b/src/components/CommonComponents/AddToCartModal.tsx
+@@ -106,6 +106,9 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
+ 
+   const handleAddToCart = () => {
+     if (!product) return;
++    
++    const finalPrice = purchaseByCarat ? perCarat : perStone;
++    if (finalPrice <= 0) return;
+ 
+     addToCart({
+       product: {
+@@ -384,6 +387,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
+                 radius="md"
+                 leftSection={<IconShoppingCart size={18} />}
+                 className="!bg-[#0b182d] hover:opacity-95 transition-opacity"
++                disabled={(purchaseByCarat ? perCarat : perStone) <= 0}
+               >
+                 Add to cart
+               </Button>
+diff --git a/src/components/FreeSizeGemtones/FreeSizeGridView.tsx b/src/components/FreeSizeGemtones/FreeSizeGridView.tsx
+index 55090b1..a064e66 100644
+--- a/src/components/FreeSizeGemtones/FreeSizeGridView.tsx
++++ b/src/components/FreeSizeGemtones/FreeSizeGridView.tsx
+@@ -396,41 +396,45 @@ const ITEMS_PER_PAGE = 18;
+                          </Table.Td>
+                          <Table.Td className="p-1 md:p-2 pr-3 md:pr-4">
+                            <div className="flex justify-end">
+-                                                           {/* Mobile Cart Icon */}
+-                              <div className="md:hidden">
+-                                <ActionIcon
+-                                  variant="outline"
+-                                  color="#0b182d"
+-                                  size="md"
+-                                  radius="md"
+-                                  onClick={(e) => {
+-                                    e.stopPropagation();
+-                                    setSelectedProduct(row);
+-                                    openProductModal();
+-                                  }}
+-                                >
+-                                  <IconShoppingCart size={16} />
+-                                </ActionIcon>
+-                              </div>
+-                              
+-                              {/* Desktop Cart Button */}
+-                              <div className="hidden md:block">
+-                                <Button
+-                                  variant="outline"
+-                                  color="#0b182d"
+-                                  size="xs"
+-                                  radius="md"
+-                                  leftSection={<IconShoppingCart size={16} />}
+-                                  onClick={(e) => {
+-                                    e.preventDefault();
+-                                    e.stopPropagation();
+-                                    setSelectedProduct(row);
+-                                    openProductModal();
+-                                  }}
+-                                >
+-                                  ADD TO CART
+-                                </Button>
+-                              </div>
++                            {row.price && (
++                              <>
++                                {/* Mobile Cart Icon */}
++                                <div className="md:hidden">
++                                  <ActionIcon
++                                    variant="outline"
++                                    color="#0b182d"
++                                    size="md"
++                                    radius="md"
++                                    onClick={(e) => {
++                                      e.stopPropagation();
++                                      setSelectedProduct(row);
++                                      openProductModal();
++                                    }}
++                                  >
++                                    <IconShoppingCart size={16} />
++                                  </ActionIcon>
++                                </div>
++                                
++                                {/* Desktop Cart Button */}
++                                <div className="hidden md:block">
++                                  <Button
++                                    variant="outline"
++                                    color="#0b182d"
++                                    size="xs"
++                                    radius="md"
++                                    leftSection={<IconShoppingCart size={16} />}
++                                    onClick={(e) => {
++                                      e.preventDefault();
++                                      e.stopPropagation();
++                                      setSelectedProduct(row);
++                                      openProductModal();
++                                    }}
++                                  >
++                                    ADD TO CART
++                                  </Button>
++                                </div>
++                              </>
++                            )}
+                            </div>
+                          </Table.Td>
+                        </Table.Tr>
+diff --git a/src/components/GridView/AnimatedCard.tsx b/src/components/GridView/AnimatedCard.tsx
+index 4725dea..c897009 100644
+--- a/src/components/GridView/AnimatedCard.tsx
++++ b/src/components/GridView/AnimatedCard.tsx
+@@ -155,7 +155,7 @@ export const AnimatedCard = ({
+                          </div>
+                        </div>
+                        
+-                       {onAddToCart && (
++                       {onAddToCart && item?.price && (
+                          <ActionIcon 
+                            variant="filled" 
+                            color="#0b182d" 
+@@ -238,7 +238,7 @@ export const AnimatedCard = ({
+                          </div>
+                        </div>
+                        
+-                       {onAddToCart && (
++                       {onAddToCart && item?.price && (
+                          <ActionIcon 
+                            variant="filled" 
+                            color="#0b182d" 
+diff --git a/src/components/GridView/GridView.tsx b/src/components/GridView/GridView.tsx
+index 12f8e65..517734c 100644
+--- a/src/components/GridView/GridView.tsx
++++ b/src/components/GridView/GridView.tsx
+@@ -648,40 +648,44 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
+                          </Table.Td>
+                          <Table.Td className="p-1 md:p-2 pr-3 md:pr-4">
+                            <div className="flex justify-end">
+-                              {/* Mobile Cart Icon */}
+-                              <div className="md:hidden">
+-                                <ActionIcon
+-                                  variant="outline"
+-                                  color="#0b182d"
+-                                  size="md"
+-                                  radius="md"
+-                                  onClick={() => {
+-                                    setSelectedProduct(row);
+-                                    openProductModal();
+-                                  }}
+-                                >
+-                                  <IconShoppingCart size={16} />
+-                                </ActionIcon>
+-                              </div>
+-                              
+-                              {/* Desktop Cart Button */}
+-                              <div className="hidden md:block">
+-                                <Button
+-                                  variant="outline"
+-                                  color="#0b182d"
+-                                  size="xs"
+-                                  radius="md"
+-                                  leftSection={<IconShoppingCart size={16} />}
+-                                  onClick={(e) => {
+-                                    e.preventDefault();
+-                                    e.stopPropagation();
+-                                    setSelectedProduct(row);
+-                                    openProductModal();
+-                                  }}
+-                                >
+-                                  ADD TO CART
+-                                </Button>
+-                              </div>
++                            {row.price && (
++                              <>
++                                {/* Mobile Cart Icon */}
++                                <div className="md:hidden">
++                                  <ActionIcon
++                                    variant="outline"
++                                    color="#0b182d"
++                                    size="md"
++                                    radius="md"
++                                    onClick={() => {
++                                      setSelectedProduct(row);
++                                      openProductModal();
++                                    }}
++                                  >
++                                    <IconShoppingCart size={16} />
++                                  </ActionIcon>
++                                </div>
++                                
++                                {/* Desktop Cart Button */}
++                                <div className="hidden md:block">
++                                  <Button
++                                    variant="outline"
++                                    color="#0b182d"
++                                    size="xs"
++                                    radius="md"
++                                    leftSection={<IconShoppingCart size={16} />}
++                                    onClick={(e) => {
++                                      e.preventDefault();
++                                      e.stopPropagation();
++                                      setSelectedProduct(row);
++                                      openProductModal();
++                                    }}
++                                  >
++                                    ADD TO CART
++                                  </Button>
++                                </div>
++                              </>
++                            )}
+                            </div>
+                          </Table.Td>
+                        </Table.Tr>
+diff --git a/src/components/ProductDetails/ProductDetailsPage.tsx b/src/components/ProductDetails/ProductDetailsPage.tsx
+index c316eb5..7e2ae81 100644
+--- a/src/components/ProductDetails/ProductDetailsPage.tsx
++++ b/src/components/ProductDetails/ProductDetailsPage.tsx
+@@ -677,9 +677,11 @@ export default function ProductDetailsPage() {
+             )}
+             {user && (
+               <div className="flex gap-2">
+-                <Button color="#0b182d" onClick={addProductToCart} className="flex-1">
+-                  ADD TO CART
+-                </Button>
++                {hasPricing && (
++                  <Button color="#0b182d" onClick={addProductToCart} className="flex-1">
++                    ADD TO CART
++                  </Button>
++                )}
+                 <Button color="#0b182d" variant="outline" onClick={openQuote} className="flex-1">
+                   REQUEST QUOTE
+                 </Button>

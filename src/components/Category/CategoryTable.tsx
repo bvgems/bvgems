@@ -29,6 +29,7 @@ import { AuthForm } from "../Auth/AuthForm";
 import { getCartStore } from "@/store/useCartStore";
 import React, { useMemo, useState, useEffect } from "react";
 import { sortBySizeAsc } from "@/utils/sortUtils";
+import { isLabGrown } from "@/utils/priceHelpers";
 import { AddToCartModal } from "../CommonComponents/AddToCartModal";
 import { QuoteRequestModal } from "../CommonComponents/QuoteRequestModal";
 import * as XLSX from "xlsx";
@@ -51,6 +52,7 @@ export const CategoryTable = ({
     useDisclosure(false);
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [quoteProduct, setQuoteProduct] = useState<any | null>(null);
+  const [loadingCartId, setLoadingCartId] = useState<string | null>(null);
   const [selectedRows, setSelectedRows] = useState<Record<string, boolean>>({});
   const [bulkAction, setBulkAction] = useState<string | null>(null);
   const [priceOptionModal, { open: openPriceModal, close: closePriceModal }] =
@@ -315,7 +317,7 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
   };
   const isPurchaseByCarat = (product: any) => {
     const size = product?.size;
-    if (product?.quality === "Lab Grown") {
+    if (isLabGrown(product)) {
       if (
         size === "1.00 mm" ||
         size === "1.25 mm" ||
@@ -580,11 +582,33 @@ ${options.showCarat ? `Price Per Carat: $${getPerCaratPrice(item)}` : ""}
                                 <Button
                                   leftSection={<IconShoppingCart />}
                                   variant="outline"
-                                  onClick={(e) => {
+                                  loading={loadingCartId === element.id}
+                                  onClick={async (e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    setSelectedProduct(element); // ✅ store the clicked product
-                                    openProductModal();
+                                    setLoadingCartId(element.id);
+                                    try {
+                                      const res = await fetch("/api/getProduct", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify(element.id),
+                                      });
+                                      if (res.ok) {
+                                        const data = await res.json();
+                                        if (data && data.length > 0) {
+                                          setSelectedProduct(data[0]);
+                                        } else {
+                                          setSelectedProduct(element);
+                                        }
+                                      } else {
+                                        setSelectedProduct(element);
+                                      }
+                                    } catch (err) {
+                                      setSelectedProduct(element);
+                                    } finally {
+                                      setLoadingCartId(null);
+                                      openProductModal();
+                                    }
                                   }}
                                   color="#0b182d"
                                 >

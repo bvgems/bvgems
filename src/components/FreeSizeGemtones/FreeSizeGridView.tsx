@@ -57,6 +57,7 @@ export function FreeSizeGridView({
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const { user } = useAuth();
   const [quoteProduct, setQuoteProduct] = useState<any>(null);
+  const [loadingCartId, setLoadingCartId] = useState<string | null>(null);
   const [productModal, { open: openProductModal, close: closeProductModal }] = useDisclosure(false);
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
@@ -104,12 +105,24 @@ const ITEMS_PER_PAGE = 18;
       viewMode
     };
     
-    const newFiltersStr = encodeURIComponent(JSON.stringify(state));
+    const isEmpty = searchValue === "" &&
+                    selectedGem === null &&
+                    sortOrder === "lowToHigh" &&
+                    viewMode === "list";
+                    
+    const newFiltersStr = isEmpty ? null : encodeURIComponent(JSON.stringify(state));
     
     if (newFiltersStr !== currentFiltersStr) {
       const params = new URLSearchParams(searchParams.toString());
-      params.set("filters", newFiltersStr);
-      router.replace(`?${params.toString()}`, { scroll: false });
+      if (newFiltersStr) {
+        params.set("filters", newFiltersStr);
+      } else {
+        params.delete("filters");
+      }
+      
+      const paramString = params.toString();
+      const newUrl = paramString ? `?${paramString}` : window.location.pathname;
+      router.replace(newUrl, { scroll: false });
     }
   }, [
     searchValue,
@@ -423,11 +436,29 @@ const ITEMS_PER_PAGE = 18;
                                     size="xs"
                                     radius="md"
                                     leftSection={<IconShoppingCart size={16} />}
-                                    onClick={(e) => {
+                                    loading={loadingCartId === row.id}
+                                    onClick={async (e) => {
                                       e.preventDefault();
                                       e.stopPropagation();
-                                      setSelectedProduct(row);
-                                      openProductModal();
+                                      setLoadingCartId(row.id);
+                                      try {
+                                        const res = await fetch("/api/getProduct", {
+                                          method: "POST",
+                                          headers: { "Content-Type": "application/json" },
+                                          body: JSON.stringify(row.id),
+                                        });
+                                        if (res.ok) {
+                                          const data = await res.json();
+                                          setSelectedProduct(data && data.length > 0 ? data[0] : row);
+                                        } else {
+                                          setSelectedProduct(row);
+                                        }
+                                      } catch (err) {
+                                        setSelectedProduct(row);
+                                      } finally {
+                                        setLoadingCartId(null);
+                                        openProductModal();
+                                      }
                                     }}
                                   >
                                     ADD TO CART
@@ -518,7 +549,7 @@ const ITEMS_PER_PAGE = 18;
             ct_weight={selectedProduct.ct_weight}
             color={selectedProduct.color}
             product={selectedProduct}
-            hideShadeOptions={true}
+
           />
         )}
       </Modal>

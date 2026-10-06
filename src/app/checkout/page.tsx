@@ -17,6 +17,7 @@ import { CheckoutStepper } from "@/components/Checkout/CheckoutStepper";
 import { BillingSummary } from "@/components/CommonComponents/BillingSummary";
 import { useStpperStore } from "@/store/useStepperStore";
 import { useGuestUserStore } from "@/store/useGuestUserStore";
+import { isLabGrown } from "@/utils/priceHelpers";
 import { useDisclosure } from "@mantine/hooks";
 import OrderConfirmationModal from "@/components/CommonComponents/OrderConfirmationModal";
 import { getOrderPayload } from "@/utils/commonFunctions";
@@ -223,11 +224,10 @@ export default function CheckoutSelectionPage() {
                               </div>
                             )}
                             {(item?.product?.collection_slug === "Emerald" &&
-                              (item?.product?.type === "Lab Grown" ||
-                                item?.product?.quality === "Lab Grown")) ||
+                              isLabGrown(item?.product)) ||
                             (item?.product?.collection_slug === "Sapphire" &&
                               item?.product?.color === "Blue" &&
-                              item?.product?.quality !== "Lab Grown") ? (
+                              !isLabGrown(item?.product)) ? (
                               <div className="text-gray-600">
                                 Shade:{" "}
                                 <span className="font-medium">

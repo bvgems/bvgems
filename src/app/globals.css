@@ -61,3 +61,16 @@ h1, h2, h3 {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+/* Prevent mobile browsers (iOS Safari/Chrome/Firefox — all WebKit on iPhone)
+   from auto-zooming when an input/dropdown is focused. They zoom whenever the
+   focused field's font-size is below 16px. Touch devices only, so desktop
+   keeps its smaller input text. !important is needed to beat Mantine inline
+   `styles={{ input: { fontSize: ... } }}` overrides. */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
