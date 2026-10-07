@@ -247,18 +247,14 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
                });
 
                
+               
                const bestMatch = sortedVideos.find((v: any) => {
                   const lbl = (v.label || v.emerald_type || "").toLowerCase();
-                  const matchesShape = lbl.includes(shapeToUse.toLowerCase());
                   const matchesColor = colorMatch ? lbl.includes(colorMatch.toLowerCase()) : true;
-                  return matchesShape && matchesColor;
+                  return matchesColor;
                });
                
-               const shapeMatch = bestMatch || sortedVideos.find((v: any) => 
-                  (v.label || v.emerald_type || "").toLowerCase().includes(shapeToUse.toLowerCase())
-               );
-               
-               const videoItem = shapeMatch; // Exact shape required
+               const videoItem = bestMatch || sortedVideos[0];
                
                if (videoItem?.video_url) {
                    foundVideo = videoItem.video_url;
