@@ -32,12 +32,16 @@ export default function FreeSizeGemstoneSelection() {
     }
   }, [segments]);
 
+  // Seed from the last fetched list (if any) so in-app navigation shows the
+  // previous results while the new filter request is in flight. Guarded with
+  // Array.isArray so a non-array value can never crash the initial render.
+  const hasPreviousData = Array.isArray(lastFreeSizeData) && lastFreeSizeData.length > 0;
   const [filteredGemstones, setFilteredGemstones] = useState<any[]>(() => {
-    if (!lastFreeSizeData) return [];
-    return [...lastFreeSizeData].sort((a, b) => sortBySizeAsc(a, b, 'dimension'));
+    if (!hasPreviousData) return [];
+    return [...(lastFreeSizeData as any[])].sort((a, b) => sortBySizeAsc(a, b, 'dimension'));
   });
   const [filterTrigger, setFilterTrigger] = useState(0);
-  const [loading, setLoading] = useState(() => !lastFreeSizeData);
+  const [loading, setLoading] = useState(() => !hasPreviousData);
   const [isInitialized, setIsInitialized] = useState(false);
 
   const [lotSearch, setLotSearch] = useState("");

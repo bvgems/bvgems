@@ -128,11 +128,19 @@ export const globalFreeSizeCache = new Map<string, any>();
 export const globalFreeSizePromises = new Map<string, Promise<any>>();
 export let lastFreeSizeData: any[] | null = null;
 
+// The API responds with `{ data: [...] }`. Callers receive that whole body;
+// `lastFreeSizeData` must hold only the inner array, since it is spread
+// (`[...lastFreeSizeData]`) as an initial state in FreeSizeGemstoneSelection.
+const rememberLastFreeSizeData = (body: any) => {
+  lastFreeSizeData = Array.isArray(body?.data) ? body.data : null;
+};
+
 export const getFreeSizeFilteredData = async (options: any) => {
   const cacheKey = JSON.stringify(options);
   if (globalFreeSizeCache.has(cacheKey)) {
-    lastFreeSizeData = globalFreeSizeCache.get(cacheKey);
-    return lastFreeSizeData;
+    const cached = globalFreeSizeCache.get(cacheKey);
+    rememberLastFreeSizeData(cached);
+    return cached;
   }
   if (globalFreeSizePromises.has(cacheKey)) return await globalFreeSizePromises.get(cacheKey);
 
@@ -142,7 +150,7 @@ export const getFreeSizeFilteredData = async (options: any) => {
       { options },
     ).then(res => {
       globalFreeSizeCache.set(cacheKey, res?.data);
-      lastFreeSizeData = res?.data;
+      rememberLastFreeSizeData(res?.data);
       return res?.data;
     });
     globalFreeSizePromises.set(cacheKey, promise);
