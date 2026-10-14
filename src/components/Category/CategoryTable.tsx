@@ -484,33 +484,35 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
             {/* Desktop Header */}
             <TableThead className="hidden md:table-header-group">
               <TableTr className="font-extrabold text-[15px] text-gray-700 uppercase">
-                <TableTh>
-                  <Checkbox
-                    onChange={toggleSelectAll}
-                    checked={
-                      filteredAndSortedRows.length > 0 &&
-                      filteredAndSortedRows.every(
-                        (row: any) => selectedRows[row.id],
-                      )
-                    }
-                    color="#0b182d"
-                  />
+                <TableTh className="text-center w-12">
+                  <div className="flex justify-center items-center">
+                    <Checkbox
+                      onChange={toggleSelectAll}
+                      checked={
+                        filteredAndSortedRows.length > 0 &&
+                        filteredAndSortedRows.every(
+                          (row: any) => selectedRows[row.id],
+                        )
+                      }
+                      color="#0b182d"
+                    />
+                  </div>
                 </TableTh>
-                <TableTh>Image</TableTh>
-                <TableTh>Type</TableTh>
-                <TableTh>Gemstone</TableTh>
-                <TableTh>Color</TableTh>
-                <TableTh>Size</TableTh>
-                <TableTh>CT Weight</TableTh>
-                <TableTh>Quality</TableTh>
-                <TableTh>Cut</TableTh>
+                <TableTh className="text-center">Image</TableTh>
+                <TableTh className="text-left">Type</TableTh>
+                <TableTh className="text-left">Gemstone</TableTh>
+                <TableTh className="text-left">Color</TableTh>
+                <TableTh className="text-center">Size</TableTh>
+                <TableTh className="text-right">CT Weight</TableTh>
+                <TableTh className="text-center">Quality</TableTh>
+                <TableTh className="text-left">Cut</TableTh>
                 {user && (
                   <>
-                    <TableTh>est. price per stone</TableTh>
-                    <TableTh>Per Carat Price</TableTh>
+                    <TableTh className="text-right">est. price per stone</TableTh>
+                    <TableTh className="text-right">Per Carat Price</TableTh>
                   </>
                 )}
-                <TableTh></TableTh>
+                <TableTh className="text-right"></TableTh>
               </TableTr>
             </TableThead>
 
@@ -525,15 +527,17 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                       <TableTr
                         className="cursor-pointer hidden md:table-row"
                       >
-                        <TableTd onClick={(e) => e.stopPropagation()}>
-                          <Checkbox
-                            checked={!!selectedRows[element.id]}
-                            onChange={() => toggleSelectRow(element.id)}
-                            color="#0b182d"
-                          />
+                        <TableTd className="text-center w-12" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex justify-center items-center">
+                            <Checkbox
+                              checked={!!selectedRows[element.id]}
+                              onChange={() => toggleSelectRow(element.id)}
+                              color="#0b182d"
+                            />
+                          </div>
                         </TableTd>
-                        <TableTd onClick={() => goToCartPage(element)}>
-                          <div className="w-14 h-14 flex items-center justify-center rounded overflow-hidden shadow-sm border border-gray-200">
+                        <TableTd className="text-center" onClick={() => goToCartPage(element)}>
+                          <div className="w-14 h-14 mx-auto flex items-center justify-center rounded overflow-hidden shadow-sm border border-gray-200">
                             <NextImage
                               src={element.image_url}
                               alt="gem"
@@ -543,22 +547,22 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                             />
                           </div>
                         </TableTd>
-                        <TableTd onClick={() => goToCartPage(element)}>{element.type}</TableTd>
-                        <TableTd className="capitalize" onClick={() => goToCartPage(element)}>
+                        <TableTd className="text-left" onClick={() => goToCartPage(element)}>{element.type}</TableTd>
+                        <TableTd className="text-left capitalize" onClick={() => goToCartPage(element)}>
                           {element.collection_slug}
                         </TableTd>
-                        <TableTd onClick={() => goToCartPage(element)}>
+                        <TableTd className="text-left" onClick={() => goToCartPage(element)}>
                           {element.collection_slug === "Tanzanite"
                             ? "Purplish Blue"
                             : element.color}
                         </TableTd>
-                        <TableTd onClick={() => goToCartPage(element)}>{element.size}</TableTd>
-                        <TableTd onClick={() => goToCartPage(element)}>{formatDisplayWeight(element.ct_weight)}</TableTd>
-                        <TableTd onClick={() => goToCartPage(element)}>{element.quality}</TableTd>
-                        <TableTd onClick={() => goToCartPage(element)}>{element.cut}</TableTd>
+                        <TableTd className="text-center tabular-nums" onClick={() => goToCartPage(element)}>{element.size}</TableTd>
+                        <TableTd className="text-right tabular-nums" onClick={() => goToCartPage(element)}>{formatDisplayWeight(element.ct_weight)}</TableTd>
+                        <TableTd className="text-center" onClick={() => goToCartPage(element)}>{element.quality}</TableTd>
+                        <TableTd className="text-left" onClick={() => goToCartPage(element)}>{element.cut}</TableTd>
                         {user && (
                           <>
-                            <TableTd>
+                            <TableTd className="text-right tabular-nums font-medium">
                               {element?.price ? (
                                 `$ ${formatDisplayPrice(element.price)}`
                               ) : (
@@ -570,7 +574,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                                 </button>
                               )}
                             </TableTd>
-                            <TableTd onClick={(e) => e.stopPropagation()}>
+                            <TableTd className="text-right tabular-nums font-medium" onClick={(e) => e.stopPropagation()}>
                               {isPurchaseByCarat(element) ? (
                                 getPerCaratPrice(element) !== 0 ? (
                                   `$ ${formatDisplayPrice(getPerCaratPrice(element))}`
@@ -591,43 +595,45 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                                 </button>
                               )}
                             </TableTd>
-                            <TableTd onClick={(e) => e.stopPropagation()}>
+                            <TableTd className="text-right" onClick={(e) => e.stopPropagation()}>
                               {element.price && (
-                                <Button
-                                  leftSection={<IconShoppingCart />}
-                                  variant="outline"
-                                  loading={loadingCartId === element.id}
-                                  onClick={async (e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    setLoadingCartId(element.id);
-                                    try {
-                                      const res = await fetch("/api/getProduct", {
-                                        method: "POST",
-                                        headers: { "Content-Type": "application/json" },
-                                        body: JSON.stringify(element.id),
-                                      });
-                                      if (res.ok) {
-                                        const data = await res.json();
-                                        if (data && data.length > 0) {
-                                          setSelectedProduct(data[0]);
+                                <div className="flex justify-end">
+                                  <Button
+                                    leftSection={<IconShoppingCart />}
+                                    variant="outline"
+                                    loading={loadingCartId === element.id}
+                                    onClick={async (e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setLoadingCartId(element.id);
+                                      try {
+                                        const res = await fetch("/api/getProduct", {
+                                          method: "POST",
+                                          headers: { "Content-Type": "application/json" },
+                                          body: JSON.stringify(element.id),
+                                        });
+                                        if (res.ok) {
+                                          const data = await res.json();
+                                          if (data && data.length > 0) {
+                                            setSelectedProduct(data[0]);
+                                          } else {
+                                            setSelectedProduct(element);
+                                          }
                                         } else {
                                           setSelectedProduct(element);
                                         }
-                                      } else {
+                                      } catch (err) {
                                         setSelectedProduct(element);
+                                      } finally {
+                                        setLoadingCartId(null);
+                                        openProductModal();
                                       }
-                                    } catch (err) {
-                                      setSelectedProduct(element);
-                                    } finally {
-                                      setLoadingCartId(null);
-                                      openProductModal();
-                                    }
-                                  }}
-                                  color="#0b182d"
-                                >
-                                  ADD TO CART
-                                </Button>
+                                    }}
+                                    color="#0b182d"
+                                  >
+                                    ADD TO CART
+                                  </Button>
+                                </div>
                               )}
                             </TableTd>
                           </>

@@ -56,7 +56,26 @@ export async function POST(request: NextRequest) {
     // but Shopify custom line items use the price we give them anyway.
     
     // Add same totals for memo orders
-    const subtotal = verifiedCartItems.reduce((acc: number, item: any) => acc + (Number(item.product.price) * item.quantity), 0);
+    const subtotal = verifiedCartItems.reduce((acc: number, item: any) => {
+      let itemTotal = 0;
+      const product = item?.product ?? {};
+      const isCalibrated = product?.productType === "stone";
+      const isFreeGemstone = product?.productType === "freeSizeStone";
+
+      if (isFreeGemstone) {
+        itemTotal = Number(product?.price) * Number(product?.ct_weight || 1);
+      } else if (isCalibrated && product?.purchaseByCarat) {
+        itemTotal = Number(product?.price) * Number(item?.caratWeight || product?.ct_weight || 1);
+      } else {
+        itemTotal = Number(product?.price) * (Number(item?.quantity) || 1);
+      }
+
+      if (product?.needCertification) {
+        itemTotal += 75 * (Number(item?.quantity) || 1);
+      }
+
+      return acc + itemTotal;
+    }, 0);
     const shippingTotal = (deliveryMethod === "delivery" && subtotal < 200 && subtotal > 0) ? 15 : 0;
     
     (orderPayload as any).subtotal = subtotal;

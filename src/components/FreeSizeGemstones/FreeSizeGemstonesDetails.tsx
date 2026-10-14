@@ -1,6 +1,6 @@
 "use client";
 import { formatDisplayWeight } from "@/utils/formatters";
-import { formatDisplayPrice } from "@/utils/priceHelpers";
+import { formatDisplayPrice, getMinCaratWeight } from "@/utils/priceHelpers";
 
 import { fetchFreeSizeGemstonesById } from "@/apis/api";
 import { AuthForm } from "@/components/Auth/AuthForm";
@@ -51,19 +51,24 @@ export default function FreeSizeGemstoneDetails({
   const [quoteModalOpened, { open: openQuote, close: closeQuote }] = useDisclosure(false);
   const router = useRouter();
 
-    useEffect(() => {
+  useEffect(() => {
     if (product) {
       setAllowPurchaseByCarat(true);
       setPurchaseByCarat(true);
+      const minW = getMinCaratWeight(product);
+      setCaratWeight(minW);
+      setCaratError(null);
     }
   }, [product]);
 
   const addProductToCart = () => {
     if (!product) return;
-    if (purchaseByCarat && !caratWeight) {
-      setCaratError("Please select a carat weight");
+    const minW = getMinCaratWeight(product);
+    if (purchaseByCarat && (!caratWeight || Number(caratWeight) < minW)) {
+      setCaratError(`Minimum carat weight is ${minW} ct (weight of one stone)`);
       return;
     }
+    const safeCaratWeight = Math.max(minW, Number(caratWeight) || minW);
 
     addToCart({
       product: {
@@ -84,7 +89,7 @@ export default function FreeSizeGemstoneDetails({
         type: "",
       },
       quantity: purchaseByCarat ? 1 : quantity,
-      caratWeight: purchaseByCarat ? `${caratWeight}` : undefined,
+      caratWeight: purchaseByCarat ? `${safeCaratWeight}` : undefined,
     });
     notifications.show({
       icon: <IconCheck />,
@@ -362,9 +367,17 @@ export default function FreeSizeGemstoneDetails({
             {allowPurchaseByCarat && (
               <Switch
                 checked={purchaseByCarat}
-                onChange={(event) =>
-                  setPurchaseByCarat(event.currentTarget.checked)
-                }
+                onChange={(event) => {
+                  const nextChecked = event.currentTarget.checked;
+                  setPurchaseByCarat(nextChecked);
+                  if (nextChecked) {
+                    const minW = getMinCaratWeight(product);
+                    if (Number(caratWeight) < minW) {
+                      setCaratWeight(minW);
+                      setCaratError(null);
+                    }
+                  }
+                }}
                 label="Purchase by carat weight"
                 onLabel="Carat"
                 offLabel="Stone"

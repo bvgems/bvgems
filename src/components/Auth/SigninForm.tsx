@@ -7,6 +7,7 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconExclamationCircle, IconX } from "@tabler/icons-react";
 import { useUserStore } from "@/store/useUserStore";
 import { useRouter } from "next/navigation";
+import { mergeGuestCartOnLogin } from "@/store/useCartStore";
 
 export const SigninForm = ({
   onClose,
@@ -38,14 +39,23 @@ export const SigninForm = ({
     const signinResponse = await handleSignin(payload);
 
     if (signinResponse?.data?.flag) {
+      const loggedInUser = signinResponse?.data?.user;
+      if (loggedInUser?.id) {
+        try {
+          await mergeGuestCartOnLogin(loggedInUser.id);
+        } catch (e) {
+          console.error("Cart merge on login failed:", e);
+        }
+      }
+
       notifications.show({
         icon: <IconCheck />,
         color: "teal",
-        message: "Welcome Back " + signinResponse?.data?.user?.firstName + " !",
+        message: "Welcome Back " + loggedInUser?.firstName + " !",
         position: "top-right",
         autoClose: 4000,
       });
-      setUser(signinResponse?.data?.user);
+      setUser(loggedInUser);
       form.reset();
       onClose();
       setTimeout(() => {

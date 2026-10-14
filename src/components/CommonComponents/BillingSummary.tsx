@@ -16,6 +16,7 @@ export const BillingSummary = ({
     [user?.id],
   );
 
+  const cart = cartStore((state: any) => state.cart);
   const cartTotal = cartStore((state: any) => state.cartTotal);
   const getTotalPrice = cartStore((state: any) => state.getTotalPrice);
 
@@ -46,7 +47,7 @@ export const BillingSummary = ({
       setShipping(shippingCost);
       setGrandTotal(total + shippingCost);
     }
-  }, [cartTotal, deliveryMethod, hasMounted, getTotalPrice]);
+  }, [cart, cartTotal, deliveryMethod, hasMounted, getTotalPrice]);
 
   if (!hasMounted) return null;
 

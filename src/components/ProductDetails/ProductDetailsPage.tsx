@@ -1,5 +1,5 @@
 "use client";
-import { formatDisplayPrice, formatDisplayWeight } from "@/utils/priceHelpers";
+import { formatDisplayPrice, formatDisplayWeight, getMinCaratWeight } from "@/utils/priceHelpers";
 
 import {
   Alert,
@@ -117,8 +117,10 @@ export default function ProductDetailsPage() {
   };
 
   useEffect(() => {
-    if (product?.ct_weight) {
-      setCaratWeight(1);
+    if (product) {
+      const minW = getMinCaratWeight(product);
+      setCaratWeight(minW);
+      setCaratError(null);
     }
   }, [product]);
 
@@ -166,7 +168,9 @@ export default function ProductDetailsPage() {
     );
     setAllProducts(allDetails?.data);
 
-    recalcTotal(productDetails, quantity, caratWeight);
+    const minW = getMinCaratWeight(productDetails);
+    setCaratWeight(minW);
+    recalcTotal(productDetails, quantity, minW);
   };
 
   const getData = async (handle: any) => {
@@ -177,6 +181,13 @@ export default function ProductDetailsPage() {
   const addProductToCart = () => {
     if (!product) return;
 
+    const minW = getMinCaratWeight(product);
+    if (purchaseByCarat && Number(caratWeight) < minW) {
+      setCaratError(`Minimum carat weight is ${minW} ct (weight of one stone)`);
+      return;
+    }
+    const safeCaratWeight = Math.max(minW, Number(caratWeight) || minW);
+
     const perStone = getPerStonePrice(product);
     const perCarat = getPerCaratPrice(product);
 
@@ -184,7 +195,7 @@ export default function ProductDetailsPage() {
       product: {
         id: product?.id,
         handle: product?.collection_slug?.toLowerCase(),
-        productType: "stone",
+        productType: product?.productType || (product?.gemstone_type ? "freeSizeStone" : "stone"),
         purchaseByCarat: purchaseByCarat,
         productId: product.id,
         collection_slug: product.collection_slug,
@@ -218,7 +229,7 @@ export default function ProductDetailsPage() {
         additionalComments: additionalComments,
       },
       quantity: purchaseByCarat ? 1 : quantity,
-      caratWeight: purchaseByCarat ? `${caratWeight}` : undefined,
+      caratWeight: purchaseByCarat ? `${safeCaratWeight}` : undefined,
     });
 
     notifications.show({
@@ -444,7 +455,11 @@ export default function ProductDetailsPage() {
   }, [product]);
 
   useEffect(() => {
-    if (product) recalcTotal(product, quantity, caratWeight);
+    if (product) {
+      const minW = getMinCaratWeight(product);
+      const ctw = Math.max(minW, Number(caratWeight) || minW);
+      recalcTotal(product, quantity, ctw);
+    }
   }, [product, purchaseByCarat]);
 
   const hasPricing = !(
@@ -620,9 +635,18 @@ export default function ProductDetailsPage() {
             {allowPurchaseByCarat && (
               <Switch
                 checked={purchaseByCarat}
-                onChange={(event) =>
-                  setPurchaseByCarat(event.currentTarget.checked)
-                }
+                onChange={(event) => {
+                  const nextChecked = event.currentTarget.checked;
+                  setPurchaseByCarat(nextChecked);
+                  if (nextChecked) {
+                    const minW = getMinCaratWeight(product);
+                    if (Number(caratWeight) < minW) {
+                      setCaratWeight(minW);
+                      setCaratError(null);
+                      recalcTotal(product, quantity, minW);
+                    }
+                  }
+                }}
                 label="Purchase by carat weight"
                 onLabel="Carat"
                 offLabel="Stone"

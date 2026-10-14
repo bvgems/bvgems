@@ -540,34 +540,37 @@ export default function SpecialPage() {
                <Table highlightOnHover highlightOnHoverColor="#f5f5f5" striped verticalSpacing="md">
                  <Table.Thead>
                    <Table.Tr className="font-extrabold text-[12px] text-gray-700 uppercase">
-                     <Table.Th><Checkbox checked={paginatedData.length > 0 && paginatedData.every(r => selectedRows[r.id])} onChange={toggleSelectAll} /></Table.Th>
-                     <Table.Th>Item ID</Table.Th>
-                     <Table.Th>Image</Table.Th>
-                     <Table.Th>Type</Table.Th>
-                     <Table.Th>Color</Table.Th>
-                     <Table.Th>Shape</Table.Th>
-                     <Table.Th>Dimension</Table.Th>
-                     <Table.Th>Carat Wt.</Table.Th>
-                     <Table.Th>Stock Pc.</Table.Th>
-                     <Table.Th></Table.Th>
+                     <Table.Th className="text-center w-12"><div className="flex justify-center items-center"><Checkbox checked={paginatedData.length > 0 && paginatedData.every(r => selectedRows[r.id])} onChange={toggleSelectAll} /></div></Table.Th>
+                     <Table.Th className="text-left">Item ID</Table.Th>
+                     <Table.Th className="text-center">Image</Table.Th>
+                     <Table.Th className="text-left">Type</Table.Th>
+                     <Table.Th className="text-left">Color</Table.Th>
+                     <Table.Th className="text-left">Shape</Table.Th>
+                     <Table.Th className="text-center">Dimension</Table.Th>
+                     <Table.Th className="text-right">Carat Wt.</Table.Th>
+                     <Table.Th className="text-right">Stock Pc.</Table.Th>
+                     <Table.Th className="text-right"></Table.Th>
                    </Table.Tr>
                  </Table.Thead>
                  <Table.Tbody>
                    {paginatedData.length > 0 ? (
                      paginatedData.map((row) => (
                        <Table.Tr key={row.id}>
-                         <Table.Td><Checkbox checked={selectedRows[row.id] || false} onChange={() => toggleSelectRow(row.id)} /></Table.Td>
-                         <Table.Td className="text-sm font-medium">{row.Item || "-"}</Table.Td>
-                         <Table.Td>
-                           {row.imageUrl ? <img src={row.imageUrl} alt={row.normalizedGem} className="w-10 h-10 rounded object-cover" /> : <div className="w-10 h-10 bg-gray-200 rounded animate-pulse"></div>}
+                         <Table.Td className="text-center w-12"><div className="flex justify-center items-center"><Checkbox checked={selectedRows[row.id] || false} onChange={() => toggleSelectRow(row.id)} /></div></Table.Td>
+                         <Table.Td className="text-left text-sm font-medium">{row.Item || "-"}</Table.Td>
+                         <Table.Td className="text-center">
+                           <div className="w-10 h-10 mx-auto flex items-center justify-center">
+                             {row.imageUrl ? <img src={row.imageUrl} alt={row.normalizedGem} className="w-10 h-10 rounded object-cover" /> : <div className="w-10 h-10 bg-gray-200 rounded animate-pulse"></div>}
+                           </div>
                          </Table.Td>
-                         <Table.Td className="text-sm font-medium whitespace-nowrap">{row.normalizedGem || "-"}</Table.Td>
-                         <Table.Td className="text-sm">{row.Color || "-"}</Table.Td>
-                         <Table.Td className="text-sm whitespace-nowrap">{row.normalizedShape || "-"}</Table.Td>
-                         <Table.Td className="text-sm whitespace-nowrap">{row.Size || "-"}</Table.Td>
-                         <Table.Td className="text-sm">{row["Stock Wt."] || "-"}</Table.Td>
-                         <Table.Td className="text-sm">{row["Stock Pcs."] || "-"}</Table.Td>
-                         <Table.Td>
+                         <Table.Td className="text-left text-sm font-medium whitespace-nowrap">{row.normalizedGem || "-"}</Table.Td>
+                         <Table.Td className="text-left text-sm">{row.Color || "-"}</Table.Td>
+                         <Table.Td className="text-left text-sm whitespace-nowrap">{row.normalizedShape || "-"}</Table.Td>
+                         <Table.Td className="text-center text-sm whitespace-nowrap tabular-nums">{row.Size || "-"}</Table.Td>
+                         <Table.Td className="text-right text-sm tabular-nums">{row["Stock Wt."] || "-"}</Table.Td>
+                         <Table.Td className="text-right text-sm tabular-nums">{row["Stock Pcs."] || "-"}</Table.Td>
+                         <Table.Td className="text-right">
+                           <div className="flex justify-end">
                             {row["Cp Std"] && Number(row["Cp Std"]) > 0 && (
                               <Button
                                 leftSection={<IconShoppingCart size={16} />}
@@ -596,11 +599,12 @@ export default function SpecialPage() {
                                 Add
                               </Button>
                             )}
+                           </div>
                          </Table.Td>
                        </Table.Tr>
                      ))
                    ) : (
-                     <Table.Tr><Table.Td colSpan={9} className="text-center py-12 text-gray-500 italic">No matching stones found.</Table.Td></Table.Tr>
+                     <Table.Tr><Table.Td colSpan={10} className="text-center py-12 text-gray-500 italic">No matching stones found.</Table.Td></Table.Tr>
                    )}
                  </Table.Tbody>
                </Table>

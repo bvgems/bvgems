@@ -37,7 +37,7 @@ import { useRouter } from "next/navigation";
 import { EmeraldShade } from "./EmeraldShade";
 import { BlueSapphireShade } from "./BlueSapphireShade";
 import { shades } from "@/utils/constants";
-import { getPerCaratPrice, getPerStonePrice, isLabGrown, formatDisplayPrice } from "@/utils/priceHelpers";
+import { getPerCaratPrice, getPerStonePrice, isLabGrown, formatDisplayPrice, getMinCaratWeight } from "@/utils/priceHelpers";
 import { QuoteRequestModal } from "./QuoteRequestModal";
 
 interface AddToCartModalProps {
@@ -93,14 +93,16 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(true);
   const [caratError, setCaratError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
-  const [caratWeight, setCaratWeight] = useState<number>(1);
+  const [caratWeight, setCaratWeight] = useState<number>(() => getMinCaratWeight(product));
   const [allowPurchaseByCarat, setAllowPurchaseByCarat] = useState(true);
   const [quoteProduct, setQuoteProduct] = useState<any | null>(null);
 
 
   useEffect(() => {
-    if (product?.ct_weight) {
-      setCaratWeight(1);
+    if (product) {
+      const minW = getMinCaratWeight(product);
+      setCaratWeight(minW);
+      setCaratError(null);
     }
   }, [product]);
 
@@ -124,11 +126,18 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
     const finalPrice = purchaseByCarat ? perCarat : perStone;
     if (finalPrice <= 0) return;
 
+    const minW = getMinCaratWeight(product);
+    if (purchaseByCarat && Number(caratWeight) < minW) {
+      setCaratError(`Minimum carat weight is ${minW} ct (weight of one stone)`);
+      return;
+    }
+    const safeCaratWeight = Math.max(minW, Number(caratWeight) || minW);
+
     addToCart({
       product: {
         id: product?.id,
         handle: product?.collection_slug?.toLowerCase(),
-        productType: "stone",
+        productType: product?.productType || (product?.gemstone_type ? "freeSizeStone" : "stone"),
         purchaseByCarat,
         productId: product.id,
         collection_slug: product.collection_slug,
@@ -163,7 +172,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
         additionalComments: additionalComments,
       },
       quantity: purchaseByCarat ? 1 : quantity,
-      caratWeight: purchaseByCarat ? `${caratWeight}` : undefined,
+      caratWeight: purchaseByCarat ? `${safeCaratWeight}` : undefined,
     });
 
     notifications.show({
@@ -357,9 +366,17 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
               {allowPurchaseByCarat && (
                 <Switch
                   checked={purchaseByCarat}
-                  onChange={(event) =>
-                    setPurchaseByCarat(event.currentTarget.checked)
-                  }
+                  onChange={(event) => {
+                    const nextChecked = event.currentTarget.checked;
+                    setPurchaseByCarat(nextChecked);
+                    if (nextChecked) {
+                      const minW = getMinCaratWeight(product);
+                      if (Number(caratWeight) < minW) {
+                        setCaratWeight(minW);
+                        setCaratError(null);
+                      }
+                    }
+                  }}
                   label="Purchase by carat weight"
                   onLabel="Carat"
                   offLabel="Stone"

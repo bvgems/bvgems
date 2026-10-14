@@ -29,34 +29,31 @@ export const verifyCartPrices = async (cartItems: any[]) => {
         }
 
         if (verifiedItem.product.purchaseByCarat) {
+           const stoneWeight = dbCtWeight || 0;
+           const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
+           if (verifiedItem.caratWeight && Number(verifiedItem.caratWeight) < minWeight) {
+             verifiedItem.caratWeight = `${minWeight}`;
+           }
+
            // Emulate getPerCaratPrice
-           if (isLabGrown && isAlexOrParaiba) {
-              verifiedItem.product.price = 85;
+           if (isLabGrown) {
+              verifiedItem.product.price = isAlexOrParaiba ? 85 : 50;
+           } else if (dbCtWeight) {
+              verifiedItem.product.price = Number((dbPrice / dbCtWeight).toFixed(2));
            } else {
-              if (isLabGrown && (!dbProduct.price || dbPrice === 0)) {
-                 verifiedItem.product.price = 0;
-              } else if (dbCtWeight) {
-                 verifiedItem.product.price = Number((dbPrice / dbCtWeight).toFixed(2));
-              } else {
-                 verifiedItem.product.price = dbPrice;
-              }
+              verifiedItem.product.price = dbPrice;
            }
         } else {
            // Emulate getPerStonePrice
            if (isLabGrown) {
-              if (!dbProduct.price || dbPrice === 0) {
-                 verifiedItem.product.price = 0;
-              } else if (isAlexOrParaiba) {
-                 if (!allowPurchaseByCarat) {
-                    verifiedItem.product.price = dbPrice;
-                 } else {
-                    verifiedItem.product.price = Number((85 * dbCtWeight).toFixed(2));
-                 }
+              if (!allowPurchaseByCarat) {
+                 verifiedItem.product.price = dbPrice;
               } else {
-                 if (!allowPurchaseByCarat) {
-                    verifiedItem.product.price = dbPrice;
+                 const rate = isAlexOrParaiba ? 85 : 50;
+                 if (dbCtWeight) {
+                    verifiedItem.product.price = Math.round((rate * dbCtWeight + 1e-6) * 100) / 100;
                  } else {
-                    verifiedItem.product.price = Number((50 * dbCtWeight).toFixed(2));
+                    verifiedItem.product.price = dbPrice;
                  }
               }
            } else {

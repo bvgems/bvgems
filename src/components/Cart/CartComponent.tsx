@@ -1,33 +1,21 @@
 "use client";
 
-import { formatCartWeight } from "@/utils/priceHelpers";
 import { useAuth } from "@/hooks/useAuth";
 import { getCartStore } from "@/store/useCartStore";
 import {
-  Image,
   Button,
   Grid,
   GridCol,
-  NumberInput,
   Alert,
   Container,
-  Paper,
-  Group,
-  Text,
   Stack,
-  Badge,
-  Checkbox,
-  NumberFormatter,
 } from "@mantine/core";
 import {
   IconCheck,
   IconClock,
-  IconLetterX,
-  IconMinus,
-  IconPlus,
   IconArrowNarrowRight,
   IconGift,
-  IconTrash
+  IconTrash,
 } from "@tabler/icons-react";
 import { generateCalibratedStoneUrl, generateFreeSizeStoneUrl } from "@/utils/seoUrlHelpers";
 import dynamic from "next/dynamic";
@@ -36,6 +24,7 @@ import { useMemo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { BillingSummary } from "../CommonComponents/BillingSummary";
 import { QuoteRequestModal } from "../CommonComponents/QuoteRequestModal";
+import { CartLineItem } from "./CartLineItem";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
@@ -54,6 +43,7 @@ export function CartComponent() {
   const cart = cartStore((state: any) => state.cart);
   const removeProduct = cartStore((state: any) => state.removeFromCart);
   const updateQuantity = cartStore((state: any) => state.updateQuantity);
+  const updateCaratWeight = cartStore((state: any) => state.updateCaratWeight);
   const setCartTotal = cartStore((state: any) => state.setCartTotal);
   const toggleCertification = cartStore(
     (state: any) => state.toggleCertification,
@@ -105,9 +95,11 @@ export function CartComponent() {
 
     cart.forEach((item: any) => {
       const price = parseFloat(item.product.price);
-      const weight = parseFloat(
-        item.caratWeight || item.product.ct_weight || "1",
-      );
+      const stoneWeight = parseFloat(item.product.ct_weight) || 0;
+      const minWeight = stoneWeight > 1 ? stoneWeight : 1;
+      const weight = item.product.productType === "freeSizeStone"
+        ? (stoneWeight || 1)
+        : Math.max(minWeight, parseFloat(item.caratWeight || `${minWeight}`));
       const quantity = item.quantity || 1;
 
       // 💎 Handle per-carat logic
@@ -165,8 +157,8 @@ export function CartComponent() {
     });
   };
 
-  const handleRemoveProduct = (id: any, product: any) => {
-    removeProduct(product?.productId, product?.shade);
+  const handleRemoveProduct = (id: any, product: any, purchaseByCarat?: boolean) => {
+    removeProduct(id, product?.shade, purchaseByCarat);
     notifications.show({
       icon: <IconCheck />,
       color: "teal",
@@ -178,9 +170,17 @@ export function CartComponent() {
 
   const getTotalCaratPrice = (value: any) => {
     if (value?.product?.productType === "stone") {
-      return Number(value?.product?.price) * Number(value?.caratWeight);
+      const stoneWeight = Number(value?.product?.ct_weight) || 0;
+      const minWeight = stoneWeight > 1 ? stoneWeight : 1;
+      const weight = Math.max(minWeight, Number(value?.caratWeight || minWeight));
+      return (
+        Number(value?.product?.price) * weight
+      );
     } else {
-      return Number(value?.product?.price) * Number(value?.product?.ct_weight);
+      return (
+        Number(value?.product?.price) *
+        Number(value?.product?.ct_weight || 1)
+      );
     }
   };
 
@@ -301,243 +301,47 @@ export function CartComponent() {
           )}
           <Stack gap="md">
             {cart.map((value: any, index: number) => {
-              const isGift = value?.product?.isGift;
-              let total =
-                value.product.productType === "stone" ||
-                value.product.productType === "freeSizeStone"
-                  ? value.product.purchaseByCarat
-                    ? getTotalCaratPrice(value)
-                    : value.product.price * value.quantity
-                  : value.product.price * value.quantity;
-
-              if (value.product.needCertification) {
-                total += 75 * value.quantity;
-              }
+              const itemKey =
+                value?.cartItemId ||
+                `${value?.product?.productId}-${value?.product?.purchaseByCarat ? "carat" : "piece"}-${value?.product?.shade || ""}-${index}`;
 
               return (
-                <Paper
-                  key={index}
-                  shadow="sm"
-                  radius="md"
-                  p="md"
-                  withBorder
-                  style={{
-                    display: "flex",
-                    gap: "1rem",
-                    alignItems: "flex-start",
-                    border: isGift ? "2px dashed #0b182d" : undefined,
-                    background: isGift ? "#f8fafc" : undefined,
-                    position: "relative",
+                <CartLineItem
+                  key={itemKey}
+                  value={value}
+                  onOpenProduct={() => redirectToProduct(value)}
+                  onRemove={() =>
+                    handleRemoveProduct(itemKey, value.product, value.product?.purchaseByCarat)
+                  }
+                  onCustomizeGift={() => handleCustomization(value)}
+                  onRequestPricing={() => setQuoteProduct(value?.product)}
+                  onQuantityChange={(newQuantity) => {
+                    updateQuantity(
+                      itemKey,
+                      newQuantity,
+                      value.product?.shade,
+                      value.product?.purchaseByCarat
+                    );
                   }}
-                >
-                  <Image loading="lazy"
-                    src={
-                      value?.jewelryProduct?.image_url ??
-                      value?.product?.image_url
-                    }
-                    h={120}
-                    w={120}
-                    radius="md"
-                    fit="cover"
-                    onClick={() => redirectToProduct(value)}
-                    style={{ cursor: "pointer" }}
-                  />
-
-                  <div style={{ flex: 1 }}>
-                    <Group justify="space-between" align="flex-start">
-                      <div
-                        style={{ cursor: "pointer" }}
-                        onClick={() => redirectToProduct(value)}
-                      >
-                        <Text fw={600} size="lg">
-                          {value?.product?.collection_slug
-                            ? value?.product?.collection_slug +
-                              " " +
-                              value?.product?.shape
-                            : value?.product?.title}
-                        </Text>
-                        <Text size="sm" c="dimmed" mt={2}>
-                          {value?.product?.productType === "stone" && (
-                            <>
-                              Size: {value?.product?.size} | Weight:{" "}
-                              {formatCartWeight(value?.product?.ct_weight)} | Quality:{" "}
-                              {value?.product?.quality} | Color:{" "}
-                              {value?.product?.color}
-                              {value?.product?.collection_slug === "Emerald" &&
-                                value?.product?.shade && (
-                                  <> | Shade: {value?.product?.shade}</>
-                                )}
-                              {value?.product?.collection_slug === "Sapphire" &&
-                                value?.product?.color === "Blue" &&
-                                value?.product?.quality !== "Lab Grown" &&
-                                value?.product?.shade && (
-                                  <> | Shade: {value?.product?.shade}</>
-                                )}
-                            </>
-                          )}
-                          {value?.product?.productType === "bead" && (
-                            <>Stone Size: {value?.product?.size}</>
-                          )}
-                          {value?.product?.productType === "layouts" && (
-                            <>
-                              Stone Size: {value?.product?.size} | Weight:{" "}
-                              {formatCartWeight(value?.product?.ct_weight)} | Stone Count:{" "}
-                              {value?.product?.stoneCount} | Quality:{" "}
-                              {value?.product?.quality}
-                            </>
-                          )}
-                          {value?.product?.productType === "freeSizeStone" && (
-                            <>
-                              Size: {value?.product?.size} | Color:{" "}
-                              {value?.product?.color}
-                            </>
-                          )}
-
-                          {value?.product?.productType === "ringJewelry" && (
-                            <span className="capitalize">
-                              Gold Color: {value?.product?.goldColor} | Size:{" "}
-                              {value?.product?.size}
-                            </span>
-                          )}
-                          {value?.product?.productType === "necklaceJewelry" &&
-                            value?.product?.length && (
-                              <span className="capitalize">
-                                Gold Color: {value?.product?.goldColor} |
-                                Length: {value?.product?.length}
-                                {value?.product?.size &&
-                                  ` | Gemstone Size: ${value?.product?.size}`}
-                              </span>
-                            )}
-                          {value?.product?.productType === "braceletJewelry" &&
-                            value?.product?.length && (
-                              <span className="capitalize">
-                                Gold Color: {value?.product?.goldColor} |
-                                Length: {value?.product?.length}
-                              </span>
-                            )}
-                          {value?.product?.productType === "earringJewelry" && (
-                            <span className="capitalize">
-                              {value?.product?.goldColor && (
-                                <>Gold Color: {value.product.goldColor} </>
-                              )}
-                              {value?.product?.totalCaratWeight && (
-                                <>
-                                  | Total Carat Weight:{" "}
-                                  {value.product.totalCaratWeight} ct.{" "}
-                                </>
-                              )}
-                              {value?.product?.gemstone && (
-                                <>| Stone: {value.product.gemstone}</>
-                              )}
-                            </span>
-                          )}
-                        </Text>
-                      </div>
-                      {!isGift ? (
-                        <Button
-                          color="red"
-                          variant="subtle"
-                          onClick={() =>
-                            handleRemoveProduct(value.cartItemId, value.product)
-                          }
-                          leftSection={<IconTrash size={16} />}
-                        >
-                          Remove
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="light"
-                          color="dark"
-                          size="xs"
-                          leftSection={<IconGift size={14} />}
-                          onClick={() => handleCustomization(value)}
-                        >
-                          Click to Customize
-                        </Button>
-                      )}
-                    </Group>
-                    <Group mt="sm" align="center" justify="space-between">
-                      <Text fw={500} size="lg">
-                        {(value?.jewelryProduct?.price ?? value?.product?.price) === 0 ? (
-                          <button
-                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(value?.product); }}
-                            className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer"
-                          >
-                            Request Pricing
-                          </button>
-                        ) : (
-                          <NumberFormatter
-                            thousandSeparator
-                            prefix="$"
-                            value={
-                              value?.jewelryProduct?.price ??
-                              value?.product?.price
-                            }
-                          />
-                        )}
-                      </Text>
-                      {isGift ? (
-                        <Badge color="gray" variant="light">
-                          Quantity: 1
-                        </Badge>
-                      ) : value?.product?.purchaseByCarat ? (
-                        <Badge color="gray" variant="light">
-                          Carat Weight:{" "}
-                          {value?.product?.productType === "stone"
-                            ? value?.caratWeight
-                            : formatCartWeight(value?.product?.ct_weight)}
-                        </Badge>
-                      ) : (
-                        <NumberInput
-                          min={1}
-                          value={value.quantity}
-                          onChange={(newQuantity) => {
-                            const safeQuantity =
-                              typeof newQuantity === "number" ? newQuantity : 1;
-                            updateQuantity(
-                              value.product.productId,
-                              safeQuantity,
-                              value.product.shade
-                            );
-                          }}
-                          allowNegative={false}
-                          radius="md"
-                          style={{ maxWidth: 90 }}
-                        />
-                      )}
-                      {total > 0 && (
-                        <Text fw={600} size="lg">
-                          <NumberFormatter
-                            thousandSeparator
-                            prefix="$"
-                            value={total.toFixed(2)}
-                          />
-                        </Text>
-                      )}
-                    </Group>
-
-                    {!isGift && (
-                      <Checkbox
-                        color="#0b182d"
-                        size="sm"
-                        mt="sm"
-                        label={
-                          <span className="text-gray-500">
-                            Add certification for this item (+$75)
-                          </span>
-                        }
-                        checked={!!value.product.needCertification}
-                        onChange={(e) =>
-                          toggleCertification(
-                            value.product.productId,
-                            e.currentTarget.checked,
-                            value.product.shade
-                          )
-                        }
-                      />
-                    )}
-                  </div>
-                </Paper>
+                  onCaratWeightChange={(newCaratWeight) => {
+                    const stoneWeight = Number(value.product?.ct_weight) || 0;
+                    const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
+                    const safeWeight = Math.max(minWeight, Number(newCaratWeight) || minWeight);
+                    updateCaratWeight(
+                      itemKey,
+                      safeWeight,
+                      value.product?.shade
+                    );
+                  }}
+                  onToggleCertification={(checked) => {
+                    toggleCertification(
+                      itemKey,
+                      checked,
+                      value.product?.shade,
+                      value.product?.purchaseByCarat
+                    );
+                  }}
+                />
               );
             })}
           </Stack>

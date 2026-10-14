@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { NumberInput, Select, MultiSelect, Button, ActionIcon, Collapse, Switch } from "@mantine/core";
+import { NumberInput, Select, MultiSelect, Button, ActionIcon, Collapse, Switch, Loader } from "@mantine/core";
 import Image from "next/image";
-import { IconX, IconChevronUp, IconChevronDown, IconFilter } from "@tabler/icons-react";
+import { IconX, IconChevronUp, IconChevronDown, IconFilter, IconShare } from "@tabler/icons-react";
 import { shopByColorOptions } from "@/utils/constants";
 
 type RangeValue = { min: number | ""; max: number | "" };
@@ -181,6 +181,54 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [label, setLabel] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isSharingVideo, setIsSharingVideo] = useState(false);
+
+  const handleShareVideo = async (e: React.MouseEvent, url: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsSharingVideo(true);
+    try {
+      let shareUrl = url;
+      if (url.startsWith('/')) {
+        shareUrl = window.location.origin + url;
+      }
+
+      // Fetch the video file to share directly
+      const response = await fetch(shareUrl);
+      const blob = await response.blob();
+      const file = new File([blob], 'bvgems-video.mp4', { type: blob.type || 'video/mp4' });
+
+      const gemLabel = gem ? `${gem}` : "Gemstone";
+      const shapeLabel = shape ? ` ${shape}` : "";
+      const shareTitle = `B.V. Gems - ${gemLabel}${shapeLabel}`;
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: shareTitle,
+        });
+      } else {
+        // Fallback to sharing URL if files aren't supported on this browser/OS
+        if (navigator.share) {
+          await navigator.share({
+            title: shareTitle,
+            url: shareUrl,
+          });
+        } else {
+          await navigator.clipboard.writeText(shareUrl);
+          alert("Video link copied to clipboard!");
+        }
+      }
+    } catch (err) {
+      console.error("Error sharing video:", err);
+      if (err instanceof Error && err.name !== 'AbortError') {
+        alert("Sharing failed. You may need to use a different browser.");
+      }
+    } finally {
+      setIsSharingVideo(false);
+    }
+  };
 
   useEffect(() => {
     let active = true;
@@ -332,7 +380,18 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
             onError={() => setIsLoaded(false)}
           />
           {/* Subtle elegant gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60 pointer-events-none" />
+
+          {/* Share Video Button */}
+          <button
+            onClick={(e) => handleShareVideo(e, videoUrl)}
+            disabled={isSharingVideo}
+            className="absolute top-3 right-3 z-20 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-md transition-all disabled:opacity-50 cursor-pointer active:scale-95 shadow-md flex items-center justify-center"
+            title="Share Video"
+            aria-label="Share Video"
+          >
+            {isSharingVideo ? <Loader size={18} color="white" /> : <IconShare size={18} stroke={1.5} />}
+          </button>
 
           {/* Elegant frosted label */}
           {label && (
@@ -415,6 +474,13 @@ export const GridViewTopFilters = ({
 
   const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || Object.keys(selectedDimensions).some(k => selectedDimensions[k].length > 0) || selectedSapphireColors.length > 0 || selectedTypes.length > 0 || selectedGrades.length > 0;
 
+  const allDims = new Set<string>();
+  Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
+  const combinedDims = Array.from(allDims).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  const gemStr = selectedGems.length > 0 ? ` ${selectedGems[0]}` : " ANY GEM";
+  const shapeStr = selectedShapes.length > 0 ? ` ${selectedShapes[0]}` : "";
+  const dimensionLabel = `${gemStr}${shapeStr} DIMENSIONS`.trim().toUpperCase();
+
   return (
     <div className="w-full bg-white shadow-sm border border-gray-100 rounded-lg mb-10 relative z-10">
       {/* SMOOTH GRID COLLAPSE */}
@@ -422,13 +488,13 @@ export const GridViewTopFilters = ({
         <div className="overflow-hidden">
           <div className="p-6">
 
-            {/* MOBILE FILTERS (Selects) */}
-            <div className="flex lg:hidden flex-wrap gap-4 justify-center w-full mb-6">
-              {/* Gem Type Dropdown */}
-              <div className="flex flex-col flex-1 min-w-[150px] max-w-[250px]">
-                <span className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
+            {/* MOBILE FILTERS (Selects - Single Rows) */}
+            <div className="flex lg:hidden flex-col items-center w-full gap-4 mb-6">
+              {/* 1. Gem Type */}
+              <div className="flex flex-col w-full max-w-[280px]">
+                <label className="text-[11px] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider text-left">
                   Gem Type
-                </span>
+                </label>
                 <Select
                   placeholder="Any Gem Type"
                   size="md"
@@ -448,6 +514,7 @@ export const GridViewTopFilters = ({
                     }
                   }}
                   clearable={false}
+                  searchable
                   className="w-full"
                   renderOption={({ option }) => {
                     const gemOption = gemstoneOptions.find(g => g.value === option.value);
@@ -461,12 +528,12 @@ export const GridViewTopFilters = ({
                 />
               </div>
 
-              {/* Sapphire Colors */}
+              {/* Sapphire Colors (if Sapphire selected) */}
               {selectedGems.includes("Sapphire") && sapphireColors.length > 0 && (
-                <div className="flex flex-col flex-1 min-w-[150px] max-w-[250px]">
-                  <span className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
+                <div className="flex flex-col w-full max-w-[280px]">
+                  <label className="text-[11px] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider text-left">
                     Color
-                  </span>
+                  </label>
                   <MultiSelect
                     placeholder="Any Color"
                     size="md"
@@ -501,10 +568,11 @@ export const GridViewTopFilters = ({
                 </div>
               )}
 
-              <div className="flex flex-col flex-1 min-w-[150px] max-w-[250px]">
-                <span className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
+              {/* 2. Shape */}
+              <div className="flex flex-col w-full max-w-[280px]">
+                <label className="text-[11px] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider text-left">
                   Shape
-                </span>
+                </label>
                 <Select
                   placeholder="Any Shape"
                   size="md"
@@ -521,6 +589,7 @@ export const GridViewTopFilters = ({
                     }
                   }}
                   clearable={false}
+                  searchable
                   className="w-full"
                   renderOption={({ option }) => {
                     const shapeOption = shapeOptions.find(s => s.value === option.value);
@@ -534,16 +603,120 @@ export const GridViewTopFilters = ({
                 />
               </div>
 
+              {/* 3. Dimension */}
+              <div className="flex flex-col w-full max-w-[280px]">
+                <label className="text-[11px] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider text-left">
+                  {dimensionLabel}
+                </label>
+                <MultiSelect
+                  placeholder="Select"
+                  size="md"
+                  radius="md"
+                  data={combinedDims.map(d => ({ value: d, label: d }))}
+                  value={selectedDimensions["Any"] || []}
+                  onChange={(val) => {
+                    setSelectedDimensions(prev => ({ ...prev, "Any": val }));
+                    if (document.activeElement instanceof HTMLElement) {
+                      document.activeElement.blur();
+                    }
+                  }}
+                  searchable
+                  clearable={false}
+                  className="w-full"
+                />
+              </div>
+
+              {/* 4. Type */}
+              {availableTypes.length > 0 && (
+                <div className="flex flex-col w-full max-w-[280px]">
+                  <label className="text-[11px] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider text-left">
+                    Type
+                  </label>
+                  <Select
+                    placeholder="Select"
+                    size="md"
+                    radius="md"
+                    data={availableTypes.map(t => ({ value: t, label: t }))}
+                    value={selectedTypes.length > 0 ? selectedTypes[0] : null}
+                    onChange={(val) => {
+                      setSelectedTypes(val ? [val] : []);
+                      if (document.activeElement instanceof HTMLElement) {
+                        document.activeElement.blur();
+                      }
+                    }}
+                    searchable
+                    clearable={false}
+                    className="w-full"
+                  />
+                </div>
+              )}
+
+              {/* Grade (if Natural selected and availableGrades exists) */}
+              {selectedTypes.includes("Natural") && availableGrades.length > 0 && (
+                <div className="flex flex-col w-full max-w-[280px]">
+                  <label className="text-[11px] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider text-left">
+                    Grade
+                  </label>
+                  <Select
+                    placeholder="Select"
+                    size="md"
+                    radius="md"
+                    data={availableGrades.map(g => ({ value: g, label: g }))}
+                    value={selectedGrades.length > 0 ? selectedGrades[0] : null}
+                    onChange={(val) => {
+                      setSelectedGrades(val ? [val] : []);
+                      if (document.activeElement instanceof HTMLElement) {
+                        document.activeElement.blur();
+                      }
+                    }}
+                    searchable
+                    clearable={false}
+                    className="w-full"
+                  />
+                </div>
+              )}
+
+              {/* 5. Weight (CT) */}
+              <div className="flex flex-col w-full max-w-[280px]">
+                <label className="text-[11px] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider text-left">
+                  Weight (CT)
+                </label>
+                <NumberInput
+                  value={weight}
+                  onChange={(val) => setWeight(val.toString())}
+                  placeholder="Enter weight"
+                  size="md"
+                  radius="md"
+                  min={0}
+                  max={weightBounds.max}
+                  styles={{ input: { fontSize: '14px' } }}
+                  hideControls
+                  className="w-full"
+                />
+              </div>
+
+              {/* 6. Video (if any) */}
+              {selectedGems.length > 0 && (
+                <div className="w-full flex justify-center mt-2">
+                  <GemVideo
+                    gem={selectedGems[0]}
+                    shape={selectedShapes.length > 0 ? selectedShapes[0] : null}
+                    selectedTypes={selectedTypes}
+                    selectedGrades={selectedGrades}
+                    selectedSapphireColors={selectedSapphireColors}
+                  />
+                </div>
+              )}
             </div>
 
             {/* WRAPPER FOR SIDE-BY-SIDE VIDEO (DESKTOP) */}
-            <div className="flex flex-col lg:flex-row w-full gap-8 lg:gap-12">
+            <div className="hidden lg:flex flex-col lg:flex-row w-full gap-8 lg:gap-12">
               
               {/* Left Side: All Desktop & Bottom Filters */}
               <div className="flex-1 flex flex-col w-full min-w-0">
 
                 {/* DESKTOP FILTERS (Icons) */}
-                <div className="hidden lg:flex flex-col lg:flex-row gap-10">
+                <div className="flex flex-col lg:flex-row gap-10">
 
 
                   {/* GEM TYPE */}
@@ -625,46 +798,22 @@ export const GridViewTopFilters = ({
 
                 </div>
 
-                {/* Mobile/Tablet Video inline */}
-                <div className="block lg:hidden w-full mt-8">
-                  {selectedGems.length > 0 && (
-                    <GemVideo
-                      gem={selectedGems[0]}
-                      shape={selectedShapes.length > 0 ? selectedShapes[0] : null}
-                      selectedTypes={selectedTypes}
-                      selectedGrades={selectedGrades}
-                      selectedSapphireColors={selectedSapphireColors}
-                    />
-                  )}
-                </div>
-
                 {/* Remapped bottom container */}
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 w-full mt-6">
+                <div className="flex flex-row gap-8 lg:gap-12 w-full mt-6">
 
                   {/* Left Side: Filters */}
                   <div className="flex-1 flex flex-wrap gap-8 items-start w-full">
                     <SingleNumberFilter label="Weight (CT)" value={weight} onChange={setWeight} bounds={weightBounds} />
 
                     <div className="flex flex-col gap-4 w-full lg:w-auto mx-auto lg:mx-0">
-                      {(() => {
-                        const allDims = new Set<string>();
-                        Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
-                        const combinedDims = Array.from(allDims).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-                        const gemStr = selectedGems.length > 0 ? ` ${selectedGems[0]}` : " ANY GEM";
-                        const shapeStr = selectedShapes.length > 0 ? ` ${selectedShapes[0]}` : "";
-                        const label = `${gemStr}${shapeStr} DIMENSIONS`.trim().toUpperCase();
-
-                        return (
-                          <MultiDropdownFilter
-                            label={label}
-                            value={selectedDimensions["Any"] || []}
-                            onChange={(val) => {
-                              setSelectedDimensions(prev => ({ ...prev, "Any": val }));
-                            }}
-                            optionsList={combinedDims}
-                          />
-                        );
-                      })()}
+                      <MultiDropdownFilter
+                        label={dimensionLabel}
+                        value={selectedDimensions["Any"] || []}
+                        onChange={(val) => {
+                          setSelectedDimensions(prev => ({ ...prev, "Any": val }));
+                        }}
+                        optionsList={combinedDims}
+                      />
                     </div>
 
                     {availableTypes.length > 0 && (
@@ -690,7 +839,7 @@ export const GridViewTopFilters = ({
               </div>
 
               {/* Desktop Video (Sticky Right Side) */}
-              <div className="hidden lg:flex w-[280px] xl:w-[320px] shrink-0 items-start justify-end">
+              <div className="w-[280px] xl:w-[320px] shrink-0 items-start justify-end">
                 {selectedGems.length > 0 && (
                   <div className="sticky top-24 pt-4">
                     <GemVideo
@@ -713,7 +862,7 @@ export const GridViewTopFilters = ({
             </div>
 
             {hasActiveFilters && (
-              <div className="mt-8 flex items-center gap-4 flex-wrap">
+              <div className="mt-8 flex items-center justify-center lg:justify-start gap-3 flex-wrap">
                 <span className="text-sm font-bold text-gray-500">Selected</span>
 
                 {selectedGems.map(gem => (

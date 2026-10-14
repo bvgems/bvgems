@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUserStore } from "@/store/useUserStore";
+import { fetchAndSyncUserCart, mergeGuestCartOnLogin } from "@/store/useCartStore";
 
 let authPromise: Promise<any> | null = null;
 let hasAttemptedVerification = false;
@@ -18,8 +19,13 @@ export const useAuth = () => {
     if (!authPromise) {
       authPromise = axios
         .post(`/api/handleTokenVerification`, {}, { withCredentials: true })
-        .then((res) => {
-          setUser(res.data.user);
+        .then(async (res) => {
+          const verifiedUser = res.data.user;
+          setUser(verifiedUser);
+          if (verifiedUser?.id) {
+            await mergeGuestCartOnLogin(verifiedUser.id);
+            await fetchAndSyncUserCart(verifiedUser.id);
+          }
         })
         .catch(() => {
           setUser(null);

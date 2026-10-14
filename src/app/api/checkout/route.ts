@@ -72,9 +72,10 @@ export async function POST(req: Request) {
         amount = Number(product?.price) * Number(product?.ct_weight);
       } else if (isCalibrated) {
         if (product?.purchaseByCarat) {
-          if (product?.ct_weight) {
-            amount = Number(product?.price) * Number(item?.caratWeight);
-          }
+          const stoneWeight = Number(product?.ct_weight) || 0;
+          const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
+          const safeCarat = Math.max(minWeight, Number(item?.caratWeight) || minWeight);
+          amount = Number(product?.price) * safeCarat;
         } else {
           amount = Number(product?.price) * (item?.quantity || 1);
         }
@@ -106,9 +107,12 @@ export async function POST(req: Request) {
           Carat Weight Of Stone: ${product?.ct_weight}
         `;
       } else if (isCalibrated && product?.purchaseByCarat) {
+        const stoneWeight = Number(product?.ct_weight) || 0;
+        const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
+        const safeCarat = Math.max(minWeight, Number(item?.caratWeight) || minWeight);
         productData.description = `
           Per Carat Price : ${formatCurrency(Number(product?.price))}
-          Purchased Carat: ${item?.caratWeight}
+          Purchased Carat: ${safeCarat}
         `;
       } else {
         productData.description = `Quantity: ${item?.quantity}`;

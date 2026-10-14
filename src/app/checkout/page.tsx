@@ -239,7 +239,9 @@ export default function CheckoutSelectionPage() {
                               <Badge color="gray" variant="light">
                                 Carat Weight:{" "}
                                 {item?.product?.productType === "stone"
-                                  ? item?.caratWeight
+                                  ? (Number(item?.caratWeight) >= (Number(item?.product?.ct_weight) || 0)
+                                      ? item?.caratWeight
+                                      : (Number(item?.product?.ct_weight) > 1 ? item?.product?.ct_weight : "1"))
                                   : item?.product?.ct_weight}
                               </Badge>
                             ) : (
@@ -254,8 +256,12 @@ export default function CheckoutSelectionPage() {
                               ${Number(
                                 item?.product?.purchaseByCarat
                                   ? item?.product?.productType === "stone"
-                                    ? Number(item?.product?.price) * Number(item?.caratWeight)
-                                    : Number(item?.product?.price) * Number(item?.product?.ct_weight)
+                                    ? Number(item?.product?.price) *
+                                      Math.max(
+                                        Number(item?.product?.ct_weight) > 1 ? Number(item?.product?.ct_weight) : 1,
+                                        Number(item?.caratWeight) || 1
+                                      )
+                                    : Number(item?.product?.price) * Number(item?.product?.ct_weight || 1)
                                   : Number(item?.product?.price) * (item?.quantity || 1)
                               ).toFixed(2)}
                             </div>

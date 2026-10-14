@@ -42,7 +42,10 @@ export const getOrderPayload = (
 
         if (isStone) {
           if (item?.product?.purchaseByCarat) {
-            price = Number(item?.product?.price) * Number(item?.caratWeight);
+            const stoneWeight = Number(item?.product?.ct_weight) || 0;
+            const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
+            const safeCarat = Math.max(minWeight, Number(item?.caratWeight) || minWeight);
+            price = Number(item?.product?.price) * safeCarat;
             quantity = 1;
 
             properties.push(
@@ -51,7 +54,7 @@ export const getOrderPayload = (
               { name: "Quality", value: item?.product?.quality },
               {
                 name: "Selected Carat Weight",
-                value: formatCarat(item?.caratWeight),
+                value: formatCarat(safeCarat),
               },
               { name: "Total Amount", value: formatCurrency(price) },
             );
@@ -153,9 +156,10 @@ export const getOrderPayload = (
         }
 
         if (item?.product?.needCertification) {
+          price = Number(price) + 75;
           properties.push({
             name: "Need Certification",
-            value: item?.product?.needCertification === true ? "YES" : "NO",
+            value: "YES (+$75)",
           });
         }
 

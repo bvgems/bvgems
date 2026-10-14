@@ -21,7 +21,6 @@ import {
   Container,
   Loader,
 } from "@mantine/core";
-import { motion } from "framer-motion";
 import { getShapesData } from "@/apis/api";
 import { CategoryTable } from "./CategoryTable";
 import { useDisclosure } from "@mantine/hooks";
@@ -663,12 +662,7 @@ export function CategoryContent({
         <Grid className="mt-6">
           {/* Left: Image Carousel */}
           <GridCol span={{ base: 12, md: 6 }} order={{ base: 2, md: 1 }}>
-            <motion.div
-              initial={{ opacity: 0, y: 80 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
-              className="flex gap-4 items-start px-4 md:px-12"
-            >
+            <div className="flex gap-4 items-start px-4 md:px-12">
               <div className="w-full">
                 {availableQualityImages.length > 0 ? (
                   <div className="flex flex-col items-center">
@@ -748,7 +742,7 @@ export function CategoryContent({
 
                     {/* Conditional Video Block (Shows ONLY below thumbnails when a valid video exists for the selected grade) */}
                     {selectedGradeVideos.length > 0 && currentVideoUrl && (
-                      <div className="mt-8 flex flex-col items-center w-full animate-fade-in">
+                      <div className="mt-8 flex flex-col items-center w-full">
 
 
                         <div
@@ -846,17 +840,12 @@ export function CategoryContent({
                   </div>
                 )}
               </div>
-            </motion.div>
+            </div>
           </GridCol>
 
           {/* Right: Heading + Badges + Inline Filters + Video */}
           <GridCol span={{ base: 12, md: 6 }} order={{ base: 1, md: 2 }}>
-            <motion.div
-              initial={{ opacity: 0, y: 80 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
-              className="px-4 flex flex-col gap-4 sticky top-24 z-10"
-            >
+            <div className="px-4 flex flex-col gap-4 sticky top-24 z-10">
 
 
               
@@ -995,7 +984,7 @@ export function CategoryContent({
                 )}
 
               </div>
-            </motion.div>
+            </div>
 
 
           </GridCol>

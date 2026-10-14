@@ -11,7 +11,6 @@ export const getPerCaratPrice = (item: any): number => {
   if (!item) return 0;
   if (isSmallLabGrown(item)) return 0; // no per-carat for these
   if (isLabGrown(item)) {
-     if (!item?.price) return 0;
      if (item?.collection_slug === "Alexandrite" || item?.collection_slug === "Paraiba Tourmaline") {
        return 85;
      }
@@ -24,11 +23,12 @@ export const getPerCaratPrice = (item: any): number => {
 export const getPerStonePrice = (item: any): number => {
   if (!item) return 0;
   if (isSmallLabGrown(item)) return Number(item.price); // flat $2.50 from DB
-  if (!item?.ct_weight) return 0;
   if (isLabGrown(item)) {
-     if (!item?.price) return 0;
      const rate = (item?.collection_slug === "Alexandrite" || item?.collection_slug === "Paraiba Tourmaline") ? 85 : 50;
-     return Number((rate * item.ct_weight).toFixed(2));
+     if (item?.ct_weight) {
+       return Math.round((rate * Number(item.ct_weight) + 1e-6) * 100) / 100;
+     }
+     return item?.price ? Number(item.price) : 0;
   }
   return item?.price ? Number(item.price) : 0;
 };
@@ -60,3 +60,43 @@ export const formatCartWeight = (weight: number | string | undefined | null): st
   if (isNaN(num)) return weight.toString();
   return num.toString();
 };
+
+export const getStoneWeight = (product: any): number => {
+  if (!product) return 0;
+  const raw = product.ct_weight;
+  if (typeof raw === "number") return raw > 0 ? raw : 0;
+  if (typeof raw === "string") {
+    const cleaned = raw.replace(/[^0-9.]/g, "");
+    const parsed = parseFloat(cleaned);
+    return !isNaN(parsed) && parsed > 0 ? parsed : 0;
+  }
+  return 0;
+};
+
+export const getMinCaratWeight = (product: any): number => {
+  const stoneWeight = getStoneWeight(product);
+  if (stoneWeight <= 0) return 1;
+  if (product?.productType === "freeSizeStone") {
+    return Number(stoneWeight.toFixed(2));
+  }
+  if (stoneWeight <= 1) return 1;
+  return Number(stoneWeight.toFixed(2));
+};
+
+export const getCaratOptions = (product: any): string[] => {
+  const minWeight = getMinCaratWeight(product);
+  const options: string[] = [];
+
+  if (!Number.isInteger(minWeight)) {
+    options.push(String(minWeight));
+  }
+
+  const startInt = Math.max(1, Math.ceil(minWeight));
+  const maxInt = Math.max(100, startInt);
+  for (let i = startInt; i <= maxInt; i++) {
+    options.push(String(i));
+  }
+
+  return options;
+};
+
