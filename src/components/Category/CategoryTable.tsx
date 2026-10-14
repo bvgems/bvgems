@@ -100,7 +100,7 @@ export const CategoryTable = ({
       Gemstone: item.collection_slug,
       Shape: item.shape,
       Size: item.size,
-      Carat: item.ct_weight,
+      Carat: item.ct_weight ? formatDisplayWeight(item.ct_weight) : item.ct_weight,
       Quality: item.quality,
       Image: item.image_url,
       ...(options.showPiece && { "Price Per Piece": item.price }),
@@ -246,7 +246,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
         <td>${item.size}</td>
         <td>${formatDisplayWeight(item.ct_weight)}</td>
         <td>${item.quality}</td>
-        ${options.showPiece ? `<td>$${item.price ?? "-"}</td>` : ""}
+        ${options.showPiece ? `<td>$${item.price ? formatDisplayPrice(item.price) : "-"}</td>` : ""}
         ${options.showCarat ? `<td>$${formatDisplayPrice(getPerCaratPrice(item))}</td>` : ""}
       </tr>
     `,
@@ -560,7 +560,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                           <>
                             <TableTd>
                               {element?.price ? (
-                                `$ ${Number(element.price).toFixed(2)}`
+                                `$ ${formatDisplayPrice(element.price)}`
                               ) : (
                                 <button
                                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}
@@ -573,7 +573,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                             <TableTd onClick={(e) => e.stopPropagation()}>
                               {isPurchaseByCarat(element) ? (
                                 getPerCaratPrice(element) !== 0 ? (
-                                  `$ ${getPerCaratPrice(element)}`
+                                  `$ ${formatDisplayPrice(getPerCaratPrice(element))}`
                                 ) : (
                                   <button
                                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}
@@ -704,7 +704,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                                   <div>
                                     <strong>Per Carat Price:</strong>{" "}
                                     {getPerCaratPrice(element) !== 0 ? (
-                                      `$ ${getPerCaratPrice(element)}`
+                                      `$ ${formatDisplayPrice(getPerCaratPrice(element))}`
                                     ) : (
                                       <button
                                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}

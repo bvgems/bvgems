@@ -2,7 +2,7 @@
 import { PageHeader } from "@/components/CommonComponents/PageHeader";
 import Link from "next/link";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import {
   Button,
   Grid,
@@ -149,8 +149,11 @@ export function CategoryContent({
   const [selectedSapphireColor, setSelectedSapphireColor] = useState(
     urlColor || SapphireLooseGemstoneColorOptions[0]?.value
   );
-  const [emeraldShade, setEmeraldShade] = useState<string | null>(urlShade || "Zambian");
+  const [emeraldShade, setEmeraldShade] = useState<string | null>(urlShade || "Colombian");
   const [fetchedResult, setFetchedResult] = useState<any[]>([]);
+  // Identifies which shape/color the current `fetchedResult` belongs to, so we
+  // never reconcile filters against stale data while a new fetch is in flight.
+  const [fetchedKey, setFetchedKey] = useState<string | null>(null);
   const [allSizes, setAllSizes] = useState<{ [shape: string]: string[] }>({});
   const [opened, { open, close }] = useDisclosure(false);
   const [shaedImages, setShadeImages] = useState<any>([]);
@@ -164,26 +167,67 @@ export function CategoryContent({
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const mainVideoRef = useRef<HTMLVideoElement>(null);
 
+  // Last URL values we have already applied to state. The effect below also
+  // re-runs on unrelated deps (allSizes, selectedShape...), and must NOT keep
+  // overwriting state with a stale URL value (that caused a color/type ping-pong
+  // with the state -> URL effect).
+  const lastUrlRef = useRef({
+    shape: urlShape,
+    color: urlColor,
+    type: urlType,
+    shade: urlShade,
+  });
+
   // Sync state with URL parameters on soft navigation
   useEffect(() => {
     const urlShape = searchParams.get("shape");
     const urlColor = searchParams.get("color");
     const urlType = searchParams.get("type");
     const urlShade = searchParams.get("shade");
+    const last = lastUrlRef.current;
 
-    if (urlShape && urlShape !== selectedShape) {
-      setSelectedShape(urlShape);
+    if (urlShape !== last.shape) {
+      last.shape = urlShape;
+      if (urlShape && urlShape !== selectedShape) setSelectedShape(urlShape);
     }
-    if (urlColor && urlColor !== selectedSapphireColor) {
-      setSelectedSapphireColor(urlColor);
+    if (urlColor !== last.color) {
+      last.color = urlColor;
+      if (urlColor && urlColor !== selectedSapphireColor) setSelectedSapphireColor(urlColor);
     }
-    if (urlType && urlType !== typeFilter) {
-      setTypeFilter(urlType);
+    if (urlType !== last.type) {
+      last.type = urlType;
+      if (urlType && urlType !== typeFilter) setTypeFilter(urlType);
     }
-    if (urlShade && urlShade !== emeraldShade) {
-      setEmeraldShade(urlShade);
+    if (urlShade !== last.shade) {
+      last.shade = urlShade;
+      if (urlShade && urlShade !== emeraldShade) setEmeraldShade(urlShade);
     }
-  }, [searchParams]);
+    if (routeSize) {
+      const normalizedRoute = routeSize.replace(/\s+/g, "");
+      const currentSelected = selectedSizes[0]?.replace(/\s+/g, "");
+      
+      if (normalizedRoute !== currentSelected) {
+        // Find the properly formatted size from allSizes if available
+        let trueSize = routeSize;
+        if (selectedShape && allSizes[selectedShape]) {
+          const match = allSizes[selectedShape].find((s: string) => s.replace(/\s+/g, "") === normalizedRoute);
+          if (match) trueSize = match;
+        }
+        setSelectedSizes([trueSize]);
+      } else if (selectedShape && allSizes[selectedShape]) {
+        // Even if they match normalized, ensure we use the properly formatted one from the DB
+        const match = allSizes[selectedShape].find((s: string) => s.replace(/\s+/g, "") === normalizedRoute);
+        if (match && selectedSizes[0] !== match) {
+          setSelectedSizes([match]);
+        }
+      }
+    } else if (!routeSize && selectedSizes.length > 0) {
+      const urlSizesParam = searchParams.getAll("size");
+      if (!urlSizesParam || urlSizesParam.length === 0) {
+        setSelectedSizes([]);
+      }
+    }
+  }, [searchParams, routeSize, allSizes, selectedShape]);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -211,7 +255,7 @@ export function CategoryContent({
 
     setOrDelete("color", selectedSapphireColor, SapphireLooseGemstoneColorOptions[0]?.value);
     setOrDelete("type", typeFilter, null);
-    setOrDelete("shade", emeraldShade, "Zambian");
+    setOrDelete("shade", emeraldShade, "Colombian");
 
     // Size is managed via path segments, so ensure it is not in query params
     if (params.has("size")) {
@@ -222,9 +266,17 @@ export function CategoryContent({
     if (hasChanges) {
       const queryString = params.toString();
       const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
-      router.replace(newUrl, { scroll: false });
+      
+      // Prevent infinite loops or unnecessary replaces if the URL hasn't actually changed
+      const currentQuery = searchParams.toString();
+      const currentFullUrl = currentQuery ? `${pathname}?${currentQuery}` : pathname;
+      
+      if (newUrl !== currentFullUrl) {
+        console.log("Replacing URL from", currentFullUrl, "to", newUrl);
+        router.replace(newUrl, { scroll: false });
+      }
     }
-  }, [selectedShape, selectedSapphireColor, typeFilter, emeraldShade, selectedSizes, pathname, router, searchParams]);
+  }, [selectedSapphireColor, typeFilter, emeraldShade, pathname, router, searchParams]);
 
   const handleShareVideo = async (e: React.MouseEvent, url: string) => {
     e.preventDefault();
@@ -299,11 +351,11 @@ export function CategoryContent({
     );
 
     if (matched) {
-      // Ensure Z (Zambian) always comes first, C (Colombian) second
+      // Ensure C (Colombian) always comes first, Z (Zambian) second
       const sortedImages = [...matched.extra_images].sort(
         (a: string, b: string) => {
-          if (a.includes("_Z") && !b.includes("_Z")) return -1;
-          if (b.includes("_Z") && !a.includes("_Z")) return 1;
+          if (a.includes("_Z") && !b.includes("_Z")) return 1;
+          if (b.includes("_Z") && !a.includes("_Z")) return -1;
           return 0;
         },
       );
@@ -338,12 +390,51 @@ export function CategoryContent({
     }));
 
     setFetchedResult(result?.data || []);
+    setFetchedKey(`${shape}|${isSapphire ? sapphireColor : ""}`);
     setEmeraldShaedImages(result?.data);
 
     // Get one image per quality in fixed order
     const reps = getRepresentativeImages(result?.data || []);
     setQualityImages(reps);
-    setActiveSlide(0);
+    
+    const prevAvailable = qualityImages.filter((item: any) => item?.is_available);
+    const prevQuality = prevAvailable[activeSlide]?.quality || "";
+    const newAvailable = reps.filter((item: any) => item?.is_available);
+    
+    let targetType = typeFilter;
+    if (typeof window !== 'undefined') {
+       targetType = sessionStorage.getItem('preferredBvgemsType') || typeFilter;
+    }
+
+    let newIndex = -1;
+
+    // First priority: Try to match exact prevQuality, BUT ONLY if its type aligns with targetType
+    const isPrevLab = prevQuality.toLowerCase().includes("lab");
+    const prevType = isPrevLab ? "Lab Grown" : "Natural";
+
+    if (prevQuality && prevType === targetType) {
+        newIndex = newAvailable.findIndex((item: any) => item.quality === prevQuality);
+    }
+
+    // Second priority: Try to match targetType
+    if (newIndex === -1 && targetType) {
+      if (targetType === "Lab Grown") {
+        newIndex = newAvailable.findIndex((item: any) => item.quality?.toLowerCase().includes("lab"));
+      } else if (targetType === "Natural") {
+        newIndex = newAvailable.findIndex((item: any) => !item.quality?.toLowerCase().includes("lab"));
+      }
+    }
+    
+    const finalIndex = newIndex !== -1 ? newIndex : 0;
+    setActiveSlide(finalIndex);
+    setActiveVideoIndex(0);
+
+    // Auto-sync the type filter with whatever image we landed on, 
+    // so the table shows the correct data (even if it's a forced fallback)
+    const landedQuality = newAvailable[finalIndex]?.quality || "";
+    if (landedQuality) {
+       setTypeFilter(landedQuality.toLowerCase().includes("lab") ? "Lab Grown" : "Natural");
+    }
   };
 
   useEffect(() => {
@@ -354,7 +445,6 @@ export function CategoryContent({
         isSapphire,
         selectedSapphireColor,
       );
-      setSelectedSizes([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedShape, selectedSapphireColor]);
@@ -411,6 +501,102 @@ export function CategoryContent({
   const availableQualityImages = qualityImages.filter(
     (item: any) => item?.is_available,
   );
+
+  // ---- Availability-driven Size / Type filters ----
+  // The table only ever shows rows with is_available === true, so sizes and
+  // types are derived from those rows only. A size/type with 0 results is hidden.
+  const normalizeSize = (s: any) => String(s ?? "").replace(/\s+/g, "");
+  const currentKey = `${selectedShape || "default"}|${isSapphire ? selectedSapphireColor : ""}`;
+  const dataIsCurrent = fetchedKey === currentKey;
+
+  const availableRows = useMemo(
+    () => (fetchedResult || []).filter((item: any) => item?.is_available === true),
+    [fetchedResult],
+  );
+
+  // Types that actually exist for this stone/shape/color (a color may have only
+  // Natural, only Lab Grown, or both).
+  const availableTypes = useMemo(() => {
+    const present = new Set(availableRows.map((item: any) => item.type));
+    return ["Natural", "Lab Grown"].filter((t) => present.has(t));
+  }, [availableRows]);
+
+  // When only one type exists it is the effective type regardless of state.
+  const effectiveType =
+    availableTypes.length === 1 ? availableTypes[0] : typeFilter || "";
+
+  // Sizes that have at least one available row for the active type.
+  const visibleSizes = useMemo(() => {
+    const rows = effectiveType
+      ? availableRows.filter((item: any) => item.type === effectiveType)
+      : availableRows;
+    return Array.from(
+      new Set(rows.map((item: any) => item.size).filter(Boolean)),
+    ).sort(sortBySizeAsc) as string[];
+  }, [availableRows, effectiveType]);
+
+  // Keep showing the previous lists while a new shape/color is loading, so the
+  // filter panel does not flash or jump.
+  const lastSizesRef = useRef<string[]>([]);
+  const lastTypesRef = useRef<string[]>([]);
+  if (dataIsCurrent) {
+    lastSizesRef.current = visibleSizes;
+    lastTypesRef.current = availableTypes;
+  }
+  const sizesToShow = dataIsCurrent ? visibleSizes : lastSizesRef.current;
+  const typesToShow = dataIsCurrent ? availableTypes : lastTypesRef.current;
+  const typeOptions =
+    typesToShow.length >= 2
+      ? [
+          { label: "All", value: "" },
+          { label: "Natural", value: "Natural" },
+          { label: "Lab Grown", value: "Lab Grown" },
+        ]
+      : typesToShow.map((t) => ({ label: t, value: t }));
+
+  // Reconcile selections with what is actually available.
+  const reconciledKeyRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!dataIsCurrent) return;
+
+    // Only one type exists -> lock the type filter to it.
+    if (availableTypes.length === 1 && typeFilter !== availableTypes[0]) {
+      setTypeFilter(availableTypes[0]);
+    }
+
+    const size = selectedSizes[0];
+    if (!size) {
+      reconciledKeyRef.current = currentKey;
+      return;
+    }
+
+    const normalized = normalizeSize(size);
+    const sizeInType = (t: string) =>
+      availableRows.some(
+        (item: any) =>
+          normalizeSize(item.size) === normalized && (!t || item.type === t),
+      );
+
+    if (sizeInType(effectiveType)) {
+      reconciledKeyRef.current = currentKey;
+      return;
+    }
+
+    const isFirstLoad = reconciledKeyRef.current !== currentKey;
+    reconciledKeyRef.current = currentKey;
+
+    // Deep link to a size that only exists in the other type -> switch type.
+    if (isFirstLoad) {
+      const otherType = availableTypes.find((t) => sizeInType(t));
+      if (otherType) {
+        setTypeFilter(otherType);
+        return;
+      }
+    }
+
+    // Size has no results for the current type -> drop it from the selection/URL.
+    router.replace(generateSeoUrl(null, null, null), { scroll: false });
+  }, [dataIsCurrent, availableRows, availableTypes, typeFilter, selectedSizes, currentKey]);
 
   const selectedThumbnail = availableQualityImages[activeSlide]?.quality || "";
 
@@ -471,182 +657,12 @@ export function CategoryContent({
 
 
 
-        {/* --- MOVED FILTER BAR START --- */}
-        <div className="block md:hidden">
-          <Container size="xl" className="mx-auto px-0 mb-0 md:mb-10">
-            <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100">
-              <div className="flex flex-wrap gap-4 md:gap-6 justify-center">
-                
-                {/* Sapphire Color */}
-                {isSapphire && (
-                  <div className="flex flex-col flex-1 min-w-[150px] max-w-[250px]">
-                    <span className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
-                      Color
-                    </span>
-                    <Select
-                      size="md"
-                      radius="md"
-                      scrollAreaProps={{ type: "scroll" }}
-                      data={SapphireLooseGemstoneColorOptions.map((c: any) => ({
-                        label: c.value,
-                        value: c.value,
-                      }))}
-                      value={selectedSapphireColor}
-                      onChange={(val) => { setSelectedSapphireColor(val!); if(val) router.push(generateSeoUrl(null, val), { scroll: false }); }}
-                      renderOption={({ option }) => {
-                        const colorOption = SapphireLooseGemstoneColorOptions.find(c => c.value === option.value);
-                        return (
-                          <div className="flex items-center gap-3">
-                            {colorOption?.image ? (
-                              <img src={colorOption.image} alt={option.label} className="w-6 h-6 object-contain mix-blend-multiply" />
-                            ) : (
-                              <div className="w-5 h-5 rounded-full border border-gray-200" style={{ backgroundColor: colorOption?.color || '#ccc' }} />
-                            )}
-                            <span>{option.label}</span>
-                          </div>
-                        );
-                      }}
-                      leftSectionPointerEvents="none"
-                      leftSection={
-                        (() => {
-                          const colorOption = SapphireLooseGemstoneColorOptions.find(c => c.value === selectedSapphireColor);
-                          if (!colorOption) return null;
-                          return colorOption.image ? (
-                            <img src={colorOption.image} alt={colorOption.value} className="w-5 h-5 object-contain mix-blend-multiply" />
-                          ) : (
-                            <div className="w-4 h-4 rounded-full border border-gray-200" style={{ backgroundColor: colorOption.color || '#ccc' }} />
-                          );
-                        })()
-                      }
-                      className="w-full"
-                    />
-                  </div>
-                )}
 
-                {/* Shape */}
-                <div className="flex flex-col flex-1 min-w-[150px] max-w-[250px]">
-                  <span className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
-                    Shape
-                  </span>
-                  <Select
-                    placeholder="Any Shape"
-                    size="md"
-                    radius="md"
-                    scrollAreaProps={{ type: "scroll" }}
-                    data={sortedShapes.map((shape: string) => ({
-                      label: shape,
-                      value: shape,
-                    }))}
-                    value={selectedShape || null}
-                    onChange={(val) => { setSelectedShape(val); if(val) router.push(generateSeoUrl(val, null), { scroll: false }); }}
-                    renderOption={({ option }) => {
-                      const shapeImageMap: Record<string, string> = {
-                        Round: "/assets/round.svg",
-                        Oval: "/assets/oval.svg",
-                        "Emerald Cut": "/assets/emerald.svg",
-                        Pear: "/assets/pear.svg",
-                        "Princess Cut": "/assets/princesscut.svg",
-                        Marquise: "/assets/marquise.svg",
-                        Heart: "/assets/heart.svg",
-                        "Straight Baguette": "/assets/baguette.svg",
-                        Cushion: "/assets/cushion.svg",
-                        Trillion: "/assets/trillion.svg",
-                      };
-                      return (
-                        <div className="flex items-center gap-3">
-                          {shapeImageMap[option.value] ? (
-                            <img src={shapeImageMap[option.value]} alt={option.label} className="w-5 h-5 object-contain opacity-70" />
-                          ) : (
-                            <div className="w-5 h-5" />
-                          )}
-                          <span>{option.label}</span>
-                        </div>
-                      );
-                    }}
-                    leftSectionPointerEvents="none"
-                    leftSection={
-                      (() => {
-                        if (!selectedShape) return null;
-                        const shapeImageMap: Record<string, string> = {
-                          Round: "/assets/round.svg",
-                          Oval: "/assets/oval.svg",
-                          "Emerald Cut": "/assets/emerald.svg",
-                          Pear: "/assets/pear.svg",
-                          "Princess Cut": "/assets/princesscut.svg",
-                          Marquise: "/assets/marquise.svg",
-                          Heart: "/assets/heart.svg",
-                          "Straight Baguette": "/assets/baguette.svg",
-                          Cushion: "/assets/cushion.svg",
-                          Trillion: "/assets/trillion.svg",
-                        };
-                        return shapeImageMap[selectedShape] ? (
-                          <img src={shapeImageMap[selectedShape]} alt={selectedShape} className="w-5 h-5 object-contain opacity-70" />
-                        ) : null;
-                      })()
-                    }
-                    className="w-full"
-                  />
-                </div>
-
-                {/* Size */}
-                <div className="flex flex-col flex-1 min-w-[150px] max-w-[250px]">
-                  <span className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
-                    Size (mm)
-                  </span>
-                  <Select
-                    placeholder="Any Size"
-                    size="md"
-                    radius="md"
-                    scrollAreaProps={{ type: "scroll" }}
-                    data={allSizes[selectedShape || ""]?.map((size: string) => ({
-                      label: size.includes("x") ? size.replace(/x/g, " x ").replace(/\s+/g, " ").trim() : parseFloat(size).toFixed(2),
-                      value: size,
-                    })) || []}
-                    value={selectedSizes[0] || null}
-                    onChange={(val) => { setSelectedSizes(val ? [val] : []); if(val) router.push(generateSeoUrl(null, null, val), { scroll: false }); }}
-                    searchable
-                    clearable
-                    className="w-full"
-                  />
-                </div>
-
-                {/* Type */}
-                <div className="flex flex-col flex-1 min-w-[150px] max-w-[250px]">
-                  <span className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
-                    Natural / Lab
-                  </span>
-                  <Select
-                    placeholder="Any Type"
-                    size="md"
-                    radius="md"
-                    scrollAreaProps={{ type: "scroll" }}
-                    data={[
-                      { label: "All Types", value: "" },
-                      { label: "Natural", value: "Natural" },
-                      { label: "Lab Grown", value: "Lab Grown" },
-                    ]}
-                    value={typeFilter || ""}
-                    onChange={(val) => {
-                      setTypeFilter(val);
-                      if (val !== "Lab Grown") {
-                        setEmeraldShade(null);
-                      }
-                    }}
-                    clearable
-                    className="w-full"
-                  />
-                </div>
-
-              </div>
-            </div>
-          </Container>
-        </div>
-        {/* --- MOVED FILTER BAR END --- */}
 
 
         <Grid className="mt-6">
           {/* Left: Image Carousel */}
-          <GridCol span={{ base: 12, md: 6 }}>
+          <GridCol span={{ base: 12, md: 6 }} order={{ base: 2, md: 1 }}>
             <motion.div
               initial={{ opacity: 0, y: 80 }}
               animate={{ opacity: 1, y: 0 }}
@@ -663,6 +679,12 @@ export function CategoryContent({
                       onSlideChange={(index) => {
                         setActiveSlide(index);
                         setActiveVideoIndex(0);
+                        const quality = availableQualityImages[index]?.quality || "";
+                        const newType = quality.toLowerCase().includes("lab") ? "Lab Grown" : "Natural";
+                        setTypeFilter(newType);
+                        if (typeof window !== 'undefined') {
+                          sessionStorage.setItem('preferredBvgemsType', newType);
+                        }
                       }}
                       className="w-full max-w-[420px]"
                       slideGap="md"
@@ -695,6 +717,12 @@ export function CategoryContent({
                             onClick={() => {
                               setActiveSlide(index);
                               setActiveVideoIndex(0);
+                              const quality = availableQualityImages[index]?.quality || "";
+                              const newType = quality.toLowerCase().includes("lab") ? "Lab Grown" : "Natural";
+                              setTypeFilter(newType);
+                              if (typeof window !== 'undefined') {
+                                sessionStorage.setItem('preferredBvgemsType', newType);
+                              }
                             }}
                           >
                             {item.image_url ? (
@@ -822,7 +850,7 @@ export function CategoryContent({
           </GridCol>
 
           {/* Right: Heading + Badges + Inline Filters + Video */}
-          <GridCol span={{ base: 12, md: 6 }}>
+          <GridCol span={{ base: 12, md: 6 }} order={{ base: 1, md: 2 }}>
             <motion.div
               initial={{ opacity: 0, y: 80 }}
               animate={{ opacity: 1, y: 0 }}
@@ -832,134 +860,139 @@ export function CategoryContent({
 
 
               
-              <div className="hidden md:block">
-                <div className="flex flex-wrap gap-3 mt-4">
-                  {sortedShapes?.map((shape: string, index: number) => {
-                    const isSelected = shape === selectedShape;
-                    const shapeImageMap: Record<string, string> = {
-                      Round: "/assets/round.svg",
-                      Oval: "/assets/oval.svg",
-                      "Emerald Cut": "/assets/emerald.svg",
-                      Pear: "/assets/pear.svg",
-                      "Princess Cut": "/assets/princesscut.svg",
-                      Marquise: "/assets/marquise.svg",
-                      Heart: "/assets/heart.svg",
-                      "Straight Baguette": "/assets/baguette.svg",
-                      Cushion: "/assets/cushion.svg",
-                      Trillion: "/assets/trillion.svg",
-                    };
+              <div className="w-full">
+                
+                {/* Shape Filter */}
+                <div>
+                  <p className="font-semibold mb-3 text-gray-800 text-sm tracking-wide">SHAPE</p>
+                  <div className="flex flex-wrap gap-3">
+                    {sortedShapes?.map((shape: string, index: number) => {
+                      const isSelected = shape === selectedShape;
+                      const shapeImageMap: Record<string, string> = {
+                        Round: "/assets/round.svg",
+                        Oval: "/assets/oval.svg",
+                        "Emerald Cut": "/assets/emerald.svg",
+                        Pear: "/assets/pear.svg",
+                        "Princess Cut": "/assets/princesscut.svg",
+                        Marquise: "/assets/marquise.svg",
+                        Heart: "/assets/heart.svg",
+                        "Straight Baguette": "/assets/baguette.svg",
+                        Cushion: "/assets/cushion.svg",
+                        Trillion: "/assets/trillion.svg",
+                      };
 
-                    const imageSrc = shapeImageMap[shape];
+                      const imageSrc = shapeImageMap[shape];
 
-                    return (
-                      <Link
-                        href={generateSeoUrl(shape, null)}
-                        key={index}
-                        className="flex flex-col items-center cursor-pointer"
-                        scroll={false}
-                        onClick={() => setSelectedShape(shape)}
-                      >
-                        <Tooltip label={shape}>
-                          <Image loading="lazy"
-                            src={imageSrc}
-                            h={50}
-                            w={50}
-                            fit="fill"
-                            className={`rounded border ${isSelected ? "border-black" : "border-gray-300"
-                              }`}
-                          />
+                      return (
+                        <Tooltip label={shape} key={index}>
+                          <Link
+                            href={generateSeoUrl(shape, null)}
+                            scroll={false}
+                            onClick={() => setSelectedShape(shape)}
+                            className={`w-[60px] h-[60px] p-2.5 rounded-2xl border flex items-center justify-center transition-all cursor-pointer ${isSelected ? 'border-black ring-1 ring-black bg-gray-50 shadow-sm scale-[1.02]' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:scale-[1.02]'}`}
+                          >
+                            <img loading="lazy" src={imageSrc} alt={shape} className="w-full h-full object-contain opacity-80" />
+                          </Link>
                         </Tooltip>
-                      </Link>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Sapphire color filter */}
                 {isSapphire && (
-                  <div className="mt-3 py-4">
-                    <div className="flex flex-row flex-wrap gap-8 mt-3 items-center">
-                      <span className="text-lg">Color:</span>
+                  <div className="mt-8">
+                    <p className="font-semibold mb-3 text-gray-800 text-sm tracking-wide">COLOR</p>
+                    <div className="flex flex-wrap gap-3 items-center">
                       {SapphireLooseGemstoneColorOptions?.map(
-                        (item: any, index: number) => (
-                          <Tooltip label={item?.value} key={index}>
-                            <Link
-                              href={generateSeoUrl(null, item?.value)}
-                              scroll={false}
-                              onClick={() => setSelectedSapphireColor(item?.value)}
-                              style={{ display: "inline-block" }}
-                            >
-                              <div
-                              className={`p-2 border rounded-lg cursor-pointer flex items-center justify-center transition-all ${selectedSapphireColor === item?.value
-                                ? "border-black bg-gray-50 shadow-sm"
-                                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                                }`}
-                            >
-                              {/* <IconDiamond color={item?.color} size={30} /> */}
-                              <Image loading="lazy" src={item?.image} h={40} w={40} />
-                            </div>
-                            </Link>
-                          </Tooltip>
-                        ),
+                        (item: any, index: number) => {
+                          const isSelected = selectedSapphireColor === item?.value;
+                          return (
+                            <Tooltip label={item?.value} key={index}>
+                              <Link
+                                href={generateSeoUrl(null, item?.value)}
+                                scroll={false}
+                                onClick={() => setSelectedSapphireColor(item?.value)}
+                                className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all cursor-pointer overflow-hidden ${isSelected ? 'border-black ring-1 ring-black shadow-sm scale-[1.02]' : 'border-gray-200 hover:border-gray-300 hover:scale-[1.02]'}`}
+                              >
+                                <img loading="lazy" src={item?.image} alt={item?.value} className="w-full h-full object-cover" />
+                              </Link>
+                            </Tooltip>
+                          );
+                        }
                       )}
                     </div>
                   </div>
                 )}
 
-                {selectedShape && (
-                  <div className="mt-3">
-                    <p className="font-medium mb-2 text-gray-700">
-                      Select Size for {selectedShape}:
-                    </p>
-                    <Select
-                      className="w-[50%]"
-                      searchable
-                      clearable
-                      scrollAreaProps={{ type: "scroll" }}
-                      placeholder="Choose size"
-                      data={allSizes[selectedShape]?.map((size: string) => {
+                {/* Size Filter */}
+                {selectedShape && sizesToShow.length > 0 && (
+                  <div className="mt-8">
+                    <p className="font-semibold mb-3 text-gray-800 text-sm tracking-wide">SIZE (MM)</p>
+                    <div className="flex flex-wrap gap-2 max-h-[220px] overflow-y-auto pr-2 pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+                      {sizesToShow.map((size: string) => {
                         const label = size.includes("x")
-                          ? size
-                            .replace(/x/g, " x ")
-                            .replace(/\s+/g, " ")
-                            .trim()
+                          ? size.replace(/x/g, " x ").replace(/\s+/g, " ").trim()
                           : parseFloat(size).toFixed(2);
-                        return {
-                          label,
-                          value: size,
-                        };
+                        const isSelected = selectedSizes[0] === size;
+                        return (
+                          <Link
+                            key={size}
+                            href={generateSeoUrl(null, null, isSelected ? null : size)}
+                            scroll={false}
+                            className={`px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200 active:scale-95 text-center ${isSelected ? 'bg-gray-900 text-white border-gray-900 shadow-md' : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400 hover:bg-gray-50 hover:shadow-sm'}`}
+                          >
+                            {label}
+                          </Link>
+                        );
                       })}
-                      value={selectedSizes[0] || null}
-                      onChange={(value) => {
-                        setSelectedSizes(value ? [value] : []);
-                        if(value) router.push(generateSeoUrl(null, null, value), { scroll: false });
-                      }}
-                    />
+                    </div>
                   </div>
                 )}
 
-                <div className="mt-4">
-                  <p className="font-medium mb-2 text-gray-700">
-                    Natural / Lab:
-                  </p>
-                  <Select
-                    placeholder="Select Type"
-                    scrollAreaProps={{ type: "scroll" }}
-                    data={[
-                      { label: "All", value: "" },
-                      { label: "Natural", value: "Natural" },
-                      { label: "Lab Grown", value: "Lab Grown" },
-                    ]}
-                    value={typeFilter || ""}
-                    onChange={(val) => {
-                      setTypeFilter(val);
-                      if (val !== "Lab Grown") {
-                        setEmeraldShade(null);
-                      }
-                    }}
-                    className="w-[50%]"
-                    clearable
-                  />
+                {/* Type Filter */}
+                {typeOptions.length > 0 && (
+                <div className="mt-8">
+                  <p className="font-semibold mb-3 text-gray-800 text-sm tracking-wide">TYPE</p>
+                  <div className="flex flex-wrap gap-2">
+                    {typeOptions.map(t => {
+                      const isSelected = typeOptions.length === 1 || (typeFilter || "") === t.value;
+                      return (
+                        <button
+                          key={t.value}
+                          onClick={() => {
+                            setTypeFilter(t.value);
+                            if (typeof window !== 'undefined' && t.value) {
+                              sessionStorage.setItem('preferredBvgemsType', t.value);
+                            }
+                            if (t.value !== "Lab Grown") {
+                              setEmeraldShade(null);
+                            }
+                            
+                            // Auto-select corresponding thumbnail
+                            if (t.value === "Lab Grown") {
+                              const labIndex = availableQualityImages.findIndex((item: any) => item.quality?.toLowerCase().includes("lab"));
+                              if (labIndex !== -1) {
+                                setActiveSlide(labIndex);
+                                setActiveVideoIndex(0);
+                              }
+                            } else if (t.value === "Natural") {
+                              const natIndex = availableQualityImages.findIndex((item: any) => !item.quality?.toLowerCase().includes("lab"));
+                              if (natIndex !== -1) {
+                                setActiveSlide(natIndex);
+                                setActiveVideoIndex(0);
+                              }
+                            }
+                          }}
+                          className={`px-5 py-2 rounded-full border text-sm font-medium transition-all duration-200 active:scale-95 ${isSelected ? 'bg-gray-900 text-white border-gray-900 shadow-md' : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400 hover:bg-gray-50 hover:shadow-sm'}`}
+                        >
+                          {t.label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
+                )}
 
               </div>
             </motion.div>

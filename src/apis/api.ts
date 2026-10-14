@@ -4,6 +4,14 @@ const baseUrl =
     ? process.env.NEXT_PUBLIC_BASE_URL || "https://www.bvgems.com"
     : "";
 
+
+const filterGhostRows = (data: any[]) => {
+  if (!Array.isArray(data)) return data;
+  return data.filter((row: any) => 
+    row.shape || row.color || row.dimension || row.ct_weight || row.price || row.lot_number || row.image_url || row.size || row.quality
+  );
+};
+
 export const getStudsDetails = async () => {
   try {
     const response = await axios.get(`${baseUrl}/api/getStudsDetails`);
@@ -149,6 +157,9 @@ export const getFreeSizeFilteredData = async (options: any) => {
       `${baseUrl}/api/getFilteredFreeSizeGemstones`,
       { options },
     ).then(res => {
+      if (res?.data?.data) {
+        res.data.data = filterGhostRows(res.data.data);
+      }
       globalFreeSizeCache.set(cacheKey, res?.data);
       rememberLastFreeSizeData(res?.data);
       return res?.data;
@@ -675,6 +686,12 @@ export const getGemstonesList = async () => {
 
   try {
     globalGemstonesListPromise = axios.get(`${baseUrl}/api/getAllGemStones`).then(res => {
+      if (res?.data?.data) {
+        res.data.data = filterGhostRows(res.data.data);
+      }
+      if (res?.data?.allGemstones) {
+        res.data.allGemstones = filterGhostRows(res.data.allGemstones);
+      }
       globalGemstonesListCache = res?.data;
       return res?.data;
     });

@@ -6,6 +6,8 @@ import { fetchFreeSizeGemstonesById } from "@/apis/api";
 import { AuthForm } from "@/components/Auth/AuthForm";
 import { ImageZoom } from "@/components/CommonComponents/ImageZoom";
 import { ProductSpecifications } from "@/components/ProductDetails/ProductSpecifications";
+import { Switch } from "@mantine/core";
+import { GemstonesInputSection } from "@/components/CommonComponents/GemstonesInputSection";
 import { useAuth } from "@/hooks/useAuth";
 import { getCartStore } from "@/store/useCartStore";
 import {
@@ -36,6 +38,11 @@ export default function FreeSizeGemstoneDetails({
   id,
 }: FreeSizeGemstoneDetailsProps) {
   const [product, setProduct] = useState<any>();
+  const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(true);
+  const [allowPurchaseByCarat, setAllowPurchaseByCarat] = useState(true);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [caratWeight, setCaratWeight] = useState<number>(1);
+  const [caratError, setCaratError] = useState<string | null>(null);
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
   const cartStore = getCartStore(userKey);
@@ -44,28 +51,40 @@ export default function FreeSizeGemstoneDetails({
   const [quoteModalOpened, { open: openQuote, close: closeQuote }] = useDisclosure(false);
   const router = useRouter();
 
+    useEffect(() => {
+    if (product) {
+      setAllowPurchaseByCarat(true);
+      setPurchaseByCarat(true);
+    }
+  }, [product]);
+
   const addProductToCart = () => {
     if (!product) return;
+    if (purchaseByCarat && !caratWeight) {
+      setCaratError("Please select a carat weight");
+      return;
+    }
+
     addToCart({
       product: {
         id: product?.id,
         handle: "",
         productType: "freeSizeStone",
-        purchaseByCarat: true,
+        purchaseByCarat,
         productId: product.id,
         collection_slug: product.gemstone_type,
         color: product.color,
         ct_weight: product.ct_weight,
         cut: "",
         image_url: product.image_url,
-        price: product?.price,
+        price: purchaseByCarat ? product?.price : (product?.price * product?.ct_weight),
         quality: "",
         shape: product.shape,
         size: product.dimension,
         type: "",
       },
-      quantity: 1,
-      caratWeight: ``,
+      quantity: purchaseByCarat ? 1 : quantity,
+      caratWeight: purchaseByCarat ? `${caratWeight}` : undefined,
     });
     notifications.show({
       icon: <IconCheck />,
@@ -140,7 +159,7 @@ export default function FreeSizeGemstoneDetails({
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(12);
       pdf.text(
-        `${product?.ct_weight} Carat Free Size Gemstone`,
+        `${formatDisplayWeight(product?.ct_weight)} Carat Free Size Gemstone`,
         pageWidth / 2,
         y,
         { align: "center" }
@@ -164,7 +183,7 @@ export default function FreeSizeGemstoneDetails({
       leftY += 6;
       pdf.text(`Color: ${product?.color}`, leftX, leftY);
       leftY += 6;
-      pdf.text(`CT Weight: ${product?.ct_weight}`, leftX, leftY);
+      pdf.text(`CT Weight: ${formatDisplayWeight(product?.ct_weight)}`, leftX, leftY);
       leftY += 6;
       pdf.text(`Origin: ${product?.origin ?? "-"}`, leftX, leftY);
       leftY += 6;
@@ -183,7 +202,7 @@ export default function FreeSizeGemstoneDetails({
       rightY += 7;
 
       pdf.setFont("helvetica", "normal");
-      pdf.text(`Per Carat Price: $${product?.price}`, rightX, rightY);
+      pdf.text(`Per Carat Price: $${formatDisplayPrice(product?.price)}`, rightX, rightY);
       rightY += 6;
       pdf.text(
         `Total Price: $${formatDisplayPrice(product?.price * product?.ct_weight)}`,
@@ -208,7 +227,7 @@ export default function FreeSizeGemstoneDetails({
       pdf.text(wrapped, 20, descY);
 
       // --- Footer ---
-      const fileName = `${product?.dimension}_${product?.gemstone_type}_${product?.ct_weight}_Details.pdf`;
+      const fileName = `${product?.dimension}_${product?.gemstone_type}_${formatDisplayWeight(product?.ct_weight)}_Details.pdf`;
       const pdfBlob = pdf.output("blob");
 
       // ✅ Safe Share with Fallback
@@ -220,7 +239,7 @@ export default function FreeSizeGemstoneDetails({
       ) {
         const file = new File([pdfBlob], fileName, { type: "application/pdf" });
         await navigator.share({
-          title: `${product?.dimension} ${product?.gemstone_type} ${product?.ct_weight} Details`,
+          title: `${product?.dimension} ${product?.gemstone_type} ${formatDisplayWeight(product?.ct_weight)} Details`,
           files: [file],
         });
       } else {
@@ -306,7 +325,7 @@ export default function FreeSizeGemstoneDetails({
               <div className="mt-2">
                 <div className="text-md font-medium flex flex-col gap-2">
                   <span>
-                    Per Carat Price: <strong>{product?.price ? `$${product.price}` : (
+                    Per Carat Price: <strong>{product?.price ? `$${formatDisplayPrice(product.price)}` : (
                       <button 
                         onClick={(e) => { e.stopPropagation(); openQuote(); }} 
                         className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer hover:text-blue-800 transition-colors"
@@ -340,6 +359,35 @@ export default function FreeSizeGemstoneDetails({
               </Alert>
             )}
 
+            {allowPurchaseByCarat && (
+              <Switch
+                checked={purchaseByCarat}
+                onChange={(event) =>
+                  setPurchaseByCarat(event.currentTarget.checked)
+                }
+                label="Purchase by carat weight"
+                onLabel="Carat"
+                offLabel="Stone"
+                color="teal"
+                size="md"
+                mt={"lg"}
+              />
+            )}
+
+            {user && (
+              <GemstonesInputSection
+                purchaseByCarat={purchaseByCarat}
+                caratWeight={caratWeight}
+                product={product}
+                quantity={quantity}
+                setQuantity={setQuantity}
+                caratError={caratError}
+                setCaratError={setCaratError}
+                setCaratWeight={setCaratWeight}
+                recalcTotal={() => {}}
+              />
+            )}
+
             <QuestionAndDeliveryAccordian
               description={`This ${product?.gemstone_type?.toLowerCase()} free size gemstone is cut and polished to showcase its brilliance. Measuring ${
                 product?.dimension
@@ -349,7 +397,7 @@ export default function FreeSizeGemstoneDetails({
             />
 
             {user && (
-              <Button color="#0b182d" onClick={addProductToCart} fullWidth>
+              <Button color="#0b182d" onClick={addProductToCart} fullWidth className="mt-4">
                 ADD TO CART
               </Button>
             )}
@@ -367,7 +415,7 @@ export default function FreeSizeGemstoneDetails({
               "@type": "Product",
               name: `Loose ${product?.gemstone_type} ${product?.shape} ${product?.dimension}`,
               image: product?.image_url,
-              description: `Loose ${product?.gemstone_type} gemstone (${product?.shape}, ${product?.dimension}, ${product?.ct_weight} carats). Free size stone ideal for custom jewelry.`,
+              description: `Loose ${product?.gemstone_type} gemstone (${product?.shape}, ${product?.dimension}, ${formatDisplayWeight(product?.ct_weight)} carats). Free size stone ideal for custom jewelry.`,
               sku: product?.lot_number,
               brand: { "@type": "Brand", name: "B.V. Gems" }
             }),

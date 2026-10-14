@@ -96,6 +96,7 @@ export default function FreeSizeGemstoneSelection() {
         setSelectedColors([]);
       }
       setSelectedShapes([]);
+      setSingleOrMatched([]);
       setWeightRange(["", ""]);
       setLength({ min: "", max: "" });
       setWidth({ min: "", max: "" });
@@ -103,9 +104,27 @@ export default function FreeSizeGemstoneSelection() {
   }, [path, isInitialized, lastPath, gemstoneType]);
 
   useEffect(() => {
-    const shape = searchParams.get("shape")?.split(",").filter(Boolean) || [];
+    const rawShape = searchParams.get("shape")?.split(",").filter(Boolean) || [];
     const color = searchParams.get("color")?.split(",").filter(Boolean) || [];
     const weightStr = searchParams.get("weight") || "";
+    const typeParams = searchParams.get("type")?.split(",").filter(Boolean) || [];
+
+    // "pair"/"matched" is not a shape - it is the Single/Matched type filter.
+    // Treat legacy ?shape=pair links as type=matched so old links keep working.
+    const isPairToken = (s: string) => ["pair", "pairs", "matched"].includes(s.toLowerCase());
+    const shape = rawShape.filter((s) => !isPairToken(s));
+    const types = [...typeParams, ...rawShape.filter(isPairToken).map(() => "matched")];
+
+    const normalizedTypes = Array.from(
+      new Set(
+        types
+          .map((t) => t.toLowerCase())
+          .map((t) => (t === "pair" || t === "pairs" ? "matched" : t))
+          .filter((t) => t === "single" || t === "matched")
+          .map((t) => t.charAt(0).toUpperCase() + t.slice(1))
+      )
+    );
+    if (normalizedTypes.length > 0) setSingleOrMatched(normalizedTypes);
 
     if (shape.length > 0) setSelectedShapes(shape);
     
@@ -135,6 +154,7 @@ export default function FreeSizeGemstoneSelection() {
     const params = new URLSearchParams();
     if (selectedShapes.length) params.set("shape", selectedShapes.join(","));
     if (selectedColors.length) params.set("color", selectedColors.join(","));
+    if (singleOrMatched.length) params.set("type", singleOrMatched.map((t) => t.toLowerCase()).join(","));
 
     // only write weight to URL if at least one bound is provided
     if (weightRange[0] !== "" || weightRange[1] !== "") {
@@ -144,7 +164,7 @@ export default function FreeSizeGemstoneSelection() {
 
     const query = params.toString();
     router.replace(query ? `?${query}` : "?", { scroll: false });
-  }, [selectedShapes, selectedColors, weightRange, isInitialized, router]);
+  }, [selectedShapes, selectedColors, singleOrMatched, weightRange, isInitialized, router]);
 
   const sortBySize = (data: any[]) => {
     return [...data].sort((a, b) => sortBySizeAsc(a, b, 'dimension'));
@@ -251,15 +271,6 @@ export default function FreeSizeGemstoneSelection() {
 
   return (
     <div className="px-4 md:px-8 py-10 max-w-[1600px] mx-auto w-full">
-      <div className="flex justify-center mb-10">
-        <h1 className="text-4xl text-violet-800 text-center uppercase tracking-widest font-light">
-          {isFancySapphire
-            ? "Fancy Sapphires"
-            : gemstoneType
-              ? gemstoneType.charAt(0).toUpperCase() + gemstoneType.slice(1)
-              : "Free Size Gemstones"}
-        </h1>
-      </div>
 
       <FreeSizeGridViewTopFilters
         gemstoneOptions={freeSizeFilterOptions}

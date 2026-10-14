@@ -14,10 +14,15 @@ export const EmeraldShade = ({
       <div className="flex gap-4">
         {product?.extra_images?.length > 0 ? (
           product?.extra_images
-            ?.map((url: string, index: number) => ({
-              name: index === 0 ? "Colombian" : "Zambian",
+            ?.map((url: string) => ({
+              name: url.includes("_Z") || url.toLowerCase().includes("zambian") ? "Zambian" : "Colombian",
               url,
             }))
+            .sort((a: any, b: any) => {
+              if (a.name === "Colombian" && b.name !== "Colombian") return -1;
+              if (b.name === "Colombian" && a.name !== "Colombian") return 1;
+              return 0;
+            })
             .map((shade: any, index: any) => (
               <div
                 key={index}
@@ -27,7 +32,7 @@ export const EmeraldShade = ({
                     : "border-gray-300 hover:border-gray-400"
                 }`}
                 onClick={() => {
-                  setDisplayImage(product?.extra_images[index]);
+                  setDisplayImage(shade.url);
                   setEmeraldShade(shade.name);
                 }}
               >

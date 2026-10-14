@@ -1,6 +1,7 @@
 // JeweleryDetailsTable.tsx
 "use client";
 
+import { formatDisplayWeight } from "@/utils/priceHelpers";
 import { Table, Text, Divider } from "@mantine/core";
 import React, { useMemo } from "react";
 
@@ -139,7 +140,7 @@ export const JeweleryDetailsTable = ({
             <>
               {renderRow(
                 "Stone Weight:",
-                isNaN(stoneWeight) ? "-" : `${stoneWeight} ct.`,
+                isNaN(stoneWeight) ? "-" : `${formatDisplayWeight(stoneWeight)} ct.`,
               )}
               {renderRow(
                 "Diamond Weight:",

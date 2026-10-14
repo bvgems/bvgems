@@ -52,11 +52,50 @@ interface CartStore {
   updateGiftItem: (updatedProduct: Partial<CartItem["product"]>) => void;
 }
 
-const storeRegistry: any = {};
+const serverRegistry: Record<string, any> = {};
+
+const getRegistry = () => {
+  if (typeof window !== "undefined") {
+    if (!(window as any).__cartStoreRegistry) {
+      (window as any).__cartStoreRegistry = {};
+    }
+    return (window as any).__cartStoreRegistry;
+  }
+  return serverRegistry;
+};
+
+
+// Keeps every browser tab in sync with localStorage. Zustand's persist only reads
+// storage once at creation, so without this a stale tab overwrites newer data
+// written by another tab (e.g. wiping items added in the first tab).
+const crossTabSync = (store: any, storageKey: string) => {
+  if (typeof window === "undefined") return;
+
+  const rehydrate = () => {
+    try {
+      const raw = window.localStorage.getItem(storageKey);
+      if (raw === null) {
+        store.setState({ cart: [] });
+      } else {
+        store.persist.rehydrate();
+      }
+    } catch {}
+  };
+
+  window.addEventListener("storage", (e: StorageEvent) => {
+    if (e.key === storageKey) rehydrate();
+  });
+
+  // Safety net: when a tab becomes active again, pull the latest data.
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") rehydrate();
+  });
+  window.addEventListener("focus", rehydrate);
+};
 
 export const getCartStore = (userKey: string) => {
-  if (!storeRegistry[userKey]) {
-    storeRegistry[userKey] = create<CartStore>()(
+  if (!getRegistry()[userKey]) {
+    getRegistry()[userKey] = create<CartStore>()(
       persist(
         (set, get) => ({
           cart: [],
@@ -189,6 +228,7 @@ export const getCartStore = (userKey: string) => {
         },
       ),
     );
+    crossTabSync(getRegistry()[userKey], `cart-storage-${userKey}`);
   }
-  return storeRegistry[userKey];
+  return getRegistry()[userKey];
 };

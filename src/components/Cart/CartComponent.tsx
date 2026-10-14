@@ -1,5 +1,6 @@
 "use client";
 
+import { formatCartWeight } from "@/utils/priceHelpers";
 import { useAuth } from "@/hooks/useAuth";
 import { getCartStore } from "@/store/useCartStore";
 import {
@@ -359,7 +360,7 @@ export function CartComponent() {
                           {value?.product?.productType === "stone" && (
                             <>
                               Size: {value?.product?.size} | Weight:{" "}
-                              {value?.product?.ct_weight} | Quality:{" "}
+                              {formatCartWeight(value?.product?.ct_weight)} | Quality:{" "}
                               {value?.product?.quality} | Color:{" "}
                               {value?.product?.color}
                               {value?.product?.collection_slug === "Emerald" &&
@@ -380,7 +381,7 @@ export function CartComponent() {
                           {value?.product?.productType === "layouts" && (
                             <>
                               Stone Size: {value?.product?.size} | Weight:{" "}
-                              {value?.product?.ct_weight} | Stone Count:{" "}
+                              {formatCartWeight(value?.product?.ct_weight)} | Stone Count:{" "}
                               {value?.product?.stoneCount} | Quality:{" "}
                               {value?.product?.quality}
                             </>
@@ -484,7 +485,7 @@ export function CartComponent() {
                           Carat Weight:{" "}
                           {value?.product?.productType === "stone"
                             ? value?.caratWeight
-                            : value?.product?.ct_weight}
+                            : formatCartWeight(value?.product?.ct_weight)}
                         </Badge>
                       ) : (
                         <NumberInput

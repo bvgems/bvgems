@@ -29,11 +29,50 @@ interface JewelryCartStore {
   getTotalPrice: () => number;
 }
 
-const jewelryStoreRegistry: any = {};
+const serverJewelryRegistry: Record<string, any> = {};
+
+const getJewelryRegistry = () => {
+  if (typeof window !== "undefined") {
+    if (!(window as any).__jewelryCartStoreRegistry) {
+      (window as any).__jewelryCartStoreRegistry = {};
+    }
+    return (window as any).__jewelryCartStoreRegistry;
+  }
+  return serverJewelryRegistry;
+};
+
+
+// Keeps every browser tab in sync with localStorage. Zustand's persist only reads
+// storage once at creation, so without this a stale tab overwrites newer data
+// written by another tab (e.g. wiping items added in the first tab).
+const crossTabSync = (store: any, storageKey: string) => {
+  if (typeof window === "undefined") return;
+
+  const rehydrate = () => {
+    try {
+      const raw = window.localStorage.getItem(storageKey);
+      if (raw === null) {
+        store.setState({ cart: [] });
+      } else {
+        store.persist.rehydrate();
+      }
+    } catch {}
+  };
+
+  window.addEventListener("storage", (e: StorageEvent) => {
+    if (e.key === storageKey) rehydrate();
+  });
+
+  // Safety net: when a tab becomes active again, pull the latest data.
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") rehydrate();
+  });
+  window.addEventListener("focus", rehydrate);
+};
 
 export const getJewelryCartStore = (userKey: string) => {
-  if (!jewelryStoreRegistry[userKey]) {
-    jewelryStoreRegistry[userKey] = create<JewelryCartStore>()(
+  if (!getJewelryRegistry()[userKey]) {
+    getJewelryRegistry()[userKey] = create<JewelryCartStore>()(
       persist(
         (set, get) => ({
           cart: [],
@@ -69,6 +108,7 @@ export const getJewelryCartStore = (userKey: string) => {
         }
       )
     );
+    crossTabSync(getJewelryRegistry()[userKey], `jewelry-cart-storage-${userKey}`);
   }
-  return jewelryStoreRegistry[userKey];
+  return getJewelryRegistry()[userKey];
 };

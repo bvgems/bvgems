@@ -288,7 +288,7 @@ export default function ProductDetailsPage() {
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(12);
       pdf.text(
-        `${product?.ct_weight} Carat ${product?.quality} Quality Calibrated Gemstone`,
+        `${formatDisplayWeight(product?.ct_weight)} Carat ${product?.quality} Quality Calibrated Gemstone`,
         pageWidth / 2,
         y,
         { align: "center" },
@@ -321,7 +321,7 @@ export default function ProductDetailsPage() {
       leftY += 6;
       pdf.text(`Quality: ${product?.quality}`, leftX, leftY);
       leftY += 6;
-      pdf.text(`Carat Weight: ${product?.ct_weight}`, leftX, leftY);
+      pdf.text(`Carat Weight: ${formatDisplayWeight(product?.ct_weight)}`, leftX, leftY);
 
       // Right column - pricing
       let rightY = y;
@@ -383,18 +383,18 @@ export default function ProductDetailsPage() {
       ) {
         const file = new File(
           [pdfBlob],
-          `${product?.size}_${product?.collection_slug}_${product?.ct_weight}_Details.pdf`,
+          `${product?.size}_${product?.collection_slug}_${formatDisplayWeight(product?.ct_weight)}_Details.pdf`,
           {
             type: "application/pdf",
           },
         );
         await navigator.share({
-          title: `${product?.size} ${product?.collection_slug} ${product?.ct_weight} Details`,
+          title: `${product?.size} ${product?.collection_slug} ${formatDisplayWeight(product?.ct_weight)} Details`,
           files: [file],
         });
       } else {
         pdf.save(
-          `${product?.size}_${product?.collection_slug}_${product?.ct_weight}_Details.pdf`,
+          `${product?.size}_${product?.collection_slug}_${formatDisplayWeight(product?.ct_weight)}_Details.pdf`,
         );
       }
     } catch (err) {
@@ -406,7 +406,10 @@ export default function ProductDetailsPage() {
   };
 
   const isPurchaseByCarat = (product: any) => {
+    if (!product) return;
     const size = product?.size;
+    let allowed = true;
+    
     if (isLabGrown(product)) {
       if (
         size === "1.00 mm" ||
@@ -414,11 +417,16 @@ export default function ProductDetailsPage() {
         size === "1.50 mm" ||
         size === "1.75 mm"
       ) {
-        setAllowPurchaseByCarat(false);
-        return;
+        allowed = false;
       }
     }
-    setAllowPurchaseByCarat(true);
+    
+    setAllowPurchaseByCarat(allowed);
+    if (!allowed) {
+      setPurchaseByCarat(false);
+    } else {
+      setPurchaseByCarat(true);
+    }
   };
 
   useEffect(() => {
@@ -579,9 +587,9 @@ export default function ProductDetailsPage() {
                 {/* {!hasPricing && (
                   <a
                     href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                      `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${product?.ct_weight}cts., ${product?.quality} Quality`,
+                      `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${formatDisplayWeight(product?.ct_weight)}cts., ${product?.quality} Quality`,
                     )}&body=${encodeURIComponent(
-                      `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${product?.ct_weight} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`,
+                      `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${formatDisplayWeight(product?.ct_weight)} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`,
                     )}`}
                     className="underline text-blue-600"
                   >
@@ -609,13 +617,15 @@ export default function ProductDetailsPage() {
             )}
 
             {/* Switch for mode selection */}
-            {user && allowPurchaseByCarat && (
+            {allowPurchaseByCarat && (
               <Switch
                 checked={purchaseByCarat}
                 onChange={(event) =>
                   setPurchaseByCarat(event.currentTarget.checked)
                 }
-                label="Purchase by Carat Weight"
+                label="Purchase by carat weight"
+                onLabel="Carat"
+                offLabel="Stone"
                 color="teal"
                 size="md"
                 mt={"lg"}

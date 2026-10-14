@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDisplayWeight, formatDisplayPrice } from "@/utils/priceHelpers";
 import {
   Grid,
   Skeleton,
@@ -605,11 +606,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
 
   return (
     <div className="mt-0 lg:mt-4 px-4 md:px-8 pb-8 pt-4 lg:pt-8 max-w-[1600px] mx-auto w-full">
-      <div className="flex justify-center mb-6 lg:mb-10">
-        <h1 className="text-2xl lg:text-4xl text-violet-800 text-center uppercase tracking-widest font-light">
-          Calibrated Faceted Gemstones
-        </h1>
-      </div>
+
 
       {!loading && searchItems.length > 0 && (
         <GridViewTopFilters 
@@ -708,14 +705,14 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                            <span className="md:hidden">{formatListSize(row.size)}</span>
                            <span className="hidden md:inline">{row.size || "-"}</span>
                          </Table.Td>
-                         <Table.Td className="text-xs md:text-sm whitespace-nowrap p-1 md:p-2">{row.ct_weight || "-"}</Table.Td>
+                         <Table.Td className="text-xs md:text-sm whitespace-nowrap p-1 md:p-2">{row.ct_weight ? formatDisplayWeight(row.ct_weight) : "-"}</Table.Td>
                          <Table.Td className="hidden md:table-cell text-xs md:text-sm p-1 md:p-2">{row.quality || "-"}</Table.Td>
                          <Table.Td className="hidden md:table-cell text-xs md:text-sm p-1 md:p-2">{row.type || "-"}</Table.Td>
                          <Table.Td className="hidden md:table-cell text-xs md:text-sm p-1 md:p-2">
                            {user ? (
                              <span className="font-semibold text-gray-900">
                                {row.price ? (
-                                 getPerCaratPrice(row) > 0 ? `$${getPerCaratPrice(row)}` : "-"
+                                 getPerCaratPrice(row) > 0 ? `$${formatDisplayPrice(getPerCaratPrice(row))}` : "-"
                                ) : (
                                  <button 
                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(row); }} 

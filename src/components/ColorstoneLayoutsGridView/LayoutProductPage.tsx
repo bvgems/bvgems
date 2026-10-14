@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDisplayWeight } from "@/utils/priceHelpers";
 import React, { useEffect, useState } from "react";
 import { formatDisplayPrice } from "@/utils/priceHelpers";
 
@@ -102,7 +103,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
           handle: product?.handle,
           productType: "layouts",
           productId: `${product.id}-${selectedSize}`,
-          ct_weight: caratWeight,
+          ct_weight: caratWeight ? formatDisplayWeight(caratWeight) : caratWeight,
           image_url: product.images?.edges[0]?.node?.url,
           price: selectedSizePrice || "0.00",
           shape: product.shape?.value,
@@ -261,7 +262,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
                         <NumberFormatter
                           thousandSeparator
                           prefix="$"
-                          value={selectedSizePrice}
+                          value={formatDisplayPrice(selectedSizePrice)}
                           suffix=" USD"
                         />
                       )}
@@ -349,7 +350,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
                   <Text fw={600} w={150}>
                     Total Carat Weight:
                   </Text>
-                  <Text>{caratWeight || "-"} ct.</Text>
+                  <Text>{caratWeight ? formatDisplayWeight(caratWeight) : "-"} ct.</Text>
                 </Group>
                 <Group>
                   <Text fw={600} w={150}>

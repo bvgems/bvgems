@@ -150,7 +150,7 @@ export const AnimatedCard = ({
                            </span>
                            {item?.price && getPerCaratPrice(item) > 0 && (
                              <span className="font-medium text-gray-400 text-[10px] sm:text-xs">
-                               ${getPerCaratPrice(item).toFixed(2)}/ct
+                               ${formatDisplayPrice(getPerCaratPrice(item))}/ct
                              </span>
                            )}
                          </div>
@@ -233,7 +233,7 @@ export const AnimatedCard = ({
                            </span>
                            {item?.price && getPerCaratPrice(item) > 0 && (
                              <span className="font-medium text-gray-400 text-[10px] sm:text-xs">
-                               ${getPerCaratPrice(item).toFixed(2)}/ct
+                               ${formatDisplayPrice(getPerCaratPrice(item))}/ct
                              </span>
                            )}
                          </div>

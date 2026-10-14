@@ -23,6 +23,7 @@ export const useAuth = () => {
         })
         .catch(() => {
           setUser(null);
+      window.location.reload();
         })
         .finally(() => {
           hasAttemptedVerification = true;
@@ -39,6 +40,7 @@ export const useAuth = () => {
     try {
       await axios.get(`/api/handleLogout`);
       setUser(null);
+      window.location.reload();
     } catch (error) {
       console.log("Something went wrong while logout");
     }

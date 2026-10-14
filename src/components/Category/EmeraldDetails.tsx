@@ -14,7 +14,12 @@ export const EmeraldDetails = ({
       {isEmerald &&
       shaedImages.length > 0 &&
       (typeFilter === "Lab Grown" ||
-        getItemQuality(qualityImages[activeSlide]) === "Lab Grown") ? (
+        getItemQuality(qualityImages[activeSlide]) === "Lab Grown") ? (() => {
+        const colombianImg = shaedImages.find((url: string) => !url.includes("_Z") && !url.toLowerCase().includes("zambian")) || shaedImages[0];
+        const zambianImg = shaedImages.find((url: string) => url.includes("_Z") || url.toLowerCase().includes("zambian")) || shaedImages[1];
+        
+        return (
+
         <div className="mt-10">
           <h3 className="text-xl font-bold text-gray-800 mb-6 tracking-wide text-center">
             Lab Emerald Shade Variations
@@ -25,7 +30,7 @@ export const EmeraldDetails = ({
             <div className="flex flex-col items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
               <div className="h-[140px] w-[140px] flex items-center justify-center">
                 <Image loading="lazy"
-                  src={shaedImages[0]}
+                  src={colombianImg}
                   fit="contain"
                   radius="md"
                   className="object-contain rounded-xl"
@@ -39,11 +44,11 @@ export const EmeraldDetails = ({
               </p>
             </div>
 
-            {shaedImages[1] && (
+            {zambianImg && (
               <div className="flex flex-col items-center p-5 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
                 <div className="h-[140px] w-[140px] flex items-center justify-center">
                   <Image loading="lazy"
-                    src={shaedImages[1]}
+                    src={zambianImg}
                     fit="contain"
                     radius="md"
                     className="object-contain rounded-xl"
@@ -59,7 +64,7 @@ export const EmeraldDetails = ({
             )}
           </div>
         </div>
-      ) : null}
+      ); })() : null}
     </>
   );
 };

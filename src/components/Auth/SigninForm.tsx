@@ -6,6 +6,7 @@ import { handleSignin } from "@/apis/api";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconExclamationCircle, IconX } from "@tabler/icons-react";
 import { useUserStore } from "@/store/useUserStore";
+import { useRouter } from "next/navigation";
 
 export const SigninForm = ({
   onClose,
@@ -18,6 +19,7 @@ export const SigninForm = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { setUser } = useUserStore();
+  const router = useRouter();
 
   const form = useForm({
     initialValues: { email: "", password: "" },
@@ -46,6 +48,9 @@ export const SigninForm = ({
       setUser(signinResponse?.data?.user);
       form.reset();
       onClose();
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } else {
       if (signinResponse?.status === 201) {
         notifications.show({

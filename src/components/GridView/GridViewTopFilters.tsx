@@ -185,89 +185,125 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
   useEffect(() => {
     let active = true;
     setIsLoaded(false);
-    
+
     if (!gem) {
       setVideoUrl(null);
       return;
     }
 
-    
-    const shapeToUse = shape || "Round";
     const isSapphire = gem.toLowerCase() === "sapphire";
     const colorMatch = (isSapphire && selectedSapphireColors && selectedSapphireColors.length > 0) ? selectedSapphireColors[0] : null;
-    
-    getShapesData(shapeToUse, gem, isSapphire, colorMatch || undefined).then((res: any) => {
 
-      if (!active) return;
-      
-      const items = res?.data || [];
-      if (!items || items.length === 0) {
-        setVideoUrl(null);
-        return;
-      }
-      
-      // Group by quality to get representative items (like CategoryContent does)
-      const qualityMap: Record<string, any> = {};
-      items.forEach((item: any) => {
-        const hasVideo = Array.isArray(item?.cloudinary_videos) && item.cloudinary_videos.length > 0;
-        const current = qualityMap[item.quality];
-        if (!current) {
-          qualityMap[item.quality] = item;
-        } else {
-          const currentHasVideo = Array.isArray(current?.cloudinary_videos) && current.cloudinary_videos.length > 0;
-          if (!currentHasVideo && hasVideo) {
+    const fetchVideoForShape = async (shapeToTest: string) => {
+      try {
+        const res: any = await getShapesData(shapeToTest, gem, isSapphire, colorMatch || undefined);
+        const items = res?.data || [];
+        if (!items || items.length === 0) return null;
+
+        // Group by quality to get representative items (like CategoryContent does)
+        const qualityMap: Record<string, any> = {};
+        items.forEach((item: any) => {
+          const hasVideo = Array.isArray(item?.cloudinary_videos) && item.cloudinary_videos.length > 0;
+          const current = qualityMap[item.quality];
+          if (!current) {
             qualityMap[item.quality] = item;
+          } else {
+            const currentHasVideo = Array.isArray(current?.cloudinary_videos) && current.cloudinary_videos.length > 0;
+            if (!currentHasVideo && hasVideo) {
+              qualityMap[item.quality] = item;
+            }
           }
+        });
+        const images = Object.values(qualityMap);
+
+        let gradePriorities = ["AAA", "AA", "A", "Lab Grown"];
+        if (selectedTypes.includes("Lab Grown") && !selectedTypes.includes("Natural")) {
+          gradePriorities = ["Lab Grown"];
+        } else if (selectedTypes.includes("Natural") && !selectedTypes.includes("Lab Grown")) {
+          gradePriorities = ["AAA", "AA", "A"];
         }
-      });
-      const images = Object.values(qualityMap);
 
-      let gradePriorities = ["AA", "A", "B", "Lab Grown"];
-      if (selectedTypes.includes("Lab Grown") && !selectedTypes.includes("Natural")) {
-         gradePriorities = ["Lab Grown"];
-      } else if (selectedTypes.includes("Natural") && !selectedTypes.includes("Lab Grown")) {
-         gradePriorities = ["AA", "A", "B"];
-      }
+        let foundVideo = null;
+        let foundLabel = null;
 
-      let foundVideo = null;
-      let foundLabel = null;
-
-      for (const grade of gradePriorities) {
+        for (const grade of gradePriorities) {
           const gradeItem = images.find((item: any) => item.quality === grade);
           if (gradeItem?.cloudinary_videos && Array.isArray(gradeItem.cloudinary_videos) && gradeItem.cloudinary_videos.length > 0) {
-               
-               const sortedVideos = [...gradeItem.cloudinary_videos].sort((a: any, b: any) => {
-                  const labelA = (a.emerald_type || a.label || "").toLowerCase();
-                  const labelB = (b.emerald_type || b.label || "").toLowerCase();
-                  if (labelA === "colombian" && labelB !== "colombian") return -1;
-                  if (labelB === "colombian" && labelA !== "colombian") return 1;
-                  if (labelA === "zambian" && labelB !== "zambian") return -1;
-                  if (labelB === "zambian" && labelA !== "zambian") return 1;
-                  return 0;
-               });
 
-               
-               
-               const bestMatch = sortedVideos.find((v: any) => {
-                  const lbl = (v.label || v.emerald_type || "").toLowerCase();
-                  const matchesColor = colorMatch ? lbl.includes(colorMatch.toLowerCase()) : true;
-                  return matchesColor;
-               });
-               
-               const videoItem = bestMatch || sortedVideos[0];
-               
-               if (videoItem?.video_url) {
-                   foundVideo = videoItem.video_url;
-                   foundLabel = videoItem.label || videoItem.emerald_type || grade;
-                   break;
-               }
+            const sortedVideos = [...gradeItem.cloudinary_videos].sort((a: any, b: any) => {
+              const labelA = (a.emerald_type || a.label || "").toLowerCase();
+              const labelB = (b.emerald_type || b.label || "").toLowerCase();
+              if (labelA === "colombian" && labelB !== "colombian") return -1;
+              if (labelB === "colombian" && labelA !== "colombian") return 1;
+              if (labelA === "zambian" && labelB !== "zambian") return -1;
+              if (labelB === "zambian" && labelA !== "zambian") return 1;
+              return 0;
+            });
+
+            const bestMatch = sortedVideos.find((v: any) => {
+              const lbl = (v.label || v.emerald_type || "").toLowerCase();
+              const matchesColor = colorMatch ? lbl.includes(colorMatch.toLowerCase()) : true;
+              return matchesColor;
+            });
+
+            const videoItem = bestMatch || sortedVideos[0];
+
+            if (videoItem?.video_url) {
+              foundVideo = videoItem.video_url;
+              foundLabel = videoItem.label || videoItem.emerald_type || grade;
+              
+              // If no shape was selected but we found a fallback shape, append the shape name to the label
+              if (!shape && foundLabel) {
+                 foundLabel = `${shapeToTest} - ${foundLabel}`;
+              } else if (!shape && !foundLabel) {
+                 foundLabel = shapeToTest;
+              }
+              break;
+            }
           }
+        }
+        
+        if (foundVideo) {
+          return { videoUrl: foundVideo, label: foundLabel };
+        }
+        return null;
+      } catch (err) {
+        return null;
       }
-      setVideoUrl(foundVideo);
-      setLabel(foundLabel);
-    }).catch(() => {
-       if (active) setVideoUrl(null);
-    });
+    };
+
+    const run = async () => {
+      if (shape) {
+        // Only try the selected shape
+        const result = await fetchVideoForShape(shape);
+        if (active) {
+          setVideoUrl(result?.videoUrl || null);
+          setLabel(result?.label || null);
+        }
+      } else {
+        // Try shapes in fallback order
+        const fallbackShapes = ["Round", "Oval", "Princess Cut", "Emerald Cut", "Pear", "Marquise", "Heart", "Straight Baguette", "Cushion", "Trillion"];
+        let found = false;
+        for (const testShape of fallbackShapes) {
+          if (!active) return;
+          const result = await fetchVideoForShape(testShape);
+          if (result && result.videoUrl) {
+            if (active) {
+              setVideoUrl(result.videoUrl);
+              setLabel(result.label);
+            }
+            found = true;
+            break;
+          }
+        }
+        if (!found && active) {
+          setVideoUrl(null);
+          setLabel(null);
+        }
+      }
+    };
+
+    run();
 
     return () => { active = false; };
   }, [gem, shape, selectedTypes, selectedGrades, selectedSapphireColors]);
@@ -275,32 +311,38 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
   if (!videoUrl) return null;
 
   return (
-    <div className={`w-full mt-10 mb-2 flex justify-center items-center transition-all duration-700 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ display: isLoaded ? 'flex' : 'none' }}>
+    <div className={`flex justify-center items-center transition-all duration-700 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
       <div className="relative group overflow-hidden bg-white/50 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] border border-black/[0.03] p-2 ring-1 ring-black/[0.02]">
-        <div className="relative w-full max-w-sm aspect-square md:w-[400px] md:h-[400px] rounded-[2rem] overflow-hidden bg-[#fbfbfd]">
-          <video 
-             key={videoUrl}
-             src={videoUrl} 
-             autoPlay 
-             loop 
-             muted 
-             playsInline 
-             className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-             onCanPlay={() => setIsLoaded(true)}
-             onError={() => setIsLoaded(false)}
+        <div className="relative aspect-square w-[280px] md:w-[320px] lg:w-[280px] xl:w-[320px] rounded-[2rem] overflow-hidden bg-[#fbfbfd]">
+          <video
+            ref={(el) => {
+              if (el && el.readyState >= 3) {
+                setIsLoaded(true);
+              }
+            }}
+            key={videoUrl}
+            src={videoUrl}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+            onCanPlay={() => setIsLoaded(true)}
+            onLoadedData={() => setIsLoaded(true)}
+            onError={() => setIsLoaded(false)}
           />
           {/* Subtle elegant gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60" />
-          
+
           {/* Elegant frosted label */}
           {label && (
-             <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center">
-               <div className="bg-white/30 backdrop-blur-xl border border-white/40 text-gray-900 px-4 py-1.5 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
-                 <span className="text-[11px] font-medium tracking-[0.15em] uppercase drop-shadow-sm mix-blend-color-burn">
-                   {label}
-                 </span>
-               </div>
-             </div>
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center">
+              <div className="bg-white/30 backdrop-blur-xl border border-white/40 text-gray-900 px-4 py-1.5 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.05)] whitespace-nowrap">
+                <span className="text-[11px] font-medium tracking-[0.15em] uppercase drop-shadow-sm mix-blend-color-burn whitespace-nowrap">
+                  {label}
+                </span>
+              </div>
+            </div>
           )}
         </div>
       </div>
@@ -360,8 +402,8 @@ export const GridViewTopFilters = ({
   };
 
   const toggleSapphireColor = (val: string) => {
-    if (selectedSapphireColors.includes(val)) setSelectedSapphireColors(selectedSapphireColors.filter(c => c !== val));
-    else setSelectedSapphireColors([...selectedSapphireColors, val]);
+    if (selectedSapphireColors.includes(val)) setSelectedSapphireColors([]);
+    else setSelectedSapphireColors([val]);
   };
 
   const toggleShape = (val: string) => {
@@ -494,149 +536,173 @@ export const GridViewTopFilters = ({
 
             </div>
 
-            {/* DESKTOP FILTERS (Icons) */}
-            <div className="hidden lg:flex flex-col lg:flex-row gap-10">
+            {/* WRAPPER FOR SIDE-BY-SIDE VIDEO (DESKTOP) */}
+            <div className="flex flex-col lg:flex-row w-full gap-8 lg:gap-12">
+              
+              {/* Left Side: All Desktop & Bottom Filters */}
+              <div className="flex-1 flex flex-col w-full min-w-0">
+
+                {/* DESKTOP FILTERS (Icons) */}
+                <div className="hidden lg:flex flex-col lg:flex-row gap-10">
 
 
-              {/* GEM TYPE */}
-              <div className="flex flex-col items-center lg:items-start gap-4">
-                <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Gem Type</label>
-                <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                  {gemstoneOptions.map((gem, i) => {
-                    const isSelected = selectedGems.length === 1 && selectedGems.includes(gem.value);
-                    return (
-                      <div
-                        key={i}
-                        onClick={() => toggleGem(gem.value)}
-                        className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-                      >
-                        <div className={`w-14 h-14 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
-                          <img src={gem.image} alt={gem.label} className="w-full h-full object-cover object-top scale-[1.5]" />
-                        </div>
-                        <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{gem.label}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* SAPPHIRE COLORS SUB-FILTER */}
-                {selectedGems.length === 1 && selectedGems.includes("Sapphire") && sapphireColors.length > 0 && (
-                  <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center lg:items-start">
-                    <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block text-center lg:text-left">Sapphire Colors</label>
+                  {/* GEM TYPE */}
+                  <div className="flex flex-col items-center lg:items-start gap-4">
+                    <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Gem Type</label>
                     <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                      {sapphireColors.map((color, idx) => {
-                        const isSelected = selectedSapphireColors.includes(color);
-                        const colorOption = shopByColorOptions.find(o => o.name.toLowerCase() === color.toLowerCase());
-                        const imgUrl = colorOption ? colorOption.image : null;
-
+                      {gemstoneOptions.map((gem, i) => {
+                        const isSelected = selectedGems.length === 1 && selectedGems.includes(gem.value);
                         return (
                           <div
-                            key={idx}
-                            onClick={() => toggleSapphireColor(color)}
-                            className={`w-14 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                            key={i}
+                            onClick={() => toggleGem(gem.value)}
+                            className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                           >
-                            {imgUrl ? (
-                              <div className={`w-12 h-12 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
-                                <img src={imgUrl} alt={color} className={`w-full h-full object-cover object-center ${color.toLowerCase() === 'white' ? 'scale-[0.95]' : color.toLowerCase() === 'peach' ? 'scale-[1.15]' : color.toLowerCase() === 'brown' ? 'scale-[1.2]' : color.toLowerCase() === 'black' ? 'scale-[1.05]' : 'scale-[1.5]'}`} />
+                            <div className={`w-14 h-14 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
+                              <img src={gem.image} alt={gem.label} className="w-full h-full object-cover object-top scale-[1.5]" />
+                            </div>
+                            <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{gem.label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* SAPPHIRE COLORS SUB-FILTER */}
+                    {selectedGems.length === 1 && selectedGems.includes("Sapphire") && sapphireColors.length > 0 && (
+                      <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center lg:items-start">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block text-center lg:text-left">Sapphire Colors</label>
+                        <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                          {sapphireColors.map((color, idx) => {
+                            const isSelected = selectedSapphireColors.includes(color);
+                            const colorOption = shopByColorOptions.find(o => o.name.toLowerCase() === color.toLowerCase());
+                            const imgUrl = colorOption ? colorOption.image : null;
+
+                            return (
+                              <div
+                                key={idx}
+                                onClick={() => toggleSapphireColor(color)}
+                                className={`w-14 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                              >
+                                {imgUrl ? (
+                                  <div className={`w-12 h-12 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
+                                    <img src={imgUrl} alt={color} className={`w-full h-full object-cover object-center ${color.toLowerCase() === 'white' ? 'scale-[0.95]' : color.toLowerCase() === 'peach' ? 'scale-[1.15]' : color.toLowerCase() === 'brown' ? 'scale-[1.2]' : color.toLowerCase() === 'black' ? 'scale-[1.05]' : 'scale-[1.5]'}`} />
+                                  </div>
+                                ) : (
+                                  <div className={`w-12 h-12 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
+                                    <span className="text-[10px] font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
+                                  </div>
+                                )}
+                                <span className={`text-[10px] text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{color}</span>
                               </div>
-                            ) : (
-                              <div className={`w-12 h-12 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
-                                <span className="text-[10px] font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
-                              </div>
-                            )}
-                            <span className={`text-[10px] text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{color}</span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* SHAPE */}
+                  <div className="flex flex-col items-center lg:items-start gap-4">
+                    <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Shape</label>
+                    <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                      {shapeOptions.map((shape, i) => {
+                        const isSelected = selectedShapes.includes(shape.value);
+                        return (
+                          <div
+                            key={i}
+                            onClick={() => toggleShape(shape.value)}
+                            className={`flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100 text-[#0b182d]' : 'opacity-30 hover:opacity-60 text-gray-500'}`}
+                          >
+                            <div className={`w-16 h-16 flex items-center justify-center`}>
+                              <img src={shape.image} alt={shape.label} className="w-full h-full object-contain" style={{ filter: isSelected ? 'brightness(0) drop-shadow(0px 2px 2px rgba(0,0,0,0.3))' : 'grayscale(100%)' }} />
+                            </div>
+                            <span className={`text-xs ${isSelected ? 'font-bold' : 'font-medium'}`}>{shape.label}</span>
                           </div>
                         );
                       })}
                     </div>
                   </div>
-                )}
-              </div>
 
-              {/* SHAPE */}
-              <div className="flex flex-col items-center lg:items-start gap-4">
-                <label className="text-sm font-bold text-[#0b182d] uppercase tracking-wide text-center lg:text-left">Shape</label>
-                <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                  {shapeOptions.map((shape, i) => {
-                    const isSelected = selectedShapes.includes(shape.value);
-                    return (
-                      <div
-                        key={i}
-                        onClick={() => toggleShape(shape.value)}
-                        className={`flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100 text-[#0b182d]' : 'opacity-30 hover:opacity-60 text-gray-500'}`}
-                      >
-                        <div className={`w-16 h-16 flex items-center justify-center`}>
-                          <img src={shape.image} alt={shape.label} className="w-full h-full object-contain" style={{ filter: isSelected ? 'brightness(0) drop-shadow(0px 2px 2px rgba(0,0,0,0.3))' : 'grayscale(100%)' }} />
-                        </div>
-                        <span className={`text-xs ${isSelected ? 'font-bold' : 'font-medium'}`}>{shape.label}</span>
-                      </div>
-                    );
-                  })}
+                </div>
+
+                {/* Mobile/Tablet Video inline */}
+                <div className="block lg:hidden w-full mt-8">
+                  {selectedGems.length > 0 && (
+                    <GemVideo
+                      gem={selectedGems[0]}
+                      shape={selectedShapes.length > 0 ? selectedShapes[0] : null}
+                      selectedTypes={selectedTypes}
+                      selectedGrades={selectedGrades}
+                      selectedSapphireColors={selectedSapphireColors}
+                    />
+                  )}
+                </div>
+
+                {/* Remapped bottom container */}
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 w-full mt-6">
+
+                  {/* Left Side: Filters */}
+                  <div className="flex-1 flex flex-wrap gap-8 items-start w-full">
+                    <SingleNumberFilter label="Weight (CT)" value={weight} onChange={setWeight} bounds={weightBounds} />
+
+                    <div className="flex flex-col gap-4 w-full lg:w-auto mx-auto lg:mx-0">
+                      {(() => {
+                        const allDims = new Set<string>();
+                        Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
+                        const combinedDims = Array.from(allDims).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+                        const gemStr = selectedGems.length > 0 ? ` ${selectedGems[0]}` : " ANY GEM";
+                        const shapeStr = selectedShapes.length > 0 ? ` ${selectedShapes[0]}` : "";
+                        const label = `${gemStr}${shapeStr} DIMENSIONS`.trim().toUpperCase();
+
+                        return (
+                          <MultiDropdownFilter
+                            label={label}
+                            value={selectedDimensions["Any"] || []}
+                            onChange={(val) => {
+                              setSelectedDimensions(prev => ({ ...prev, "Any": val }));
+                            }}
+                            optionsList={combinedDims}
+                          />
+                        );
+                      })()}
+                    </div>
+
+                    {availableTypes.length > 0 && (
+                      <SingleDropdownFilter
+                        label="Type"
+                        value={selectedTypes.length > 0 ? selectedTypes[0] : ""}
+                        onChange={(val) => setSelectedTypes(val ? [val] : [])}
+                        optionsList={availableTypes}
+                      />
+                    )}
+
+                    {selectedTypes.includes("Natural") && availableGrades.length > 0 && (
+                      <SingleDropdownFilter
+                        label="Grade"
+                        value={selectedGrades.length > 0 ? selectedGrades[0] : ""}
+                        onChange={(val) => setSelectedGrades(val ? [val] : [])}
+                        optionsList={availableGrades}
+                      />
+                    )}
+                  </div>
+
                 </div>
               </div>
 
-            </div>
-            
-            {/* Elegant Gem Video Presentation */}
-            <GemVideo 
-              gem={selectedGems.length > 0 ? selectedGems[0] : null} 
-              shape={selectedShapes.length > 0 ? selectedShapes[0] : null} 
-              selectedTypes={selectedTypes}
-              selectedGrades={selectedGrades}
-              selectedSapphireColors={selectedSapphireColors}
-            />
-
-            {/* Remapped bottom container */}
-            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 w-full mt-6">
-              
-              {/* Left Side: Filters */}
-              <div className="flex-1 flex flex-wrap gap-8 items-start w-full">
-              <SingleNumberFilter label="Weight (CT)" value={weight} onChange={setWeight} bounds={weightBounds} />
-
-              <div className="flex flex-col gap-4 w-full lg:w-auto mx-auto lg:mx-0">
-                {(() => {
-                  const allDims = new Set<string>();
-                  Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
-                  const combinedDims = Array.from(allDims).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-                  const gemStr = selectedGems.length > 0 ? ` ${selectedGems[0]}` : " ANY GEM";
-                  const shapeStr = selectedShapes.length > 0 ? ` ${selectedShapes[0]}` : "";
-                  const label = `${gemStr}${shapeStr} DIMENSIONS`.trim().toUpperCase();
-                  
-                  return (
-                    <MultiDropdownFilter 
-                      label={label} 
-                      value={selectedDimensions["Any"] || []} 
-                      onChange={(val) => {
-                        setSelectedDimensions(prev => ({ ...prev, "Any": val }));
-                      }} 
-                      optionsList={combinedDims} 
+              {/* Desktop Video (Sticky Right Side) */}
+              <div className="hidden lg:flex w-[280px] xl:w-[320px] shrink-0 items-start justify-end">
+                {selectedGems.length > 0 && (
+                  <div className="sticky top-24 pt-4">
+                    <GemVideo
+                      gem={selectedGems[0]}
+                      shape={selectedShapes.length > 0 ? selectedShapes[0] : null}
+                      selectedTypes={selectedTypes}
+                      selectedGrades={selectedGrades}
+                      selectedSapphireColors={selectedSapphireColors}
                     />
-                  );
-                })()}
-
-
+                  </div>
+                )}
               </div>
-
-              {availableTypes.length > 0 && (
-                <SingleDropdownFilter 
-                  label="Type" 
-                  value={selectedTypes.length > 0 ? selectedTypes[0] : ""} 
-                  onChange={(val) => setSelectedTypes(val ? [val] : [])} 
-                  optionsList={availableTypes} 
-                />
-              )}
-
-              {selectedTypes.includes("Natural") && availableGrades.length > 0 && (
-                <SingleDropdownFilter 
-                  label="Grade" 
-                  value={selectedGrades.length > 0 ? selectedGrades[0] : ""} 
-                  onChange={(val) => setSelectedGrades(val ? [val] : [])} 
-                  optionsList={availableGrades} 
-                />
-              )}
-              </div>
-
-
             </div>
 
             {/* Unified Custom Size Note */}
@@ -692,7 +758,7 @@ export const GridViewTopFilters = ({
                   </div>
                 )}
 
-                {Object.entries(selectedDimensions).map(([groupKey, dims]) => 
+                {Object.entries(selectedDimensions).map(([groupKey, dims]) =>
                   dims.map((d, i) => (
                     <div key={`${groupKey}-${i}`} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
                       {groupKey}: {d}

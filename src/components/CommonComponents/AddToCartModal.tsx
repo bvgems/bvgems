@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDisplayWeight } from "@/utils/priceHelpers";
 import {
   ActionIcon,
   Badge,
@@ -84,7 +85,9 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
       product?.shape === "Round"
       ? shades[0]?.image
       : product?.extra_images?.length > 0
-        ? product?.extra_images[0]
+        ? (product?.collection_slug?.toLowerCase() === "emerald"
+             ? (product.extra_images.find((u: string) => !u.includes("_Z") && !u.toLowerCase().includes("zambian")) || product.extra_images[0])
+             : product.extra_images[0])
         : image_url,
   );
   const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(true);
@@ -179,7 +182,10 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   };
 
   const isPurchaseByCarat = (product: any) => {
+    if (!product) return;
     const size = product?.size;
+    let allowed = true;
+    
     if (isLabGrown(product)) {
       if (
         size === "1.00 mm" ||
@@ -187,11 +193,16 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
         size === "1.50 mm" ||
         size === "1.75 mm"
       ) {
-        setAllowPurchaseByCarat(false);
-        return;
+        allowed = false;
       }
     }
-    setAllowPurchaseByCarat(true);
+    
+    setAllowPurchaseByCarat(allowed);
+    if (!allowed) {
+      setPurchaseByCarat(false);
+    } else {
+      setPurchaseByCarat(true);
+    }
   };
 
   useEffect(() => {
@@ -282,7 +293,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
                   title="Open product details"
                 >
                   {`${size || ""} ${name}, Quality ${quality || ""}, ${
-                    ct_weight || "-"
+                    ct_weight ? formatDisplayWeight(ct_weight) : "-"
                   } ct.`}
                 </span>
               </Title>
@@ -343,7 +354,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
             {/* Purchase mode + inputs */}
             <div className="mt-6">
-              {user && allowPurchaseByCarat && (
+              {allowPurchaseByCarat && (
                 <Switch
                   checked={purchaseByCarat}
                   onChange={(event) =>
