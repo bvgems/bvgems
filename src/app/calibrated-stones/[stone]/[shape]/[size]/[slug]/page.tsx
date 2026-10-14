@@ -7,9 +7,9 @@ export default async function Page(props: any) {
   const formattedStone = stone.replace(/-/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase());
   return (
     <div className="w-full">
-      <PageHeader 
-        title={`${formattedStone} Detail`} 
-        subtitle="Review the specifications and high-resolution media for this calibrated gemstone." 
+      <PageHeader
+        title={`${formattedStone}`}
+        subtitle="Review the specifications and high-resolution media for this calibrated gemstone."
       />
       <ProductDetailsPage {...props} />
     </div>
