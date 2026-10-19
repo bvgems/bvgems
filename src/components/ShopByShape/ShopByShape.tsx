@@ -21,7 +21,7 @@ export const ShopByShape = () => {
     router.push(`/calibrated-stones?${query}`);
   };
   return (
-    <div className="mt-20 mb-20 bg-gray-100 px-20 py-10">
+    <div className="mt-18 bg-gray-100 px-20 py-10">
       <AnimatedText
         text="Shop Gemstones By Shape"
         className="text-center text-4xl text-[#0b182d] mb-14"

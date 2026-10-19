@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUserStore } from "@/store/useUserStore";
 import { fetchAndSyncUserCart, mergeGuestCartOnLogin } from "@/store/useCartStore";
+import { syncRecentlyViewedOnLogin } from "@/store/useRecentlyViewedStore";
 
 let authPromise: Promise<any> | null = null;
 let hasAttemptedVerification = false;
@@ -25,6 +26,7 @@ export const useAuth = () => {
           if (verifiedUser?.id) {
             await mergeGuestCartOnLogin(verifiedUser.id);
             await fetchAndSyncUserCart(verifiedUser.id);
+            await syncRecentlyViewedOnLogin(verifiedUser.id);
           }
         })
         .catch(() => {

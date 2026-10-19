@@ -11,6 +11,7 @@ const data = [
     icon: IconUser,
     children: [
       { title: "Personal Information", link: "#" },
+      { title: "Recently Viewed", link: "#" },
       { title: "Shipping Address", link: "#" },
       { title: "AML Information", link: "#" },
     ],

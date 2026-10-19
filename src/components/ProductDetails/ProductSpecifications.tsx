@@ -102,7 +102,7 @@ export const ProductSpecifications = ({
 
     if (newProduct?.id) {
       getProduct(newProduct.id);
-      const stoneHandle = newProduct?.collection_slug?.toLowerCase() || "unknown-stone";
+      const stoneHandle = (newProduct?.collection_slug || newProduct?.gemstone_type || "gemstone").toLowerCase();
       router.push(generateCalibratedStoneUrl(newProduct, stoneHandle));
     }
 

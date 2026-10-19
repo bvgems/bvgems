@@ -379,13 +379,13 @@ export function FreeSizeGridView({
                         key={row.id || idx}
                         onClick={(e: any) => {
                           if (e.target?.closest?.('button, input, [role="button"]')) return;
-                          const stoneHandle = row?.collection_slug?.toLowerCase() || "unknown";
+                          const stoneHandle = (row?.gemstone_type || row?.collection_slug || "gemstone").toLowerCase().replace(/\s+/g, "-");
                           router.push(generateFreeSizeStoneUrl(row, stoneHandle));
                         }}
                         className="cursor-pointer hover:bg-gray-50 transition-colors"
                       >
                          <Table.Td className="p-1 md:p-2 pl-3 md:pl-4 text-center">
-                           {row.image_url ? <img src={row.image_url} alt={row.collection_slug} className="w-8 h-8 md:w-10 md:h-10 mx-auto rounded object-contain mix-blend-multiply" /> : <div className="w-8 h-8 md:w-10 md:h-10 mx-auto bg-gray-200 rounded"></div>}
+                           {row.image_url ? <img src={row.image_url} alt={row.gemstone_type || row.collection_slug || "Gemstone"} className="w-8 h-8 md:w-10 md:h-10 mx-auto rounded object-contain mix-blend-multiply" /> : <div className="w-8 h-8 md:w-10 md:h-10 mx-auto bg-gray-200 rounded"></div>}
                          </Table.Td>
                          <Table.Td className="hidden md:table-cell text-left text-xs md:text-sm p-1 md:p-2 capitalize">{row.shape || "-"}</Table.Td>
                          <Table.Td className="hidden md:table-cell text-left text-xs md:text-sm p-1 md:p-2">{row.color || "-"}</Table.Td>

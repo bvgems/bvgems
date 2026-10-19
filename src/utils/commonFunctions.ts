@@ -45,6 +45,7 @@ export const getOrderPayload = (
             const stoneWeight = Number(item?.product?.ct_weight) || 0;
             const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
             const safeCarat = Math.max(minWeight, Number(item?.caratWeight) || minWeight);
+            const stones = Number(item?.quantity) || (stoneWeight > 0 ? Math.max(1, Math.round(safeCarat / stoneWeight)) : 1);
             price = Number(item?.product?.price) * safeCarat;
             quantity = 1;
 
@@ -52,8 +53,9 @@ export const getOrderPayload = (
               { name: "Shape", value: item?.product?.shape },
               { name: "Size", value: item?.product?.size },
               { name: "Quality", value: item?.product?.quality },
+              { name: "Stone Count", value: `${stones} stone${stones > 1 ? "s" : ""}` },
               {
-                name: "Selected Carat Weight",
+                name: "Total Carat Weight",
                 value: formatCarat(safeCarat),
               },
               { name: "Total Amount", value: formatCurrency(price) },

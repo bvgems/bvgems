@@ -13,7 +13,7 @@ export default async function FreeSizeRedirect({ params }: Props) {
   const productData = await fetchFreeSizeGemstonesById(id);
   if (!productData) permanentRedirect("/free-size-gemstones");
 
-  const stoneHandle = productData.gemstone_type?.toLowerCase() || productData.collection_slug?.toLowerCase() || "unknown-stone";
+  const stoneHandle = productData.gemstone_type?.toLowerCase() || productData.collection_slug?.toLowerCase() || "gemstone";
   const newUrl = generateFreeSizeStoneUrl(productData, stoneHandle);
   
   permanentRedirect(newUrl);

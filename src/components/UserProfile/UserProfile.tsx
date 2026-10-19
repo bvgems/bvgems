@@ -36,16 +36,25 @@ export const UserProfile = ({ isSmaller, user }: any) => {
     >
       <Menu.Target>
         <UnstyledButton
-          className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
+          className={cx(
+            "flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-full border border-gray-200 hover:border-gray-300 hover:bg-gray-50 active:scale-[0.97] transition-all duration-150 cursor-pointer",
+            { "bg-gray-100 border-gray-300": userMenuOpened }
+          )}
+          aria-label="User profile menu"
         >
-          <Group gap={isSmaller ? 2 : 5}>
-            <Avatar
-              name={`${user?.firstName} ${user?.lastName}`}
-              color="#0b182d"
-            />
-
-            <IconChevronDown size={12} stroke={1.5} />
-          </Group>
+          <Avatar
+            name={`${user?.firstName || ""} ${user?.lastName || ""}`}
+            color="#0b182d"
+            size={28}
+            radius="xl"
+            className="text-[12px] font-semibold"
+          />
+          {user?.firstName && !isSmaller && (
+            <span className="text-xs font-medium text-gray-800 max-w-[90px] truncate">
+              {user.firstName}
+            </span>
+          )}
+          <IconChevronDown size={13} stroke={2} className="text-gray-500" />
         </UnstyledButton>
       </Menu.Target>
       <MenuDropdown>

@@ -2,48 +2,24 @@
 
 import { PageHeader } from "@/components/CommonComponents/PageHeader";
 import { FAQComponent } from "@/components/FAQs/FAQComponent";
-import {
-  Anchor,
-  Breadcrumbs,
-  Container,
-  Loader,
-  ThemeIcon,
-  Title,
-} from "@mantine/core";
-import { IconQuestionMark } from "@tabler/icons-react";
+import { FAQ_DATA, FAQItem } from "@/data/faqData";
+import { Container } from "@mantine/core";
 
-export default function FAQClient({ faqContent }: { faqContent: any }) {
-  const breadcrumbItems = [
-    { title: "Home", href: "/" },
-    { title: "FAQs" },
-  ].map((item, index) => (
-    <Anchor
-      size="sm"
-      href={item.href}
-      key={index}
-      className="text-gray-600 hover:text-black"
-    >
-      {item.title}
-    </Anchor>
-  ));
-
-  if (!faqContent) {
-    return (
-      <div className="flex justify-center items-center min-h-[50vh]">
-        <Loader size="lg" color="#0b182d" />
-      </div>
-    );
-  }
+export default function FAQClient({ faqContent }: { faqContent?: FAQItem[] }) {
+  const content =
+    faqContent && Array.isArray(faqContent) && faqContent.length > 0
+      ? faqContent
+      : FAQ_DATA;
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20">
-      <PageHeader 
-        title="Frequently Asked Questions" 
-        subtitle="Find answers to common questions about our products, shipping, returns, and more. If you need further assistance, don't hesitate to contact us." 
+      <PageHeader
+        title="Gemstones & Memo Program FAQ"
+        subtitle="Frequently asked questions regarding calibrated gemstones, loose colored stones, wholesale trade pricing, and the B.V. Gems Trade Memo Program."
       />
 
       <Container size="md" className="mt-[-2rem] relative z-10">
-        <FAQComponent faqContent={faqContent} />
+        <FAQComponent faqContent={content} />
       </Container>
     </div>
   );

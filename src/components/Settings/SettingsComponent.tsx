@@ -13,6 +13,7 @@ import { useUserStore } from "@/store/useUserStore";
 import { AMLInfo } from "../AML/AMLInfo";
 import { BusinessReference } from "../Business/BusinessReference";
 import { BusinessVerificationForm } from "../Business/BusinessVerificationForm";
+import { ProfileRecentlyViewed } from "../Profile/ProfileRecentlyViewed";
 
 interface Props {
   activeSection?: string;
@@ -68,6 +69,10 @@ export const SettingsComponent = ({
       {
         title: "Personal Information",
         content: <ProfileInfo userData={userData} />,
+      },
+      {
+        title: "Recently Viewed",
+        content: <ProfileRecentlyViewed />,
       },
       {
         title: "Shipping Address",

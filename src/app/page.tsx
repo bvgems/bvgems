@@ -6,6 +6,7 @@ import { BirthStoneComponent } from "@/components/BirthStone/BirthStoneComponent
 import { BestSellingProductsComponents } from "@/components/BestSellingProducts/BestSellingProductsComponents";
 import { BookAppointment } from "@/components/BookAppointment/BookAppointment";
 import { ShopCalibrated } from "@/components/ShopCalibrated/ShopCalibrated";
+import { ReturningCustomerHistory } from "@/components/Home/ReturningCustomerHistory";
 import { ShopByShape } from "@/components/ShopByShape/ShopByShape";
 import { FadeInUpBox } from "@/components/CommonComponents/FadeInUpBox";
 import dynamic from "next/dynamic";
@@ -70,6 +71,7 @@ export default async function Home() {
   return (
     <>
       {heroData && <Hero jewelryRef={{ current: null }} heroData={heroData} />}
+      <ReturningCustomerHistory />
       <ShopCalibrated />
       <ShopByShape />
       <ShopByColor />

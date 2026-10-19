@@ -29,6 +29,8 @@ import {
 import { sortBySizeAsc } from "@/utils/sortUtils";
 import { ImageZoom } from "../CommonComponents/ImageZoom";
 import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
+import { RecentlyViewedSection } from "../CommonComponents/RecentlyViewedSection";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { useAuth } from "@/hooks/useAuth";
 import { getCartStore } from "@/store/useCartStore";
 import { notifications } from "@mantine/notifications";
@@ -78,6 +80,13 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
   const cartStore = getCartStore(userKey);
   const addToCart = cartStore((state: any) => state.addToCart);
   const [modalOpened, { open, close }] = useDisclosure(false);
+  const { trackProduct } = useRecentlyViewed();
+
+  useEffect(() => {
+    if (product) {
+      trackProduct(product, "layout");
+    }
+  }, [product, trackProduct]);
 
   useEffect(() => {
     const matched = shapeSize?.find((item: any) => item?.size === selectedSize);
@@ -406,6 +415,7 @@ export default function LayoutProductPage({ product }: ProductPageProps) {
           </GridCol>
         </Grid>
       </Container>
+      <RecentlyViewedSection currentItemId={product?.id ? `layout_${product.id}` : undefined} />
     </>
   );
 }

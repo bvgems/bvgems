@@ -100,3 +100,27 @@ export const getCaratOptions = (product: any): string[] => {
   return options;
 };
 
+/**
+ * Calculates nearest whole stone count and exact total carats for carat-wise purchase.
+ * Example: 3.2 ct stone, customer enters 5 ct:
+ * 1 stone = 3.2 ct (distance |5 - 3.2| = 1.8 ct)
+ * 2 stones = 6.4 ct (distance |5 - 6.4| = 1.4 ct) -> 2 stones is closer!
+ * Formula: stoneCount = Math.max(1, Math.round(requestedCarat / singleStoneWeight))
+ * totalCarats = Number((stoneCount * singleStoneWeight).toFixed(4))
+ */
+export const calculateNearestStones = (
+  singleStoneWeight: number | string | undefined | null,
+  requestedCarat: number | string | undefined | null,
+): { stoneCount: number; totalCarats: number } => {
+  const weight = typeof singleStoneWeight === "number" ? singleStoneWeight : parseFloat(String(singleStoneWeight || "0").replace(/[^0-9.]/g, "")) || 0;
+  const requested = typeof requestedCarat === "number" ? requestedCarat : parseFloat(String(requestedCarat || "0")) || 0;
+  
+  if (weight <= 0) {
+    const safe = Math.max(1, requested);
+    return { stoneCount: 1, totalCarats: safe };
+  }
+  const stoneCount = Math.max(1, Math.round(requested / weight));
+  const totalCarats = Number((stoneCount * weight).toFixed(4));
+  return { stoneCount, totalCarats };
+};
+

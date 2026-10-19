@@ -107,15 +107,12 @@ export async function POST(req: Request) {
           Carat Weight Of Stone: ${product?.ct_weight}
         `;
       } else if (isCalibrated && product?.purchaseByCarat) {
-        const stoneWeight = Number(product?.ct_weight) || 0;
-        const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
-        const safeCarat = Math.max(minWeight, Number(item?.caratWeight) || minWeight);
         productData.description = `
-          Per Carat Price : ${formatCurrency(Number(product?.price))}
-          Purchased Carat: ${safeCarat}
+          ${item?.quantity} stone${Number(item?.quantity) > 1 ? "s" : ""} (~${item?.caratWeight} ct total)
+          Per Carat Price: ${formatCurrency(Number(product?.price))}
         `;
       } else {
-        productData.description = `Quantity: ${item?.quantity}`;
+        productData.description = `Quantity: ${item?.quantity} stone${Number(item?.quantity) > 1 ? "s" : ""}`;
       }
 
       if (product?.image_url && String(product.image_url).trim()) {

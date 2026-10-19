@@ -26,6 +26,8 @@ import Script from "next/script";
 import React, { useEffect, useState } from "react";
 import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
 import { QuoteRequestModal } from "@/components/CommonComponents/QuoteRequestModal";
+import { RecentlyViewedSection } from "@/components/CommonComponents/RecentlyViewedSection";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
 // 📦 PDF imports
 import jsPDF from "jspdf";
@@ -51,6 +53,8 @@ export default function FreeSizeGemstoneDetails({
   const [quoteModalOpened, { open: openQuote, close: closeQuote }] = useDisclosure(false);
   const router = useRouter();
 
+  const { trackProduct } = useRecentlyViewed();
+
   useEffect(() => {
     if (product) {
       setAllowPurchaseByCarat(true);
@@ -58,8 +62,9 @@ export default function FreeSizeGemstoneDetails({
       const minW = getMinCaratWeight(product);
       setCaratWeight(minW);
       setCaratError(null);
+      trackProduct(product, "free-size");
     }
-  }, [product]);
+  }, [product, trackProduct]);
 
   const addProductToCart = () => {
     if (!product) return;
@@ -258,7 +263,7 @@ export default function FreeSizeGemstoneDetails({
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 px-5 mt-6">
+    <div className="w-full">
       <Modal opened={modalOpened} onClose={close} centered>
         <AuthForm onClose={close} />
       </Modal>
@@ -269,8 +274,10 @@ export default function FreeSizeGemstoneDetails({
         product={product} 
       />
 
-      {/* Left */}
-      <div className="w-full md:w-2/3 pr-2">
+      {/* Top Product Section: Left (image/specs) + Right (pricing/actions) */}
+      <div className="flex flex-col md:flex-row gap-6 px-5 mt-6">
+        {/* Left */}
+        <div className="w-full md:w-2/3 pr-2">
         <div className="p-4">
           <div className="flex mt-3">
             <Tooltip label="Share As PDF" position="left" withArrow>
@@ -417,6 +424,8 @@ export default function FreeSizeGemstoneDetails({
           </div>
         </div>
       </div>
+      {/* End flex-row */}
+      </div>
 
       {product && (
         <Script
@@ -435,6 +444,9 @@ export default function FreeSizeGemstoneDetails({
           }}
         />
       )}
+
+      {/* Bottom Section: Recently Viewed (full width, just above footer) */}
+      <RecentlyViewedSection currentItemId={product?.id ? `free_size_${product.id}` : undefined} />
     </div>
   );
 }

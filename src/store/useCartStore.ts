@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import axios from "axios";
+import { calculateNearestStones } from "@/utils/priceHelpers";
 
 export interface CartItem {
   cartItemId?: string;
@@ -34,6 +35,7 @@ export interface CartItem {
   };
   quantity: number;
   caratWeight?: string;
+  requestedCarats?: number;
 }
 
 export const generateCartItemId = (item: Partial<CartItem> | any): string => {
@@ -134,6 +136,23 @@ const debouncedSaveCartToDb = (userKey: string, cart: CartItem[]) => {
   }, 400);
 };
 
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeunload", () => {
+    Object.keys(debounceTimers).forEach((key) => {
+      if (key && key !== "guest" && debounceTimers[key]) {
+        clearTimeout(debounceTimers[key]);
+        const currentCart = getRegistry()[key]?.getState()?.cart;
+        if (currentCart && navigator.sendBeacon) {
+          navigator.sendBeacon(
+            "/api/cart",
+            new Blob([JSON.stringify({ cart: currentCart })], { type: "application/json" })
+          );
+        }
+      }
+    });
+  });
+}
+
 export const fetchAndSyncUserCart = async (userId: string | number) => {
   if (typeof window === "undefined" || !userId || String(userId) === "guest") return;
   try {
@@ -195,16 +214,17 @@ export const getCartStore = (userKey: string) => {
                 cartItemId: targetCartItemId,
               };
 
-              // Enforce minimum carat weight >= single stone weight
+              // Enforce nearest whole stone count and exact carat weight
               if (
                 itemToAdd.product?.purchaseByCarat &&
-                itemToAdd.caratWeight
+                itemToAdd.product?.productType === "stone"
               ) {
                 const stoneWeight = Number(itemToAdd.product?.ct_weight) || 0;
-                const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
-                if (Number(itemToAdd.caratWeight) < minWeight) {
-                  itemToAdd.caratWeight = `${minWeight}`;
-                }
+                const requested = Number(itemToAdd.requestedCarats || itemToAdd.caratWeight || stoneWeight);
+                const { stoneCount, totalCarats } = calculateNearestStones(stoneWeight, requested);
+                itemToAdd.quantity = stoneCount;
+                itemToAdd.caratWeight = `${totalCarats}`;
+                itemToAdd.requestedCarats = requested;
               }
 
               if (itemToAdd.product?.isGift) {
@@ -237,23 +257,28 @@ export const getCartStore = (userKey: string) => {
                 const existingItem = state.cart[existingIndex];
                 const updatedCart = [...state.cart];
 
-                // If both are by carat weight: increase carat weight
+                // If both are by carat weight: combine requested carats and recalculate nearest stones
                 if (
                   (itemToAdd.product?.productType === "stone" ||
                     itemToAdd.product?.productType === "freeSizeStone") &&
                   itemToAdd.product?.purchaseByCarat
                 ) {
-                  const currentCarats = Number(existingItem.caratWeight || 1);
-                  const addedCarats = Number(itemToAdd.caratWeight || 1);
-                  const mergedCarats = currentCarats + addedCarats;
+                  const stoneWeight = Number(existingItem.product?.ct_weight) || Number(itemToAdd.product?.ct_weight) || 0;
+                  const currentReq = Number(existingItem.requestedCarats || existingItem.caratWeight || stoneWeight);
+                  const addedReq = Number(itemToAdd.requestedCarats || itemToAdd.caratWeight || stoneWeight);
+                  const totalReq = currentReq + addedReq;
+                  const { stoneCount, totalCarats } = calculateNearestStones(stoneWeight, totalReq);
 
                   updatedCart[existingIndex] = {
                     ...existingItem,
                     cartItemId: targetCartItemId,
-                    caratWeight: `${mergedCarats}`,
+                    quantity: stoneCount,
+                    caratWeight: `${totalCarats}`,
+                    requestedCarats: totalReq,
                     product: {
                       ...existingItem.product,
                       price: itemToAdd.product?.price || existingItem.product?.price,
+                      ct_weight: existingItem.product?.ct_weight || itemToAdd.product?.ct_weight,
                     },
                   };
                   return { cart: updatedCart };
@@ -353,9 +378,14 @@ export const getCartStore = (userKey: string) => {
 
                 if (matches) {
                   const stoneWeight = Number(item.product?.ct_weight) || 0;
-                  const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
-                  const safeCarat = Math.max(minWeight, Number(caratWeight) || minWeight);
-                  return { ...item, caratWeight: `${safeCarat}` };
+                  const reqNum = Math.max(0.01, Number(caratWeight) || 0);
+                  const { stoneCount, totalCarats } = calculateNearestStones(stoneWeight, reqNum);
+                  return {
+                    ...item,
+                    quantity: stoneCount,
+                    caratWeight: `${totalCarats}`,
+                    requestedCarats: reqNum,
+                  };
                 }
                 return item;
               }),
@@ -398,28 +428,25 @@ export const getCartStore = (userKey: string) => {
               let productTotal = 0;
 
               if (
-                item.product.productType === "stone" ||
-                item.product.productType === "freeSizeStone"
+                item.product?.productType === "stone" ||
+                item.product?.productType === "freeSizeStone"
               ) {
                 if (item.product.purchaseByCarat) {
                   const stoneWeight = Number(item.product?.ct_weight) || 0;
                   const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
-                  const caratPrice =
-                    item.product.productType === "stone"
-                      ? Number(item.product.price) *
-                        Math.max(minWeight, Number(item.caratWeight || minWeight))
-                      : Number(item.product.price) *
-                        Number(item.product.ct_weight || 1);
-                  productTotal = caratPrice;
+                  const actualWeight = item.product.productType === "stone"
+                    ? Number(item.caratWeight || minWeight)
+                    : Number(item.product.ct_weight || 1);
+                  productTotal = Number(item.product.price) * actualWeight;
                 } else {
-                  productTotal = Number(item.product.price) * item.quantity;
+                  productTotal = Number(item.product.price) * Number(item.quantity || 1);
                 }
               } else {
-                productTotal = Number(item.product.price) * item.quantity;
+                productTotal = Number(item.product?.price || 0) * Number(item.quantity || 1);
               }
 
-              if (item.product.needCertification) {
-                productTotal += 75 * item.quantity;
+              if (item.product?.needCertification) {
+                productTotal += 75 * Number(item.quantity || 1);
               }
               return total + productTotal;
             }, 0);
@@ -444,16 +471,12 @@ export const getCartStore = (userKey: string) => {
     crossTabSync(getRegistry()[userKey], `cart-storage-${userKey}`);
 
     if (typeof window !== "undefined" && userKey !== "guest") {
-      // 1. Initial fetch from PostgreSQL for cross-device consistency
+      // 1. Initial fetch from PostgreSQL for cross-device consistency (DB is master for logged in users)
       axios
         .get("/api/cart")
         .then((res) => {
-          if (res?.data?.cart && Array.isArray(res.data.cart) && res.data.cart.length > 0) {
-            const currentLocalCart = getRegistry()[userKey].getState().cart;
-            // Populate or merge if local store has fewer or no items
-            if (currentLocalCart.length === 0) {
-              getRegistry()[userKey].setState({ cart: res.data.cart });
-            }
+          if (res?.data?.cart && Array.isArray(res.data.cart)) {
+            getRegistry()[userKey].setState({ cart: res.data.cart });
           }
         })
         .catch(() => {});

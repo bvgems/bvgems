@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { getCartStore } from "@/store/useCartStore";
+import { getCartStore, fetchAndSyncUserCart } from "@/store/useCartStore";
 import {
   Button,
   Grid,
@@ -24,6 +24,7 @@ import { useMemo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { BillingSummary } from "../CommonComponents/BillingSummary";
 import { QuoteRequestModal } from "../CommonComponents/QuoteRequestModal";
+import { RecentlyViewedSection } from "../CommonComponents/RecentlyViewedSection";
 import { CartLineItem } from "./CartLineItem";
 
 const Player = dynamic(
@@ -55,7 +56,13 @@ export function CartComponent() {
   const [isFreeStuds, setIsFreeStuds] = useState(false);
   const [studsDetails, setStudsDetails] = useState<any>({});
   const [quoteProduct, setQuoteProduct] = useState<any | null>(null);
-  useEffect(() => setHasMounted(true), []);
+  
+  useEffect(() => {
+    setHasMounted(true);
+    if (user?.id) {
+      fetchAndSyncUserCart(user.id);
+    }
+  }, [user?.id]);
 
   useEffect(() => {
     checkFreeStuds();
@@ -206,7 +213,11 @@ export function CartComponent() {
       const stoneHandle = value?.product?.handle || "unknown-stone";
       router.push(generateCalibratedStoneUrl(value?.product, stoneHandle));
     } else if (value?.product?.productType === "freeSizeStone") {
-      const stoneHandle = value?.product?.handle || value?.product?.collection_slug || "unknown-stone";
+      const stoneHandle =
+        value?.product?.gemstone_type ||
+        value?.product?.handle ||
+        value?.product?.collection_slug ||
+        "gemstone";
       router.push(generateFreeSizeStoneUrl(value?.product, stoneHandle));
     } else if (value?.product?.productType === "layouts") {
       router.push(`/trade/layouts/${value?.product?.handle}`);
@@ -369,6 +380,7 @@ export function CartComponent() {
         onClose={() => setQuoteProduct(null)} 
         product={quoteProduct} 
       />
+      <RecentlyViewedSection title="Recently Viewed by You" />
     </Container>
   );
 }

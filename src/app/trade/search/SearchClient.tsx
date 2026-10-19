@@ -40,10 +40,10 @@ export function SearchClient() {
 
   const handleCardClick = (item: any) => {
     if (item?.gemstone_type) {
-      const stoneHandle = item?.gemstone_type?.toLowerCase() || "unknown-stone";
+      const stoneHandle = (item?.gemstone_type || "gemstone").toLowerCase();
       router.push(generateFreeSizeStoneUrl(item, stoneHandle));
     } else if (item?.collection_slug) {
-      const stoneHandle = item?.collection_slug?.toLowerCase() || "unknown-stone";
+      const stoneHandle = (item?.collection_slug || "gemstone").toLowerCase();
       router.push(generateCalibratedStoneUrl(item, stoneHandle));
     }
   };

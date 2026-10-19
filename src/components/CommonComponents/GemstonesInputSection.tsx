@@ -1,7 +1,7 @@
 import { Button, NumberInput, NumberInputHandlers, Select, Text } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import React, { useEffect, useMemo, useRef } from "react";
-import { getCaratOptions, getMinCaratWeight } from "@/utils/priceHelpers";
+import { calculateNearestStones, formatCartWeight, getCaratOptions, getMinCaratWeight, getStoneWeight } from "@/utils/priceHelpers";
 
 export const GemstonesInputSection = ({
   purchaseByCarat,
@@ -17,7 +17,13 @@ export const GemstonesInputSection = ({
   const handlersRef = useRef<NumberInputHandlers>(null);
 
   const minWeight = useMemo(() => getMinCaratWeight(product), [product]);
+  const stoneWeight = useMemo(() => getStoneWeight(product), [product]);
   const caratOptions = useMemo(() => getCaratOptions(product), [product]);
+
+  const nearest = useMemo(() => {
+    if (!purchaseByCarat || stoneWeight <= 0) return null;
+    return calculateNearestStones(stoneWeight, Number(caratWeight) || minWeight);
+  }, [purchaseByCarat, stoneWeight, caratWeight, minWeight]);
 
   useEffect(() => {
     if (purchaseByCarat && minWeight > 0) {
@@ -63,13 +69,21 @@ export const GemstonesInputSection = ({
           className="w-32"
         />
       </div>
+      {nearest && (
+        <div className="rounded-md bg-blue-50/70 px-2.5 py-1.5 text-xs text-blue-900 flex items-center justify-between">
+          <span>Closest whole stones:</span>
+          <span className="font-semibold tabular-nums">
+            {nearest.stoneCount} stone{nearest.stoneCount > 1 ? "s" : ""} ({formatCartWeight(nearest.totalCarats)} ct)
+          </span>
+        </div>
+      )}
       {minWeight > 1 && (
         <Text size="xs" color="dimmed" mt={1}>
           Minimum weight: {minWeight} ct (weight of one stone).
         </Text>
       )}
-      <Text size="xs" color="dimmed" mt={minWeight > 1 ? 0 : 2}>
-        We will deliver the order by using the closest number of stones possible for selected weight. For any other request feel free to contact us.
+      <Text size="xs" color="dimmed" mt={minWeight > 1 ? 0 : 1}>
+        We deliver the order by using the closest whole number of stones possible for your selected weight.
       </Text>
     </div>
   ) : (

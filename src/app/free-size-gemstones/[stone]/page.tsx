@@ -19,13 +19,14 @@ export const metadata: Metadata = {
 
 export default async function FreeSizeGemstonePage({ params }: { params: Promise<{ stone: string }> }) {
   const { stone } = await params;
-  const formattedStone = stone.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+  const rawStone = (!stone || stone === "unknown" || stone === "unknown-stone") ? "Gemstone" : stone;
+  const formattedStone = rawStone.replace(/-/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase());
 
   return (
     <div className="w-full">
       <PageHeader 
         title={`${formattedStone} Free Size`} 
-        subtitle={`Explore our exclusive collection of ${formattedStone} free size gemstones.`} 
+        subtitle={`Explore our exclusive collection of ${formattedStone.toLowerCase()} free size gemstones.`} 
       />
       <FreeSizeGemstoneSelection />
     </div>

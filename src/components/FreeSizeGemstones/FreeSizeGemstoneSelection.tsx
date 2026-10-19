@@ -6,7 +6,7 @@ import { FreeSizeGridViewTopFilters } from "@/components/FreeSizeGemtones/FreeSi
 import { sortBySizeAsc } from "@/utils/sortUtils";
 import { Divider, Grid, GridCol, Skeleton, Card } from "@mantine/core";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { freeSizeFilterOptions, FreeSizeShapeFilterList, SapphireLooseGemstoneColorOptions } from "@/utils/constants";
+import { freeSizeFilterOptions, FreeSizeShapeFilterList, FreeSizeSapphireColorOptions } from "@/utils/constants";
 import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -54,7 +54,7 @@ export default function FreeSizeGemstoneSelection() {
   // If we land on the base /sapphire URL, we want to auto-select "Blue" unless a color is already specified in the URL
   const [selectedColors, setSelectedColors] = useState<string[]>(
     gemstoneType && gemstoneType.toLowerCase() === "fancy-sapphire"
-      ? SapphireLooseGemstoneColorOptions.map((c: any) => c.value).filter((c: string) => c.toLowerCase() !== "blue")
+      ? FreeSizeSapphireColorOptions.map((c: any) => c.value).filter((c: string) => c.toLowerCase() !== "blue")
       : []
   );
   const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
@@ -86,7 +86,7 @@ export default function FreeSizeGemstoneSelection() {
         if (gemstoneType.toLowerCase() === "sapphire") newStone = "Blue Sapphire";
         if (gemstoneType.toLowerCase() === "fancy-sapphire") {
           newStone = "Fancy Sapphire";
-          setSelectedColors(SapphireLooseGemstoneColorOptions.map((c: any) => c.value).filter((c: string) => c.toLowerCase() !== "blue"));
+          setSelectedColors(FreeSizeSapphireColorOptions.map((c: any) => c.value).filter((c: string) => c.toLowerCase() !== "blue"));
         } else {
           setSelectedColors([]);
         }
@@ -288,7 +288,7 @@ export default function FreeSizeGemstoneSelection() {
         widthRange={width}
         setWidthRange={setWidth}
         widthBounds={{ min: 0, max: 30 }}
-        sapphireColors={SapphireLooseGemstoneColorOptions.map((o: any) => o.value)}
+        sapphireColors={FreeSizeSapphireColorOptions.map((o: any) => o.value)}
         selectedSapphireColors={selectedColors}
         setSelectedSapphireColors={setSelectedColors}
         lotSearch={lotSearch}

@@ -10,7 +10,7 @@ import {
   Image,
   Modal,
 } from "@mantine/core";
-import { IconChevronDown } from "@tabler/icons-react";
+import { IconChevronDown, IconUser } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { UserProfile } from "../UserProfile/UserProfile";
@@ -52,6 +52,47 @@ export const DrawerComponent = ({
         position="left"
         zIndex={1000}
       >
+        {/* Mobile Account Banner */}
+        {!user ? (
+          <div className="mb-4 mx-1 p-3.5 rounded-xl bg-gradient-to-br from-slate-50 to-gray-100 border border-gray-200 shadow-xs">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-8 h-8 rounded-full bg-[#0b182d] text-white flex items-center justify-center shrink-0">
+                  <IconUser size={16} stroke={2} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-gray-900 tracking-wide uppercase truncate">B.V. Gems</p>
+                  <p className="text-[11px] text-gray-500 truncate">Log in for trade pricing</p>
+                </div>
+              </div>
+              <Button
+                size="xs"
+                color="#0b182d"
+                radius="xl"
+                className="px-3.5 text-[11px] font-semibold tracking-wider uppercase active:scale-95 transition-transform shrink-0"
+                onClick={() => {
+                  toggle();
+                  open();
+                }}
+              >
+                LOG IN
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="mb-4 mx-1 p-3 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-between">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-full bg-[#0b182d] text-white flex items-center justify-center font-semibold text-xs shrink-0">
+                {`${user?.firstName?.[0] || ""}${user?.lastName?.[0] || ""}`.toUpperCase() || "BV"}
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-gray-900 truncate">{user?.firstName} {user?.lastName}</p>
+                <p className="text-[11px] text-gray-500 truncate">{user?.email}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <Accordion
           variant="transparent"
           multiple={false}

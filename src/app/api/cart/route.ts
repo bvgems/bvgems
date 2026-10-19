@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { pool } from "@/lib/pool";
+import { verifyCartPrices } from "../lib/verifyCartPrices";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -90,6 +91,14 @@ export async function GET() {
       cart = typeof res.rows[0].cart === "string" ? JSON.parse(res.rows[0].cart) : res.rows[0].cart;
     }
 
+    if (Array.isArray(cart) && cart.length > 0) {
+      try {
+        cart = await verifyCartPrices(cart);
+      } catch (e) {
+        console.warn("verifyCartPrices non-fatal in GET /api/cart:", e);
+      }
+    }
+
     return NextResponse.json({ cart, authenticated: true }, { status: 200 });
   } catch (error: any) {
     console.error("Failed to fetch user cart from DB:", error);
@@ -123,13 +132,23 @@ export async function POST(req: NextRequest) {
       cartToSave = mergeCartItems(existingDbCart, body.guestCart);
     }
 
+    // Verify cart items against PostgreSQL database so full unrounded prices and weights are saved
+    let verifiedCart = cartToSave;
+    if (Array.isArray(cartToSave) && cartToSave.length > 0) {
+      try {
+        verifiedCart = await verifyCartPrices(cartToSave);
+      } catch (e) {
+        console.warn("verifyCartPrices non-fatal in POST /api/cart:", e);
+      }
+    }
+
     const res = await pool.query(
       `INSERT INTO user_carts (user_id, cart, updated_at)
        VALUES ($1, $2, NOW())
        ON CONFLICT (user_id)
        DO UPDATE SET cart = EXCLUDED.cart, updated_at = NOW()
        RETURNING cart`,
-      [userId, JSON.stringify(cartToSave)]
+      [userId, JSON.stringify(verifiedCart)]
     );
 
     let savedCart = res.rows[0].cart;

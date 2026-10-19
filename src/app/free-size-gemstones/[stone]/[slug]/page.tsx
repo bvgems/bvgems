@@ -62,10 +62,15 @@ export async function generateMetadata({
 export default async function Page({ params }: PageProps) {
   const { stone, slug } = await params;
   const id = extractIdFromSlug(slug);
+  const product = await fetchFreeSizeGemstonesById(id);
+
+  const rawStone = product?.gemstone_type || (stone && stone !== "unknown" && stone !== "unknown-stone" ? stone : "Gemstone");
+  const formattedStone = rawStone.replace(/-/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase());
+
   return (
     <div className="w-full">
       <PageHeader 
-        title={`${stone.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase())} Detail`} 
+        title={`${formattedStone} Details`} 
         subtitle="Review the specifications and high-resolution media for this unique gemstone." 
       />
       <FreeSizeGemstoneDetails id={id} />

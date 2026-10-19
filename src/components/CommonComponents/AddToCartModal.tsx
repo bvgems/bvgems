@@ -37,8 +37,9 @@ import { useRouter } from "next/navigation";
 import { EmeraldShade } from "./EmeraldShade";
 import { BlueSapphireShade } from "./BlueSapphireShade";
 import { shades } from "@/utils/constants";
-import { getPerCaratPrice, getPerStonePrice, isLabGrown, formatDisplayPrice, getMinCaratWeight } from "@/utils/priceHelpers";
+import { getPerCaratPrice, getPerStonePrice, isLabGrown, formatDisplayPrice, getMinCaratWeight, calculateNearestStones, getStoneWeight } from "@/utils/priceHelpers";
 import { QuoteRequestModal } from "./QuoteRequestModal";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
 interface AddToCartModalProps {
   opened: boolean;
@@ -98,6 +99,8 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   const [quoteProduct, setQuoteProduct] = useState<any | null>(null);
 
 
+  const { trackProduct } = useRecentlyViewed();
+
   useEffect(() => {
     if (product) {
       const minW = getMinCaratWeight(product);
@@ -105,6 +108,12 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
       setCaratError(null);
     }
   }, [product]);
+
+  useEffect(() => {
+    if (opened && product) {
+      trackProduct(product, "calibrated");
+    }
+  }, [opened, product, trackProduct]);
 
 
   console.log("AddToCartModal Render Debug:", {
@@ -132,6 +141,18 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
       return;
     }
     const safeCaratWeight = Math.max(minW, Number(caratWeight) || minW);
+    const stoneWeight = getStoneWeight(product);
+
+    let finalQuantity = quantity;
+    let finalCaratWeight: string | undefined = undefined;
+    let requestedCarats: number | undefined = undefined;
+
+    if (purchaseByCarat) {
+      const { stoneCount, totalCarats } = calculateNearestStones(stoneWeight, safeCaratWeight);
+      finalQuantity = stoneCount;
+      finalCaratWeight = `${totalCarats}`;
+      requestedCarats = safeCaratWeight;
+    }
 
     addToCart({
       product: {
@@ -171,8 +192,9 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
         type: product.type,
         additionalComments: additionalComments,
       },
-      quantity: purchaseByCarat ? 1 : quantity,
-      caratWeight: purchaseByCarat ? `${safeCaratWeight}` : undefined,
+      quantity: finalQuantity,
+      caratWeight: finalCaratWeight,
+      requestedCarats,
     });
 
     notifications.show({
@@ -186,7 +208,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   };
 
   const handleRedirect = () => {
-    const stoneHandle = product?.collection_slug?.toLowerCase() || "unknown-stone";
+    const stoneHandle = (product?.collection_slug || product?.gemstone_type || "gemstone").toLowerCase();
     router?.push(generateCalibratedStoneUrl(product, stoneHandle));
   };
 

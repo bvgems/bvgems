@@ -256,15 +256,12 @@ export function CartLineItem({
   const safeCaratAmount = byCarat && p.productType === "stone" && caratAmount > 0 && caratAmount < minCarat
     ? minCarat
     : caratAmount;
+  const requestedCarats = Number(value?.requestedCarats) || safeCaratAmount;
 
   const merchandise = byCarat ? unitPrice * safeCaratAmount : unitPrice * quantity;
   const certFee = p.needCertification ? CERTIFICATION_FEE * quantity : 0;
   const itemTotal = merchandise + certFee;
 
-  const approxStones =
-    p.productType === "stone" && byCarat && stoneWeight > 0
-      ? Math.max(1, Math.round(safeCaratAmount / stoneWeight))
-      : null;
   const totalWeight =
     isStoneLike && !byCarat && stoneWeight > 0 && quantity > 1
       ? Number((stoneWeight * quantity).toFixed(3))
@@ -407,9 +404,9 @@ export function CartLineItem({
                     ) : byCarat ? (
                       <Stepper
                         label="Carat weight"
-                        value={safeCaratAmount}
+                        value={requestedCarats}
                         min={minCarat}
-                        max={Math.max(MAX_CARAT_WEIGHT, safeCaratAmount)}
+                        max={Math.max(MAX_CARAT_WEIGHT, requestedCarats)}
                         suffix=" ct"
                         onChange={onCaratWeightChange}
                       />
@@ -435,16 +432,20 @@ export function CartLineItem({
                   </EquationCell>
                 </div>
 
-                {(approxStones || totalWeight) && (
+                {((byCarat && p.productType === "stone" && stoneWeight > 0) || totalWeight) && (
                   <p className="mt-3 flex items-start gap-1.5 text-xs leading-relaxed text-gray-500">
                     <IconInfoCircle size={14} className="mt-px shrink-0" />
-                    {approxStones ? (
+                    {byCarat && p.productType === "stone" && stoneWeight > 0 ? (
                       <span>
                         <span className="font-medium text-gray-700">
-                          ≈ {approxStones.toLocaleString()} stones
+                          {quantity} stone{quantity > 1 ? "s" : ""}
                         </span>{" "}
-                        at {formatCt(stoneWeight)} each. We match your carat weight with the
-                        closest number of stones, so the final count may vary slightly.
+                        at {formatCt(stoneWeight)} each ={" "}
+                        <span className="font-medium text-gray-700">{formatCt(safeCaratAmount)} total</span>
+                        {requestedCarats !== safeCaratAmount ? (
+                          <span className="text-gray-500"> (closest whole match for {formatCt(requestedCarats)} requested)</span>
+                        ) : null}
+                        .
                       </span>
                     ) : (
                       <span>

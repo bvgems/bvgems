@@ -2,21 +2,21 @@ export const shades = [
   {
     name: "Vivid Royal Blue",
     image:
-      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1776363412/royal-blue_miap0z.png`,
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "oko8ywzn"}/image/upload/v1792433613/Gemstone%20Shapes/Sapphire/Shades/royal-blue.webp`,
     description:
       "Darker, rich, and saturated royal blue hue. Known for its depth and intensity.",
   },
   {
     name: "Medium Light Cornflower Blue",
     image:
-      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1776363428/medium-cornflower_fewy1r.png`,
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "oko8ywzn"}/image/upload/v1792433614/Gemstone%20Shapes/Sapphire/Shades/medium-cornflower.webp`,
     description:
       "Lighter and brighter blue hue with vibrant brilliance and sparkle.",
   },
   {
     name: "Medium Navy Blue",
     image:
-      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1776363440/navy-blue_gqxfn3.png`,
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "oko8ywzn"}/image/upload/v1792433615/Gemstone%20Shapes/Sapphire/Shades/navy-blue.webp`,
     description: "Deep navy tone with elegant brilliance and rich saturation.",
   },
 ];
@@ -876,78 +876,100 @@ export const gemstoneOptions = [
   {
     label: "Alexandrite",
     value: "Alexandrite",
-    image: "/assets/sapphire.webp",
-    shopImage: "/assets/alexandrite-shop-cali.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431936/Gemstone%20Shapes/Alexandrite/Green-Purple/Lab_Grown/alexandrite-green-purple-lab-grown-lab-grown-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431936/Gemstone%20Shapes/Alexandrite/Green-Purple/Lab_Grown/alexandrite-green-purple-lab-grown-lab-grown-round.png",
     link: "/calibrated-stones/alexandrite",
   },
   {
     label: "Amethyst",
     value: "Amethyst",
-    image: "/assets/amethyst.webp",
-    shopImage: "/assets/amethyst-shop-cali.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431938/Gemstone%20Shapes/Amethyst/Purple/A/amethyst-purple-natural-a-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431938/Gemstone%20Shapes/Amethyst/Purple/A/amethyst-purple-natural-a-round.png",
     link: "/calibrated-stones/amethyst",
   },
   {
     label: "Aquamarine",
     value: "Aquamarine",
-    image: "/assets/aquamarine.webp",
-    shopImage: "/assets/aquamarine-shop-cali.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431944/Gemstone%20Shapes/Aquamarine/Aqua/AA/aquamarine-aqua-natural-aa-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431944/Gemstone%20Shapes/Aquamarine/Aqua/AA/aquamarine-aqua-natural-aa-round.png",
     link: "/calibrated-stones/aquamarine",
   },
   {
     label: "Citrine",
     value: "Citrine",
-    image: "/assets/citrine.webp",
-    shopImage: "/assets/citrine-shop-cal.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431946/Gemstone%20Shapes/Citrine/Orange/AA/citrine-orange-natural-aa-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431946/Gemstone%20Shapes/Citrine/Orange/AA/citrine-orange-natural-aa-round.png",
     link: "/calibrated-stones/citrine",
   },
   {
     label: "Emerald",
     value: "Emerald",
-    image: "/assets/emerald.webp",
-    shopImage: "/assets/emerald-shop-cal.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431952/Gemstone%20Shapes/Emerald/Green/AA/emerald-green-natural-aa-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431952/Gemstone%20Shapes/Emerald/Green/AA/emerald-green-natural-aa-round.png",
     link: "/calibrated-stones/emerald",
   },
   {
     label: "Morganite",
     value: "Morganite",
-    image: "/assets/morganite.webp",
-    shopImage: "/assets/morganite-shop-cal.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431956/Gemstone%20Shapes/Morganite/Peach/A/morganite-peach-natural-a-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431956/Gemstone%20Shapes/Morganite/Peach/A/morganite-peach-natural-a-round.png",
     link: "/calibrated-stones/morganite",
   },
   {
     label: "Paraiba Tourmaline",
     value: "Paraiba Tourmaline",
-    image: "/assets/paraiba-img.webp",
-    shopImage: "/assets/paraiba-shop.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431957/Gemstone%20Shapes/Paraiba%20Tourmaline/Windex_Blue/Lab_Grown/paraiba-tourmaline-windex-blue-lab-grown-lab-grown-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431957/Gemstone%20Shapes/Paraiba%20Tourmaline/Windex_Blue/Lab_Grown/paraiba-tourmaline-windex-blue-lab-grown-lab-grown-round.png",
     link: "/calibrated-stones/paraiba-tourmaline",
   },
   {
     label: "Peridot",
     value: "Peridot",
-    image: "/assets/peridot.webp",
-    shopImage: "/assets/peridot-shop-cal.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431960/Gemstone%20Shapes/Peridot/Green/A/peridot-green-natural-a-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431960/Gemstone%20Shapes/Peridot/Green/A/peridot-green-natural-a-round.png",
     link: "/calibrated-stones/peridot",
   },
   {
     label: "Ruby",
     value: "Ruby",
-    image: "/assets/ruby.webp",
-    shopImage: "/assets/ruby-shop-cali.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431967/Gemstone%20Shapes/Ruby/Red/AA/ruby-red-natural-aa-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431967/Gemstone%20Shapes/Ruby/Red/AA/ruby-red-natural-aa-round.png",
     link: "/calibrated-stones/ruby",
   },
   {
     label: "Sapphire (All Colors)",
     value: "Sapphire",
-    image: "/assets/sapphire.webp",
-    shopImage: "/assets/sapphire-shop-calibrated.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431988/Gemstone%20Shapes/Sapphire/Blue/AA/sapphire-blue-natural-aa-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431988/Gemstone%20Shapes/Sapphire/Blue/AA/sapphire-blue-natural-aa-round.png",
     link: "/calibrated-stones/sapphire",
   },
   {
     label: "Tanzanite",
     value: "Tanzanite",
-    image: "/assets/tanzanite.webp",
-    shopImage: "/assets/tanzanite-shop-cali1.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792432020/Gemstone%20Shapes/Tanzanite/Purple/AA/tanzanite-purple-natural-aa-round.png",
+    shopImage:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792432020/Gemstone%20Shapes/Tanzanite/Purple/AA/tanzanite-purple-natural-aa-round.png",
     link: "/calibrated-stones/tanzanite",
   },
 ];
@@ -955,49 +977,57 @@ export const gemstoneOptionsForCustomization = [
   {
     label: "Alexandrite",
     value: "Alexandrite",
-    image: "/assets/sapphire.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431936/Gemstone%20Shapes/Alexandrite/Green-Purple/Lab_Grown/alexandrite-green-purple-lab-grown-lab-grown-round.png",
     link: "/calibrated-stones/alexandrite",
   },
   {
     label: "Amethyst",
     value: "Amethyst",
-    image: "/assets/amethyst.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431938/Gemstone%20Shapes/Amethyst/Purple/A/amethyst-purple-natural-a-round.png",
     link: "/calibrated-stones/amethyst",
   },
   {
     label: "Aquamarine",
     value: "Aquamarine",
-    image: "/assets/aquamarine.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431944/Gemstone%20Shapes/Aquamarine/Aqua/AA/aquamarine-aqua-natural-aa-round.png",
     link: "/calibrated-stones/aquamarine",
   },
   {
     label: "Citrine",
     value: "Citrine",
-    image: "/assets/citrine.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431946/Gemstone%20Shapes/Citrine/Orange/AA/citrine-orange-natural-aa-round.png",
     link: "/calibrated-stones/citrine",
   },
   {
     label: "Emerald",
     value: "Emerald",
-    image: "/assets/emerald.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431952/Gemstone%20Shapes/Emerald/Green/AA/emerald-green-natural-aa-round.png",
     link: "/calibrated-stones/emerald",
   },
   {
     label: "Morganite",
     value: "Morganite",
-    image: "/assets/morganite.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431956/Gemstone%20Shapes/Morganite/Peach/A/morganite-peach-natural-a-round.png",
     link: "/calibrated-stones/morganite",
   },
   {
     label: "Peridot",
     value: "Peridot",
-    image: "/assets/peridot.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431960/Gemstone%20Shapes/Peridot/Green/A/peridot-green-natural-a-round.png",
     link: "/calibrated-stones/peridot",
   },
   {
     label: "Ruby",
     value: "Ruby",
-    image: "/assets/ruby.webp",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431967/Gemstone%20Shapes/Ruby/Red/AA/ruby-red-natural-aa-round.png",
     link: "/calibrated-stones/ruby",
   },
   // {
@@ -1226,69 +1256,75 @@ export const quickNavigationData = [
 export const shopByColorOptions = [
   {
     name: "Red",
-    image: "/assets/red1.webp",
-    href: "/shop-by-color/red",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431967/Gemstone%20Shapes/Ruby/Red/AA/ruby-red-natural-aa-round.png",
+    href: "/calibrated-stones?color=red",
   },
   {
     name: "Pink",
-
-    image: "/assets/pinkcolor.webp",
-    href: "/shop-by-color/pink",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431995/Gemstone%20Shapes/Sapphire/Pink/Lab_Grown/sapphire-pink-lab-grown-lab-grown-round.png",
+    href: "/calibrated-stones?color=pink",
   },
   {
     name: "Blue",
-
-    image: "/assets/blue2.webp",
-    href: "/shop-by-color/blue",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431988/Gemstone%20Shapes/Sapphire/Blue/AA/sapphire-blue-natural-aa-round.png",
+    href: "/calibrated-stones?color=blue",
   },
   {
     name: "Purple",
-
-    image: "/assets/purplecolor.webp",
-    href: "/shop-by-color/purple",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431938/Gemstone%20Shapes/Amethyst/Purple/A/amethyst-purple-natural-a-round.png",
+    href: "/calibrated-stones?color=purple",
   },
   {
     name: "Green",
-
-    image: "/assets/greencolor.webp",
-    href: "/shop-by-color/green",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431952/Gemstone%20Shapes/Emerald/Green/AA/emerald-green-natural-aa-round.png",
+    href: "/calibrated-stones?color=green",
   },
   {
     name: "Yellow",
-
-    image: "/assets/yellowcolor.webp",
-    href: "/shop-by-color/yellow",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792432015/Gemstone%20Shapes/Sapphire/Yellow/Lab_Grown/sapphire-yellow-lab-grown-lab-grown-round.png",
+    href: "/calibrated-stones?color=yellow",
   },
   {
     name: "Orange",
-
-    image: "/assets/orange2.webp",
-    href: "/shop-by-color/orange",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431946/Gemstone%20Shapes/Citrine/Orange/AA/citrine-orange-natural-aa-round.png",
+    href: "/calibrated-stones?color=orange",
   },
   {
     name: "White",
-    image: "/assets/white_sapphire.png",
-    href: "/shop-by-color/white",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792432013/Gemstone%20Shapes/Sapphire/White/AA/sapphire-white-natural-aa-round.png",
+    href: "/calibrated-stones?color=white",
   },
   {
-    name: "Brown",
-    image: "/assets/brown-saphh.png",
-    href: "/shop-by-color/brown",
+    name: "Aqua",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431944/Gemstone%20Shapes/Aquamarine/Aqua/AA/aquamarine-aqua-natural-aa-round.png",
+    href: "/calibrated-stones?color=aqua",
   },
   {
     name: "Peach",
-    image: "/assets/peach-saphh.png",
-    href: "/shop-by-color/peach",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431956/Gemstone%20Shapes/Morganite/Peach/A/morganite-peach-natural-a-round.png",
+    href: "/calibrated-stones?color=peach",
   },
   {
     name: "Black",
-    image: "/assets/black-sapp.png",
-    href: "/shop-by-color/black",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431980/Gemstone%20Shapes/Sapphire/Black/AA/sapphire-black-natural-aa-round.png",
+    href: "/calibrated-stones?color=black",
   },
   {
     name: "Teal",
-    image: "/assets/teal.png",
-    href: "/shop-by-color/teal",
+    image:
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792439039/Gemstone%20Shapes/Sapphire/Teal/sapphire-teal-round.png",
+    href: "/free-size-gemstones?color=Teal",
   },
 ];
 
@@ -1606,8 +1642,20 @@ export const SapphireLooseGemstoneColorOptions = [
   { value: "Green", color: "#22C55E", image: "/assets/greencolor.webp" },
   { value: "Orange", color: "#F97316", image: "/assets/orange2.webp" },
   { value: "Purple", color: "#800080", image: "/assets/purplecolor.webp" },
-  { value: "White", color: "#FFFFFF", image: "/assets/white_sapphire.png" },
-  { value: "Teal", color: "#008080", image: "/assets/teal.png" },
+  { value: "White", color: "#FFFFFF", image: "https://res.cloudinary.com/oko8ywzn/image/upload/v1792440572/Gemstone%20Shapes/Sapphire/Swatches/sapphire-white-swatch.png" },
+  { value: "Black", color: "#000000", image: "https://res.cloudinary.com/oko8ywzn/image/upload/v1792440573/Gemstone%20Shapes/Sapphire/Swatches/sapphire-black-swatch.png" },
+  { value: "Red", color: "#DC2626", image: "https://res.cloudinary.com/oko8ywzn/image/upload/v1792440573/Gemstone%20Shapes/Sapphire/Swatches/sapphire-red-swatch.png" },
+];
+
+export const FreeSizeSapphireColorOptions = [
+  { value: "Blue", color: "#1E40AF", image: "/assets/blue2.webp" },
+  { value: "Yellow", color: "#FACC15", image: "/assets/yellowcolor.webp" },
+  { value: "Pink", color: "#EC4899", image: "/assets/pinkcolor.webp" },
+  { value: "Green", color: "#22C55E", image: "/assets/greencolor.webp" },
+  { value: "Orange", color: "#F97316", image: "/assets/orange2.webp" },
+  { value: "Purple", color: "#800080", image: "/assets/purplecolor.webp" },
+  { value: "White", color: "#FFFFFF", image: "https://res.cloudinary.com/oko8ywzn/image/upload/v1792440572/Gemstone%20Shapes/Sapphire/Swatches/sapphire-white-swatch.png" },
+  { value: "Teal", color: "#008080", image: "https://res.cloudinary.com/oko8ywzn/image/upload/v1792439039/Gemstone%20Shapes/Sapphire/Teal/sapphire-teal-round.png" },
 ];
 
 export const FreeSizeOrigins: any = {

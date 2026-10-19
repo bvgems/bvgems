@@ -252,9 +252,21 @@ export function CategoryContent({
       hasChanges = true;
     }
 
-    setOrDelete("color", selectedSapphireColor, SapphireLooseGemstoneColorOptions[0]?.value);
+    if (isSapphire) {
+      setOrDelete("color", selectedSapphireColor, SapphireLooseGemstoneColorOptions[0]?.value);
+    } else if (params.has("color")) {
+      params.delete("color");
+      hasChanges = true;
+    }
+
     setOrDelete("type", typeFilter, null);
-    setOrDelete("shade", emeraldShade, "Colombian");
+
+    if (isEmerald) {
+      setOrDelete("shade", emeraldShade, "Colombian");
+    } else if (params.has("shade")) {
+      params.delete("shade");
+      hasChanges = true;
+    }
 
     // Size is managed via path segments, so ensure it is not in query params
     if (params.has("size")) {
@@ -263,19 +275,17 @@ export function CategoryContent({
     }
 
     if (hasChanges) {
-      const queryString = params.toString();
-      const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+      params.sort();
+      const currentParams = new URLSearchParams(searchParams.toString());
+      currentParams.sort();
       
-      // Prevent infinite loops or unnecessary replaces if the URL hasn't actually changed
-      const currentQuery = searchParams.toString();
-      const currentFullUrl = currentQuery ? `${pathname}?${currentQuery}` : pathname;
-      
-      if (newUrl !== currentFullUrl) {
-        console.log("Replacing URL from", currentFullUrl, "to", newUrl);
+      if (params.toString() !== currentParams.toString()) {
+        const queryString = params.toString();
+        const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
         router.replace(newUrl, { scroll: false });
       }
     }
-  }, [selectedSapphireColor, typeFilter, emeraldShade, pathname, router, searchParams]);
+  }, [selectedSapphireColor, typeFilter, emeraldShade, pathname, router, searchParams, isSapphire, isEmerald]);
 
   const handleShareVideo = async (e: React.MouseEvent, url: string) => {
     e.preventDefault();
@@ -400,8 +410,8 @@ export function CategoryContent({
     const prevQuality = prevAvailable[activeSlide]?.quality || "";
     const newAvailable = reps.filter((item: any) => item?.is_available);
     
-    let targetType = typeFilter;
-    if (typeof window !== 'undefined') {
+    let targetType = searchParams.get("type") || typeFilter;
+    if (!targetType && typeof window !== 'undefined') {
        targetType = sessionStorage.getItem('preferredBvgemsType') || typeFilter;
     }
 
@@ -428,10 +438,9 @@ export function CategoryContent({
     setActiveSlide(finalIndex);
     setActiveVideoIndex(0);
 
-    // Auto-sync the type filter with whatever image we landed on, 
-    // so the table shows the correct data (even if it's a forced fallback)
+    // Auto-sync the type filter only if user has not explicitly requested a type in the URL
     const landedQuality = newAvailable[finalIndex]?.quality || "";
-    if (landedQuality) {
+    if (landedQuality && !searchParams.get("type")) {
        setTypeFilter(landedQuality.toLowerCase().includes("lab") ? "Lab Grown" : "Natural");
     }
   };
@@ -594,7 +603,11 @@ export function CategoryContent({
     }
 
     // Size has no results for the current type -> drop it from the selection/URL.
-    router.replace(generateSeoUrl(null, null, null), { scroll: false });
+    setSelectedSizes([]);
+    const targetUrl = generateSeoUrl(null, null, null);
+    if (typeof window !== "undefined" && window.location.pathname + window.location.search !== targetUrl) {
+      router.replace(targetUrl, { scroll: false });
+    }
   }, [dataIsCurrent, availableRows, availableTypes, typeFilter, selectedSizes, currentKey]);
 
   const selectedThumbnail = availableQualityImages[activeSlide]?.quality || "";
@@ -902,7 +915,7 @@ export function CategoryContent({
                                 href={generateSeoUrl(null, item?.value)}
                                 scroll={false}
                                 onClick={() => setSelectedSapphireColor(item?.value)}
-                                className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all cursor-pointer overflow-hidden ${isSelected ? 'border-black ring-1 ring-black shadow-sm scale-[1.02]' : 'border-gray-200 hover:border-gray-300 hover:scale-[1.02]'}`}
+                                className={`w-12 h-12 rounded-full border bg-white flex items-center justify-center transition-all cursor-pointer overflow-hidden ${isSelected ? 'border-black ring-1 ring-black shadow-sm scale-[1.04]' : 'border-gray-200 hover:border-gray-300 hover:scale-[1.02]'}`}
                               >
                                 <img loading="lazy" src={item?.image} alt={item?.value} className="w-full h-full object-cover" />
                               </Link>

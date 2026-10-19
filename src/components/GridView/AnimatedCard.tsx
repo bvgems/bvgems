@@ -48,7 +48,15 @@ export const AnimatedCard = ({
   }, [controls, inView]);
 
   const redirectToStonePage = () => {
-    const stoneHandle = item?.collection_slug?.toLowerCase() || "unknown";
+    const stoneHandle = (
+      (isFreeSize ? item?.gemstone_type : item?.collection_slug) ||
+      item?.collection_slug ||
+      item?.gemstone_type ||
+      "gemstone"
+    )
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+
     if (!isFreeSize) {
       router.push(generateCalibratedStoneUrl(item, stoneHandle));
     } else {

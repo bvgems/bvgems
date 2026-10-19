@@ -26,6 +26,8 @@ import {
 
 import { getCartStore } from "@/store/useCartStore";
 import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
+import { RecentlyViewedSection } from "../CommonComponents/RecentlyViewedSection";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { useJewelryFunctions } from "@/hooks/useJewlryFunctions";
 import { notifications } from "@mantine/notifications";
 import { GoldColorInput } from "../CommonComponents/GoldColorInput";
@@ -87,6 +89,14 @@ export const JewelryProductDetails = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentVariantSlug = pathname?.split("/").filter(Boolean).pop();
+
+  const { trackProduct } = useRecentlyViewed();
+
+  useEffect(() => {
+    if (productData) {
+      trackProduct(productData, "jewelry");
+    }
+  }, [productData, trackProduct]);
   useEffect(() => {
     switch (category) {
       case "necklaces":
@@ -651,6 +661,8 @@ export const JewelryProductDetails = ({
       <div className="mt-4">
         <QuestionAndDeliveryAccordian description={productData?.description} />
       </div>
+
+      <RecentlyViewedSection currentItemId={productData?.id ? `jewelry_${productData.id}` : undefined} />
     </>
   );
 };

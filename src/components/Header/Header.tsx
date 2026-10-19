@@ -158,10 +158,10 @@ export function Header() {
     setSearchQuery("");
 
     if (option?.gemstone_type) {
-      const stoneHandle = option?.gemstone_type?.toLowerCase() || "unknown-stone";
+      const stoneHandle = (option?.gemstone_type || "gemstone").toLowerCase();
       router?.push(generateFreeSizeStoneUrl(option, stoneHandle));
     } else if (option?.collection_slug) {
-      const stoneHandle = option?.collection_slug?.toLowerCase() || "unknown-stone";
+      const stoneHandle = (option?.collection_slug || "gemstone").toLowerCase();
       router.push(generateCalibratedStoneUrl(option, stoneHandle));
     } else {
       router.push(
@@ -514,7 +514,7 @@ export function Header() {
           ) : (
             <Grid className="h-full items-center w-full px-6 mt-5">
               <GridCol
-                span={{ base: 12, md: 2 }}
+                span={{ base: 12, md: 2, xl: 2 }}
                 className="flex justify-start"
               >
                 <div className="relative w-[140px] h-[70px] cursor-pointer" onClick={() => router.push("/")}>
@@ -528,7 +528,7 @@ export function Header() {
               </GridCol>
 
               <GridCol
-                span={{ base: 12, md: 8 }}
+                span={{ base: 12, md: 7.5, xl: 8 }}
                 className="flex justify-center"
               >
                 <div
@@ -540,36 +540,51 @@ export function Header() {
               </GridCol>
 
               <GridCol
-                span={{ base: 12, md: 2 }}
-                className="flex items-center justify-end gap-4"
+                span={{ base: 12, md: 2.5, xl: 2 }}
+                className="flex items-center justify-end gap-3.5 whitespace-nowrap flex-shrink-0"
               >
                 {user ? (
                   <UserProfile isSmaller={isSmaller} user={user} />
                 ) : (
-                  <IconUser
-                    className="cursor-pointer text-gray-700 hover:text-gray-900"
+                  <button
+                    type="button"
                     onClick={open}
-                    size="20"
-                  />
+                    aria-label="Log In"
+                    title="Log in to access wholesale pricing and account features"
+                    className="group relative inline-flex items-center gap-2 pl-2 pr-3.5 py-1.5 rounded-full bg-[#0b182d] text-white hover:bg-[#162744] active:scale-[0.96] transition-all duration-200 ease-out shadow-xs hover:shadow-md cursor-pointer select-none"
+                  >
+                    <span className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 group-hover:bg-white/25">
+                      <IconUser size={13} stroke={2.2} className="text-white" />
+                    </span>
+                    <span className="text-[12px] font-semibold tracking-wider uppercase text-white">
+                      Log In
+                    </span>
+                  </button>
                 )}
 
-                <div className="w-px h-6 bg-gray-300" />
+                <div className="w-px h-5 bg-gray-200" />
 
-                <IconSearch
-                  className="hover:cursor-pointer text-gray-700 hover:text-gray-900"
-                  size="20"
+                <button
+                  type="button"
                   onClick={() => setSearchOpen(true)}
-                />
+                  aria-label="Search"
+                  className="p-1.5 rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 active:scale-90 transition-all duration-150 cursor-pointer flex items-center justify-center"
+                >
+                  <IconSearch size={20} stroke={1.8} />
+                </button>
 
                 <div className="relative">
-                  <IconShoppingBag
+                  <button
+                    type="button"
                     onClick={() => router.push("/cart")}
-                    className="hover:cursor-pointer text-gray-700 hover:text-gray-900"
-                    size="20"
-                  />
+                    aria-label="Shopping Cart"
+                    className="p-1.5 rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 active:scale-90 transition-all duration-150 cursor-pointer flex items-center justify-center"
+                  >
+                    <IconShoppingBag size={20} stroke={1.8} />
+                  </button>
                   {cartCount > 0 && (
-                    <div className="absolute -top-2 -right-2">
-                      <span className="bg-[#0b182d] text-white rounded-full text-xs px-2 py-0.5 min-w-[20px] h-5 flex items-center justify-center">
+                    <div className="absolute -top-1 -right-1 pointer-events-none">
+                      <span className="bg-[#0b182d] text-white rounded-full text-[11px] font-semibold px-1.5 min-w-[18px] h-[18px] flex items-center justify-center shadow-xs">
                         {cartCount}
                       </span>
                     </div>

@@ -38,6 +38,8 @@ import Script from "next/script";
 import jsPDF from "jspdf";
 import { BlueSapphireShade } from "../CommonComponents/BlueSapphireShade";
 import { QuoteRequestModal } from "@/components/CommonComponents/QuoteRequestModal";
+import { RecentlyViewedSection } from "@/components/CommonComponents/RecentlyViewedSection";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
 /** ---------- Helpers ---------- */
 const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
@@ -139,6 +141,14 @@ export default function ProductDetailsPage() {
 
   const [tableOpened, { open: openTable, close: closeTable }] =
     useDisclosure(false);
+
+  const { trackProduct } = useRecentlyViewed();
+
+  useEffect(() => {
+    if (product) {
+      trackProduct(product, "calibrated");
+    }
+  }, [product, trackProduct]);
 
   // 📌 Ref to capture page content for PDF
   const pageRef = useRef<HTMLDivElement>(null);
@@ -469,7 +479,7 @@ export default function ProductDetailsPage() {
   );
 
   return (
-    <div ref={pageRef} className="flex flex-col md:flex-row gap-6 px-5 mt-6">
+    <div ref={pageRef} className="w-full">
       <Modal
         opened={modalOpened}
         onClose={close}
@@ -486,8 +496,10 @@ export default function ProductDetailsPage() {
         product={product}
       />
 
-      {/* Left: Image and specs */}
-      <div className="w-full md:w-2/3 pr-2">
+      {/* Main Product Details: Left (image/specs) + Right (pricing/actions) */}
+      <div className="flex flex-col md:flex-row gap-6 px-5 mt-6">
+        {/* Left: Image and specs */}
+        <div className="w-full md:w-2/3 pr-2">
         <Breadcrumbs separator="›" className="mb-4">
           {breadcrumbItems}
         </Breadcrumbs>
@@ -745,7 +757,14 @@ export default function ProductDetailsPage() {
           </div>
         </div>
       </div>
+      {/* End flex-row */}
+      </div>
+
       <SizeToleranceGuide opened={tableOpened} close={closeTable} />
+
+      {/* Bottom Section: Recently Viewed (full width, just above footer) */}
+      <RecentlyViewedSection currentItemId={product?.id ? `calibrated_${product.id}` : undefined} />
+
       {product && (
         <Script
           id="product-schema"

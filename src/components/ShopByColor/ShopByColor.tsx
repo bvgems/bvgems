@@ -1,71 +1,49 @@
 "use client";
 
-import { Container, Grid, Card } from "@mantine/core";
-import Image from "next/image";
-import { motion } from "framer-motion";
+import { Container } from "@mantine/core";
 import { AnimatedText } from "../CommonComponents/AnimatedText";
 import { shopByColorOptions } from "@/utils/constants";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const itemVariants = {
-  hidden: { opacity: 0, x: 100 },
-  visible: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: {
-      delay: i * 0.1,
-      duration: 0.6,
-      type: "spring",
-    },
-  }),
-};
-
 export default function ShopByColor() {
-  const router = useRouter();
-
-  const handleShopByColor = (item: any) => {
-    router?.push(`/calibrated-stones?color=${item?.name?.toLowerCase()}`);
-  };
 
   return (
     <Container size={1350} className="mt-20">
-      <AnimatedText
-        text="Shop Gemstone By Color"
-        className="text-center text-4xl text-[#0b182d] mb-8"
-      />
+      <div className="text-center mb-10">
+        <AnimatedText
+          text="Shop Gemstone By Color"
+          className="text-center text-3xl sm:text-4xl font-serif text-[#0b182d] tracking-tight"
+        />
+        <p className="text-xs sm:text-sm text-slate-500 uppercase tracking-widest mt-2">
+          Curated natural and lab-grown stones across the spectrum
+        </p>
+      </div>
 
-      {/* FLEX WRAPPER to avoid wrapping issue */}
-      <div className="flex flex-wrap justify-center gap-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 max-w-6xl mx-auto">
         {shopByColorOptions?.map((item: any, index: number) => (
-          <motion.div
+          <Link
             key={index}
-            custom={index}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          // variants={itemVariants}
+            href={item?.href || `/calibrated-stones?color=${item?.name?.toLowerCase()}`}
+            rel="nofollow"
+            className="group relative flex flex-col items-center justify-between p-4 sm:p-5 rounded-2xl bg-white border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-[0_14px_30px_rgba(11,24,45,0.08)] hover:border-slate-300 transition-all duration-300 ease-out cursor-pointer no-underline active:scale-[0.97]"
           >
-            <Card
-              component={Link}
-              href={`/calibrated-stones?color=${item?.name?.toLowerCase()}`}
-              rel="nofollow"
-              shadow="sm"
-              radius="lg"
-              withBorder
-              className="w-[150px] flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 hover:shadow-lg block no-underline"
-            >
-              <div className="relative w-[130px] h-[130px] flex items-center justify-center">
-                  <Image loading="lazy"
-                  fill
-                  src={item?.image}
-                  alt={`${item?.name} colored gemstones collection`}
-                  className={`object-contain ${item?.name?.toLowerCase() === 'white' ? 'scale-[0.7]' : item?.name?.toLowerCase() === 'peach' ? 'scale-[0.75]' : item?.name?.toLowerCase() === 'brown' ? 'scale-[0.8]' : item?.name?.toLowerCase() === 'black' ? 'scale-[0.75]' : 'scale-100'}`}
-                />
-              </div>
-              <span className=" text-[#0b182d] mt-3">{item?.name}</span>
-            </Card>
-          </motion.div>
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-b from-slate-50 to-slate-100/50 flex items-center justify-center overflow-visible">
+              <img
+                src={item?.image}
+                alt={`${item?.name} colored gemstones collection`}
+                className="w-full h-full object-contain scale-[1.65] group-hover:scale-[1.82] transition-transform duration-300 ease-out drop-shadow-[0_6px_12px_rgba(0,0,0,0.12)]"
+                loading="lazy"
+              />
+            </div>
+            <div className="text-center mt-3">
+              <p className="text-xs sm:text-sm font-semibold text-[#0b182d] group-hover:text-blue-900 tracking-wide transition-colors m-0">
+                {item?.name}
+              </p>
+              <span className="text-[10px] text-slate-400 uppercase tracking-widest font-medium mt-1 inline-block group-hover:text-blue-600 transition-colors">
+                Shop Color &rarr;
+              </span>
+            </div>
+          </Link>
         ))}
       </div>
     </Container>

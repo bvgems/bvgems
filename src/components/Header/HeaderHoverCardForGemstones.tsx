@@ -1,9 +1,8 @@
 import {
-  FreeSizeGemstonesList,
   ShapeFilterList,
   shopByColorOptions,
 } from "@/utils/constants";
-import { Button, Center, Grid, GridCol, HoverCard, Image } from "@mantine/core";
+import { Center, Grid, GridCol, HoverCard } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -50,102 +49,146 @@ export const HeaderHoverCardForGemstones = ({
       </HoverCard.Target>
 
       <HoverCard.Dropdown
-        className="relative px-10 py-10 bg-white rounded-lg shadow-lg border border-gray-200"
-        style={{ minHeight: "450px" }}
+        className="relative px-8 py-8 bg-white rounded-xl shadow-2xl border border-slate-100"
+        style={{ minHeight: "440px" }}
       >
-        <Grid className="w-full pl-8">
-          <GridCol span={4}>
-            <div className="mt-4">
-              <p className="font-semibold mb-5 text-sm uppercase text-black">
-                SHOP BY GEMSTONES
-              </p>
-              <div className="flex flex-col gap-2 text-black">
+        <Grid className="w-full">
+          {/* Column 1: Shop By Gemstones */}
+          <GridCol span={4} className="border-r border-slate-100/80 pr-6">
+            <div>
+              <div className="pb-2 mb-3 border-b border-slate-100">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  SHOP BY GEMSTONES
+                </p>
+              </div>
+              <div className="flex flex-col gap-0.5">
                 {link.links?.map((item: any) => (
                   <div
                     key={item.link}
-                    className="w-full px-4 py-2 rounded-md hover:bg-gray-100 cursor-pointer"
+                    className="group flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors duration-150"
                     onClick={() => {
-                        setOpened(false);
-                        router.push(item.link);
+                      setOpened(false);
+                      router.push(item.link);
                     }}
                   >
-                    <div className="flex items-center gap-2">
-                      {item.image && (
-                        <div className="relative w-[28px] h-[28px] shrink-0">
-                          <Image loading="lazy" src={item.image} fit="contain" h={28} w={28} />
-                        </div>
-                      )}
-                      <span className={`text-[17px] hover:text-gray-500 ${pathname === item.link ? "text-gray-400" : "text-black"}`}>
-                        {item.label}
-                      </span>
-                    </div>
+                    {item.image && (
+                      <div className="w-7 h-7 shrink-0 flex items-center justify-center overflow-visible">
+                        <img
+                          src={item.image}
+                          alt={item.label}
+                          className="w-full h-full object-contain scale-[1.8] group-hover:scale-[2.05] transition-transform duration-200 ease-out"
+                        />
+                      </div>
+                    )}
+                    <span
+                      className={`text-[13.5px] font-medium transition-colors ${
+                        pathname === item.link
+                          ? "text-slate-400 font-semibold"
+                          : "text-slate-700 group-hover:text-slate-950"
+                      }`}
+                    >
+                      {item.label}
+                    </span>
                   </div>
                 ))}
               </div>
-              <div className="flex justify-end pr-4">
-                <Button
-                  variant="transparent"
-                  color="#0b182d"
+              <div className="flex justify-end pr-3 mt-3 pt-2 border-t border-slate-100">
+                <button
                   onClick={() => handleNav("")}
-                  className="text-blue-600 underline flex items-center gap-1 hover:text-blue-800"
+                  className="text-xs font-semibold text-[#0b182d] hover:text-blue-700 flex items-center gap-1 transition-colors cursor-pointer"
                 >
-                  <span className="underline">View All</span>
+                  <span>View All Gemstones</span>
                   <IconChevronDown
                     style={{ transform: "rotate(-90deg)" }}
-                    size={16}
-                    stroke={2}
+                    size={14}
+                    stroke={2.5}
                   />
-                </Button>
+                </button>
               </div>
             </div>
           </GridCol>
 
-          <GridCol span={4}>
-            <div className="mt-4">
-              <p className="font-semibold mb-5 text-sm uppercase text-black">SHOP BY SHAPE</p>
-              <div className="flex flex-col gap-2 text-black">
+          {/* Column 2: Shop By Shape */}
+          <GridCol span={4} className="border-r border-slate-100/80 px-6">
+            <div>
+              <div className="pb-2 mb-3 border-b border-slate-100">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  SHOP BY SHAPE
+                </p>
+              </div>
+              <div className="flex flex-col gap-0.5">
                 {ShapeFilterList?.map((item, index) => (
                   <div
                     key={index}
                     onClick={() =>
                       handleNav(`shape=${item.label.toLowerCase()}`)
                     }
-                    className="flex items-center gap-2 cursor-pointer hover:text-gray-500"
+                    className="group flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors duration-150"
                   >
-                    <Image loading="lazy" src={item.image} h={35} w={35} fit="contain" />
-                    <span className="text-md mb-2">{item.label}</span>
+                    <div className="w-7 h-7 shrink-0 flex items-center justify-center">
+                      <img
+                        src={item.image}
+                        alt={item.label}
+                        className="w-5 h-5 object-contain opacity-75 group-hover:opacity-100 group-hover:scale-110 transition-all duration-200 ease-out"
+                      />
+                    </div>
+                    <span className="text-[13.5px] font-medium text-slate-700 group-hover:text-slate-950 transition-colors">
+                      {item.label}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           </GridCol>
 
-          <GridCol span={4}>
-            <div className="mt-4">
-              <p className="font-semibold mb-5 text-sm uppercase text-black">SHOP BY COLOR</p>
-              <div className="flex flex-col gap-2 text-black">
+          {/* Column 3: Shop By Color & Origin */}
+          <GridCol span={4} className="pl-6">
+            <div>
+              <div className="pb-2 mb-3 border-b border-slate-100">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  SHOP BY COLOR
+                </p>
+              </div>
+              <div className="flex flex-col gap-0.5">
                 {shopByColorOptions?.map((item, index) => (
                   <div
-                    onClick={() =>
-                      handleNav(`color=${item.name.toLowerCase()}`)
-                    }
+                    onClick={() => {
+                      setOpened(false);
+                      router.push(item.href || `/calibrated-stones?color=${item.name.toLowerCase()}`);
+                    }}
                     key={index}
-                    className="flex items-center gap-2 hover:text-gray-500 cursor-pointer"
+                    className="group flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors duration-150"
                   >
-                    <Image loading="lazy" src={item?.image} h={35} w={35} fit="contain" />
-                    <span className="text-md mb-2">{item.name}</span>
+                    <div className="w-7 h-7 shrink-0 flex items-center justify-center overflow-visible">
+                      <img
+                        src={item?.image}
+                        alt={item.name}
+                        className="w-full h-full object-contain scale-[1.8] group-hover:scale-[2.05] transition-transform duration-200 ease-out"
+                      />
+                    </div>
+                    <span className="text-[13.5px] font-medium text-slate-700 group-hover:text-slate-950 transition-colors">
+                      {item.name}
+                    </span>
                   </div>
                 ))}
               </div>
-              <div>
-                <p className="font-semibold mt-10 text-sm uppercase">SHOP BY TYPE</p>
-                <div className="flex flex-col gap-2 mt-4 text-blue-800 cursor-pointer">
-                  <span onClick={() => handleNav(`type=Natural`)}>
+              <div className="mt-4 pt-3 border-t border-slate-100 px-1">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                  SHOP BY TYPE
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleNav("type=Natural")}
+                    className="flex-1 py-1.5 px-3 text-xs font-semibold rounded-md border border-slate-200 bg-white hover:border-[#0b182d] hover:bg-slate-50 text-slate-700 hover:text-slate-950 transition-all duration-150 cursor-pointer"
+                  >
                     Natural
-                  </span>
-                  <span onClick={() => handleNav(`type=Lab Grown`)}>
+                  </button>
+                  <button
+                    onClick={() => handleNav("type=Lab Grown")}
+                    className="flex-1 py-1.5 px-3 text-xs font-semibold rounded-md border border-slate-200 bg-white hover:border-[#0b182d] hover:bg-slate-50 text-slate-700 hover:text-slate-950 transition-all duration-150 cursor-pointer"
+                  >
                     Lab Grown
-                  </span>
+                  </button>
                 </div>
               </div>
             </div>

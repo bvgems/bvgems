@@ -520,7 +520,7 @@ export const GridViewTopFilters = ({
                     const gemOption = gemstoneOptions.find(g => g.value === option.value);
                     return (
                       <div className="flex items-center gap-3">
-                        {gemOption && <img src={gemOption.image} alt={option.label} className="w-6 h-6 object-cover rounded-full" />}
+                        {gemOption && <img src={gemOption.image} alt={option.label} className="w-6 h-6 object-contain" />}
                         <span>{option.label}</span>
                       </div>
                     );
@@ -556,7 +556,7 @@ export const GridViewTopFilters = ({
                       return (
                         <div className="flex items-center gap-3">
                           {colorOption?.image ? (
-                            <img src={colorOption.image} alt={option.label} className="w-6 h-6 object-contain mix-blend-multiply" />
+                            <img src={colorOption.image} alt={option.label} className="w-6 h-6 object-contain" />
                           ) : (
                             <div className="w-5 h-5 rounded-full border border-gray-200" style={{ backgroundColor: (colorOption as any)?.color || '#ccc' }} />
                           )}
@@ -731,8 +731,8 @@ export const GridViewTopFilters = ({
                             onClick={() => toggleGem(gem.value)}
                             className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                           >
-                            <div className={`w-14 h-14 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
-                              <img src={gem.image} alt={gem.label} className="w-full h-full object-cover object-top scale-[1.5]" />
+                            <div className="w-14 h-14 shrink-0 flex items-center justify-center">
+                              <img src={gem.image} alt={gem.label} className="w-full h-full object-contain" />
                             </div>
                             <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{gem.label}</span>
                           </div>
@@ -757,8 +757,8 @@ export const GridViewTopFilters = ({
                                 className={`w-14 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                               >
                                 {imgUrl ? (
-                                  <div className={`w-12 h-12 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
-                                    <img src={imgUrl} alt={color} className={`w-full h-full object-cover object-center ${color.toLowerCase() === 'white' ? 'scale-[0.95]' : color.toLowerCase() === 'peach' ? 'scale-[1.15]' : color.toLowerCase() === 'brown' ? 'scale-[1.2]' : color.toLowerCase() === 'black' ? 'scale-[1.05]' : 'scale-[1.5]'}`} />
+                                  <div className="w-12 h-12 shrink-0 flex items-center justify-center">
+                                    <img src={imgUrl} alt={color} className={`w-full h-full object-contain ${color.toLowerCase() === 'brown' ? 'scale-[0.85]' : ''}`} />
                                   </div>
                                 ) : (
                                   <div className={`w-12 h-12 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
