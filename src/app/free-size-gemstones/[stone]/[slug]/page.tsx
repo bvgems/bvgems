@@ -29,21 +29,17 @@ export async function generateMetadata({
 
   return {
     title: `${product.gemstone_type} ${product.shape} ${product.ct_weight}cts. | B.V. Gems`,
-    description: `Buy ${
-      product.ct_weight
-    } carat ${product.color.toLowerCase()} ${product.gemstone_type.toLowerCase()} (${
-      product.shape
-    }) at B.V. Gems. Perfect for rings, necklaces & custom jewelry.`,
+    description: `Buy ${product.ct_weight
+      } carat ${product.color.toLowerCase()} ${product.gemstone_type.toLowerCase()} (${product.shape
+      }) at B.V. Gems. Perfect for rings, necklaces & custom jewelry.`,
     alternates: {
       canonical: `https://www.bvgems.com/free-size-gemstones/${stone}/${slug}`,
     },
     openGraph: {
       title: `${product.gemstone_type} ${product.shape} ${product.ct_weight}cts. | B.V. Gems`,
-      description: `Ethically sourced ${product.gemstone_type.toLowerCase()} gemstones. Lot #${
-        product.lot_number
-      }, size ${product.dimension}, color ${
-        product.color
-      }. Shop now at B.V. Gems.`,
+      description: `Ethically sourced ${product.gemstone_type.toLowerCase()} gemstones. Lot #${product.lot_number
+        }, size ${product.dimension}, color ${product.color
+        }. Shop now at B.V. Gems.`,
       url: `https://www.bvgems.com/free-size-gemstones/${stone}/${slug}`,
       siteName: "B.V. Gems",
       type: "website",
@@ -69,9 +65,9 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <div className="w-full">
-      <PageHeader 
-        title={`${formattedStone} Details`} 
-        subtitle="Review the specifications and high-resolution media for this unique gemstone." 
+      <PageHeader
+        title={`${formattedStone}`}
+        subtitle="Review the specifications and high-resolution media for this unique gemstone."
       />
       <FreeSizeGemstoneDetails id={id} />
     </div>

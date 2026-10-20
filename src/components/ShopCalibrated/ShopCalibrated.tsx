@@ -9,7 +9,8 @@ export const ShopCalibrated = () => {
 
   return (
     <Container size={1350} className="mt-1">
-      <div className="text-center mb-10">
+      <div className="text-center mt-10 mb-10">
+
         <AnimatedText
           text="Shop Calibrated Gemstones"
           className="text-center text-3xl sm:text-4xl font-serif text-[#0b182d] tracking-tight"

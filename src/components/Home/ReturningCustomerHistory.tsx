@@ -124,7 +124,8 @@ export const ReturningCustomerHistory: React.FC = () => {
   }
 
   return (
-    <section className="w-full mt-14 mb-12 select-none">
+    <section className="w-full mt-14 select-none">
+
       <Container size={1350}>
         {/* Centered Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10 px-4">
