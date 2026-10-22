@@ -218,14 +218,14 @@ export async function GET(req: NextRequest) {
         ]);
 
         const jewelryEdges = [
-          ...(allRings?.edges || []),
-          ...(allNecklaces?.edges || []),
-          ...(allBracelets?.edges || []),
-          ...(allEarrings?.edges || []),
-          ...(allBeads || []),
+          ...(allRings?.edges || []).map((e: any) => ({ ...(e.node || e), jewelryCategory: "rings" })),
+          ...(allNecklaces?.edges || []).map((e: any) => ({ ...(e.node || e), jewelryCategory: "necklaces" })),
+          ...(allBracelets?.edges || []).map((e: any) => ({ ...(e.node || e), jewelryCategory: "bracelets" })),
+          ...(allEarrings?.edges || []).map((e: any) => ({ ...(e.node || e), jewelryCategory: "earrings" })),
+          ...(allBeads || []).map((e: any) => ({ ...(e.node || e), jewelryCategory: "beads" })),
         ];
 
-        cachedJewelry = jewelryEdges.map((item: any) => item.node || item);
+        cachedJewelry = jewelryEdges;
         jewelryCacheTime = Date.now();
       }
 

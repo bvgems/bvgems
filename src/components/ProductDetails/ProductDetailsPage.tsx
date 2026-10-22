@@ -84,7 +84,7 @@ export default function ProductDetailsPage() {
     { title: "Calibrated Faceted Gemstones", href: "/calibrated-stones" },
     {
       title: product?.collection_slug,
-      href: `/calibrated-faceted-gemstones/${name}`,
+      href: `/calibrated-stones/${name}`,
     },
   ].map((item, index) => (
     <Anchor

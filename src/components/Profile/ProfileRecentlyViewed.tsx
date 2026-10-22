@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
+import { unwrapString } from "@/store/useRecentlyViewedStore";
 import { useAuth } from "@/hooks/useAuth";
 import {
   IconSearch,
@@ -31,12 +32,12 @@ export const ProfileRecentlyViewed: React.FC = () => {
       // Search term filter
       if (searchTerm.trim()) {
         const query = searchTerm.toLowerCase();
-        const matchTitle = item.title?.toLowerCase().includes(query);
-        const matchGemstone = item.gemstone?.toLowerCase().includes(query);
-        const matchShape = item.shape?.toLowerCase().includes(query);
-        const matchSize = (item.size || item.dimension)?.toLowerCase().includes(query);
-        const matchColor = item.color?.toLowerCase().includes(query);
-        const matchLot = item.lot_number?.toLowerCase().includes(query);
+        const matchTitle = unwrapString(item.title).toLowerCase().includes(query);
+        const matchGemstone = unwrapString(item.gemstone).toLowerCase().includes(query);
+        const matchShape = unwrapString(item.shape).toLowerCase().includes(query);
+        const matchSize = (unwrapString(item.size) || unwrapString(item.dimension)).toLowerCase().includes(query);
+        const matchColor = unwrapString(item.color).toLowerCase().includes(query);
+        const matchLot = unwrapString(item.lot_number).toLowerCase().includes(query);
         return matchTitle || matchGemstone || matchShape || matchSize || matchColor || matchLot;
       }
       return true;
@@ -144,6 +145,12 @@ export const ProfileRecentlyViewed: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredItems.map((item) => {
+            const titleText = unwrapString(item.title) || "Gemstone";
+            const qualityText = unwrapString(item.quality);
+            const shapeText = unwrapString(item.shape);
+            const sizeText = unwrapString(item.size) || unwrapString(item.dimension);
+            const caratText = unwrapString(item.carat_weight);
+            const itemUrl = unwrapString(item.url) || "/";
             const hasPrice = item.price && Number(item.price) > 0;
             const priceDisplay = hasPrice
               ? `$${Number(item.price).toLocaleString("en-US", {
@@ -159,10 +166,10 @@ export const ProfileRecentlyViewed: React.FC = () => {
               >
                 {/* Image Section */}
                 <div className="relative h-44 bg-gray-50 flex items-center justify-center p-3 overflow-hidden border-b border-gray-100">
-                  <Link href={item.url} className="w-full h-full relative block">
+                  <Link href={itemUrl} className="w-full h-full relative block">
                     <Image
-                      src={item.image_url || "/assets/logo2.webp"}
-                      alt={item.title}
+                      src={unwrapString(item.image_url) || "/assets/logo2.webp"}
+                      alt={titleText}
                       fill
                       sizes="250px"
                       className="object-contain p-2 group-hover:scale-108 transition-transform duration-300 ease-out"
@@ -170,10 +177,10 @@ export const ProfileRecentlyViewed: React.FC = () => {
                   </Link>
 
                   {/* Quality Badge */}
-                  {item.quality && (
+                  {qualityText && (
                     <div className="absolute top-2.5 left-2.5 pointer-events-none">
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-white/90 text-gray-800 shadow-2xs backdrop-blur-xs border border-gray-200/60">
-                        {item.quality}
+                        {qualityText}
                       </span>
                     </div>
                   )}
@@ -198,27 +205,27 @@ export const ProfileRecentlyViewed: React.FC = () => {
                 <div className="p-3.5 flex flex-col flex-1 justify-between gap-3">
                   <div>
                     <Link
-                      href={item.url}
+                      href={itemUrl}
                       className="text-xs font-semibold text-[#0b182d] hover:text-blue-700 transition-colors line-clamp-1 block mb-2"
-                      title={item.title}
+                      title={titleText}
                     >
-                      {item.title}
+                      {titleText}
                     </Link>
 
                     <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-gray-600">
-                      {item.shape && (
+                      {shapeText && (
                         <span className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700 font-medium">
-                          {item.shape}
+                          {shapeText}
                         </span>
                       )}
-                      {(item.size || item.dimension) && (
+                      {sizeText && (
                         <span className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700">
-                          {item.size || item.dimension}
+                          {sizeText}
                         </span>
                       )}
-                      {item.carat_weight && (
+                      {caratText && (
                         <span className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700">
-                          {item.carat_weight} ct
+                          {caratText} ct
                         </span>
                       )}
                     </div>
@@ -246,7 +253,7 @@ export const ProfileRecentlyViewed: React.FC = () => {
                     </div>
 
                     <Link
-                      href={item.url}
+                      href={itemUrl}
                       className="px-3 py-1 rounded-full text-[11px] font-semibold text-[#0b182d] bg-gray-100 hover:bg-[#0b182d] hover:text-white transition-all duration-150 active:scale-95 flex items-center gap-1 shrink-0"
                     >
                       <span>View</span>

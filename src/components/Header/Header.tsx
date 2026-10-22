@@ -163,10 +163,9 @@ export function Header() {
     } else if (option?.collection_slug) {
       const stoneHandle = (option?.collection_slug || "gemstone").toLowerCase();
       router.push(generateCalibratedStoneUrl(option, stoneHandle));
-    } else {
-      router.push(
-        `/jewelry/${option?.productType?.toLowerCase()}/${option?.handle}`
-      );
+    } else if (option?.handle) {
+      const cat = (option?.jewelryCategory || option?.productType || "rings").toLowerCase();
+      router.push(`/jewelry/${cat}/${option.handle}`);
     }
   };
 

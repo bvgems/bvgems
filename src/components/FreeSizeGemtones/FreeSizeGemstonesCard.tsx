@@ -11,7 +11,10 @@ export const FreeSizeGemstonesCard = () => {
   const router = useRouter();
 
   const redirectToProduct = (product: any) => {
-    router?.push(`/free-size-gemstones/${product?.label?.toLowerCase()}`);
+    router?.push(
+      product?.link ||
+        `/free-size-gemstones/${product?.label?.toLowerCase().replace(/\s+/g, "-")}`,
+    );
   };
 
   return (

@@ -27,7 +27,7 @@ import {
   IconShoppingCart,
   IconInfoCircle
 } from "@tabler/icons-react";
-import { generateCalibratedStoneUrl } from "@/utils/seoUrlHelpers";
+import { generateCalibratedStoneUrl, generateFreeSizeStoneUrl } from "@/utils/seoUrlHelpers";
 import React, { useEffect, useMemo, useState } from "react";
 import { GemstonesInputSection } from "./GemstonesInputSection";
 import { useAuth } from "@/hooks/useAuth";
@@ -100,6 +100,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
 
   const { trackProduct } = useRecentlyViewed();
+  const isFreeSize = Boolean(product?.gemstone_type && !product?.collection_slug);
 
   useEffect(() => {
     if (product) {
@@ -111,19 +112,10 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   useEffect(() => {
     if (opened && product) {
-      trackProduct(product, "calibrated");
+      trackProduct(product, isFreeSize ? "free-size" : "calibrated");
     }
-  }, [opened, product, trackProduct]);
+  }, [opened, product, isFreeSize, trackProduct]);
 
-
-  console.log("AddToCartModal Render Debug:", {
-    hideShadeOptions,
-    collection_slug: product?.collection_slug,
-    isLabGrown: isLabGrown(product),
-    type: product?.type,
-    quality: product?.quality,
-    extra_images: product?.extra_images
-  });
 
   const perCarat = useMemo(() => getPerCaratPrice(product), [product]);
 
@@ -157,11 +149,11 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
     addToCart({
       product: {
         id: product?.id,
-        handle: product?.collection_slug?.toLowerCase(),
+        handle: (product?.collection_slug || product?.gemstone_type || "gemstone").toLowerCase(),
         productType: product?.productType || (product?.gemstone_type ? "freeSizeStone" : "stone"),
         purchaseByCarat,
         productId: product.id,
-        collection_slug: product.collection_slug,
+        collection_slug: product.collection_slug || product.gemstone_type,
         color: product.color,
         ct_weight: product.ct_weight,
         cut: product.cut,
@@ -188,7 +180,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
         price: purchaseByCarat ? perCarat : perStone,
         quality: product.quality,
         shape: product.shape,
-        size: product.size,
+        size: product.size || product.dimension || size,
         type: product.type,
         additionalComments: additionalComments,
       },
@@ -209,7 +201,11 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   const handleRedirect = () => {
     const stoneHandle = (product?.collection_slug || product?.gemstone_type || "gemstone").toLowerCase();
-    router?.push(generateCalibratedStoneUrl(product, stoneHandle));
+    if (isFreeSize) {
+      router?.push(generateFreeSizeStoneUrl(product, stoneHandle));
+    } else {
+      router?.push(generateCalibratedStoneUrl(product, stoneHandle));
+    }
   };
 
   const isPurchaseByCarat = (product: any) => {

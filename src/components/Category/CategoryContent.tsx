@@ -1019,7 +1019,7 @@ export function CategoryContent({
                   {data?.title} gemstones are prized for their rarity,
                   brilliance, and versatility. At B.V. Gems in New York’s
                   Diamond District, we offer {getQuality()}
-                  {data?.title.toLowerCase()} gemstones in calibrated sizes for
+                  {data?.title?.toLowerCase()} gemstones in calibrated sizes for
                   rings, necklaces, earrings, and custom jewelry. Each stone is
                   ethically sourced and inspected for quality, ensuring
                   brilliance and durability.

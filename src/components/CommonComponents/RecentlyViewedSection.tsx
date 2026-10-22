@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Container, Tooltip } from "@mantine/core";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
+import { unwrapString } from "@/store/useRecentlyViewedStore";
 import { useAuth } from "@/hooks/useAuth";
 import {
   IconChevronLeft,
@@ -242,6 +243,11 @@ export const RecentlyViewedSection: React.FC<RecentlyViewedSectionProps> = ({
             }}
           >
             {displayItems.map((item) => {
+              const titleText = unwrapString(item.title) || "Gemstone";
+              const qualityText = unwrapString(item.quality);
+              const shapeText = unwrapString(item.shape);
+              const sizeText = unwrapString(item.size) || unwrapString(item.dimension);
+              const caratText = unwrapString(item.carat_weight);
               const hasPrice = item.price && Number(item.price) > 0;
               const priceDisplay = hasPrice
                 ? `$${Number(item.price).toLocaleString("en-US", {
@@ -256,15 +262,15 @@ export const RecentlyViewedSection: React.FC<RecentlyViewedSectionProps> = ({
                   className="w-[230px] sm:w-[255px] shrink-0 snap-start bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_14px_30px_rgba(11,24,45,0.09)] hover:border-slate-300 transition-all duration-300 ease-out group flex flex-col justify-between"
                 >
                   <Link
-                    href={item.url}
+                    href={unwrapString(item.url) || "/"}
                     draggable={false}
                     className="flex flex-col h-full text-inherit no-underline"
                   >
                     {/* Image Area */}
                     <div className="relative h-44 bg-gradient-to-b from-slate-50 to-slate-100/60 flex items-center justify-center p-3 overflow-hidden border-b border-slate-100">
                       <Image
-                        src={item.image_url || "/assets/logo2.webp"}
-                        alt={item.title}
+                        src={unwrapString(item.image_url) || "/assets/logo2.webp"}
+                        alt={titleText}
                         fill
                         sizes="255px"
                         draggable={false}
@@ -272,10 +278,10 @@ export const RecentlyViewedSection: React.FC<RecentlyViewedSectionProps> = ({
                       />
 
                       {/* Quality / Gemstone Tag */}
-                      {item.quality && (
+                      {qualityText && (
                         <div className="absolute top-2.5 left-2.5 pointer-events-none">
                           <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-white/90 text-[#0b182d] shadow-2xs backdrop-blur-xs border border-slate-200/60">
-                            {item.quality}
+                            {qualityText}
                           </span>
                         </div>
                       )}
@@ -309,26 +315,26 @@ export const RecentlyViewedSection: React.FC<RecentlyViewedSectionProps> = ({
                       <div>
                         <h3
                           className="text-xs sm:text-sm font-semibold text-[#0b182d] group-hover:text-blue-900 transition-colors line-clamp-1 mb-2 tracking-wide"
-                          title={item.title}
+                          title={titleText}
                         >
-                          {item.title}
+                          {titleText}
                         </h3>
 
                         {/* Specification Chips */}
                         <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-slate-600">
-                          {item.shape && (
+                          {shapeText && (
                             <span className="px-2 py-0.5 bg-slate-100 rounded-md text-slate-700 font-medium">
-                              {item.shape}
+                              {shapeText}
                             </span>
                           )}
-                          {(item.size || item.dimension) && (
+                          {sizeText && (
                             <span className="px-2 py-0.5 bg-slate-100 rounded-md text-slate-700">
-                              {item.size || item.dimension}
+                              {sizeText}
                             </span>
                           )}
-                          {item.carat_weight && (
+                          {caratText && (
                             <span className="px-2 py-0.5 bg-slate-100 rounded-md text-slate-700">
-                              {item.carat_weight} ct
+                              {caratText} ct
                             </span>
                           )}
                         </div>

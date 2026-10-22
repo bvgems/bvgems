@@ -44,19 +44,19 @@ export const GemstonesByBirthMonths = [
         image:
           "/assets/shopify/raw_3fc1e418-4c8c-4f90-a898-6b0a640705c3.png",
         title: "Emerald Rings",
-        link: "jewelry/rings?stone=emerald",
+        link: "/jewelry/rings?stone=emerald",
       },
       {
         image:
           "/assets/shopify/raw_b75b25f6-c44b-4583-90e1-1a5ff66519e3.png",
         title: "Emerald Necklaces",
-        link: "jewelry/necklaces?stone=emerald",
+        link: "/jewelry/necklaces?stone=emerald",
       },
       {
         image:
           "/assets/shopify/7ce09a_44524ec8cc1b4b5ca2e91179c3727ed6_mv2.webp",
         title: "Emerald Earrings",
-        link: "jewelry/earrings?stone=emerald",
+        link: "/jewelry/earrings?stone=emerald",
       },
       {
         image:
@@ -82,19 +82,19 @@ export const GemstonesByBirthMonths = [
         image:
           "/assets/shopify/raw_5acd9d11-d4b6-439f-bf4f-25dc5f8a3034.png",
         title: "Ruby Rings",
-        link: "jewelry/rings?stone=ruby",
+        link: "/jewelry/rings?stone=ruby",
       },
       {
         image:
           "/assets/shopify/raw_18e3b9eb-f92d-4b56-9a42-d49d793e789a.png",
         title: "Ruby Necklaces",
-        link: "jewelry/necklaces?stone=ruby",
+        link: "/jewelry/necklaces?stone=ruby",
       },
       {
         image:
           "/assets/shopify/7ce09a_81f8b76367114ed69b9b62e79d3604cb_mv2.webp",
         title: "Ruby Earrings",
-        link: "jewelry/earrings?stone=ruby",
+        link: "/jewelry/earrings?stone=ruby",
       },
       {
         image:
@@ -120,19 +120,19 @@ export const GemstonesByBirthMonths = [
         image:
           "/assets/shopify/raw_5b0afe2d-24fd-4837-9272-a3649b33c9f8.png",
         title: "Sapphire Rings",
-        link: "jewelry/rings?stone=Blue Sapphire",
+        link: "/jewelry/rings?stone=Blue Sapphire",
       },
       {
         image:
           "/assets/shopify/raw_13243bcb-54ea-48f8-8b75-413502f71169.png",
         title: "Sapphire Necklaces",
-        link: "jewelry/necklaces?stone=Blue Sapphire",
+        link: "/jewelry/necklaces?stone=Blue Sapphire",
       },
       {
         image:
           "/assets/shopify/7ce09a_c5beda9eb5684a3e925328c2385e3d6d_mv2.webp",
         title: "Sapphire Earrings",
-        link: "jewelry/earrings?stone=Blue Sapphire",
+        link: "/jewelry/earrings?stone=Blue Sapphire",
       },
       {
         image:
@@ -931,9 +931,9 @@ export const gemstoneOptions = [
     label: "Paraiba Tourmaline",
     value: "Paraiba Tourmaline",
     image:
-      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431957/Gemstone%20Shapes/Paraiba%20Tourmaline/Windex_Blue/Lab_Grown/paraiba-tourmaline-windex-blue-lab-grown-lab-grown-round.png",
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792680741/Gemstone%20Shapes/Paraiba%20Tourmaline/Windex_Blue/Lab_Grown/paraiba-tourmaline-windex-blue-lab-grown-lab-grown-round.png",
     shopImage:
-      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431957/Gemstone%20Shapes/Paraiba%20Tourmaline/Windex_Blue/Lab_Grown/paraiba-tourmaline-windex-blue-lab-grown-lab-grown-round.png",
+      "https://res.cloudinary.com/oko8ywzn/image/upload/v1792680741/Gemstone%20Shapes/Paraiba%20Tourmaline/Windex_Blue/Lab_Grown/paraiba-tourmaline-windex-blue-lab-grown-lab-grown-round.png",
     link: "/calibrated-stones/paraiba-tourmaline",
   },
   {
@@ -1040,37 +1040,37 @@ export const gemstoneOptionsForCustomization = [
     label: "Blue Sapphire",
     value: "Blue Sapphire",
     image: "/assets/blue2.webp",
-    link: "/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/sapphire?color=Blue",
   },
   {
     label: "Yellow Sapphire",
     value: "Yellow Sapphire",
     image: "/assets/yellowcolor.webp",
-    link: "/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/sapphire?color=Yellow",
   },
   {
     label: "Pink Sapphire",
     value: "Pink Sapphire",
     image: "/assets/pinkcolor.webp",
-    link: "/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/sapphire?color=Pink",
   },
   {
     label: "Green Sapphire",
     value: "Green Sapphire",
     image: "/assets/greencolor.webp",
-    link: "/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/sapphire?color=Green",
   },
   {
     label: "Orange Sapphire",
     value: "Orange Sapphire",
     image: "/assets/orange2.webp",
-    link: "/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/sapphire?color=Orange",
   },
   {
     label: "Purple Sapphire",
     value: "Purple Sapphire",
     image: "/assets/purplecolor.webp",
-    link: "/calibrated-stones/tanzanite",
+    link: "/calibrated-stones/sapphire?color=Purple",
   },
   // { value: "Black", color: "#000000" },
   // { value: "White", color: "#808080" },

@@ -4,6 +4,7 @@ import { useAuth } from "./useAuth";
 import {
   getRecentlyViewedStore,
   normalizeToRecentlyViewed,
+  sanitizeRecentlyViewedList,
 } from "@/store/useRecentlyViewedStore";
 import { useCallback, useMemo } from "react";
 import { RecentlyViewedItem } from "@/types/recentlyViewed";
@@ -13,7 +14,8 @@ export const useRecentlyViewed = () => {
   const userKey = user?.id?.toString() || "guest";
 
   const store = useMemo(() => getRecentlyViewedStore(userKey), [userKey]);
-  const items = store((state: any) => state.items) as RecentlyViewedItem[];
+  const rawItems = store((state: any) => state.items) as RecentlyViewedItem[];
+  const items = useMemo(() => sanitizeRecentlyViewedList(rawItems), [rawItems]);
   const addItem = store((state: any) => state.addItem);
   const removeItem = store((state: any) => state.removeItem);
   const clearAll = store((state: any) => state.clearAll);

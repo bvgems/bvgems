@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { pool } from "@/lib/pool";
 import { RecentlyViewedItem } from "@/types/recentlyViewed";
+import { sanitizeRecentlyViewedList } from "@/store/useRecentlyViewedStore";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 const MAX_RECENT_ITEMS = 30;
@@ -30,15 +31,17 @@ function mergeRecentlyViewed(
   incoming: RecentlyViewedItem[]
 ): RecentlyViewedItem[] {
   const map = new Map<string, RecentlyViewedItem>();
+  const cleanIncoming = sanitizeRecentlyViewedList(incoming);
+  const cleanExisting = sanitizeRecentlyViewedList(existing);
 
   // Process incoming items first (newest timestamps take precedence)
-  for (const item of incoming) {
+  for (const item of cleanIncoming) {
     if (!item?.id) continue;
     map.set(item.id, item);
   }
 
   // Then process existing items that aren't already updated
-  for (const item of existing) {
+  for (const item of cleanExisting) {
     if (!item?.id) continue;
     if (!map.has(item.id)) {
       map.set(item.id, item);
@@ -69,10 +72,11 @@ export async function GET() {
 
     let items: RecentlyViewedItem[] = [];
     if (res.rows.length > 0 && res.rows[0].items) {
-      items =
+      const raw =
         typeof res.rows[0].items === "string"
           ? JSON.parse(res.rows[0].items)
           : res.rows[0].items;
+      items = sanitizeRecentlyViewedList(raw);
     }
 
     return NextResponse.json({ items, authenticated: true }, { status: 200 });
@@ -86,7 +90,9 @@ export async function POST(req: NextRequest) {
   const userId = await getAuthenticatedUserId();
   const body = await req.json().catch(() => ({}));
   const rawItem = body.item as RecentlyViewedItem | undefined;
-  const rawItems = (body.items as RecentlyViewedItem[] | undefined) || (rawItem ? [rawItem] : []);
+  const rawItems = sanitizeRecentlyViewedList(
+    (body.items as RecentlyViewedItem[] | undefined) || (rawItem ? [rawItem] : [])
+  );
 
   if (!rawItems || rawItems.length === 0) {
     return NextResponse.json({ success: false, message: "No items provided" }, { status: 400 });

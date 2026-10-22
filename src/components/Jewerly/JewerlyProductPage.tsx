@@ -30,7 +30,7 @@ type PageProps = {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { product, category, stone } = params;
+  const { product, category, stone } = await params;
   const response = await fetchProductByHandle(product);
   const productData = response?.product;
 
@@ -46,6 +46,9 @@ export async function generateMetadata({
   const cleanTitle = gemstone ? `${gemstone} ${productData.title} in ${metal}` : `${productData.title} in ${metal}`;
   const title = `${cleanTitle} | B.V. Gems`;
   const description = `Shop the ${cleanTitle} at B.V. Gems. Ethically sourced and shipped free in the U.S.`;
+  const canonicalUrl = stone
+    ? `https://www.bvgems.com/jewelry/${category}/${product}/${stone}`
+    : `https://www.bvgems.com/jewelry/${category}/${product}`;
 
   return {
     title,
@@ -56,7 +59,7 @@ export async function generateMetadata({
       type: "website",
       images:
         productData?.images?.edges?.map((img: any) => img?.node?.url) || [],
-      url: `https://www.bvgems.com/jewelry-details/${category}/${product}/${stone}`,
+      url: canonicalUrl,
       siteName: "B.V. Gems",
     },
     twitter: {
@@ -68,7 +71,7 @@ export async function generateMetadata({
       ],
     },
     alternates: {
-      canonical: `https://www.bvgems.com/jewelry-details/${category}/${product}/${stone}`,
+      canonical: canonicalUrl,
     },
   };
 }
@@ -80,8 +83,8 @@ export default function JewelryProductPage() {
   const { product, category, stone } = useParams<any>();
 
   const path = usePathname();
-  const capitalize = (str: string) =>
-    str.charAt(0).toUpperCase() + str.slice(1);
+  const capitalize = (str?: string) =>
+    str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
 
   const [productData, setProductData] = useState<any>(null);
   const [images, setImages] = useState<Thumb[]>([]);
@@ -107,10 +110,21 @@ export default function JewelryProductPage() {
     ? `${gemstoneStr} ${productData?.title || ""} in ${metalStr}`
     : `${productData?.title || ""} in ${metalStr}`;
 
+  const categoryBreadcrumb =
+    category === "beads"
+      ? { title: "Precious Beads", href: "/precious-beads" }
+      : category === "finished-bead-necklaces"
+        ? { title: "Finished Bead Necklaces", href: "/trade/finished-bead-necklaces" }
+        : { title: capitalize(category), href: `/jewelry/${category}` };
+
+  const currentCrumbTitle = stone
+    ? capitalize(stone.replace(/-/g, " "))
+    : productData?.title || capitalize(String(product || "").replace(/-/g, " "));
+
   const breadcrumbItems = [
     { title: "Home", href: "/" },
-    { title: capitalize(category), href: `/jewelry/${category}` },
-    { title: capitalize(stone), href: undefined as any },
+    categoryBreadcrumb,
+    ...(currentCrumbTitle ? [{ title: currentCrumbTitle, href: undefined as any }] : []),
   ];
 
   useEffect(() => {

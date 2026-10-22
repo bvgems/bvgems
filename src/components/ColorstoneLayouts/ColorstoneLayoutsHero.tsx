@@ -32,7 +32,7 @@ export const ColorstoneLayoutsHero = () => {
   }, []);
 
   const redirectToBuildOwnLayout = () => {
-    router?.push("/create-colorstone-layout");
+    router?.push("/trade/layouts");
   };
   return (
     <div className="relative w-full h-[450px] bg-white overflow-hidden">

@@ -77,6 +77,26 @@ const nextConfig: NextConfig = {
         source: "/trade",
         destination: "/",
         permanent: true,
+      },
+      {
+        source: "/education",
+        destination: "/customer-support/education",
+        permanent: true,
+      },
+      {
+        source: "/create-colorstone-layout",
+        destination: "/trade/layouts",
+        permanent: true,
+      },
+      {
+        source: "/jewelry/beads",
+        destination: "/precious-beads",
+        permanent: true,
+      },
+      {
+        source: "/jewelry/finished-bead-necklaces",
+        destination: "/trade/finished-bead-necklaces",
+        permanent: true,
       }
     ];
   },

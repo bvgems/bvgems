@@ -53,7 +53,13 @@ interface ProductPageProps {
 }
 
 export default function LayoutProductPage({ product }: ProductPageProps) {
-  const shapeSize = JSON.parse(product?.shapeSizes?.value);
+  const shapeSize = React.useMemo(() => {
+    try {
+      return product?.shapeSizes?.value ? JSON.parse(product.shapeSizes.value) : [];
+    } catch {
+      return [];
+    }
+  }, [product?.shapeSizes?.value]);
   const images = product?.images?.edges?.map((img: any) => img.node.url) || [];
   const [mainImage, setMainImage] = useState(images?.[2] || images?.[0]);
   const { user } = useAuth();

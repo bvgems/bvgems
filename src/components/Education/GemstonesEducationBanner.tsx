@@ -30,7 +30,7 @@ export const GemstonesEducationBanner = () => {
             color="violet"
             rightSection={<IconArrowRight />}
             onClick={() => {
-              router?.push("/education");
+              router?.push("/customer-support/education");
             }}
           >
             Learn More

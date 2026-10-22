@@ -27,28 +27,35 @@ export async function generateMetadata({
     };
   }
 
+  const gemstoneType = product.gemstone_type || "Gemstone";
+  const shape = product.shape || "";
+  const color = product.color ? `${product.color.toLowerCase()} ` : "";
+  const ctWeight = product.ct_weight ?? "";
+
   return {
-    title: `${product.gemstone_type} ${product.shape} ${product.ct_weight}cts. | B.V. Gems`,
-    description: `Buy ${product.ct_weight
-      } carat ${product.color.toLowerCase()} ${product.gemstone_type.toLowerCase()} (${product.shape
-      }) at B.V. Gems. Perfect for rings, necklaces & custom jewelry.`,
+    title: `${gemstoneType} ${shape} ${ctWeight}cts. | B.V. Gems`,
+    description: `Buy ${ctWeight} carat ${color}${gemstoneType.toLowerCase()}${
+      shape ? ` (${shape})` : ""
+    } at B.V. Gems. Perfect for rings, necklaces & custom jewelry.`,
     alternates: {
       canonical: `https://www.bvgems.com/free-size-gemstones/${stone}/${slug}`,
     },
     openGraph: {
-      title: `${product.gemstone_type} ${product.shape} ${product.ct_weight}cts. | B.V. Gems`,
-      description: `Ethically sourced ${product.gemstone_type.toLowerCase()} gemstones. Lot #${product.lot_number
-        }, size ${product.dimension}, color ${product.color
-        }. Shop now at B.V. Gems.`,
+      title: `${gemstoneType} ${shape} ${ctWeight}cts. | B.V. Gems`,
+      description: `Ethically sourced ${gemstoneType.toLowerCase()} gemstones. Lot #${
+        product.lot_number || "-"
+      }, size ${product.dimension || "-"}, color ${
+        product.color || "-"
+      }. Shop now at B.V. Gems.`,
       url: `https://www.bvgems.com/free-size-gemstones/${stone}/${slug}`,
       siteName: "B.V. Gems",
       type: "website",
       images: [
         {
-          url: product.image_url,
+          url: product.image_url || "/assets/logo2.webp",
           width: 800,
           height: 800,
-          alt: `${product.gemstone_type} ${product.shape} gemstone`,
+          alt: `${gemstoneType} ${shape} gemstone`,
         },
       ],
     },

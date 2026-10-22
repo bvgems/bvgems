@@ -1,7 +1,8 @@
 import axios from "axios";
+const rawBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.bvgems.com";
 const baseUrl =
   typeof window === "undefined"
-    ? process.env.NEXT_PUBLIC_BASE_URL || "https://www.bvgems.com"
+    ? rawBaseUrl.replace(/^https:\/\/bvgems\.com\b/, "https://www.bvgems.com")
     : "";
 
 

@@ -94,9 +94,9 @@ export const JewelryProductDetails = ({
 
   useEffect(() => {
     if (productData) {
-      trackProduct(productData, "jewelry");
+      trackProduct({ ...productData, category }, "jewelry");
     }
-  }, [productData, trackProduct]);
+  }, [productData, category, trackProduct]);
   useEffect(() => {
     switch (category) {
       case "necklaces":

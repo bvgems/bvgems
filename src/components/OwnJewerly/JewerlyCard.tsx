@@ -28,7 +28,7 @@ export const JewelryCard = ({
     }
   }, [inView, controls]);
   const handleRedirect = () => {
-    router.push(`/create-colorstone-layout`);
+    router.push(`/trade/layouts`);
   };
 
   return (

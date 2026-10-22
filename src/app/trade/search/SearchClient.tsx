@@ -45,6 +45,9 @@ export function SearchClient() {
     } else if (item?.collection_slug) {
       const stoneHandle = (item?.collection_slug || "gemstone").toLowerCase();
       router.push(generateCalibratedStoneUrl(item, stoneHandle));
+    } else if (item?.handle) {
+      const cat = (item?.jewelryCategory || item?.productType || "rings").toLowerCase();
+      router.push(`/jewelry/${cat}/${item.handle}`);
     }
   };
 
@@ -73,7 +76,9 @@ export function SearchClient() {
         <Grid>
           {results.map((item, idx) => {
             const lotPrefix = item.lot_number ? `${item.lot_number} - ` : "";
-            const title = `${lotPrefix}${item.collection_slug ?? item.gemstone_type ?? ""} ${item.shape ?? ""} ${item.size ?? item.dimension ?? ""}`.trim();
+            const title =
+              item.title ||
+              `${lotPrefix}${item.collection_slug ?? item.gemstone_type ?? ""} ${item.shape ?? ""} ${item.size ?? item.dimension ?? ""}`.trim();
             
             return (
               <Grid.Col key={idx} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
