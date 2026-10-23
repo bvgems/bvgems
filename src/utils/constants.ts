@@ -1546,7 +1546,7 @@ export const links = [
     label: "Beads",
     links: [
       {
-        link: "/trade/beads",
+        link: "/precious-beads",
         label: "Precious Beads",
       },
       {
@@ -1597,7 +1597,7 @@ export const mobileLinks = [
     label: "Beads",
     links: [
       {
-        link: "/trade/beads",
+        link: "/precious-beads",
         label: "Precious Beads",
       },
       {

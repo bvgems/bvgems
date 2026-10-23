@@ -33,6 +33,7 @@ import { sortBySizeAsc } from "@/utils/sortUtils";
 import { isLabGrown } from "@/utils/priceHelpers";
 import { AddToCartModal } from "../CommonComponents/AddToCartModal";
 import { QuoteRequestModal } from "../CommonComponents/QuoteRequestModal";
+import { generateCalibratedStoneUrl } from "@/utils/seoUrlHelpers";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
@@ -82,11 +83,8 @@ export const CategoryTable = ({
 
   const goToCartPage = (item: any) => {
     // Generate hierarchical URL for Calibrated Stones
-    const shape = item?.shape?.toLowerCase().replace(/\s+/g, "-") || "unknown-shape";
-    const size = item?.size ? encodeURIComponent(item.size.replace(/\s+/g, "-")) : "unknown-size";
-    const type = item?.type?.toLowerCase().replace(/\s+/g, "-") || "natural";
-    const slug = `${type}-${name}-${item.id}`;
-    const url = `/calibrated-stones/${name}/${shape}/${size}/${slug}`;
+    const stoneHandle = name || item?.collection_slug || item?.gemstone_type || "gemstone";
+    const url = generateCalibratedStoneUrl(item, stoneHandle);
     router.push(url);
   };
 

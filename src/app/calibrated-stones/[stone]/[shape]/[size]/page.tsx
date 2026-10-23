@@ -17,8 +17,8 @@ const formatShapeParam = (shapeParam: string) => {
 };
 
 const formatSizeParam = (sizeParam: string) => {
-  // if size is "6x8mm", returns "6x8mm" - assuming frontend handles the unit logic or matches as-is
-  return decodeURIComponent(sizeParam).replace("-", " ");
+  // if size is "8.00-x-6.00-mm", returns "8.00 x 6.00 mm"
+  return decodeURIComponent(sizeParam).replace(/-/g, " ");
 };
 
 export async function generateMetadata({

@@ -212,113 +212,118 @@ export function CartComponent() {
 
   if (cart.length === 0) {
     return (
-      <div className="flex flex-col gap-3 items-center justify-center py-24">
-        <Player
-          autoplay
-          loop
-          src="/assets/empty-cart.json"
-          style={{ height: "300px", width: "300px" }}
-        />
-        <p className="text-xl font-semibold mt-4 text-gray-700">
-          Your cart is empty
-        </p>
-        <Button
-          onClick={() => router.push("/calibrated-stones")}
-          color="gray"
-          rightSection={<IconArrowNarrowRight />}
-        >
-          Shop Now
-        </Button>
-      </div>
+      <>
+        <div className="flex flex-col gap-3 items-center justify-center py-24">
+          <Player
+            autoplay
+            loop
+            src="/assets/empty-cart.json"
+            style={{ height: "300px", width: "300px" }}
+          />
+          <p className="text-xl font-semibold mt-4 text-gray-700">
+            Your cart is empty
+          </p>
+          <Button
+            onClick={() => router.push("/calibrated-stones")}
+            color="gray"
+            rightSection={<IconArrowNarrowRight />}
+          >
+            Shop Now
+          </Button>
+        </div>
+        <RecentlyViewedSection />
+      </>
     );
   }
 
   return (
-    <Container size="xl" className="py-10">
-      <Grid gutter="xl">
-        <GridCol span={{ base: 12, md: 8 }}>
-          <div className="flex items-center justify-between">
-            <div />
+    <>
+      <Container size="xl" className="py-10">
+        <Grid gutter="xl">
+          <GridCol span={{ base: 12, md: 8 }}>
+            <div className="flex items-center justify-between">
+              <div />
+              <Button
+                color="#0b182d"
+                size="compact-sm"
+                leftSection={<IconTrash size={14} />}
+                onClick={() => {
+                  cartStore.getState().clearCart();
+                }}
+              >
+                CLEAR CART
+              </Button>
+            </div>
+            <Stack gap="md" mt="md">
+              {cart.map((value: any, index: number) => {
+                const itemKey =
+                  value?.cartItemId || generateCartItemId(value);
+
+                return (
+                  <CartLineItem
+                    key={`${itemKey}-${index}`}
+                    value={value}
+                    onOpenProduct={() => redirectToProduct(value)}
+                    onRemove={() =>
+                      handleRemoveProduct(itemKey, value.product, value.product?.purchaseByCarat)
+                    }
+                    onRequestPricing={() => setQuoteProduct(value?.product)}
+                    onQuantityChange={(newQuantity) => {
+                      updateQuantity(
+                        itemKey,
+                        newQuantity,
+                        value.product?.shade,
+                        value.product?.purchaseByCarat
+                      );
+                    }}
+                    onCaratWeightChange={(newCaratWeight) => {
+                      const stoneWeight = Number(value.product?.ct_weight) || 0;
+                      const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
+                      const safeWeight = Math.max(minWeight, Number(newCaratWeight) || minWeight);
+                      updateCaratWeight(
+                        itemKey,
+                        safeWeight,
+                        value.product?.shade
+                      );
+                    }}
+                    onToggleCertification={(checked) => {
+                      toggleCertification(
+                        itemKey,
+                        checked,
+                        value.product?.shade,
+                        value.product?.purchaseByCarat
+                      );
+                    }}
+                  />
+                );
+              })}
+            </Stack>
+          </GridCol>
+
+          {/* Right Side Summary */}
+          <GridCol span={{ base: 12, md: 4 }}>
+            <BillingSummary />
             <Button
+              disabled={!cart?.length}
+              onClick={handleCheckout}
+              rightSection={<IconArrowNarrowRight />}
+              mt="md"
+              size="lg"
               color="#0b182d"
-              size="compact-sm"
-              leftSection={<IconTrash size={14} />}
-              onClick={() => {
-                cartStore.getState().clearCart();
-              }}
+              fullWidth
+              radius="md"
             >
-              CLEAR CART
+              CHECKOUT
             </Button>
-          </div>
-          <Stack gap="md" mt="md">
-            {cart.map((value: any, index: number) => {
-              const itemKey =
-                value?.cartItemId || generateCartItemId(value);
-
-              return (
-                <CartLineItem
-                  key={`${itemKey}-${index}`}
-                  value={value}
-                  onOpenProduct={() => redirectToProduct(value)}
-                  onRemove={() =>
-                    handleRemoveProduct(itemKey, value.product, value.product?.purchaseByCarat)
-                  }
-                  onRequestPricing={() => setQuoteProduct(value?.product)}
-                  onQuantityChange={(newQuantity) => {
-                    updateQuantity(
-                      itemKey,
-                      newQuantity,
-                      value.product?.shade,
-                      value.product?.purchaseByCarat
-                    );
-                  }}
-                  onCaratWeightChange={(newCaratWeight) => {
-                    const stoneWeight = Number(value.product?.ct_weight) || 0;
-                    const minWeight = stoneWeight > 1 ? Number(stoneWeight.toFixed(2)) : 1;
-                    const safeWeight = Math.max(minWeight, Number(newCaratWeight) || minWeight);
-                    updateCaratWeight(
-                      itemKey,
-                      safeWeight,
-                      value.product?.shade
-                    );
-                  }}
-                  onToggleCertification={(checked) => {
-                    toggleCertification(
-                      itemKey,
-                      checked,
-                      value.product?.shade,
-                      value.product?.purchaseByCarat
-                    );
-                  }}
-                />
-              );
-            })}
-          </Stack>
-        </GridCol>
-
-        {/* Right Side Summary */}
-        <GridCol span={{ base: 12, md: 4 }}>
-          <BillingSummary />
-          <Button
-            disabled={!cart?.length}
-            onClick={handleCheckout}
-            rightSection={<IconArrowNarrowRight />}
-            mt="md"
-            size="lg"
-            color="#0b182d"
-            fullWidth
-            radius="md"
-          >
-            CHECKOUT
-          </Button>
-        </GridCol>
-      </Grid>
-      <QuoteRequestModal 
-        opened={!!quoteProduct} 
-        onClose={() => setQuoteProduct(null)} 
-        product={quoteProduct} 
-      />
-      <RecentlyViewedSection title="Recently Viewed by You" />
-    </Container>
+          </GridCol>
+        </Grid>
+        <QuoteRequestModal 
+          opened={!!quoteProduct} 
+          onClose={() => setQuoteProduct(null)} 
+          product={quoteProduct} 
+        />
+      </Container>
+      <RecentlyViewedSection />
+    </>
   );
 }

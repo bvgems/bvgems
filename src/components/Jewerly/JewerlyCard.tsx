@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { JewelryImageZoom } from "./JewelryImageZoom";
+import { generateJewelryUrl } from "@/utils/seoUrlHelpers";
 
 export const JewelryCategoryCard = ({
   isBead,
@@ -82,21 +83,21 @@ export const JewelryCategoryCard = ({
 
   const redirectToProduct = () => {
     const handle = product?.node?.handle;
-    const stoneSlug = selectedVariant?.node?.title
-      ? selectedVariant?.node?.title.toLowerCase().replace(/\s+/g, "-")
-      : null;
+    if (!handle) return;
 
     const finalCategory = isBead
       ? "beads"
       : isBeadNecklace
         ? "finished-bead-necklaces"
         : category;
-    if (!handle) return;
-    if (stoneSlug) {
-      router.push(`/jewelry/${finalCategory}/${handle}/${stoneSlug}`);
-    } else {
-      router.push(`/jewelry/${finalCategory}/${handle}`);
-    }
+
+    router.push(
+      generateJewelryUrl(
+        finalCategory,
+        handle,
+        selectedVariant?.node?.title
+      )
+    );
   };
 
   const seoTitle = !isBead

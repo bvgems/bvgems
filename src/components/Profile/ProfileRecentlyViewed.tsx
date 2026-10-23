@@ -16,6 +16,7 @@ import {
   IconArrowUpRight,
 } from "@tabler/icons-react";
 import { Button, TextInput, Tooltip } from "@mantine/core";
+import { formatRelativeTime } from "@/utils/greetingHelpers";
 
 export const ProfileRecentlyViewed: React.FC = () => {
   const { items, removeItem, clearAll } = useRecentlyViewed();
@@ -185,6 +186,13 @@ export const ProfileRecentlyViewed: React.FC = () => {
                     </div>
                   )}
 
+                  {/* Visited Time Badge */}
+                  <div className="absolute top-2.5 right-2.5 pointer-events-none">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/5 text-slate-500 backdrop-blur-xs">
+                      {formatRelativeTime(item.viewedAt)}
+                    </span>
+                  </div>
+
                   {/* Delete Button */}
                   <Tooltip label="Remove from history" position="left" withArrow>
                     <button
@@ -194,7 +202,8 @@ export const ProfileRecentlyViewed: React.FC = () => {
                         e.stopPropagation();
                         removeItem(item.id);
                       }}
-                      className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-gray-400 hover:text-red-600 shadow-2xs flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 active:scale-90 cursor-pointer"
+                      aria-label="Remove item"
+                      className="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-white/90 hover:bg-white text-gray-400 hover:text-red-600 shadow-2xs flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 active:scale-90 cursor-pointer"
                     >
                       <IconX size={12} stroke={2.2} />
                     </button>
@@ -247,7 +256,7 @@ export const ProfileRecentlyViewed: React.FC = () => {
                         </div>
                       ) : (
                         <span className="text-[11px] text-gray-500 italic">
-                          Trade Wholesale
+                          Wholesale Price
                         </span>
                       )}
                     </div>

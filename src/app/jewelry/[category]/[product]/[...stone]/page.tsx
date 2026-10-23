@@ -8,6 +8,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { product: productHandle, category, stone } = await params;
+  const stoneParam = Array.isArray(stone) ? stone.join("-") : (stone || "");
   const response = await fetchProductByHandle(productHandle);
   const product = response?.product;
 
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const baseTitle = product?.title || "Fine Jewelry";
-  const gemstone = stone ? stone.replace(/-/g, " ") : "";
+  const gemstone = stoneParam ? stoneParam.replace(/-/g, " ") : "";
   const metal = product?.goldType?.value || "14K Gold";
   const cleanTitle = gemstone ? `${gemstone} ${baseTitle} in ${metal}` : `${baseTitle} in ${metal}`;
 
@@ -32,12 +33,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${cleanTitle} | B.V. Gems`,
       description: `Explore ${cleanTitle} at B.V. Gems.`,
       images: product?.images?.edges?.map((img: any) => img?.node?.url) || [],
-      url: `https://www.bvgems.com/jewelry/${category}/${productHandle}/${stone}`,
+      url: `https://www.bvgems.com/jewelry/${category}/${productHandle}/${stoneParam}`,
       siteName: "B.V. Gems",
       type: "website",
     },
     alternates: {
-      canonical: `https://www.bvgems.com/jewelry/${category}/${productHandle}/${stone}`,
+      canonical: `https://www.bvgems.com/jewelry/${category}/${productHandle}/${stoneParam}`,
     },
   };
 }

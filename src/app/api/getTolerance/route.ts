@@ -37,10 +37,7 @@ export async function GET(req: Request) {
     const collection = result?.data?.collection;
 
     if (!collection) {
-      return NextResponse.json(
-        { error: "Collection not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ collection: null }, { status: 200 });
     }
 
     return NextResponse.json({ collection }, { status: 200 });

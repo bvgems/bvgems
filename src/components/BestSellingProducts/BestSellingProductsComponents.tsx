@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { IconChevronRight } from "@tabler/icons-react";
 
 import Link from "next/link";
+import { generateJewelryUrl, normalizeJewelryCategory } from "@/utils/seoUrlHelpers";
 
 export const BestSellingProductsComponents = ({ initialProducts = [] }: { initialProducts?: any[] }) => {
   return (
@@ -35,14 +36,17 @@ export const BestSellingProductsComponents = ({ initialProducts = [] }: { initia
         previousControlProps={{ "aria-label": "Previous slide" }}
       >
         {initialProducts?.map((item: any, idx: number) => {
-          console.log("item node", item);
+          const category = normalizeJewelryCategory(item?.node);
+          const variantTitle = item?.node?.variants?.edges?.[0]?.node?.title;
+          const targetUrl = generateJewelryUrl(category, item?.node?.handle, variantTitle);
+
           return (
             <Carousel.Slide key={idx}>
               <motion.div
                 whileHover={{ scale: 1.05 }}
               >
                 <Link 
-                  href={`/jewelry-details/${item?.node?.productType?.toLowerCase()}/${item?.node?.handle}/${item?.node?.variants.edges[0]?.node?.title.toLowerCase().replace(/\s+/g, "-")}`}
+                  href={targetUrl}
                   className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer p-6 flex flex-col items-center justify-between h-[300px] block no-underline"
                 >
                   <div className="relative w-full h-[200px] flex justify-center">

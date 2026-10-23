@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
     });
     const allGemstones = await getAllLooseGemstones();
     if (result.rows.length === 0 || allGemstones?.length === 0) {
-      return NextResponse.json({ error: "No data found" }, { status: 404 });
+      return NextResponse.json({ data: [], allGemstones: [] }, { status: 200 });
     }
     
     // Apply price gating based on user session

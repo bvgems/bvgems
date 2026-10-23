@@ -24,7 +24,6 @@ import {
 
 import { getCartStore } from "@/store/useCartStore";
 import { QuestionAndDeliveryAccordian } from "../CommonComponents/QuestionAndDeliveryAccordian";
-import { RecentlyViewedSection } from "../CommonComponents/RecentlyViewedSection";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { useJewelryFunctions } from "@/hooks/useJewlryFunctions";
 import { notifications } from "@mantine/notifications";
@@ -43,6 +42,7 @@ import { JewelryOptionsDrawer } from "./JewelryOptionsDrawer";
 import { CustomizeJewelryDrawer } from "./CustomizeJewelryDrawer";
 import { JeweleryDetailsTable } from "./JeweleryDetailsTable";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { generateJewelryUrl, formatJewelryVariantSlug } from "@/utils/seoUrlHelpers";
 
 // 🔹 Hook to generate fake review count
 function useFakeReviewCount(jf: any) {
@@ -456,9 +456,7 @@ export const JewelryProductDetails = ({
             </h3>
             <div className="grid grid-cols-2 gap-4">
               {productData?.variants?.edges?.map((item: any, idx: number) => {
-                const slug = item?.node?.title
-                  ?.toLowerCase()
-                  .replace(/\s+/g, "-");
+                const slug = formatJewelryVariantSlug(item?.node?.title);
 
                 const isActive = slug === currentVariantSlug;
                 return (
@@ -469,9 +467,11 @@ export const JewelryProductDetails = ({
       `}
                     onClick={() => {
                       router.push(
-                        `/jewelry-details/${category}/${
-                          productData?.handle
-                        }/${item?.node?.title.toLowerCase().replace(/\s+/g, "-")}`,
+                        generateJewelryUrl(
+                          category,
+                          productData?.handle,
+                          item?.node?.title
+                        )
                       );
                     }}
                   >
@@ -509,9 +509,7 @@ export const JewelryProductDetails = ({
             <div className="grid grid-cols-2 gap-4">
               {productData?.relatedProducts?.references?.edges.map(
                 (item: any, idx: number) => {
-                  const slug = item?.node?.title
-                    ?.toLowerCase()
-                    .replace(/\s+/g, "-");
+                  const slug = formatJewelryVariantSlug(item?.node?.title);
 
                   const isActive = slug === currentVariantSlug;
                   return (
@@ -521,11 +519,13 @@ export const JewelryProductDetails = ({
         ${isActive ? "border-2 border-[#9aa7bb]" : "border border-transparent"}
       `}
                       onClick={() => {
-                        const baseUrl = `/jewelry-details/${category}/${
-                          item?.node?.handle
-                        }/${item?.node?.title.toLowerCase().replace(/\s+/g, "-")}`;
+                        const targetUrl = generateJewelryUrl(
+                          category,
+                          item?.node?.handle,
+                          item?.node?.title
+                        );
 
-                        router.push(baseUrl);
+                        router.push(targetUrl);
                       }}
                     >
                       <div className="w-full flex justify-center">
@@ -578,8 +578,6 @@ export const JewelryProductDetails = ({
       <div className="mt-4">
         <QuestionAndDeliveryAccordian description={productData?.description} />
       </div>
-
-      <RecentlyViewedSection currentItemId={productData?.id ? `jewelry_${productData.id}` : undefined} />
     </>
   );
 };

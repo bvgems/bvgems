@@ -131,7 +131,7 @@ export default async function Home() {
                 <span className="inline-block border-b border-black pb-1 uppercase tracking-wider text-xs font-semibold group-hover:text-blue-900 transition-colors">Shop Layouts</span>
               </Link>
               
-              <Link href="/trade/beads" className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] group block relative h-80 overflow-hidden bg-white shadow-sm border border-gray-100 p-8 flex flex-col justify-center items-center text-center transition-shadow hover:shadow-md">
+              <Link href="/precious-beads" className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] group block relative h-80 overflow-hidden bg-white shadow-sm border border-gray-100 p-8 flex flex-col justify-center items-center text-center transition-shadow hover:shadow-md">
                 <h3 className="text-2xl font-light uppercase tracking-widest mb-4">Precious Beads</h3>
                 <p className="text-gray-600 mb-6 text-sm leading-relaxed">High-quality loose beads and finished bead necklaces.</p>
                 <span className="inline-block border-b border-black pb-1 uppercase tracking-wider text-xs font-semibold group-hover:text-blue-900 transition-colors">Shop Beads</span>

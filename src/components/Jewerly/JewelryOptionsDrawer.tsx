@@ -1,6 +1,7 @@
 import { Divider, Image, NumberFormatter } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { generateJewelryUrl } from "@/utils/seoUrlHelpers";
 
 export const JewelryOptionsDrawer = ({
   selectedShape,
@@ -33,9 +34,11 @@ export const JewelryOptionsDrawer = ({
               className="bg-white transition-all duration-300 cursor-pointer p-4 flex flex-col justify-between shadow-md hover:shadow-xl rounded-xl"
               onClick={() => {
                 router.push(
-                  `/jewelry-details/${category}/${
-                    productData?.handle
-                  }/${item?.node?.title.toLowerCase().replace(/\s+/g, "-")}`,
+                  generateJewelryUrl(
+                    category,
+                    productData?.handle,
+                    item?.node?.title
+                  )
                 );
               }}
             >

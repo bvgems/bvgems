@@ -136,8 +136,8 @@ export async function POST(req: NextRequest) {
         );
       } else {
         return NextResponse.json(
-          { error: "No gemstones found" },
-          { status: 404 }
+          { data: [] },
+          { status: 200 }
         );
       }
     }

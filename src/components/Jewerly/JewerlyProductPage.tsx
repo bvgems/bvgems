@@ -21,6 +21,8 @@ import { JewelryImageZoom } from "./JewelryImageZoom";
 import { useAuth } from "@/hooks/useAuth";
 import { getCartStore } from "@/store/useCartStore";
 import { VideoAutoPlay } from "./VideoAutoPlay";
+import { RecentlyViewedSection } from "@/components/CommonComponents/RecentlyViewedSection";
+import { formatJewelryVariantSlug } from "@/utils/seoUrlHelpers";
 
 type PageProps = {
   params: any;
@@ -80,7 +82,11 @@ export async function generateMetadata({
 type Thumb = { url: string; title?: string | null; type?: string };
 
 export default function JewelryProductPage() {
-  const { product, category, stone } = useParams<any>();
+  const rawParams = useParams<any>();
+  const product = rawParams?.product;
+  const category = rawParams?.category;
+  const rawStone = rawParams?.stone;
+  const stone = Array.isArray(rawStone) ? rawStone.join("-") : rawStone;
 
   const path = usePathname();
   const capitalize = (str?: string) =>
@@ -178,11 +184,11 @@ export default function JewelryProductPage() {
       }
 
       // Handle variant selection
-      const slugify = (str: string) => str.toLowerCase().replace(/\s+/g, "-");
       const variantEdges = productInfo?.variants?.edges ?? [];
       if (stone && variantEdges?.length) {
+        const normalizedStone = formatJewelryVariantSlug(stone);
         const match = variantEdges.find(
-          (v: any) => slugify(v?.node?.title || "") === stone.toLowerCase(),
+          (v: any) => formatJewelryVariantSlug(v?.node?.title || "") === normalizedStone,
         );
         if (match?.node) {
           setSelectedShape(match.node.title);
@@ -491,6 +497,11 @@ export default function JewelryProductPage() {
           </GridCol>
         </Grid>
       </div>
+
+      {/* Bottom Section: Recently Viewed (full width, just above footer) */}
+      <RecentlyViewedSection
+        currentItemId={productData?.id ? `jewelry_${productData.id}` : undefined}
+      />
 
       {/* ✅ JSON-LD */}
       {productData && (

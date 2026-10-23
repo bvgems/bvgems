@@ -40,6 +40,7 @@ export default function FreeSizeGemstoneDetails({
   id,
 }: FreeSizeGemstoneDetailsProps) {
   const [product, setProduct] = useState<any>();
+  const [isNotFound, setIsNotFound] = useState(false);
   const [purchaseByCarat, setPurchaseByCarat] = useState<boolean>(true);
   const [allowPurchaseByCarat, setAllowPurchaseByCarat] = useState(true);
   const [quantity, setQuantity] = useState<number>(1);
@@ -106,7 +107,12 @@ export default function FreeSizeGemstoneDetails({
   };
 
   const getFreeSizeGemstonesById = async () => {
+    setIsNotFound(false);
     const result = await fetchFreeSizeGemstonesById(id);
+    if (!result) {
+      setIsNotFound(true);
+      return;
+    }
     setProduct(result);
   };
 
@@ -261,6 +267,28 @@ export default function FreeSizeGemstoneDetails({
       setIsSharing(false);
     }
   };
+
+  if (isNotFound) {
+    return (
+      <div className="w-full py-16 px-4">
+        <div className="max-w-md mx-auto text-center bg-gray-50 border border-gray-200 rounded-2xl p-8 shadow-xs">
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Gemstone Unavailable</h2>
+          <p className="text-sm text-gray-600 mb-6">
+            The requested free size gemstone is no longer available in our inventory.
+          </p>
+          <Button
+            color="#0b182d"
+            onClick={() => router.push("/free-size-gemstones")}
+          >
+            Browse Free Size Stones
+          </Button>
+        </div>
+        <div className="mt-14">
+          <RecentlyViewedSection />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">

@@ -73,6 +73,8 @@ export default function ProductDetailsPage() {
   const [displayImage, setDisplayImage] = useState<any>();
   const [shopifyProduct, setShopifyProduct] = useState<any>();
   const [allProducts, setAllProducts] = useState<any>();
+  const [isNotFound, setIsNotFound] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState<number>(1);
   const [caratError, setCaratError] = useState<string | null>(null);
   const [emeraldShade, setEmeraldShade] = useState<string | null>("Colombian");
@@ -165,7 +167,15 @@ export default function ProductDetailsPage() {
   };
 
   const getProduct = async (pid: string) => {
+    setLoading(true);
+    setIsNotFound(false);
     const productDetails = await getParticularProductsData(pid);
+
+    if (!productDetails) {
+      setIsNotFound(true);
+      setLoading(false);
+      return;
+    }
 
     setProduct(productDetails);
     setDescription(
@@ -181,6 +191,7 @@ export default function ProductDetailsPage() {
     const minW = getMinCaratWeight(productDetails);
     setCaratWeight(minW);
     recalcTotal(productDetails, quantity, minW);
+    setLoading(false);
   };
 
   const getData = async (handle: any) => {
@@ -477,6 +488,28 @@ export default function ProductDetailsPage() {
     getPerCaratPrice(product) === 0 &&
     price === 0
   );
+
+  if (isNotFound) {
+    return (
+      <div className="w-full py-16 px-4">
+        <div className="max-w-md mx-auto text-center bg-gray-50 border border-gray-200 rounded-2xl p-8 shadow-xs">
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Gemstone Unavailable</h2>
+          <p className="text-sm text-gray-600 mb-6">
+            The requested calibrated gemstone is no longer available in our inventory or may have been updated.
+          </p>
+          <Button
+            color="#0b182d"
+            onClick={() => router.push(name ? `/calibrated-stones/${name}` : "/calibrated-stones")}
+          >
+            Browse Calibrated Stones
+          </Button>
+        </div>
+        <div className="mt-14">
+          <RecentlyViewedSection />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={pageRef} className="w-full">
