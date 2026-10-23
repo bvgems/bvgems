@@ -10,134 +10,159 @@ export const verifyCartPrices = async (cartItems: any[]) => {
       ...item,
       product: { ...(item.product || {}) },
     };
+
+    // Drop any legacy free gift items
+    if (verifiedItem.product.isGift || String(verifiedItem.product.productId || "").includes("FREE-GIFT")) {
+      continue;
+    }
+
     const { productType, id, productId, quality, size, handle } = verifiedItem.product;
 
-    if (productType === "stone") {
-      const stoneId = productId || id;
-      const dbRes = await pool.query(
-        "SELECT price, ct_weight, collection_slug, type, quality, size FROM gemstone_specs WHERE id = $1", 
-        [stoneId]
-      );
-      if (dbRes.rows.length > 0) {
-        const dbProduct = dbRes.rows[0];
-        const dbPrice = Number(dbProduct.price);
-        const dbCtWeight = Number(dbProduct.ct_weight);
-        
-        // 1. Always enforce exact database ct_weight
-        verifiedItem.product.ct_weight = dbCtWeight;
-        
-        const isLabGrown = dbProduct.type === 'Lab Grown' || dbProduct.quality === 'Lab Grown' || dbProduct.type === 'Lab-Grown' || dbProduct.quality === 'Lab-Grown';
-        const isAlexOrParaiba = dbProduct.collection_slug === "Alexandrite" || dbProduct.collection_slug === "Paraiba Tourmaline";
-        
-        let allowPurchaseByCarat = true;
-        if (isLabGrown) {
-           const s = dbProduct.size;
-           if (s === "1.00 mm" || s === "1.25 mm" || s === "1.50 mm" || s === "1.75 mm") {
-              allowPurchaseByCarat = false;
-           }
-        }
-
-        if (verifiedItem.product.purchaseByCarat && allowPurchaseByCarat) {
-          // Per-carat price
-          let perCaratPrice = 0;
+    try {
+      if (productType === "stone") {
+        const stoneId = productId || id;
+        const dbRes = await pool.query(
+          "SELECT price, ct_weight, collection_slug, type, quality, size FROM gemstone_specs WHERE id = $1", 
+          [stoneId]
+        );
+        if (dbRes.rows.length > 0) {
+          const dbProduct = dbRes.rows[0];
+          const dbPrice = Number(dbProduct.price);
+          const dbCtWeight = Number(dbProduct.ct_weight);
+          
+          // 1. Always enforce exact database ct_weight
+          verifiedItem.product.ct_weight = dbCtWeight;
+          
+          const isLabGrown = dbProduct.type === 'Lab Grown' || dbProduct.quality === 'Lab Grown' || dbProduct.type === 'Lab-Grown' || dbProduct.quality === 'Lab-Grown';
+          const isAlexOrParaiba = dbProduct.collection_slug === "Alexandrite" || dbProduct.collection_slug === "Paraiba Tourmaline";
+          
+          let allowPurchaseByCarat = true;
           if (isLabGrown) {
-            perCaratPrice = isAlexOrParaiba ? 85 : 50;
-          } else if (dbCtWeight > 0) {
-            perCaratPrice = Number((dbPrice / dbCtWeight).toFixed(2));
-          } else {
-            perCaratPrice = dbPrice;
+             const s = dbProduct.size;
+             if (s === "1.00 mm" || s === "1.25 mm" || s === "1.50 mm" || s === "1.75 mm") {
+                allowPurchaseByCarat = false;
+             }
           }
-          verifiedItem.product.price = perCaratPrice;
 
-          // Calculate nearest whole stones & actual total carats
-          const requestedCarats = Number(verifiedItem.requestedCarats || verifiedItem.caratWeight || dbCtWeight);
-          const { stoneCount, totalCarats } = calculateNearestStones(dbCtWeight, requestedCarats);
-          verifiedItem.quantity = stoneCount;
-          verifiedItem.caratWeight = String(totalCarats);
-          verifiedItem.requestedCarats = requestedCarats;
-        } else {
-          // Bought by stone piece count
-          verifiedItem.product.purchaseByCarat = false;
-          let perStonePrice = 0;
-          if (isLabGrown) {
-            if (!allowPurchaseByCarat) {
-              perStonePrice = dbPrice;
+          if (verifiedItem.product.purchaseByCarat && allowPurchaseByCarat) {
+            // Per-carat price
+            let perCaratPrice = 0;
+            if (isLabGrown) {
+              perCaratPrice = isAlexOrParaiba ? 85 : 50;
+            } else if (dbCtWeight > 0) {
+              perCaratPrice = Number((dbPrice / dbCtWeight).toFixed(2));
             } else {
-              const rate = isAlexOrParaiba ? 85 : 50;
-              perStonePrice = dbCtWeight > 0 ? Math.round((rate * dbCtWeight + 1e-6) * 100) / 100 : dbPrice;
+              perCaratPrice = dbPrice;
             }
-          } else {
-            perStonePrice = dbPrice;
-          }
-          verifiedItem.product.price = perStonePrice;
-          verifiedItem.quantity = Math.max(1, Math.round(Number(verifiedItem.quantity) || 1));
-        }
-      } else {
-        throw new Error(`Product not found: ${id}`);
-      }
-    } else if (productType === "freeSizeStone") {
-      const freeStoneId = productId || id;
-      const dbRes = await pool.query("SELECT price, ct_weight FROM free_size_gemstones WHERE id = $1", [freeStoneId]);
-      if (dbRes.rows.length > 0) {
-        if (dbRes.rows[0].price == null) {
-          throw new Error(`Price not available for product: ${freeStoneId}`);
-        }
-        verifiedItem.product.price = Number(dbRes.rows[0].price);
-        if (dbRes.rows[0].ct_weight != null) {
-          verifiedItem.product.ct_weight = Number(dbRes.rows[0].ct_weight);
-        }
-        verifiedItem.quantity = 1;
-      } else {
-        throw new Error(`Product not found: ${id}`);
-      }
-    }
- else if (
-      productType === "layouts" ||
-      productType === "jewelry" ||
-      productType === "beads" ||
-      productType === "earringJewelry"
-    ) {
-      const shopifyProduct = await fetchShopifyProduct(handle);
-      if (!shopifyProduct) {
-        throw new Error(`Shopify product not found: ${handle}`);
-      }
+            verifiedItem.product.price = perCaratPrice;
 
-      if (productType === "layouts") {
-        // Layouts use shapeSizes metafield
-        try {
-          const shapeSizesStr = shopifyProduct.metafield?.value;
-          if (shapeSizesStr) {
-            const parsed = JSON.parse(shapeSizesStr);
-            const sizeData = parsed.find((s: any) => s.size === size);
-            if (sizeData) {
-              let basePrice = Number(sizeData.price);
-              if (quality === "A") {
-                basePrice = basePrice * 0.75;
+            // Calculate nearest whole stones & actual total carats
+            const requestedCarats = Number(verifiedItem.requestedCarats || verifiedItem.caratWeight || dbCtWeight);
+            const { stoneCount, totalCarats } = calculateNearestStones(dbCtWeight, requestedCarats);
+            verifiedItem.quantity = stoneCount;
+            verifiedItem.caratWeight = String(totalCarats);
+            verifiedItem.requestedCarats = requestedCarats;
+          } else {
+            // Bought by stone piece count
+            verifiedItem.product.purchaseByCarat = false;
+            let perStonePrice = 0;
+            if (isLabGrown) {
+              if (!allowPurchaseByCarat) {
+                perStonePrice = dbPrice;
+              } else {
+                const rate = isAlexOrParaiba ? 85 : 50;
+                perStonePrice = dbCtWeight > 0 ? Math.round((rate * dbCtWeight + 1e-6) * 100) / 100 : dbPrice;
               }
-              verifiedItem.product.price = basePrice;
             } else {
-               throw new Error(`Layout size not found: ${size}`);
+              perStonePrice = dbPrice;
             }
+            verifiedItem.product.price = perStonePrice;
+            verifiedItem.quantity = Math.max(1, Math.round(Number(verifiedItem.quantity) || 1));
           }
-        } catch (err: any) {
-          throw new Error(`Failed to verify layout price: ${err.message}`);
         }
-      } else {
-        // Regular Shopify products (jewelry, beads, etc.) use variant prices
-        const variant = shopifyProduct.variants?.edges?.[0]?.node;
-        if (variant) {
-          // You might need to match the specific variant if they selected one, 
-          // but for this implementation we'll take the first variant's price
-          // as we don't have a specific variant ID in the cart payload based on the code seen earlier.
-          // Wait, if it has a variantPrice, we should check all variants to make sure it matches.
-          // Actually, let's just get the first variant price for now. If it has variantPrice, they should match.
-          // We'll enforce the first variant's price since we didn't see variant selection logic.
-          verifiedItem.product.price = Number(variant.price.amount);
-          if (verifiedItem.product.variantPrice) {
-             verifiedItem.product.variantPrice = Number(variant.price.amount);
+      } else if (productType === "freeSizeStone") {
+        const freeStoneId = productId || id;
+        const dbRes = await pool.query("SELECT price, ct_weight FROM free_size_gemstones WHERE id = $1", [freeStoneId]);
+        if (dbRes.rows.length > 0 && dbRes.rows[0].price != null) {
+          verifiedItem.product.price = Number(dbRes.rows[0].price);
+          if (dbRes.rows[0].ct_weight != null) {
+            verifiedItem.product.ct_weight = Number(dbRes.rows[0].ct_weight);
+          }
+          verifiedItem.quantity = 1;
+        }
+      } else if (
+        handle &&
+        (productType === "layouts" ||
+          productType === "jewelry" ||
+          productType === "ringJewelry" ||
+          productType === "necklaceJewelry" ||
+          productType === "braceletJewelry" ||
+          productType === "bead" ||
+          productType === "beads" ||
+          productType === "earringJewelry")
+      ) {
+        const shopifyProduct = await fetchShopifyProduct(handle);
+        if (shopifyProduct) {
+          if (productType === "layouts") {
+            const shapeSizesStr = shopifyProduct.shapeSizes?.value || shopifyProduct.metafield?.value;
+            if (shapeSizesStr) {
+              const parsed = JSON.parse(shapeSizesStr);
+              const sizeData = parsed.find((s: any) => s.size === size);
+              if (sizeData) {
+                let basePrice = Number(sizeData.price);
+                if (quality === "A") {
+                  basePrice = basePrice * 0.75;
+                }
+                verifiedItem.product.price = basePrice;
+              }
+            }
+          } else if (
+            productType === "earringJewelry" &&
+            shopifyProduct.earring_metafield?.value
+          ) {
+            try {
+              const parsedEarrings = JSON.parse(shopifyProduct.earring_metafield.value);
+              if (Array.isArray(parsedEarrings) && parsedEarrings.length > 0) {
+                const targetCarat = String(verifiedItem.product.totalCaratWeight || "").trim();
+                const matchedOption =
+                  parsedEarrings.find((opt: any) => String(opt?.carat || "").trim() === targetCarat) ||
+                  parsedEarrings[0];
+                if (matchedOption?.price != null) {
+                  verifiedItem.product.price = Number(matchedOption.price);
+                }
+              }
+            } catch {
+              const variant = shopifyProduct.variants?.edges?.[0]?.node;
+              if (variant?.price?.amount != null) {
+                verifiedItem.product.price = Number(variant.price.amount);
+              }
+            }
+          } else {
+            const edges: any[] = shopifyProduct.variants?.edges || [];
+            const currentPrice = Number(verifiedItem.product.price);
+            const sizeStr = String(size || "").trim();
+            const matchedVariant =
+              (sizeStr &&
+                edges.find((e) => String(e?.node?.title || "").trim() === sizeStr)) ||
+              edges.find(
+                (e) =>
+                  e?.node?.price?.amount != null &&
+                  Math.abs(Number(e.node.price.amount) - currentPrice) < 0.01
+              ) ||
+              edges[0];
+
+            const resolvedAmount = matchedVariant?.node?.price?.amount;
+            if (resolvedAmount != null) {
+              verifiedItem.product.price = Number(resolvedAmount);
+              if (verifiedItem.product.variantPrice) {
+                verifiedItem.product.variantPrice = Number(resolvedAmount);
+              }
+            }
           }
         }
       }
+    } catch (err) {
+      console.warn("Non-fatal item price verification warning:", err);
     }
     
     verifiedCart.push(verifiedItem);
@@ -152,10 +177,16 @@ const fetchShopifyProduct = async (handle: string) => {
       product(handle: $handle) {
         id
         title
+        shapeSizes: metafield(namespace: "custom", key: "shape_sizes") {
+          value
+        }
         metafield(namespace: "custom", key: "shapeSizes") {
           value
         }
-        variants(first: 10) {
+        earring_metafield: metafield(namespace: "custom", key: "earring_metafielcd") {
+          value
+        }
+        variants(first: 50) {
           edges {
             node {
               id

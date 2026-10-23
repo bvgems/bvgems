@@ -177,11 +177,22 @@ import { getShapesData } from "@/apis/api";
 
 
 
-const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireColors }: any) => {
+const GemVideo = ({ gem, shape, selectedTypes, availableTypes = [], selectedGrades, selectedSapphireColors }: any) => {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [label, setLabel] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSharingVideo, setIsSharingVideo] = useState(false);
+  const [isVideoZoomed, setIsVideoZoomed] = useState(false);
+  const [videoZoomPos, setVideoZoomPos] = useState({ x: 50, y: 50 });
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleVideoMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!videoContainerRef.current) return;
+    const { left, top, width, height } = videoContainerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(100, ((e.clientX - left) / width) * 100));
+    const y = Math.max(0, Math.min(100, ((e.clientY - top) / height) * 100));
+    setVideoZoomPos({ x, y });
+  };
 
   const handleShareVideo = async (e: React.MouseEvent, url: string) => {
     e.preventDefault();
@@ -236,6 +247,14 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
 
     if (!gem) {
       setVideoUrl(null);
+      setLabel(null);
+      return;
+    }
+
+    // If gem has both Natural and Lab Grown available, and user hasn't selected any type yet: DO NOT SHOW VIDEO
+    if (availableTypes && availableTypes.length > 1 && (!selectedTypes || selectedTypes.length === 0)) {
+      setVideoUrl(null);
+      setLabel(null);
       return;
     }
 
@@ -250,7 +269,12 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
 
         // Group by quality to get representative items (like CategoryContent does)
         const qualityMap: Record<string, any> = {};
+        const distinctTypesInItems = new Set<string>();
         items.forEach((item: any) => {
+          const isLab = String(item.quality || "").toLowerCase().includes("lab") || 
+                        String(item.type || "").toLowerCase().includes("lab");
+          distinctTypesInItems.add(isLab ? "Lab Grown" : "Natural");
+
           const hasVideo = Array.isArray(item?.cloudinary_videos) && item.cloudinary_videos.length > 0;
           const current = qualityMap[item.quality];
           if (!current) {
@@ -264,12 +288,43 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
         });
         const images = Object.values(qualityMap);
 
-        let gradePriorities = ["AAA", "AA", "A", "Lab Grown"];
-        if (selectedTypes.includes("Lab Grown") && !selectedTypes.includes("Natural")) {
-          gradePriorities = ["Lab Grown"];
-        } else if (selectedTypes.includes("Natural") && !selectedTypes.includes("Lab Grown")) {
-          gradePriorities = ["AAA", "AA", "A"];
+        const gemHasMultipleTypes = (availableTypes && availableTypes.length > 1) || distinctTypesInItems.size > 1;
+        const userHasSelectedType = selectedTypes && selectedTypes.length > 0;
+
+        // If the gem has both Natural and Lab Grown, but user hasn't selected a type, DO NOT SHOW VIDEO
+        if (gemHasMultipleTypes && !userHasSelectedType) {
+          return null;
         }
+
+        let gradePriorities: string[] = [];
+        if (userHasSelectedType) {
+          if (selectedTypes.includes("Lab Grown")) {
+            gradePriorities = ["Lab Grown"];
+          } else if (selectedTypes.includes("Natural")) {
+            if (selectedGrades && selectedGrades.length > 0) {
+              gradePriorities = [selectedGrades[0], "AAA", "AA", "A"].filter(Boolean);
+            } else {
+              gradePriorities = ["AAA", "AA", "A"];
+            }
+          }
+        } else {
+          // Only for single-type gem (e.g. only Lab Grown like Paraiba, or only Natural like Morganite)
+          const singleType = (availableTypes && availableTypes.length === 1)
+            ? availableTypes[0]
+            : Array.from(distinctTypesInItems)[0];
+
+          if (singleType === "Lab Grown") {
+            gradePriorities = ["Lab Grown"];
+          } else {
+            if (selectedGrades && selectedGrades.length > 0) {
+              gradePriorities = [selectedGrades[0], "AAA", "AA", "A"].filter(Boolean);
+            } else {
+              gradePriorities = ["AAA", "AA", "A"];
+            }
+          }
+        }
+
+        if (gradePriorities.length === 0) return null;
 
         let foundVideo = null;
         let foundLabel = null;
@@ -354,14 +409,20 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
     run();
 
     return () => { active = false; };
-  }, [gem, shape, selectedTypes, selectedGrades, selectedSapphireColors]);
+  }, [gem, shape, selectedTypes, availableTypes, selectedGrades, selectedSapphireColors]);
 
   if (!videoUrl) return null;
 
   return (
     <div className={`flex justify-center items-center transition-all duration-700 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
       <div className="relative group overflow-hidden bg-white/50 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] border border-black/[0.03] p-2 ring-1 ring-black/[0.02]">
-        <div className="relative aspect-square w-[280px] md:w-[320px] lg:w-[280px] xl:w-[320px] rounded-[2rem] overflow-hidden bg-[#fbfbfd]">
+        <div
+          ref={videoContainerRef}
+          className="relative aspect-square w-[280px] md:w-[320px] lg:w-[280px] xl:w-[320px] rounded-[2rem] overflow-hidden bg-[#fbfbfd] cursor-zoom-in"
+          onMouseMove={handleVideoMouseMove}
+          onMouseEnter={() => setIsVideoZoomed(true)}
+          onMouseLeave={() => setIsVideoZoomed(false)}
+        >
           <video
             ref={(el) => {
               if (el && el.readyState >= 3) {
@@ -374,11 +435,21 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
             loop
             muted
             playsInline
-            className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+            className={`w-full h-full object-cover transition-transform duration-100 ease-linear ${
+              isVideoZoomed ? "scale-[2]" : "scale-[1]"
+            }`}
+            style={{
+              transformOrigin: `${videoZoomPos.x}% ${videoZoomPos.y}%`,
+            }}
             onCanPlay={() => setIsLoaded(true)}
             onLoadedData={() => setIsLoaded(true)}
             onError={() => setIsLoaded(false)}
           />
+
+          {isVideoZoomed && (
+            <div className="absolute inset-0 border-[3px] border-black/30 rounded-[2rem] pointer-events-none z-10" />
+          )}
+
           {/* Subtle elegant gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60 pointer-events-none" />
 
@@ -395,7 +466,7 @@ const GemVideo = ({ gem, shape, selectedTypes, selectedGrades, selectedSapphireC
 
           {/* Elegant frosted label */}
           {label && (
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center">
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-10">
               <div className="bg-white/30 backdrop-blur-xl border border-white/40 text-gray-900 px-4 py-1.5 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.05)] whitespace-nowrap">
                 <span className="text-[11px] font-medium tracking-[0.15em] uppercase drop-shadow-sm mix-blend-color-burn whitespace-nowrap">
                   {label}
@@ -702,6 +773,7 @@ export const GridViewTopFilters = ({
                     gem={selectedGems[0]}
                     shape={selectedShapes.length > 0 ? selectedShapes[0] : null}
                     selectedTypes={selectedTypes}
+                    availableTypes={availableTypes}
                     selectedGrades={selectedGrades}
                     selectedSapphireColors={selectedSapphireColors}
                   />
@@ -846,6 +918,7 @@ export const GridViewTopFilters = ({
                       gem={selectedGems[0]}
                       shape={selectedShapes.length > 0 ? selectedShapes[0] : null}
                       selectedTypes={selectedTypes}
+                      availableTypes={availableTypes}
                       selectedGrades={selectedGrades}
                       selectedSapphireColors={selectedSapphireColors}
                     />

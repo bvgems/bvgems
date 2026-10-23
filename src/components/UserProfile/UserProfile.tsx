@@ -10,6 +10,7 @@ import { useDisclosure } from "@mantine/hooks";
 import {
   IconBasketCheck,
   IconChevronDown,
+  IconClock,
   IconLogout,
   IconUser,
 } from "@tabler/icons-react";
@@ -65,6 +66,14 @@ export const UserProfile = ({ isSmaller, user }: any) => {
           leftSection={<IconUser size={16} stroke={1.5} />}
         >
           My Profile
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            router?.push("/profile?tab=recently-viewed");
+          }}
+          leftSection={<IconClock size={16} stroke={1.5} />}
+        >
+          Recently Viewed
         </MenuItem>
         <MenuItem
           onClick={() => {

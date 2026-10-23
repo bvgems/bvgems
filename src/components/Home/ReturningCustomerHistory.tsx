@@ -14,11 +14,13 @@ import {
   IconArrowRight,
   IconDiamond,
   IconSparkles,
+  IconTrash,
+  IconX,
 } from "@tabler/icons-react";
 import { getTimeBasedGreeting, formatRelativeTime } from "@/utils/greetingHelpers";
 
 export const ReturningCustomerHistory: React.FC = () => {
-  const { items } = useRecentlyViewed();
+  const { items, removeItem, clearAll } = useRecentlyViewed();
   const { user } = useAuth();
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -146,6 +148,30 @@ export const ReturningCustomerHistory: React.FC = () => {
           <p className="text-xs sm:text-sm text-slate-500 mt-2.5 max-w-xl mx-auto font-normal leading-relaxed">
             {greetingData.subtext}
           </p>
+
+          {/* Action Row */}
+          <div className="flex items-center justify-center gap-2.5 mt-3.5">
+            {user && (
+              <Link
+                href="/profile?tab=recently-viewed"
+                className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#0b182d] hover:text-blue-900 transition-colors px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200/70"
+              >
+                <span>View All In Profile</span>
+                <IconArrowRight size={13} />
+              </Link>
+            )}
+
+            <Tooltip label="Clear viewed history" position="top" withArrow>
+              <button
+                type="button"
+                onClick={clearAll}
+                className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-medium text-slate-400 hover:text-red-600 transition-colors px-2.5 py-1 rounded-full hover:bg-slate-100 border border-transparent hover:border-slate-200 active:scale-95 cursor-pointer"
+              >
+                <IconTrash size={13} />
+                <span>Clear</span>
+              </button>
+            </Tooltip>
+          </div>
         </div>
 
         {/* Horizontal Slider Rail with Floating Side Navigation */}
@@ -242,6 +268,22 @@ export const ReturningCustomerHistory: React.FC = () => {
                           {formatRelativeTime(item.viewedAt)}
                         </span>
                       </div>
+
+                      {/* Remove Item Button on Hover */}
+                      <Tooltip label="Remove from history" position="left" withArrow>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            removeItem(item.id);
+                          }}
+                          aria-label="Remove item"
+                          className="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-white/90 hover:bg-white text-slate-400 hover:text-red-600 shadow-2xs flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 active:scale-90 cursor-pointer"
+                        >
+                          <IconX size={12} stroke={2.2} />
+                        </button>
+                      </Tooltip>
                     </div>
 
                     {/* Content Area */}

@@ -108,7 +108,7 @@ export const SettingsComponent = ({
   const accordions = sectionAccordions[activeSection] ?? [];
 
   return (
-    <div className="p-6">
+    <div className="p-2 md:p-4">
       <Accordion
         chevronPosition="left"
         value={activeSubSection ?? null}

@@ -165,12 +165,6 @@ export const getOrderPayload = (
           });
         }
 
-        if (item?.product?.isGift) {
-          properties.push({
-            name: "FREE GIFT",
-            value: "STUDS EARRINGS",
-          });
-        }
 
         if (item?.product?.quality) {
           properties.push({

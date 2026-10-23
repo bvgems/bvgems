@@ -57,10 +57,7 @@ export function Header() {
     [user?.id]
   );
   const cart = cartStore((state: any) => state?.cart);
-  const cartCount = cart?.reduce(
-    (sum: any, item: any) => sum + item.quantity,
-    0
-  );
+  const cartCount = cart?.length || 0;
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");

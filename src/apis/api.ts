@@ -13,16 +13,6 @@ const filterGhostRows = (data: any[]) => {
   );
 };
 
-export const getStudsDetails = async () => {
-  try {
-    const response = await axios.get(`${baseUrl}/api/getStudsDetails`);
-    return response.data;
-  } catch (error) {
-    console.error("Error in getting the orders", error);
-    return null;
-  }
-};
-
 export const getOrders = async (email: any) => {
   try {
     const response = await axios.get(

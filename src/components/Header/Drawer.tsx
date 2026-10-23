@@ -211,6 +211,15 @@ export const DrawerComponent = ({
             <div
               onClick={() => {
                 toggle();
+                router.push("/profile?tab=recently-viewed");
+              }}
+              className="mt-4 pl-2.5 cursor-pointer"
+            >
+              Recently Viewed
+            </div>
+            <div
+              onClick={() => {
+                toggle();
                 router.push("/my-orders");
               }}
               className="mt-4 pl-2.5 cursor-pointer"

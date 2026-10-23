@@ -8,7 +8,6 @@ export const JewelryOptionsDrawer = ({
   category,
   close,
   open,
-  isFreeGift,
 }: any) => {
   const router = useRouter();
 
@@ -33,17 +32,11 @@ export const JewelryOptionsDrawer = ({
               key={idx}
               className="bg-white transition-all duration-300 cursor-pointer p-4 flex flex-col justify-between shadow-md hover:shadow-xl rounded-xl"
               onClick={() => {
-                !isFreeGift
-                  ? router.push(
-                      `/jewelry-details/${category}/${
-                        productData?.handle
-                      }/${item?.node?.title.toLowerCase().replace(/\s+/g, "-")}`,
-                    )
-                  : router.push(
-                      `/jewelry-details/${category}/${
-                        productData?.handle
-                      }/${item?.node?.title.toLowerCase().replace(/\s+/g, "-")}?freeGift=true`,
-                    );
+                router.push(
+                  `/jewelry-details/${category}/${
+                    productData?.handle
+                  }/${item?.node?.title.toLowerCase().replace(/\s+/g, "-")}`,
+                );
               }}
             >
               <div className="w-full flex justify-center">

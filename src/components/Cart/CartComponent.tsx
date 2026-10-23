@@ -1,7 +1,11 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { getCartStore, fetchAndSyncUserCart } from "@/store/useCartStore";
+import {
+  getCartStore,
+  fetchAndSyncUserCart,
+  generateCartItemId,
+} from "@/store/useCartStore";
 import {
   Button,
   Grid,
@@ -14,7 +18,6 @@ import {
   IconCheck,
   IconClock,
   IconArrowNarrowRight,
-  IconGift,
   IconTrash,
 } from "@tabler/icons-react";
 import { generateCalibratedStoneUrl, generateFreeSizeStoneUrl } from "@/utils/seoUrlHelpers";
@@ -42,6 +45,7 @@ export function CartComponent() {
   const addToCart = cartStore((state: any) => state.addToCart);
 
   const cart = cartStore((state: any) => state.cart);
+  const isSynced = cartStore((state: any) => state.isSynced);
   const removeProduct = cartStore((state: any) => state.removeFromCart);
   const updateQuantity = cartStore((state: any) => state.updateQuantity);
   const updateCaratWeight = cartStore((state: any) => state.updateCaratWeight);
@@ -53,8 +57,6 @@ export function CartComponent() {
   const [hasMounted, setHasMounted] = useState(false);
   const [subtotal, setSubtotal] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
-  const [isFreeStuds, setIsFreeStuds] = useState(false);
-  const [studsDetails, setStudsDetails] = useState<any>({});
   const [quoteProduct, setQuoteProduct] = useState<any | null>(null);
   
   useEffect(() => {
@@ -64,36 +66,21 @@ export function CartComponent() {
     }
   }, [user?.id]);
 
+  // Purge any legacy gift items from cart if present (only after initial DB sync for logged-in users)
   useEffect(() => {
-    checkFreeStuds();
-  }, [cart, grandTotal]);
-
-  const checkFreeStuds = () => {
-    let eligible = false;
-
-    cart?.forEach((item: any) => {
-      const productType = item?.product?.productType;
-
-      if (
-        productType === "braceletJewelry" ||
-        productType === "ringJewelry" ||
-        productType === "earringJewelry" ||
-        productType === "necklaceJewelry"
-      ) {
-        if (Number(item?.product?.price) * item?.quantity > 1000) {
-          eligible = true;
-        }
-      }
-    });
-
-    setIsFreeStuds(eligible);
-
-    const giftItem = cart.find((item: any) => item.product.isGift);
-
-    if (!eligible && giftItem) {
-      removeProduct(giftItem.product.productId, giftItem.product.shade);
+    if (user?.id && !isSynced) return;
+    const legacyGifts = cart.filter(
+      (item: any) =>
+        item?.product?.isGift ||
+        String(item?.product?.productId || "").includes("FREE-GIFT"),
+    );
+    if (legacyGifts.length > 0) {
+      legacyGifts.forEach((giftItem: any) => {
+        const giftKey = giftItem?.cartItemId || generateCartItemId(giftItem);
+        removeProduct(giftKey, giftItem?.product?.shade);
+      });
     }
-  };
+  }, [cart, removeProduct, user?.id, isSynced]);
 
   useEffect(() => {
     if (!hasMounted) return;
@@ -117,52 +104,18 @@ export function CartComponent() {
       }
 
       // ✅ Add certification fee if selected
-      if (item.product.needCertification) total += 75 * quantity;
+      if (item.product.needCertification) {
+        total += 75 * (item.product.purchaseByCarat ? 1 : quantity);
+      }
     });
 
     // Base subtotal
     setSubtotal(total);
 
+    // Free shipping on orders of $200 or above, otherwise $15 standard shipping
     const shippingCost = total >= 200 ? 0 : 15;
     setGrandTotal(total + shippingCost);
   }, [cart, hasMounted]);
-
-  useEffect(() => {
-    // fetchStudsDetails();
-    if (isFreeStuds && !cart.some((item: any) => item.product.isGift)) {
-      addProductInCart();
-    }
-  }, [isFreeStuds]);
-
-  const addProductInCart = () => {
-    const variables: any = {};
-    variables.goldColor = "white";
-    variables.totalCaratWeight = "0.65";
-    variables.stone = null;
-    variables.image =
-      "/assets/shopify/1233_Y.png";
-    addToCart({
-      product: {
-        productType: "earringJewelry",
-
-        productId: `gid://shopify/Product/7963364196405-FREE-GIFT`,
-        handle: "natural-round-blue-sapphire-studs-earrings",
-        title: "Natural Round Blue Sapphire Studs Earrings",
-        image_url:
-          "/assets/shopify/1233_Y.png",
-        price: 0,
-        gemstone: variables?.stone,
-        size: variables?.size || "",
-        goldColor: variables?.goldColor || "",
-        length: variables?.length || "",
-        firstStone: "",
-        secondStone: "",
-        totalCaratWeight: variables?.totalCaratWeight,
-        isGift: Boolean(true),
-      },
-      quantity: 1,
-    });
-  };
 
   const handleRemoveProduct = (id: any, product: any, purchaseByCarat?: boolean) => {
     removeProduct(id, product?.shade, purchaseByCarat);
@@ -244,7 +197,7 @@ export function CartComponent() {
       }
 
       if (value.product.needCertification) {
-        productTotal += 75 * value?.quantity;
+        productTotal += 75 * (value.product.purchaseByCarat ? 1 : (value?.quantity || 1));
       }
 
       return sum + productTotal;
@@ -255,13 +208,6 @@ export function CartComponent() {
 
   const handleCheckout = () => {
     router.push("/checkout");
-  };
-
-  const handleCustomization = (value: any) => {
-    cartStore.getState().setFreeGiftSession(true);
-    router.push(
-      `/jewelry/earrings/${value?.product?.handle}/${value?.product?.handle}?freeGift=true&fromCart=true`,
-    );
   };
 
   if (cart.length === 0) {
@@ -304,27 +250,19 @@ export function CartComponent() {
               CLEAR CART
             </Button>
           </div>
-          {cart.some((item: any) => item.product.isGift) && (
-            <Alert mb="md" color="green" icon={<IconGift />} radius="md">
-              🎉 Congratulations! You've unlocked a complimentary gift with your
-              purchase.
-            </Alert>
-          )}
-          <Stack gap="md">
+          <Stack gap="md" mt="md">
             {cart.map((value: any, index: number) => {
               const itemKey =
-                value?.cartItemId ||
-                `${value?.product?.productId}-${value?.product?.purchaseByCarat ? "carat" : "piece"}-${value?.product?.shade || ""}-${index}`;
+                value?.cartItemId || generateCartItemId(value);
 
               return (
                 <CartLineItem
-                  key={itemKey}
+                  key={`${itemKey}-${index}`}
                   value={value}
                   onOpenProduct={() => redirectToProduct(value)}
                   onRemove={() =>
                     handleRemoveProduct(itemKey, value.product, value.product?.purchaseByCarat)
                   }
-                  onCustomizeGift={() => handleCustomization(value)}
                   onRequestPricing={() => setQuoteProduct(value?.product)}
                   onQuantityChange={(newQuantity) => {
                     updateQuantity(

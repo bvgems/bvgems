@@ -100,9 +100,6 @@ export default function JewelryProductPage() {
     () => getCartStore(user?.id || "guest"),
     [user?.id],
   );
-  const isFreeGift =
-    searchParams.get("freeGift") === "true" &&
-    cartStore((state: any) => state.freeGiftSession);
 
   const gemstoneStr = stone ? stone.replace(/-/g, " ") : "";
   const metalStr = productData?.goldType?.value || "14K Gold";
@@ -489,7 +486,6 @@ export default function JewelryProductPage() {
                 selectedImage={images[currentIndex]?.url || images[0]?.url}
                 twoStoneRings={twoStoneRings}
                 category={category}
-                isFreeGift={isFreeGift}
               />
             </motion.div>
           </GridCol>

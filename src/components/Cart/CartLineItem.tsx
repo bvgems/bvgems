@@ -2,7 +2,6 @@
 
 import { Checkbox, Image, NumberInput } from "@mantine/core";
 import {
-  IconGift,
   IconInfoCircle,
   IconMinus,
   IconPlus,
@@ -218,7 +217,6 @@ export function CartLineItem({
   value,
   onOpenProduct,
   onRemove,
-  onCustomizeGift,
   onRequestPricing,
   onQuantityChange,
   onCaratWeightChange,
@@ -227,21 +225,19 @@ export function CartLineItem({
   value: any;
   onOpenProduct: () => void;
   onRemove: () => void;
-  onCustomizeGift: () => void;
   onRequestPricing: () => void;
   onQuantityChange: (n: number) => void;
   onCaratWeightChange: (n: number) => void;
   onToggleCertification: (checked: boolean) => void;
 }) {
   const p = value?.product ?? {};
-  const isGift = !!p.isGift;
   const isStoneLike = p.productType === "stone" || p.productType === "freeSizeStone";
   const byCarat = isStoneLike && !!p.purchaseByCarat;
   const quantity = Number(value?.quantity) || 1;
 
   const unitPrice = Number(p.price) || 0;
   const displayPrice = value?.jewelryProduct?.price ?? p.price;
-  const needsQuote = !isGift && Number(displayPrice) === 0;
+  const needsQuote = Number(displayPrice) === 0;
 
   // Calibrated stones: the buyer chooses the carat weight. Free-size stones: one unique
   // stone, so the "amount" is that stone's own weight and isn't editable.
@@ -259,7 +255,9 @@ export function CartLineItem({
   const requestedCarats = Number(value?.requestedCarats) || safeCaratAmount;
 
   const merchandise = byCarat ? unitPrice * safeCaratAmount : unitPrice * quantity;
-  const certFee = p.needCertification ? CERTIFICATION_FEE * quantity : 0;
+  const certFee = p.needCertification
+    ? CERTIFICATION_FEE * (byCarat ? 1 : quantity)
+    : 0;
   const itemTotal = merchandise + certFee;
 
   const totalWeight =
@@ -268,7 +266,7 @@ export function CartLineItem({
       : null;
 
   const title = p.collection_slug ? `${p.collection_slug} ${p.shape ?? ""}`.trim() : p.title;
-  const kind = isGift ? "Complimentary gift" : KIND_LABEL[p.productType] ?? "Item";
+  const kind = KIND_LABEL[p.productType] ?? "Item";
   const origin = isStoneLike && p.type ? (isLabGrown(p) ? "Lab Grown" : "Natural") : null;
   const specs = getSpecs(p, byCarat, quantity);
 
@@ -282,11 +280,7 @@ export function CartLineItem({
 
   return (
     <article
-      className={`rounded-2xl border p-4 sm:p-5 ${
-        isGift
-          ? "border-dashed border-[#0b182d]/40 bg-slate-50"
-          : "border-gray-200 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]"
-      }`}
+      className="rounded-2xl border p-4 sm:p-5 border-gray-200 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]"
     >
       <div className="grid grid-cols-[72px_minmax(0,1fr)] gap-x-4 gap-y-3 sm:grid-cols-[104px_minmax(0,1fr)] sm:gap-x-5 sm:gap-y-2.5">
         {/* Image */}
@@ -334,25 +328,15 @@ export function CartLineItem({
               </button>
             </div>
 
-            {isGift ? (
-              <button
-                type="button"
-                onClick={onCustomizeGift}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#0b182d] px-3 py-1.5 text-xs font-medium text-white transition-transform duration-100 ease-out active:scale-[0.97]"
-              >
-                <IconGift size={14} /> Customize
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={onRemove}
-                className="-mr-2 inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-gray-500 transition-[transform,color,background-color] duration-100 ease-out hover:bg-red-50 hover:text-red-600 active:scale-[0.97]"
-                aria-label={`Remove ${title} from cart`}
-              >
-                <IconTrash size={16} stroke={1.75} />
-                <span className="hidden sm:inline">Remove</span>
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={onRemove}
+              className="-mr-2 inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-gray-500 transition-[transform,color,background-color] duration-100 ease-out hover:bg-red-50 hover:text-red-600 active:scale-[0.97]"
+              aria-label={`Remove ${title} from cart`}
+            >
+              <IconTrash size={16} stroke={1.75} />
+              <span className="hidden sm:inline">Remove</span>
+            </button>
           </div>
 
           {specs.length > 0 && (
@@ -370,14 +354,7 @@ export function CartLineItem({
         {/* Price: how is the total calculated? Full-width on mobile, under the text on desktop. */}
         <div className="col-span-2 sm:col-span-1 sm:col-start-2">
           <div className="rounded-xl bg-gray-50 p-3 sm:p-4">
-            {isGift ? (
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-sm text-gray-600">
-                  Included free with your jewelry purchase over $1,000
-                </span>
-                <span className="text-[15px] font-semibold text-emerald-700">Free</span>
-              </div>
-            ) : needsQuote ? (
+            {needsQuote ? (
               <div className="flex items-center justify-between gap-3">
                 <span className="text-sm text-gray-600">Pricing for this item is quoted on request.</span>
                 <button
@@ -462,7 +439,7 @@ export function CartLineItem({
                     <div className="flex items-center justify-between gap-3 text-gray-600">
                       <span>
                         Certification
-                        {quantity > 1 && (
+                        {!byCarat && quantity > 1 && (
                           <span className="text-gray-400">
                             {" "}
                             · {formatUSD(CERTIFICATION_FEE)} × {quantity}
@@ -483,27 +460,25 @@ export function CartLineItem({
             )}
           </div>
 
-          {!isGift && (
-            <Checkbox
-              color="#0b182d"
-              size="sm"
-              mt="sm"
-              checked={!!p.needCertification}
-              onChange={(e) => onToggleCertification(e.currentTarget.checked)}
-              label={
-                <span className="text-sm text-gray-600">
-                  Add certification{" "}
-                  <span className="text-gray-400">
-                    {byCarat
-                      ? `(+${formatUSD(CERTIFICATION_FEE)} for this lot)`
-                      : quantity > 1
-                        ? `(+${formatUSD(CERTIFICATION_FEE)} per piece)`
-                        : `(+${formatUSD(CERTIFICATION_FEE)})`}
-                  </span>
+          <Checkbox
+            color="#0b182d"
+            size="sm"
+            mt="sm"
+            checked={!!p.needCertification}
+            onChange={(e) => onToggleCertification(e.currentTarget.checked)}
+            label={
+              <span className="text-sm text-gray-600">
+                Add certification{" "}
+                <span className="text-gray-400">
+                  {byCarat
+                    ? `(+${formatUSD(CERTIFICATION_FEE)} for this lot)`
+                    : quantity > 1
+                      ? `(+${formatUSD(CERTIFICATION_FEE)} per piece)`
+                      : `(+${formatUSD(CERTIFICATION_FEE)})`}
                 </span>
-              }
-            />
-          )}
+              </span>
+            }
+          />
         </div>
       </div>
     </article>

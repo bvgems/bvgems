@@ -172,7 +172,7 @@ export const RecentlyViewedSection: React.FC<RecentlyViewedSectionProps> = ({
           <div className="flex items-center justify-center gap-2.5 mt-3.5">
             {user && (
               <Link
-                href="/profile"
+                href="/profile?tab=recently-viewed"
                 className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#0b182d] hover:text-blue-900 transition-colors px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200/70"
               >
                 <span>View All In Profile</span>

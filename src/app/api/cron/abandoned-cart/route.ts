@@ -28,8 +28,16 @@ export async function GET(request: Request) {
 
     if (!email) continue;
 
-    const items =
+    const rawItems =
       typeof cart.cart === "string" ? JSON.parse(cart.cart) : cart.cart;
+    const items = (Array.isArray(rawItems) ? rawItems : []).filter(
+      (item: any) =>
+        item &&
+        item.product &&
+        !item.product?.isGift &&
+        !String(item.product?.productId || "").includes("FREE-GIFT")
+    );
+    if (items.length === 0) continue;
 
     const html = `
   <div style="font-family: 'Futura', sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
@@ -84,7 +92,7 @@ export async function GET(request: Request) {
       </p>
      
       <p style="font-size: 16px; font-weight: bold; margin: 4px 0;">
-        ${item?.product.price == 0 ? "Free Gift 🎁" : `$${item?.product.price}`}
+        $${item?.product?.price ?? 0}
       </p>
     </div>
   </div>

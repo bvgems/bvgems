@@ -84,7 +84,7 @@ export async function POST(req: Request) {
       }
 
       if (product?.needCertification) {
-        amount += 75 * (item?.quantity || 1);
+        amount += 75 * (product?.purchaseByCarat ? 1 : (item?.quantity || 1));
       }
 
       subtotal += amount;

@@ -18,9 +18,7 @@ import {
 } from "@mantine/core";
 import {
   IconCheck,
-  IconGift,
   IconShoppingCart,
-  IconSparkles,
   IconStarFilled,
 } from "@tabler/icons-react";
 
@@ -76,7 +74,7 @@ export const JewelryProductDetails = ({
   selectedImage,
   twoStoneRings,
   category,
-  isFreeGift,
+  isFreeGift = false,
 }: any) => {
   const { user } = useAuth();
   const userKey = user?.id?.toString() || "guest";
@@ -85,7 +83,6 @@ export const JewelryProductDetails = ({
   const [opened, { open, close }] = useDisclosure(false);
   const [value, setValue] = useState<string>("");
   const [customizedDrawerTitle, setCustomizedDrawerTitle] = useState("");
-  const [freeGiftModalOpened, setFreeGiftModalOpened] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentVariantSlug = pathname?.split("/").filter(Boolean).pop();
@@ -116,18 +113,6 @@ export const JewelryProductDetails = ({
         break;
     }
   }, [category]);
-
-  useEffect(() => {
-    const fromCart = searchParams.get("fromCart");
-    const freeGift = searchParams.get("freeGift");
-
-    const alreadyShown = sessionStorage.getItem("freeGiftShown");
-
-    if (freeGift === "true" && fromCart === "true" && !alreadyShown) {
-      setFreeGiftModalOpened(true);
-      sessionStorage.setItem("freeGiftShown", "true");
-    }
-  }, [searchParams]);
 
   const jf = useJewelryFunctions(
     path,
@@ -186,21 +171,11 @@ export const JewelryProductDetails = ({
 
   useEffect(() => {
     if (jf.isEarringCategory && parsed.length > 0 && !selectedEarring) {
-      if (isFreeGift) {
-        const freeOption = parsed.find((opt) => opt.carat === "0.65");
-
-        if (freeOption) {
-          setSelectedEarring(freeOption);
-          jf.setSelectedCarat(freeOption.carat);
-          jf.setCustomPrice(0); // FREE
-        }
-      } else {
-        setSelectedEarring(parsed[0]);
-        jf.setSelectedCarat(parsed[0].carat);
-        jf.setCustomPrice(Number(parsed[0].price));
-      }
+      setSelectedEarring(parsed[0]);
+      jf.setSelectedCarat(parsed[0].carat);
+      jf.setCustomPrice(Number(parsed[0].price));
     }
-  }, [jf.isEarringCategory, parsed, selectedEarring, isFreeGift]);
+  }, [jf.isEarringCategory, parsed, selectedEarring]);
 
   // 🔹 Handle option change
   const handleEarringChange = (option: any) => {
@@ -214,41 +189,6 @@ export const JewelryProductDetails = ({
 
   return (
     <>
-      <Modal
-        opened={freeGiftModalOpened}
-        onClose={() => setFreeGiftModalOpened(false)}
-        centered
-        withCloseButton
-        title={
-          <Group gap="xs">
-            <IconSparkles size={20} color="gold" />
-            <Text fw={600}>Congratulations!</Text>
-          </Group>
-        }
-      >
-        <div className="flex flex-col gap-3">
-          <Text>
-            🎉 You’re receiving a <strong>FREE 0.65 Carat Stud Earring</strong>{" "}
-            as a gift!
-          </Text>
-
-          <Text size="sm" c="dimmed">
-            You can personalize your gift by changing the gemstone. Click on{" "}
-            <strong>“Explore Different Gemstones”</strong> below the product
-            image.
-          </Text>
-
-          <Button
-            mt="sm"
-            color="#0b182d"
-            onClick={() => setFreeGiftModalOpened(false)}
-            fullWidth
-          >
-            Continue Customizing
-          </Button>
-        </div>
-      </Modal>
-
       <Drawer
         size={500}
         position="right"
@@ -389,10 +329,7 @@ export const JewelryProductDetails = ({
                     label={opt.carat}
                     value={opt.carat}
                     selected={selectedEarring?.carat === opt.carat}
-                    disabled={isFreeGift && opt.carat !== "0.65"}
-                    onClick={() => {
-                      if (!isFreeGift) handleEarringChange(opt);
-                    }}
+                    onClick={() => handleEarringChange(opt)}
                   />
                 </SwiperSlide>
               ))}
@@ -483,35 +420,19 @@ export const JewelryProductDetails = ({
               size="md"
               w={110}
               style={{ height: "100%" }}
-              disabled={isFreeGift}
             />
           </GridCol>
           <GridCol span={{ base: 9 }}>
-            {isFreeGift ? (
-              <Button
-                disabled={jf.isDisabled()}
-                color="#0b182d"
-                onClick={() => {
-                  addProduct();
-                }}
-                leftSection={<IconGift size={20} />}
-                fullWidth
-                h="100%"
-              >
-                CLAIM YOUR FREE GIFT
-              </Button>
-            ) : (
-              <Button
-                disabled={jf.isDisabled()}
-                color="#0b182d"
-                onClick={addProduct}
-                leftSection={<IconShoppingCart size={20} />}
-                fullWidth
-                h="100%"
-              >
-                ADD TO CART
-              </Button>
-            )}
+            <Button
+              disabled={jf.isDisabled()}
+              color="#0b182d"
+              onClick={addProduct}
+              leftSection={<IconShoppingCart size={20} />}
+              fullWidth
+              h="100%"
+            >
+              ADD TO CART
+            </Button>
           </GridCol>
         </Grid>
 
@@ -604,11 +525,7 @@ export const JewelryProductDetails = ({
                           item?.node?.handle
                         }/${item?.node?.title.toLowerCase().replace(/\s+/g, "-")}`;
 
-                        const finalUrl = isFreeGift
-                          ? `${baseUrl}?freeGift=true`
-                          : baseUrl;
-
-                        router.push(finalUrl);
+                        router.push(baseUrl);
                       }}
                     >
                       <div className="w-full flex justify-center">

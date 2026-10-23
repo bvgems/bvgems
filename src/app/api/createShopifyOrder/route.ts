@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
       }
 
       if (product?.needCertification) {
-        itemTotal += 75 * (Number(item?.quantity) || 1);
+        itemTotal += 75 * (product?.purchaseByCarat ? 1 : (Number(item?.quantity) || 1));
       }
 
       return acc + itemTotal;

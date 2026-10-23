@@ -41,9 +41,6 @@ export interface CartItem {
 export const generateCartItemId = (item: Partial<CartItem> | any): string => {
   const p = item?.product || {};
   const pid = String(p.productId ?? p.id ?? "");
-  if (p.isGift) {
-    return `gift_${pid}`;
-  }
   const pType = p.productType || "stone";
   const shade = (p.shade || "").trim();
   const byCarat = Boolean(p.purchaseByCarat);
@@ -53,13 +50,104 @@ export const generateCartItemId = (item: Partial<CartItem> | any): string => {
     return `${pType}_${pid}_${shade}_${byCarat ? "carat" : "piece"}`;
   }
 
-  // Jewelry and other products
-  const variant = [p.goldColor, p.size, p.length, p.totalCaratWeight].filter(Boolean).join("_");
+  if (pType === "layouts") {
+    const layoutVariant = [p.size, p.quality, p.shape].filter(Boolean).join("_");
+    return `${pType}_${pid}_${layoutVariant || "default"}`;
+  }
+
+  // Jewelry, beads, and other products
+  const variant = [
+    p.goldColor,
+    p.size,
+    p.length,
+    p.quality,
+    p.totalCaratWeight,
+    p.gemstone,
+    p.firstStone,
+    p.secondStone,
+  ]
+    .filter(Boolean)
+    .join("_");
   return `${pType}_${pid}_${variant || "default"}`;
+};
+
+export const matchesCartItem = (
+  item: CartItem | any,
+  cartItemIdOrProductId: string | any,
+  shade?: string,
+  purchaseByCarat?: boolean,
+): boolean => {
+  if (!item || !cartItemIdOrProductId) return false;
+  const targetKey = String(cartItemIdOrProductId).trim();
+  const currentCartItemId = String(item.cartItemId || "").trim();
+  const computedItemId = generateCartItemId(item);
+
+  // 1. Exact cartItemId match
+  if (currentCartItemId && currentCartItemId === targetKey) return true;
+
+  // 2. Exact computed generateCartItemId match
+  if (computedItemId === targetKey) return true;
+
+  const prodId = String(item.product?.productId ?? "").trim();
+  const rawId = String(item.product?.id ?? "").trim();
+
+  // 3. Fallback for legacy composite keys: `${productId}-${mode}-${shade}-${index}`
+  if (
+    (prodId && (targetKey.startsWith(`${prodId}-`) || targetKey === prodId)) ||
+    (rawId && (targetKey.startsWith(`${rawId}-`) || targetKey === rawId))
+  ) {
+    if (
+      item.product?.productType === "stone" ||
+      item.product?.productType === "freeSizeStone"
+    ) {
+      if (purchaseByCarat !== undefined) {
+        const sameMode =
+          Boolean(item.product?.purchaseByCarat) === Boolean(purchaseByCarat);
+        const sameShade =
+          (item.product?.shade || "").trim() === (shade || "").trim();
+        return sameMode && sameShade;
+      }
+      if (shade !== undefined) {
+        const sameShade =
+          (item.product?.shade || "").trim() === (shade || "").trim();
+        return sameShade;
+      }
+    }
+    return true;
+  }
+
+  // 4. Match by direct productId or id
+  const matchesProd = Boolean(prodId && prodId === targetKey);
+  const matchesRaw = Boolean(rawId && rawId === targetKey);
+
+  if (matchesProd || matchesRaw) {
+    if (
+      item.product?.productType === "stone" ||
+      item.product?.productType === "freeSizeStone"
+    ) {
+      if (purchaseByCarat !== undefined) {
+        const sameMode =
+          Boolean(item.product?.purchaseByCarat) === Boolean(purchaseByCarat);
+        const sameShade =
+          (item.product?.shade || "").trim() === (shade || "").trim();
+        return sameMode && sameShade;
+      } else if (shade !== undefined) {
+        const sameShade =
+          (item.product?.shade || "").trim() === (shade || "").trim();
+        return sameShade;
+      }
+      return true;
+    }
+    // For Layouts, Jewelry, Beads, etc.: productId/id match is a direct match
+    return true;
+  }
+
+  return false;
 };
 
 interface CartStore {
   cart: CartItem[];
+  isSynced: boolean;
   cartTotal: number;
   shippingTotal: number;
   grandTotal: number;
@@ -72,9 +160,6 @@ interface CartStore {
   getTotalPrice: () => number;
   updateTotals: () => void;
   setCartTotal: (total: number) => void;
-  freeGiftSession: boolean;
-  setFreeGiftSession: (value: boolean) => void;
-  updateGiftItem: (updatedProduct: Partial<CartItem["product"]>) => void;
 }
 
 const serverRegistry: Record<string, any> = {};
@@ -89,36 +174,71 @@ const getRegistry = () => {
   return serverRegistry;
 };
 
-
-// Keeps every browser tab in sync with localStorage. Zustand's persist only reads
-// storage once at creation, so without this a stale tab overwrites newer data
-// written by another tab (e.g. wiping items added in the first tab).
-const crossTabSync = (store: any, storageKey: string) => {
-  if (typeof window === "undefined" || typeof document === "undefined") return;
-
-  const rehydrate = () => {
-    try {
-      const raw = window.localStorage.getItem(storageKey);
-      if (raw === null) {
-        store.setState({ cart: [] });
-      } else {
-        store.persist.rehydrate();
-      }
-    } catch {}
-  };
-
-  window.addEventListener("storage", (e: StorageEvent) => {
-    if (e.key === storageKey) rehydrate();
-  });
-
-  // Safety net: when a tab becomes active again, pull the latest data.
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") rehydrate();
-  });
-  window.addEventListener("focus", rehydrate);
+const normalizeCartItems = (cart: CartItem[]): CartItem[] => {
+  if (!Array.isArray(cart)) return [];
+  return cart
+    .filter(
+      (item) =>
+        item &&
+        typeof item === "object" &&
+        item.product &&
+        !item.product?.isGift &&
+        !String(item.product?.productId || "").includes("FREE-GIFT"),
+    )
+    .map((item) => {
+      return {
+        ...item,
+        cartItemId: item.cartItemId || generateCartItemId(item),
+        quantity: Number(item.quantity) || 1,
+        product: {
+          ...item.product,
+          price: Number(item.product?.price) || 0,
+        },
+      };
+    });
 };
 
-const debounceTimers: Record<string, NodeJS.Timeout> = {};
+const areCartsEquivalent = (a: CartItem[], b: CartItem[]): boolean => {
+  if (a === b) return true;
+  if (!Array.isArray(a) || !Array.isArray(b)) return false;
+  if (a.length !== b.length) return false;
+  try {
+    return JSON.stringify(normalizeCartItems(a)) === JSON.stringify(normalizeCartItems(b));
+  } catch {
+    return false;
+  }
+};
+
+// Track user-initiated mutations & in-flight saves so background GET syncs never overwrite active edits
+const debounceTimers: Record<string, ReturnType<typeof setTimeout>> = {};
+const inFlightSaves: Record<string, number> = {};
+const inFlightFetches: Record<string, boolean> = {};
+const mutationVersion: Record<string, number> = {};
+const syncListenersAttached: Record<string, boolean> = {};
+const broadcastChannels: Record<string, BroadcastChannel> = {};
+
+const getBroadcastChannel = (userKey: string): BroadcastChannel | null => {
+  if (typeof window === "undefined" || typeof BroadcastChannel === "undefined") {
+    return null;
+  }
+  if (!broadcastChannels[userKey]) {
+    try {
+      broadcastChannels[userKey] = new BroadcastChannel(`bvgems-cart-sync-${userKey}`);
+    } catch {
+      return null;
+    }
+  }
+  return broadcastChannels[userKey];
+};
+
+const broadcastCartToSameOriginTabs = (userKey: string, cart: CartItem[]) => {
+  const channel = getBroadcastChannel(userKey);
+  if (channel) {
+    try {
+      channel.postMessage({ type: "CART_UPDATED", cart, timestamp: Date.now() });
+    } catch {}
+  }
+};
 
 const debouncedSaveCartToDb = (userKey: string, cart: CartItem[]) => {
   if (typeof window === "undefined" || !userKey || userKey === "guest") return;
@@ -127,13 +247,40 @@ const debouncedSaveCartToDb = (userKey: string, cart: CartItem[]) => {
     clearTimeout(debounceTimers[userKey]);
   }
 
+  const versionAtSchedule = mutationVersion[userKey] || 0;
+
   debounceTimers[userKey] = setTimeout(async () => {
+    delete debounceTimers[userKey];
+    inFlightSaves[userKey] = (inFlightSaves[userKey] || 0) + 1;
     try {
-      await axios.post("/api/cart", { cart });
+      const res = await axios.post("/api/cart", { cart: normalizeCartItems(cart) });
+      // Only reconcile server-verified cart if the user hasn't made another edit while POST was in flight
+      if (
+        (mutationVersion[userKey] || 0) === versionAtSchedule &&
+        res?.data?.cart &&
+        Array.isArray(res.data.cart)
+      ) {
+        const store = getRegistry()[userKey];
+        if (store && !areCartsEquivalent(store.getState().cart, res.data.cart)) {
+          store.setState({ cart: res.data.cart, isSynced: true });
+        }
+      }
     } catch (err) {
       console.error("Failed to auto-save cart to DB:", err);
+    } finally {
+      inFlightSaves[userKey] = Math.max(0, (inFlightSaves[userKey] || 1) - 1);
     }
-  }, 400);
+  }, 250);
+};
+
+// Called ONLY when the user explicitly mutates the cart (add, remove, update quantity/carat/cert/gift)
+const commitUserCartMutation = (userKey: string, nextCart: CartItem[]) => {
+  const normalized = normalizeCartItems(nextCart);
+  mutationVersion[userKey] = (mutationVersion[userKey] || 0) + 1;
+  broadcastCartToSameOriginTabs(userKey, normalized);
+  if (userKey !== "guest") {
+    debouncedSaveCartToDb(userKey, normalized);
+  }
 };
 
 if (typeof window !== "undefined") {
@@ -141,11 +288,14 @@ if (typeof window !== "undefined") {
     Object.keys(debounceTimers).forEach((key) => {
       if (key && key !== "guest" && debounceTimers[key]) {
         clearTimeout(debounceTimers[key]);
+        delete debounceTimers[key];
         const currentCart = getRegistry()[key]?.getState()?.cart;
         if (currentCart && navigator.sendBeacon) {
           navigator.sendBeacon(
             "/api/cart",
-            new Blob([JSON.stringify({ cart: currentCart })], { type: "application/json" })
+            new Blob([JSON.stringify({ cart: normalizeCartItems(currentCart) })], {
+              type: "application/json",
+            }),
           );
         }
       }
@@ -155,19 +305,52 @@ if (typeof window !== "undefined") {
 
 export const fetchAndSyncUserCart = async (userId: string | number) => {
   if (typeof window === "undefined" || !userId || String(userId) === "guest") return;
+  const key = String(userId);
+
+  // Never overwrite the local store if the user has a pending debounced save or an in-flight POST
+  if (debounceTimers[key] || (inFlightSaves[key] || 0) > 0 || inFlightFetches[key]) {
+    return;
+  }
+
+  const versionBeforeFetch = mutationVersion[key] || 0;
+  inFlightFetches[key] = true;
+
   try {
-    const res = await axios.get("/api/cart");
+    const res = await axios.get(`/api/cart?_t=${Date.now()}`, {
+      headers: {
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+      },
+    });
+
+    // Re-check after network await that no user mutation happened while GET was in-flight
+    if (
+      debounceTimers[key] ||
+      (inFlightSaves[key] || 0) > 0 ||
+      (mutationVersion[key] || 0) !== versionBeforeFetch
+    ) {
+      return;
+    }
+
     if (res?.data?.cart && Array.isArray(res.data.cart)) {
-      const store = getCartStore(String(userId));
-      store.setState({ cart: res.data.cart });
+      const store = getCartStore(key);
+      const remoteCart = normalizeCartItems(res.data.cart);
+      const currentState = store.getState();
+
+      if (!areCartsEquivalent(currentState.cart, remoteCart) || !currentState.isSynced) {
+        store.setState({ cart: remoteCart, isSynced: true });
+      }
     }
   } catch (err) {
     console.error("Failed to fetch user cart from DB:", err);
+  } finally {
+    inFlightFetches[key] = false;
   }
 };
 
 export const mergeGuestCartOnLogin = async (userId: string | number) => {
   if (typeof window === "undefined" || !userId || String(userId) === "guest") return;
+  const key = String(userId);
   try {
     const rawGuest = window.localStorage.getItem("cart-storage-guest");
     let guestCart: any[] = [];
@@ -179,31 +362,135 @@ export const mergeGuestCartOnLogin = async (userId: string | number) => {
     }
 
     if (Array.isArray(guestCart) && guestCart.length > 0) {
-      const res = await axios.post("/api/cart", { guestCart });
-      if (res?.data?.cart) {
-        window.localStorage.removeItem("cart-storage-guest");
-        const userStore = getCartStore(String(userId));
-        userStore.setState({ cart: res.data.cart });
+      inFlightSaves[key] = (inFlightSaves[key] || 0) + 1;
+      try {
+        const res = await axios.post("/api/cart", { guestCart });
+        if (res?.data?.cart) {
+          window.localStorage.removeItem("cart-storage-guest");
+          const guestStore = getRegistry()["guest"];
+          if (guestStore) {
+            guestStore.setState({ cart: [] });
+          }
+          const userStore = getCartStore(key);
+          const merged = normalizeCartItems(res.data.cart);
+          userStore.setState({ cart: merged, isSynced: true });
+          broadcastCartToSameOriginTabs(key, merged);
+        }
+      } finally {
+        inFlightSaves[key] = Math.max(0, (inFlightSaves[key] || 1) - 1);
       }
+    } else {
+      await fetchAndSyncUserCart(key);
     }
   } catch (err) {
     console.error("Failed to merge guest cart on login:", err);
   }
 };
 
+// Synchronizes cart across tabs AND across origins/environments (e.g. localhost <-> production).
+// CRITICAL: For logged-in users, PostgreSQL is the single source of truth — we NEVER rehydrate
+// from window.localStorage on focus/visibilitychange, because another origin (e.g. production)
+// may have updated PostgreSQL while this origin's localStorage is stale.
+const setupLiveCartSync = (store: any, userKey: string, storageKey: string) => {
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+  if (syncListenersAttached[userKey]) return;
+  syncListenersAttached[userKey] = true;
+
+  // 1. Instant 0ms sync across tabs on the SAME origin via BroadcastChannel + storage event
+  const channel = getBroadcastChannel(userKey);
+  if (channel) {
+    channel.onmessage = (event) => {
+      if (event?.data?.type === "CART_UPDATED" && Array.isArray(event.data.cart)) {
+        const incoming = normalizeCartItems(event.data.cart);
+        if (!areCartsEquivalent(store.getState().cart, incoming)) {
+          store.setState({ cart: incoming, isSynced: true });
+        }
+      }
+    };
+  }
+
+  window.addEventListener("storage", (e: StorageEvent) => {
+    if (e.key !== storageKey) return;
+    try {
+      if (e.newValue === null) {
+        if (store.getState().cart.length > 0) {
+          store.setState({ cart: [] });
+        }
+      } else {
+        const parsed = JSON.parse(e.newValue);
+        const incoming = normalizeCartItems(parsed?.state?.cart || []);
+        if (!areCartsEquivalent(store.getState().cart, incoming)) {
+          store.setState({ cart: incoming });
+        }
+      }
+    } catch {}
+  });
+
+  if (userKey === "guest") {
+    // Guest carts only exist in localStorage
+    const rehydrateGuest = () => {
+      try {
+        const raw = window.localStorage.getItem(storageKey);
+        if (raw === null) {
+          store.setState({ cart: [] });
+        } else {
+          const parsed = JSON.parse(raw);
+          const incoming = normalizeCartItems(parsed?.state?.cart || []);
+          if (!areCartsEquivalent(store.getState().cart, incoming)) {
+            store.setState({ cart: incoming });
+          }
+        }
+      } catch {}
+    };
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") rehydrateGuest();
+    });
+    window.addEventListener("focus", rehydrateGuest);
+    return;
+  }
+
+  // 2. Logged-in users: PostgreSQL is master. Pull fresh cart from DB on:
+  //    - Initial creation
+  //    - Window focus / tab visibility change / back-forward cache restore / reconnect
+  //    - Live background heartbeat while tab is visible (so localhost & production update live without refreshing!)
+  const syncFromDatabase = () => {
+    if (document.visibilityState === "visible") {
+      fetchAndSyncUserCart(userKey);
+    }
+  };
+
+  fetchAndSyncUserCart(userKey);
+
+  window.addEventListener("focus", syncFromDatabase);
+  window.addEventListener("pageshow", syncFromDatabase);
+  window.addEventListener("online", syncFromDatabase);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      fetchAndSyncUserCart(userKey);
+    }
+  });
+
+  // Live background sync every 3 seconds while the tab is visible
+  setInterval(() => {
+    if (document.visibilityState === "visible") {
+      fetchAndSyncUserCart(userKey);
+    }
+  }, 3000);
+};
+
 export const getCartStore = (userKey: string) => {
-  if (!getRegistry()[userKey]) {
-    getRegistry()[userKey] = create<CartStore>()(
+  const normalizedKey = userKey ? String(userKey) : "guest";
+  if (!getRegistry()[normalizedKey]) {
+    getRegistry()[normalizedKey] = create<CartStore>()(
       persist(
         (set, get) => ({
           cart: [],
+          isSynced: normalizedKey === "guest",
           cartTotal: 0,
           shippingTotal: 0,
           grandTotal: 0,
-          freeGiftSession: false,
 
           setCartTotal: (total) => set({ cartTotal: total }),
-          setFreeGiftSession: (value) => set({ freeGiftSession: value }),
 
           addToCart: (newItem) =>
             set((state) => {
@@ -227,17 +514,16 @@ export const getCartStore = (userKey: string) => {
                 itemToAdd.requestedCarats = requested;
               }
 
-              if (itemToAdd.product?.isGift) {
-                const alreadyExists = state.cart.find(
-                  (item) => item.product?.isGift,
-                );
-                if (alreadyExists) return state;
-                return { cart: [...state.cart, itemToAdd] };
-              }
-
               const existingIndex = state.cart.findIndex((item) => {
                 const existingId = item.cartItemId || generateCartItemId(item);
                 if (existingId === targetCartItemId) return true;
+                if (generateCartItemId(item) === generateCartItemId(itemToAdd)) return true;
+
+                // Only use product+shade+mode fallback for stones; layouts/jewelry/beads have distinct size/gold/quality variants
+                const pType = itemToAdd.product?.productType || "stone";
+                if (pType !== "stone" && pType !== "freeSizeStone") {
+                  return false;
+                }
 
                 const sameProduct =
                   String(item.product?.productId ?? item.product?.id ?? "") ===
@@ -248,9 +534,8 @@ export const getCartStore = (userKey: string) => {
                 const sameMode =
                   Boolean(item.product?.purchaseByCarat) ===
                   Boolean(itemToAdd.product?.purchaseByCarat);
-                const notGift = !item.product?.isGift;
 
-                return sameProduct && sameShade && sameMode && notGift;
+                return sameProduct && sameShade && sameMode;
               });
 
               if (existingIndex > -1) {
@@ -281,6 +566,7 @@ export const getCartStore = (userKey: string) => {
                       ct_weight: existingItem.product?.ct_weight || itemToAdd.product?.ct_weight,
                     },
                   };
+                  commitUserCartMutation(normalizedKey, updatedCart);
                   return { cart: updatedCart };
                 }
 
@@ -296,128 +582,109 @@ export const getCartStore = (userKey: string) => {
                     price: itemToAdd.product?.price || existingItem.product?.price,
                   },
                 };
+                commitUserCartMutation(normalizedKey, updatedCart);
                 return { cart: updatedCart };
               }
 
               // Different purchase mode or product: add as separate card
-              return { cart: [...state.cart, itemToAdd] };
+              const nextCart = [...state.cart, itemToAdd];
+              commitUserCartMutation(normalizedKey, nextCart);
+              return { cart: nextCart };
             }),
 
-          updateGiftItem: (updatedProduct) =>
-            set((state) => ({
-              cart: state.cart.map((item) =>
-                item.product?.isGift
-                  ? {
-                      ...item,
-                      product: {
-                        ...item.product,
-                        ...updatedProduct,
-                      },
-                    }
-                  : item,
-              ),
-            })),
-
           removeFromCart: (cartItemIdOrProductId, shade, purchaseByCarat) =>
-            set((state) => ({
-              cart: state.cart.filter((item) => {
-                const itemId = item.cartItemId || generateCartItemId(item);
-                if (itemId === cartItemIdOrProductId) return false;
-
-                if (purchaseByCarat !== undefined) {
-                  const sameProduct =
-                    String(item.product?.productId ?? item.product?.id ?? "") ===
-                    String(cartItemIdOrProductId);
-                  const sameShade =
-                    (item.product?.shade || "").trim() === (shade || "").trim();
-                  const sameMode =
-                    Boolean(item.product?.purchaseByCarat) === Boolean(purchaseByCarat);
-                  if (sameProduct && sameShade && sameMode) return false;
-                } else if (shade !== undefined) {
-                  const sameProduct =
-                    String(item.product?.productId ?? item.product?.id ?? "") ===
-                    String(cartItemIdOrProductId);
-                  const sameShade =
-                    (item.product?.shade || "").trim() === (shade || "").trim();
-                  if (sameProduct && sameShade) return false;
-                }
-
-                return true;
-              }),
-            })),
+            set((state) => {
+              const nextCart = state.cart.filter(
+                (item) => !matchesCartItem(item, cartItemIdOrProductId, shade, purchaseByCarat)
+              );
+              if (nextCart.length === state.cart.length) {
+                return state;
+              }
+              commitUserCartMutation(normalizedKey, nextCart);
+              return { cart: nextCart };
+            }),
 
           updateQuantity: (cartItemIdOrProductId, quantity, shade, purchaseByCarat) =>
-            set((state) => ({
-              cart: state.cart.map((item) => {
-                const itemId = item.cartItemId || generateCartItemId(item);
-                const matches =
-                  itemId === cartItemIdOrProductId ||
-                  (purchaseByCarat !== undefined
-                    ? String(item.product?.productId ?? item.product?.id ?? "") ===
-                        String(cartItemIdOrProductId) &&
-                      (item.product?.shade || "").trim() === (shade || "").trim() &&
-                      Boolean(item.product?.purchaseByCarat) === Boolean(purchaseByCarat)
-                    : String(item.product?.productId ?? item.product?.id ?? "") ===
-                        String(cartItemIdOrProductId) &&
-                      (item.product?.shade || "").trim() === (shade || "").trim());
-
-                return matches ? { ...item, quantity } : item;
-              }),
-            })),
+            set((state) => {
+              let matched = false;
+              const nextCart = state.cart.map((item) => {
+                if (matchesCartItem(item, cartItemIdOrProductId, shade, purchaseByCarat)) {
+                  matched = true;
+                  return {
+                    ...item,
+                    cartItemId: item.cartItemId || generateCartItemId(item),
+                    quantity: Math.max(1, Number(quantity) || 1),
+                  };
+                }
+                return item;
+              });
+              if (!matched) return state;
+              commitUserCartMutation(normalizedKey, nextCart);
+              return { cart: nextCart };
+            }),
 
           updateCaratWeight: (cartItemIdOrProductId, caratWeight, shade) =>
-            set((state) => ({
-              cart: state.cart.map((item) => {
-                const itemId = item.cartItemId || generateCartItemId(item);
-                const matches =
-                  itemId === cartItemIdOrProductId ||
-                  (String(item.product?.productId ?? item.product?.id ?? "") ===
-                    String(cartItemIdOrProductId) &&
-                    (item.product?.shade || "").trim() === (shade || "").trim() &&
-                    Boolean(item.product?.purchaseByCarat));
-
-                if (matches) {
+            set((state) => {
+              let matched = false;
+              const nextCart = state.cart.map((item) => {
+                if (matchesCartItem(item, cartItemIdOrProductId, shade, true)) {
+                  matched = true;
                   const stoneWeight = Number(item.product?.ct_weight) || 0;
                   const reqNum = Math.max(0.01, Number(caratWeight) || 0);
                   const { stoneCount, totalCarats } = calculateNearestStones(stoneWeight, reqNum);
                   return {
                     ...item,
+                    cartItemId: item.cartItemId || generateCartItemId(item),
                     quantity: stoneCount,
                     caratWeight: `${totalCarats}`,
                     requestedCarats: reqNum,
                   };
                 }
                 return item;
-              }),
-            })),
+              });
+              if (!matched) return state;
+              commitUserCartMutation(normalizedKey, nextCart);
+              return { cart: nextCart };
+            }),
 
           toggleCertification: (cartItemIdOrProductId, checked, shade, purchaseByCarat) =>
-            set((state) => ({
-              cart: state.cart.map((item) => {
-                const itemId = item.cartItemId || generateCartItemId(item);
-                const matches =
-                  itemId === cartItemIdOrProductId ||
-                  (purchaseByCarat !== undefined
-                    ? String(item.product?.productId ?? item.product?.id ?? "") ===
-                        String(cartItemIdOrProductId) &&
-                      (item.product?.shade || "").trim() === (shade || "").trim() &&
-                      Boolean(item.product?.purchaseByCarat) === Boolean(purchaseByCarat)
-                    : String(item.product?.productId ?? item.product?.id ?? "") ===
-                        String(cartItemIdOrProductId) &&
-                      (item.product?.shade || "").trim() === (shade || "").trim());
-
-                return matches
-                  ? {
-                      ...item,
-                      product: { ...item.product, needCertification: checked },
-                    }
-                  : item;
-              }),
-            })),
+            set((state) => {
+              let matched = false;
+              const nextCart = state.cart.map((item) => {
+                if (matchesCartItem(item, cartItemIdOrProductId, shade, purchaseByCarat)) {
+                  matched = true;
+                  return {
+                    ...item,
+                    cartItemId: item.cartItemId || generateCartItemId(item),
+                    product: { ...item.product, needCertification: Boolean(checked) },
+                  };
+                }
+                return item;
+              });
+              if (!matched) return state;
+              commitUserCartMutation(normalizedKey, nextCart);
+              return { cart: nextCart };
+            }),
 
           clearCart: () => {
-            if (typeof window !== "undefined" && userKey !== "guest") {
-              axios.delete("/api/cart").catch(() => {});
+            if (debounceTimers[normalizedKey]) {
+              clearTimeout(debounceTimers[normalizedKey]);
+              delete debounceTimers[normalizedKey];
+            }
+            mutationVersion[normalizedKey] = (mutationVersion[normalizedKey] || 0) + 1;
+            broadcastCartToSameOriginTabs(normalizedKey, []);
+
+            if (typeof window !== "undefined" && normalizedKey !== "guest") {
+              inFlightSaves[normalizedKey] = (inFlightSaves[normalizedKey] || 0) + 1;
+              axios
+                .delete("/api/cart")
+                .catch(() => {})
+                .finally(() => {
+                  inFlightSaves[normalizedKey] = Math.max(
+                    0,
+                    (inFlightSaves[normalizedKey] || 1) - 1,
+                  );
+                });
             }
             set({ cart: [], cartTotal: 0, shippingTotal: 0, grandTotal: 0 });
           },
@@ -446,7 +713,7 @@ export const getCartStore = (userKey: string) => {
               }
 
               if (item.product?.needCertification) {
-                productTotal += 75 * Number(item.quantity || 1);
+                productTotal += 75 * (item.product.purchaseByCarat ? 1 : Number(item.quantity || 1));
               }
               return total + productTotal;
             }, 0);
@@ -464,30 +731,21 @@ export const getCartStore = (userKey: string) => {
           },
         }),
         {
-          name: `cart-storage-${userKey}`,
+          name: `cart-storage-${normalizedKey}`,
+          partialize: (state) => ({
+            cart: state.cart,
+            cartTotal: state.cartTotal,
+            shippingTotal: state.shippingTotal,
+            grandTotal: state.grandTotal,
+          }),
         },
       ),
     );
-    crossTabSync(getRegistry()[userKey], `cart-storage-${userKey}`);
-
-    if (typeof window !== "undefined" && userKey !== "guest") {
-      // 1. Initial fetch from PostgreSQL for cross-device consistency (DB is master for logged in users)
-      axios
-        .get("/api/cart")
-        .then((res) => {
-          if (res?.data?.cart && Array.isArray(res.data.cart)) {
-            getRegistry()[userKey].setState({ cart: res.data.cart });
-          }
-        })
-        .catch(() => {});
-
-      // 2. Subscribe to store changes to automatically persist to PostgreSQL
-      getRegistry()[userKey].subscribe((state: CartStore, prevState: CartStore) => {
-        if (state.cart !== prevState.cart) {
-          debouncedSaveCartToDb(userKey, state.cart);
-        }
-      });
-    }
+    setupLiveCartSync(
+      getRegistry()[normalizedKey],
+      normalizedKey,
+      `cart-storage-${normalizedKey}`,
+    );
   }
-  return getRegistry()[userKey];
+  return getRegistry()[normalizedKey];
 };

@@ -1,52 +1,33 @@
+"use client";
+
 import { useRef, useState } from "react";
 
-export const ImageZoom = ({ src, alt, className = "" }: any) => {
-  const sourceRef: any = useRef(null);
-  const targetRef: any = useRef(null);
-  const containerRef: any = useRef(null);
-
-  const [opacity, setOpacity] = useState(0);
-  const [offset, setOffset] = useState({ left: 0, top: 0 });
+export const ImageZoom = ({ src, alt, className = "", h, zoom = 2.2 }: any) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
 
   const handleMouseEnter = () => {
-    setOpacity(1);
+    setIsZoomed(true);
   };
 
   const handleMouseLeave = () => {
-    setOpacity(0);
+    setIsZoomed(false);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!targetRef.current || !sourceRef.current || !containerRef.current)
-      return;
-
-    const targetRect = targetRef.current.getBoundingClientRect();
-    const sourceRect = sourceRef.current.getBoundingClientRect();
-    const containerRect = containerRef.current.getBoundingClientRect();
-
-    const xRatio = (targetRect.width - containerRect.width) / sourceRect.width;
-    const yRatio =
-      (targetRect.height - containerRect.height) / sourceRect.height;
-
-    const left = Math.max(
-      Math.min(e.clientX - sourceRect.left, sourceRect.width),
-      0
-    );
-    const top = Math.max(
-      Math.min(e.clientY - sourceRect.top, sourceRect.height),
-      0
-    );
-
-    setOffset({
-      left: left * -xRatio,
-      top: top * -yRatio,
-    });
+    if (!containerRef.current) return;
+    const { left, top, width, height } = containerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(100, ((e.clientX - left) / width) * 100));
+    const y = Math.max(0, Math.min(100, ((e.clientY - top) / height) * 100));
+    setZoomPos({ x, y });
   };
 
   if (!src) {
     return (
       <div
         className={`flex items-center justify-center bg-gray-50 w-full h-[300px] md:h-[450px] border border-gray-100 rounded-lg ${className}`}
+        style={h ? { height: h } : undefined}
       >
         <span className="text-gray-400 font-medium tracking-wide text-sm">Image Not Available</span>
       </div>
@@ -56,30 +37,19 @@ export const ImageZoom = ({ src, alt, className = "" }: any) => {
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden cursor-zoom-in h-[300px] md:h-[450px] ${className}`}
+      className={`relative overflow-hidden cursor-zoom-in h-[300px] md:h-[450px] w-full flex items-center justify-center ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
-      style={{ borderRadius: "8px" }}
+      style={{ borderRadius: "8px", ...(h ? { height: h } : {}) }}
     >
       <img
-        ref={sourceRef}
         src={src}
         alt={alt}
-        className={`w-full h-[300px] md:h-[450px] block object-contain`}
-      />
-      <img
-        ref={targetRef}
-        src={src}
-        alt={alt}
-        className="absolute pointer-events-none"
+        className="w-full h-full block object-contain pointer-events-none transition-transform duration-150 ease-out will-change-transform select-none"
         style={{
-          left: `${offset.left}px`,
-          top: `${offset.top}px`,
-          opacity: opacity,
-          transform: "scale(2)",
-          transformOrigin: "top left",
-          transition: "opacity 0.3s ease",
+          transform: isZoomed ? `scale(${zoom})` : "scale(1)",
+          transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
         }}
       />
     </div>
