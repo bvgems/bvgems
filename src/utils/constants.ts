@@ -978,7 +978,7 @@ export const gemstoneOptions = [
     link: "/calibrated-stones/tanzanite",
   },
   {
-    label: "Topaz (All Colors)",
+    label: "Topaz",
     value: "Topaz",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038839/Gemstone%20Shapes/Topaz/Swiss_Blue/AA/topaz-swiss-blue-natural-aa-round.png",
