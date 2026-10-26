@@ -1106,9 +1106,9 @@ export const gemstoneOptionsForCustomization = [
 
 export const colorOptions: any = {
   Topaz: [
+    { label: "Sky Blue", value: "Sky Blue", color: "#87CEEB" },
     { label: "Swiss Blue", value: "Swiss Blue", color: "#00A4E4" },
     { label: "London Blue", value: "London Blue", color: "#1B4D68" },
-    { label: "Sky Blue", value: "Sky Blue", color: "#87CEEB" },
   ],
   Sapphire: [
     { label: "Blue", value: "blue", color: "#1E40AF" },
@@ -1674,9 +1674,9 @@ export const SapphireLooseGemstoneColorOptions = [
 ];
 
 export const TopazLooseGemstoneColorOptions = [
+  { value: "Sky Blue", label: "Sky Blue", color: "#87CEEB", image: "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038894/Gemstone%20Shapes/Topaz/Sky_Blue/AA/topaz-sky-blue-natural-aa-round.png" },
   { value: "Swiss Blue", label: "Swiss Blue", color: "#00A4E4", image: "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038839/Gemstone%20Shapes/Topaz/Swiss_Blue/AA/topaz-swiss-blue-natural-aa-round.png" },
   { value: "London Blue", label: "London Blue", color: "#1B4D68", image: "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038910/Gemstone%20Shapes/Topaz/London_Blue/AA/topaz-london-blue-natural-aa-round.png" },
-  { value: "Sky Blue", label: "Sky Blue", color: "#87CEEB", image: "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038894/Gemstone%20Shapes/Topaz/Sky_Blue/AA/topaz-sky-blue-natural-aa-round.png" },
 ];
 
 export const FreeSizeSapphireColorOptions = [

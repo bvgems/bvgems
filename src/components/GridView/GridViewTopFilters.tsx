@@ -781,7 +781,7 @@ export const GridViewTopFilters = ({
                     placeholder="Any Color"
                     size="md"
                     radius="md"
-                    data={(topazVariants.length > 0 ? topazVariants : ["Swiss Blue", "London Blue", "Sky Blue"]).map((v: any) => ({
+                    data={(topazVariants.length > 0 ? topazVariants : ["Sky Blue", "Swiss Blue", "London Blue"]).map((v: any) => ({
                       label: v,
                       value: v,
                     }))}
@@ -1048,7 +1048,7 @@ export const GridViewTopFilters = ({
                       <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center lg:items-start">
                         <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block text-center lg:text-left">Topaz Colors</label>
                         <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                          {(topazVariants.length > 0 ? topazVariants : ["Swiss Blue", "London Blue", "Sky Blue"]).map((variant, idx) => {
+                          {(topazVariants.length > 0 ? topazVariants : ["Sky Blue", "Swiss Blue", "London Blue"]).map((variant, idx) => {
                             const isSelected = selectedTopazVariants.includes(variant);
                             const variantImages: Record<string, string> = {
                               "Swiss Blue": "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038839/Gemstone%20Shapes/Topaz/Swiss_Blue/AA/topaz-swiss-blue-natural-aa-round.png",

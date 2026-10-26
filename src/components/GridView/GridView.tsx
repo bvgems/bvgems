@@ -159,7 +159,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       return a.localeCompare(b);
     });
 
-    const topazOrder = ["swiss blue", "london blue", "sky blue"];
+    const topazOrder = ["sky blue", "swiss blue", "london blue"];
     const sortedTopaz = Array.from(topazColors).sort((a, b) => {
       const idxA = topazOrder.indexOf(a.toLowerCase());
       const idxB = topazOrder.indexOf(b.toLowerCase());
