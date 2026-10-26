@@ -53,7 +53,7 @@ export const BlogsSection = () => {
                   </h3>
 
                   <p className="text-sm text-gray-500 mb-3">
-                    {post.author || "B.V. Gems"} ·{" "}
+                    {post.author || post.authorV2?.name || "B.V. Gems"} ·{" "}
                     {new Date(post.publishedAt).toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",

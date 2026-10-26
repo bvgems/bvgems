@@ -1,10 +1,9 @@
 // app/api/blogs/route.ts
 import { NextRequest, NextResponse } from "next/server";
+import { getCustomBlogByHandle } from "@/data/customBlogs";
 
 export async function GET(req: NextRequest) {
   try {
-    console.log("first*****************");
-
     const { searchParams } = new URL(req.url);
     const handle = searchParams.get("blogName");
 
@@ -13,6 +12,11 @@ export async function GET(req: NextRequest) {
         { error: "Missing blogName query param" },
         { status: 400 }
       );
+    }
+
+    const customArticle = getCustomBlogByHandle(handle);
+    if (customArticle) {
+      return NextResponse.json(customArticle, { status: 200 });
     }
     const endpoint = process.env.SHOPIFY_STOREFRONT_URL as string;
 

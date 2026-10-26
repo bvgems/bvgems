@@ -424,8 +424,8 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
               value={sortOrder}
               onChange={setSortOrder}
               data={[
-                { label: "Low to High", value: "lowToHigh" },
-                { label: "High to Low", value: "highToLow" },
+                { label: "Ctw. Low to High", value: "lowToHigh" },
+                { label: "Ctw. High to Low", value: "highToLow" },
               ]}
               clearable
               className="w-[220px] hidden md:block"
@@ -478,11 +478,11 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
               </Button>
             </div>
           )}
-          <Table highlightOnHover highlightOnHoverColor="#DCDCDC" striped>
+          <Table highlightOnHover highlightOnHoverColor="#DCDCDC" striped stickyHeader stickyHeaderOffset={85}>
             {/* Desktop Header */}
-            <TableThead className="hidden md:table-header-group">
-              <TableTr className="font-extrabold text-[15px] text-gray-700 uppercase">
-                <TableTh className="text-center w-12">
+            <TableThead className="hidden md:table-header-group sticky top-[85px] z-20 shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
+              <TableTr className="font-bold text-xs uppercase tracking-wider bg-slate-100 text-[#0b182d] border-b-2 border-slate-200">
+                <TableTh className="!text-center w-12 py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">
                   <div className="flex justify-center items-center">
                     <Checkbox
                       onChange={toggleSelectAll}
@@ -496,21 +496,21 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                     />
                   </div>
                 </TableTh>
-                <TableTh className="text-center">Image</TableTh>
-                <TableTh className="text-left">Type</TableTh>
-                <TableTh className="text-left">Gemstone</TableTh>
-                <TableTh className="text-left">Color</TableTh>
-                <TableTh className="text-center">Size</TableTh>
-                <TableTh className="text-right">CT Weight</TableTh>
-                <TableTh className="text-center">Quality</TableTh>
-                <TableTh className="text-left">Cut</TableTh>
+                <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Image</TableTh>
+                <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Type</TableTh>
+                <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Gemstone</TableTh>
+                <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Color</TableTh>
+                <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Size</TableTh>
+                <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">CT Weight</TableTh>
+                <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Quality</TableTh>
+                <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Cut</TableTh>
                 {user && (
                   <>
-                    <TableTh className="text-right">est. price per stone</TableTh>
-                    <TableTh className="text-right">Per Carat Price</TableTh>
+                    <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">est. price per stone</TableTh>
+                    <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Per Carat Price</TableTh>
                   </>
                 )}
-                <TableTh className="text-right"></TableTh>
+                <TableTh className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider"></TableTh>
               </TableTr>
             </TableThead>
 
@@ -525,7 +525,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                       <TableTr
                         className="cursor-pointer hidden md:table-row"
                       >
-                        <TableTd className="text-center w-12" onClick={(e) => e.stopPropagation()}>
+                        <TableTd className="!text-center w-12 align-middle" onClick={(e) => e.stopPropagation()}>
                           <div className="flex justify-center items-center">
                             <Checkbox
                               checked={!!selectedRows[element.id]}
@@ -534,7 +534,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                             />
                           </div>
                         </TableTd>
-                        <TableTd className="text-center" onClick={() => goToCartPage(element)}>
+                        <TableTd className="!text-center align-middle" onClick={() => goToCartPage(element)}>
                           <div className="w-14 h-14 mx-auto flex items-center justify-center rounded overflow-hidden shadow-sm border border-gray-200">
                             <NextImage
                               src={element.image_url}
@@ -545,41 +545,41 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                             />
                           </div>
                         </TableTd>
-                        <TableTd className="text-left" onClick={() => goToCartPage(element)}>{element.type}</TableTd>
-                        <TableTd className="text-left capitalize" onClick={() => goToCartPage(element)}>
+                        <TableTd className="!text-center align-middle" onClick={() => goToCartPage(element)}>{element.type}</TableTd>
+                        <TableTd className="!text-center capitalize align-middle" onClick={() => goToCartPage(element)}>
                           {element.collection_slug}
                         </TableTd>
-                        <TableTd className="text-left" onClick={() => goToCartPage(element)}>
+                        <TableTd className="!text-center align-middle" onClick={() => goToCartPage(element)}>
                           {element.collection_slug === "Tanzanite"
                             ? "Purplish Blue"
                             : element.color}
                         </TableTd>
-                        <TableTd className="text-center tabular-nums" onClick={() => goToCartPage(element)}>{element.size}</TableTd>
-                        <TableTd className="text-right tabular-nums" onClick={() => goToCartPage(element)}>{formatDisplayWeight(element.ct_weight)}</TableTd>
-                        <TableTd className="text-center" onClick={() => goToCartPage(element)}>{element.quality}</TableTd>
-                        <TableTd className="text-left" onClick={() => goToCartPage(element)}>{element.cut}</TableTd>
+                        <TableTd className="!text-center tabular-nums align-middle" onClick={() => goToCartPage(element)}>{element.size}</TableTd>
+                        <TableTd className="!text-center tabular-nums align-middle" onClick={() => goToCartPage(element)}>{formatDisplayWeight(element.ct_weight)}</TableTd>
+                        <TableTd className="!text-center align-middle" onClick={() => goToCartPage(element)}>{element.quality}</TableTd>
+                        <TableTd className="!text-center align-middle" onClick={() => goToCartPage(element)}>{element.cut}</TableTd>
                         {user && (
                           <>
-                            <TableTd className="text-right tabular-nums font-medium">
+                            <TableTd className="!text-center tabular-nums font-medium align-middle">
                               {element?.price ? (
                                 `$ ${formatDisplayPrice(element.price)}`
                               ) : (
                                 <button
                                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}
-                                  className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer"
+                                  className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-center"
                                 >
                                   Request Pricing
                                 </button>
                               )}
                             </TableTd>
-                            <TableTd className="text-right tabular-nums font-medium" onClick={(e) => e.stopPropagation()}>
+                            <TableTd className="!text-center tabular-nums font-medium align-middle" onClick={(e) => e.stopPropagation()}>
                               {isPurchaseByCarat(element) ? (
                                 getPerCaratPrice(element) !== 0 ? (
                                   `$ ${formatDisplayPrice(getPerCaratPrice(element))}`
                                 ) : (
                                   <button
                                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}
-                                    className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer"
+                                    className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-center"
                                   >
                                     Request Pricing
                                   </button>
@@ -587,15 +587,15 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                               ) : (
                                 <button
                                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(element); }}
-                                  className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer"
+                                  className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-center"
                                 >
                                   Request Pricing
                                 </button>
                               )}
                             </TableTd>
-                            <TableTd className="text-right" onClick={(e) => e.stopPropagation()}>
+                            <TableTd className="!text-center align-middle" onClick={(e) => e.stopPropagation()}>
                               {element.price && (
-                                <div className="flex justify-end">
+                                <div className="flex justify-center items-center">
                                   <Button
                                     leftSection={<IconShoppingCart />}
                                     variant="outline"
@@ -755,10 +755,10 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
         </div>
       </div>
 
-      <QuoteRequestModal 
-        opened={!!quoteProduct} 
-        onClose={() => setQuoteProduct(null)} 
-        product={quoteProduct} 
+      <QuoteRequestModal
+        opened={!!quoteProduct}
+        onClose={() => setQuoteProduct(null)}
+        product={quoteProduct}
       />
     </>
   );

@@ -7,6 +7,7 @@ import { createShippingAddress } from "../helperFunctions/createShippingAddress"
 import { createBusinessReference } from "../helperFunctions/createBusinessReference";
 import { upsertAMLInfo } from "../helperFunctions/createAMLInfo";
 import { buildApplicationEmail } from "../helperFunctions/buildApplicationEmail";
+import { buildApplicationReceivedEmail } from "../helperFunctions/buildApplicationReceivedEmail";
 import jwt from "jsonwebtoken";
 
 export async function POST(request: NextRequest) {
@@ -75,6 +76,25 @@ export async function POST(request: NextRequest) {
       "New Account Application Received",
       emailHtml
     );
+
+    // Send confirmation email to applicant
+    const applicantEmail = stepperUser?.email;
+    if (applicantEmail) {
+      try {
+        const applicantEmailHtml = buildApplicationReceivedEmail({
+          applicantName: stepperUser?.firstName || stepperUser?.first_name || "Valued Customer",
+          companyName: stepperUser?.companyName || businessVerification?.companyName,
+        });
+
+        await sendEmail(
+          applicantEmail,
+          "We Received Your Account Application – B.V. Gems",
+          applicantEmailHtml
+        );
+      } catch (clientEmailError) {
+        console.error("Failed to send confirmation email to applicant:", clientEmailError);
+      }
+    }
 
     return new Response(
       JSON.stringify({

@@ -178,14 +178,22 @@ export const TopFilters = ({
           <div className="flex flex-wrap gap-4">
             {gemstoneOptions.map((gem, i) => {
               const isSelected = selectedGems.includes(gem.value);
+              const gemScale =
+                gem.value === "Alexandrite"
+                  ? "scale-[2.4]"
+                  : gem.value === "Paraiba Tourmaline"
+                  ? "scale-[2.05]"
+                  : gem.value === "Morganite" || gem.value === "Peridot"
+                  ? "scale-[2.12]"
+                  : "scale-[2.2]";
               return (
                 <div 
                   key={i} 
                   onClick={() => toggleGem(gem.value)}
                   className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                 >
-                  <div className="w-14 h-14 shrink-0 flex items-center justify-center">
-                    <img src={gem.image} alt={gem.label} className="w-full h-full object-contain" />
+                  <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
+                    <img src={gem.image} alt={gem.label} className={`w-full h-full object-contain ${gemScale}`} />
                   </div>
                   <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{gem.label}</span>
                 </div>
@@ -202,23 +210,36 @@ export const TopFilters = ({
                   const isSelected = selectedSapphireColors.includes(color);
                   const colorOption = shopByColorOptions.find(o => o.name.toLowerCase() === color.toLowerCase());
                   const imgUrl = colorOption ? colorOption.image : null;
+                  const cLower = color.toLowerCase();
+                  const colorScale =
+                    cLower === "white"
+                      ? "scale-[2.3]"
+                      : cLower === "pink"
+                      ? "scale-[2.25]"
+                      : cLower === "black"
+                      ? "scale-[2.07]"
+                      : cLower === "peach"
+                      ? "scale-[2.14]"
+                      : cLower === "brown"
+                      ? "scale-[1.85]"
+                      : "scale-[2.2]";
 
                   return (
                     <div
                       key={idx}
                       onClick={() => toggleSapphireColor(color)}
-                      className={`w-14 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                      className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                     >
                       {imgUrl ? (
-                         <div className="w-12 h-12 shrink-0 flex items-center justify-center">
-                           <img src={imgUrl} alt={color} className={`w-full h-full object-contain ${color.toLowerCase() === 'brown' ? 'scale-[0.85]' : ''}`} />
+                         <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
+                           <img src={imgUrl} alt={color} className={`w-full h-full object-contain ${colorScale}`} />
                          </div>
                       ) : (
-                         <div className={`w-12 h-12 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
-                           <span className="text-[10px] font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
+                         <div className={`w-16 h-16 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
+                           <span className="text-xs font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
                          </div>
                       )}
-                      <span className={`text-[10px] text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{color}</span>
+                      <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{color}</span>
                     </div>
                   );
                 })}

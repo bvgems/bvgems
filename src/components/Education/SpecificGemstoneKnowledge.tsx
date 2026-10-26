@@ -4,6 +4,7 @@ import { getGemStoneKnowledge } from "@/apis/api";
 import { Image, Table, Button, Anchor, Breadcrumbs } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { IconDownload } from "@tabler/icons-react";
+import { gemstoneOptions } from "@/utils/constants";
 
 interface Props {
   activeStone?: string;
@@ -88,6 +89,31 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
 
   if (!activeStone) return null;
 
+  const normalizedActiveStone = (activeStone || "").trim().toLowerCase();
+  const matchedGem = gemstoneOptions.find(
+    (item) =>
+      item.value.toLowerCase() === normalizedActiveStone ||
+      item.label.toLowerCase() === normalizedActiveStone ||
+      item.label.toLowerCase().includes(normalizedActiveStone) ||
+      normalizedActiveStone.includes(item.value.toLowerCase()) ||
+      item.value.toLowerCase().replace(/\s+/g, "-") === normalizedActiveStone
+  );
+
+  const rawStoneImage =
+    matchedGem?.shopImage ||
+    matchedGem?.image ||
+    (normalizedActiveStone === "paraiba tourmaline"
+      ? "/assets/pariba-desc.webp"
+      : knowledge?.additionalImages?.reference?.image?.url) ||
+    knowledge?.image?.src ||
+    "";
+
+  // Use Cloudinary trim if available to remove transparent padding so the stone is prominently sized
+  const gemstoneImage =
+    rawStoneImage.includes("res.cloudinary.com") && !rawStoneImage.includes("/e_trim/")
+      ? rawStoneImage.replace("/upload/", "/upload/e_trim/")
+      : rawStoneImage;
+
   return (
     <>
       <Breadcrumbs separator="›" className="mb-6">
@@ -98,11 +124,14 @@ export const SpecificGemstoneKnowledge = ({ activeStone }: Props) => {
           <>
             <div className="flex flex-col items-center" ref={contentRef}>
               <div className="flex justify-center flex-col items-center gap-3">
-                <Image loading="lazy"
+                <Image
+                  loading="lazy"
                   h={160}
                   w={160}
-                  className="object-cover"
-                  src={activeStone?.toLowerCase() === "paraiba tourmaline" ? "/assets/pariba-desc.webp" : knowledge?.additionalImages?.reference?.image?.url}
+                  fit="contain"
+                  className="object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.08)]"
+                  src={gemstoneImage}
+                  alt={activeStone}
                 />
                 <span className="text-xl md:text-2xl font-semibold capitalize">
                   {activeStone}

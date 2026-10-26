@@ -278,18 +278,18 @@ export const FreeSizeGridViewTopFilters = ({
                     <div
                       key={idx}
                       onClick={() => toggleSapphireColor(color)}
-                      className={`w-14 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                      className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                     >
                       {imgUrl ? (
-                         <div className={`w-12 h-12 shrink-0 rounded-full overflow-hidden shadow-sm flex items-center justify-center`}>
-                           <img src={imgUrl} alt={color} className={`w-full h-full object-cover object-center ${color.toLowerCase() === 'white' ? 'scale-[0.95]' : color.toLowerCase() === 'teal' ? 'scale-[2.2]' : color.toLowerCase() === 'peach' ? 'scale-[1.15]' : color.toLowerCase() === 'brown' ? 'scale-[1.2]' : color.toLowerCase() === 'black' ? 'scale-[1.05]' : 'scale-[1.5]'}`} />
+                         <div className="w-14 h-14 shrink-0 flex items-center justify-center overflow-hidden">
+                           <img src={imgUrl} alt={color} className={`w-full h-full object-contain scale-[2.2]`} />
                          </div>
                       ) : (
-                         <div className={`w-12 h-12 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
-                           <span className="text-[10px] font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
+                         <div className={`w-14 h-14 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
+                           <span className="text-xs font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
                          </div>
                       )}
-                      <span className={`text-[10px] text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{color}</span>
+                      <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{color}</span>
                     </div>
                   );
                 })}

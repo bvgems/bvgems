@@ -358,18 +358,18 @@ export function FreeSizeGridView({
         <>
           
           {viewMode === "list" ? (
-             <div className="bg-white rounded shadow-sm border border-gray-100 p-1 md:p-2 w-full overflow-hidden mt-5">
-               <Table highlightOnHover highlightOnHoverColor="#f5f5f5" striped verticalSpacing="sm" horizontalSpacing="xs" style={{ tableLayout: "fixed", width: "100%" }}>
-                 <Table.Thead>
-                   <Table.Tr className="font-bold text-xs text-gray-700 uppercase">
-                     <Table.Th className="w-[45px] md:w-[60px] pl-3 md:pl-4 text-center"></Table.Th>
-                     <Table.Th className="hidden md:table-cell md:w-[20%] text-left">Shape</Table.Th>
-                     <Table.Th className="hidden md:table-cell md:w-[15%] text-left">Color</Table.Th>
-                     <Table.Th className="w-[45%] md:w-[22%] text-center">Dimensions</Table.Th>
-                     <Table.Th className="w-[20%] md:w-[10%] text-right">Ct.</Table.Th>
-                     <Table.Th className="hidden md:table-cell md:w-[12%] text-right">Price/Ct</Table.Th>
-                     <Table.Th className="w-[35%] md:w-[12%] text-right">Price/St</Table.Th>
-                     <Table.Th className="w-[50px] md:w-[100px] pr-3 md:pr-4 text-right"></Table.Th>
+             <div className="bg-white rounded shadow-sm border border-gray-100 p-1 md:p-2 w-full mt-5">
+               <Table highlightOnHover highlightOnHoverColor="#f5f5f5" striped verticalSpacing="sm" horizontalSpacing="xs" stickyHeader stickyHeaderOffset={85} style={{ tableLayout: "fixed", width: "100%" }}>
+                 <Table.Thead className="sticky top-[85px] z-20 shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
+                   <Table.Tr className="font-bold text-xs uppercase tracking-wider bg-slate-100 text-[#0b182d] border-b-2 border-slate-200">
+                     <Table.Th className="w-[60px] md:w-[72px] !text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider"></Table.Th>
+                     <Table.Th className="hidden md:table-cell md:w-[20%] !text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Shape</Table.Th>
+                     <Table.Th className="hidden md:table-cell md:w-[15%] !text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Color</Table.Th>
+                     <Table.Th className="w-[45%] md:w-[22%] !text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Dimensions</Table.Th>
+                     <Table.Th className="w-[20%] md:w-[10%] !text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Ct.</Table.Th>
+                     <Table.Th className="hidden md:table-cell md:w-[12%] !text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Price/Ct</Table.Th>
+                     <Table.Th className="w-[35%] md:w-[12%] !text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Price/St</Table.Th>
+                     <Table.Th className="w-[48px] md:w-[100px] !text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider"></Table.Th>
                    </Table.Tr>
                  </Table.Thead>
                  <Table.Tbody>
@@ -384,25 +384,35 @@ export function FreeSizeGridView({
                         }}
                         className="cursor-pointer hover:bg-gray-50 transition-colors"
                       >
-                         <Table.Td className="p-1 md:p-2 pl-3 md:pl-4 text-center">
-                           {row.image_url ? <img src={row.image_url} alt={row.gemstone_type || row.collection_slug || "Gemstone"} className="w-8 h-8 md:w-10 md:h-10 mx-auto rounded object-contain mix-blend-multiply" /> : <div className="w-8 h-8 md:w-10 md:h-10 mx-auto bg-gray-200 rounded"></div>}
+                         <Table.Td className="p-1 md:p-2 !text-center align-middle">
+                           {row.image_url ? (
+                             <div className="w-12 h-12 md:w-14 md:h-14 mx-auto flex items-center justify-center overflow-hidden">
+                               <img
+                                 src={row.image_url}
+                                 alt={row.gemstone_type || row.collection_slug || "Gemstone"}
+                                 className="w-full h-full object-contain"
+                               />
+                             </div>
+                           ) : (
+                             <div className="w-12 h-12 md:w-14 md:h-14 mx-auto bg-gray-200 rounded-md"></div>
+                           )}
                          </Table.Td>
-                         <Table.Td className="hidden md:table-cell text-left text-xs md:text-sm p-1 md:p-2 capitalize">{row.shape || "-"}</Table.Td>
-                         <Table.Td className="hidden md:table-cell text-left text-xs md:text-sm p-1 md:p-2">{row.color || "-"}</Table.Td>
-                         <Table.Td className="text-center text-xs md:text-sm p-1 md:p-2 tabular-nums">
+                         <Table.Td className="hidden md:table-cell !text-center text-xs md:text-sm p-1 md:p-2 capitalize align-middle">{row.shape || "-"}</Table.Td>
+                         <Table.Td className="hidden md:table-cell !text-center text-xs md:text-sm p-1 md:p-2 align-middle">{row.color || "-"}</Table.Td>
+                         <Table.Td className="!text-center text-xs md:text-sm p-1 md:p-2 tabular-nums align-middle">
                            <span className="md:hidden">{row.dimension?.replace(/mm/gi, '').trim() || "-"}</span>
                            <span className="hidden md:inline">{row.dimension || "-"}</span>
                          </Table.Td>
-                         <Table.Td className="text-right text-xs md:text-sm whitespace-nowrap p-1 md:p-2 tabular-nums">{row.ct_weight ? formatDisplayWeight(row.ct_weight) : "-"}</Table.Td>
-                         <Table.Td className="hidden md:table-cell text-right text-xs md:text-sm p-1 md:p-2 tabular-nums">
+                         <Table.Td className="!text-center text-xs md:text-sm whitespace-nowrap p-1 md:p-2 tabular-nums align-middle">{row.ct_weight ? formatDisplayWeight(row.ct_weight) : "-"}</Table.Td>
+                         <Table.Td className="hidden md:table-cell !text-center text-xs md:text-sm p-1 md:p-2 tabular-nums align-middle">
                            {user ? (
-                             <span className="font-semibold text-gray-900">
+                             <span className="font-semibold text-gray-900 inline-block text-center">
                                {row.price ? (
                                  getPerCaratPrice(row) > 0 ? `$${formatDisplayPrice(getPerCaratPrice(row))}` : "-"
                                ) : (
                                  <button 
                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(row); }} 
-                                   className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-xs md:text-sm flex flex-col md:inline-block text-right leading-tight"
+                                   className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-xs md:text-sm inline-block text-center leading-tight"
                                  >
                                    <span className="md:hidden">Request<br/>Pricing</span>
                                    <span className="hidden md:inline whitespace-nowrap">Request Pricing</span>
@@ -413,15 +423,15 @@ export function FreeSizeGridView({
                              <span className="text-gray-400 text-[10px] italic">Sign in</span>
                            )}
                          </Table.Td>
-                         <Table.Td className="text-right text-xs md:text-sm p-1 md:p-2 tabular-nums">
+                         <Table.Td className="!text-center text-xs md:text-sm p-1 md:p-2 tabular-nums align-middle">
                            {user ? (
-                             <span className="font-semibold text-gray-900">
+                             <span className="font-semibold text-gray-900 inline-block text-center">
                                {row.price ? (
                                  `$${formatDisplayPrice(getPerStonePrice(row))}`
                                ) : (
                                  <button 
                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuoteProduct(row); }} 
-                                   className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-xs md:text-sm flex flex-col md:inline-block text-right leading-tight"
+                                   className="text-blue-600 underline bg-transparent border-none p-0 cursor-pointer text-xs md:text-sm inline-block text-center leading-tight"
                                  >
                                    <span className="md:hidden">Request<br/>Pricing</span>
                                    <span className="hidden md:inline whitespace-nowrap">Request Pricing</span>
@@ -432,8 +442,8 @@ export function FreeSizeGridView({
                              <span className="text-gray-400 text-[10px] italic">Sign in</span>
                            )}
                          </Table.Td>
-                         <Table.Td className="text-right p-1 md:p-2 pr-3 md:pr-4">
-                           <div className="flex justify-end">
+                         <Table.Td className="!text-center p-1 md:p-2 pr-3 md:pr-4 align-middle">
+                           <div className="flex justify-center items-center">
                             {row.price && (
                               <>
                                 {/* Mobile Cart Icon */}

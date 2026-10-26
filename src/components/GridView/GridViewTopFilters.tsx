@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NumberInput, Select, MultiSelect, Button, ActionIcon, Collapse, Switch, Loader } from "@mantine/core";
 import Image from "next/image";
-import { IconX, IconChevronUp, IconChevronDown, IconFilter, IconShare } from "@tabler/icons-react";
+import { IconX, IconChevronUp, IconChevronDown, IconFilter, IconShare, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { shopByColorOptions } from "@/utils/constants";
 
 type RangeValue = { min: number | ""; max: number | "" };
@@ -129,11 +129,13 @@ const MultiDropdownFilter = ({
   value,
   onChange,
   optionsList,
+  placeholder = "Select Size",
 }: {
   label: string;
   value: string[];
   onChange: (val: string[]) => void;
   optionsList: string[];
+  placeholder?: string;
 }) => {
   const options = optionsList.map(opt => ({ value: opt, label: opt }));
 
@@ -146,7 +148,7 @@ const MultiDropdownFilter = ({
       {/* Mobile view */}
       <div className="flex lg:hidden flex-col gap-1 w-full">
         <MultiSelect
-          placeholder="Select"
+          placeholder={placeholder}
           data={options}
           value={value}
           onChange={onChange}
@@ -159,7 +161,7 @@ const MultiDropdownFilter = ({
       {/* Desktop view */}
       <div className="hidden lg:flex gap-2 w-full">
         <MultiSelect
-          placeholder="Select"
+          placeholder={placeholder}
           data={options}
           value={value}
           onChange={onChange}
@@ -178,13 +180,18 @@ import { getShapesData } from "@/apis/api";
 
 
 const GemVideo = ({ gem, shape, selectedTypes, availableTypes = [], selectedGrades, selectedSapphireColors }: any) => {
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
-  const [label, setLabel] = useState<string | null>(null);
+  const [videoList, setVideoList] = useState<{ videoUrl: string; label: string | null }[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSharingVideo, setIsSharingVideo] = useState(false);
   const [isVideoZoomed, setIsVideoZoomed] = useState(false);
   const [videoZoomPos, setVideoZoomPos] = useState({ x: 50, y: 50 });
   const videoContainerRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
+
+  const currentVideo = videoList[currentIndex] || videoList[0] || null;
+  const currentVideoUrl = currentVideo?.videoUrl || null;
+  const currentLabel = currentVideo?.label || null;
 
   const handleVideoMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!videoContainerRef.current) return;
@@ -194,9 +201,56 @@ const GemVideo = ({ gem, shape, selectedTypes, availableTypes = [], selectedGrad
     setVideoZoomPos({ x, y });
   };
 
-  const handleShareVideo = async (e: React.MouseEvent, url: string) => {
+  const handlePrevVideo = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (videoList.length <= 1) return;
+    setIsVideoZoomed(false);
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : videoList.length - 1));
+  };
+
+  const handleNextVideo = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (videoList.length <= 1) return;
+    setIsVideoZoomed(false);
+    setCurrentIndex((prev) => (prev < videoList.length - 1 ? prev + 1 : 0));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diffX = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(diffX) > 40) {
+      if (diffX < 0) {
+        handleNextVideo();
+      } else {
+        handlePrevVideo();
+      }
+    }
+    touchStartX.current = null;
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (videoList.length <= 1) return;
+    if (e.key === "ArrowLeft") {
+      handlePrevVideo();
+    } else if (e.key === "ArrowRight") {
+      handleNextVideo();
+    }
+  };
+
+  const handleShareVideo = async (e: React.MouseEvent, url: string | null) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!url) return;
 
     setIsSharingVideo(true);
     try {
@@ -245,48 +299,35 @@ const GemVideo = ({ gem, shape, selectedTypes, availableTypes = [], selectedGrad
     let active = true;
     setIsLoaded(false);
 
-    if (!gem) {
-      setVideoUrl(null);
-      setLabel(null);
+    if (!gem || !shape) {
+      setVideoList([]);
+      setCurrentIndex(0);
       return;
     }
 
     // If gem has both Natural and Lab Grown available, and user hasn't selected any type yet: DO NOT SHOW VIDEO
     if (availableTypes && availableTypes.length > 1 && (!selectedTypes || selectedTypes.length === 0)) {
-      setVideoUrl(null);
-      setLabel(null);
+      setVideoList([]);
+      setCurrentIndex(0);
       return;
     }
 
     const isSapphire = gem.toLowerCase() === "sapphire";
     const colorMatch = (isSapphire && selectedSapphireColors && selectedSapphireColors.length > 0) ? selectedSapphireColors[0] : null;
 
-    const fetchVideoForShape = async (shapeToTest: string) => {
+    const fetchVideoForShape = async (shapeToTest: string): Promise<{ videoUrl: string; label: string | null }[] | null> => {
       try {
         const res: any = await getShapesData(shapeToTest, gem, isSapphire, colorMatch || undefined);
         const items = res?.data || [];
         if (!items || items.length === 0) return null;
 
-        // Group by quality to get representative items (like CategoryContent does)
-        const qualityMap: Record<string, any> = {};
+        // Group by quality to check distinct types
         const distinctTypesInItems = new Set<string>();
         items.forEach((item: any) => {
           const isLab = String(item.quality || "").toLowerCase().includes("lab") || 
                         String(item.type || "").toLowerCase().includes("lab");
           distinctTypesInItems.add(isLab ? "Lab Grown" : "Natural");
-
-          const hasVideo = Array.isArray(item?.cloudinary_videos) && item.cloudinary_videos.length > 0;
-          const current = qualityMap[item.quality];
-          if (!current) {
-            qualityMap[item.quality] = item;
-          } else {
-            const currentHasVideo = Array.isArray(current?.cloudinary_videos) && current.cloudinary_videos.length > 0;
-            if (!currentHasVideo && hasVideo) {
-              qualityMap[item.quality] = item;
-            }
-          }
         });
-        const images = Object.values(qualityMap);
 
         const gemHasMultipleTypes = (availableTypes && availableTypes.length > 1) || distinctTypesInItems.size > 1;
         const userHasSelectedType = selectedTypes && selectedTypes.length > 0;
@@ -326,14 +367,25 @@ const GemVideo = ({ gem, shape, selectedTypes, availableTypes = [], selectedGrad
 
         if (gradePriorities.length === 0) return null;
 
-        let foundVideo = null;
-        let foundLabel = null;
-
         for (const grade of gradePriorities) {
-          const gradeItem = images.find((item: any) => item.quality === grade);
-          if (gradeItem?.cloudinary_videos && Array.isArray(gradeItem.cloudinary_videos) && gradeItem.cloudinary_videos.length > 0) {
+          const matchingItems = items.filter((item: any) => item.quality === grade);
+          const seenUrls = new Set<string>();
+          const gradeVideos: any[] = [];
 
-            const sortedVideos = [...gradeItem.cloudinary_videos].sort((a: any, b: any) => {
+          for (const itm of matchingItems) {
+            if (Array.isArray(itm?.cloudinary_videos)) {
+              for (const v of itm.cloudinary_videos) {
+                if (v?.video_url && !seenUrls.has(v.video_url)) {
+                  seenUrls.add(v.video_url);
+                  gradeVideos.push(v);
+                }
+              }
+            }
+          }
+
+          if (gradeVideos.length > 0) {
+            // Sort videos: Colombian first, Zambian second (for emeralds)
+            const sortedVideos = [...gradeVideos].sort((a: any, b: any) => {
               const labelA = (a.emerald_type || a.label || "").toLowerCase();
               const labelB = (b.emerald_type || b.label || "").toLowerCase();
               if (labelA === "colombian" && labelB !== "colombian") return -1;
@@ -343,32 +395,31 @@ const GemVideo = ({ gem, shape, selectedTypes, availableTypes = [], selectedGrad
               return 0;
             });
 
-            const bestMatch = sortedVideos.find((v: any) => {
-              const lbl = (v.label || v.emerald_type || "").toLowerCase();
-              const matchesColor = colorMatch ? lbl.includes(colorMatch.toLowerCase()) : true;
-              return matchesColor;
+            let candidateVideos = sortedVideos;
+            if (colorMatch) {
+              const colorMatching = sortedVideos.filter((v: any) => {
+                const lbl = (v.label || v.emerald_type || "").toLowerCase();
+                return lbl.includes(colorMatch.toLowerCase());
+              });
+              if (colorMatching.length > 0) {
+                candidateVideos = colorMatching;
+              }
+            }
+
+            const videoObjects = candidateVideos.map((videoItem: any) => {
+              const itemLabel = videoItem.label || videoItem.emerald_type || grade;
+              return {
+                videoUrl: videoItem.video_url as string,
+                label: itemLabel as string | null,
+              };
             });
 
-            const videoItem = bestMatch || sortedVideos[0];
-
-            if (videoItem?.video_url) {
-              foundVideo = videoItem.video_url;
-              foundLabel = videoItem.label || videoItem.emerald_type || grade;
-              
-              // If no shape was selected but we found a fallback shape, append the shape name to the label
-              if (!shape && foundLabel) {
-                 foundLabel = `${shapeToTest} - ${foundLabel}`;
-              } else if (!shape && !foundLabel) {
-                 foundLabel = shapeToTest;
-              }
-              break;
+            if (videoObjects.length > 0) {
+              return videoObjects;
             }
           }
         }
-        
-        if (foundVideo) {
-          return { videoUrl: foundVideo, label: foundLabel };
-        }
+
         return null;
       } catch (err) {
         return null;
@@ -376,33 +427,19 @@ const GemVideo = ({ gem, shape, selectedTypes, availableTypes = [], selectedGrad
     };
 
     const run = async () => {
-      if (shape) {
-        // Only try the selected shape
-        const result = await fetchVideoForShape(shape);
+      if (!shape) {
         if (active) {
-          setVideoUrl(result?.videoUrl || null);
-          setLabel(result?.label || null);
+          setVideoList([]);
+          setCurrentIndex(0);
         }
-      } else {
-        // Try shapes in fallback order
-        const fallbackShapes = ["Round", "Oval", "Princess Cut", "Emerald Cut", "Pear", "Marquise", "Heart", "Straight Baguette", "Cushion", "Trillion"];
-        let found = false;
-        for (const testShape of fallbackShapes) {
-          if (!active) return;
-          const result = await fetchVideoForShape(testShape);
-          if (result && result.videoUrl) {
-            if (active) {
-              setVideoUrl(result.videoUrl);
-              setLabel(result.label);
-            }
-            found = true;
-            break;
-          }
-        }
-        if (!found && active) {
-          setVideoUrl(null);
-          setLabel(null);
-        }
+        return;
+      }
+
+      // Only fetch video for the selected shape
+      const result = await fetchVideoForShape(shape);
+      if (active) {
+        setVideoList(result || []);
+        setCurrentIndex(0);
       }
     };
 
@@ -411,26 +448,35 @@ const GemVideo = ({ gem, shape, selectedTypes, availableTypes = [], selectedGrad
     return () => { active = false; };
   }, [gem, shape, selectedTypes, availableTypes, selectedGrades, selectedSapphireColors]);
 
-  if (!videoUrl) return null;
+  if (videoList.length === 0 || !currentVideoUrl) return null;
 
   return (
     <div className={`flex justify-center items-center transition-all duration-700 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-      <div className="relative group overflow-hidden bg-white/50 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] border border-black/[0.03] p-2 ring-1 ring-black/[0.02]">
+      <div 
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        className="relative group overflow-hidden bg-white/50 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] border border-black/[0.03] p-2 ring-1 ring-black/[0.02] outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+      >
         <div
           ref={videoContainerRef}
-          className="relative aspect-square w-[280px] md:w-[320px] lg:w-[280px] xl:w-[320px] rounded-[2rem] overflow-hidden bg-[#fbfbfd] cursor-zoom-in"
+          className="relative aspect-square w-[280px] md:w-[320px] lg:w-[280px] xl:w-[320px] rounded-[2rem] overflow-hidden bg-[#fbfbfd] cursor-zoom-in select-none"
           onMouseMove={handleVideoMouseMove}
           onMouseEnter={() => setIsVideoZoomed(true)}
           onMouseLeave={() => setIsVideoZoomed(false)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           <video
             ref={(el) => {
-              if (el && el.readyState >= 3) {
-                setIsLoaded(true);
+              if (el) {
+                if (el.readyState >= 3) {
+                  setIsLoaded(true);
+                }
+                el.play().catch(() => {});
               }
             }}
-            key={videoUrl}
-            src={videoUrl}
+            key={currentVideoUrl}
+            src={currentVideoUrl}
             autoPlay
             loop
             muted
@@ -451,27 +497,85 @@ const GemVideo = ({ gem, shape, selectedTypes, availableTypes = [], selectedGrad
           )}
 
           {/* Subtle elegant gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/15 pointer-events-none" />
 
-          {/* Share Video Button */}
+          {/* Counter Badge (Apple style pill, top-left) */}
+          {videoList.length > 1 && (
+            <div className="absolute top-3 left-3 z-20 bg-black/40 text-white/95 px-2.5 py-1 rounded-full backdrop-blur-md border border-white/20 shadow-sm text-[11px] font-medium tracking-wider flex items-center justify-center pointer-events-none select-none">
+              <span>{currentIndex + 1}</span>
+              <span className="mx-1 text-white/50">/</span>
+              <span className="text-white/70">{videoList.length}</span>
+            </div>
+          )}
+
+          {/* Share Video Button (top-right) */}
           <button
-            onClick={(e) => handleShareVideo(e, videoUrl)}
+            onClick={(e) => handleShareVideo(e, currentVideoUrl)}
             disabled={isSharingVideo}
-            className="absolute top-3 right-3 z-20 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-md transition-all disabled:opacity-50 cursor-pointer active:scale-95 shadow-md flex items-center justify-center"
+            className="absolute top-3 right-3 z-20 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-md transition-all disabled:opacity-50 cursor-pointer active:scale-95 shadow-md flex items-center justify-center border border-white/20"
             title="Share Video"
             aria-label="Share Video"
           >
             {isSharingVideo ? <Loader size={18} color="white" /> : <IconShare size={18} stroke={1.5} />}
           </button>
 
+          {/* Apple-style Concise Left & Right Arrow Buttons */}
+          {videoList.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={handlePrevVideo}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/40 hover:bg-black/65 active:scale-90 text-white backdrop-blur-md border border-white/25 shadow-[0_4px_12px_rgba(0,0,0,0.25)] flex items-center justify-center transition-all cursor-pointer opacity-90 hover:opacity-100 group/btn"
+                aria-label="Previous video"
+                title="Previous video"
+              >
+                <IconChevronLeft size={18} stroke={2.5} className="transition-transform group-hover/btn:-translate-x-0.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleNextVideo}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/40 hover:bg-black/65 active:scale-90 text-white backdrop-blur-md border border-white/25 shadow-[0_4px_12px_rgba(0,0,0,0.25)] flex items-center justify-center transition-all cursor-pointer opacity-90 hover:opacity-100 group/btn"
+                aria-label="Next video"
+                title="Next video"
+              >
+                <IconChevronRight size={18} stroke={2.5} className="transition-transform group-hover/btn:translate-x-0.5" />
+              </button>
+            </>
+          )}
+
           {/* Elegant frosted label */}
-          {label && (
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-10">
+          {currentLabel && (
+            <div className={`absolute ${videoList.length > 1 ? 'bottom-6' : 'bottom-5'} left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-10 transition-all duration-300`}>
               <div className="bg-white/30 backdrop-blur-xl border border-white/40 text-gray-900 px-4 py-1.5 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.05)] whitespace-nowrap">
                 <span className="text-[11px] font-medium tracking-[0.15em] uppercase drop-shadow-sm mix-blend-color-burn whitespace-nowrap">
-                  {label}
+                  {currentLabel}
                 </span>
               </div>
+            </div>
+          )}
+
+          {/* Bottom Pagination Dots (Apple style pill/dots) */}
+          {videoList.length > 1 && (
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20 pointer-events-auto">
+              {videoList.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setCurrentIndex(idx);
+                    setIsVideoZoomed(false);
+                  }}
+                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    idx === currentIndex
+                      ? "w-4 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.4)]"
+                      : "w-1.5 bg-white/45 hover:bg-white/80"
+                  }`}
+                  aria-label={`Go to video ${idx + 1}`}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -548,7 +652,7 @@ export const GridViewTopFilters = ({
   const allDims = new Set<string>();
   Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
   const combinedDims = Array.from(allDims).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-  const gemStr = selectedGems.length > 0 ? ` ${selectedGems[0]}` : " ANY GEM";
+  const gemStr = selectedGems.length > 0 ? ` ${selectedGems[0]}` : "";
   const shapeStr = selectedShapes.length > 0 ? ` ${selectedShapes[0]}` : "";
   const dimensionLabel = `${gemStr}${shapeStr} DIMENSIONS`.trim().toUpperCase();
 
@@ -567,7 +671,7 @@ export const GridViewTopFilters = ({
                   Gem Type
                 </label>
                 <Select
-                  placeholder="Any Gem Type"
+                  placeholder="Select Gem Type"
                   size="md"
                   radius="md"
                   data={gemstoneOptions.map((gem: any) => ({
@@ -591,7 +695,11 @@ export const GridViewTopFilters = ({
                     const gemOption = gemstoneOptions.find(g => g.value === option.value);
                     return (
                       <div className="flex items-center gap-3">
-                        {gemOption && <img src={gemOption.image} alt={option.label} className="w-6 h-6 object-contain" />}
+                        {gemOption && (
+                          <div className="w-6 h-6 shrink-0 flex items-center justify-center overflow-hidden">
+                            <img src={gemOption.image} alt={option.label} className="w-full h-full object-contain scale-[2.2]" />
+                          </div>
+                        )}
                         <span>{option.label}</span>
                       </div>
                     );
@@ -627,7 +735,9 @@ export const GridViewTopFilters = ({
                       return (
                         <div className="flex items-center gap-3">
                           {colorOption?.image ? (
-                            <img src={colorOption.image} alt={option.label} className="w-6 h-6 object-contain" />
+                            <div className="w-6 h-6 shrink-0 flex items-center justify-center overflow-hidden">
+                              <img src={colorOption.image} alt={option.label} className="w-full h-full object-contain scale-[2.2]" />
+                            </div>
                           ) : (
                             <div className="w-5 h-5 rounded-full border border-gray-200" style={{ backgroundColor: (colorOption as any)?.color || '#ccc' }} />
                           )}
@@ -645,7 +755,7 @@ export const GridViewTopFilters = ({
                   Shape
                 </label>
                 <Select
-                  placeholder="Any Shape"
+                  placeholder="Select Gem Shape"
                   size="md"
                   radius="md"
                   data={shapeOptions.map((s: any) => ({
@@ -680,7 +790,7 @@ export const GridViewTopFilters = ({
                   {dimensionLabel}
                 </label>
                 <MultiSelect
-                  placeholder="Select"
+                  placeholder="Select Size"
                   size="md"
                   radius="md"
                   data={combinedDims.map(d => ({ value: d, label: d }))}
@@ -767,11 +877,11 @@ export const GridViewTopFilters = ({
               </div>
 
               {/* 6. Video (if any) */}
-              {selectedGems.length > 0 && (
+              {selectedGems.length > 0 && selectedShapes.length > 0 && (
                 <div className="w-full flex justify-center mt-2">
                   <GemVideo
                     gem={selectedGems[0]}
-                    shape={selectedShapes.length > 0 ? selectedShapes[0] : null}
+                    shape={selectedShapes[0]}
                     selectedTypes={selectedTypes}
                     availableTypes={availableTypes}
                     selectedGrades={selectedGrades}
@@ -797,14 +907,22 @@ export const GridViewTopFilters = ({
                     <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                       {gemstoneOptions.map((gem, i) => {
                         const isSelected = selectedGems.length === 1 && selectedGems.includes(gem.value);
+                        const gemScale =
+                          gem.value === "Alexandrite"
+                            ? "scale-[2.4]"
+                            : gem.value === "Paraiba Tourmaline"
+                            ? "scale-[2.05]"
+                            : gem.value === "Morganite" || gem.value === "Peridot"
+                            ? "scale-[2.12]"
+                            : "scale-[2.2]";
                         return (
                           <div
                             key={i}
                             onClick={() => toggleGem(gem.value)}
                             className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                           >
-                            <div className="w-14 h-14 shrink-0 flex items-center justify-center">
-                              <img src={gem.image} alt={gem.label} className="w-full h-full object-contain" />
+                            <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
+                              <img src={gem.image} alt={gem.label} className={`w-full h-full object-contain ${gemScale}`} />
                             </div>
                             <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{gem.label}</span>
                           </div>
@@ -821,23 +939,36 @@ export const GridViewTopFilters = ({
                             const isSelected = selectedSapphireColors.includes(color);
                             const colorOption = shopByColorOptions.find(o => o.name.toLowerCase() === color.toLowerCase());
                             const imgUrl = colorOption ? colorOption.image : null;
+                            const cLower = color.toLowerCase();
+                            const colorScale =
+                              cLower === "white"
+                                ? "scale-[2.3]"
+                                : cLower === "pink"
+                                ? "scale-[2.25]"
+                                : cLower === "black"
+                                ? "scale-[2.07]"
+                                : cLower === "peach"
+                                ? "scale-[2.14]"
+                                : cLower === "brown"
+                                ? "scale-[1.85]"
+                                : "scale-[2.2]";
 
                             return (
                               <div
                                 key={idx}
                                 onClick={() => toggleSapphireColor(color)}
-                                className={`w-14 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                                className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                               >
                                 {imgUrl ? (
-                                  <div className="w-12 h-12 shrink-0 flex items-center justify-center">
-                                    <img src={imgUrl} alt={color} className={`w-full h-full object-contain ${color.toLowerCase() === 'brown' ? 'scale-[0.85]' : ''}`} />
+                                  <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
+                                    <img src={imgUrl} alt={color} className={`w-full h-full object-contain ${colorScale}`} />
                                   </div>
                                 ) : (
-                                  <div className={`w-12 h-12 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
-                                    <span className="text-[10px] font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
+                                  <div className={`w-16 h-16 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
+                                    <span className="text-xs font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
                                   </div>
                                 )}
-                                <span className={`text-[10px] text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{color}</span>
+                                <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{color}</span>
                               </div>
                             );
                           })}
@@ -912,11 +1043,11 @@ export const GridViewTopFilters = ({
 
               {/* Desktop Video (Sticky Right Side) */}
               <div className="w-[280px] xl:w-[320px] shrink-0 items-start justify-end">
-                {selectedGems.length > 0 && (
+                {selectedGems.length > 0 && selectedShapes.length > 0 && (
                   <div className="sticky top-24 pt-4">
                     <GemVideo
                       gem={selectedGems[0]}
-                      shape={selectedShapes.length > 0 ? selectedShapes[0] : null}
+                      shape={selectedShapes[0]}
                       selectedTypes={selectedTypes}
                       availableTypes={availableTypes}
                       selectedGrades={selectedGrades}

@@ -536,41 +536,41 @@ export default function SpecialPage() {
           </div>
 
           {viewMode === "list" ? (
-             <div className="overflow-x-auto">
-               <Table highlightOnHover highlightOnHoverColor="#f5f5f5" striped verticalSpacing="md">
-                 <Table.Thead>
-                   <Table.Tr className="font-extrabold text-[12px] text-gray-700 uppercase">
-                     <Table.Th className="text-center w-12"><div className="flex justify-center items-center"><Checkbox checked={paginatedData.length > 0 && paginatedData.every(r => selectedRows[r.id])} onChange={toggleSelectAll} /></div></Table.Th>
-                     <Table.Th className="text-left">Item ID</Table.Th>
-                     <Table.Th className="text-center">Image</Table.Th>
-                     <Table.Th className="text-left">Type</Table.Th>
-                     <Table.Th className="text-left">Color</Table.Th>
-                     <Table.Th className="text-left">Shape</Table.Th>
-                     <Table.Th className="text-center">Dimension</Table.Th>
-                     <Table.Th className="text-right">Carat Wt.</Table.Th>
-                     <Table.Th className="text-right">Stock Pc.</Table.Th>
-                     <Table.Th className="text-right"></Table.Th>
+             <div className="w-full">
+               <Table highlightOnHover highlightOnHoverColor="#f5f5f5" striped verticalSpacing="md" stickyHeader stickyHeaderOffset={85}>
+                 <Table.Thead className="sticky top-[85px] z-20 shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
+                   <Table.Tr className="font-bold text-xs uppercase tracking-wider bg-slate-100 text-[#0b182d] border-b-2 border-slate-200">
+                     <Table.Th className="!text-center w-12 py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider"><div className="flex justify-center items-center"><Checkbox checked={paginatedData.length > 0 && paginatedData.every(r => selectedRows[r.id])} onChange={toggleSelectAll} /></div></Table.Th>
+                     <Table.Th className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Item ID</Table.Th>
+                     <Table.Th className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Image</Table.Th>
+                     <Table.Th className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Type</Table.Th>
+                     <Table.Th className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Color</Table.Th>
+                     <Table.Th className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Shape</Table.Th>
+                     <Table.Th className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Dimension</Table.Th>
+                     <Table.Th className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Carat Wt.</Table.Th>
+                     <Table.Th className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider">Stock Pc.</Table.Th>
+                     <Table.Th className="!text-center py-3 bg-slate-100 text-[#0b182d] font-bold text-xs uppercase tracking-wider"></Table.Th>
                    </Table.Tr>
                  </Table.Thead>
                  <Table.Tbody>
                    {paginatedData.length > 0 ? (
                      paginatedData.map((row) => (
                        <Table.Tr key={row.id}>
-                         <Table.Td className="text-center w-12"><div className="flex justify-center items-center"><Checkbox checked={selectedRows[row.id] || false} onChange={() => toggleSelectRow(row.id)} /></div></Table.Td>
-                         <Table.Td className="text-left text-sm font-medium">{row.Item || "-"}</Table.Td>
-                         <Table.Td className="text-center">
+                         <Table.Td className="!text-center w-12 align-middle"><div className="flex justify-center items-center"><Checkbox checked={selectedRows[row.id] || false} onChange={() => toggleSelectRow(row.id)} /></div></Table.Td>
+                         <Table.Td className="!text-center text-sm font-medium align-middle">{row.Item || "-"}</Table.Td>
+                         <Table.Td className="!text-center align-middle">
                            <div className="w-10 h-10 mx-auto flex items-center justify-center">
                              {row.imageUrl ? <img src={row.imageUrl} alt={row.normalizedGem} className="w-10 h-10 rounded object-cover" /> : <div className="w-10 h-10 bg-gray-200 rounded animate-pulse"></div>}
                            </div>
                          </Table.Td>
-                         <Table.Td className="text-left text-sm font-medium whitespace-nowrap">{row.normalizedGem || "-"}</Table.Td>
-                         <Table.Td className="text-left text-sm">{row.Color || "-"}</Table.Td>
-                         <Table.Td className="text-left text-sm whitespace-nowrap">{row.normalizedShape || "-"}</Table.Td>
-                         <Table.Td className="text-center text-sm whitespace-nowrap tabular-nums">{row.Size || "-"}</Table.Td>
-                         <Table.Td className="text-right text-sm tabular-nums">{row["Stock Wt."] || "-"}</Table.Td>
-                         <Table.Td className="text-right text-sm tabular-nums">{row["Stock Pcs."] || "-"}</Table.Td>
-                         <Table.Td className="text-right">
-                           <div className="flex justify-end">
+                         <Table.Td className="!text-center text-sm font-medium whitespace-nowrap align-middle">{row.normalizedGem || "-"}</Table.Td>
+                         <Table.Td className="!text-center text-sm align-middle">{row.Color || "-"}</Table.Td>
+                         <Table.Td className="!text-center text-sm whitespace-nowrap align-middle">{row.normalizedShape || "-"}</Table.Td>
+                         <Table.Td className="!text-center text-sm whitespace-nowrap tabular-nums align-middle">{row.Size || "-"}</Table.Td>
+                         <Table.Td className="!text-center text-sm tabular-nums align-middle">{row["Stock Wt."] || "-"}</Table.Td>
+                         <Table.Td className="!text-center text-sm tabular-nums align-middle">{row["Stock Pcs."] || "-"}</Table.Td>
+                         <Table.Td className="!text-center align-middle">
+                           <div className="flex justify-center items-center">
                             {row["Cp Std"] && Number(row["Cp Std"]) > 0 && (
                               <Button
                                 leftSection={<IconShoppingCart size={16} />}

@@ -16,16 +16,22 @@ function EducationContent() {
     .slice()
     .sort((a: any, b: any) => a.title.localeCompare(b.title));
 
-  const [selectedStone, setSelectedStone] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const queryStone = searchParams.get("activeStone");
+  const [selectedStone, setSelectedStone] = useState<string | null>(
+    queryStone ? queryStone.toLowerCase() : "alexandrite"
+  );
   const [opened, { open, close }] = useDisclosure(false);
 
   useEffect(() => {
-    if (queryStone && queryStone !== selectedStone) {
-      setSelectedStone(queryStone.toLowerCase());
+    if (queryStone) {
+      if (queryStone.toLowerCase() !== selectedStone) {
+        setSelectedStone(queryStone.toLowerCase());
+      }
+    } else if (!selectedStone) {
+      setSelectedStone("alexandrite");
     }
-  }, [queryStone]);
+  }, [queryStone, selectedStone]);
 
   return (
     <div className="flex flex-col md:flex-row h-screen overflow-hidden">

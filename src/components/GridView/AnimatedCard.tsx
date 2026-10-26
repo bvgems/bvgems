@@ -107,15 +107,17 @@ export const AnimatedCard = ({
             redirectToStonePage();
           }}
         >
-          <div className="flex items-center justify-center bg-white h-[140px] sm:h-[160px] md:h-[200px] lg:h-[240px]">
-            <motion.img
-              src={item?.image_url}
-              alt={item?.title}
-              className="object-contain h-[70%]"
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ type: "spring", damping: 20, stiffness: 100 }}
-            />
+          <div className="flex items-center justify-center bg-white overflow-hidden h-[140px] sm:h-[160px] md:h-[200px] lg:h-[240px]">
+            <div className={`w-full h-full flex items-center justify-center ${!isFreeSize ? "scale-[2.1] sm:scale-[1.9]" : ""}`}>
+              <motion.img
+                src={item?.image_url}
+                alt={item?.title}
+                className="object-contain h-[70%]"
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", damping: 20, stiffness: 100 }}
+              />
+            </div>
           </div>
 
           <div className="p-3.5 md:p-5 flex flex-col flex-grow bg-white relative">

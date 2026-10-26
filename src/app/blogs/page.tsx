@@ -6,16 +6,19 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { IconArrowRight } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { customBlogPosts } from "@/data/customBlogs";
 
 export default function BlogPage() {
   const router = useRouter();
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [blogPosts, setBlogPosts] = useState<any[]>(customBlogPosts);
+  const [loading, setLoading] = useState(customBlogPosts.length === 0);
 
   const fetchBlogs = async () => {
     try {
       const response = await getBlogPosts();
-      setBlogPosts(response?.data || []);
+      if (response?.data && response.data.length > 0) {
+        setBlogPosts(response.data);
+      }
     } catch (error) {
       console.error("Error fetching blogs:", error);
     } finally {
@@ -80,7 +83,7 @@ export default function BlogPage() {
 
                   {/* Author + Date */}
                   <p className="text-sm text-gray-500 mb-4">
-                    {post.author || "B.V. Gems"} ·{" "}
+                    {post.author || post.authorV2?.name || "B.V. Gems"} ·{" "}
                     {new Date(post.publishedAt).toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",
