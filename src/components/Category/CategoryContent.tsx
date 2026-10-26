@@ -28,7 +28,7 @@ import { SizeToleranceGuide } from "../Tolerance/SizeToleranceGuide";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { ImageZoom } from "../CommonComponents/ImageZoom";
 import { IconDiamond, IconShare } from "@tabler/icons-react";
-import { SapphireLooseGemstoneColorOptions } from "@/utils/constants";
+import { SapphireLooseGemstoneColorOptions, TopazLooseGemstoneColorOptions } from "@/utils/constants";
 import { Carousel } from "@mantine/carousel";
 import Script from "next/script";
 import { EmeraldDetails } from "./EmeraldDetails";
@@ -71,6 +71,7 @@ const getRepresentativeImages = (items: any[]) => {
 export function CategoryContent({
   isSapphire,
   isEmerald,
+  isTopaz: isTopazProp,
   data,
   shapes,
   handle,
@@ -80,6 +81,7 @@ export function CategoryContent({
 }: {
   isSapphire: boolean;
   isEmerald: boolean;
+  isTopaz?: boolean;
   data: any;
   shapes: string[];
   handle: any;
@@ -87,6 +89,7 @@ export function CategoryContent({
   routeShape?: string;
   routeSize?: string;
 }) {
+  const isTopaz = isTopazProp ?? (String(handle).toLowerCase() === "topaz" || String(routeStone).toLowerCase() === "topaz");
   const shapeOrder = [
     "Round",
     "Oval",
@@ -111,8 +114,8 @@ export function CategoryContent({
     const shapeSlug = shapeToUse.toLowerCase().replace(/\s+/g, "-");
     const params = new URLSearchParams();
     
-    const colorToUse = newColor || (isSapphire ? selectedSapphireColor : null);
-    if (colorToUse && isSapphire) {
+    const colorToUse = newColor || (isSapphire ? selectedSapphireColor : isTopaz ? selectedTopazColor : null);
+    if (colorToUse && (isSapphire || isTopaz)) {
       params.set("color", colorToUse);
     }
     if (typeFilter) {
@@ -148,6 +151,13 @@ export function CategoryContent({
   const [selectedSapphireColor, setSelectedSapphireColor] = useState(
     urlColor || SapphireLooseGemstoneColorOptions[0]?.value
   );
+  const [selectedTopazColor, setSelectedTopazColor] = useState(() => {
+    if (urlColor) {
+      const match = TopazLooseGemstoneColorOptions.find(o => o.value.toLowerCase() === urlColor.toLowerCase());
+      if (match) return match.value;
+    }
+    return TopazLooseGemstoneColorOptions[0]?.value;
+  });
   const [emeraldShade, setEmeraldShade] = useState<string | null>(urlShade || "Colombian");
   const [fetchedResult, setFetchedResult] = useState<any[]>([]);
   // Identifies which shape/color the current `fetchedResult` belongs to, so we
@@ -192,6 +202,10 @@ export function CategoryContent({
     if (urlColor !== last.color) {
       last.color = urlColor;
       if (urlColor && urlColor !== selectedSapphireColor) setSelectedSapphireColor(urlColor);
+      if (urlColor) {
+        const match = TopazLooseGemstoneColorOptions.find(o => o.value.toLowerCase() === urlColor.toLowerCase());
+        if (match && match.value !== selectedTopazColor) setSelectedTopazColor(match.value);
+      }
     }
     if (urlType !== last.type) {
       last.type = urlType;
@@ -254,6 +268,8 @@ export function CategoryContent({
 
     if (isSapphire) {
       setOrDelete("color", selectedSapphireColor, SapphireLooseGemstoneColorOptions[0]?.value);
+    } else if (isTopaz) {
+      setOrDelete("color", selectedTopazColor, TopazLooseGemstoneColorOptions[0]?.value);
     } else if (params.has("color")) {
       params.delete("color");
       hasChanges = true;
@@ -285,7 +301,7 @@ export function CategoryContent({
         router.replace(newUrl, { scroll: false });
       }
     }
-  }, [selectedSapphireColor, typeFilter, emeraldShade, pathname, router, searchParams, isSapphire, isEmerald]);
+  }, [selectedSapphireColor, selectedTopazColor, typeFilter, emeraldShade, pathname, router, searchParams, isSapphire, isEmerald, isTopaz]);
 
   const handleShareVideo = async (e: React.MouseEvent, url: string) => {
     e.preventDefault();
@@ -379,13 +395,13 @@ export function CategoryContent({
     selectedShape: string | null,
     title: string,
     isSapphire: boolean,
-    sapphireColor: string,
+    activeColor: string,
   ) => {
     const result: any = await getShapesData(
       selectedShape,
       title,
       isSapphire,
-      sapphireColor,
+      activeColor,
     );
 
     const shape = selectedShape || "default";
@@ -399,7 +415,7 @@ export function CategoryContent({
     }));
 
     setFetchedResult(result?.data || []);
-    setFetchedKey(`${shape}|${isSapphire ? sapphireColor : ""}`);
+    setFetchedKey(`${shape}|${(isSapphire || isTopaz) ? activeColor : ""}`);
     setEmeraldShaedImages(result?.data);
 
     // Get one image per quality in fixed order
@@ -451,11 +467,11 @@ export function CategoryContent({
         selectedShape,
         data?.title,
         isSapphire,
-        selectedSapphireColor,
+        isSapphire ? selectedSapphireColor : isTopaz ? selectedTopazColor : "",
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedShape, selectedSapphireColor]);
+  }, [selectedShape, selectedSapphireColor, selectedTopazColor]);
 
   const redirectToEducation = () => {
     router.push(
@@ -500,6 +516,8 @@ export function CategoryContent({
         return "All Natural and Lab Grown Quality ";
       case "Tanzanite":
         return "AA Quality ";
+      case "Topaz":
+        return "AA Quality ";
 
       default:
         break;
@@ -514,7 +532,7 @@ export function CategoryContent({
   // The table only ever shows rows with is_available === true, so sizes and
   // types are derived from those rows only. A size/type with 0 results is hidden.
   const normalizeSize = (s: any) => String(s ?? "").replace(/\s+/g, "");
-  const currentKey = `${selectedShape || "default"}|${isSapphire ? selectedSapphireColor : ""}`;
+  const currentKey = `${selectedShape || "default"}|${isSapphire ? selectedSapphireColor : isTopaz ? selectedTopazColor : ""}`;
   const dataIsCurrent = fetchedKey === currentKey;
 
   const availableRows = useMemo(
@@ -920,6 +938,38 @@ export function CategoryContent({
                                 <img loading="lazy" src={item?.image} alt={item?.value} className="w-full h-full object-cover" />
                               </Link>
                             </Tooltip>
+                          );
+                        }
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Topaz color filter */}
+                {isTopaz && (
+                  <div className="mt-8">
+                    <p className="font-semibold mb-3 text-gray-800 text-sm tracking-wide">COLOR</p>
+                    <div className="flex flex-wrap gap-5 items-start">
+                      {TopazLooseGemstoneColorOptions?.map(
+                        (item: any, index: number) => {
+                          const isSelected = selectedTopazColor?.toLowerCase() === item?.value.toLowerCase();
+                          return (
+                            <Link
+                              key={index}
+                              href={generateSeoUrl(null, item?.value)}
+                              scroll={false}
+                              onClick={() => setSelectedTopazColor(item?.value)}
+                              className="flex flex-col items-center gap-1.5 cursor-pointer group no-underline"
+                            >
+                              <div
+                                className={`w-12 h-12 rounded-full border bg-white flex items-center justify-center transition-all overflow-hidden ${isSelected ? 'border-black ring-1 ring-black shadow-sm scale-[1.04]' : 'border-gray-200 group-hover:border-gray-300 group-hover:scale-[1.02]'}`}
+                              >
+                                <img loading="lazy" src={item?.image} alt={item?.value} className="w-full h-full object-contain scale-[1.8]" />
+                              </div>
+                              <span className={`text-xs text-center leading-tight whitespace-nowrap transition-colors ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600 group-hover:text-gray-900'}`}>
+                                {item?.value}
+                              </span>
+                            </Link>
                           );
                         }
                       )}

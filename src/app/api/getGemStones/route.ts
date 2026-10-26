@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
       const gemstoneFiltered = edges
         .map((edge: any) => edge.node)
-        .filter((product: any) => product.productType === "Gemstones");
+        .filter((product: any) => product.productType === "Gemstones" || product.handle === "topaz");
 
       gemstoneProducts.push(...gemstoneFiltered);
     }

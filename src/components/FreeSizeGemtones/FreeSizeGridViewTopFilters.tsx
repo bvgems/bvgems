@@ -253,8 +253,8 @@ export const FreeSizeGridViewTopFilters = ({
                   onClick={() => toggleGem(gem.value)}
                   className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                 >
-                  <div className={`w-14 h-14 shrink-0 flex items-center justify-center`}>
-                    <img src={gem.image} alt={gem.label} className={`max-w-full max-h-full object-contain ${imgScale}`} />
+                  <div className={`w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden`}>
+                    <img src={gem.image} alt={gem.label} className={`w-full h-full object-contain ${imgScale}`} />
                   </div>
                   <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{gem.label}</span>
                 </div>
@@ -281,11 +281,11 @@ export const FreeSizeGridViewTopFilters = ({
                       className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
                     >
                       {imgUrl ? (
-                         <div className="w-14 h-14 shrink-0 flex items-center justify-center overflow-hidden">
+                         <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
                            <img src={imgUrl} alt={color} className={`w-full h-full object-contain scale-[2.2]`} />
                          </div>
                       ) : (
-                         <div className={`w-14 h-14 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
+                         <div className={`w-16 h-16 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
                            <span className="text-xs font-bold text-gray-400">{color.substring(0, 3).toUpperCase()}</span>
                          </div>
                       )}

@@ -51,6 +51,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
   const [selectedGems, setSelectedGems] = useState<string[]>([]);
   const [selectedShapes, setSelectedShapes] = useState<string[]>([]);
   const [selectedSapphireColors, setSelectedSapphireColors] = useState<string[]>([]);
+  const [selectedTopazVariants, setSelectedTopazVariants] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]); // "Natural" or "Lab Grown"
   const [selectedGrades, setSelectedGrades] = useState<string[]>([]);
   const autoSelectedTypeRef = useRef<string | null>(null);
@@ -130,9 +131,10 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     }
   };
 
-  const { weightBounds, availableSapphireColors } = useMemo(() => {
+  const { weightBounds, availableSapphireColors, availableTopazVariants } = useMemo(() => {
     let minWt = 0, maxWt = 0;
     const colors = new Set<string>();
+    const topazColors = new Set<string>();
 
     searchItems.forEach((d: any) => {
        const wt = parseFloat(d.ct_weight) || 0;
@@ -140,6 +142,9 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
 
        if (String(d.collection_slug || "").toLowerCase().includes("sapphire") && d.color) {
          colors.add(d.color);
+       }
+       if (String(d.collection_slug || "").toLowerCase().includes("topaz") && d.color) {
+         topazColors.add(d.color);
        }
     });
 
@@ -154,9 +159,18 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       return a.localeCompare(b);
     });
 
+    const topazOrder = ["swiss blue", "london blue", "sky blue"];
+    const sortedTopaz = Array.from(topazColors).sort((a, b) => {
+      const idxA = topazOrder.indexOf(a.toLowerCase());
+      const idxB = topazOrder.indexOf(b.toLowerCase());
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      return a.localeCompare(b);
+    });
+
     return {
       weightBounds: { min: 0, max: Math.ceil(maxWt) || 100 },
-      availableSapphireColors: sortedColors
+      availableSapphireColors: sortedColors,
+      availableTopazVariants: sortedTopaz
     };
   }, [searchItems]);
 
@@ -174,6 +188,13 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       preFiltered = preFiltered.filter(item => {
         const color = String(item.color || "").toLowerCase();
         return selectedSapphireColors.some(c => color.includes(c.toLowerCase()));
+      });
+    }
+
+    if (selectedTopazVariants.length > 0) {
+      preFiltered = preFiltered.filter(item => {
+        const color = String(item.color || "").toLowerCase();
+        return selectedTopazVariants.some(c => color.includes(c.toLowerCase()));
       });
     }
 
@@ -197,6 +218,9 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       if (key.toLowerCase() === "sapphire" && item.color) {
         key = `Sapphire ${item.color}`;
       }
+      if (key.toLowerCase() === "topaz" && item.color) {
+        key = `Topaz ${item.color}`;
+      }
       if (!groups[key]) groups[key] = new Set<string>();
       if (item.size) groups[key].add(item.size);
     });
@@ -206,7 +230,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       result[k] = Array.from(groups[k]).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
     }
     return result;
-  }, [searchItems, selectedShapes, selectedTypes, selectedGems, selectedSapphireColors]);
+  }, [searchItems, selectedShapes, selectedTypes, selectedGems, selectedSapphireColors, selectedTopazVariants]);
 
   const availableTypes = useMemo(() => {
     let preFiltered = [...searchItems];
@@ -324,9 +348,19 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
           });
           initGems = Array.from(matchingGems);
         }
+        if (initGems.length === 0 && parsed.selectedTopazVariants?.length > 0) {
+          const matchingGems = new Set<string>();
+          searchItems.forEach((item: any) => {
+            if (item.collection_slug && item.color && item.color.toLowerCase().includes(parsed.selectedTopazVariants[0].toLowerCase())) {
+              matchingGems.add(item.collection_slug);
+            }
+          });
+          initGems = Array.from(matchingGems);
+        }
         setSelectedGems(initGems);
         setSelectedShapes(parsed.selectedShapes || []);
         setSelectedSapphireColors(parsed.selectedSapphireColors || []);
+        setSelectedTopazVariants(parsed.selectedTopazVariants || []);
         setSelectedTypes(parsed.selectedTypes || []);
         setSelectedGrades(parsed.selectedGrades || []);
         setWeight(parsed.weight || "");
@@ -376,6 +410,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       }
 
       setSelectedGrades([]);
+      setSelectedTopazVariants([]);
 
       setSelectedGems([]);
       setWeight("");
@@ -392,6 +427,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       selectedGems,
       selectedShapes,
       selectedSapphireColors,
+      selectedTopazVariants,
       selectedTypes,
       selectedGrades,
       weight,
@@ -403,6 +439,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     const isEmpty = selectedGems.length === 0 &&
                     selectedShapes.length === 0 &&
                     selectedSapphireColors.length === 0 &&
+                    selectedTopazVariants.length === 0 &&
                     selectedTypes.length === 0 &&
                     selectedGrades.length === 0 &&
                     weight === "" &&
@@ -433,6 +470,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     selectedGems,
     selectedShapes,
     selectedSapphireColors,
+    selectedTopazVariants,
     selectedTypes,
     selectedGrades,
     weight,
@@ -497,6 +535,14 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       });
     }
 
+    // Filter by Topaz Variant
+    if (selectedTopazVariants.length > 0) {
+      filtered = filtered.filter(item => {
+        const color = String(item.color || "").toLowerCase();
+        return selectedTopazVariants.some(c => color.includes(c.toLowerCase()));
+      });
+    }
+
     // Filter by Type (Natural / Lab Grown)
     if (selectedTypes.length > 0) {
       filtered = filtered.filter(item => {
@@ -534,6 +580,9 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
         if (groupKey.toLowerCase() === "sapphire" && item.color) {
           groupKey = `Sapphire ${item.color}`;
         }
+        if (groupKey.toLowerCase() === "topaz" && item.color) {
+          groupKey = `Topaz ${item.color}`;
+        }
         
         const selectedForGroup = selectedDimensions[groupKey];
         if (!selectedForGroup || selectedForGroup.length === 0) {
@@ -558,6 +607,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     selectedGems, 
     selectedShapes, 
     selectedSapphireColors,
+    selectedTopazVariants,
     selectedTypes,
     selectedGrades,
         weight, 
@@ -569,6 +619,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     setSelectedGems([]);
     setSelectedShapes([]);
     setSelectedSapphireColors([]);
+    setSelectedTopazVariants([]);
     setSelectedTypes([]);
     setSelectedGrades([]);
     setWeight("");
@@ -640,6 +691,10 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
           sapphireColors={availableSapphireColors}
           selectedSapphireColors={selectedSapphireColors}
           setSelectedSapphireColors={setSelectedSapphireColors}
+
+          topazVariants={availableTopazVariants}
+          selectedTopazVariants={selectedTopazVariants}
+          setSelectedTopazVariants={setSelectedTopazVariants}
           
           resetAll={resetAll}
         />
@@ -715,7 +770,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                            <span className="md:hidden">{formatListSize(row.size)}</span>
                            <span className="hidden md:inline">{row.size || "-"}</span>
                          </Table.Td>
-                         <Table.Td className="!text-center text-xs md:text-sm whitespace-nowrap p-1 md:p-2 tabular-nums align-middle">{row.ct_weight ? formatDisplayWeight(row.ct_weight) : "-"}</Table.Td>
+                         <Table.Td className="!text-center text-xs md:text-sm whitespace-nowrap p-1 md:p-2 tabular-nums align-middle">{row.ct_weight ? formatDisplayWeight(row.ct_weight) : "NA"}</Table.Td>
                          <Table.Td className="hidden md:table-cell !text-center text-xs md:text-sm p-1 md:p-2 font-medium align-middle">{row.quality || "-"}</Table.Td>
                          <Table.Td className="hidden md:table-cell !text-center text-xs md:text-sm p-1 md:p-2 align-middle">{row.type || "-"}</Table.Td>
                          <Table.Td className="hidden md:table-cell !text-center text-xs md:text-sm p-1 md:p-2 tabular-nums align-middle">

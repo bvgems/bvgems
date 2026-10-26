@@ -22,7 +22,7 @@ export async function generateMetadata({
   if (shape) {
     prefix += `${shape} `;
   }
-  if (color && stone === "sapphire") {
+  if (color && (stone === "sapphire" || stone === "topaz")) {
     prefix += `${color} `;
   }
   const data: any = await getCategoryData(stone);
@@ -39,7 +39,7 @@ export async function generateMetadata({
     prefix + (gemstoneName.charAt(0).toUpperCase() + gemstoneName.slice(1));
   const urlParams = new URLSearchParams();
   if (shape) urlParams.set("shape", shape);
-  if (color && stone === "sapphire") urlParams.set("color", color);
+  if (color && (stone === "sapphire" || stone === "topaz")) urlParams.set("color", color);
   const paramString = urlParams.toString();
   const canonicalUrl = `https://www.bvgems.com/calibrated-stones/${stone}${paramString ? '?' + paramString : ''}`;
 
@@ -57,15 +57,29 @@ export default async function StonePage({ params }: PageProps) {
 
   const isSapphire = stone === "sapphire";
   const isEmerald = stone === "emerald";
+  const isTopaz = stone === "topaz";
   const data: any = await getCategoryData(stone);
 
-  const shapes = data?.shapes?.value?.split(",").map((s: any) => s.trim());
+  const defaultShapes = [
+    "Round",
+    "Oval",
+    "Princess Cut",
+    "Emerald Cut",
+    "Pear",
+    "Marquise",
+    "Cushion",
+    "Trillion",
+    "Heart",
+    "Straight Baguette",
+  ];
+  const shapes = data?.shapes?.value?.split(",").map((s: any) => s.trim()) || defaultShapes;
 
   return (
     <div>
       <CategoryContent
         isSapphire={isSapphire}
         isEmerald={isEmerald}
+        isTopaz={isTopaz}
         data={data}
         shapes={shapes}
         handle={stone}

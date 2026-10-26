@@ -33,6 +33,10 @@ type TopFiltersProps = {
   selectedSapphireColors: string[];
   setSelectedSapphireColors: (val: string[]) => void;
 
+  topazVariants?: string[];
+  selectedTopazVariants?: string[];
+  setSelectedTopazVariants?: (val: string[]) => void;
+
   selectedTypes: string[];
   setSelectedTypes: (val: string[]) => void;
   availableTypes: string[];
@@ -604,6 +608,9 @@ export const GridViewTopFilters = ({
   sapphireColors,
   selectedSapphireColors,
   setSelectedSapphireColors,
+  topazVariants = [],
+  selectedTopazVariants = [],
+  setSelectedTopazVariants,
   selectedTypes,
   setSelectedTypes,
   availableTypes,
@@ -619,9 +626,15 @@ export const GridViewTopFilters = ({
       if (val === "Sapphire") {
         setSelectedSapphireColors([]);
       }
+      if (val === "Topaz" && setSelectedTopazVariants) {
+        setSelectedTopazVariants([]);
+      }
     } else {
       if (selectedGems.includes("Sapphire") && val !== "Sapphire") {
         setSelectedSapphireColors([]);
+      }
+      if (selectedGems.includes("Topaz") && val !== "Topaz" && setSelectedTopazVariants) {
+        setSelectedTopazVariants([]);
       }
       setSelectedGems([val]);
     }
@@ -633,11 +646,20 @@ export const GridViewTopFilters = ({
     if (val === "Sapphire") {
       setSelectedSapphireColors([]);
     }
+    if (val === "Topaz" && setSelectedTopazVariants) {
+      setSelectedTopazVariants([]);
+    }
   };
 
   const toggleSapphireColor = (val: string) => {
     if (selectedSapphireColors.includes(val)) setSelectedSapphireColors([]);
     else setSelectedSapphireColors([val]);
+  };
+
+  const toggleTopazVariant = (val: string) => {
+    if (!setSelectedTopazVariants) return;
+    if (selectedTopazVariants.includes(val)) setSelectedTopazVariants([]);
+    else setSelectedTopazVariants([val]);
   };
 
   const toggleShape = (val: string) => {
@@ -647,7 +669,7 @@ export const GridViewTopFilters = ({
 
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
 
-  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || Object.keys(selectedDimensions).some(k => selectedDimensions[k].length > 0) || selectedSapphireColors.length > 0 || selectedTypes.length > 0 || selectedGrades.length > 0;
+  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || Object.keys(selectedDimensions).some(k => selectedDimensions[k].length > 0) || selectedSapphireColors.length > 0 || selectedTopazVariants.length > 0 || selectedTypes.length > 0 || selectedGrades.length > 0;
 
   const allDims = new Set<string>();
   Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
@@ -740,6 +762,51 @@ export const GridViewTopFilters = ({
                             </div>
                           ) : (
                             <div className="w-5 h-5 rounded-full border border-gray-200" style={{ backgroundColor: (colorOption as any)?.color || '#ccc' }} />
+                          )}
+                          <span>{option.label}</span>
+                        </div>
+                      );
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Topaz Colors (if Topaz selected) */}
+              {selectedGems.includes("Topaz") && (
+                <div className="flex flex-col w-full max-w-[280px]">
+                  <label className="text-[11px] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider text-left">
+                    Color
+                  </label>
+                  <MultiSelect
+                    placeholder="Any Color"
+                    size="md"
+                    radius="md"
+                    data={(topazVariants.length > 0 ? topazVariants : ["Swiss Blue", "London Blue", "Sky Blue"]).map((v: any) => ({
+                      label: v,
+                      value: v,
+                    }))}
+                    value={selectedTopazVariants}
+                    onChange={(val) => {
+                      if (setSelectedTopazVariants) setSelectedTopazVariants(val);
+                      if (document.activeElement instanceof HTMLElement) {
+                        document.activeElement.blur();
+                      }
+                    }}
+                    clearable={false}
+                    className="w-full"
+                    renderOption={({ option }) => {
+                      const variantImages: Record<string, string> = {
+                        "Swiss Blue": "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038839/Gemstone%20Shapes/Topaz/Swiss_Blue/AA/topaz-swiss-blue-natural-aa-round.png",
+                        "London Blue": "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038910/Gemstone%20Shapes/Topaz/London_Blue/AA/topaz-london-blue-natural-aa-round.png",
+                        "Sky Blue": "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038894/Gemstone%20Shapes/Topaz/Sky_Blue/AA/topaz-sky-blue-natural-aa-round.png",
+                      };
+                      const img = variantImages[option.value];
+                      return (
+                        <div className="flex items-center gap-3">
+                          {img && (
+                            <div className="w-6 h-6 shrink-0 flex items-center justify-center overflow-hidden">
+                              <img src={img} alt={option.label} className="w-full h-full object-contain scale-[2.2]" />
+                            </div>
                           )}
                           <span>{option.label}</span>
                         </div>
@@ -975,6 +1042,43 @@ export const GridViewTopFilters = ({
                         </div>
                       </div>
                     )}
+
+                    {/* TOPAZ COLORS SUB-FILTER */}
+                    {selectedGems.length === 1 && selectedGems.includes("Topaz") && (
+                      <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center lg:items-start">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3 block text-center lg:text-left">Topaz Colors</label>
+                        <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                          {(topazVariants.length > 0 ? topazVariants : ["Swiss Blue", "London Blue", "Sky Blue"]).map((variant, idx) => {
+                            const isSelected = selectedTopazVariants.includes(variant);
+                            const variantImages: Record<string, string> = {
+                              "Swiss Blue": "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038839/Gemstone%20Shapes/Topaz/Swiss_Blue/AA/topaz-swiss-blue-natural-aa-round.png",
+                              "London Blue": "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038910/Gemstone%20Shapes/Topaz/London_Blue/AA/topaz-london-blue-natural-aa-round.png",
+                              "Sky Blue": "https://res.cloudinary.com/oko8ywzn/image/upload/v1793038894/Gemstone%20Shapes/Topaz/Sky_Blue/AA/topaz-sky-blue-natural-aa-round.png",
+                            };
+                            const imgUrl = variantImages[variant];
+
+                            return (
+                              <div
+                                key={idx}
+                                onClick={() => toggleTopazVariant(variant)}
+                                className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                              >
+                                {imgUrl ? (
+                                  <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
+                                    <img src={imgUrl} alt={variant} className="w-full h-full object-contain scale-[2.2]" />
+                                  </div>
+                                ) : (
+                                  <div className={`w-16 h-16 shrink-0 rounded-full shadow-sm flex items-center justify-center bg-gray-100`}>
+                                    <span className="text-xs font-bold text-gray-400">{variant.substring(0, 3).toUpperCase()}</span>
+                                  </div>
+                                )}
+                                <span className={`text-xs text-center leading-tight ${isSelected ? 'font-bold text-[#0b182d]' : 'font-medium text-gray-600'}`}>{variant}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* SHAPE */}
@@ -1080,6 +1184,13 @@ export const GridViewTopFilters = ({
                   <div key={`color-${color}`} className="flex items-center gap-2 bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
                     {color} Sapphire
                     <IconX size={14} className="cursor-pointer" onClick={() => toggleSapphireColor(color)} />
+                  </div>
+                ))}
+
+                {selectedTopazVariants.map(variant => (
+                  <div key={`topaz-${variant}`} className="flex items-center gap-2 bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
+                    {variant} Topaz
+                    <IconX size={14} className="cursor-pointer" onClick={() => toggleTopazVariant(variant)} />
                   </div>
                 ))}
 

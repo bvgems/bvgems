@@ -8,9 +8,24 @@ const formatCarat = (value: number) => `${Number(value).toFixed(2)} ct`;
 
 const getTitle = (item: any, productType: any) => {
   if (productType === "freeSizeStone") {
-    return `${item?.product?.collection_slug} ${item?.product?.shape} ${item?.product?.size} ${item?.product?.ct_weight}`;
+    const parts = [
+      item?.product?.collection_slug,
+      item?.product?.shape,
+      item?.product?.size,
+      item?.product?.ct_weight ? formatCarat(Number(item?.product?.ct_weight)) : "",
+    ].filter(Boolean);
+    return parts.join(" • ");
   } else if (productType === "stone") {
-    return `${item?.product?.collection_slug} ${item?.product?.shape} ${item?.product?.size} ${item?.product?.ct_weight} Quality ${item?.product?.quality}`;
+    const carat = item?.product?.ct_weight ? formatCarat(Number(item?.product?.ct_weight)) : "";
+    const quality = item?.product?.quality ? String(item?.product?.quality) : "";
+    const parts = [
+      item?.product?.collection_slug,
+      item?.product?.shape,
+      item?.product?.size,
+      carat,
+      quality,
+    ].filter(Boolean);
+    return parts.join(" • ");
   } else if (productType === "bead") {
     return `${item?.product?.title}`;
   }
@@ -69,6 +84,12 @@ export const getOrderPayload = (
               { name: "Color", value: item?.product?.color },
               { name: "Quality", value: item?.product?.quality },
             );
+            if (item?.product?.ct_weight) {
+              properties.push({
+                name: "Carat Weight",
+                value: formatCarat(Number(item?.product?.ct_weight)),
+              });
+            }
           }
           if (item?.product?.collection_slug === "Emerald") {
             if (item?.product?.shade) {

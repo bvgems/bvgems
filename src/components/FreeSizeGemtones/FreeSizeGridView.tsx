@@ -390,7 +390,7 @@ export function FreeSizeGridView({
                                <img
                                  src={row.image_url}
                                  alt={row.gemstone_type || row.collection_slug || "Gemstone"}
-                                 className="w-full h-full object-contain"
+                                 className="w-full h-full object-contain mix-blend-multiply"
                                />
                              </div>
                            ) : (

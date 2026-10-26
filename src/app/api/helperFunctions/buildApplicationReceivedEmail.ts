@@ -9,7 +9,12 @@ export function buildApplicationReceivedEmail({
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 24px; border-radius: 10px; color: #222;">
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="https://res.cloudinary.com/${cloudName}/image/upload/v1754420615/logo2_qhix5o.png" alt="BV Gems Logo" style="max-height: 55px;" />
+        <img 
+          src="https://res.cloudinary.com/${cloudName}/image/upload/v1754420615/logo2_qhix5o.png" 
+          alt="BV Gems Logo" 
+          width="140" 
+          style="display: block; margin: 0 auto; width: 140px; max-width: 140px; height: auto; border: 0;" 
+        />
         <h2 style="color: #0b182d; margin-top: 14px; text-transform: uppercase; font-size: 20px; letter-spacing: 0.5px;">Account Application Received</h2>
       </div>
 

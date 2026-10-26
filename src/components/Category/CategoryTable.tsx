@@ -98,7 +98,7 @@ export const CategoryTable = ({
       Gemstone: item.collection_slug,
       Shape: item.shape,
       Size: item.size,
-      Carat: item.ct_weight ? formatDisplayWeight(item.ct_weight) : item.ct_weight,
+      Carat: item.ct_weight ? formatDisplayWeight(item.ct_weight) : "NA",
       Quality: item.quality,
       Image: item.image_url,
       ...(options.showPiece && { "Price Per Piece": item.price }),
@@ -208,7 +208,7 @@ Gemstone: ${item.collection_slug}
 Shape: ${item.shape}
 Image: ${item.image_url}
 Size: ${item.size}
-CT: ${formatDisplayWeight(item.ct_weight)}
+CT: ${item.ct_weight ? formatDisplayWeight(item.ct_weight) : "NA"}
 Quality: ${item.quality}
 ${options.showPiece && item.price ? `Price Per Piece: $${formatDisplayPrice(item.price)}` : ""}
 ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(item))}` : ""}
@@ -242,7 +242,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
         <td>${item.collection_slug}</td>
         <td>${item.shape}</td>
         <td>${item.size}</td>
-        <td>${formatDisplayWeight(item.ct_weight)}</td>
+        <td>${item.ct_weight ? formatDisplayWeight(item.ct_weight) : "NA"}</td>
         <td>${item.quality}</td>
         ${options.showPiece ? `<td>$${item.price ? formatDisplayPrice(item.price) : "-"}</td>` : ""}
         ${options.showCarat ? `<td>$${formatDisplayPrice(getPerCaratPrice(item))}</td>` : ""}
@@ -535,13 +535,11 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                           </div>
                         </TableTd>
                         <TableTd className="!text-center align-middle" onClick={() => goToCartPage(element)}>
-                          <div className="w-14 h-14 mx-auto flex items-center justify-center rounded overflow-hidden shadow-sm border border-gray-200">
-                            <NextImage
+                          <div className="w-12 h-12 md:w-14 md:h-14 mx-auto flex items-center justify-center overflow-hidden">
+                            <img
                               src={element.image_url}
-                              alt="gem"
-                              width={56}
-                              height={56}
-                              className="object-cover w-full h-full"
+                              alt={element.collection_slug || "gem"}
+                              className="w-full h-full object-contain scale-[2.2] md:scale-[2.0]"
                             />
                           </div>
                         </TableTd>
@@ -555,7 +553,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                             : element.color}
                         </TableTd>
                         <TableTd className="!text-center tabular-nums align-middle" onClick={() => goToCartPage(element)}>{element.size}</TableTd>
-                        <TableTd className="!text-center tabular-nums align-middle" onClick={() => goToCartPage(element)}>{formatDisplayWeight(element.ct_weight)}</TableTd>
+                        <TableTd className="!text-center tabular-nums align-middle" onClick={() => goToCartPage(element)}>{element.ct_weight ? formatDisplayWeight(element.ct_weight) : "NA"}</TableTd>
                         <TableTd className="!text-center align-middle" onClick={() => goToCartPage(element)}>{element.quality}</TableTd>
                         <TableTd className="!text-center align-middle" onClick={() => goToCartPage(element)}>{element.cut}</TableTd>
                         {user && (
@@ -646,13 +644,11 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                           <div className="flex items-center justify-between w-full">
                             {/* Left: Image + details */}
                             <div className="flex items-center gap-3" onClick={() => goToCartPage(element)}>
-                              <div className="w-14 h-14 flex-shrink-0 rounded overflow-hidden shadow-sm border border-gray-200">
-                                <NextImage
+                              <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                                <img
                                   src={element.image_url}
-                                  alt="gem"
-                                  width={56}
-                                  height={56}
-                                  className="object-cover w-full h-full"
+                                  alt={element.collection_slug || "gem"}
+                                  className="w-full h-full object-contain scale-[2.2]"
                                 />
                               </div>
                               <div className="flex flex-col text-sm">
@@ -688,7 +684,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
                                 </span>
                               </div>
                               <div>
-                                <strong>CT Weight:</strong> {formatDisplayWeight(element.ct_weight)}
+                                <strong>CT Weight:</strong> {element.ct_weight ? formatDisplayWeight(element.ct_weight) : "NA"}
                               </div>
                               {user && (
                                 <>

@@ -3,7 +3,8 @@ import { pool } from "@/lib/pool";
 
 export async function POST(req: Request) {
   try {
-    const { shape, collection, isSapphire, sapphireColor } = await req.json();
+    const { shape, collection, isSapphire, sapphireColor, color } = await req.json();
+    const targetColor = sapphireColor || color;
 
     if (!shape) {
       return NextResponse.json({ error: "Missing shape" }, { status: 400 });
@@ -22,14 +23,14 @@ export async function POST(req: Request) {
       );
     } else {
       // Case 2: collection provided
-      if (isSapphire) {
+      if (isSapphire || targetColor) {
         result = await pool.query(
           `SELECT * 
            FROM gemstone_specs 
            WHERE shape = $1 
              AND LOWER(collection_slug) = LOWER($2) 
-             AND color = $3`,
-          [shape, collection, sapphireColor]
+             AND LOWER(color) = LOWER($3)`,
+          [shape, collection, targetColor]
         );
       } else {
         if (collection.toLowerCase() === "emerald") {

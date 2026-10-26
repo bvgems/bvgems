@@ -320,7 +320,7 @@ export default function ProductDetailsPage() {
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(12);
       pdf.text(
-        `${formatDisplayWeight(product?.ct_weight)} Carat ${product?.quality} Quality Calibrated Gemstone`,
+        `${product?.ct_weight ? `${formatDisplayWeight(product?.ct_weight)} Carat ` : ""}${product?.quality} Quality Calibrated Gemstone`,
         pageWidth / 2,
         y,
         { align: "center" },
@@ -353,7 +353,7 @@ export default function ProductDetailsPage() {
       leftY += 6;
       pdf.text(`Quality: ${product?.quality}`, leftX, leftY);
       leftY += 6;
-      pdf.text(`Carat Weight: ${formatDisplayWeight(product?.ct_weight)}`, leftX, leftY);
+      pdf.text(`Carat Weight: ${product?.ct_weight ? formatDisplayWeight(product?.ct_weight) : "NA"}`, leftX, leftY);
 
       // Right column - pricing
       let rightY = y;
@@ -590,7 +590,7 @@ export default function ProductDetailsPage() {
             <div>
               <h1 className="text-xl font-semibold">
                 Loose {product?.collection_slug} {product?.shape}{" "}
-                {product?.size} – {formatDisplayWeight(product?.ct_weight)} Carat {product?.quality}{" "}
+                {product?.size}{product?.ct_weight ? ` – ${formatDisplayWeight(product?.ct_weight)} Carat` : ""} {product?.quality}{" "}
                 Quality Calibrated Gemstone
               </h1>
               <div className="flex justify-between items-center mt-2">

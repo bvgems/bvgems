@@ -47,12 +47,20 @@ export const Footer = () => {
   useEffect(() => {
     const fetchAllGemstones = async () => {
       const response = await getAllGemstones();
-      const formattedGemstones = response
+      let formattedGemstones = response
         ?.map((item: any) => ({
           label: item?.title,
           link: `/calibrated-stones/${item?.handle}`,
-        }))
-        .sort((a: any, b: any) => a.label.localeCompare(b.label));
+        })) || [];
+
+      if (!formattedGemstones.some((g: any) => g.label.toLowerCase() === "topaz")) {
+        formattedGemstones.push({
+          label: "Topaz",
+          link: "/calibrated-stones/topaz",
+        });
+      }
+
+      formattedGemstones.sort((a: any, b: any) => a.label.localeCompare(b.label));
       setAllGemstoenes(formattedGemstones);
     };
 

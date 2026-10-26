@@ -32,15 +32,17 @@ export async function generateMetadata({
   }
 
   const canonicalUrl = `https://www.bvgems.com${generateCalibratedStoneUrl(product, product.collection_slug)}`;
+  const ctTitleStr = product.ct_weight ? `${formatDisplayWeight(product.ct_weight)}ct ` : "";
+  const ctDescStr = product.ct_weight ? `${formatDisplayWeight(product.ct_weight)} ct, ` : "";
 
   return {
-    title: `${product.collection_slug} ${product.shape} ${product.size} ${formatDisplayWeight(product.ct_weight)}ct ${product.quality} Quality – B.V. Gems`,
-    description: `Buy ${product.collection_slug} ${product.shape} ${product.size}, ${formatDisplayWeight(product.ct_weight)} ct, ${product.quality} quality at B.V. Gems. Ethically sourced, precision cut, free U.S. shipping on or above $200.`,
+    title: `${product.collection_slug} ${product.shape} ${product.size} ${ctTitleStr}${product.quality} Quality – B.V. Gems`,
+    description: `Buy ${product.collection_slug} ${product.shape} ${product.size}, ${ctDescStr}${product.quality} quality at B.V. Gems. Ethically sourced, precision cut, free U.S. shipping on or above $200.`,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${product.collection_slug} ${product.shape} ${product.size} ${formatDisplayWeight(product.ct_weight)}ct ${product.quality} Quality – B.V. Gems`,
+      title: `${product.collection_slug} ${product.shape} ${product.size} ${ctTitleStr}${product.quality} Quality – B.V. Gems`,
       description: `Shop ${product.collection_slug} gemstones at B.V. Gems. Ethically sourced, precision cut, and shipped worldwide.`,
       url: canonicalUrl,
       images: [product.image_url],

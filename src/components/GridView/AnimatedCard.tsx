@@ -112,7 +112,7 @@ export const AnimatedCard = ({
               <motion.img
                 src={item?.image_url}
                 alt={item?.title}
-                className="object-contain h-[70%]"
+                className="object-contain h-[70%] mix-blend-multiply"
                 initial={{ opacity: 0, scale: 1.05 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: "spring", damping: 20, stiffness: 100 }}
@@ -137,7 +137,9 @@ export const AnimatedCard = ({
                    <span className="text-gray-300 text-[10px]">•</span>
                    <span>{item?.quality || "Natural"}</span>
                    <span className="text-gray-300 text-[10px]">•</span>
-                   <span className="text-gray-400">{formatDisplayWeight(item?.ct_weight)} ct</span>
+                   <span className="text-gray-400">
+                     {item?.ct_weight ? `${formatDisplayWeight(item?.ct_weight)} ct` : "NA"}
+                   </span>
                  </p>
 
                  <div className="mt-auto flex flex-col pt-4 border-t border-gray-50 mt-4">
@@ -220,7 +222,9 @@ export const AnimatedCard = ({
                    )}
                    <span>{item?.type || item?.quality || "Natural"}</span>
                   <span className="text-gray-300 text-[10px]">•</span>
-                   <span className="text-gray-400">{formatDisplayWeight(item?.ct_weight)} ct</span>
+                   <span className="text-gray-400">
+                     {item?.ct_weight ? `${formatDisplayWeight(item?.ct_weight)} ct` : "NA"}
+                   </span>
                  </p>
 
                  <div className="mt-auto flex flex-col pt-4 border-t border-gray-50 mt-4">

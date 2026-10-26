@@ -714,8 +714,10 @@ export const getShapesData = async (
   collection?: string,
   isSapphire?: boolean,
   sapphireColor?: string,
+  color?: string,
 ) => {
-  const cacheKey = JSON.stringify({ shape, collection, isSapphire, sapphireColor });
+  const targetColor = sapphireColor || color;
+  const cacheKey = JSON.stringify({ shape, collection, isSapphire, sapphireColor: targetColor });
   if (globalShapesDataCache.has(cacheKey)) {
     lastShapesData = globalShapesDataCache.get(cacheKey);
     return lastShapesData;
@@ -727,7 +729,8 @@ export const getShapesData = async (
       shape,
       collection,
       isSapphire,
-      sapphireColor,
+      sapphireColor: targetColor,
+      color: targetColor,
     }).then(res => {
       globalShapesDataCache.set(cacheKey, res);
       lastShapesData = res;
