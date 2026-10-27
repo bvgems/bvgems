@@ -623,17 +623,15 @@ export const GridViewTopFilters = ({
   const toggleGem = (val: string) => {
     if (selectedGems.length === 1 && selectedGems[0] === val) {
       setSelectedGems([]);
-      if (val === "Sapphire") {
-        setSelectedSapphireColors([]);
-      }
-      if (val === "Topaz" && setSelectedTopazVariants) {
+      setSelectedSapphireColors([]);
+      if (setSelectedTopazVariants) {
         setSelectedTopazVariants([]);
       }
     } else {
-      if (selectedGems.includes("Sapphire") && val !== "Sapphire") {
+      if (val !== "Sapphire") {
         setSelectedSapphireColors([]);
       }
-      if (selectedGems.includes("Topaz") && val !== "Topaz" && setSelectedTopazVariants) {
+      if (val !== "Topaz" && setSelectedTopazVariants) {
         setSelectedTopazVariants([]);
       }
       setSelectedGems([val]);
@@ -643,10 +641,10 @@ export const GridViewTopFilters = ({
   const removeGem = (val: string) => {
     const newGems = selectedGems.filter(g => g !== val);
     setSelectedGems(newGems);
-    if (val === "Sapphire") {
+    if (!newGems.includes("Sapphire")) {
       setSelectedSapphireColors([]);
     }
-    if (val === "Topaz" && setSelectedTopazVariants) {
+    if (!newGems.includes("Topaz") && setSelectedTopazVariants) {
       setSelectedTopazVariants([]);
     }
   };
@@ -669,7 +667,7 @@ export const GridViewTopFilters = ({
 
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
 
-  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || Object.keys(selectedDimensions).some(k => selectedDimensions[k].length > 0) || selectedSapphireColors.length > 0 || selectedTopazVariants.length > 0 || selectedTypes.length > 0 || selectedGrades.length > 0;
+  const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || Object.keys(selectedDimensions).some(k => selectedDimensions[k].length > 0) || (selectedGems.includes("Sapphire") && selectedSapphireColors.length > 0) || (selectedGems.includes("Topaz") && selectedTopazVariants.length > 0) || selectedTypes.length > 0 || selectedGrades.length > 0;
 
   const allDims = new Set<string>();
   Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
@@ -1180,16 +1178,16 @@ export const GridViewTopFilters = ({
                   </div>
                 ))}
 
-                {selectedSapphireColors.map(color => (
+                {selectedGems.includes("Sapphire") && selectedSapphireColors.map(color => (
                   <div key={`color-${color}`} className="flex items-center gap-2 bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
-                    {color} Sapphire
+                    {color}
                     <IconX size={14} className="cursor-pointer" onClick={() => toggleSapphireColor(color)} />
                   </div>
                 ))}
 
-                {selectedTopazVariants.map(variant => (
+                {selectedGems.includes("Topaz") && selectedTopazVariants.map(variant => (
                   <div key={`topaz-${variant}`} className="flex items-center gap-2 bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
-                    {variant} Topaz
+                    {variant}
                     <IconX size={14} className="cursor-pointer" onClick={() => toggleTopazVariant(variant)} />
                   </div>
                 ))}

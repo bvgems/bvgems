@@ -206,7 +206,7 @@ export const FAQ_DATA: FAQItem[] = [
     categoryLabel: "Orders & Showroom",
     question: "How fast do gemstone orders ship, and how are packages insured?",
     answer:
-      "In-stock calibrated and loose stone orders placed before 3:00 PM EST ship the same business day. All packages are dispatched via fully insured expedited couriers (FedEx or UPS) with adult signature required upon delivery. Free standard insured shipping is provided on all U.S. orders of $200 or more.",
+      "In-stock calibrated and loose stone orders placed before 3:00 PM EST ship the same business day. All packages are dispatched via fully insured expedited couriers (FedEx or UPS) with adult signature required upon delivery. Free 2 Days insured shipping is provided on all U.S. orders of $500 or more ($23 for orders under $500), and Priority Overnight shipping is available for $38 ($15 on orders of $500 or more).",
   },
   {
     id: "loose-stone-return-policy",

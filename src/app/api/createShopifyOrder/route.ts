@@ -11,6 +11,7 @@ export async function POST(request: NextRequest) {
       cartItems,
       email,
       deliveryMethod,
+      shippingOption = "2day",
       shippingAddress,
       selectedShippingAddress,
       user,
@@ -76,7 +77,34 @@ export async function POST(request: NextRequest) {
 
       return acc + itemTotal;
     }, 0);
-    const shippingTotal = (deliveryMethod === "delivery" && subtotal < 200 && subtotal > 0) ? 15 : 0;
+    let shippingTotal = 0;
+    if (deliveryMethod === "delivery" && subtotal > 0) {
+      if (subtotal >= 500) {
+        shippingTotal = shippingOption === "overnight" ? 15 : 0;
+      } else {
+        shippingTotal = shippingOption === "overnight" ? 38 : 23;
+      }
+    }
+
+    const shippingTitle =
+      deliveryMethod === "store"
+        ? "Store Pickup (New York, NY)"
+        : shippingOption === "overnight"
+          ? "Priority Overnight Shipping"
+          : "2 Days Shipping";
+
+    (orderPayload.order as any).shipping_lines = [
+      {
+        title: shippingTitle,
+        price: shippingTotal.toFixed(2),
+        code:
+          deliveryMethod === "store"
+            ? "store_pickup"
+            : shippingOption === "overnight"
+              ? "priority_overnight"
+              : "2_days",
+      },
+    ];
     
     (orderPayload as any).subtotal = subtotal;
     (orderPayload as any).shipping = shippingTotal;

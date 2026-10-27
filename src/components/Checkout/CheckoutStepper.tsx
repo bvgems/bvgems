@@ -38,6 +38,9 @@ export const CheckoutStepper = ({
   setPaymentMethod,
   deliveryMethod,
   setDeliveryMethod,
+  shippingOption,
+  setShippingOption,
+  subtotal,
 }: any) => {
   const { user } = useAuth();
   const { setGuestUser } = useGuestUserStore();
@@ -58,6 +61,9 @@ export const CheckoutStepper = ({
           <DeliveryMethod
             deliveryMethod={deliveryMethod}
             setDeliveryMethod={setDeliveryMethod}
+            shippingOption={shippingOption}
+            setShippingOption={setShippingOption}
+            subtotal={subtotal}
           />
         ),
       },
@@ -111,7 +117,7 @@ export const CheckoutStepper = ({
     });
 
     return result;
-  }, [deliveryMethod, user, paymentMethod, selectedShippingAddress]);
+  }, [deliveryMethod, user, paymentMethod, selectedShippingAddress, shippingOption, subtotal]);
 
   const handleNext = (index: number) => {
     if (index === 1) {

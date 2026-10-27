@@ -38,7 +38,7 @@ export const GemstonesByBirthMonths = [
     month: "May",
     gemstone: "Emerald",
     image_url:
-      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1756317899/RD_Z_emh9yw.jpg`,
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1793130426/RD_Z_emh9yw.jpg`,
     products: [
       {
         image:
@@ -60,7 +60,7 @@ export const GemstonesByBirthMonths = [
       },
       {
         image:
-          `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1756317899/RD_Z_emh9yw.jpg`,
+          `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1793130426/RD_Z_emh9yw.jpg`,
         title: "Loose Gemstones",
         link: "/calibrated-stones/emerald",
       },
@@ -70,13 +70,13 @@ export const GemstonesByBirthMonths = [
     month: "June",
     gemstone: "Alexandrite",
     image_url:
-      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1755717221/IMG_2131_zgoi6w.png`,
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1793130570/IMG_2131_zgoi6w.png`,
   },
   {
     month: "July",
     gemstone: "Ruby",
     image_url:
-      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1756410867/IMG_2626-3_pju0li.png`,
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1793130571/IMG_2626-3_pju0li.png`,
     products: [
       {
         image:
@@ -98,7 +98,7 @@ export const GemstonesByBirthMonths = [
       },
       {
         image:
-          `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1756410867/IMG_2626-3_pju0li.png`,
+          `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1793130571/IMG_2626-3_pju0li.png`,
         title: "Loose Gemstones",
         link: "/calibrated-stones/ruby",
       },
@@ -114,7 +114,7 @@ export const GemstonesByBirthMonths = [
     month: "September",
     gemstone: "Sapphire",
     image_url:
-      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1755880908/RD_AA_SRD00042208_p8ijmh.jpg`,
+      `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1793130571/RD_AA_SRD00042208_p8ijmh.jpg`,
     products: [
       {
         image:
@@ -136,7 +136,7 @@ export const GemstonesByBirthMonths = [
       },
       {
         image:
-          `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1755880908/RD_AA_SRD00042208_p8ijmh.jpg`,
+          `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1793130571/RD_AA_SRD00042208_p8ijmh.jpg`,
         title: "Loose Gemstones",
         link: "/calibrated-stones/sapphire",
       },
@@ -1284,67 +1284,67 @@ export const shopByColorOptions = [
     name: "Red",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431967/Gemstone%20Shapes/Ruby/Red/AA/ruby-red-natural-aa-round.png",
-    href: "/calibrated-stones?color=red",
+    href: "/calibrated-stones?gem=Ruby",
   },
   {
     name: "Pink",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431995/Gemstone%20Shapes/Sapphire/Pink/Lab_Grown/sapphire-pink-lab-grown-lab-grown-round.png",
-    href: "/calibrated-stones?color=pink",
+    href: "/calibrated-stones?gem=Sapphire&color=pink",
   },
   {
     name: "Blue",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431988/Gemstone%20Shapes/Sapphire/Blue/AA/sapphire-blue-natural-aa-round.png",
-    href: "/calibrated-stones?color=blue",
+    href: "/calibrated-stones?gem=Sapphire&color=blue",
   },
   {
     name: "Purple",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431938/Gemstone%20Shapes/Amethyst/Purple/A/amethyst-purple-natural-a-round.png",
-    href: "/calibrated-stones?color=purple",
+    href: "/calibrated-stones?gem=Amethyst",
   },
   {
     name: "Green",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431952/Gemstone%20Shapes/Emerald/Green/AA/emerald-green-natural-aa-round.png",
-    href: "/calibrated-stones?color=green",
+    href: "/calibrated-stones?gem=Emerald",
   },
   {
     name: "Yellow",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792432015/Gemstone%20Shapes/Sapphire/Yellow/Lab_Grown/sapphire-yellow-lab-grown-lab-grown-round.png",
-    href: "/calibrated-stones?color=yellow",
+    href: "/calibrated-stones?gem=Sapphire&color=yellow",
   },
   {
     name: "Orange",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431946/Gemstone%20Shapes/Citrine/Orange/AA/citrine-orange-natural-aa-round.png",
-    href: "/calibrated-stones?color=orange",
+    href: "/calibrated-stones?gem=Citrine",
   },
   {
     name: "White",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792432013/Gemstone%20Shapes/Sapphire/White/AA/sapphire-white-natural-aa-round.png",
-    href: "/calibrated-stones?color=white",
+    href: "/calibrated-stones?gem=Sapphire&color=white",
   },
   {
     name: "Aqua",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431944/Gemstone%20Shapes/Aquamarine/Aqua/AA/aquamarine-aqua-natural-aa-round.png",
-    href: "/calibrated-stones?color=aqua",
+    href: "/calibrated-stones?gem=Aquamarine",
   },
   {
     name: "Peach",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431956/Gemstone%20Shapes/Morganite/Peach/A/morganite-peach-natural-a-round.png",
-    href: "/calibrated-stones?color=peach",
+    href: "/calibrated-stones?gem=Morganite",
   },
   {
     name: "Black",
     image:
       "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431980/Gemstone%20Shapes/Sapphire/Black/AA/sapphire-black-natural-aa-round.png",
-    href: "/calibrated-stones?color=black",
+    href: "/calibrated-stones?gem=Sapphire&color=black",
   },
   {
     name: "Teal",

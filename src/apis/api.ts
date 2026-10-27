@@ -421,6 +421,7 @@ export const makeCheckout = async (data: any) => {
       cartItems: data?.cartItems,
       email: data?.email,
       deliveryMethod: data?.deliveryMethod,
+      shippingOption: data?.shippingOption,
       shippingAddress: data?.shippingAddress,
       selectedShippingAddress: data?.selectedShippingAddress,
       user: data?.user,

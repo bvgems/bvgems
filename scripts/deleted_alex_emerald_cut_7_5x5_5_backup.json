@@ -1,0 +1,25 @@
+{
+  "id": 9768,
+  "collection_slug": "Alexandrite",
+  "shape": "Emerald Cut",
+  "size": "7.50 x 5.50 mm",
+  "ct_weight": "1.78",
+  "cut": "Step-cut",
+  "quality": "Lab Grown",
+  "price": "151.30",
+  "type": "Lab Grown",
+  "color": "Green - Purple ",
+  "image_url": "https://res.cloudinary.com/oko8ywzn/image/upload/v1792431936/Gemstone%20Shapes/Alexandrite/Green-Purple/Lab_Grown/alexandrite-green-purple-lab-grown-lab-grown-emerald-cut.png",
+  "is_available": true,
+  "search_vector": "'5.50':6 '7.50':4 'alexandrit':3 'cut':2 'emerald':1 'green':8 'mm':7 'purpl':9 'x':5",
+  "cloudinary_videos": [
+    {
+      "public_id": "Gemstone Videos/Alexandrite/shape-emeraldCut/grade-Lab/IMG_0192_t7hlzd_mp4",
+      "video_url": "https://res.cloudinary.com/dabdvgxd4/video/upload/v1787172085/Gemstone%20Videos/Alexandrite/shape-emeraldCut/grade-Lab/IMG_0192_t7hlzd_mp4.mp4"
+    },
+    {
+      "public_id": "Gemstone Videos/Alexandrite/shape-emeraldCut/grade-Lab/IMG_0195_wil1fw_mp4",
+      "video_url": "https://res.cloudinary.com/dabdvgxd4/video/upload/v1787172087/Gemstone%20Videos/Alexandrite/shape-emeraldCut/grade-Lab/IMG_0195_wil1fw_mp4.mp4"
+    }
+  ]
+}

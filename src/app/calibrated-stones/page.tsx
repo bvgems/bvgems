@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/CommonComponents/PageHeader";
 export const metadata: Metadata = {
   title: "Loose Calibrated Faceted Gemstones – Shop Online | B.V. Gems",
   description:
-    "Discover over 5,000 calibrated faceted gemstones at B.V. Gems. Shop natural & lab-grown sapphires, emeralds, rubies, citrine & more. Free U.S. shipping on or above $200.",
+    "Discover over 5,000 calibrated faceted gemstones at B.V. Gems. Shop natural & lab-grown sapphires, emeralds, rubies, citrine & more. Free U.S. shipping on or above $500.",
   openGraph: {
     title: "Loose Calibrated Faceted Gemstones – Shop Online | B.V. Gems",
     description:

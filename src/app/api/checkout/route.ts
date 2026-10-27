@@ -22,6 +22,7 @@ export async function POST(req: Request) {
       cartItems,
       email,
       deliveryMethod,
+      shippingOption = "2day",
       shippingAddress,
       selectedShippingAddress,
       user,
@@ -134,19 +135,40 @@ export async function POST(req: Request) {
       };
     });
 
-    // 🚚 Apply conditional shipping: only if deliveryMethod === 'delivery'
+    // 🚚 Apply shipping:
+    // If delivery:
+    // - Subtotal >= 500: 2day is Free ($0), overnight is $15
+    // - Subtotal < 500: 2day is $23, overnight is $38
+    // If store pickup or subtotal === 0: $0
     let shippingFee = 0;
-    if (deliveryMethod === "delivery" && subtotal < 200 && subtotal > 0) {
-      shippingFee = 15;
+    if (deliveryMethod === "delivery" && subtotal > 0) {
+      if (subtotal >= 500) {
+        shippingFee = shippingOption === "overnight" ? 15 : 0;
+      } else {
+        shippingFee = shippingOption === "overnight" ? 38 : 23;
+      }
+    }
+
+    if (shippingFee > 0) {
+      const shippingTitle =
+        shippingOption === "overnight"
+          ? "Priority Overnight Shipping"
+          : "2 Days Shipping";
+      const shippingDesc =
+        shippingOption === "overnight"
+          ? subtotal >= 500
+            ? "Priority Overnight upgrade fee on orders $500 and above"
+            : "Priority Overnight shipping within the US"
+          : "2 Days shipping within the US (Free on orders $500 and above)";
+
       line_items.push({
         price_data: {
           currency: "usd",
           product_data: {
-            name: "Shipping Fee",
-            description:
-              "Standard shipping within the US (applied for delivery orders under $200)",
+            name: shippingTitle,
+            description: shippingDesc,
           },
-          unit_amount: shippingFee * 100, // $15 → 1500 cents
+          unit_amount: Math.round(shippingFee * 100),
         },
         quantity: 1,
       });
@@ -166,6 +188,7 @@ export async function POST(req: Request) {
       cancel_url: `${origin}/payment-cancelled`,
       metadata: {
         deliveryMethod: deliveryMethod || "",
+        shippingOption: shippingOption || "2day",
         shippingAddress: JSON.stringify(shippingAddress || {}),
         selectedShippingAddress: JSON.stringify(selectedShippingAddress || {}),
         user: JSON.stringify(user || {}),

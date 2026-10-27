@@ -114,6 +114,30 @@ export async function POST(req: NextRequest) {
         cartItems,
       );
 
+      const shippingOption = session.metadata?.shippingOption || "2day";
+      const deliveryMethod = session.metadata?.deliveryMethod;
+      const shippingFee = parseFloat(session.metadata?.shipping || "0") || 0;
+
+      const shippingTitle =
+        deliveryMethod === "store"
+          ? "Store Pickup (New York, NY)"
+          : shippingOption === "overnight"
+            ? "Priority Overnight Shipping"
+            : "2 Days Shipping";
+
+      (orderPayload.order as any).shipping_lines = [
+        {
+          title: shippingTitle,
+          price: shippingFee.toFixed(2),
+          code:
+            deliveryMethod === "store"
+              ? "store_pickup"
+              : shippingOption === "overnight"
+                ? "priority_overnight"
+                : "2_days",
+        },
+      ];
+
       console.log(
         "📝 Final Shopify Payload:",
         JSON.stringify(orderPayload, null, 2),

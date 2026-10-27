@@ -5,7 +5,7 @@ import { fetchBeads } from "@/apis/api";
 export const metadata: Metadata = {
   title: "Precious Gemstone Beads – Moonstone, Emerald & More | B.V. Gems",
   description:
-    "Shop precious gemstone beads at B.V. Gems. Discover moonstone, emerald, ruby, sapphire beads and more. Ethically sourced, high quality, free U.S. shipping on or above $200.",
+    "Shop precious gemstone beads at B.V. Gems. Discover moonstone, emerald, ruby, sapphire beads and more. Ethically sourced, high quality, free U.S. shipping on or above $500.",
   openGraph: {
     title: "Precious Gemstone Beads – Moonstone, Emerald & More | B.V. Gems",
     description:

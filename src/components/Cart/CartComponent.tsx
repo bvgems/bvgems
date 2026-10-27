@@ -53,6 +53,8 @@ export function CartComponent() {
   const toggleCertification = cartStore(
     (state: any) => state.toggleCertification,
   );
+  const shippingOption =
+    cartStore((state: any) => state.shippingOption) || "2day";
   const router = useRouter();
   const [hasMounted, setHasMounted] = useState(false);
   const [subtotal, setSubtotal] = useState(0);
@@ -112,10 +114,19 @@ export function CartComponent() {
     // Base subtotal
     setSubtotal(total);
 
-    // Free shipping on orders of $200 or above, otherwise $15 standard shipping
-    const shippingCost = total >= 200 ? 0 : 15;
+    // Free 2-day shipping on orders of $500 or above ($23 otherwise; overnight is $15 / $38)
+    const shippingCost =
+      total === 0
+        ? 0
+        : total >= 500
+          ? shippingOption === "overnight"
+            ? 15
+            : 0
+          : shippingOption === "overnight"
+            ? 38
+            : 23;
     setGrandTotal(total + shippingCost);
-  }, [cart, hasMounted]);
+  }, [cart, hasMounted, shippingOption]);
 
   const handleRemoveProduct = (id: any, product: any, purchaseByCarat?: boolean) => {
     removeProduct(id, product?.shade, purchaseByCarat);

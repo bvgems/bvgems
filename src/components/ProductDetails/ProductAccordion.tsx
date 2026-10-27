@@ -50,8 +50,9 @@ export const ProductAccordion = ({ description }: any) => {
             styles={{ itemWrapper: { paddingLeft: "0.5rem" } }}
           >
             <ListItem>
-              Free shipping on purchases of $200 or more. A $15 delivery
-              charge applies to orders below $200 within the United States.
+              Free 2 Days shipping on purchases of $500 or more ($23 on orders
+              under $500). Priority Overnight shipping is available for $38 ($15
+              on orders of $500 or more) within the United States.
             </ListItem>
 
             <ListItem>All Packages Require Signature.</ListItem>

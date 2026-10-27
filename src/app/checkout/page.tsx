@@ -35,6 +35,9 @@ export default function CheckoutSelectionPage() {
   const cartTotal = cartStore((state: any) => state.cartTotal);
   const shippingTotal = cartStore((state: any) => state.shippingTotal);
   const grandTotal = cartStore((state: any) => state.grandTotal);
+  const shippingOption =
+    cartStore((state: any) => state.shippingOption) || "2day";
+  const setShippingOption = cartStore((state: any) => state.setShippingOption);
   const updateTotals = cartStore((state: any) => state.updateTotals);
 
   const { shippingAddress } = useStpperStore();
@@ -57,6 +60,7 @@ export default function CheckoutSelectionPage() {
       cartItems: cart,
       email: user ? user.email : guestUser?.email || "guest@example.com",
       deliveryMethod,
+      shippingOption,
       shippingAddress,
       selectedShippingAddress,
       user,
@@ -96,6 +100,7 @@ export default function CheckoutSelectionPage() {
         cartItems: cart,
         email: user ? user.email : guestUser?.email || "guest@example.com",
         deliveryMethod,
+        shippingOption,
         shippingAddress,
         selectedShippingAddress,
         user,
@@ -146,9 +151,16 @@ export default function CheckoutSelectionPage() {
               setPaymentMethod={setPaymentMethod}
               deliveryMethod={deliveryMethod}
               setDeliveryMethod={setDeliveryMethod}
+              shippingOption={shippingOption}
+              setShippingOption={setShippingOption}
+              subtotal={cartTotal}
             />
             <div className="px-10">
-              <BillingSummary deliveryMethod={deliveryMethod} />
+              <BillingSummary
+                deliveryMethod={deliveryMethod}
+                shippingOption={shippingOption}
+                setShippingOption={setShippingOption}
+              />
 
               <Button
                 disabled={

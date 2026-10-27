@@ -27,6 +27,23 @@ import { generateCalibratedStoneUrl } from "@/utils/seoUrlHelpers";
 
 type RangeValue = { min: number | ""; max: number | "" };
 
+const COLOR_TO_GEM: Record<string, { gem: string; sapphireColor?: string; topazVariant?: string }> = {
+  aqua: { gem: "Aquamarine" },
+  red: { gem: "Ruby" },
+  green: { gem: "Emerald" },
+  purple: { gem: "Amethyst" },
+  orange: { gem: "Citrine" },
+  peach: { gem: "Morganite" },
+  blue: { gem: "Sapphire", sapphireColor: "Blue" },
+  pink: { gem: "Sapphire", sapphireColor: "Pink" },
+  yellow: { gem: "Sapphire", sapphireColor: "Yellow" },
+  white: { gem: "Sapphire", sapphireColor: "White" },
+  black: { gem: "Sapphire", sapphireColor: "Black" },
+  "sky blue": { gem: "Topaz", topazVariant: "Sky Blue" },
+  "swiss blue": { gem: "Topaz", topazVariant: "Swiss Blue" },
+  "london blue": { gem: "Topaz", topazVariant: "London Blue" },
+};
+
 interface GridViewProps {
   gemstones?: any;
   loadingTrigger?: any;
@@ -184,14 +201,14 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       });
     }
 
-    if (selectedSapphireColors.length > 0) {
+    if (selectedSapphireColors.length > 0 && (selectedGems.length === 0 || selectedGems.includes("Sapphire"))) {
       preFiltered = preFiltered.filter(item => {
         const color = String(item.color || "").toLowerCase();
         return selectedSapphireColors.some(c => color.includes(c.toLowerCase()));
       });
     }
 
-    if (selectedTopazVariants.length > 0) {
+    if (selectedTopazVariants.length > 0 && (selectedGems.length === 0 || selectedGems.includes("Topaz"))) {
       preFiltered = preFiltered.filter(item => {
         const color = String(item.color || "").toLowerCase();
         return selectedTopazVariants.some(c => color.includes(c.toLowerCase()));
@@ -357,10 +374,19 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
           });
           initGems = Array.from(matchingGems);
         }
+        // Only retain sapphire colors if Sapphire is selected (or no gem selected)
+        const validSapphireColors = (initGems.length === 0 || initGems.includes("Sapphire"))
+          ? (parsed.selectedSapphireColors || [])
+          : [];
+        // Only retain topaz variants if Topaz is selected (or no gem selected)
+        const validTopazVariants = (initGems.length === 0 || initGems.includes("Topaz"))
+          ? (parsed.selectedTopazVariants || [])
+          : [];
+
         setSelectedGems(initGems);
         setSelectedShapes(parsed.selectedShapes || []);
-        setSelectedSapphireColors(parsed.selectedSapphireColors || []);
-        setSelectedTopazVariants(parsed.selectedTopazVariants || []);
+        setSelectedSapphireColors(validSapphireColors);
+        setSelectedTopazVariants(validTopazVariants);
         setSelectedTypes(parsed.selectedTypes || []);
         setSelectedGrades(parsed.selectedGrades || []);
         setWeight(parsed.weight || "");
@@ -376,6 +402,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
 
     // If no filters in URL (fresh load or navigating from Home)
     if (!isInitialized.current) {
+      const initGem = searchParams.get("gem");
       const initShape = searchParams.get("shape");
       const initColor = searchParams.get("color");
       const initType = searchParams.get("type");
@@ -387,37 +414,73 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
         setSelectedShapes([]);
       }
 
+      if (initGem) {
+        const found = gemstoneOptions.find(g => g.value.toLowerCase() === initGem.toLowerCase() || g.label.toLowerCase() === initGem.toLowerCase());
+        setSelectedGems([found ? found.value : initGem]);
+      } else if (initColor) {
+        const colorKey = initColor.toLowerCase();
+        const mapping = COLOR_TO_GEM[colorKey];
+        if (mapping) {
+          setSelectedGems([mapping.gem]);
+        } else {
+          const colorTitle = initColor.charAt(0).toUpperCase() + initColor.slice(1).toLowerCase();
+          const matchingGems = new Set<string>();
+          searchItems.forEach((item: any) => {
+            if (item.collection_slug && item.color && item.color.toLowerCase().includes(colorTitle.toLowerCase())) {
+              const matchedOpt = gemstoneOptions.find(g => g.value.toLowerCase() === item.collection_slug.toLowerCase());
+              matchingGems.add(matchedOpt ? matchedOpt.value : item.collection_slug);
+            }
+          });
+          setSelectedGems(Array.from(matchingGems));
+        }
+      } else {
+        setSelectedGems([]);
+      }
+
       if (initColor) {
+        const colorKey = initColor.toLowerCase();
+        const mapping = COLOR_TO_GEM[colorKey];
         const colorTitle = initColor.charAt(0).toUpperCase() + initColor.slice(1).toLowerCase();
-        setSelectedSapphireColors([colorTitle]);
-        
-        const matchingGems = new Set<string>();
-        searchItems.forEach((item: any) => {
-          if (item.collection_slug && item.color && item.color.toLowerCase().includes(colorTitle.toLowerCase())) {
-            matchingGems.add(item.collection_slug);
+        if (mapping) {
+          if (mapping.gem === "Sapphire" && mapping.sapphireColor) {
+            setSelectedSapphireColors([mapping.sapphireColor]);
+          } else {
+            setSelectedSapphireColors([]);
           }
-        });
-        setSelectedGems(Array.from(matchingGems));
+          if (mapping.gem === "Topaz" && mapping.topazVariant) {
+            setSelectedTopazVariants([mapping.topazVariant]);
+          } else {
+            setSelectedTopazVariants([]);
+          }
+        } else {
+          if (availableSapphireColors.some(c => c.toLowerCase() === colorKey)) {
+            setSelectedSapphireColors([colorTitle]);
+          } else {
+            setSelectedSapphireColors([]);
+          }
+          if (availableTopazVariants.some(c => c.toLowerCase() === colorKey)) {
+            setSelectedTopazVariants([colorTitle]);
+          } else {
+            setSelectedTopazVariants([]);
+          }
+        }
       } else {
         setSelectedSapphireColors([]);
+        setSelectedTopazVariants([]);
       }
 
       if (initType) {
         setSelectedTypes([initType]);
       } else {
         setSelectedTypes([]);
-    setSelectedGrades([]);
       }
 
       setSelectedGrades([]);
-      setSelectedTopazVariants([]);
-
-      setSelectedGems([]);
       setWeight("");
       setSelectedDimensions({});
       isInitialized.current = true;
     }
-  }, [searchItems, currentFiltersStr]); // Re-run if URL filters change (e.g. Back button)
+  }, [searchItems, currentFiltersStr, availableSapphireColors, availableTopazVariants]); // Re-run if URL filters change (e.g. Back button)
 
   // 2. Sync State -> URL (runs when user changes a filter)
   useEffect(() => {
@@ -458,6 +521,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       }
       
       // Remove the old query params if we are transitioning to state-based URL
+      params.delete("gem");
       params.delete("shape");
       params.delete("color");
       params.delete("type");
@@ -482,6 +546,18 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     searchParams
   ]);
   // ----------------------------
+
+  // Ensure sapphire colors and topaz variants are cleared when a non-matching gem is selected
+  useEffect(() => {
+    if (selectedGems.length > 0) {
+      if (!selectedGems.includes("Sapphire") && selectedSapphireColors.length > 0) {
+        setSelectedSapphireColors([]);
+      }
+      if (!selectedGems.includes("Topaz") && selectedTopazVariants.length > 0) {
+        setSelectedTopazVariants([]);
+      }
+    }
+  }, [selectedGems, selectedSapphireColors, selectedTopazVariants]);
 
   // Cleanup invalid filters
   useEffect(() => {
@@ -528,7 +604,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     }
 
     // Filter by Color
-    if (selectedSapphireColors.length > 0) {
+    if (selectedSapphireColors.length > 0 && (selectedGems.length === 0 || selectedGems.includes("Sapphire"))) {
       filtered = filtered.filter(item => {
         const color = String(item.color || "").toLowerCase();
         return selectedSapphireColors.some(c => color.includes(c.toLowerCase()));
@@ -536,7 +612,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     }
 
     // Filter by Topaz Variant
-    if (selectedTopazVariants.length > 0) {
+    if (selectedTopazVariants.length > 0 && (selectedGems.length === 0 || selectedGems.includes("Topaz"))) {
       filtered = filtered.filter(item => {
         const color = String(item.color || "").toLowerCase();
         return selectedTopazVariants.some(c => color.includes(c.toLowerCase()));

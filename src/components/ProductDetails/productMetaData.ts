@@ -37,7 +37,7 @@ export async function generateMetadata({
 
   return {
     title: `${product.collection_slug} ${product.shape} ${product.size} ${ctTitleStr}${product.quality} Quality – B.V. Gems`,
-    description: `Buy ${product.collection_slug} ${product.shape} ${product.size}, ${ctDescStr}${product.quality} quality at B.V. Gems. Ethically sourced, precision cut, free U.S. shipping on or above $200.`,
+    description: `Buy ${product.collection_slug} ${product.shape} ${product.size}, ${ctDescStr}${product.quality} quality at B.V. Gems. Ethically sourced, precision cut, free U.S. shipping on or above $500.`,
     alternates: {
       canonical: canonicalUrl,
     },

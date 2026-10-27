@@ -149,6 +149,7 @@ interface CartStore {
   cart: CartItem[];
   isSynced: boolean;
   cartTotal: number;
+  shippingOption: "2day" | "overnight";
   shippingTotal: number;
   grandTotal: number;
   addToCart: (item: CartItem) => void;
@@ -158,7 +159,8 @@ interface CartStore {
   toggleCertification: (cartItemIdOrProductId: string, checked: boolean, shade?: string, purchaseByCarat?: boolean) => void;
   clearCart: () => void;
   getTotalPrice: () => number;
-  updateTotals: () => void;
+  setShippingOption: (option: "2day" | "overnight") => void;
+  updateTotals: (deliveryMethod?: string, customOption?: "2day" | "overnight") => void;
   setCartTotal: (total: number) => void;
 }
 
@@ -686,7 +688,14 @@ export const getCartStore = (userKey: string) => {
                   );
                 });
             }
-            set({ cart: [], cartTotal: 0, shippingTotal: 0, grandTotal: 0 });
+            set({ cart: [], cartTotal: 0, shippingOption: "2day", shippingTotal: 0, grandTotal: 0 });
+          },
+
+          shippingOption: "2day",
+
+          setShippingOption: (option: "2day" | "overnight") => {
+            set({ shippingOption: option });
+            get().updateTotals("delivery", option);
           },
 
           getTotalPrice: () => {
@@ -719,9 +728,17 @@ export const getCartStore = (userKey: string) => {
             }, 0);
           },
 
-          updateTotals: () => {
+          updateTotals: (deliveryMethod = "delivery", customOption?: "2day" | "overnight") => {
             const subtotal = get().getTotalPrice();
-            const shipping = subtotal < 200 && subtotal > 0 ? 15 : 0;
+            const option = customOption || get().shippingOption || "2day";
+            let shipping = 0;
+            if (deliveryMethod === "store" || subtotal === 0) {
+              shipping = 0;
+            } else if (subtotal >= 500) {
+              shipping = option === "overnight" ? 15 : 0;
+            } else {
+              shipping = option === "overnight" ? 38 : 23;
+            }
             const grandTotal = subtotal + shipping;
             set({
               cartTotal: subtotal,
@@ -735,6 +752,7 @@ export const getCartStore = (userKey: string) => {
           partialize: (state) => ({
             cart: state.cart,
             cartTotal: state.cartTotal,
+            shippingOption: state.shippingOption,
             shippingTotal: state.shippingTotal,
             grandTotal: state.grandTotal,
           }),
