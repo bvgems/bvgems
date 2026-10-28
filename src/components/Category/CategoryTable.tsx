@@ -34,6 +34,7 @@ import { isLabGrown } from "@/utils/priceHelpers";
 import { AddToCartModal } from "../CommonComponents/AddToCartModal";
 import { QuoteRequestModal } from "../CommonComponents/QuoteRequestModal";
 import { generateCalibratedStoneUrl } from "@/utils/seoUrlHelpers";
+import { formatShapeDisplay } from "@/utils/constants";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
@@ -96,7 +97,7 @@ export const CategoryTable = ({
   ) => {
     const data = items.map((item) => ({
       Gemstone: item.collection_slug,
-      Shape: item.shape,
+      Shape: formatShapeDisplay(item.shape),
       Size: item.size,
       Carat: item.ct_weight ? formatDisplayWeight(item.ct_weight) : "NA",
       Quality: item.quality,
@@ -205,7 +206,7 @@ export const CategoryTable = ({
       .map((item) => {
         return `
 Gemstone: ${item.collection_slug}
-Shape: ${item.shape}
+Shape: ${formatShapeDisplay(item.shape)}
 Image: ${item.image_url}
 Size: ${item.size}
 CT: ${item.ct_weight ? formatDisplayWeight(item.ct_weight) : "NA"}
@@ -240,7 +241,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
       <tr>
         <td><img src="${item.image_url}" width="60" /></td>
         <td>${item.collection_slug}</td>
-        <td>${item.shape}</td>
+        <td>${formatShapeDisplay(item.shape)}</td>
         <td>${item.size}</td>
         <td>${item.ct_weight ? formatDisplayWeight(item.ct_weight) : "NA"}</td>
         <td>${item.quality}</td>
@@ -386,7 +387,7 @@ ${options.showCarat ? `Price Per Carat: $${formatDisplayPrice(getPerCaratPrice(i
             onClose={closeProductModal}
             price={selectedProduct.price}
             image_url={selectedProduct.image_url}
-            name={`${selectedProduct.collection_slug} ${selectedProduct.shape}`}
+            name={`${selectedProduct.collection_slug} ${formatShapeDisplay(selectedProduct.shape)}`}
             size={selectedProduct.size}
             quality={selectedProduct.quality}
             ct_weight={selectedProduct.ct_weight}

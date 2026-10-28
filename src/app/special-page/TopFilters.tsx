@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { RangeSlider, NumberInput, Select, Button, ActionIcon, Collapse } from "@mantine/core";
 import Image from "next/image";
 import { IconX, IconChevronUp, IconChevronDown, IconFilter } from "@tabler/icons-react";
-import { shopByColorOptions } from "@/utils/constants";
+import { shopByColorOptions, formatShapeDisplay } from "@/utils/constants";
 
 type RangeValue = { min: number | ""; max: number | "" };
 
@@ -312,7 +312,7 @@ export const TopFilters = ({
 
           {selectedShapes.map(shape => (
              <div key={shape} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
-               {shape}
+               {formatShapeDisplay(shape)}
                <IconX size={14} className="cursor-pointer" onClick={() => toggleShape(shape)} />
              </div>
           ))}

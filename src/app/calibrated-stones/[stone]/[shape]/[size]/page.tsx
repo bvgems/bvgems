@@ -1,6 +1,9 @@
 import { getCategoryData } from "@/apis/api";
 import { CategoryContent } from "@/components/Category/CategoryContent";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getDbShapesForGemstone } from "@/lib/gemstoneShapes";
+import { formatShapeDisplay } from "@/utils/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +12,12 @@ type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-const formatShapeParam = (shapeParam: string) => {
+// Convert URL shape format to DB shape (e.g., "emerald-cut" -> "Emerald Cut", "cushion" / "square-cushion" -> "Cushion")
+const resolveDbShape = (shapeParam: string) => {
+  const normalized = shapeParam.toLowerCase().replace(/[-\s]+/g, " ").trim();
+  if (normalized === "square cushion" || normalized === "cushion") {
+    return "Cushion";
+  }
   return shapeParam
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -17,8 +25,16 @@ const formatShapeParam = (shapeParam: string) => {
 };
 
 const formatSizeParam = (sizeParam: string) => {
-  // if size is "8.00-x-6.00-mm", returns "8.00 x 6.00 mm"
-  return decodeURIComponent(sizeParam).replace(/-/g, " ");
+  let s = decodeURIComponent(sizeParam).replace(/-/g, " ").trim();
+  if (s.includes("x") && !s.includes(" x ")) {
+    s = s.replace(/x/gi, " x ");
+  }
+  if (!s.endsWith("mm") && !s.includes("mm")) {
+    s = s + " mm";
+  } else if (s.includes("mm") && !s.includes(" mm")) {
+    s = s.replace(/mm/gi, " mm");
+  }
+  return s.replace(/\s+/g, " ").trim();
 };
 
 export async function generateMetadata({
@@ -29,10 +45,11 @@ export async function generateMetadata({
   const searchParamsResolved = await searchParams;
   const color = searchParamsResolved?.color as string | undefined;
   
-  const shape = formatShapeParam(shapeParam);
+  const dbShape = resolveDbShape(shapeParam);
+  const displayShape = formatShapeDisplay(dbShape);
   const size = formatSizeParam(sizeParam);
   
-  let prefix = `${size} ${shape} `;
+  let prefix = `${size} ${displayShape} `;
   if (color && (stone === "sapphire" || stone === "topaz")) {
     prefix += `${color} `;
   }
@@ -69,23 +86,16 @@ export default async function StoneShapeSizePage({ params }: PageProps) {
   const isSapphire = stone === "sapphire";
   const isEmerald = stone === "emerald";
   const isTopaz = stone === "topaz";
-  const data: any = await getCategoryData(stone);
-
-  const defaultShapes = [
-    "Round",
-    "Oval",
-    "Princess Cut",
-    "Emerald Cut",
-    "Pear",
-    "Marquise",
-    "Cushion",
-    "Trillion",
-    "Heart",
-    "Straight Baguette",
-  ];
-  const shapes = data?.shapes?.value?.split(",").map((s: any) => s.trim()) || defaultShapes;
-  const shape = formatShapeParam(shapeParam);
+  const [data, shapes] = await Promise.all([
+    getCategoryData(stone),
+    getDbShapesForGemstone(stone),
+  ]);
+  const shape = resolveDbShape(shapeParam);
   const size = formatSizeParam(sizeParam);
+
+  if (!shapes.some((s) => s.toLowerCase() === shape.toLowerCase())) {
+    notFound();
+  }
 
   return (
     <div>

@@ -2,10 +2,10 @@ import {
   ShapeFilterList,
   shopByColorOptions,
 } from "@/utils/constants";
-import { Center, Grid, GridCol, HoverCard } from "@mantine/core";
+import { Center, Grid, GridCol, Popover } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export const HeaderHoverCardForGemstones = ({
   link,
@@ -16,23 +16,63 @@ export const HeaderHoverCardForGemstones = ({
 }: any) => {
   const router = useRouter();
   const [opened, setOpened] = useState(false);
+  const closeTimeoutRef = useRef<number | null>(null);
+
+  const clearCloseTimeout = () => {
+    if (closeTimeoutRef.current !== null) {
+      window.clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+  };
+
+  const handleTargetMouseEnter = () => {
+    clearCloseTimeout();
+    setOpened(true);
+  };
+
+  const handleDropdownMouseEnter = () => {
+    clearCloseTimeout();
+  };
+
+  const handleMouseLeave = () => {
+    clearCloseTimeout();
+    closeTimeoutRef.current = window.setTimeout(() => {
+      setOpened(false);
+    }, 150);
+  };
+
+  const closePopup = () => {
+    clearCloseTimeout();
+    setOpened(false);
+  };
+
+  useEffect(() => {
+    return () => clearCloseTimeout();
+  }, []);
 
   const handleNav = (query: string) => {
-    setOpened(false);
-    router.push(`/calibrated-stones?${query}`);
+    closePopup();
+    router.push(query ? `/calibrated-stones?${query}` : "/calibrated-stones");
   };
 
   return (
-    <HoverCard
+    <Popover
       key={link.label}
+      opened={opened}
+      onChange={setOpened}
       width={1200}
       position="bottom"
       radius="md"
       shadow="md"
       withinPortal
+      transitionProps={{ exitDuration: 0 }}
     >
-      <HoverCard.Target>
-        <div className="px-3 py-2 rounded-sm hover:text-gray-500 text-[12px]">
+      <Popover.Target>
+        <div
+          onMouseEnter={handleTargetMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="px-3 py-2 rounded-sm hover:text-gray-500 text-[12px] cursor-pointer"
+        >
           <Center>
             <span
               className={`mr-1 ${smallerTextFlag ? "text-[12px]" : "text-[15px]"
@@ -46,9 +86,11 @@ export const HeaderHoverCardForGemstones = ({
             <IconChevronDown size={14} stroke={1.5} />
           </Center>
         </div>
-      </HoverCard.Target>
+      </Popover.Target>
 
-      <HoverCard.Dropdown
+      <Popover.Dropdown
+        onMouseEnter={handleDropdownMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className="relative px-8 py-8 bg-white rounded-xl shadow-2xl border border-slate-100"
         style={{ minHeight: "440px" }}
       >
@@ -67,7 +109,7 @@ export const HeaderHoverCardForGemstones = ({
                     key={item.link}
                     className="group flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors duration-150"
                     onClick={() => {
-                      setOpened(false);
+                      closePopup();
                       router.push(item.link);
                     }}
                   >
@@ -121,7 +163,7 @@ export const HeaderHoverCardForGemstones = ({
                   <div
                     key={index}
                     onClick={() =>
-                      handleNav(`shape=${item.label.toLowerCase()}`)
+                      handleNav(`shape=${encodeURIComponent(item.value.toLowerCase())}`)
                     }
                     className="group flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors duration-150"
                   >
@@ -153,8 +195,8 @@ export const HeaderHoverCardForGemstones = ({
                 {shopByColorOptions?.map((item, index) => (
                   <div
                     onClick={() => {
-                      setOpened(false);
-                      router.push(item.href || `/calibrated-stones?color=${item.name.toLowerCase()}`);
+                      closePopup();
+                      router.push(item.href || `/calibrated-stones?color=${encodeURIComponent(item.name.toLowerCase())}`);
                     }}
                     key={index}
                     className="group flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors duration-150"
@@ -194,7 +236,7 @@ export const HeaderHoverCardForGemstones = ({
             </div>
           </GridCol>
         </Grid>
-      </HoverCard.Dropdown>
-    </HoverCard>
+      </Popover.Dropdown>
+    </Popover>
   );
 };

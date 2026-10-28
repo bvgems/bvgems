@@ -17,6 +17,7 @@ import {
 } from "@tabler/icons-react";
 import { Button, TextInput, Tooltip } from "@mantine/core";
 import { formatRelativeTime } from "@/utils/greetingHelpers";
+import { formatShapeDisplay } from "@/utils/constants";
 
 export const ProfileRecentlyViewed: React.FC = () => {
   const { items, removeItem, clearAll } = useRecentlyViewed();
@@ -148,7 +149,7 @@ export const ProfileRecentlyViewed: React.FC = () => {
           {filteredItems.map((item) => {
             const titleText = unwrapString(item.title) || "Gemstone";
             const qualityText = unwrapString(item.quality);
-            const shapeText = unwrapString(item.shape);
+            const shapeText = formatShapeDisplay(unwrapString(item.shape));
             const sizeText = unwrapString(item.size) || unwrapString(item.dimension);
             const caratText = unwrapString(item.carat_weight);
             const itemUrl = unwrapString(item.url) || "/";

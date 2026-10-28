@@ -29,7 +29,7 @@ export const ShapeFilter = ({
   const settingsOptions = [
     { label: "Round", Icon: ShapeRound },
     { label: "Oval", Icon: ShapeOval },
-    { label: "Cushion", Icon: ShapeCushion },
+    { label: "Square Cushion", Icon: ShapeCushion },
     { label: "Radiant", Icon: ShapeRadiant },
     { label: "Emerald", Icon: ShapeEmerald },
     { label: "Asscher", Icon: ShapeAsscher },

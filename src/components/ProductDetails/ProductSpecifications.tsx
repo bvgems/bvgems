@@ -25,6 +25,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCertificate } from "@tabler/icons-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { generateCalibratedStoneUrl } from "@/utils/seoUrlHelpers";
+import { formatShapeDisplay } from "@/utils/constants";
 import { useRouter } from "next/navigation";
 
 const isValid = (val: any) => val && val !== "-" && String(val).trim() !== "";
@@ -194,7 +195,7 @@ export const ProductSpecifications = ({
           {isValid(product?.shape) && (
             <div className="flex flex-row justify-between items-center">
               <div className="font-semibold">Shape</div>
-              <Text>{product?.shape}</Text>
+              <Text>{formatShapeDisplay(product?.shape)}</Text>
             </div>
           )}
 
@@ -336,7 +337,7 @@ export const ProductSpecifications = ({
                 <Table.Th>
                   <span className="font-semibold">Shape</span>
                 </Table.Th>
-                <Table.Td>{product?.shape}</Table.Td>
+                <Table.Td>{formatShapeDisplay(product?.shape)}</Table.Td>
               </Table.Tr>
             )}
 

@@ -30,7 +30,7 @@ export const ShopByShape = () => {
         <SimpleGrid cols={{ base: 2, sm: 3, md: 5, lg: 5 }} spacing="xl" verticalSpacing="xl">
           {ShapeFilterList.map((shape, index) => (
             <Link
-              href={`/calibrated-stones?shape=${shape.label.toLowerCase()}`}
+              href={`/calibrated-stones?shape=${shape.value.toLowerCase()}`}
               className="flex justify-center flex-col items-center cursor-pointer no-underline hover:opacity-75 transition-opacity"
               rel="nofollow"
               key={index}

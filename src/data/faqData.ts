@@ -25,7 +25,7 @@ export const FAQ_DATA: FAQItem[] = [
     answer:
       "Calibrated gemstones are precision-cut loose gemstones cut to exact standardized millimeter dimensions (e.g., 2.00 mm, 3.00 mm, 6x4 mm, 7x5 mm, 8x6 mm) with strict dimensional tolerances. Unlike free-form stones that require custom mountings, calibrated stones fit directly into standard jewelry mountings, halo settings, eternity bands, and production castings without requiring bench jewelers to perform costly custom seat-cutting or lapidary re-cutting.",
     keyPoints: [
-      "Standard millimeter sizing (Round, Oval, Emerald Cut, Cushion, Pear, Princess, Marquise, Baguette, Trillion).",
+      "Standard millimeter sizing (Round, Oval, Emerald Cut, Square Cushion, Elongated Cushion, Pear, Princess, Marquise, Baguette, Trillion).",
       "Saves significant labor time and manufacturing costs on custom mountings.",
       "Ensures predictable fit for multi-stone eternity bands, tennis bracelets, and halo designs.",
     ],

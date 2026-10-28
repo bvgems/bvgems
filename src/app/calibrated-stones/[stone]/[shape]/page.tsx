@@ -1,6 +1,9 @@
 import { getCategoryData } from "@/apis/api";
 import { CategoryContent } from "@/components/Category/CategoryContent";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getDbShapesForGemstone } from "@/lib/gemstoneShapes";
+import { formatShapeDisplay } from "@/utils/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -9,8 +12,12 @@ type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-// Convert URL shape format "emerald-cut" to "Emerald Cut"
-const formatShapeParam = (shapeParam: string) => {
+// Convert URL shape format to DB shape (e.g., "emerald-cut" -> "Emerald Cut", "cushion" / "square-cushion" -> "Cushion")
+const resolveDbShape = (shapeParam: string) => {
+  const normalized = shapeParam.toLowerCase().replace(/[-\s]+/g, " ").trim();
+  if (normalized === "square cushion" || normalized === "cushion") {
+    return "Cushion";
+  }
   return shapeParam
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -25,8 +32,9 @@ export async function generateMetadata({
   const searchParamsResolved = await searchParams;
   const color = searchParamsResolved?.color as string | undefined;
   
-  const shape = formatShapeParam(shapeParam);
-  let prefix = `${shape} `;
+  const dbShape = resolveDbShape(shapeParam);
+  const displayShape = formatShapeDisplay(dbShape);
+  let prefix = `${displayShape} `;
   if (color && (stone === "sapphire" || stone === "topaz")) {
     prefix += `${color} `;
   }
@@ -63,22 +71,15 @@ export default async function StoneShapePage({ params }: PageProps) {
   const isSapphire = stone === "sapphire";
   const isEmerald = stone === "emerald";
   const isTopaz = stone === "topaz";
-  const data: any = await getCategoryData(stone);
+  const [data, shapes] = await Promise.all([
+    getCategoryData(stone),
+    getDbShapesForGemstone(stone),
+  ]);
+  const shape = resolveDbShape(shapeParam);
 
-  const defaultShapes = [
-    "Round",
-    "Oval",
-    "Princess Cut",
-    "Emerald Cut",
-    "Pear",
-    "Marquise",
-    "Cushion",
-    "Trillion",
-    "Heart",
-    "Straight Baguette",
-  ];
-  const shapes = data?.shapes?.value?.split(",").map((s: any) => s.trim()) || defaultShapes;
-  const shape = formatShapeParam(shapeParam);
+  if (!shapes.some((s) => s.toLowerCase() === shape.toLowerCase())) {
+    notFound();
+  }
 
   return (
     <div>

@@ -7,6 +7,7 @@ import { Container, Grid, Title, Text, Loader, Badge, Card } from "@mantine/core
 import { IconSearch } from "@tabler/icons-react";
 import Image from "next/image";
 import { generateCalibratedStoneUrl, generateFreeSizeStoneUrl } from "@/utils/seoUrlHelpers";
+import { formatShapeDisplay } from "@/utils/constants";
 
 export function SearchClient() {
   const searchParams = useSearchParams();
@@ -76,9 +77,10 @@ export function SearchClient() {
         <Grid>
           {results.map((item, idx) => {
             const lotPrefix = item.lot_number ? `${item.lot_number} - ` : "";
+            const shapeStr = formatShapeDisplay(item.shape);
             const title =
               item.title ||
-              `${lotPrefix}${item.collection_slug ?? item.gemstone_type ?? ""} ${item.shape ?? ""} ${item.size ?? item.dimension ?? ""}`.trim();
+              `${lotPrefix}${item.collection_slug ?? item.gemstone_type ?? ""} ${shapeStr ?? ""} ${item.size ?? item.dimension ?? ""}`.trim();
             
             return (
               <Grid.Col key={idx} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>

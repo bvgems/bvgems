@@ -1360,6 +1360,13 @@ export const GOLD_COLORS = [
   { label: "Rose Gold", value: "rose", hex: "#B76E79" },
 ];
 
+export const formatShapeDisplay = (shape?: string | null): string => {
+  if (!shape) return "";
+  const trimmed = shape.trim();
+  if (trimmed.toLowerCase() === "cushion") return "Square Cushion";
+  return trimmed;
+};
+
 export const ShapeFilterList = [
   {
     label: "Round",
@@ -1392,9 +1399,14 @@ export const ShapeFilterList = [
     value: "Marquise",
   },
   {
-    label: "Cushion",
+    label: "Square Cushion",
     image: "/assets/cushion.svg",
     value: "Cushion",
+  },
+  {
+    label: "Elongated Cushion",
+    image: "/assets/elongated-cushion.svg",
+    value: "Elongated Cushion",
   },
   {
     label: "Trillion",

@@ -2,6 +2,7 @@ import { formatDisplayWeight } from "@/utils/priceHelpers";
 import type { Metadata } from "next";
 import { getParticularProductsData } from "@/apis/api";
 import { generateCalibratedStoneUrl } from "@/utils/seoUrlHelpers";
+import { formatShapeDisplay } from "@/utils/constants";
 
 type Props = {
   params: Promise<{ slug?: string; id?: string }>;
@@ -34,15 +35,16 @@ export async function generateMetadata({
   const canonicalUrl = `https://www.bvgems.com${generateCalibratedStoneUrl(product, product.collection_slug)}`;
   const ctTitleStr = product.ct_weight ? `${formatDisplayWeight(product.ct_weight)}ct ` : "";
   const ctDescStr = product.ct_weight ? `${formatDisplayWeight(product.ct_weight)} ct, ` : "";
+  const displayShape = formatShapeDisplay(product.shape);
 
   return {
-    title: `${product.collection_slug} ${product.shape} ${product.size} ${ctTitleStr}${product.quality} Quality – B.V. Gems`,
-    description: `Buy ${product.collection_slug} ${product.shape} ${product.size}, ${ctDescStr}${product.quality} quality at B.V. Gems. Ethically sourced, precision cut, free U.S. shipping on or above $500.`,
+    title: `${product.collection_slug} ${displayShape} ${product.size} ${ctTitleStr}${product.quality} Quality – B.V. Gems`,
+    description: `Buy ${product.collection_slug} ${displayShape} ${product.size}, ${ctDescStr}${product.quality} quality at B.V. Gems. Ethically sourced, precision cut, free U.S. shipping on or above $500.`,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${product.collection_slug} ${product.shape} ${product.size} ${ctTitleStr}${product.quality} Quality – B.V. Gems`,
+      title: `${product.collection_slug} ${displayShape} ${product.size} ${ctTitleStr}${product.quality} Quality – B.V. Gems`,
       description: `Shop ${product.collection_slug} gemstones at B.V. Gems. Ethically sourced, precision cut, and shipped worldwide.`,
       url: canonicalUrl,
       images: [product.image_url],

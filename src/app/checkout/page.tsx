@@ -21,6 +21,7 @@ import { isLabGrown } from "@/utils/priceHelpers";
 import { useDisclosure } from "@mantine/hooks";
 import OrderConfirmationModal from "@/components/CommonComponents/OrderConfirmationModal";
 import { getOrderPayload } from "@/utils/commonFunctions";
+import { formatShapeDisplay } from "@/utils/constants";
 
 export default function CheckoutSelectionPage() {
   const { user } = useAuth();
@@ -206,7 +207,7 @@ export default function CheckoutSelectionPage() {
                           <div>
                             <div className="font-semibold text-gray-900 mb-1">
                               {item?.product?.collection_slug
-                                ? `${item?.product?.collection_slug} ${item?.product?.shape}`
+                                ? `${item?.product?.collection_slug} ${formatShapeDisplay(item?.product?.shape)}`
                                 : item?.product?.title}
                             </div>
                             <div className="text-gray-600">
@@ -311,7 +312,7 @@ export default function CheckoutSelectionPage() {
                           <div>
                             <div className="font-semibold text-gray-900 mb-1">
                               {item?.product?.collection_slug
-                                ? `${item?.product?.collection_slug} ${item?.product?.shape}`
+                                ? `${item?.product?.collection_slug} ${formatShapeDisplay(item?.product?.shape)}`
                                 : item?.product?.title}
                             </div>
                             {item?.product?.goldColor && (
@@ -334,7 +335,7 @@ export default function CheckoutSelectionPage() {
                               <div className="text-gray-600">
                                 Shape:{" "}
                                 <span className="font-medium">
-                                  {item?.product?.shape}
+                                  {formatShapeDisplay(item?.product?.shape)}
                                 </span>
                               </div>
                             )}

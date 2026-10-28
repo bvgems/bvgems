@@ -33,7 +33,7 @@ import { AuthForm } from "../Auth/AuthForm";
 import { useAuth } from "@/hooks/useAuth";
 import { UserProfile } from "../UserProfile/UserProfile";
 import { getCartStore } from "@/store/useCartStore";
-import { links } from "@/utils/constants";
+import { links, formatShapeDisplay } from "@/utils/constants";
 import { DrawerComponent } from "./Drawer";
 import { HeaderHoverCardForGemstones } from "./HeaderHoverCardForGemstones";
 import { AddressBar } from "./AddressBar";
@@ -199,11 +199,11 @@ export function Header() {
               ? `${option?.title}`
               : option?.collection_slug === "Sapphire"
                 ? `${option?.color} ${option.collection_slug || option.gemstone_type
-                } ${option.shape} ${option.size || option.dimension}${option.category === "Calibrated" && option.quality
+                } ${formatShapeDisplay(option.shape)} ${option.size || option.dimension}${option.category === "Calibrated" && option.quality
                   ? ` - ${option.quality} Quality`
                   : ""
                 }`
-                : `${option.collection_slug || option.gemstone_type} ${option.shape
+                : `${option.collection_slug || option.gemstone_type} ${formatShapeDisplay(option.shape)
                 } ${option.size || option.dimension}${option.category === "Calibrated" && option.quality
                   ? ` - ${option.quality} Quality`
                   : ""

@@ -18,6 +18,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { getTimeBasedGreeting, formatRelativeTime } from "@/utils/greetingHelpers";
+import { formatShapeDisplay } from "@/utils/constants";
 
 export const ReturningCustomerHistory: React.FC = () => {
   const { items, removeItem, clearAll } = useRecentlyViewed();
@@ -221,7 +222,7 @@ export const ReturningCustomerHistory: React.FC = () => {
             {items.map((item) => {
               const titleText = unwrapString(item.title) || "Gemstone";
               const qualityText = unwrapString(item.quality);
-              const shapeText = unwrapString(item.shape);
+              const shapeText = formatShapeDisplay(unwrapString(item.shape));
               const sizeText = unwrapString(item.size) || unwrapString(item.dimension);
               const caratText = unwrapString(item.carat_weight);
               const hasPrice = item.price && Number(item.price) > 0;

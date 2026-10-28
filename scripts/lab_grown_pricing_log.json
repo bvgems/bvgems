@@ -1,0 +1,1042 @@
+[
+  {
+    "id": 6927,
+    "gemstone": "Alexandrite",
+    "shape": "Cushion",
+    "size": "7.00 x 7.00 mm",
+    "color": "Green - Purple",
+    "ct_weight": 2.0152,
+    "pricing_rule": "$85/ct * 2.0152 ct",
+    "calculated_price": 171.29
+  },
+  {
+    "id": 7007,
+    "gemstone": "Alexandrite",
+    "shape": "Pear",
+    "size": "8.00 x 6.00 mm",
+    "color": "Green - Purple",
+    "ct_weight": 1.257,
+    "pricing_rule": "$85/ct * 1.257 ct",
+    "calculated_price": 106.84
+  },
+  {
+    "id": 7120,
+    "gemstone": "Alexandrite",
+    "shape": "Round",
+    "size": "1.25 mm",
+    "color": "Green - Purple",
+    "ct_weight": 0.0116,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7121,
+    "gemstone": "Alexandrite",
+    "shape": "Round",
+    "size": "1.75 mm",
+    "color": "Green - Purple",
+    "ct_weight": 0.0318,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7122,
+    "gemstone": "Alexandrite",
+    "shape": "Round",
+    "size": "2.25 mm",
+    "color": "Green - Purple",
+    "ct_weight": 0.0675,
+    "pricing_rule": "$85/ct * 0.0675 ct",
+    "calculated_price": 5.74
+  },
+  {
+    "id": 7123,
+    "gemstone": "Alexandrite",
+    "shape": "Round",
+    "size": "3.25 mm",
+    "color": "Green - Purple",
+    "ct_weight": 0.2034,
+    "pricing_rule": "$85/ct * 0.2034 ct",
+    "calculated_price": 17.29
+  },
+  {
+    "id": 7124,
+    "gemstone": "Alexandrite",
+    "shape": "Round",
+    "size": "3.75 mm",
+    "color": "Green - Purple",
+    "ct_weight": 0.3125,
+    "pricing_rule": "$85/ct * 0.3125 ct",
+    "calculated_price": 26.56
+  },
+  {
+    "id": 7125,
+    "gemstone": "Alexandrite",
+    "shape": "Round",
+    "size": "4.25 mm",
+    "color": "Green - Purple",
+    "ct_weight": 0.4549,
+    "pricing_rule": "$85/ct * 0.4549 ct",
+    "calculated_price": 38.67
+  },
+  {
+    "id": 7126,
+    "gemstone": "Alexandrite",
+    "shape": "Round",
+    "size": "4.75 mm",
+    "color": "Green - Purple",
+    "ct_weight": 0.6351,
+    "pricing_rule": "$85/ct * 0.6351 ct",
+    "calculated_price": 53.98
+  },
+  {
+    "id": 7127,
+    "gemstone": "Alexandrite",
+    "shape": "Round",
+    "size": "5.25 mm",
+    "color": "Green - Purple",
+    "ct_weight": 0.8575,
+    "pricing_rule": "$85/ct * 0.8575 ct",
+    "calculated_price": 72.89
+  },
+  {
+    "id": 7128,
+    "gemstone": "Alexandrite",
+    "shape": "Round",
+    "size": "8.50 mm",
+    "color": "Green - Purple",
+    "ct_weight": 3.6393,
+    "pricing_rule": "$85/ct * 3.6393 ct",
+    "calculated_price": 309.34
+  },
+  {
+    "id": 6948,
+    "gemstone": "Emerald",
+    "shape": "Emerald Cut",
+    "size": "12.00 x 10.00 mm",
+    "color": "Green",
+    "ct_weight": 5.9541,
+    "pricing_rule": "$50/ct * 5.9541 ct",
+    "calculated_price": 297.71
+  },
+  {
+    "id": 6970,
+    "gemstone": "Emerald",
+    "shape": "Marquise",
+    "size": "9.00 x 4.50 mm",
+    "color": "Green",
+    "ct_weight": 0.81,
+    "pricing_rule": "$50/ct * 0.81 ct",
+    "calculated_price": 40.5
+  },
+  {
+    "id": 7002,
+    "gemstone": "Emerald",
+    "shape": "Oval",
+    "size": "5.00 x 3.00 mm",
+    "color": "Green",
+    "ct_weight": 0.2062,
+    "pricing_rule": "$50/ct * 0.2062 ct",
+    "calculated_price": 10.31
+  },
+  {
+    "id": 7012,
+    "gemstone": "Emerald",
+    "shape": "Pear",
+    "size": "12.00 x 7.00 mm",
+    "color": "Green",
+    "ct_weight": 2.3891,
+    "pricing_rule": "$50/ct * 2.3891 ct",
+    "calculated_price": 119.46
+  },
+  {
+    "id": 7011,
+    "gemstone": "Emerald",
+    "shape": "Pear",
+    "size": "8.00 x 6.00 mm",
+    "color": "Green",
+    "ct_weight": 0.9179,
+    "pricing_rule": "$50/ct * 0.9179 ct",
+    "calculated_price": 45.9
+  },
+  {
+    "id": 7141,
+    "gemstone": "Emerald",
+    "shape": "Round",
+    "size": "10.50 mm",
+    "color": "Green",
+    "ct_weight": 3.6206,
+    "pricing_rule": "$50/ct * 3.6206 ct",
+    "calculated_price": 181.03
+  },
+  {
+    "id": 7137,
+    "gemstone": "Emerald",
+    "shape": "Round",
+    "size": "4.25 mm",
+    "color": "Green",
+    "ct_weight": 0.2401,
+    "pricing_rule": "$50/ct * 0.2401 ct",
+    "calculated_price": 12.01
+  },
+  {
+    "id": 7138,
+    "gemstone": "Emerald",
+    "shape": "Round",
+    "size": "4.75 mm",
+    "color": "Green",
+    "ct_weight": 0.3352,
+    "pricing_rule": "$50/ct * 0.3352 ct",
+    "calculated_price": 16.76
+  },
+  {
+    "id": 7139,
+    "gemstone": "Emerald",
+    "shape": "Round",
+    "size": "5.25 mm",
+    "color": "Green",
+    "ct_weight": 0.4526,
+    "pricing_rule": "$50/ct * 0.4526 ct",
+    "calculated_price": 22.63
+  },
+  {
+    "id": 7140,
+    "gemstone": "Emerald",
+    "shape": "Round",
+    "size": "9.50 mm",
+    "color": "Green",
+    "ct_weight": 2.6815,
+    "pricing_rule": "$50/ct * 2.6815 ct",
+    "calculated_price": 134.08
+  },
+  {
+    "id": 6929,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Cushion",
+    "size": "7.00 x 7.00 mm",
+    "color": "Windex Blue",
+    "ct_weight": 2.0152,
+    "pricing_rule": "$85/ct * 2.0152 ct",
+    "calculated_price": 171.29
+  },
+  {
+    "id": 7015,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Pear",
+    "size": "8.00 x 6.00 mm",
+    "color": "Windex Blue",
+    "ct_weight": 1.257,
+    "pricing_rule": "$85/ct * 1.257 ct",
+    "calculated_price": 106.84
+  },
+  {
+    "id": 7147,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Round",
+    "size": "1.25 mm",
+    "color": "Windex Blue",
+    "ct_weight": 0.009,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7148,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Round",
+    "size": "1.75 mm",
+    "color": "Windex Blue",
+    "ct_weight": 0.0257,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7149,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Round",
+    "size": "2.25 mm",
+    "color": "Windex Blue",
+    "ct_weight": 0.0582,
+    "pricing_rule": "$85/ct * 0.0582 ct",
+    "calculated_price": 4.95
+  },
+  {
+    "id": 7150,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Round",
+    "size": "3.25 mm",
+    "color": "Windex Blue",
+    "ct_weight": 0.1669,
+    "pricing_rule": "$85/ct * 0.1669 ct",
+    "calculated_price": 14.19
+  },
+  {
+    "id": 7151,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Round",
+    "size": "3.75 mm",
+    "color": "Windex Blue",
+    "ct_weight": 0.252,
+    "pricing_rule": "$85/ct * 0.252 ct",
+    "calculated_price": 21.42
+  },
+  {
+    "id": 7152,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Round",
+    "size": "4.25 mm",
+    "color": "Windex Blue",
+    "ct_weight": 0.3551,
+    "pricing_rule": "$85/ct * 0.3551 ct",
+    "calculated_price": 30.18
+  },
+  {
+    "id": 7153,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Round",
+    "size": "4.75 mm",
+    "color": "Windex Blue",
+    "ct_weight": 0.5141,
+    "pricing_rule": "$85/ct * 0.5141 ct",
+    "calculated_price": 43.7
+  },
+  {
+    "id": 7154,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Round",
+    "size": "5.25 mm",
+    "color": "Windex Blue",
+    "ct_weight": 0.6887,
+    "pricing_rule": "$85/ct * 0.6887 ct",
+    "calculated_price": 58.54
+  },
+  {
+    "id": 7155,
+    "gemstone": "Paraiba Tourmaline",
+    "shape": "Round",
+    "size": "8.50 mm",
+    "color": "Windex Blue",
+    "ct_weight": 3.2742,
+    "pricing_rule": "$85/ct * 3.2742 ct",
+    "calculated_price": 278.31
+  },
+  {
+    "id": 6930,
+    "gemstone": "Ruby",
+    "shape": "Cushion",
+    "size": "4.00 x 4.00 mm",
+    "color": "Red",
+    "ct_weight": 0.3892,
+    "pricing_rule": "$50/ct * 0.3892 ct",
+    "calculated_price": 19.46
+  },
+  {
+    "id": 6931,
+    "gemstone": "Ruby",
+    "shape": "Cushion",
+    "size": "7.00 x 7.00 mm",
+    "color": "Red",
+    "ct_weight": 2.2223,
+    "pricing_rule": "$50/ct * 2.2223 ct",
+    "calculated_price": 111.12
+  },
+  {
+    "id": 6951,
+    "gemstone": "Ruby",
+    "shape": "Emerald Cut",
+    "size": "12.00 x 10.00 mm",
+    "color": "Red",
+    "ct_weight": 8.8879,
+    "pricing_rule": "$50/ct * 8.8879 ct",
+    "calculated_price": 444.4
+  },
+  {
+    "id": 6977,
+    "gemstone": "Ruby",
+    "shape": "Marquise",
+    "size": "9.00 x 4.50 mm",
+    "color": "Red",
+    "ct_weight": 0.9279,
+    "pricing_rule": "$50/ct * 0.9279 ct",
+    "calculated_price": 46.4
+  },
+  {
+    "id": 7021,
+    "gemstone": "Ruby",
+    "shape": "Pear",
+    "size": "12.00 x 8.00 mm",
+    "color": "Red",
+    "ct_weight": 4.1597,
+    "pricing_rule": "$50/ct * 4.1597 ct",
+    "calculated_price": 207.99
+  },
+  {
+    "id": 7020,
+    "gemstone": "Ruby",
+    "shape": "Pear",
+    "size": "8.00 x 6.00 mm",
+    "color": "Red",
+    "ct_weight": 1.4707,
+    "pricing_rule": "$50/ct * 1.4707 ct",
+    "calculated_price": 73.54
+  },
+  {
+    "id": 7160,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "1.10 mm",
+    "color": "Red",
+    "ct_weight": 0.0081,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7161,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "1.20 mm",
+    "color": "Red",
+    "ct_weight": 0.0106,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7162,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "1.30 mm",
+    "color": "Red",
+    "ct_weight": 0.0134,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7163,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "1.40 mm",
+    "color": "Red",
+    "ct_weight": 0.0164,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7164,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "1.60 mm",
+    "color": "Red",
+    "ct_weight": 0.0236,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7165,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "1.70 mm",
+    "color": "Red",
+    "ct_weight": 0.0278,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7166,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "1.80 mm",
+    "color": "Red",
+    "ct_weight": 0.0318,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7167,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "1.90 mm",
+    "color": "Red",
+    "ct_weight": 0.0357,
+    "pricing_rule": "$3.00 flat per stone (< 2mm round)",
+    "calculated_price": 3
+  },
+  {
+    "id": 7168,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "2.25 mm",
+    "color": "Red",
+    "ct_weight": 0.0578,
+    "pricing_rule": "$50/ct * 0.0578 ct",
+    "calculated_price": 2.89
+  },
+  {
+    "id": 7169,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "2.75 mm",
+    "color": "Red",
+    "ct_weight": 0.1027,
+    "pricing_rule": "$50/ct * 0.1027 ct",
+    "calculated_price": 5.14
+  },
+  {
+    "id": 7170,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "3.25 mm",
+    "color": "Red",
+    "ct_weight": 0.1623,
+    "pricing_rule": "$50/ct * 0.1623 ct",
+    "calculated_price": 8.12
+  },
+  {
+    "id": 7171,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "3.75 mm",
+    "color": "Red",
+    "ct_weight": 0.2467,
+    "pricing_rule": "$50/ct * 0.2467 ct",
+    "calculated_price": 12.34
+  },
+  {
+    "id": 7172,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "4.25 mm",
+    "color": "Red",
+    "ct_weight": 0.3471,
+    "pricing_rule": "$50/ct * 0.3471 ct",
+    "calculated_price": 17.36
+  },
+  {
+    "id": 7173,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "4.75 mm",
+    "color": "Red",
+    "ct_weight": 0.4947,
+    "pricing_rule": "$50/ct * 0.4947 ct",
+    "calculated_price": 24.74
+  },
+  {
+    "id": 7174,
+    "gemstone": "Ruby",
+    "shape": "Round",
+    "size": "5.25 mm",
+    "color": "Red",
+    "ct_weight": 0.6952,
+    "pricing_rule": "$50/ct * 0.6952 ct",
+    "calculated_price": 34.76
+  },
+  {
+    "id": 6944,
+    "gemstone": "Sapphire",
+    "shape": "Cushion",
+    "size": "11.00 x 11.00 mm",
+    "color": "Blue",
+    "ct_weight": 8.1955,
+    "pricing_rule": "$50/ct * 8.1955 ct",
+    "calculated_price": 409.78
+  },
+  {
+    "id": 6945,
+    "gemstone": "Sapphire",
+    "shape": "Cushion",
+    "size": "11.00 x 11.00 mm",
+    "color": "Pink",
+    "ct_weight": 8.1955,
+    "pricing_rule": "$50/ct * 8.1955 ct",
+    "calculated_price": 409.78
+  },
+  {
+    "id": 6946,
+    "gemstone": "Sapphire",
+    "shape": "Cushion",
+    "size": "11.00 x 11.00 mm",
+    "color": "Yellow",
+    "ct_weight": 8.1955,
+    "pricing_rule": "$50/ct * 8.1955 ct",
+    "calculated_price": 409.78
+  },
+  {
+    "id": 6954,
+    "gemstone": "Sapphire",
+    "shape": "Emerald Cut",
+    "size": "12.00 x 10.00 mm",
+    "color": "Blue",
+    "ct_weight": 8.2616,
+    "pricing_rule": "$50/ct * 8.2616 ct",
+    "calculated_price": 413.08
+  },
+  {
+    "id": 6955,
+    "gemstone": "Sapphire",
+    "shape": "Emerald Cut",
+    "size": "12.00 x 10.00 mm",
+    "color": "Pink",
+    "ct_weight": 8.2616,
+    "pricing_rule": "$50/ct * 8.2616 ct",
+    "calculated_price": 413.08
+  },
+  {
+    "id": 6956,
+    "gemstone": "Sapphire",
+    "shape": "Emerald Cut",
+    "size": "12.00 x 10.00 mm",
+    "color": "Yellow",
+    "ct_weight": 8.2616,
+    "pricing_rule": "$50/ct * 8.2616 ct",
+    "calculated_price": 413.08
+  },
+  {
+    "id": 6980,
+    "gemstone": "Sapphire",
+    "shape": "Marquise",
+    "size": "9.00 x 4.50 mm",
+    "color": "Blue",
+    "ct_weight": 0.9033,
+    "pricing_rule": "$50/ct * 0.9033 ct",
+    "calculated_price": 45.17
+  },
+  {
+    "id": 6981,
+    "gemstone": "Sapphire",
+    "shape": "Marquise",
+    "size": "9.00 x 4.50 mm",
+    "color": "Pink",
+    "ct_weight": 0.9033,
+    "pricing_rule": "$50/ct * 0.9033 ct",
+    "calculated_price": 45.17
+  },
+  {
+    "id": 6982,
+    "gemstone": "Sapphire",
+    "shape": "Marquise",
+    "size": "9.00 x 4.50 mm",
+    "color": "Yellow",
+    "ct_weight": 0.9033,
+    "pricing_rule": "$50/ct * 0.9033 ct",
+    "calculated_price": 45.17
+  },
+  {
+    "id": 7032,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "10.00 x 8.00 mm",
+    "color": "Blue",
+    "ct_weight": 2.982,
+    "pricing_rule": "$50/ct * 2.982 ct",
+    "calculated_price": 149.1
+  },
+  {
+    "id": 7033,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "10.00 x 8.00 mm",
+    "color": "Pink",
+    "ct_weight": 2.982,
+    "pricing_rule": "$50/ct * 2.982 ct",
+    "calculated_price": 149.1
+  },
+  {
+    "id": 7034,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "10.00 x 8.00 mm",
+    "color": "Yellow",
+    "ct_weight": 2.982,
+    "pricing_rule": "$50/ct * 2.982 ct",
+    "calculated_price": 149.1
+  },
+  {
+    "id": 7035,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "12.00 x 7.00 mm",
+    "color": "Blue",
+    "ct_weight": 3.2085,
+    "pricing_rule": "$50/ct * 3.2085 ct",
+    "calculated_price": 160.42
+  },
+  {
+    "id": 7036,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "12.00 x 7.00 mm",
+    "color": "Pink",
+    "ct_weight": 3.2085,
+    "pricing_rule": "$50/ct * 3.2085 ct",
+    "calculated_price": 160.42
+  },
+  {
+    "id": 7037,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "12.00 x 7.00 mm",
+    "color": "Yellow",
+    "ct_weight": 3.2085,
+    "pricing_rule": "$50/ct * 3.2085 ct",
+    "calculated_price": 160.42
+  },
+  {
+    "id": 7038,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "12.00 x 8.00 mm",
+    "color": "Blue",
+    "ct_weight": 3.92,
+    "pricing_rule": "$50/ct * 3.92 ct",
+    "calculated_price": 196
+  },
+  {
+    "id": 7039,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "12.00 x 8.00 mm",
+    "color": "Pink",
+    "ct_weight": 3.92,
+    "pricing_rule": "$50/ct * 3.92 ct",
+    "calculated_price": 196
+  },
+  {
+    "id": 7040,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "12.00 x 8.00 mm",
+    "color": "Yellow",
+    "ct_weight": 3.92,
+    "pricing_rule": "$50/ct * 3.92 ct",
+    "calculated_price": 196
+  },
+  {
+    "id": 7041,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "13.00 x 9.00 mm",
+    "color": "Blue",
+    "ct_weight": 5.2742,
+    "pricing_rule": "$50/ct * 5.2742 ct",
+    "calculated_price": 263.71
+  },
+  {
+    "id": 7042,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "13.00 x 9.00 mm",
+    "color": "Pink",
+    "ct_weight": 5.2742,
+    "pricing_rule": "$50/ct * 5.2742 ct",
+    "calculated_price": 263.71
+  },
+  {
+    "id": 7043,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "13.00 x 9.00 mm",
+    "color": "Yellow",
+    "ct_weight": 5.2742,
+    "pricing_rule": "$50/ct * 5.2742 ct",
+    "calculated_price": 263.71
+  },
+  {
+    "id": 7044,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "14.00 x 9.00 mm",
+    "color": "Blue",
+    "ct_weight": 5.8943,
+    "pricing_rule": "$50/ct * 5.8943 ct",
+    "calculated_price": 294.72
+  },
+  {
+    "id": 7045,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "14.00 x 9.00 mm",
+    "color": "Pink",
+    "ct_weight": 5.8943,
+    "pricing_rule": "$50/ct * 5.8943 ct",
+    "calculated_price": 294.72
+  },
+  {
+    "id": 7046,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "14.00 x 9.00 mm",
+    "color": "Yellow",
+    "ct_weight": 5.8943,
+    "pricing_rule": "$50/ct * 5.8943 ct",
+    "calculated_price": 294.72
+  },
+  {
+    "id": 7026,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "8.00 x 6.00 mm",
+    "color": "Blue",
+    "ct_weight": 1.3859,
+    "pricing_rule": "$50/ct * 1.3859 ct",
+    "calculated_price": 69.3
+  },
+  {
+    "id": 7027,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "8.00 x 6.00 mm",
+    "color": "Pink",
+    "ct_weight": 1.3859,
+    "pricing_rule": "$50/ct * 1.3859 ct",
+    "calculated_price": 69.3
+  },
+  {
+    "id": 7028,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "8.00 x 6.00 mm",
+    "color": "Yellow",
+    "ct_weight": 1.3859,
+    "pricing_rule": "$50/ct * 1.3859 ct",
+    "calculated_price": 69.3
+  },
+  {
+    "id": 7029,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "9.00 x 7.00 mm",
+    "color": "Blue",
+    "ct_weight": 2.084,
+    "pricing_rule": "$50/ct * 2.084 ct",
+    "calculated_price": 104.2
+  },
+  {
+    "id": 7030,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "9.00 x 7.00 mm",
+    "color": "Pink",
+    "ct_weight": 2.084,
+    "pricing_rule": "$50/ct * 2.084 ct",
+    "calculated_price": 104.2
+  },
+  {
+    "id": 7031,
+    "gemstone": "Sapphire",
+    "shape": "Pear",
+    "size": "9.00 x 7.00 mm",
+    "color": "Yellow",
+    "ct_weight": 2.084,
+    "pricing_rule": "$50/ct * 2.084 ct",
+    "calculated_price": 104.2
+  },
+  {
+    "id": 7193,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "2.25 mm",
+    "color": "Blue",
+    "ct_weight": 0.0664,
+    "pricing_rule": "$50/ct * 0.0664 ct",
+    "calculated_price": 3.32
+  },
+  {
+    "id": 7194,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "2.25 mm",
+    "color": "Pink",
+    "ct_weight": 0.0664,
+    "pricing_rule": "$50/ct * 0.0664 ct",
+    "calculated_price": 3.32
+  },
+  {
+    "id": 7195,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "2.25 mm",
+    "color": "Yellow",
+    "ct_weight": 0.0664,
+    "pricing_rule": "$50/ct * 0.0664 ct",
+    "calculated_price": 3.32
+  },
+  {
+    "id": 7196,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "2.75 mm",
+    "color": "Blue",
+    "ct_weight": 0.1213,
+    "pricing_rule": "$50/ct * 0.1213 ct",
+    "calculated_price": 6.07
+  },
+  {
+    "id": 7197,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "2.75 mm",
+    "color": "Pink",
+    "ct_weight": 0.1213,
+    "pricing_rule": "$50/ct * 0.1213 ct",
+    "calculated_price": 6.07
+  },
+  {
+    "id": 7198,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "2.75 mm",
+    "color": "Yellow",
+    "ct_weight": 0.1213,
+    "pricing_rule": "$50/ct * 0.1213 ct",
+    "calculated_price": 6.07
+  },
+  {
+    "id": 7199,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "3.25 mm",
+    "color": "Blue",
+    "ct_weight": 0.2002,
+    "pricing_rule": "$50/ct * 0.2002 ct",
+    "calculated_price": 10.01
+  },
+  {
+    "id": 7200,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "3.25 mm",
+    "color": "Pink",
+    "ct_weight": 0.2002,
+    "pricing_rule": "$50/ct * 0.2002 ct",
+    "calculated_price": 10.01
+  },
+  {
+    "id": 7201,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "3.25 mm",
+    "color": "Yellow",
+    "ct_weight": 0.2002,
+    "pricing_rule": "$50/ct * 0.2002 ct",
+    "calculated_price": 10.01
+  },
+  {
+    "id": 7202,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "3.75 mm",
+    "color": "Blue",
+    "ct_weight": 0.3041,
+    "pricing_rule": "$50/ct * 0.3041 ct",
+    "calculated_price": 15.2
+  },
+  {
+    "id": 7203,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "3.75 mm",
+    "color": "Pink",
+    "ct_weight": 0.3041,
+    "pricing_rule": "$50/ct * 0.3041 ct",
+    "calculated_price": 15.2
+  },
+  {
+    "id": 7204,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "3.75 mm",
+    "color": "Yellow",
+    "ct_weight": 0.3041,
+    "pricing_rule": "$50/ct * 0.3041 ct",
+    "calculated_price": 15.2
+  },
+  {
+    "id": 7205,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "4.25 mm",
+    "color": "Blue",
+    "ct_weight": 0.436,
+    "pricing_rule": "$50/ct * 0.436 ct",
+    "calculated_price": 21.8
+  },
+  {
+    "id": 7206,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "4.25 mm",
+    "color": "Pink",
+    "ct_weight": 0.436,
+    "pricing_rule": "$50/ct * 0.436 ct",
+    "calculated_price": 21.8
+  },
+  {
+    "id": 7207,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "4.25 mm",
+    "color": "Yellow",
+    "ct_weight": 0.436,
+    "pricing_rule": "$50/ct * 0.436 ct",
+    "calculated_price": 21.8
+  },
+  {
+    "id": 7208,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "4.75 mm",
+    "color": "Blue",
+    "ct_weight": 0.6028,
+    "pricing_rule": "$50/ct * 0.6028 ct",
+    "calculated_price": 30.14
+  },
+  {
+    "id": 7209,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "4.75 mm",
+    "color": "Pink",
+    "ct_weight": 0.6028,
+    "pricing_rule": "$50/ct * 0.6028 ct",
+    "calculated_price": 30.14
+  },
+  {
+    "id": 7210,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "4.75 mm",
+    "color": "Yellow",
+    "ct_weight": 0.6028,
+    "pricing_rule": "$50/ct * 0.6028 ct",
+    "calculated_price": 30.14
+  },
+  {
+    "id": 7211,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "5.25 mm",
+    "color": "Blue",
+    "ct_weight": 0.8088,
+    "pricing_rule": "$50/ct * 0.8088 ct",
+    "calculated_price": 40.44
+  },
+  {
+    "id": 7212,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "5.25 mm",
+    "color": "Pink",
+    "ct_weight": 0.8088,
+    "pricing_rule": "$50/ct * 0.8088 ct",
+    "calculated_price": 40.44
+  },
+  {
+    "id": 7213,
+    "gemstone": "Sapphire",
+    "shape": "Round",
+    "size": "5.25 mm",
+    "color": "Yellow",
+    "ct_weight": 0.8088,
+    "pricing_rule": "$50/ct * 0.8088 ct",
+    "calculated_price": 40.44
+  }
+]

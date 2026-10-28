@@ -31,7 +31,7 @@ export const GemStonesShapes = ({ activeSegment, setActiveSegment }: any) => {
                   <div className="flex flex-col items-center">
                     <Image loading="lazy" src="/assets/cushion.webp" h={50} w={50} />
                     <span className="text-sm mt-1 text-violet-800">
-                      Cushion
+                      Square Cushion
                     </span>
                   </div>
                 </div>

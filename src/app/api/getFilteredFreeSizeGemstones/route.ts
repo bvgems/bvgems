@@ -84,8 +84,12 @@ export async function POST(req: NextRequest) {
     if (options.shape && Array.isArray(options.shape) && options.shape.length > 0) {
       const finalShapes: string[] = [];
       options.shape.forEach((s: string) => {
-        finalShapes.push(s);
-        if (s.toLowerCase() === "cushion") {
+        if (s.toLowerCase() === "square cushion") {
+          finalShapes.push("Cushion");
+        } else {
+          finalShapes.push(s);
+        }
+        if (s.toLowerCase() === "cushion" || s.toLowerCase() === "square cushion") {
           finalShapes.push("Elongated Cushion", "Emerald Cushion Cut");
         }
         if (s.toLowerCase() === "heart") {

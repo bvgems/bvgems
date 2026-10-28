@@ -1,5 +1,6 @@
 "use client";
 import { Badge, Button, Group } from "@mantine/core";
+import { formatShapeDisplay } from "@/utils/constants";
 
 interface FilterChipsProps {
   selectedStones: string[];
@@ -89,7 +90,7 @@ export const FilterChips = ({
             color="dark"
             radius="sm"
           >
-            Shape: {shape}
+            Shape: {formatShapeDisplay(shape)}
           </Badge>
         ))}
         {selectedTypes.map((type) => (

@@ -40,6 +40,7 @@ import { BlueSapphireShade } from "../CommonComponents/BlueSapphireShade";
 import { QuoteRequestModal } from "@/components/CommonComponents/QuoteRequestModal";
 import { RecentlyViewedSection } from "@/components/CommonComponents/RecentlyViewedSection";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
+import { formatShapeDisplay } from "@/utils/constants";
 
 /** ---------- Helpers ---------- */
 const LAB_LABELS = new Set(["Lab Grown", "Lab-Grown"]);
@@ -310,7 +311,7 @@ export default function ProductDetailsPage() {
       pdf.setFont("helvetica", "bold");
       pdf.setFontSize(16);
       pdf.text(
-        `Loose ${product?.collection_slug} ${product?.shape} ${product?.size}`,
+        `Loose ${product?.collection_slug} ${formatShapeDisplay(product?.shape)} ${product?.size}`,
         pageWidth / 2,
         y,
         { align: "center" },
@@ -343,7 +344,7 @@ export default function ProductDetailsPage() {
       leftY += 6;
       pdf.text(`Stone: ${product?.collection_slug}`, leftX, leftY);
       leftY += 6;
-      pdf.text(`Shape: ${product?.shape}`, leftX, leftY);
+      pdf.text(`Shape: ${formatShapeDisplay(product?.shape)}`, leftX, leftY);
       leftY += 6;
       pdf.text(`Size: ${product?.size}`, leftX, leftY);
       leftY += 6;
@@ -552,7 +553,7 @@ export default function ProductDetailsPage() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full md:w-7/12 flex flex-col items-center">
               <ImageZoom
-                alt={`${product?.collection_slug} ${product?.shape} ${product?.size} gemstone – ${product?.quality} Quality`}
+                alt={`${product?.collection_slug} ${formatShapeDisplay(product?.shape)} ${product?.size} gemstone – ${product?.quality} Quality`}
                 src={displayImage}
               />
               <div className="text-xs text-gray-500 flex items-center mt-2">
@@ -589,7 +590,7 @@ export default function ProductDetailsPage() {
             {/* Title */}
             <div>
               <h1 className="text-xl font-semibold">
-                Loose {product?.collection_slug} {product?.shape}{" "}
+                Loose {product?.collection_slug} {formatShapeDisplay(product?.shape)}{" "}
                 {product?.size}{product?.ct_weight ? ` – ${formatDisplayWeight(product?.ct_weight)} Carat` : ""} {product?.quality}{" "}
                 Quality Calibrated Gemstone
               </h1>
@@ -647,9 +648,9 @@ export default function ProductDetailsPage() {
                 {/* {!hasPricing && (
                   <a
                     href={`mailto:sales@bvgems.com?subject=${encodeURIComponent(
-                      `Price Request for ${product?.collection_slug} ${product?.shape} ${product?.size} ${formatDisplayWeight(product?.ct_weight)}cts., ${product?.quality} Quality`,
+                      `Price Request for ${product?.collection_slug} ${formatShapeDisplay(product?.shape)} ${product?.size} ${formatDisplayWeight(product?.ct_weight)}cts., ${product?.quality} Quality`,
                     )}&body=${encodeURIComponent(
-                      `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${product?.shape}\nSize: ${product?.size}\nCarat Weight: ${formatDisplayWeight(product?.ct_weight)} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`,
+                      `Hello,\n\nI would like to request the price for the following gemstone:\n\nGemstone: ${product?.collection_slug}\nShape: ${formatShapeDisplay(product?.shape)}\nSize: ${product?.size}\nCarat Weight: ${formatDisplayWeight(product?.ct_weight)} cts\nQuality: ${product?.quality}\n\nPlease let me know the pricing and availability.\n\nThank you!`,
                     )}`}
                     className="underline text-blue-600"
                   >
@@ -806,7 +807,7 @@ export default function ProductDetailsPage() {
             __html: JSON.stringify({
               "@context": "https://schema.org/",
               "@type": "Product",
-              name: `Loose ${product?.collection_slug} ${product?.shape} ${product?.size}`,
+              name: `Loose ${product?.collection_slug} ${formatShapeDisplay(product?.shape)} ${product?.size}`,
               image: product?.image_url,
               description: `${product?.quality} quality ${product?.collection_slug} gemstone, calibrated and ethically sourced from B.V. Gems, NYC Diamond District.`,
               sku: product?.id,

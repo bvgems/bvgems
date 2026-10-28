@@ -92,8 +92,9 @@ export default function FreeSizeGemstoneSelection() {
         }
         setSelectedStones([newStone]);
       } else {
+        const urlColors = searchParams.get("color")?.split(",").filter(Boolean) || [];
         setSelectedStones([]);
-        setSelectedColors([]);
+        setSelectedColors(urlColors);
       }
       setSelectedShapes([]);
       setSingleOrMatched([]);

@@ -12,6 +12,7 @@ import { IconShoppingCart, IconLock } from "@tabler/icons-react";
 import { getPerCaratPrice, getPerStonePrice } from "@/utils/priceHelpers";
 
 import { generateCalibratedStoneUrl, generateFreeSizeStoneUrl } from "@/utils/seoUrlHelpers";
+import { formatShapeDisplay } from "@/utils/constants";
 
 interface AnimatedCardProps {
   item: any;
@@ -38,7 +39,7 @@ export const AnimatedCard = ({
 
   const getProductName = (item: any) => {
     const ctWeightPart = item?.ct_weight ? `${formatDisplayWeight(item.ct_weight)} cttw. ` : "";
-    return `${ctWeightPart}${item?.color} ${item?.shape} ${item?.collection_slug}, ${item?.quality} Quality - ${item?.size}`;
+    return `${ctWeightPart}${item?.color} ${formatShapeDisplay(item?.shape)} ${item?.collection_slug}, ${item?.quality} Quality - ${item?.size}`;
   };
 
   useEffect(() => {
@@ -133,7 +134,7 @@ export const AnimatedCard = ({
                  </div>
                  
                  <p className="text-gray-500 text-[11px] sm:text-xs tracking-wide font-medium mt-0.5 flex flex-wrap items-center gap-1.5">
-                   <span>{item?.shape}</span>
+                   <span>{formatShapeDisplay(item?.shape)}</span>
                    <span className="text-gray-300 text-[10px]">•</span>
                    <span>{item?.quality || "Natural"}</span>
                    <span className="text-gray-300 text-[10px]">•</span>
@@ -216,7 +217,7 @@ export const AnimatedCard = ({
                  <p className="text-gray-500 text-[11px] sm:text-xs tracking-wide font-medium mt-0.5 flex flex-wrap items-center gap-1.5">
                    {item?.shape && (
                      <>
-                       <span>{item?.shape}</span>
+                       <span>{formatShapeDisplay(item?.shape)}</span>
                        <span className="text-gray-300 text-[10px]">•</span>
                      </>
                    )}

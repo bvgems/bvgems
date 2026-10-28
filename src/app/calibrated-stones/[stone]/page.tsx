@@ -1,6 +1,8 @@
 import { getCategoryData } from "@/apis/api";
 import { CategoryContent } from "@/components/Category/CategoryContent";
 import { Metadata } from "next";
+import { getDbShapesForGemstone } from "@/lib/gemstoneShapes";
+import { formatShapeDisplay } from "@/utils/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +22,7 @@ export async function generateMetadata({
   
   let prefix = "";
   if (shape) {
-    prefix += `${shape} `;
+    prefix += `${formatShapeDisplay(shape)} `;
   }
   if (color && (stone === "sapphire" || stone === "topaz")) {
     prefix += `${color} `;
@@ -58,21 +60,10 @@ export default async function StonePage({ params }: PageProps) {
   const isSapphire = stone === "sapphire";
   const isEmerald = stone === "emerald";
   const isTopaz = stone === "topaz";
-  const data: any = await getCategoryData(stone);
-
-  const defaultShapes = [
-    "Round",
-    "Oval",
-    "Princess Cut",
-    "Emerald Cut",
-    "Pear",
-    "Marquise",
-    "Cushion",
-    "Trillion",
-    "Heart",
-    "Straight Baguette",
-  ];
-  const shapes = data?.shapes?.value?.split(",").map((s: any) => s.trim()) || defaultShapes;
+  const [data, shapes] = await Promise.all([
+    getCategoryData(stone),
+    getDbShapesForGemstone(stone),
+  ]);
 
   return (
     <div>

@@ -28,7 +28,7 @@ import { SizeToleranceGuide } from "../Tolerance/SizeToleranceGuide";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { ImageZoom } from "../CommonComponents/ImageZoom";
 import { IconDiamond, IconShare } from "@tabler/icons-react";
-import { SapphireLooseGemstoneColorOptions, TopazLooseGemstoneColorOptions } from "@/utils/constants";
+import { SapphireLooseGemstoneColorOptions, TopazLooseGemstoneColorOptions, formatShapeDisplay } from "@/utils/constants";
 import { Carousel } from "@mantine/carousel";
 import Script from "next/script";
 import { EmeraldDetails } from "./EmeraldDetails";
@@ -93,35 +93,44 @@ export function CategoryContent({
   const shapeOrder = [
     "Round",
     "Oval",
+    "Princess Cut",
     "Emerald Cut",
     "Pear",
-    "Princess Cut",
     "Marquise",
+    "Cushion",
+    "Elongated Cushion",
+    "Trillion",
     "Heart",
     "Straight Baguette",
-    "Cushion",
-    "Trillion",
   ];
-  const sortedShapes = [...(shapes || [])].sort(
-    (a, b) => shapeOrder.indexOf(a) - shapeOrder.indexOf(b),
-  );
+  const sortedShapes = [...(shapes || [])].sort((a, b) => {
+    const normA = a === "Square Cushion" ? "Cushion" : a;
+    const normB = b === "Square Cushion" ? "Cushion" : b;
+    const idxA = shapeOrder.indexOf(normA);
+    const idxB = shapeOrder.indexOf(normB);
+    if (idxA === -1 && idxB === -1) return a.localeCompare(b);
+    if (idxA === -1) return 1;
+    if (idxB === -1) return -1;
+    return idxA - idxB;
+  });
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
   const generateSeoUrl = (newShape: string | null, newColor: string | null, newSize: string | null = null) => {
-    const shapeToUse = newShape || selectedShape || (shapes?.length ? shapes[0] : "round");
+    const shapeToUse = newShape || selectedShape || (sortedShapes?.length ? sortedShapes[0] : "Round");
     const shapeSlug = shapeToUse.toLowerCase().replace(/\s+/g, "-");
     const params = new URLSearchParams();
     
+    const defaultColor = isSapphire ? SapphireLooseGemstoneColorOptions[0]?.value : isTopaz ? TopazLooseGemstoneColorOptions[0]?.value : null;
     const colorToUse = newColor || (isSapphire ? selectedSapphireColor : isTopaz ? selectedTopazColor : null);
-    if (colorToUse && (isSapphire || isTopaz)) {
+    if (colorToUse && (isSapphire || isTopaz) && colorToUse !== defaultColor) {
       params.set("color", colorToUse);
     }
     if (typeFilter) {
       params.set("type", typeFilter);
     }
-    if (emeraldShade && isEmerald) {
+    if (emeraldShade && emeraldShade !== "Colombian" && isEmerald) {
       params.set("shade", emeraldShade);
     }
     
@@ -144,7 +153,7 @@ export function CategoryContent({
   const urlShade = searchParams.get("shade");
 
   const [selectedShape, setSelectedShape] = useState<string | null>(
-    routeShape || urlShape || (shapes?.length ? shapes[0] : null)
+    routeShape || urlShape || (sortedShapes?.length ? sortedShapes[0] : null)
   );
   const [selectedSizes, setSelectedSizes] = useState<string[]>(routeSize ? [routeSize] : (urlSizes || []));
   const [typeFilter, setTypeFilter] = useState<string | null>(urlType || null);
@@ -898,20 +907,22 @@ export function CategoryContent({
                         Heart: "/assets/heart.svg",
                         "Straight Baguette": "/assets/baguette.svg",
                         Cushion: "/assets/cushion.svg",
+                        "Elongated Cushion": "/assets/elongated-cushion.svg",
                         Trillion: "/assets/trillion.svg",
                       };
 
                       const imageSrc = shapeImageMap[shape];
+                      const displayLabel = formatShapeDisplay(shape);
 
                       return (
-                        <Tooltip label={shape} key={index}>
+                        <Tooltip label={displayLabel} key={index}>
                           <Link
                             href={generateSeoUrl(shape, null)}
                             scroll={false}
                             onClick={() => setSelectedShape(shape)}
                             className={`w-[60px] h-[60px] p-2.5 rounded-2xl border flex items-center justify-center transition-all cursor-pointer ${isSelected ? 'border-black ring-1 ring-black bg-gray-50 shadow-sm scale-[1.02]' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:scale-[1.02]'}`}
                           >
-                            <img loading="lazy" src={imageSrc} alt={shape} className="w-full h-full object-contain opacity-80" />
+                            <img loading="lazy" src={imageSrc} alt={displayLabel} className="w-full h-full object-contain opacity-80" />
                           </Link>
                         </Tooltip>
                       );

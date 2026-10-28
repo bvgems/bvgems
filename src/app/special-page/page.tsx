@@ -9,7 +9,7 @@ import { useDisclosure } from "@mantine/hooks";
 import axios from "axios";
 import { TopFilters } from "./TopFilters";
 import { CSVLink } from "react-csv";
-import { gemstoneOptions as importedGemstoneOptions, ShapeFilterList } from "@/utils/constants";
+import { gemstoneOptions as importedGemstoneOptions, ShapeFilterList, formatShapeDisplay } from "@/utils/constants";
 import { AddToCartModal } from "@/components/CommonComponents/AddToCartModal";
 
 const SHAPE_MAP: Record<string, string> = {
@@ -294,7 +294,13 @@ export default function SpecialPage() {
 
       // 2. Visual Filters
       if (selectedGems.length > 0 && !selectedGems.some(g => String(item.normalizedGem || "").toLowerCase().includes(g.toLowerCase()))) return false;
-      if (selectedShapes.length > 0 && !selectedShapes.some(s => String(item.normalizedShape || "").toLowerCase().includes(s.toLowerCase()))) return false;
+      if (selectedShapes.length > 0 && !selectedShapes.some(s => {
+        const shape = String(item.normalizedShape || "").toLowerCase().trim();
+        const target = s.toLowerCase().trim();
+        if (target === "cushion" || target === "square cushion" || target === "square-cushion") return shape === "cushion";
+        if (target === "elongated cushion" || target === "elongated-cushion") return shape === "elongated cushion";
+        return shape === target || shape.includes(target);
+      })) return false;
       
       // 2b. Sapphire Color Filter (Only applies if Sapphire is selected and colors are chosen)
       if (selectedGems.includes("Sapphire") && selectedSapphireColors.length > 0) {
@@ -684,7 +690,7 @@ export default function SpecialPage() {
             onClose={closeProductModal}
             price={selectedProduct.price}
             image_url={selectedProduct.image_url}
-            name={`${selectedProduct.collection_slug} ${selectedProduct.shape}`}
+            name={`${selectedProduct.collection_slug} ${formatShapeDisplay(selectedProduct.shape)}`}
             size={selectedProduct.size}
             quality={selectedProduct.quality}
             ct_weight={selectedProduct.ct_weight}

@@ -191,6 +191,45 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     };
   }, [searchItems]);
 
+  const availableShapesSet = useMemo(() => {
+    let preFiltered = searchItems;
+
+    if (selectedGems.length > 0) {
+      preFiltered = preFiltered.filter(item => {
+        const slug = String(item.collection_slug || "").toLowerCase();
+        return selectedGems.some(g => slug.includes(g.toLowerCase()));
+      });
+    }
+
+    return new Set(
+      preFiltered
+        .map(item => String(item.shape || "").trim().toLowerCase())
+        .filter(Boolean)
+    );
+  }, [searchItems, selectedGems]);
+
+  const availableGemsSet = useMemo(() => {
+    let preFiltered = searchItems;
+
+    if (selectedShapes.length > 0) {
+      preFiltered = preFiltered.filter(item => {
+        const shape = String(item.shape || "").toLowerCase().trim();
+        return selectedShapes.some(s => {
+          const target = s.toLowerCase().trim();
+          if (target === "cushion" || target === "square cushion" || target === "square-cushion") return shape === "cushion";
+          if (target === "elongated cushion" || target === "elongated-cushion") return shape === "elongated cushion";
+          return shape === target || shape.includes(target);
+        });
+      });
+    }
+
+    return new Set(
+      preFiltered
+        .map(item => String(item.collection_slug || "").trim().toLowerCase())
+        .filter(Boolean)
+    );
+  }, [searchItems, selectedShapes]);
+
   const availableDimensionsGrouped = useMemo(() => {
     let preFiltered = [...searchItems];
 
@@ -217,8 +256,13 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
 
     if (selectedShapes.length > 0) {
       preFiltered = preFiltered.filter(item => {
-        const shape = String(item.shape || "").toLowerCase();
-        return selectedShapes.some(s => shape.includes(s.toLowerCase()));
+        const shape = String(item.shape || "").toLowerCase().trim();
+        return selectedShapes.some(s => {
+          const target = s.toLowerCase().trim();
+          if (target === "cushion" || target === "square cushion" || target === "square-cushion") return shape === "cushion";
+          if (target === "elongated cushion" || target === "elongated-cushion") return shape === "elongated cushion";
+          return shape === target || shape.includes(target);
+        });
       });
     }
 
@@ -261,8 +305,13 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
 
     if (selectedShapes.length > 0) {
       preFiltered = preFiltered.filter(item => {
-        const shape = String(item.shape || "").toLowerCase();
-        return selectedShapes.some(s => shape.includes(s.toLowerCase()));
+        const shape = String(item.shape || "").toLowerCase().trim();
+        return selectedShapes.some(s => {
+          const target = s.toLowerCase().trim();
+          if (target === "cushion" || target === "square cushion" || target === "square-cushion") return shape === "cushion";
+          if (target === "elongated cushion" || target === "elongated-cushion") return shape === "elongated cushion";
+          return shape === target || shape.includes(target);
+        });
       });
     }
 
@@ -293,8 +342,13 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
 
     if (selectedShapes.length > 0) {
       preFiltered = preFiltered.filter((item: any) => {
-        const shape = String(item.shape || "").toLowerCase();
-        return selectedShapes.some(s => shape.includes(s.toLowerCase()));
+        const shape = String(item.shape || "").toLowerCase().trim();
+        return selectedShapes.some(s => {
+          const target = s.toLowerCase().trim();
+          if (target === "cushion" || target === "square cushion" || target === "square-cushion") return shape === "cushion";
+          if (target === "elongated cushion" || target === "elongated-cushion") return shape === "elongated cushion";
+          return shape === target || shape.includes(target);
+        });
       });
     }
 
@@ -345,14 +399,24 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
   }, [availableTypes, selectedTypes]);
 
   // --- URL State Sync Logic ---
+  const searchParamsStr = searchParams.toString();
   const currentFiltersStr = searchParams.get("filters");
   const isInitialized = useRef(false);
+  const isSyncingFromUrlRef = useRef(false);
+  const internalFilterUrlsRef = useRef<Set<string>>(new Set());
+  const internalClearedUrlRef = useRef(false);
+  const lastExternalQueryRef = useRef<string | null>(null);
 
-  // 1. Sync URL -> State (runs on mount and when user clicks Back/Forward)
+  // 1. Sync URL -> State (runs on mount, navbar selections, and when user clicks Back/Forward)
   useEffect(() => {
     if (searchItems.length === 0) return;
 
     if (currentFiltersStr) {
+      // Ignore URL updates that were just triggered by our own State -> URL effect
+      if (isInitialized.current && internalFilterUrlsRef.current.has(currentFiltersStr)) {
+        return;
+      }
+
       try {
         const parsed = JSON.parse(decodeURIComponent(currentFiltersStr));
         let initGems = parsed.selectedGems || [];
@@ -383,6 +447,10 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
           ? (parsed.selectedTopazVariants || [])
           : [];
 
+        internalFilterUrlsRef.current.add(currentFiltersStr);
+        isSyncingFromUrlRef.current = true;
+        autoSelectedTypeRef.current = null;
+
         setSelectedGems(initGems);
         setSelectedShapes(parsed.selectedShapes || []);
         setSelectedSapphireColors(validSapphireColors);
@@ -400,91 +468,112 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       }
     }
 
-    // If no filters in URL (fresh load or navigating from Home)
-    if (!isInitialized.current) {
-      const initGem = searchParams.get("gem");
-      const initShape = searchParams.get("shape");
-      const initColor = searchParams.get("color");
-      const initType = searchParams.get("type");
-
-      if (initShape) {
-        const shapeObj = ShapeFilterList.find(s => s.label.toLowerCase() === initShape.toLowerCase());
-        setSelectedShapes(shapeObj ? [shapeObj.value] : []);
-      } else {
-        setSelectedShapes([]);
-      }
-
-      if (initGem) {
-        const found = gemstoneOptions.find(g => g.value.toLowerCase() === initGem.toLowerCase() || g.label.toLowerCase() === initGem.toLowerCase());
-        setSelectedGems([found ? found.value : initGem]);
-      } else if (initColor) {
-        const colorKey = initColor.toLowerCase();
-        const mapping = COLOR_TO_GEM[colorKey];
-        if (mapping) {
-          setSelectedGems([mapping.gem]);
-        } else {
-          const colorTitle = initColor.charAt(0).toUpperCase() + initColor.slice(1).toLowerCase();
-          const matchingGems = new Set<string>();
-          searchItems.forEach((item: any) => {
-            if (item.collection_slug && item.color && item.color.toLowerCase().includes(colorTitle.toLowerCase())) {
-              const matchedOpt = gemstoneOptions.find(g => g.value.toLowerCase() === item.collection_slug.toLowerCase());
-              matchingGems.add(matchedOpt ? matchedOpt.value : item.collection_slug);
-            }
-          });
-          setSelectedGems(Array.from(matchingGems));
-        }
-      } else {
-        setSelectedGems([]);
-      }
-
-      if (initColor) {
-        const colorKey = initColor.toLowerCase();
-        const mapping = COLOR_TO_GEM[colorKey];
-        const colorTitle = initColor.charAt(0).toUpperCase() + initColor.slice(1).toLowerCase();
-        if (mapping) {
-          if (mapping.gem === "Sapphire" && mapping.sapphireColor) {
-            setSelectedSapphireColors([mapping.sapphireColor]);
-          } else {
-            setSelectedSapphireColors([]);
-          }
-          if (mapping.gem === "Topaz" && mapping.topazVariant) {
-            setSelectedTopazVariants([mapping.topazVariant]);
-          } else {
-            setSelectedTopazVariants([]);
-          }
-        } else {
-          if (availableSapphireColors.some(c => c.toLowerCase() === colorKey)) {
-            setSelectedSapphireColors([colorTitle]);
-          } else {
-            setSelectedSapphireColors([]);
-          }
-          if (availableTopazVariants.some(c => c.toLowerCase() === colorKey)) {
-            setSelectedTopazVariants([colorTitle]);
-          } else {
-            setSelectedTopazVariants([]);
-          }
-        }
-      } else {
-        setSelectedSapphireColors([]);
-        setSelectedTopazVariants([]);
-      }
-
-      if (initType) {
-        setSelectedTypes([initType]);
-      } else {
-        setSelectedTypes([]);
-      }
-
-      setSelectedGrades([]);
-      setWeight("");
-      setSelectedDimensions({});
-      isInitialized.current = true;
+    // If URL was cleared internally (e.g. user unchecked all filters or clicked Reset), ignore
+    if (isInitialized.current && internalClearedUrlRef.current && searchParamsStr === "") {
+      internalClearedUrlRef.current = false;
+      lastExternalQueryRef.current = "";
+      return;
     }
-  }, [searchItems, currentFiltersStr, availableSapphireColors, availableTopazVariants]); // Re-run if URL filters change (e.g. Back button)
+
+    // If we already processed this exact external query string and are waiting for state -> URL sync
+    if (isInitialized.current && searchParamsStr === lastExternalQueryRef.current) {
+      return;
+    }
+
+    // Fresh load or external navigation (e.g. selecting shape/color/type from Navbar popup)
+    lastExternalQueryRef.current = searchParamsStr;
+    internalFilterUrlsRef.current.clear();
+    internalClearedUrlRef.current = false;
+    isSyncingFromUrlRef.current = true;
+    autoSelectedTypeRef.current = null;
+
+    const initGem = searchParams.get("gem");
+    const initShape = searchParams.get("shape");
+    const initColor = searchParams.get("color");
+    const initType = searchParams.get("type");
+
+    if (initShape) {
+      const shapeObj = ShapeFilterList.find(s => s.label.toLowerCase() === initShape.toLowerCase() || s.value.toLowerCase() === initShape.toLowerCase());
+      setSelectedShapes(shapeObj ? [shapeObj.value] : [initShape]);
+    } else {
+      setSelectedShapes([]);
+    }
+
+    if (initGem) {
+      const found = gemstoneOptions.find(g => g.value.toLowerCase() === initGem.toLowerCase() || g.label.toLowerCase() === initGem.toLowerCase());
+      setSelectedGems([found ? found.value : initGem]);
+    } else if (initColor) {
+      const colorKey = initColor.toLowerCase();
+      const mapping = COLOR_TO_GEM[colorKey];
+      if (mapping) {
+        setSelectedGems([mapping.gem]);
+      } else {
+        const colorTitle = initColor.charAt(0).toUpperCase() + initColor.slice(1).toLowerCase();
+        const matchingGems = new Set<string>();
+        searchItems.forEach((item: any) => {
+          if (item.collection_slug && item.color && item.color.toLowerCase().includes(colorTitle.toLowerCase())) {
+            const matchedOpt = gemstoneOptions.find(g => g.value.toLowerCase() === item.collection_slug.toLowerCase());
+            matchingGems.add(matchedOpt ? matchedOpt.value : item.collection_slug);
+          }
+        });
+        setSelectedGems(Array.from(matchingGems));
+      }
+    } else {
+      setSelectedGems([]);
+    }
+
+    if (initColor) {
+      const colorKey = initColor.toLowerCase();
+      const mapping = COLOR_TO_GEM[colorKey];
+      const colorTitle = initColor.charAt(0).toUpperCase() + initColor.slice(1).toLowerCase();
+      if (mapping) {
+        if (mapping.gem === "Sapphire" && mapping.sapphireColor) {
+          setSelectedSapphireColors([mapping.sapphireColor]);
+        } else {
+          setSelectedSapphireColors([]);
+        }
+        if (mapping.gem === "Topaz" && mapping.topazVariant) {
+          setSelectedTopazVariants([mapping.topazVariant]);
+        } else {
+          setSelectedTopazVariants([]);
+        }
+      } else {
+        if (availableSapphireColors.some(c => c.toLowerCase() === colorKey)) {
+          setSelectedSapphireColors([colorTitle]);
+        } else {
+          setSelectedSapphireColors([]);
+        }
+        if (availableTopazVariants.some(c => c.toLowerCase() === colorKey)) {
+          setSelectedTopazVariants([colorTitle]);
+        } else {
+          setSelectedTopazVariants([]);
+        }
+      }
+    } else {
+      setSelectedSapphireColors([]);
+      setSelectedTopazVariants([]);
+    }
+
+    if (initType) {
+      setSelectedTypes([initType]);
+    } else {
+      setSelectedTypes([]);
+    }
+
+    setSelectedGrades([]);
+    setWeight("");
+    setSelectedDimensions({});
+    setToleranceEnabled(false);
+    isInitialized.current = true;
+  }, [searchItems, searchParamsStr, currentFiltersStr, availableSapphireColors, availableTopazVariants, searchParams]);
 
   // 2. Sync State -> URL (runs when user changes a filter)
   useEffect(() => {
     if (!isInitialized.current) return;
+    if (isSyncingFromUrlRef.current) {
+      isSyncingFromUrlRef.current = false;
+      return;
+    }
 
     const state = {
       selectedGems,
@@ -511,12 +600,19 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
                     viewMode === "list";
                     
     const newFiltersStr = isEmpty ? null : encodeURIComponent(JSON.stringify(state));
+    const hasLegacyQueryParams =
+      searchParams.has("gem") ||
+      searchParams.has("shape") ||
+      searchParams.has("color") ||
+      searchParams.has("type");
     
-    if (newFiltersStr !== currentFiltersStr) {
+    if (newFiltersStr !== currentFiltersStr || hasLegacyQueryParams) {
       const params = new URLSearchParams(searchParams.toString());
       if (newFiltersStr) {
+        internalFilterUrlsRef.current.add(newFiltersStr);
         params.set("filters", newFiltersStr);
       } else {
+        internalClearedUrlRef.current = true;
         params.delete("filters");
       }
       
@@ -526,6 +622,7 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
       params.delete("color");
       params.delete("type");
       
+      lastExternalQueryRef.current = null;
       const paramString = params.toString();
       const newUrl = paramString ? `?${paramString}` : window.location.pathname;
       router.replace(newUrl, { scroll: false });
@@ -583,6 +680,21 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     });
   }, [availableDimensionsGrouped]);
 
+  // Cleanup invalid shapes when selectedGems changes
+  useEffect(() => {
+    if (!isInitialized.current || searchItems.length === 0) return;
+    if (selectedGems.length === 0) return;
+
+    setSelectedShapes(prev => {
+      if (prev.length === 0) return prev;
+      const filteredShapes = prev.filter(s => availableShapesSet.has(s.toLowerCase()));
+      if (filteredShapes.length !== prev.length) {
+        return filteredShapes;
+      }
+      return prev;
+    });
+  }, [availableShapesSet, selectedGems.length, searchItems.length]);
+
   // Filtering Logic
   useEffect(() => {
     let filtered = [...searchItems];
@@ -598,8 +710,13 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
     // Filter by Shape
     if (selectedShapes.length > 0) {
       filtered = filtered.filter(item => {
-        const shape = String(item.shape || "").toLowerCase();
-        return selectedShapes.some(s => shape.includes(s.toLowerCase()));
+        const shape = String(item.shape || "").toLowerCase().trim();
+        return selectedShapes.some(s => {
+          const target = s.toLowerCase().trim();
+          if (target === "cushion" || target === "square cushion" || target === "square-cushion") return shape === "cushion";
+          if (target === "elongated cushion" || target === "elongated-cushion") return shape === "elongated cushion";
+          return shape === target || shape.includes(target);
+        });
       });
     }
 
@@ -692,6 +809,9 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
   ]);
 
   const resetAll = () => {
+    autoSelectedTypeRef.current = null;
+    internalClearedUrlRef.current = true;
+    lastExternalQueryRef.current = "";
     setSelectedGems([]);
     setSelectedShapes([]);
     setSelectedSapphireColors([]);
@@ -739,6 +859,8 @@ export function GridView({ gemstones, loadingTrigger, color }: GridViewProps) {
         <GridViewTopFilters 
           gemstoneOptions={gemstoneOptions}
           shapeOptions={ShapeFilterList}
+          availableShapesSet={availableShapesSet}
+          availableGemsSet={availableGemsSet}
           
           selectedGems={selectedGems}
           setSelectedGems={setSelectedGems}

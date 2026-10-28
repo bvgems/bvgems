@@ -1,3 +1,5 @@
+import { formatShapeDisplay } from "./constants";
+
 const formatCurrency = (value: number) =>
   `$${Number(value).toLocaleString("en-US", {
     minimumFractionDigits: 2,
@@ -10,7 +12,7 @@ const getTitle = (item: any, productType: any) => {
   if (productType === "freeSizeStone") {
     const parts = [
       item?.product?.collection_slug,
-      item?.product?.shape,
+      formatShapeDisplay(item?.product?.shape),
       item?.product?.size,
       item?.product?.ct_weight ? formatCarat(Number(item?.product?.ct_weight)) : "",
     ].filter(Boolean);
@@ -20,7 +22,7 @@ const getTitle = (item: any, productType: any) => {
     const quality = item?.product?.quality ? String(item?.product?.quality) : "";
     const parts = [
       item?.product?.collection_slug,
-      item?.product?.shape,
+      formatShapeDisplay(item?.product?.shape),
       item?.product?.size,
       carat,
       quality,

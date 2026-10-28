@@ -4,13 +4,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { NumberInput, Select, MultiSelect, Button, ActionIcon, Collapse, Switch, Loader } from "@mantine/core";
 import Image from "next/image";
 import { IconX, IconChevronUp, IconChevronDown, IconFilter, IconShare, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { shopByColorOptions } from "@/utils/constants";
+import { shopByColorOptions, formatShapeDisplay } from "@/utils/constants";
 
 type RangeValue = { min: number | ""; max: number | "" };
 
 type TopFiltersProps = {
   gemstoneOptions: { label: string; image: string; value: string }[];
   shapeOptions: { label: string; image: string; value: string }[];
+  availableShapesSet?: Set<string>;
+  availableGemsSet?: Set<string>;
 
   selectedGems: string[];
   setSelectedGems: (val: string[]) => void;
@@ -593,6 +595,8 @@ export const GridViewTopFilters = ({
 
   gemstoneOptions,
   shapeOptions,
+  availableShapesSet,
+  availableGemsSet,
   selectedGems,
   setSelectedGems,
   selectedShapes,
@@ -638,6 +642,18 @@ export const GridViewTopFilters = ({
     }
   };
 
+  const handleGemClick = (val: string, isAvailable: boolean) => {
+    if (!isAvailable) {
+      // If user clicks a dimmed gem, switch to it by unselecting the conflicting shape
+      setSelectedShapes([]);
+      setSelectedGems([val]);
+      if (val !== "Sapphire") setSelectedSapphireColors([]);
+      if (val !== "Topaz" && setSelectedTopazVariants) setSelectedTopazVariants([]);
+    } else {
+      toggleGem(val);
+    }
+  };
+
   const removeGem = (val: string) => {
     const newGems = selectedGems.filter(g => g !== val);
     setSelectedGems(newGems);
@@ -665,6 +681,18 @@ export const GridViewTopFilters = ({
     else setSelectedShapes([val]);
   };
 
+  const handleShapeClick = (val: string, isAvailable: boolean) => {
+    if (!isAvailable) {
+      // If user clicks a dimmed shape, switch to it by unselecting the conflicting gem
+      setSelectedGems([]);
+      setSelectedSapphireColors([]);
+      if (setSelectedTopazVariants) setSelectedTopazVariants([]);
+      setSelectedShapes([val]);
+    } else {
+      toggleShape(val);
+    }
+  };
+
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
 
   const hasActiveFilters = selectedGems.length > 0 || selectedShapes.length > 0 || weight !== "" || Object.keys(selectedDimensions).some(k => selectedDimensions[k].length > 0) || (selectedGems.includes("Sapphire") && selectedSapphireColors.length > 0) || (selectedGems.includes("Topaz") && selectedTopazVariants.length > 0) || selectedTypes.length > 0 || selectedGrades.length > 0;
@@ -673,7 +701,7 @@ export const GridViewTopFilters = ({
   Object.values(availableDimensionsGrouped).forEach(dims => dims.forEach(d => allDims.add(d)));
   const combinedDims = Array.from(allDims).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
   const gemStr = selectedGems.length > 0 ? ` ${selectedGems[0]}` : "";
-  const shapeStr = selectedShapes.length > 0 ? ` ${selectedShapes[0]}` : "";
+  const shapeStr = selectedShapes.length > 0 ? ` ${formatShapeDisplay(selectedShapes[0])}` : "";
   const dimensionLabel = `${gemStr}${shapeStr} DIMENSIONS`.trim().toUpperCase();
 
   return (
@@ -700,15 +728,19 @@ export const GridViewTopFilters = ({
                   }))}
                   value={selectedGems.length > 0 ? selectedGems[0] : null}
                   onChange={(val) => {
-                    setSelectedGems(val ? [val] : []);
-                    if (selectedGems.includes("Sapphire") && val !== "Sapphire") {
+                    if (val) {
+                      const isAvailable = !availableGemsSet || selectedShapes.length === 0 || availableGemsSet.has(val.toLowerCase());
+                      handleGemClick(val, isAvailable);
+                    } else {
+                      setSelectedGems([]);
                       setSelectedSapphireColors([]);
+                      if (setSelectedTopazVariants) setSelectedTopazVariants([]);
                     }
                     if (document.activeElement instanceof HTMLElement) {
                       document.activeElement.blur();
                     }
                   }}
-                  clearable={false}
+                  clearable
                   searchable
                   className="w-full"
                   renderOption={({ option }) => {
@@ -829,12 +861,17 @@ export const GridViewTopFilters = ({
                   }))}
                   value={selectedShapes.length > 0 ? selectedShapes[0] : null}
                   onChange={(val) => {
-                    setSelectedShapes(val ? [val] : []);
+                    if (val) {
+                      const isAvailable = !availableShapesSet || selectedGems.length === 0 || availableShapesSet.has(val.toLowerCase());
+                      handleShapeClick(val, isAvailable);
+                    } else {
+                      setSelectedShapes([]);
+                    }
                     if (document.activeElement instanceof HTMLElement) {
                       document.activeElement.blur();
                     }
                   }}
-                  clearable={false}
+                  clearable
                   searchable
                   className="w-full"
                   renderOption={({ option }) => {
@@ -962,7 +999,7 @@ export const GridViewTopFilters = ({
               {/* Left Side: All Desktop & Bottom Filters */}
               <div className="flex-1 flex flex-col w-full min-w-0">
 
-                {/* DESKTOP FILTERS (Icons) */}
+                {/* DESKTOP FILTERS (Icons) - Side by Side exactly as original */}
                 <div className="flex flex-col lg:flex-row gap-10">
 
 
@@ -972,6 +1009,7 @@ export const GridViewTopFilters = ({
                     <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                       {gemstoneOptions.map((gem, i) => {
                         const isSelected = selectedGems.length === 1 && selectedGems.includes(gem.value);
+                        const isAvailable = !availableGemsSet || selectedShapes.length === 0 || availableGemsSet.has(gem.value.toLowerCase());
                         const gemScale =
                           gem.value === "Alexandrite"
                             ? "scale-[2.4]"
@@ -983,8 +1021,15 @@ export const GridViewTopFilters = ({
                         return (
                           <div
                             key={i}
-                            onClick={() => toggleGem(gem.value)}
-                            className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                            onClick={() => handleGemClick(gem.value, isAvailable)}
+                            title={!isAvailable ? `${gem.label} (Not available in ${selectedShapes.map(formatShapeDisplay).join(', ')})` : gem.label}
+                            className={`w-20 flex flex-col items-center gap-2 cursor-pointer transition-all duration-200 select-none ${
+                              isSelected
+                                ? 'opacity-100 scale-105'
+                                : !isAvailable
+                                ? 'opacity-25 grayscale hover:opacity-50'
+                                : 'opacity-40 hover:opacity-80'
+                            }`}
                           >
                             <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
                               <img src={gem.image} alt={gem.label} className={`w-full h-full object-contain ${gemScale}`} />
@@ -1022,7 +1067,7 @@ export const GridViewTopFilters = ({
                               <div
                                 key={idx}
                                 onClick={() => toggleSapphireColor(color)}
-                                className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                                className={`w-20 flex flex-col items-center gap-2 cursor-pointer transition-all duration-200 ${isSelected ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-70'}`}
                               >
                                 {imgUrl ? (
                                   <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
@@ -1059,7 +1104,7 @@ export const GridViewTopFilters = ({
                               <div
                                 key={idx}
                                 onClick={() => toggleTopazVariant(variant)}
-                                className={`w-20 flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                                className={`w-20 flex flex-col items-center gap-2 cursor-pointer transition-all duration-200 ${isSelected ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-70'}`}
                               >
                                 {imgUrl ? (
                                   <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
@@ -1085,16 +1130,40 @@ export const GridViewTopFilters = ({
                     <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                       {shapeOptions.map((shape, i) => {
                         const isSelected = selectedShapes.includes(shape.value);
+                        const isAvailable = !availableShapesSet || selectedGems.length === 0 || availableShapesSet.has(shape.value.toLowerCase());
+                        const words = shape.label.split(' ');
                         return (
                           <div
                             key={i}
-                            onClick={() => toggleShape(shape.value)}
-                            className={`flex flex-col items-center gap-2 cursor-pointer ${isSelected ? 'opacity-100 text-[#0b182d]' : 'opacity-30 hover:opacity-60 text-gray-500'}`}
+                            onClick={() => handleShapeClick(shape.value, isAvailable)}
+                            title={!isAvailable ? `${shape.label} (Not available in ${selectedGems.join(', ')})` : shape.label}
+                            className={`flex flex-col items-center gap-2 cursor-pointer transition-all duration-200 select-none ${
+                              isSelected
+                                ? 'opacity-100 text-[#0b182d]'
+                                : !isAvailable
+                                ? 'opacity-25 grayscale hover:opacity-50 text-gray-400'
+                                : 'opacity-30 hover:opacity-60 text-gray-500'
+                            }`}
                           >
-                            <div className={`w-16 h-16 flex items-center justify-center`}>
-                              <img src={shape.image} alt={shape.label} className="w-full h-full object-contain" style={{ filter: isSelected ? 'brightness(0) drop-shadow(0px 2px 2px rgba(0,0,0,0.3))' : 'grayscale(100%)' }} />
+                            <div className="w-16 h-16 flex items-center justify-center">
+                              <img
+                                src={shape.image}
+                                alt={shape.label}
+                                className="w-full h-full object-contain"
+                                style={{
+                                  filter: isSelected
+                                    ? 'brightness(0) drop-shadow(0px 2px 2px rgba(0,0,0,0.3))'
+                                    : 'grayscale(100%)'
+                                }}
+                              />
                             </div>
-                            <span className={`text-xs ${isSelected ? 'font-bold' : 'font-medium'}`}>{shape.label}</span>
+                            <span className={`text-xs text-center leading-tight flex flex-col items-center min-h-[30px] justify-start ${isSelected ? 'font-bold' : 'font-medium'}`}>
+                              {words.map((word, wordIdx) => (
+                                <span key={wordIdx} className="block whitespace-nowrap">
+                                  {word}
+                                </span>
+                              ))}
+                            </span>
                           </div>
                         );
                       })}
@@ -1194,7 +1263,7 @@ export const GridViewTopFilters = ({
 
                 {selectedShapes.map(shape => (
                   <div key={shape} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-semibold text-gray-800">
-                    {shape}
+                    {formatShapeDisplay(shape)}
                     <IconX size={14} className="cursor-pointer" onClick={() => toggleShape(shape)} />
                   </div>
                 ))}

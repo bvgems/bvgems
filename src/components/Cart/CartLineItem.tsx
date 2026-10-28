@@ -8,6 +8,7 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { formatCartWeight, isLabGrown } from "@/utils/priceHelpers";
+import { formatShapeDisplay } from "@/utils/constants";
 
 const CERTIFICATION_FEE = 75;
 const MAX_CARAT_WEIGHT = 100; // mirrors the 1–100 ct options on the product page
@@ -265,7 +266,8 @@ export function CartLineItem({
       ? Number((stoneWeight * quantity).toFixed(3))
       : null;
 
-  const title = p.collection_slug ? `${p.collection_slug} ${p.shape ?? ""}`.trim() : p.title;
+  const displayShape = formatShapeDisplay(p.shape);
+  const title = p.collection_slug ? `${p.collection_slug} ${displayShape ?? ""}`.trim() : p.title;
   const kind = KIND_LABEL[p.productType] ?? "Item";
   const origin = isStoneLike && p.type ? (isLabGrown(p) ? "Lab Grown" : "Natural") : null;
   const specs = getSpecs(p, byCarat, quantity);
