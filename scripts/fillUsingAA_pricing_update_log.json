@@ -1,0 +1,103 @@
+{
+  "timestamp": "2026-10-29T20:33:35.214Z",
+  "source_file": "/Users/meetpatel/Desktop/BV/calibrated_gemstones_db_copy/BV_Gems_Calibrated_Stones_With_Stuller_Pricing_fillUsingAA.csv",
+  "backup_table": "gemstone_specs_backup_20261029_fillUsingAA",
+  "total_rows": 3265,
+  "rows_updated": 1386,
+  "previously_updated_rows_confirmed": 1186,
+  "new_fallback_rows_updated": 200,
+  "non_price_columns_altered": 0,
+  "lab_grown_altered": 0,
+  "sample_newly_priced_rows": [
+    {
+      "id": 9885,
+      "collection_slug": "Amethyst",
+      "shape": "Heart",
+      "size": "3.00 mm",
+      "quality": "A",
+      "old_price": "5",
+      "new_price": "5.36"
+    },
+    {
+      "id": 9806,
+      "collection_slug": "Amethyst",
+      "shape": "Round",
+      "size": "1.00 mm",
+      "quality": "A",
+      "old_price": "4",
+      "new_price": "4.02"
+    },
+    {
+      "id": 9835,
+      "collection_slug": "Amethyst",
+      "shape": "Round",
+      "size": "1.25 mm",
+      "quality": "A",
+      "old_price": "4",
+      "new_price": "4.08"
+    },
+    {
+      "id": 9970,
+      "collection_slug": "Amethyst",
+      "shape": "Round",
+      "size": "4.25 mm",
+      "quality": "A",
+      "old_price": "3.66",
+      "new_price": "4.8"
+    },
+    {
+      "id": 10000,
+      "collection_slug": "Amethyst",
+      "shape": "Round",
+      "size": "5.25 mm",
+      "quality": "A",
+      "old_price": "4.88",
+      "new_price": "8.1"
+    },
+    {
+      "id": 7136,
+      "collection_slug": "Citrine",
+      "shape": "Round",
+      "size": "10.00 mm",
+      "quality": "AA",
+      "old_price": null,
+      "new_price": "31.5"
+    },
+    {
+      "id": 10607,
+      "collection_slug": "Emerald",
+      "shape": "Round",
+      "size": "5.50 mm",
+      "quality": "AA",
+      "old_price": null,
+      "new_price": "468"
+    },
+    {
+      "id": 10611,
+      "collection_slug": "Emerald",
+      "shape": "Round",
+      "size": "6.00 mm",
+      "quality": "AA",
+      "old_price": null,
+      "new_price": "744"
+    },
+    {
+      "id": 7183,
+      "collection_slug": "Ruby",
+      "shape": "Round",
+      "size": "1.60 mm",
+      "quality": "A",
+      "old_price": null,
+      "new_price": "12.57"
+    },
+    {
+      "id": 7185,
+      "collection_slug": "Ruby",
+      "shape": "Round",
+      "size": "1.70 mm",
+      "quality": "A",
+      "old_price": null,
+      "new_price": "13.77"
+    }
+  ]
+}

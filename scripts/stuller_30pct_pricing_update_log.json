@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-10-29T20:51:07.873Z",
+  "source_file": "/Users/meetpatel/Desktop/BV/calibrated_gemstones_db_copy/BV_Gems_Calibrated_Stones_With_Stuller_Pricing_fillUsingAA.csv",
+  "backup_table": "gemstone_specs_backup_20261029_before_30pct",
+  "total_rows": 3265,
+  "rows_updated": 1373,
+  "non_price_columns_altered": 0,
+  "lab_grown_altered": 0,
+  "sample_updated_rows": [
+    {
+      "id": 9863,
+      "collection_slug": "Amethyst",
+      "shape": "Cushion",
+      "size": "10.00 x 10.00 mm",
+      "quality": "A",
+      "old_40_off_price": "38.86",
+      "new_30_off_price": "45.34"
+    },
+    {
+      "id": 9862,
+      "collection_slug": "Amethyst",
+      "shape": "Cushion",
+      "size": "10.00 x 10.00 mm",
+      "quality": "A",
+      "old_40_off_price": "38.86",
+      "new_30_off_price": "45.34"
+    },
+    {
+      "id": 9864,
+      "collection_slug": "Amethyst",
+      "shape": "Cushion",
+      "size": "12.00 x 12.00 mm",
+      "quality": "A",
+      "old_40_off_price": "68.35",
+      "new_30_off_price": "79.74"
+    },
+    {
+      "id": 9912,
+      "collection_slug": "Amethyst",
+      "shape": "Cushion",
+      "size": "5.00 x 5.00 mm",
+      "quality": "A",
+      "old_40_off_price": "4.59",
+      "new_30_off_price": "5.35"
+    },
+    {
+      "id": 9913,
+      "collection_slug": "Amethyst",
+      "shape": "Cushion",
+      "size": "5.00 x 5.00 mm",
+      "quality": "A",
+      "old_40_off_price": "4.59",
+      "new_30_off_price": "5.35"
+    },
+    {
+      "id": 9914,
+      "collection_slug": "Amethyst",
+      "shape": "Cushion",
+      "size": "6.00 x 6.00 mm",
+      "quality": "A",
+      "old_40_off_price": "6.74",
+      "new_30_off_price": "7.87"
+    },
+    {
+      "id": 9854,
+      "collection_slug": "Amethyst",
+      "shape": "Cushion",
+      "size": "6.00 x 6.00 mm",
+      "quality": "A",
+      "old_40_off_price": "6.74",
+      "new_30_off_price": "7.87"
+    },
+    {
+      "id": 9855,
+      "collection_slug": "Amethyst",
+      "shape": "Cushion",
+      "size": "7.00 x 7.00 mm",
+      "quality": "A",
+      "old_40_off_price": "12.13",
+      "new_30_off_price": "14.15"
+    },
+    {
+      "id": 9856,
+      "collection_slug": "Amethyst",
+      "shape": "Cushion",
+      "size": "8.00 x 8.00 mm",
+      "quality": "A",
+      "old_40_off_price": "16.72",
+      "new_30_off_price": "19.5"
+    },
+    {
+      "id": 9857,
+      "collection_slug": "Amethyst",
+      "shape": "Cushion",
+      "size": "9.00 x 9.00 mm",
+      "quality": "A",
+      "old_40_off_price": "23.11",
+      "new_30_off_price": "26.96"
+    }
+  ]
+}
