@@ -27,11 +27,11 @@ export const metadata: Metadata = {
 
   // 🔹 Title & Description
   title: {
-    default: "B.V. Gems | Wholesale Gemstones & Fine Jewelry NYC",
+    default: "B.V. Gems | Wholesale Gemstones NYC",
     template: "%s | B.V. Gems Diamond District",
   },
   description:
-    "B.V. Gems — trusted wholesale dealer in calibrated & free-size gemstones. Explore sapphires, rubies, emeralds & fine jewelry from NYC’s Diamond District.",
+    "B.V. Gems — trusted wholesale dealer in calibrated & free-size gemstones. Explore sapphires, rubies, emeralds & more from NYC’s Diamond District.",
 
   icons: {
     icon: "/favicon.ico",
@@ -45,15 +45,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "B.V. Gems",
-    title: "B.V. Gems | Wholesale Gemstones & Fine Jewelry",
+    title: "B.V. Gems | Wholesale Gemstones",
     description:
-      "Discover sapphires, rubies, emeralds & custom jewelry from NYC’s Diamond District. Trusted wholesale gemstone dealer with six generations of expertise.",
+      "Discover sapphires, rubies, emeralds & calibrated gemstones from NYC’s Diamond District. Trusted wholesale gemstone dealer with six generations of expertise.",
     images: [
       {
         url: `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1755204867/hv55w43ddxqmlpjkb2tc.png`,
         width: 1200,
         height: 630,
-        alt: "B.V. Gems - Fine Gemstones & Jewelry",
+        alt: "B.V. Gems - Wholesale Gemstones",
       },
     ],
   },
