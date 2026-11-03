@@ -99,7 +99,7 @@ export default function RootLayout({
               "@type": "JewelryStore",
               name: "B.V. Gems",
               description:
-                "Wholesale dealer of calibrated gemstones and fine jewelry in NYC’s Diamond District.",
+                "Wholesale dealer of calibrated gemstones in NYC’s Diamond District.",
               image: `https://www.bvgems.com/assets/logo2.webp`,
               logo: `https://www.bvgems.com/assets/logo2.webp`,
               "@id": siteUrl,
