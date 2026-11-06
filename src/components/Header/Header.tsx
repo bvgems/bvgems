@@ -197,7 +197,7 @@ export function Header() {
             {lotPrefix}
             {String(option?.id ?? "").startsWith("gid")
               ? `${option?.title}`
-              : option?.collection_slug === "Sapphire"
+              : (option?.collection_slug === "Sapphire" || option?.collection_slug === "Topaz") && option?.color
                 ? `${option?.color} ${option.collection_slug || option.gemstone_type
                 } ${formatShapeDisplay(option.shape)} ${option.size || option.dimension}${option.category === "Calibrated" && option.quality
                   ? ` - ${option.quality} Quality`

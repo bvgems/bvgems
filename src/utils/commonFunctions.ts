@@ -8,10 +8,39 @@ const formatCurrency = (value: number) =>
 
 const formatCarat = (value: number) => `${Number(value).toFixed(2)} ct`;
 
+export const getStoneName = (product: any) => {
+  const gemName = (product?.collection_slug || product?.gemstone_type || "").trim();
+  const color = product?.color?.trim();
+  if (!gemName) return color || "Gemstone";
+  if (!color) return gemName;
+
+  const lowerGem = gemName.toLowerCase();
+  const lowerColor = color.toLowerCase();
+
+  // If color is already part of the gem name (e.g. "Paraiba Tourmaline"), don't duplicate
+  if (lowerGem.includes(lowerColor)) return gemName;
+
+  // For Topaz (e.g. "Swiss Blue Topaz", "London Blue Topaz", "Sky Blue Topaz")
+  // For Sapphire (e.g. "Blue Sapphire", "Pink Sapphire", "Yellow Sapphire")
+  // For other gems where color designates the variety
+  if (
+    lowerGem === "topaz" ||
+    lowerGem === "sapphire" ||
+    lowerGem === "garnet" ||
+    lowerGem === "tourmaline" ||
+    lowerGem === "quartz"
+  ) {
+    return `${color} ${gemName}`;
+  }
+
+  return gemName;
+};
+
 const getTitle = (item: any, productType: any) => {
   if (productType === "freeSizeStone") {
+    const stoneName = getStoneName(item?.product);
     const parts = [
-      item?.product?.collection_slug,
+      stoneName,
       formatShapeDisplay(item?.product?.shape),
       item?.product?.size,
       item?.product?.ct_weight ? formatCarat(Number(item?.product?.ct_weight)) : "",
@@ -20,8 +49,9 @@ const getTitle = (item: any, productType: any) => {
   } else if (productType === "stone") {
     const carat = item?.product?.ct_weight ? formatCarat(Number(item?.product?.ct_weight)) : "";
     const quality = item?.product?.quality ? String(item?.product?.quality) : "";
+    const stoneName = getStoneName(item?.product);
     const parts = [
-      item?.product?.collection_slug,
+      stoneName,
       formatShapeDisplay(item?.product?.shape),
       item?.product?.size,
       carat,
@@ -32,7 +62,7 @@ const getTitle = (item: any, productType: any) => {
     return `${item?.product?.title}`;
   }
   return (
-    item?.product?.collection_slug || item?.product?.title || "Custom Product"
+    getStoneName(item?.product) || item?.product?.title || "Custom Product"
   );
 };
 
@@ -69,6 +99,7 @@ export const getOrderPayload = (
             properties.push(
               { name: "Shape", value: item?.product?.shape },
               { name: "Size", value: item?.product?.size },
+              { name: "Color", value: item?.product?.color },
               { name: "Quality", value: item?.product?.quality },
               { name: "Stone Count", value: `${stones} stone${stones > 1 ? "s" : ""}` },
               {
@@ -189,7 +220,10 @@ export const getOrderPayload = (
         }
 
 
-        if (item?.product?.quality) {
+        if (
+          item?.product?.quality &&
+          !properties.some((p: any) => p.name === "Quality")
+        ) {
           properties.push({
             name: "Quality",
             value: item?.product?.quality,
@@ -200,11 +234,22 @@ export const getOrderPayload = (
           item?.jewelryProduct?.image_url ?? item?.product?.image_url ?? "";
         const isStored = !!item?.product?.variantId;
 
+        const cleanProperties = [
+          ...properties.filter(
+            (p: any) =>
+              p &&
+              p.value !== undefined &&
+              p.value !== null &&
+              p.value !== ""
+          ),
+          { name: "_image_url", value: imageUrl },
+        ];
+
         return isStored
           ? {
               variant_id: item?.product?.variantId,
               quantity,
-              properties,
+              properties: cleanProperties,
               requires_shipping: deliveryMethod === "delivery",
               fulfillment_service: "manual",
             }
@@ -215,10 +260,7 @@ export const getOrderPayload = (
               requires_shipping: deliveryMethod === "delivery",
               taxable: true,
               fulfillment_service: "manual",
-              properties: [
-                ...properties,
-                { name: "_image_url", value: imageUrl },
-              ],
+              properties: cleanProperties,
             };
       }),
       tags:

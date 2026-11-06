@@ -267,7 +267,11 @@ export function CartLineItem({
       : null;
 
   const displayShape = formatShapeDisplay(p.shape);
-  const title = p.collection_slug ? `${p.collection_slug} ${displayShape ?? ""}`.trim() : p.title;
+  const gemDisplay =
+    (p.collection_slug === "Topaz" || p.collection_slug === "Sapphire") && p.color
+      ? `${p.color} ${p.collection_slug}`
+      : p.collection_slug;
+  const title = gemDisplay ? `${gemDisplay} ${displayShape ?? ""}`.trim() : p.title;
   const kind = KIND_LABEL[p.productType] ?? "Item";
   const origin = isStoneLike && p.type ? (isLabGrown(p) ? "Lab Grown" : "Natural") : null;
   const specs = getSpecs(p, byCarat, quantity);

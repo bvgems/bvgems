@@ -1,5 +1,6 @@
 import { pool } from "@/lib/pool";
 import { sendEmail } from "@/utils/sendEmail";
+import { getStoneName } from "@/utils/commonFunctions";
 
 export async function GET(request: Request) {
   // 🔒 Auth check
@@ -64,7 +65,7 @@ export async function GET(request: Request) {
       <p style="font-size: 16px; font-weight: bold; margin: 0;">
       ${
         item?.product?.collection_slug
-          ? item?.product?.collection_slug + " " + item?.product?.shape
+          ? getStoneName(item?.product) + " " + item?.product?.shape
           : item?.product.title
       }
       </p>

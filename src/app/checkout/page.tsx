@@ -20,7 +20,7 @@ import { useGuestUserStore } from "@/store/useGuestUserStore";
 import { isLabGrown } from "@/utils/priceHelpers";
 import { useDisclosure } from "@mantine/hooks";
 import OrderConfirmationModal from "@/components/CommonComponents/OrderConfirmationModal";
-import { getOrderPayload } from "@/utils/commonFunctions";
+import { getOrderPayload, getStoneName } from "@/utils/commonFunctions";
 import { formatShapeDisplay } from "@/utils/constants";
 
 export default function CheckoutSelectionPage() {
@@ -207,7 +207,7 @@ export default function CheckoutSelectionPage() {
                           <div>
                             <div className="font-semibold text-gray-900 mb-1">
                               {item?.product?.collection_slug
-                                ? `${item?.product?.collection_slug} ${formatShapeDisplay(item?.product?.shape)}`
+                                ? `${getStoneName(item?.product)} ${formatShapeDisplay(item?.product?.shape)}`
                                 : item?.product?.title}
                             </div>
                             <div className="text-gray-600">
@@ -312,7 +312,7 @@ export default function CheckoutSelectionPage() {
                           <div>
                             <div className="font-semibold text-gray-900 mb-1">
                               {item?.product?.collection_slug
-                                ? `${item?.product?.collection_slug} ${formatShapeDisplay(item?.product?.shape)}`
+                                ? `${getStoneName(item?.product)} ${formatShapeDisplay(item?.product?.shape)}`
                                 : item?.product?.title}
                             </div>
                             {item?.product?.goldColor && (
